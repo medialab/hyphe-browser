@@ -1,0 +1,7 @@
+.urlInputContainer {
+  display: flex;
+}
+.urlInput {
+  flex-grow: 1;
+  margin: 0 1em;
+}

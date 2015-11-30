@@ -1,16 +1,13 @@
-import React, { Component, PropTypes} from 'react';
+import React, { Component } from 'react';
 import DevTools from './DevTools';
+import BrowserPage from './BrowserPage';
 
 
 export default class App extends Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired
-  };
-
   render() {
     return (
       <div>
-        {this.props.children}
+        <BrowserPage />
         <DevTools />
       </div>
     );

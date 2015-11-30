@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
+import browser from './browser';
 
 const rootReducer = combineReducers({
-  counter
+  browser,
 });
 
 export default rootReducer;
