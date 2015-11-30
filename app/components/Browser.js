@@ -85,6 +85,21 @@ export default class Browser extends Component {
     ));
   }
 
+  renderSidebar() {
+    const { sidebarVisible, openTab } = this.props;
+
+    if (!sidebarVisible) {
+      return null;
+    }
+
+    const showJSON = (o) => {
+      const json = JSON.stringify(o);
+      openTab('data:application/json,' + escape(json));
+    };
+
+    return <BrowserSidebar onClick={ openTab } onAjaxResult={ showJSON } />;
+  }
+
   render() {
     const { sidebarVisible, toggleSidebar, openTab, setTabUrl } = this.props;
     const tab = this.getActiveTab();
@@ -107,7 +122,7 @@ export default class Browser extends Component {
         </header>
         <div className="window-content">
           <div className="pane-group">
-            { sidebarVisible ? <BrowserSidebar onClick={ (url) => openTab(url) } /> : null }
+            { this.renderSidebar() }
             <div className="pane">
               <div className="tab-group">
                 { this.renderTabs() }

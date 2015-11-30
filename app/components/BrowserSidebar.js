@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 
 export default class BrowserSidebar extends Component {
   static propTypes = {
     onClick: React.PropTypes.func.isRequired,
+    onAjaxResult: React.PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {loading: false};
+  }
+
+  ajaxRequest() {
+    const { onAjaxResult } = this.props;
+
+    this.setState({loading: true});
+    $.post('http://hyphe.medialab.sciences-po.fr/dev-mathieu-api/', '{"method":"list_corpus","params":[]}')
+      .then((result) => {
+        onAjaxResult(result);
+        this.setState({ loading: false });
+      });
   }
 
   renderLink(key, url) {
@@ -12,6 +30,19 @@ export default class BrowserSidebar extends Component {
       <span key={ key } onClick={ () => onClick(url) } className="nav-group-item">
         <span className="icon icon-home"></span>
         { key }
+      </span>
+    );
+  }
+
+  renderLoading() {
+    if (!this.state.loading) {
+      return null;
+    }
+
+    return (
+      <span className="nav-group-item">
+        <span className="icon icon-ccw"></span>
+        Loading…
       </span>
     );
   }
@@ -34,6 +65,12 @@ export default class BrowserSidebar extends Component {
         <nav className="nav-group">
           <h5 className="nav-group-title">Crash test</h5>
           { this.renderLinks() }
+          <h5 className="nav-group-title">Test Ajax</h5>
+          <span onClick={ () => this.ajaxRequest() } className="nav-group-item">
+            <span className="icon icon-home"></span>
+            POST to Medialab
+          </span>
+          { this.renderLoading() }
         </nav>
       </div>
     );
