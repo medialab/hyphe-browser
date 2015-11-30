@@ -33,7 +33,14 @@ $ npm install
 npm run dev
 ```
 
-### Usage: production build
+### Usage: test build
+
+```sh
+npm run build
+npm start
+```
+
+### Usage: production build for all platforms
 
 ```sh
 npm run package
