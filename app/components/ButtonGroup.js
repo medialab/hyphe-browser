@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export default class ButtonGroup extends Component {
   static propTypes = {
     pullRight: PropTypes.bool,
+    children: PropTypes.any,
   }
 
   constructor(props) {

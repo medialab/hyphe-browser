@@ -1,39 +1,39 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 export default class BrowserSidebar extends Component {
+  static propTypes = {
+    onClick: React.PropTypes.func.isRequired,
+  }
+
+  renderLink(key, url) {
+    const { onClick } = this.props;
+
+    return (
+      <span key={ key } onClick={ () => onClick(url) } className="nav-group-item">
+        <span className="icon icon-home"></span>
+        { key }
+      </span>
+    );
+  }
+
+  renderLinks() {
+    const links = {
+      Twitter: 'https://twitter.com/medialab_ScPo/status/591539149779431424',
+      Youtube: 'https://www.youtube.com/watch?v=rp838o6vnYE',
+      Facebook: 'https://www.facebook.com/sciencespo/',
+      Linkedin: 'https://www.linkedin.com/in/paul-girard-57822118',
+      Lepoint: 'http://www.lepoint.fr/',
+    };
+
+    return Object.keys(links).map((key) => this.renderLink(key, links[key]));
+  }
+
   render() {
     return (
       <div className="pane pane-sm sidebar">
         <nav className="nav-group">
-          <h5 className="nav-group-title">Favorites</h5>
-          <span className="nav-group-item">
-            <span className="icon icon-home"></span>
-            connors
-          </span>
-          <span className="nav-group-item active">
-            <span className="icon icon-light-up"></span>
-            Photon
-          </span>
-          <span className="nav-group-item">
-            <span className="icon icon-download"></span>
-            Downloads
-          </span>
-          <span className="nav-group-item">
-            <span className="icon icon-folder"></span>
-            Documents
-          </span>
-          <span className="nav-group-item">
-            <span className="icon icon-window"></span>
-            Applications
-          </span>
-          <span className="nav-group-item">
-            <span className="icon icon-signal"></span>
-            AirDrop
-          </span>
-          <span className="nav-group-item">
-            <span className="icon icon-monitor"></span>
-            Desktop
-          </span>
+          <h5 className="nav-group-title">Crash test</h5>
+          { this.renderLinks() }
         </nav>
       </div>
     );
