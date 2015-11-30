@@ -19,3 +19,22 @@ Not sure I'll stick with it, needs digging to evaluate the difficulty of adaptin
 * [https://github.com/gabrielbull/react-desktop](react-desktop)
 * [http://photonkit.com/components/](Photon) may be more generic (and featurefull?)
 * [https://github.com/adamschwartz/chrome-tabs](chrome-tabs)
+
+## Installation
+
+```sh
+$ npm install
+```
+
+### Usage: development
+
+
+```sh
+npm run dev
+```
+
+### Usage: production build
+
+```sh
+npm run package
+```
