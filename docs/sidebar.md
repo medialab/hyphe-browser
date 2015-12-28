@@ -17,4 +17,6 @@ https://github.com/niutech/chrome-devtools-sidebar
 
 - Opera supports sidebar extensions out of the box :
 
+https://dev.opera.com/blog/sidebar-extensions/
+https://dev.opera.com/extensions/sidebar-action-manual/
 https://addons.opera.com/en/extensions/?tag=sidebar&order=popular&ref=sidebar
