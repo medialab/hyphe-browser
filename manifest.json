@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "version": "1.0",
+  "name": "Hyphe",
+  "description": "Hyphe description",
+  "icons": {
+    "128": "images/icons/icon-128.png"
+  },
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  "devtools_page": "html/devtools.html",
+  "options_page": "html/options.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/content.css"],
+      "js": ["js/content.js"]
+    }
+  ],
+  "permissions": [
+    "tabs",
+   "webNavigation"
+  ]
+}
