@@ -2,15 +2,10 @@
 // 1 - open the first devtools window undocked
 // 2 - press Ctrl+Shift+i to open a second devtools window
 
+// this file is only used to create the panel
+// see devtools-panel.js for the real logic
+
 console.log("hello from devtools")
-
-// setup communication between parts of the extension
-
-var associatedTabId = chrome.devtools.inspectedWindow.tabId
-chrome.runtime.connect({ name: `devtools-${associatedTabId}` })
-.onMessage.addListener((msg) => {
-	console.log(msg)
-})
 
 function onPanelCreated (panel) {}
 
