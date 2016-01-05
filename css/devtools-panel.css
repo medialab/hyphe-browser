@@ -12,6 +12,9 @@ body {
 a {
 	color: #333;
 }
+h1, h2 {
+	font-weight: 300;
+}
 #logo {
 	height: 1.5em;
 	margin-right: .5em;
