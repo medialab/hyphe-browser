@@ -40,7 +40,8 @@ const store = applyMiddleware(toBackgroundMiddleware)(createStore)(reducer)
 const actions = {
 	refreshTabs: (tabs) => ({type: "refreshTabs", payload: { tabs }}),
 	createTab: (url) => ({ type: "createTab", payload: { url, toBg: true }}),
-	updateTab: (url) => ({ type: "updateTab", payload: { url, toBg: true }})
+	updateTab: (url) => ({ type: "updateTab", payload: { url, toBg: true }}),
+	mirror: (tabId) => ({ type: "mirror", payload: { tabId, toBg: true }})
 }
 
 const mapStateToProps = (state) => ({ tabs: state.tabs, urls: state.urls })

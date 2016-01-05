@@ -19,6 +19,16 @@ function getSpecificPorts (type) {
 	return specificPorts
 }
 
+function findContentPort (tabId) {
+	var contentPorts = getContentPorts()
+	var port
+	contentPorts.forEach((v, k) => {
+		var id = Number(k.split("-")[1])
+		if (id === tabId) port = v
+	})
+	return port
+}
+
 var getContentPorts = () => getSpecificPorts("content")
 var getDevtoolsPorts = () => getSpecificPorts("devtools")
 
@@ -72,6 +82,9 @@ function devtoolsToContent (msg, port) {
 	case "updateTab":
 		chrome.tabs.update(tabId, { url: msg.payload.url.url })
 	break
+	case "mirror":
+		findContentPort(msg.payload.tabId).postMessage({ type: "mirror" })
+	break
 	}
 }
 
@@ -104,7 +117,7 @@ var webNavigationEvents = [
 
 webNavigationEvents.forEach((name) => {
 	chrome.webNavigation[name].addListener((evt) => {
-		broadcastToDevtools({
+		broadcast({
 			type: `webNavigation.${name}`,
 			payload: evt
 		})
