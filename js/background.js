@@ -33,6 +33,16 @@ function broadcastToDevtools (msg) {
 	devtoolsPorts.forEach(p => p.postMessage(msg))
 }
 
+function broadcastTabs () {
+	// all tabs if query params are empty
+	chrome.tabs.query({}, (tabs) => {
+		broadcastToDevtools({
+			type: "tabs",
+			payload: tabs
+		})
+	})
+}
+
 // append tabId if still unknown
 function getPortFullName (port) {
 	var fullName = port.name
@@ -47,6 +57,7 @@ chrome.runtime.onConnect.addListener((port) => {
 	var fullName = getPortFullName(port)
 	console.log("connect", fullName, port)
 	ports.set(fullName, port)
+	broadcastTabs()
 
 	// clean ports Map
 	port.onDisconnect.addListener(() => ports.delete(fullName))
@@ -68,5 +79,6 @@ webNavigationEvents.forEach((name) => {
 			type: `webNavigation.${name}`,
 			payload: evt
 		})
+		broadcastTabs()
 	})
 })
