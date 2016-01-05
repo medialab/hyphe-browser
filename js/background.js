@@ -31,11 +31,21 @@ chrome.runtime.onConnect.addListener((port) => {
 	port.onDisconnect.addListener(() => ports.delete(fullName))
 })
 
+// https://developer.chrome.com/extensions/webNavigation
 // onBeforeNavigate -> onCommitted -> onDOMContentLoaded -> onCompleted
 // beware of ads iframes!
-chrome.webNavigation.onCommitted.addListener((evt) => {
-	broadcast({
-		type: "webNavigation.onCommitted",
-		payload: evt
+var webNavigationEvents = [
+	"onBeforeNavigate",
+	"onCommitted",
+	"onDOMContentLoaded",
+	"onCompleted"
+]
+
+webNavigationEvents.forEach((name) => {
+	chrome.webNavigation[name].addListener((evt) => {
+		broadcast({
+			type: `webNavigation.${name}`,
+			payload: evt
+		})
 	})
 })
