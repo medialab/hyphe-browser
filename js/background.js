@@ -7,9 +7,30 @@ console.log("hello from background")
 
 var ports = new Map()
 
+// helpers to get subsets of ports
+
+function getSpecificPorts (type) {
+	var specificPorts = new Map()
+	// poor filter :(
+	ports.forEach((v, k) => {
+		if (k.includes(type))
+			specificPorts.set(k, v)
+	})
+	return specificPorts
+}
+
+var getContentPorts = () => getSpecificPorts("content")
+var getDevtoolsPorts = () => getSpecificPorts("devtools")
+
 function broadcast (msg) {
 	console.log("broadcast", ports.size, [...ports.keys()], msg)
 	ports.forEach(p => p.postMessage(msg))
+}
+
+function broadcastToDevtools (msg) {
+	var devtoolsPorts = getDevtoolsPorts()
+	console.log("broadcast to devtools", devtoolsPorts.size, [...devtoolsPorts.keys()], msg)
+	devtoolsPorts.forEach(p => p.postMessage(msg))
 }
 
 // append tabId if still unknown
@@ -43,7 +64,7 @@ var webNavigationEvents = [
 
 webNavigationEvents.forEach((name) => {
 	chrome.webNavigation[name].addListener((evt) => {
-		broadcast({
+		broadcastToDevtools({
 			type: `webNavigation.${name}`,
 			payload: evt
 		})
