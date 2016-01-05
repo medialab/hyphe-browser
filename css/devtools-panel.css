@@ -19,3 +19,13 @@ h1, h2 {
 	height: 1.5em;
 	margin-right: .5em;
 }
+button {
+	background: none;
+	border: 1px solid #555;
+	border-radius: 2px;
+	cursor: pointer;
+	margin-left: .5em;
+}
+button:hover {
+	background: white;
+}

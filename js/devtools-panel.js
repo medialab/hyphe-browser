@@ -5,16 +5,25 @@ import ReactDOM from "react-dom"
 import { bindActionCreators, createStore } from "redux"
 import { Provider, connect } from "react-redux"
 
-import TabLinkList from "./components/TabLinkList"
+import App from "./components/App"
 
 // redux: reducer, store, actions and connect
 
-const initialState = { tabs: [] }
+const initialState = {
+	tabs: [],
+	urls: [
+		{ name: "Twitter", url: "https://twitter.com/medialab_ScPo/status/591539149779431424" },
+		{ name: 'Youtube', url: "https://www.youtube.com/watch?v=rp838o6vnYE" },
+		{ name: "Facebook", url: "https://www.facebook.com/sciencespo/" },
+		{ name: "Linked", url: "https://www.linkedin.com/in/paul-girard-57822118" },
+		{ name: "Lepoint", url :"http://www.lepoint.fr/" },
+	]
+}
 
 var reducer = (state = initialState, action) => {
 	switch (action.type) {
 	case "refreshTabs":
-		return { tabs: action.payload.tabs }
+		return { tabs: action.payload.tabs, urls: state.urls }
 	default:
 		return state
 	}
@@ -26,18 +35,18 @@ const actions = {
 	refreshTabs: (tabs) => ({type: "refreshTabs", payload: { tabs }})
 }
 
-const mapStateToProps = (state) => ({ tabs: state.tabs })
+const mapStateToProps = (state) => ({ tabs: state.tabs, urls: state.urls })
 const mapDispatchToProps = (dispatch) => ({ actions: bindActionCreators(actions, dispatch) })
 
-const ConnectedTabLinkList = connect(mapStateToProps, mapDispatchToProps)(TabLinkList)
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 
 // rendering
 
 ReactDOM.render(
 	<Provider store={store}>
-		<ConnectedTabLinkList />
+		<ConnectedApp />
 	</Provider>,
-	document.getElementById("tab-link-list")
+	document.getElementById("root")
 )
 
 // refresh
