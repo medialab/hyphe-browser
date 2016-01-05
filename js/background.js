@@ -82,3 +82,5 @@ webNavigationEvents.forEach((name) => {
 		broadcastTabs()
 	})
 })
+
+chrome.tabs.onRemoved.addListener(broadcastTabs)
