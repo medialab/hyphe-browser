@@ -52,12 +52,41 @@ function getPortFullName (port) {
 	return fullName
 }
 
+// triggered by port
+function onMessage (msg, port) {
+	console.log("onMessage", msg, port)
+	if (port.name.includes("devtools-")) {
+		devtoolsToContent(msg, port)
+	} else {
+		contentToDevtools(msg, port)
+	}
+}
+
+function devtoolsToContent (msg, port) {
+	var tabId = Number(port.name.split("-")[1])
+	// white list
+	switch (msg.type) {
+	case "createTab":
+		chrome.tabs.create({ url: msg.payload.url.url })
+	break
+	case "updateTab":
+		chrome.tabs.update(tabId, { url: msg.payload.url.url })
+	break
+	}
+}
+
+function contentToDevtools (msg, port) {
+
+}
+
 // populate ports Map
 chrome.runtime.onConnect.addListener((port) => {
 	var fullName = getPortFullName(port)
 	console.log("connect", fullName, port)
 	ports.set(fullName, port)
 	broadcastTabs()
+
+	port.onMessage.addListener(onMessage)
 
 	// clean ports Map
 	port.onDisconnect.addListener(() => ports.delete(fullName))

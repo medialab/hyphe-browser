@@ -9,7 +9,7 @@ export default ({ actions, tabs, urls }) => {
 			<h2>Current tabs</h2>
 			<TabLinkList tabs={tabs} />
 			<h2>Crash test</h2>
-			<UrlLinkList urls={urls} />
+			<UrlLinkList urls={urls} actions={actions} />
 		</div>
 	)
 }

@@ -2,12 +2,12 @@ console.log("hello from devtools panel")
 
 import React from "react"
 import ReactDOM from "react-dom"
-import { bindActionCreators, createStore } from "redux"
+import { bindActionCreators, createStore, applyMiddleware } from "redux"
 import { Provider, connect } from "react-redux"
 
 import App from "./components/App"
 
-// redux: reducer, store, actions and connect
+// redux: reducer, store, middleware, actions and connect
 
 const initialState = {
 	tabs: [],
@@ -29,10 +29,18 @@ var reducer = (state = initialState, action) => {
 	}
 }
 
-const store = createStore(reducer)
+// middleware that intercept certain action to trigger call to background.js via port
+var toBackgroundMiddleware = () => (next) => (action) => {
+	if (action.payload.toBg) emit(action)
+	next(action)
+}
+
+const store = applyMiddleware(toBackgroundMiddleware)(createStore)(reducer)
 
 const actions = {
-	refreshTabs: (tabs) => ({type: "refreshTabs", payload: { tabs }})
+	refreshTabs: (tabs) => ({type: "refreshTabs", payload: { tabs }}),
+	createTab: (url) => ({ type: "createTab", payload: { url, toBg: true }}),
+	updateTab: (url) => ({ type: "updateTab", payload: { url, toBg: true }})
 }
 
 const mapStateToProps = (state) => ({ tabs: state.tabs, urls: state.urls })
@@ -57,9 +65,12 @@ const refresh = (tabs) => {
 // setup communication between parts of the extension
 
 var associatedTabId = chrome.devtools.inspectedWindow.tabId
-chrome.runtime.connect({ name: `devtools-${associatedTabId}` })
-.onMessage.addListener((msg) => {
+var port = chrome.runtime.connect({ name: `devtools-${associatedTabId}` })
+port.onMessage.addListener((msg) => {
 	console.log(`message received by devtools-${associatedTabId}`, msg)
 	if (msg.type === "tabs") refresh(msg.payload)
 })
 
+function emit (action) {
+	port.postMessage(action)
+}
