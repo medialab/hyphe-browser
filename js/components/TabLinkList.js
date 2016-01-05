@@ -1,12 +1,12 @@
-var React = require("react")
-var $ = React.DOM
+import React from "react"
 
-var TabLink = require("./TabLink")
+import TabLink from "./TabLink"
 
-TabLinkList = (props) => {
+export default ({ tabs, actions }) => {
+	console.log("TabLink", tabs)
 	return (
-		$.ul({}, props.tabs.map(TabLink))
+		<ul>
+			{ tabs.map((tab) => <TabLink tab={tab} />) }
+		</ul>
 	)
 }
-
-module.exports = TabLinkList

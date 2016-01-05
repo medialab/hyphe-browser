@@ -1,11 +1,12 @@
-var React = require("react")
-var $ = React.DOM
+import React from "react"
 
-TabLink = (props) => {
+export default ({ tab }) => {
 	return (
-		$.li({},
-			$.a({ href: props.url }, props.name))
+		<li key={tab.id}>
+			<span>{tab.id}</span>
+			<img alt="favicon" src={tab.favIconUrl} style={{width: "1em"}} />
+			<a>{tab.title}</a>
+		</li>
 	)
 }
 
-module.exports = TabLink
