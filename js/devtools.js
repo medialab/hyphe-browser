@@ -6,9 +6,9 @@ console.log("hello from devtools")
 
 // setup communication between parts of the extension
 
-chrome.runtime.connect({ name: "devtools" })
+var associatedTabId = chrome.devtools.inspectedWindow.tabId
+chrome.runtime.connect({ name: `devtools-${associatedTabId}` })
 .onMessage.addListener((msg) => {
-	console.log(msg.type)
 	console.log(msg)
 })
 
