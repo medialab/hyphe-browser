@@ -5,6 +5,8 @@ import Button from './Button';
 import BrowserUrl from './BrowserUrl';
 import WebViewPane from './WebViewPane';
 import styles from './Browser.module.css';
+import networkErrors from '@naholyr/chromium-net-errors';
+
 
 export default class Browser extends Component {
   static propTypes = {
@@ -44,8 +46,14 @@ export default class Browser extends Component {
       setTabStatus({ loading: false, url: info }, id);
       break;
     case 'error':
-      alert(info.errorDescription);
-      setTabStatus({ loading: false, url: info.url, error: info }, id);
+      const err = networkErrors.createByCode(info.errorCode);
+      if (info.pageURL === info.validatedURL) {
+        // Main page triggered the error, it's important
+        alert(err.message);
+        setTabStatus({ loading: false, url: info.pageURL, error: info }, id);
+      }
+      // Anyway, log to console
+      console.error(err);
       break;
     case 'title':
       setTabTitle(info, id);
