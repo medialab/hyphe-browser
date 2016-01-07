@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import App from './containers/App';
 import configureStore from './store/configureStore';
 import './app.css';
+import { openTab } from './actions/browser';
 
 const store = configureStore();
 
@@ -21,3 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   // module and its dependencies as dead code.
   // require('./createDevToolsWindow')(store);
 }
+
+setTimeout(function () {
+  store.dispatch(openTab('http://localhost:3001'));
+});
