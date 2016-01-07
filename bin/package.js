@@ -4,13 +4,13 @@ const packager = require('electron-packager')
 const del = require('del')
 const exec = require('child_process').exec
 const promisify = require('tiny-promisify')
-//const webpack = require('webpack')
-//const cfg = require('./webpack.config.production.js')
+const webpack = require('webpack')
+const cfg = require('../webpack.config.production.js')
 const pkg = require('../package.json')
 const electronPkg = require('../node_modules/electron-prebuilt/package.json')
 
 const packageP = promisify(packager)
-//const webpackP = promisify(webpack)
+const webpackP = promisify(webpack)
 
 const ignored = [
   '/test($|/)',
@@ -51,8 +51,8 @@ const targets = [
 ]
 
 console.log('Building packages…')
-/*webpackP(cfg)
-.then(() =>*/ del('release')//)
+webpackP(cfg)
+.then(() => del('release'))
 .then(() => packageAll())
 .then(() => console.log('Packages built successfully!'))
 .catch((err) => {
