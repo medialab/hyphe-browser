@@ -12,7 +12,7 @@ config.debug = true
 config.devtool = 'cheap-module-eval-source-map'
 
 config.entry = [
-  //'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
+  'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
   './app/index'
 ]
 
@@ -35,7 +35,7 @@ config.module.loaders.push({
 */
 
 config.plugins.push(
-  //new webpack.HotModuleReplacementPlugin(),
+  new webpack.HotModuleReplacementPlugin(),
   new webpack.NoErrorsPlugin(),
   new webpack.DefinePlugin({
     '__DEV__': true,
