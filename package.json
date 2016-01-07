@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "watch:lint": "watch-exec -c 'npm run lint' -w . -n -e node_modules",
     "watch": "npm-run-all --parallel watch:*",
-    "start": "electron ."
+    "start": "electron .",
+    "release": "node bin/package.js"
   },
   "repository": {
     "type": "git",
@@ -29,13 +30,16 @@
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
     "cross-env": "^1.0.7",
+    "del": "^2.2.0",
+    "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.36.2",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.14.0",
     "jsdom": "^7.2.2",
     "mocha": "^2.3.4",
     "npm-run-all": "^1.4.0",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "tiny-promisify": "^0.1.0"
   },
   "dependencies": {
     "electron-debug": "^0.5.1"
