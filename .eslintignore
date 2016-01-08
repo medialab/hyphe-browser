@@ -1,3 +1,4 @@
-release/**
-dist/**
-node_modules/**
+release
+dist
+node_modules
+vendors
