@@ -1,3 +1,9 @@
-const [x, y] = [1, 2]
+import React from 'react'
+import { render } from 'react-dom'
+import DumbButton from './components/DumbButton'
 
-console.log(x, '+', y, '=', x + y) // eslint-disable-line no-console
+const domRoot = document.getElementById('root')
+
+const rootElement = <DumbButton />
+
+render(rootElement, domRoot)

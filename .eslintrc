@@ -26,7 +26,7 @@
     "quotes": [1, "single", "avoid-escape"],
     "semi": [1, "never"],
     "space-before-function-paren": [1, "always"],
-    "react/jsx-curly-spacing": [1, "never"],
+    "react/jsx-curly-spacing": [1, "always"],
     "react/jsx-max-props-per-line": [1, { "maximum": 4 }],
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 2,
