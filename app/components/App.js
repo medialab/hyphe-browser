@@ -1,11 +1,12 @@
 import React from 'react'
-import LoginPage from './LoginPage'
+import StartUpForm from './login/StartUpForm'
 import HypheBrowser from './HypheBrowser'
 
 export default class App extends React.Component {
 
-  renderLoginPage () {
-    return <LoginPage />
+  // select a server, a corpus and login to the latter
+  renderStartUpForm () {
+    return <StartUpForm />
   }
 
   renderHypheBrowser () {
@@ -14,11 +15,18 @@ export default class App extends React.Component {
 
   render () {
     const corpusSelected = false // TODO login screen
-    if (corpusSelected) {
-      return this.renderHypheBrowser()
-    } else {
-      return this.renderLoginPage()
-    }
+
+    return (
+      <div className="window">
+        <div className="window-content">
+          { corpusSelected
+            ? this.renderHypheBrowser()
+            : this.renderStartUpForm()
+          }
+        </div>
+      </div>
+
+    )
   }
 
 }
