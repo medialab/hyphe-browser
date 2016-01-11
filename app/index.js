@@ -35,5 +35,3 @@ if (process.env.NODE_ENV === 'development') {
   console.log('Development: JSON RPC client set as global variable')
   window.client = jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')
 }
-
-location.hash = 'browser'
