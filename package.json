@@ -8,7 +8,8 @@
     "watch:test": "npm test -- --watch --growl",
     "lint": "eslint .",
     "watch:lint": "watch-exec -c 'npm run lint' -w . -n -e node_modules,release,dist",
-    "watch": "npm-run-all --parallel watch:*",
+    "watch-all": "npm-run-all --parallel watch:*",
+    "dev": "npm-run-all --parallel watch:electron watch:dev-server",
     "start": "cross-env NODE_ENV=production electron .",
     "release": "node bin/package.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.production.js --progress --profile --colors",
@@ -59,6 +60,14 @@
   "dependencies": {
     "electron-debug": "^0.5.1",
     "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react-dom": "^0.14.6",
+    "react-redux": "^4.0.6",
+    "redux": "^3.0.5",
+    "redux-actions": "^0.9.0",
+    "redux-devtools": "^3.0.1",
+    "redux-devtools-dock-monitor": "^1.0.1",
+    "redux-devtools-log-monitor": "^1.0.1",
+    "redux-thunk": "^1.0.3",
+    "uuid": "^2.0.1"
   }
 }
