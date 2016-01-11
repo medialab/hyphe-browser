@@ -55,3 +55,33 @@ body {
 }
 
 /** Corpus status **/
+
+h1.title {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.corpus-statuses {
+  display: flex;
+  flex-direction: row;
+  width: 120px;
+}
+.corpus-status {
+  flex-grow: 1;
+  margin: 1px;
+  padding: 1px;
+  background: #fff;
+  text-align: center;
+}
+.corpus-status-IN {
+  border-bottom: 3px solid #333;
+}
+.corpus-status-UNDECIDED {
+  border-bottom: 3px solid #ADA299;
+}
+.corpus-status-OUT {
+  border-bottom: 3px solid #FAA;
+}
+.corpus-status-DISCOVERED {
+  border-bottom: 3px solid #93BDE0;
+}
