@@ -50,6 +50,7 @@
     "react-transform-hmr": "^1.0.1",
     "sinon": "^1.17.2",
     "tiny-promisify": "^0.1.0",
+    "watch-exec": "^1.2.0",
     "webpack": "^1.12.10",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
