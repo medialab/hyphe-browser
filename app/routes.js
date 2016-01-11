@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, IndexRoute, IndexRedirect } from 'react-router'
 
 import App from './components/App'
-import HypheBrowser from './components/HypheBrowser'
+import Browser from './components/browser/Browser'
 
 // login components
 import Login from './components/login/Login'
@@ -22,7 +22,7 @@ export default (
       <IndexRoute component={ StartUpForm } />
     </Route>
 
-    <Route path="browser" component={ HypheBrowser } />
+    <Route path="browser" component={ Browser } />
 
     <IndexRedirect to="/login" />
   </Route>

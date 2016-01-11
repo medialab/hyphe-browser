@@ -36,3 +36,22 @@ body {
   vertical-align: middle;
   margin-right: 4px;
 }
+
+
+/** Error dialog **/
+
+.error-dialog {
+  position: absolute;
+  width: 50%;
+  left: 25%;
+  top: 1%;
+  min-height: 20%;
+  background: rgba(200, 50, 50, 0.75);
+  color: black;
+  font-size: 24px;
+  border-radius: 1em;
+  padding: 1em;
+  z-index: 999;
+}
+
+/** Corpus status **/
