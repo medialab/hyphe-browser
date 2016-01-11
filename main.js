@@ -16,9 +16,9 @@ app.on('ready', () => {
   const window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
 
   if (process.env.NODE_ENV === 'development') {
-    window.loadUrl('file://' + __dirname + '/app/index-dev.html')
+    window.loadURL('file://' + __dirname + '/app/index-dev.html')
   } else {
-    window.loadUrl('file://' + __dirname + '/app/index.html')
+    window.loadURL('file://' + __dirname + '/app/index.html')
   }
 
   window.maximize()
