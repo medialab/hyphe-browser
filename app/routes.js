@@ -15,9 +15,9 @@ export default (
   <Route path="/" component={ App }>
 
     <Route path="login" component={ Login }>
-      <Route path="corpus-form" component= { CorpusForm } />
-      <Route path="corpus-login-form" component= { CorpusLoginForm } />
-      <Route path="server-form" component= { ServerForm } />
+      <Route path="corpus-form" component={ CorpusForm } />
+      <Route path="corpus-login-form" component={ CorpusLoginForm } />
+      <Route path="server-form" component={ ServerForm } />
       // select a server, a corpus and login to the latter
       <IndexRoute component={ StartUpForm } />
     </Route>

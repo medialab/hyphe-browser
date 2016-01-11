@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 // in this electron app it's easier to reason with hashHistory
-import { IndexRoute, Router, hashHistory } from 'react-router'
+import { Router, hashHistory } from 'react-router'
 import { syncReduxAndRouter } from 'redux-simple-router'
 
 import routes from './routes'

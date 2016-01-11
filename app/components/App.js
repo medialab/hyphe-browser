@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 const App = (props) => {
 
-  // populate by the router
+  // populated by the router
   const { children } = props
 
   return (
@@ -13,6 +13,10 @@ const App = (props) => {
     </div>
   )
 
+}
+
+App.propTypes = {
+  children: PropTypes.node
 }
 
 export default App

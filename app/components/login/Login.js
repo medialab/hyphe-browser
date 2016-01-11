@@ -1,8 +1,10 @@
+// this component is just a place holder for subforms
+//
 import '../../css/pane'
 
-import React from 'react'
+import React, { PropTypes } from 'react'
 
-export default (props) => {
+const Login = (props) => {
 
   // all forms are displayed in pane-centered
   return (
@@ -13,3 +15,8 @@ export default (props) => {
 
 }
 
+Login.propTypes = {
+  children: PropTypes.node
+}
+
+export default Login
