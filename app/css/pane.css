@@ -1,0 +1,13 @@
+.pane-centered {
+  background-color: white;
+  border: 1px solid #999;
+  border-radius: 5px;
+  box-shadow: 0 5px 5px rgba(100, 100, 100, 0.1);
+  margin: auto;
+  padding: 1vh;
+  width: 50vh;
+}
+
+.pane-centered-title {
+  margin-top: 0;
+}
