@@ -9,6 +9,8 @@ import routes from './routes'
 import DevTools from './components/DevTools'
 import configureStore from './store/configureStore'
 
+import jsonrpc from './utils/jsonrpc'
+
 const store = configureStore()
 
 syncReduxAndRouter(hashHistory, store)
@@ -27,3 +29,9 @@ const rootElement = (
 )
 
 render(rootElement, domRoot)
+
+// Debugging utilities
+if (process.env.NODE_ENV === 'development') {
+  console.log('Development: JSON RPC client set as global variable')
+  window.client = jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')
+}
