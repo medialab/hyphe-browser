@@ -5,16 +5,13 @@ import '../../css/login/start-up-form'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
+import * as actions from './../../actions/servers'
 import CorpusList from './CorpusList'
 
 const StartUpForm = (props) => {
-
-  // TODO from props
-  const servers = [
-    {name: 'fooServer', url: 'fooUrl'},
-    {name: 'barServer', url: 'barUrl'}
-  ]
 
   return (
     <form className="start-up-form">
@@ -23,11 +20,11 @@ const StartUpForm = (props) => {
       <div className="form-group">
         <select
           className="form-control server-list"
-          onChange={ () => this.props.onServerChange() }
+          onChange={ (evt) => props.actions.fetchCorpora(evt.target.value) }
         >
           <option>Please select a server instance</option>
-          { servers.map((server) =>
-            <option key={ server.url }>{ server.name }</option>
+          { props.servers.map((server) =>
+            <option key={ server.url } value={ server.url }>{ server.name }</option>
           ) }
         </select>
       </div>
@@ -37,16 +34,31 @@ const StartUpForm = (props) => {
 
       <hr />
 
-      <CorpusList />
+      { props.ui.loaders.corpora
+        ? <span>Loading corpora…</span>
+        : <CorpusList corpora={ props.corpora } />
+      }
     </form>
   )
 
 }
 
-// TODO add isRequired when implemented
 StartUpForm.propTypes = {
-  onServerChange: PropTypes.func,
-  servers: PropTypes.array
+  corpora: PropTypes.object.isRequired,
+  servers: PropTypes.array.isRequired,
+  ui: PropTypes.object.isRequired
 }
 
-export default StartUpForm
+const mapStateToProps = (state) => ({
+  corpora: state.corpora,
+  servers: state.servers,
+  ui: state.ui
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+const connectedStartUpForm = connect(mapStateToProps, mapDispatchToProps)(StartUpForm)
+
+export default connectedStartUpForm
