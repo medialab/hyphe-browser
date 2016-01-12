@@ -19,6 +19,7 @@ const CorpusListItem = (props) => {
       <h5 className="corpus-list-item-name">
         { corpus.password ? <span className="icon icon-lock"></span> : null }
         { corpus.name }
+        { corpus.status === "ready" ? <span className="icon icon-play"></span> : null }
       </h5>
       <div>{ corpus.webentities_in } web entities</div>
       <div className="corpus-list-item-dates">
