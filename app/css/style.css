@@ -1,13 +1,23 @@
+/* will be supported on Chrome 49 */
+:root {
+  --primary-bg-color: #EFEBE8;
+  --secondary-bg-color: #F7F3F0;
+  --primary-blue-color: #428BCA;
+}
+
 body {
   background: #EFEBE8;
-  color: #333;
+  color: #555;
+}
+
+a {
+  color: #428BCA;
 }
 
 .window-content {
   background: #EFEBE8;
-  color: #333;
+  color: #555;
 }
-
 
 .urlInputContainer {
   display: flex;
