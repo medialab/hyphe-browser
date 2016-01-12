@@ -5,6 +5,11 @@ import {
   FETCH_CORPORA_FAILURE
 } from '../actions/servers'
 import {
+  FETCH_CORPUS_STATUS_REQUEST,
+  FETCH_CORPUS_STATUS_SUCCESS,
+  FETCH_CORPUS_STATUS_FAILURE
+} from '../actions/corpora'
+import {
   SHOW_ERROR,
   HIDE_ERROR
 } from '../actions/browser'
@@ -19,7 +24,8 @@ const initialState = {
   // to display loaders in different places
   loaders: {
     // when fetching the list of corpora
-    corpora: false
+    corpora: false,
+    corpus_status: false
   }
 }
 
@@ -51,5 +57,10 @@ export default createReducer(initialState, {
   [HIDE_ERROR]: (state) => ({
     ...state,
     error: { message: '', icon: '', fatal: false }
-  })
+  }),
+
+  // display loader
+  [FETCH_CORPUS_STATUS_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: true } }),
+  [FETCH_CORPUS_STATUS_SUCCESS]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } }),
+  [FETCH_CORPUS_STATUS_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } })
 })
