@@ -50,8 +50,8 @@ StartUpForm.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  corpora: state.corpora,
-  servers: state.servers,
+  corpora: state.corpora.list,
+  servers: state.servers.list,
   ui: state.ui
 })
 
