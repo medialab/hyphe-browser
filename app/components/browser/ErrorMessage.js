@@ -1,9 +1,7 @@
 import React from 'react'
 
-export default ({ message }) => message
-  ? (
-    <div className="error-dialog">
-      <strong>{ message }</strong>
-    </div>
-  )
-  : <noscript />
+export default ({ message }) => (
+  <div className={ 'error-dialog ' + (message ? 'visible' : 'hidden') }>
+    <strong>{ message }</strong>
+  </div>
+)

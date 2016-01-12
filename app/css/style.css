@@ -54,14 +54,20 @@ a {
   position: absolute;
   width: 50%;
   left: 25%;
-  top: 1%;
-  min-height: 20%;
+  min-height: 150px;
+  max-height: 350px;
   background: rgba(200, 50, 50, 0.75);
   color: black;
   font-size: 24px;
   border-radius: 1em;
   padding: 1em;
   z-index: 999;
+}
+.hidden {
+  top: -400px;
+}
+.visible {
+  top: 5px;
 }
 
 /** Corpus status **/
