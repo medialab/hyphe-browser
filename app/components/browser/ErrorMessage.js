@@ -1,7 +1,8 @@
 import React from 'react'
 
-export default ({ message }) => (
+export default ({ message, icon }) => (
   <div className={ 'error-dialog ' + (message ? 'visible' : 'hidden') }>
-    <strong>{ message }</strong>
+    { icon ? <span class={ 'icon icon-' + icon } /> : null }
+    <strong> { message }</strong>
   </div>
 )
