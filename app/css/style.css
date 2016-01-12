@@ -70,7 +70,7 @@ a {
   top: 5px;
 }
 .error-dialog-wrapper.blocking {
-  
+
 }
 
 
@@ -84,7 +84,7 @@ h1.title {
 .corpus-statuses {
   display: flex;
   flex-direction: row;
-  width: 120px;
+  width: 160px;
 }
 .corpus-status {
   flex-grow: 1;
@@ -108,8 +108,28 @@ h1.title {
 
 /** Disconnection **/
 
+.disconnect-link {
+  display: block;
+  height: 38px; /* similar to title */
+}
 .icon-disconnect {
   color: black;
   font-weight: bold;
   font-size: 24px;
+}
+
+/** Load indicators **/
+
+.corpus-loads {
+  display: flex;
+  flex-direction: row;
+  width: 160px;
+}
+
+.corpus-load {
+  flex-grow: 1;
+  margin: 1px;
+  padding: 1px;
+  background: #fff;
+  text-align: center;
 }

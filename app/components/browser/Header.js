@@ -59,7 +59,7 @@ class Header extends React.Component {
           { status && ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
         </div>
         <div className="pull-right">
-          <Link to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled"></span></Link>
+          <Link className="disconnect-link" to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled" /></Link>
           { status && ready && <CorpusLoadIndicators status={ status } /> }
         </div>
       </header>
