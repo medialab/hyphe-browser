@@ -1,13 +1,17 @@
 // login to a corpus form
 
 import React, { PropTypes } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-export default (props) => {
+import * as actions from '../../actions/corpora'
+
+const CorpusLoginForm = (props) => {
 
   return (
     <form className="server-form">
-      <h2 className="pane-centered-title">Login to corpus</h2>
+      <h2 className="pane-centered-title">Login to { props.corpus.name }</h2>
       <div className="form-group">
         <label>Password</label>
         <input className="form-control" />
@@ -20,3 +24,20 @@ export default (props) => {
   )
 
 }
+
+CorpusLoginForm.propTypes = {
+  actions: PropTypes.object.isRequired,
+  corpus: PropTypes.object
+}
+
+const mapStateToProps = (state) => ({
+  corpus: state.corpora.selected
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+const ConnectedCorpusLoginForm = connect(mapStateToProps, mapDispatchToProps)(CorpusLoginForm)
+
+export default ConnectedCorpusLoginForm

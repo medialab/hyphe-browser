@@ -1,25 +1,23 @@
-// 4 components in this file
-//
-// this list displays 2 kind of items:
-// - password protected corpora redirect to /login/corpus-login-form
-// - no password protected corpora change the state and redirect to /browser
 
 import '../../css/login/corpus-list'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
+import { pushPath } from 'redux-simple-router'
 import moment from 'moment'
 
 // abstract component
 const CorpusListItem = (props) => {
-  const { corpus } = props
+
+  const { actions, corpus, dispatch } = props
+  const path = corpus.password ? '/login/corpus-login-form' : 'browser'
 
   return (
-    <div>
+    <div onClick={ () => { actions.selectCorpus(props.corpus); dispatch(pushPath(path)) } }>
       <h5 className="corpus-list-item-name">
         { corpus.password ? <span className="icon icon-lock"></span> : null }
         { corpus.name }
-        { corpus.status === "ready" ? <span className="icon icon-play"></span> : null }
+        { corpus.status === 'ready' ? <span className="icon icon-play"></span> : null }
       </h5>
       <div>{ corpus.webentities_in } web entities</div>
       <div className="corpus-list-item-dates">
@@ -31,41 +29,14 @@ const CorpusListItem = (props) => {
   )
 }
 CorpusListItem.propTypes = {
-  corpus: PropTypes.object.isRequired
-}
-
-
-const PasswordCorpusListItem = (props) => {
-
-  return (
-    <Link to="/login/corpus-login-form">
-      <CorpusListItem corpus={ props.corpus } />
-    </Link>
-  )
-}
-
-PasswordCorpusListItem.propTypes = {
-  corpus: PropTypes.object.isRequired
-}
-
-
-const NoPasswordCorpusListItem = (props) => {
-
-  return (
-    <div onClick={ () => props.actions.selectCorpus(props.corpus) }>
-      <CorpusListItem corpus={ props.corpus } />
-    </div>
-  )
-}
-
-NoPasswordCorpusListItem.propTypes = {
   actions: PropTypes.object.isRequired,
-  corpus: PropTypes.object.isRequired
+  corpus: PropTypes.object.isRequired,
+  dispatch: PropTypes.func
 }
-
 
 const CorpusList = (props) => {
 
+  const { actions, dispatch } = props
   const corpora = Object.keys(props.corpora)
     .sort()
     .map((k) => props.corpora[k])
@@ -79,10 +50,7 @@ const CorpusList = (props) => {
         <ul className="list-group corpus-list">
           { corpora.map((corpus) =>
             <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-              { corpus.password
-                ? <PasswordCorpusListItem corpus={ corpus } />
-                : <NoPasswordCorpusListItem actions={ props.actions } corpus={ corpus } />
-              }
+              <CorpusListItem actions={ actions } corpus={ corpus } dispatch={ dispatch } />
             </li>
           ) }
         </ul>
@@ -96,7 +64,8 @@ const CorpusList = (props) => {
 
 CorpusList.propTypes = {
   actions: PropTypes.object.isRequired,
-  corpora: PropTypes.object.isRequired
+  corpora: PropTypes.object.isRequired,
+  dispatch: PropTypes.func
 }
 
 export default CorpusList

@@ -1,5 +1,4 @@
 import jsonrpc from '../utils/jsonrpc'
-import { pushPath } from 'redux-simple-router'
 
 export const SELECT_CORPUS = '§_SELECT_CORPUS'
 
@@ -15,16 +14,11 @@ export const CREATE_CORPUS_REQUEST = '§_CREATE_CORPUS_REQUEST'
 export const CREATE_CORPUS_SUCCESS = '§_CREATE_CORPUS_SUCCESS'
 export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 
-export const selectCorpus = (corpus) => (dispatch) => {
-  dispatch({
-    type: SELECT_CORPUS,
-    payload: {
-      corpus
-    }
-  })
+export const selectCorpus = (corpus) => ({
+  type: SELECT_CORPUS,
+  payload: { corpus }
+})
 
-  dispatch(pushPath('/browser'))
-}
 
 export const requestCorpusStatus = (corpus) => ({
   type: FETCH_CORPUS_STATUS_REQUEST,

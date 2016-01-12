@@ -41,7 +41,7 @@ const StartUpForm = (props, context) => {
 
       { props.ui.loaders.corpora
         ? <Spinner textId="loading-corpora" />
-        : <CorpusList actions={ props.actions } corpora={ props.corpora } />
+        : <CorpusList actions={ props.actions } corpora={ props.corpora } dispatch={ props.dispatch } />
       }
     </form>
   )
@@ -55,6 +55,7 @@ StartUpForm.contextTypes = {
 StartUpForm.propTypes = {
   actions: PropTypes.object,
   corpora: PropTypes.object.isRequired,
+  dispatch: PropTypes.func,
   servers: PropTypes.array.isRequired,
   ui: PropTypes.object.isRequired
 }
@@ -66,7 +67,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
+  actions: bindActionCreators(actions, dispatch),
+  dispatch
 })
 
 const connectedStartUpForm = connect(mapStateToProps, mapDispatchToProps)(StartUpForm)
