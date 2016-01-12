@@ -8,10 +8,14 @@ import { syncReduxAndRouter } from 'redux-simple-router'
 import routes from './routes'
 import DevTools from './components/DevTools'
 import configureStore from './store/configureStore'
+import { setLocale } from './actions/intl'
 
 import jsonrpc from './utils/jsonrpc'
 
 const store = configureStore()
+
+// Initialize i18n
+store.dispatch(setLocale('fr-FR')) // TODO from user preferences
 
 syncReduxAndRouter(hashHistory, store)
 
