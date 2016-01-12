@@ -10,7 +10,7 @@ import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
 class Header extends React.Component {
 
   watchStatus () {
-    const { fetchCorpusStatus, showError, serverUrl, corpus } = this.props
+    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
     const repeat = () => {
       this.watchTimeout = setTimeout(() => this.watchStatus(), 1000)
     }
@@ -19,24 +19,17 @@ class Header extends React.Component {
       .then((action) => {
         if (!action.payload.corpus.ready) {
           showError({ message: action.payload.corpus.message, fatal: true })
-          return this.doStartCorpus()
+          return startCorpus(serverUrl, corpus, corpusPassword)
+            .then(() => {
+              hideError()
+            })
+            .catch((err) => {
+              showError({ message: err.message, fatal: true })
+            })
         }
       })
       // Whatever happens next, repeat
       .then(repeat, repeat)
-  }
-
-  doStartCorpus () {
-    const { hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
-
-    return startCorpus(serverUrl, corpus, corpusPassword)
-      .then(() => {
-        hideError()
-        return this.watchStatus()
-      })
-      .catch((err) => {
-        showError({ message: err.message, fatal: true })
-      })
   }
 
   componentDidMount () {
