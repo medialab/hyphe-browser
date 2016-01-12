@@ -14,7 +14,8 @@ import CorpusList from './CorpusList'
 import { FormattedMessage as T } from 'react-intl'
 
 
-const StartUpForm = (props) => {
+const StartUpForm = (props, context) => {
+  const formatMessage = context.intl.formatMessage
 
   return (
     <form className="start-up-form">
@@ -25,7 +26,7 @@ const StartUpForm = (props) => {
           className="form-control server-list"
           onChange={ (evt) => props.actions.fetchCorpora(evt.target.value) }
         >
-          <option><T id="select-server" /></option>
+          <option>{ formatMessage({ id: 'select-server' }) }</option>
           { props.servers.map((server) =>
             <option key={ server.url } value={ server.url }>{ server.name }</option>
           ) }
@@ -44,6 +45,10 @@ const StartUpForm = (props) => {
     </form>
   )
 
+}
+
+StartUpForm.contextTypes = {
+  intl: PropTypes.any
 }
 
 StartUpForm.propTypes = {
