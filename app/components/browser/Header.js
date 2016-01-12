@@ -12,27 +12,26 @@ class Header extends React.Component {
   watchStatus () {
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
     const repeat = () => {
-      this.watchTimeout = setTimeout(() => this.watchStatus(), 1000)
+      this.watchTimeout = setTimeout(() => this.watchStatus(), 5000)
     }
 
     return fetchCorpusStatus(serverUrl, corpus)
-      .then((action) => {
-        if (!action.payload.corpus.ready) {
-          const { ram_left, ports_left } = action.payload.status.hyphe
-          const message = action.payload.corpus.message + ((ram_left > 0 && ports_left > 0)
+      .then(({ payload: { status } }) => {
+        if (!status.corpus.ready) {
+          const { ram_left, ports_left } = status.hyphe
+          const message = status.corpus.message + ((ram_left > 0 && ports_left > 0)
             ? '. Starting corpus now…'
             : '. No resource available to start corpus, please retry later.')
           showError({ message, fatal: true })
 
           if (ram_left > 0 && ports_left > 0) {
             return startCorpus(serverUrl, corpus, corpusPassword)
-              .then(() => {
-                hideError()
-              })
               .catch((err) => {
                 showError({ message: err.message, fatal: true })
               })
           }
+        } else {
+          hideError()
         }
       })
       // Whatever happens next, repeat
@@ -44,7 +43,6 @@ class Header extends React.Component {
   }
 
   componentWillUnmount () {
-    // interrupt timeout
     clearTimeout(this.watchTimeout)
   }
 
