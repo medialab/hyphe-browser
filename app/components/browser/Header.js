@@ -2,6 +2,7 @@ import React from 'react'
 import CorpusStatusIndicators from './CorpusStatusIndicators'
 import CorpusLoadIndicators from './CorpusLoadIndicators'
 import jsonrpc from '../../utils/jsonrpc'
+import { Link } from 'react-router'
 
 export default class CorpusHeader extends React.Component {
 
@@ -48,6 +49,7 @@ export default class CorpusHeader extends React.Component {
           { this.state.loading ? null : <CorpusStatusIndicators counters={ this.state.status.corpus.memory_structure.webentities } /> }
         </div>
         <div className="pull-right">
+          <Link to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled"></span></Link>
           { this.state.loading ? null : <CorpusLoadIndicators status={ this.state.status } /> }
         </div>
       </header>

@@ -101,3 +101,11 @@ h1.title {
 .corpus-status-DISCOVERED {
   border-bottom: 3px solid #93BDE0;
 }
+
+/** Disconnection **/
+
+.icon-disconnect {
+  color: black;
+  font-weight: bold;
+  font-size: 24px;
+}
