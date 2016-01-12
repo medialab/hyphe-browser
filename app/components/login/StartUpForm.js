@@ -11,31 +11,34 @@ import { connect } from 'react-redux'
 import actions from './../../actions'
 import CorpusList from './CorpusList'
 
+import { FormattedMessage as T } from 'react-intl'
+
+
 const StartUpForm = (props) => {
 
   return (
     <form className="start-up-form">
-      <h2 className="pane-centered-title">Welcome to Hyphe</h2>
+      <h2 className="pane-centered-title"><T id="welcome" /></h2>
 
       <div className="form-group">
         <select
           className="form-control server-list"
           onChange={ (evt) => props.actions.fetchCorpora(evt.target.value) }
         >
-          <option>Please select a server instance</option>
+          <option><T id="select-server" /></option>
           { props.servers.map((server) =>
             <option key={ server.url } value={ server.url }>{ server.name }</option>
           ) }
         </select>
       </div>
       <div className="form-group">
-        <Link className="btn btn-primary" to="/login/server-form">Add server</Link>
+        <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
       </div>
 
       <hr />
 
       { props.ui.loaders.corpora
-        ? <span>Loading corpora…</span>
+        ? <span><T id="loading-corpora" /></span>
         : <CorpusList actions={ props.actions } corpora={ props.corpora } />
       }
     </form>
