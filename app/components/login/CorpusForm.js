@@ -6,6 +6,7 @@ import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
 
@@ -95,30 +96,30 @@ class CorpusForm extends Component {
 
     return (
       <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
-        <h2 className="pane-centered-title">Corpus edition</h2>
-        <div>on { server.name } ({ server.url })</div>
+        <h2 className="pane-centered-title"><T id="corpus-edition" /></h2>
+        <div><T id="on-server" values={ server } /></div>
         <hr />
         <div className="form-group">
-          <label>Corpus name</label>
+          <label><T id="corpus-name" /></label>
           <input className="form-control"
                  onChange={ (evt) => this.onChangeName(evt) }
                  value={ this.state.data.name } />
         </div>
         <div className="form-group">
-          <label>Password</label>
+          <label><T id="password" /></label>
           <input className="form-control"
                  onChange={ (evt) => this.onChangePassword(evt) }
                  value={ this.state.data.password } />
         </div>
         <div className="form-group">
-          <label>Confirm password</label>
+          <label><T id="confirm-password" /></label>
           <input className="form-control"
                  onChange={ (evt) => this.onChangePasswordConfirm(evt) }
                  value={ this.state.data.passwordConfirm } />
         </div>
         <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.disabled }>Create corpus</button>
-          <Link className="btn btn-default" to="/login">Cancel</Link>
+          <button className="btn btn-primary" disabled={ this.state.disabled }><T id="create-corpus" /></button>
+          <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
         </div>
       </form>
     )

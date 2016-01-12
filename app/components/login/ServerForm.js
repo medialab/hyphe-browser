@@ -9,29 +9,28 @@ export default (props) => {
 
   return (
     <form className="server-form">
-      <h2 className="pane-centered-title">Server edition</h2>
+      <h2 className="pane-centered-title"><T id="server-edition" /></h2>
       <div className="form-group">
-        <label>API url</label>
+        <label><T id="api-url" /></label>
         <input className="form-control" />
       </div>
       <div className="form-group">
-        <label>Login</label>
+        <label><T id="login" /></label>
         <input className="form-control" />
       </div>
       <div className="form-group">
-        <label>Password</label>
+        <label><T id="password" /></label>
         <input className="form-control" />
       </div>
       <div className="form-group">
-        <label>Instance name</label>
+        <label><T id="instance-name" /></label>
         <input className="form-control" />
       </div>
       <div className="form-actions">
-        <button className="btn btn-primary">Save</button>
-        <Link className="btn btn-default" to="/login">Cancel</Link>
+        <button className="btn btn-primary"><T id="save" /></button>
+        <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
       </div>
     </form>
   )
 
 }
-

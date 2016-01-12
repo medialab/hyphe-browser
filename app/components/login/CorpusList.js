@@ -4,7 +4,7 @@ import '../../css/login/corpus-list'
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import { pushPath } from 'redux-simple-router'
-import moment from 'moment'
+import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 // abstract component
 const CorpusListItem = (props) => {
@@ -19,11 +19,11 @@ const CorpusListItem = (props) => {
         { corpus.name }
         { corpus.status === 'ready' ? <span className="icon icon-play"></span> : null }
       </h5>
-      <div>{ corpus.webentities_in } web entities</div>
+      <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
       <div className="corpus-list-item-dates">
-        <span>Created { moment(corpus.created_at).fromNow() }</span>
+        <span><T id="created-ago" values={ { relative: <D value={ corpus.created_at } /> } } /></span>
         <span> - </span>
-        <span>Used { moment(corpus.last_activity).fromNow() }</span>
+        <span><T id="used-ago" values={ { relative: <D value={ corpus.last_activity } /> } } /></span>
       </div>
     </div>
   )
@@ -45,7 +45,7 @@ const CorpusList = (props) => {
 
   return (
     <div>
-      <h3>{ corpora.length } available corpora :</h3>
+      <h3><T id="available-corpora" values={ { count: corpora.length } } /></h3>
       <div className="form-group corpus-list-slider">
         <ul className="list-group corpus-list">
           { corpora.map((corpus) =>
@@ -56,7 +56,7 @@ const CorpusList = (props) => {
         </ul>
       </div>
       <div className="form-actions">
-        <Link className="btn btn-primary" to="/login/corpus-form">Create Corpus</Link>
+        <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
       </div>
     </div>
   )

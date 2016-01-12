@@ -7,13 +7,11 @@ import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { FormattedMessage as T } from 'react-intl'
 
 import actions from '../../actions'
 import CorpusList from './CorpusList'
 import Spinner from '../Spinner'
-
-import { FormattedMessage as T } from 'react-intl'
-
 
 const StartUpForm = (props, context) => {
   const formatMessage = context.intl.formatMessage

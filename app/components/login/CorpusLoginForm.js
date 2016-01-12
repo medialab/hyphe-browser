@@ -4,6 +4,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
 
@@ -11,14 +12,14 @@ const CorpusLoginForm = (props) => {
 
   return (
     <form className="server-form">
-      <h2 className="pane-centered-title">Login to { props.corpus.name }</h2>
+      <h2 className="pane-centered-title"><T id="login-corpus" values={ { name: props.corpus.name } } /></h2>
       <div className="form-group">
-        <label>Password</label>
+        <label><T id="password" /></label>
         <input className="form-control" />
       </div>
       <div className="form-actions">
-        <Link className="btn btn-primary" to="/browser">Connect</Link>
-        <Link className="btn btn-default" to="/login">Cancel</Link>
+        <Link className="btn btn-primary" to="/browser"><T id="connect" /></Link>
+        <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
       </div>
     </form>
   )
