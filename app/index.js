@@ -17,6 +17,8 @@ const store = configureStore()
 // Initialize i18n
 store.dispatch(setLocale('fr-FR')) // TODO from user preferences
 
+// Reset URI
+location.hash = 'login'
 syncReduxAndRouter(hashHistory, store)
 
 const domRoot = document.getElementById('root')
