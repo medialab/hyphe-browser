@@ -75,7 +75,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
     }
   })
 
-  return jsonrpc(serverUrl)('create_corpus', corpus)
+  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
     .then((res) => dispatch(receiveCorpus(serverUrl, res)))
     .catch((err) => dispatch({
       type: CREATE_CORPUS_FAILURE,
