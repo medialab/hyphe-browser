@@ -24,9 +24,9 @@ const StartUpForm = (props, context) => {
       <div className="form-group">
         <select
           className="form-control server-list"
-          onChange={ (evt) => props.actions.fetchCorpora(evt.target.value) }
+          onChange={ (evt) => { if (evt.target.value) props.actions.fetchCorpora(evt.target.value) } }
         >
-          <option>{ formatMessage({ id: 'select-server' }) }</option>
+          <option value="">{ formatMessage({ id: 'select-server' }) }</option>
           { props.servers.map((server) =>
             <option key={ server.url } value={ server.url }>{ server.name }</option>
           ) }

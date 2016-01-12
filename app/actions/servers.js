@@ -24,6 +24,8 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
 
   return jsonrpc(serverUrl)('list_corpus')
     .then((res) => dispatch(receiveCorpora(serverUrl, res)))
-    // TODO better error handling
-    .catch((err) => console.error(err))
+    .catch((err) => dispatch({
+      type: FETCH_CORPORA_FAILURE,
+      payload: err
+    }))
 }
