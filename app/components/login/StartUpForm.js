@@ -8,8 +8,9 @@ import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import actions from './../../actions'
+import actions from '../../actions'
 import CorpusList from './CorpusList'
+import Spinner from '../Spinner'
 
 import { FormattedMessage as T } from 'react-intl'
 
@@ -39,7 +40,7 @@ const StartUpForm = (props, context) => {
       <hr />
 
       { props.ui.loaders.corpora
-        ? <span><T id="loading-corpora" /></span>
+        ? <Spinner textId="loading-corpora" />
         : <CorpusList actions={ props.actions } corpora={ props.corpora } />
       }
     </form>
@@ -52,6 +53,7 @@ StartUpForm.contextTypes = {
 }
 
 StartUpForm.propTypes = {
+  actions: PropTypes.object,
   corpora: PropTypes.object.isRequired,
   servers: PropTypes.array.isRequired,
   ui: PropTypes.object.isRequired
