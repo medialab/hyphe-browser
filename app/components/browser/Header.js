@@ -3,68 +3,93 @@ import CorpusStatusIndicators from './CorpusStatusIndicators'
 import CorpusLoadIndicators from './CorpusLoadIndicators'
 import { Link } from 'react-router'
 
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { showError, hideError } from './../../actions/browser'
+import { showError, hideError } from '../../actions/browser'
+import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
 
-  /*
-  refreshStatus () {
-    console.log('Get corpus status...')
-    this.client('get_status', [this.props.corpus]).then((status) => {
-      console.log('Got corpus status', status)
-      if (!status.corpus.ready) {
-        // TODO handle that globally
-        console.error('Corpus not ready, starting...')
-        this.client('start_corpus', [this.props.corpus, this.props.password || '']).then(() => {
-          this.refreshStatus()
-        })
-      } else {
-        this.setState({
-          loading: false,
-          status
-        })
-        setTimeout(() => this.refreshStatus(), 1000)
-      }
-    }).catch((err) => console.error(err)) // TODO emit error action
-  }
-  */
+class Header extends React.Component {
 
-const Header = ({ loading, status, actions }) => {
-  if (!status.ready) {
-    actions.showError({ message: 'fake error', fatal: true })
-    setTimeout(() => {
-      actions.hideError()
-    }, 2000)
+  watchStatus () {
+    const { fetchCorpusStatus, showError, serverUrl, corpus } = this.props
+    const repeat = () => {
+      this.watchTimeout = setTimeout(() => this.watchStatus(), 1000)
+    }
+
+    return fetchCorpusStatus(serverUrl, corpus)
+      .then((action) => {
+        if (!action.payload.corpus.ready) {
+          showError({ message: action.payload.corpus.message, fatal: true })
+          return this.doStartCorpus()
+        }
+      })
+      // Whatever happens next, repeat
+      .then(repeat, repeat)
   }
 
-  return (
-    <header className="toolbar toolbar-header">
-      <div className="pull-left">
-        <h1 className="title">{ loading ? '...' : status.corpus.corpus_id }</h1>
-        { loading ? null : <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
-      </div>
-      <div className="pull-right">
-        <Link to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled"></span></Link>
-        { loading ? null : <CorpusLoadIndicators status={ status } /> }
-      </div>
-    </header>
-  )
+  doStartCorpus () {
+    const { hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
+
+    return startCorpus(serverUrl, corpus, corpusPassword)
+      .then(() => {
+        hideError()
+        return this.watchStatus()
+      })
+      .catch((err) => {
+        showError({ message: err.message, fatal: true })
+      })
+  }
+
+  componentDidMount () {
+    this.watchStatus()
+  }
+
+  componentWillUnmount () {
+    // interrupt timeout
+    clearTimeout(this.watchTimeout)
+  }
+
+  render () {
+    const { status, corpus } = this.props
+    const ready = status && status.corpus && status.corpus.ready
+
+    return (
+      <header className="toolbar toolbar-header">
+        <div className="pull-left">
+          <h1 className="title">{ corpus.corpus_id }</h1>
+          { status && ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
+        </div>
+        <div className="pull-right">
+          <Link to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled"></span></Link>
+          { status && ready && <CorpusLoadIndicators status={ status } /> }
+        </div>
+      </header>
+    )
+  }
 }
 
 Header.propTypes = {
-  actions: React.PropTypes.objectOf(React.PropTypes.func).isRequired,
-  loading: React.PropTypes.bool.isRequired,
+  corpus: React.PropTypes.object.isRequired,
+  corpusPassword: React.PropTypes.string,
+  fetchCorpusStatus: React.PropTypes.func,
+  hideError: React.PropTypes.func,
+  serverUrl: React.PropTypes.string.isRequired,
+  showError: React.PropTypes.func,
+  startCorpus: React.PropTypes.func,
   status: React.PropTypes.object
 }
 
-const mapStateToProps = ({ ui, corpora }) => ({
-  loading: ui.loaders.corpus_status,
-  status: corpora.selected.status
+const mapStateToProps = ({ corpora, servers }) => ({
+  corpus: corpora.selected,
+  corpusPassword: null, // TODO
+  serverUrl: servers.selected.url,
+  status: corpora.status
 })
 
 const mapDispatchToProps = {
   showError,
-  hideError
+  hideError,
+  fetchCorpusStatus,
+  startCorpus
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
