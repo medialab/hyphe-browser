@@ -47,14 +47,10 @@ class Header extends React.Component {
 
     return (
       <header className="toolbar toolbar-header">
-        <div className="pull-left">
-          <h1 className="title">{ corpus.corpus_id }</h1>
-          { status && ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
-        </div>
-        <div className="pull-right">
-          <Link className="disconnect-link" to="login"><span className="pull-right icon-disconnect icon icon-cancel-circled" /></Link>
-          { status && ready && <CorpusLoadIndicators status={ status } /> }
-        </div>
+        { status && ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
+        <h1 className="title">{ corpus.corpus_id }</h1>
+        { status && ready && <CorpusLoadIndicators status={ status } /> }
+        <Link className="disconnect-link" to="login" title="Disconnect"><span className="pull-right icon-disconnect icon icon-cancel-circled" /></Link>
       </header>
     )
   }

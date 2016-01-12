@@ -74,11 +74,21 @@ a {
 }
 
 
+/** Header alignment **/
+
+header {
+  display: flex;
+  flex-direction: row;
+}
+header h1.title {
+  flex-grow: 1;
+}
+
 /** Corpus status **/
 
 h1.title {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .corpus-statuses {
@@ -92,6 +102,7 @@ h1.title {
   padding: 1px;
   background: #fff;
   text-align: center;
+  font-size: 16px;
 }
 .corpus-status-IN {
   border-bottom: 3px solid #333;
@@ -110,12 +121,12 @@ h1.title {
 
 .disconnect-link {
   display: block;
-  height: 38px; /* similar to title */
+  margin: 0 5px 0 10px;
 }
 .icon-disconnect {
   color: black;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /** Load indicators **/
@@ -132,4 +143,5 @@ h1.title {
   padding: 1px;
   background: #fff;
   text-align: center;
+  font-size: 16px;
 }
