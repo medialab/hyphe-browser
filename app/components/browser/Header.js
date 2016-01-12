@@ -18,14 +18,21 @@ class Header extends React.Component {
     return fetchCorpusStatus(serverUrl, corpus)
       .then((action) => {
         if (!action.payload.corpus.ready) {
-          showError({ message: action.payload.corpus.message, fatal: true })
-          return startCorpus(serverUrl, corpus, corpusPassword)
-            .then(() => {
-              hideError()
-            })
-            .catch((err) => {
-              showError({ message: err.message, fatal: true })
-            })
+          const { ram_left, ports_left } = action.payload.status.hyphe
+          const message = action.payload.corpus.message + ((ram_left > 0 && ports_left > 0)
+            ? '. Starting corpus now…'
+            : '. No resource available to start corpus, please retry later.')
+          showError({ message, fatal: true })
+
+          if (ram_left > 0 && ports_left > 0) {
+            return startCorpus(serverUrl, corpus, corpusPassword)
+              .then(() => {
+                hideError()
+              })
+              .catch((err) => {
+                showError({ message: err.message, fatal: true })
+              })
+          }
         }
       })
       // Whatever happens next, repeat
