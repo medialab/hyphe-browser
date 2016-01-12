@@ -8,7 +8,7 @@ import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import * as actions from './../../actions/servers'
+import actions from './../../actions'
 import CorpusList from './CorpusList'
 
 const StartUpForm = (props) => {
@@ -36,7 +36,7 @@ const StartUpForm = (props) => {
 
       { props.ui.loaders.corpora
         ? <span>Loading corpora…</span>
-        : <CorpusList corpora={ props.corpora } />
+        : <CorpusList actions={ props.actions } corpora={ props.corpora } />
       }
     </form>
   )
