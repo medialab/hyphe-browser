@@ -4,11 +4,20 @@ import Header from './Header'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
 
-export default () => (
+import { connect } from 'react-redux'
+
+
+const Browser = ({ error }) => (
   <div className="window">
-    <ErrorMessage message={ null } />
-    <Header uri="http://hyphe.medialab.sciences-po.fr/dev-forccast-api" corpus="test" />
+    <Header />
     <BrowserStack />
     <BrowserTabs />
+    <ErrorMessage { ...error } />
   </div>
 )
+
+const mapStateToProps = ({ ui }) => ({
+  error: ui.error
+})
+
+export default connect(mapStateToProps)(Browser)

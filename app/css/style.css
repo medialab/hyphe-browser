@@ -63,12 +63,16 @@ a {
   padding: 1em;
   z-index: 999;
 }
-.hidden {
+.error-dialog.hidden {
   top: -400px;
 }
-.visible {
+.error-dialog.visible {
   top: 5px;
 }
+.error-dialog-wrapper.blocking {
+  
+}
+
 
 /** Corpus status **/
 
