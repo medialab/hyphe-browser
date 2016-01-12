@@ -7,6 +7,8 @@ const CorpusList = (props) => {
 
   const corpora = Object.keys(props.corpora).map((k) => props.corpora[k])
 
+  if (!corpora.length) return <noscript />
+
   return (
     <div>
       <h3>Available corpora :</h3>
