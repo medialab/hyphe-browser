@@ -44,9 +44,9 @@ export const fetchCorpusStatus = (serverUrl, corpus) => (dispatch) => {
 
   return jsonrpc(serverUrl)('get_status', [corpus.corpus_id])
     .then((status) => dispatch(receiveCorpusStatus(corpus, status)))
-    .catch((err) => dispatch({
+    .catch((error) => dispatch({
       type: FETCH_CORPUS_STATUS_FAILURE,
-      payload: err
+      payload: { error, serverUrl, corpus }
     }))
 }
 
@@ -55,7 +55,10 @@ export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
 
   return jsonrpc(serverUrl)('start_corpus', [corpus.corpus_id, password])
     .then(() => dispatch({ type: START_CORPUS_SUCCESS, payload: { corpus } }))
-    .catch((error) => dispatch({ type: START_CORPUS_FAILURE, payload: { corpus, error } }))
+    .catch((error) => dispatch({
+      type: START_CORPUS_FAILURE,
+      payload: { error, corpus }
+    }))
 }
 
 export const receiveCorpus = (serverUrl, corpus) => ({
@@ -77,8 +80,8 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
 
   return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
     .then((res) => dispatch(receiveCorpus(serverUrl, res)))
-    .catch((err) => dispatch({
+    .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,
-      payload: err
+      payload: { error, corpus }
     }))
 }
