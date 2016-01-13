@@ -35,6 +35,10 @@ const StartUpForm = (props, context) => (
     </div>
     <div className="form-group">
       <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
+      { props.selectedServer
+        ? <Link className="btn btn-primary" to="/login/server-form?edit"><T id="edit-server" /></Link>
+        : null
+      }
       <button className="btn btn-default" onClick={ () => props.actions.resetServers() }>
         <T id="reset-servers" />
       </button>

@@ -2,6 +2,7 @@ import createReducer from '../utils/create-reducer'
 import {
   FETCH_CORPORA_REQUEST,
   CREATE_SERVER,
+  UPDATE_SERVER,
   DELETE_SERVER,
   RESET_SERVERS
 } from '../actions/servers'
@@ -24,6 +25,16 @@ export default createReducer(initialState, {
   [CREATE_SERVER]: (state, { server }) => ({
     ...state,
     list: state.list.concat(server)
+  }),
+
+  [UPDATE_SERVER]: (state, { server }) => ({
+    ...state,
+    list: state.list.map((s) => {
+      if (s.name === server.name) {
+        return server
+      }
+      return s
+    })
   }),
 
   [DELETE_SERVER]: (state, { server }) => ({

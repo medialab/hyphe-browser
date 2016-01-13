@@ -5,6 +5,7 @@ export const FETCH_CORPORA_SUCCESS = '§_FETCH_CORPORA_SUCCESS'
 export const FETCH_CORPORA_FAILURE = '§_FETCH_CORPORA_FAILURE'
 
 export const CREATE_SERVER = '§_CREATE_SERVER'
+export const UPDATE_SERVER = '§_UPDATE_SERVER'
 export const DELETE_SERVER = '§_DELETE_SERVER'
 
 // to clear the localStorage
@@ -36,6 +37,11 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
 
 export const createServer = (server) => ({
   type: CREATE_SERVER,
+  payload: { server }
+})
+
+export const updateServer = (server) => ({
+  type: UPDATE_SERVER,
   payload: { server }
 })
 

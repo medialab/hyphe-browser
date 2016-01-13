@@ -10,6 +10,7 @@ import { pushPath } from 'redux-simple-router'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/servers'
+import { FORM_CREATE, FORM_EDIT } from '../../constants'
 
 class ServerForm extends Component {
 
@@ -17,10 +18,17 @@ class ServerForm extends Component {
 
   constructor (props) {
     super(props)
+
+    // beware, edit could be set to null
+    const mode = props.location.query.edit !== undefined
+      ? FORM_EDIT
+      : FORM_CREATE
+
     this.state = {
       disabled: false,
       errors: [],
-      data: this.getInitData()
+      data: this.getInitData(mode),
+      mode
     }
   }
 
@@ -55,7 +63,10 @@ class ServerForm extends Component {
     )
   }
 
-  getInitData () {
+  getInitData (mode) {
+    if (mode === FORM_EDIT) {
+      return { ...this.props.selectedServer }
+    }
     return {
       url: null,
       name: null,
@@ -81,11 +92,15 @@ class ServerForm extends Component {
       ...this.state.data
     }
 
-    this.props.actions.createServer(server)
+    this.state.mode === FORM_CREATE
+      ? this.props.actions.createServer(server)
+      : this.props.actions.updateServer(server)
+
     this.props.dispatch(pushPath('/login'))
   }
 
   render () {
+
     return (
       <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
         <h2 className="pane-centered-title"><T id="server-edition" /></h2>
@@ -116,10 +131,13 @@ class ServerForm extends Component {
 
 ServerForm.propTypes = {
   actions: PropTypes.object,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  location: PropTypes.object,
+  selectedServer: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
+  selectedServer: state.servers.selected
 })
 
 const mapDispatchToProps = (dispatch) => ({
