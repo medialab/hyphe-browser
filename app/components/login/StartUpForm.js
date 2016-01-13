@@ -20,6 +20,7 @@ const StartUpForm = (props, context) => (
     <div className="form-group">
       <select
         className="form-control server-list"
+        defaultValue={ props.selectedServer && props.selectedServer.url }
         onChange={ (evt) => { if (evt.target.value) props.actions.fetchCorpora(evt.target.value) } }
       >
         <option value="">{ context.intl.formatMessage({ id: 'select-server' }) }</option>
@@ -31,8 +32,6 @@ const StartUpForm = (props, context) => (
     <div className="form-group">
       <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
     </div>
-
-    <hr />
 
     { props.ui.loaders.corpora
       ? <Spinner textId="loading-corpora" />
@@ -49,12 +48,14 @@ StartUpForm.propTypes = {
   actions: PropTypes.object,
   corpora: PropTypes.object.isRequired,
   dispatch: PropTypes.func,
+  selectedServer: PropTypes.object,
   servers: PropTypes.array.isRequired,
   ui: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
   corpora: state.corpora.list,
+  selectedServer: state.servers.selected,
   servers: state.servers.list,
   ui: state.ui
 })
