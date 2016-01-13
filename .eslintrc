@@ -30,7 +30,7 @@
     "react/jsx-max-props-per-line": [1, { "maximum": 4 }],
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 2,
-    "react/jsx-sort-prop-types": 1,
+    "react/jsx-sort-prop-types": 0,
     "react/jsx-sort-props": 0,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
