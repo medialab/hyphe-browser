@@ -1,0 +1,12 @@
+/* extension to photon */
+
+.btn:disabled, .btn[disabled] {
+  background: white;
+  border-color: #B7B7B7;
+  color: #B7B7B7;
+}
+
+input:disabled, input[disabled] {
+  background: #EEE;
+  color: #999;
+}
