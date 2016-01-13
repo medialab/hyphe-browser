@@ -3,17 +3,18 @@ import ErrorMessage from './ErrorMessage'
 import Header from './Header'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
+import CorpusStatusWatcher from '../CorpusStatusWatcher'
 
 import { connect } from 'react-redux'
 
 
 const Browser = ({ error }) => (
-  <div className="window">
+  <CorpusStatusWatcher className="window">
     <Header />
     <BrowserStack />
     <BrowserTabs />
     <ErrorMessage { ...error } />
-  </div>
+  </CorpusStatusWatcher>
 )
 
 const mapStateToProps = ({ ui }) => ({
