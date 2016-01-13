@@ -28,6 +28,7 @@
   "delete": "Supprimer",
   "disconnect": "Déconnecter",
   "edit-server": "Éditer ce serveur",
+  "error-loading-corpora": "Erreur de chargement des corpora",
   "loading-corpora": "Chargement des corpora…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",

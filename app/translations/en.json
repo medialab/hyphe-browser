@@ -28,6 +28,7 @@
   "delete": "Delete",
   "disconnect": "Disconnect",
   "edit-server": "Edit this server",
+  "error-loading-corpora": "Error loading corpora",
   "loading-corpora": "Loading corpora…",
   "login": "Login",
   "login-corpus": "Login to {name}",
