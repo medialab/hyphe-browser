@@ -38,6 +38,7 @@
   "select-server": "Sélectionnez une instance",
   "server-edition": "Édition de l'instance",
   "server-name": "Nom du server",
+  "url-and-name-required": "Les champs URL et nom sont requis",
   "used-ago": "Utilisé {relative}",
   "webentities": "{count, plural, \n=0 {aucune entité web}\n=1 {1 entité web}\nother {# entités web}}",
   "welcome": "Bienvenue sur Hyphe"
