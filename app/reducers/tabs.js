@@ -1,7 +1,8 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
 import {
-  OPEN_TAB, CLOSE_TAB, SELECT_TAB
+  OPEN_TAB, CLOSE_TAB, SELECT_TAB,
+  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
 } from '../actions/tabs'
 
 
@@ -14,7 +15,7 @@ export default createReducer(initialState, {
 
   [OPEN_TAB]: (state, { url, title }) => {
     const id = uuid()
-    const icon = null // TODO
+    const icon = null // TODO default icon
 
     return {
       ...state,
@@ -39,6 +40,35 @@ export default createReducer(initialState, {
   [SELECT_TAB]: (state, id) => ({
     ...state,
     activeTab: id
+  }),
+
+  [SET_TAB_URL]: (state, { id, url }) => {
+    const tabId = id || state.activeTab
+    const tabIndex = state.tabs.findIndex((tab) => tab.id === tabId)
+    const head = state.tabs.slice(0, tabIndex)
+    const tail = state.tabs.slice(tabIndex + 1)
+    const tab = { ...state.tabs[tabIndex], url }
+    const tabs = head.concat([tab]).concat(tail)
+
+    return {
+      ...state,
+      tabs
+    }
+  },
+
+  [SET_TAB_TITLE]: (state, { id, title }) => ({
+    ...state,
+    tabs: state.tabs.map((tab) => (tab.id === id) ? { ...tab, title } : tab)
+  }),
+
+  [SET_TAB_ICON]: (state, { id, icon }) => ({
+    ...state,
+    tabs: state.tabs.map((tab) => (tab.id === id) ? { ...tab, icon } : tab)
+  }),
+
+  [SET_TAB_STATUS]: (state, { id, loading, error, url }) => ({
+    ...state,
+    tabs: state.tabs.map((tab) => (tab.id === id) ? { ...tab, loading, error, url: url || tab.url } : tab)
   })
 
 })
