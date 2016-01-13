@@ -16,7 +16,11 @@ class CorpusForm extends Component {
 
   constructor (props) {
     super(props)
-    this.state = this.getInitState()
+    this.state = {
+      disabled: false,
+      errors: [],
+      data: this.getInitData()
+    }
   }
 
   // proxy for setState
@@ -37,33 +41,23 @@ class CorpusForm extends Component {
     this.setFormState('data', data)
   }
 
-  onChangeData (evt) {
-    this.setDataState(evt.target.name, evt.target.value)
-  }
-
   renderFormGroup (name, label) {
     return (
       <div className="form-group">
         <label><T id={ label || name } /></label>
         <input className="form-control"
                name={ name }
-               onChange={ (evt) => this.onChangeData(evt) }
+               onChange={ ({ target }) => this.setDataState(name, target.value) }
                value={ this.state.data[name] } />
       </div>
     )
   }
 
-  getInitState () {
+  getInitData () {
     return {
-      // form state
-      disabled: false,
-      errors: [],
-      // fields values
-      data: {
-        name: null,
-        password: null,
-        passwordConfirm: null
-      }
+      name: null,
+      password: null,
+      passwordConfirm: null
     }
   }
 
