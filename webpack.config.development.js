@@ -40,7 +40,8 @@ config.plugins.push(
   new webpack.DefinePlugin({
     '__DEV__': true,
     'process.env': {
-      'NODE_ENV': JSON.stringify('development')
+      'NODE_ENV': JSON.stringify('development'),
+      'DIRECT_ACCESS_CORPUS_TEST': JSON.stringify(process.env.DIRECT_ACCESS_CORPUS_TEST)
     }
   })
 )
