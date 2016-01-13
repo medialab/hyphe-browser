@@ -13,6 +13,8 @@ import actions from '../../actions'
 import CorpusList from './CorpusList'
 import Spinner from '../Spinner'
 
+// the reset button is for dev purposes and should be put somewhere else in the final product
+
 const StartUpForm = (props, context) => (
   <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
     <h2 className="pane-centered-title"><T id="welcome" /></h2>
