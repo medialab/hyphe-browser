@@ -12,9 +12,59 @@ import * as actions from '../../actions/corpora'
 
 class CorpusForm extends Component {
 
+  // generic form methods
+
   constructor (props) {
     super(props)
     this.state = this.getInitState()
+  }
+
+  // proxy for setState
+  setFormState (key, value) {
+    let state = {
+      ...this.state,
+      [key]: value
+    }
+    this.setState(state)
+  }
+
+  // deal with fields values
+  setDataState (key, value) {
+    let data = {
+      ...this.state.data,
+      [key]: value
+    }
+    this.setFormState('data', data)
+  }
+
+  onChangeData (evt) {
+    this.setDataState(evt.target.name, evt.target.value)
+  }
+
+  renderFormGroup (name, label) {
+    return (
+      <div className="form-group">
+        <label><T id={ label || name } /></label>
+        <input className="form-control"
+               name={ name }
+               onChange={ (evt) => this.onChangeData(evt) }
+               value={ this.state.data[name] } />
+      </div>
+    )
+  }
+
+  getInitState () {
+    return {
+      // form state
+      disabled: false,
+      errors: [],
+      // fields values
+      data: {
+        name: null,
+        password: null,
+        passwordConfirm: null
+      }
+    }
   }
 
   onSubmit (evt) {
@@ -43,82 +93,30 @@ class CorpusForm extends Component {
     this.props.actions.createCorpus(this.props.server.url, corpus)
   }
 
-  onChangeName (evt) {
-    this.setDataState('name', evt.target.value)
-  }
-
-  onChangePassword (evt) {
-    this.setDataState('password', evt.target.value)
-  }
-
-  onChangePasswordConfirm (evt) {
-    this.setDataState('passwordConfirm', evt.target.value)
-  }
+  // validation
 
   checkPassword () {
     return this.state.data.password === this.state.data.passwordConfirm
-  }
-
-  getInitState () {
-    return {
-      // form state
-      disabled: false,
-      errors: [],
-      // fields values
-      data: {
-        name: null,
-        password: null,
-        passwordConfirm: null
-      }
-    }
-  }
-
-  // proxy for setState
-  setFormState (key, value) {
-    let state = {
-      ...this.state,
-      [key]: value
-    }
-    this.setState(state)
-  }
-
-  // deal with fields values
-  setDataState (key, value) {
-    let data = {
-      ...this.state.data,
-      [key]: value
-    }
-    this.setFormState('data', data)
   }
 
   render () {
     const { server } = this.props
 
     return (
-      <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
+      <form className="corpus-form" onSubmit={ (evt) => this.onSubmit(evt) }>
         <h2 className="pane-centered-title"><T id="corpus-edition" /></h2>
         <div><T id="on-server" values={ server } /></div>
+
         <hr />
-        <div className="form-group">
-          <label><T id="corpus-name" /></label>
-          <input className="form-control"
-                 onChange={ (evt) => this.onChangeName(evt) }
-                 value={ this.state.data.name } />
-        </div>
-        <div className="form-group">
-          <label><T id="password" /></label>
-          <input className="form-control"
-                 onChange={ (evt) => this.onChangePassword(evt) }
-                 value={ this.state.data.password } />
-        </div>
-        <div className="form-group">
-          <label><T id="confirm-password" /></label>
-          <input className="form-control"
-                 onChange={ (evt) => this.onChangePasswordConfirm(evt) }
-                 value={ this.state.data.passwordConfirm } />
-        </div>
+
+        { this.renderFormGroup('name', 'corpus-name') }
+        { this.renderFormGroup('password') }
+        { this.renderFormGroup('passwordConfirm', 'confirm-password') }
+
         <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.disabled }><T id="create-corpus" /></button>
+          <button className="btn btn-primary" disabled={ this.state.disabled }>
+            <T id="create-corpus" />
+          </button>
           <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
         </div>
       </form>
