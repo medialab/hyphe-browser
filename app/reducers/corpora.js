@@ -1,6 +1,9 @@
 import createReducer from '../utils/create-reducer'
 import { SELECT_CORPUS } from '../actions/corpora'
-import { FETCH_CORPORA_SUCCESS } from '../actions/servers'
+import {
+  FETCH_CORPORA_REQUEST,
+  FETCH_CORPORA_SUCCESS
+} from '../actions/servers'
 import { FETCH_CORPUS_STATUS_SUCCESS } from '../actions/corpora'
 
 const initialState = {
@@ -11,9 +14,15 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [FETCH_CORPORA_REQUEST]: (state) => ({
+    ...state,
+    list: {},
+    selected: null
+  }),
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,
-    list: {...corpora}
+    list: {...corpora},
+    selected: null
   }),
 
   [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => ({

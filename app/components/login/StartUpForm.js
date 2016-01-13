@@ -44,6 +44,11 @@ const StartUpForm = (props, context) => (
       </button>
     </div>
 
+    { props.ui.error === true
+      ? <div className="form-error"><T id="error-loading-corpora" /></div>
+      : null
+    }
+
     { props.ui.loaders.corpora
       ? <Spinner textId="loading-corpora" />
       : <CorpusList actions={ props.actions } corpora={ props.corpora } dispatch={ props.dispatch } />

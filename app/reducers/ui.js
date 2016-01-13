@@ -14,13 +14,15 @@ import {
   HIDE_ERROR
 } from '../actions/browser'
 
+const getEmptyError = () => ({
+  message: null,
+  fatal: false,
+  icon: ''
+})
+
 const initialState = {
   // error message
-  error: {
-    message: null,
-    fatal: false,
-    icon: ''
-  },
+  error: getEmptyError(),
   // to display loaders in different places
   loaders: {
     // when fetching the list of corpora
@@ -31,24 +33,20 @@ const initialState = {
 
 export default createReducer(initialState, {
   // display loader
-  [FETCH_CORPORA_REQUEST]: (state) => {
-    return {
-      ...state,
-      loaders: { ...state.loaders, corpora: true }
-    }
-  },
-  [FETCH_CORPORA_SUCCESS]: (state) => {
-    return {
-      ...state,
-      loaders: { ...state.loaders, corpora: false }
-    }
-  },
-  [FETCH_CORPORA_FAILURE]: (state) => {
-    return {
-      ...state,
-      loaders: { ...state.loaders, corpora: false }
-    }
-  },
+  [FETCH_CORPORA_REQUEST]: (state) => ({
+    ...state,
+    loaders: { ...state.loaders, corpora: true },
+    error: false
+  }),
+  [FETCH_CORPORA_SUCCESS]: (state) => ({
+    ...state,
+    loaders: { ...state.loaders, corpora: false }
+  }),
+  [FETCH_CORPORA_FAILURE]: (state) => ({
+    ...state,
+    loaders: { ...state.loaders, corpora: false },
+    error: true
+  }),
 
   [SHOW_ERROR]: (state, error) => ({
     ...state,
@@ -56,7 +54,7 @@ export default createReducer(initialState, {
   }),
   [HIDE_ERROR]: (state) => ({
     ...state,
-    error: { message: '', icon: '', fatal: false }
+    error: getEmptyError()
   }),
 
   // display loader
