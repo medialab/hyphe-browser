@@ -25,6 +25,7 @@
   "corpus-status.UNDECIDED": "?",
   "create-corpus": "Create corpus",
   "created-ago": "Created {relative}",
+  "delete": "Delete",
   "disconnect": "Disconnect",
   "edit-server": "Edit this server",
   "loading-corpora": "Loading corpora…",
