@@ -11,25 +11,19 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
-  [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => {
-    return {
-      ...state,
-      list: {...corpora}
-    }
-  },
+  [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
+    ...state,
+    list: {...corpora}
+  }),
 
-  [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => {
-    return {
-      ...state,
-      selected: corpus,
-      status
-    }
-  },
+  [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => ({
+    ...state,
+    selected: corpus,
+    status
+  }),
 
-  [SELECT_CORPUS]: (state, { corpus }) => {
-    return {
-      ...state,
-      selected: corpus
-    }
-  }
+  [SELECT_CORPUS]: (state, { corpus }) => ({
+    ...state,
+    selected: corpus
+  })
 })
