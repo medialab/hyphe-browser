@@ -42,3 +42,12 @@ if (process.env.NODE_ENV === 'development') {
   console.log('Development: JSON RPC client set as global variable')
   window.client = jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')
 }
+
+
+if (process.env.DIRECT_ACCESS_CORPUS_TEST) {
+  console.log('Defined environment variable $DIRECT_ACCESS_CORPUS_TEST: switch login form')
+  store.dispatch(require('./actions/servers').fetchCorpora('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')).then((action) => {
+    store.dispatch(require('./actions/corpora').selectCorpus(action.payload.corpora.test))
+    store.dispatch(require('redux-simple-router').pushPath('browser'))
+  })
+}
