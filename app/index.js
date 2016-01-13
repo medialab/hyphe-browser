@@ -9,13 +9,14 @@ import routes from './routes'
 import DevTools from './components/DevTools'
 import configureStore from './store/configureStore'
 import { setLocale } from './actions/intl'
+import { DEFAULT_LOCALE } from './constants'
 
 import jsonrpc from './utils/jsonrpc'
 
 const store = configureStore()
 
 // Initialize i18n
-store.dispatch(setLocale('fr-FR')) // TODO from user preferences
+store.dispatch(setLocale(DEFAULT_LOCALE)) // TODO from user preferences
 
 // Reset URI
 location.hash = 'login'

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
 import { intlShape } from 'react-intl'
+import { CORPUS_STATUS_WATCHER_INTERVAL } from '../constants'
 
 class CorpusStatusWatcher extends React.Component {
 
@@ -29,7 +30,7 @@ class CorpusStatusWatcher extends React.Component {
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
 
     const repeat = () => {
-      this.watchTimeout = setTimeout(() => this.watchStatus(), 5000)
+      this.watchTimeout = setTimeout(() => this.watchStatus(), CORPUS_STATUS_WATCHER_INTERVAL)
     }
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {

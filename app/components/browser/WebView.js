@@ -1,5 +1,6 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
+import { WEBVIEW_UA } from '../../constants'
 
 import remote from 'remote'
 
@@ -13,7 +14,7 @@ class WebView extends React.Component {
 
   constructor (props) {
     super({
-      ua: 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
+      ua: WEBVIEW_UA,
       visible: true,
       ...props
     })
