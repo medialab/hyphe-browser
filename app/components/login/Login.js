@@ -4,16 +4,15 @@ import '../../css/pane'
 
 import React, { PropTypes } from 'react'
 
-const Login = (props) => {
-
-  // all forms are displayed in pane-centered
-  return (
-    <div className="pane-centered">
-      { props.children  }
+const Login = (props) => (
+  <div className="window">
+    <div className="window-content">
+      <div className="pane-centered">
+        { props.children  }
+      </div>
     </div>
-  )
-
-}
+  </div>
+)
 
 Login.propTypes = {
   children: PropTypes.node

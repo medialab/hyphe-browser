@@ -4,11 +4,7 @@ import { connect } from 'react-redux'
 
 const App = ({ children, locale, messages }) => (
   <IntlProvider locale={ locale } messages={ messages }>
-    <div className="window">
-      <div className="window-content">
-        { children }
-      </div>
-    </div>
+    { children }
   </IntlProvider>
 )
 
