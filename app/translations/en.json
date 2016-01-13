@@ -20,5 +20,7 @@
   "created-ago": "Created {relative}",
   "used-ago": "Used {relative}",
   "available-corpora": "{count, plural, \n=0 {no available corpus}\n=1 {1 available corpus}\nother {# available corpora}}",
-  "webentities": "{count, plural, \n=0 {no web entity}\n=1 {1 web entity}\nother {# web entities}}"
+  "webentities": "{count, plural, \n=0 {no web entity}\n=1 {1 web entity}\nother {# web entities}}",
+  "name": "Name",
+  "server-name": "Server name"
 }
