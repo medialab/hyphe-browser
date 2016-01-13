@@ -1,15 +1,8 @@
 import React from 'react'
 import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../../utils/status'
+import { intlShape } from 'react-intl'
 
-/*
-  corpus.crawler.jobs_pending = nb de crawls prévus
-  corpus.crawler.jobs_running = nb de crawls en cours
-  corpus.memory_structure.pages_to_index = nb de pages à indexer
-  hyphe.crawls_pending = nb de crawls sur la plateforme
-  crawl_slots = max_crawls (config ?) - hyphe.crawls_running
-*/
-
-export default ({ status }) => {
+const CorpusLoadIndicators = ({ status }, { intl: { formatMessage } }) => {
   const corpusCrawlingStatus = getCorpusCrawlingStatus(status.corpus.crawler)
   // TODO max_crawls configurable
   const hypheCrawlingStatus = getHypheCrawlingStatus({ max_crawls: 12, ...status.hyphe })
@@ -28,18 +21,24 @@ export default ({ status }) => {
 
   return (
     <div className="corpus-loads">
-      <span className="corpus-load corpus-load-status" title={ 'Corpus load: ' + corpusCrawlingStatus }>
+      <span className="corpus-load corpus-load-status" title={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
         <span className={ 'corpus-load-status-' + corpusCrawlingStatus + ' icon icon-' + loadStatusIcon } />
       </span>
-      <span className="corpus-load corpus-load-pending" title={ 'Pending jobs' }>
+      <span className="corpus-load corpus-load-pending" title={ formatMessage({ id: 'corpus-load-pending' }) }>
         { status.corpus.crawler.jobs_pending }
       </span>
-      <span className="corpus-load corpus-load-index" title={ 'Running jobs' }>
+      <span className="corpus-load corpus-load-running" title={ formatMessage({ id: 'corpus-load-running' }) }>
         { status.corpus.crawler.jobs_running }
       </span>
-      <span className="corpus-load corpus-load-health" title={ 'Crawlers health: ' + hypheCrawlingStatus }>
-        <span className={ 'corpus-load-health-' + hypheCrawlingStatus + ' icon icon-' + loadHealthIcon } />        
+      <span className="corpus-load corpus-load-health" title={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
+        <span className={ 'corpus-load-health-' + hypheCrawlingStatus + ' icon icon-' + loadHealthIcon } />
       </span>
     </div>
   )
 }
+
+CorpusLoadIndicators.contextTypes = {
+  intl: intlShape
+}
+
+export default CorpusLoadIndicators

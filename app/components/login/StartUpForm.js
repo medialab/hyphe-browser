@@ -7,7 +7,7 @@ import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, intlShape } from 'react-intl'
 
 import actions from '../../actions'
 import CorpusList from './CorpusList'
@@ -41,7 +41,7 @@ const StartUpForm = (props, context) => (
 )
 
 StartUpForm.contextTypes = {
-  intl: PropTypes.any
+  intl: intlShape
 }
 
 StartUpForm.propTypes = {

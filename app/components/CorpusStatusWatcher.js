@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
+import { intlShape } from 'react-intl'
 
 class CorpusStatusWatcher extends React.Component {
 
@@ -24,6 +25,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   watchStatus () {
+    const { intl: { formatMessage } } = this.context
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
 
     const repeat = () => {
@@ -32,18 +34,18 @@ class CorpusStatusWatcher extends React.Component {
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
-        const { ram_left, ports_left } = status.hyphe
-        const message = status.corpus.message + ((ram_left > 0 && ports_left > 0)
-          ? '. Starting corpus now…'
-          : '. No resource available to start corpus, please retry later.')
-        showError({ message, fatal: true })
-
-        if (ram_left > 0 && ports_left > 0) {
+        if (status.hyphe.ram_left > 0 && status.hyphe.ports_left > 0) {
+          // Resources available: start corpus
+          showError({ message: formatMessage({ id: 'corpus-not-started-starting' }), fatal: true })
           return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
             showError({ message: err.message, fatal: true })
           })
+        } else {
+          // No resource, such a dramatic failure :(
+          showError({ message: formatMessage({ id: 'corpus-not-started-no-resource' }), fatal: true })
         }
       } else {
+        // Everything is awesome
         hideError()
       }
     }).then(repeat, repeat) // Whatever happens next, repeat
@@ -52,6 +54,10 @@ class CorpusStatusWatcher extends React.Component {
   render () {
     return <div className={ this.props.className }>{ this.props.children }</div>
   }
+}
+
+CorpusStatusWatcher.contextTypes = {
+  intl: intlShape
 }
 
 CorpusStatusWatcher.propTypes = {
