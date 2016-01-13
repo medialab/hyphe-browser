@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { FormattedMessage as T } from 'react-intl'
 
+import * as actions from '../../actions/servers'
+
 class ServerForm extends Component {
 
   // generic form methods
@@ -63,6 +65,13 @@ class ServerForm extends Component {
   onSubmit (evt) {
     // no real submit to the server
     evt.preventDefault()
+    this.setFormState('disabled', true)
+
+    let server = {
+      ...this.state.data
+    }
+
+    this.props.actions.createServer(server)
   }
 
   render () {
@@ -93,14 +102,13 @@ ServerForm.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-
+  actions: PropTypes.object
 })
 
 const mapDispatchToProps = (dispatch) => ({
-
+  actions: bindActionCreators(actions, dispatch)
 })
 
 const ConnectedServerForm = connect(mapStateToProps, mapDispatchToProps)(ServerForm)
 
 export default ConnectedServerForm
-

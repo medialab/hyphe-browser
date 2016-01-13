@@ -1,5 +1,8 @@
 import createReducer from '../utils/create-reducer'
-import { FETCH_CORPORA_REQUEST } from '../actions/servers'
+import {
+  FETCH_CORPORA_REQUEST,
+  CREATE_SERVER_SUCCESS
+} from '../actions/servers'
 
 const initialState = {
   list: [
@@ -11,10 +14,13 @@ const initialState = {
 
 export default createReducer(initialState, {
   // a server has been selected in the startup dropdown
-  [FETCH_CORPORA_REQUEST]: (state, { serverUrl }) => {
-    return {
-      ...state,
-      selected: state.list.find(s => s.url === serverUrl)
-    }
-  }
+  [FETCH_CORPORA_REQUEST]: (state, { serverUrl }) => ({
+    ...state,
+    selected: state.list.find(s => s.url === serverUrl)
+  }),
+
+  [CREATE_SERVER_SUCCESS]: (state, { server }) => ({
+    ...state,
+    list: state.list.concat(server)
+  })
 })
