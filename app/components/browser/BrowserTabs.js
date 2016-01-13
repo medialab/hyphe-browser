@@ -5,7 +5,7 @@ import networkErrors from '@naholyr/chromium-net-errors'
 import { connect } from 'react-redux'
 import * as tabActions from '../../actions/tabs'
 
-const updateTabStatus = ({ setTabStatus, setTabTitle, setTabIcon, showError }) => (id, event, info) => {
+const updateTabStatus = ({ setTabStatus, setTabTitle, setTabIcon, showError }, id) => (event, info) => {
   switch (event) {
 
   case 'start':
@@ -41,32 +41,32 @@ const updateTabStatus = ({ setTabStatus, setTabTitle, setTabIcon, showError }) =
   }
 }
 
-const renderWebViews = (props) => (props.tabs.map(({ url }) => (
-  <WebView url={ url } onStatusUpdate={ updateTabStatus(props) } />
+const renderWebViews = (props) => (props.tabs.map(({ id, url }) => (
+  <WebView visible={ id === props.activeTab } key={ id } url={ url } onStatusUpdate={ updateTabStatus(props, id) } />
 )))
 
-const renderTabs = ({ tabs, activeTab, selectTab, closeTab }) => (tabs.map(({ id, title, icon, loading }) => (
-  <div key={ id } className={ 'tab-item ' + ((activeTab === id) ? ' active' : '') } onClick={ () => selectTab(id) }>
-    <span className="icon icon-cancel icon-close-tab" onClick={ (e) => { e.stopPropagation(); closeTab(id) } }></span>
-    { loading
-      ? <span className="icon icon-dot-3" />
-      : (icon
-        ? <img src={ icon } width="16" height="16" className="tab-favicon" />
-        : <noscript />
-      )
-    }
-    { title }
-  </div>
-)))
+const renderTabs = ({ tabs, activeTab, selectTab, closeTab }) => ((tabs.length === 0)
+  ? <div className="browser-tab-emptyspace" />
+  : tabs.map(({ id, title, icon, loading }) => (
+    <div key={ id } className={ 'browser-tab tab-item ' + ((activeTab === id) ? ' active' : '') } onClick={ () => selectTab(id) }>
+      <span className="icon icon-cancel icon-close-tab" onClick={ (e) => { e.stopPropagation(); closeTab(id) } }></span>
+      { loading
+        ? <span className="icon icon-dot-3" />
+        : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
+      }
+      { title }
+    </div>
+  )
+))
 
 const BrowserTabs = (props) => (
   <div>
-    <div className="tab-group">
+    <div className="tab-group browser-tabs">
       { renderTabs(props) }
-      <div className="tab-item tab-item-fixed">
+      <div className="browser-tab-hyphe tab-item tab-item-fixed">
         TODO Hyphe special tab
       </div>
-      <div className="tab-item tab-item-fixed" onClick={ () => props.openTab() }>
+      <div className="browser-tap-new tab-item tab-item-fixed" onClick={ () => props.openTab('http://google.fr') }>
         <span className="icon icon-plus"></span>
       </div>
     </div>

@@ -165,3 +165,12 @@ h1.title {
   vertical-align: middle;
   margin-right: 4px;
 }
+.browser-tab {
+}
+.browser-tab-emptyspace {
+  flex-grow: 1;
+}
+.browser-tab-hyphe {
+}
+.browser-tab-new {
+}
