@@ -4,15 +4,19 @@ import '../../css/pane'
 
 import React, { PropTypes } from 'react'
 
-const Login = (props) => (
-  <div className="window">
-    <div className="window-content">
-      <div className="pane-centered">
-        { props.children  }
+class Login extends React.Component {
+  render () {
+    return (
+      <div className="window">
+        <div className="window-content">
+          <div className="pane-centered">
+            { this.props.children  }
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-)
+    )
+  }
+}
 
 Login.propTypes = {
   children: PropTypes.node

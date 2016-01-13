@@ -7,27 +7,30 @@ import { pushPath } from 'redux-simple-router'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 // abstract component
-const CorpusListItem = (props) => {
+class CorpusListItem extends React.Component {
+  render () {
 
-  const { actions, corpus, dispatch } = props
-  const path = corpus.password ? '/login/corpus-login-form' : 'browser'
+    const { actions, corpus, dispatch } = this.props
+    const path = corpus.password ? '/login/corpus-login-form' : 'browser'
 
-  return (
-    <div onClick={ () => { actions.selectCorpus(props.corpus); dispatch(pushPath(path)) } }>
-      <h5 className="corpus-list-item-name">
-        { corpus.password ? <span className="icon icon-lock"></span> : null }
-        { corpus.name }
-        { corpus.status === 'ready' ? <span className="icon icon-play"></span> : null }
-      </h5>
-      <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
-      <div className="corpus-list-item-dates">
-        <span><T id="created-ago" values={ { relative: <D value={ corpus.created_at } /> } } /></span>
-        <span> - </span>
-        <span><T id="used-ago" values={ { relative: <D value={ corpus.last_activity } /> } } /></span>
+    return (
+      <div onClick={ () => { actions.selectCorpus(corpus); dispatch(pushPath(path)) } }>
+        <h5 className="corpus-list-item-name">
+          { corpus.password ? <span className="icon icon-lock"></span> : null }
+          { corpus.name }
+          { corpus.status === 'ready' ? <span className="icon icon-play"></span> : null }
+        </h5>
+        <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
+        <div className="corpus-list-item-dates">
+          <span><T id="created-ago" values={ { relative: <D value={ corpus.created_at } /> } } /></span>
+          <span> - </span>
+          <span><T id="used-ago" values={ { relative: <D value={ corpus.last_activity } /> } } /></span>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
 CorpusListItem.propTypes = {
   actions: PropTypes.object.isRequired,
   corpus: PropTypes.object.isRequired,

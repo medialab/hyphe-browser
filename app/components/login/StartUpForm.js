@@ -15,46 +15,52 @@ import Spinner from '../Spinner'
 
 // the reset button is for dev purposes and should be put somewhere else in the final product
 
-const StartUpForm = (props, context) => (
-  <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
-    <h2 className="pane-centered-title"><T id="welcome" /></h2>
+class StartUpForm extends React.Component {
+  render () {
+    const { selectedServer, actions, servers, ui, corpora, dispatch } = this.props
 
-    <div className="form-group">
-      <select
-        className="form-control server-list"
-        defaultValue={ props.selectedServer && props.selectedServer.url }
-        onChange={ (evt) => { if (evt.target.value) props.actions.fetchCorpora(evt.target.value) } }
-      >
-        <option value="">{ context.intl.formatMessage({ id: 'select-server' }) }</option>
-        { props.servers.map((server) =>
-          <option key={ server.url } value={ server.url }>
-            { server.name } ({ server.url })
-          </option>
-        ) }
-      </select>
-    </div>
-    <div className="form-group">
-      <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
-      { props.selectedServer
-        ? <Link className="btn btn-primary" to="/login/server-form?edit"><T id="edit-server" /></Link>
-        : null
-      }
-      <button className="btn btn-default" onClick={ () => props.actions.resetServers() }>
-        <T id="reset-servers" />
-      </button>
-    </div>
+    return (
+      <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
+        <h2 className="pane-centered-title"><T id="welcome" /></h2>
 
-    { props.ui.error === true
-      ? <div className="form-error"><T id="error-loading-corpora" /></div>
-      : null
-    }
+        <div className="form-group">
+          <select
+            className="form-control server-list"
+            defaultValue={ selectedServer && selectedServer.url }
+            onChange={ (evt) => { if (evt.target.value) actions.fetchCorpora(evt.target.value) } }
+          >
+            <option value="">{ context.intl.formatMessage({ id: 'select-server' }) }</option>
+            { servers.map((server) =>
+              <option key={ server.url } value={ server.url }>
+                { server.name } ({ server.url })
+              </option>
+            ) }
+          </select>
+        </div>
+        <div className="form-group">
+          <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
+          { selectedServer
+            ? <Link className="btn btn-primary" to="/login/server-form?edit"><T id="edit-server" /></Link>
+            : null
+          }
+          <button className="btn btn-default" onClick={ () => actions.resetServers() }>
+            <T id="reset-servers" />
+          </button>
+        </div>
 
-    { props.ui.loaders.corpora
-      ? <Spinner textId="loading-corpora" />
-      : <CorpusList actions={ props.actions } corpora={ props.corpora } dispatch={ props.dispatch } />
-    }
-  </form>
-)
+        { ui.error === true
+          ? <div className="form-error"><T id="error-loading-corpora" /></div>
+          : null
+        }
+
+        { ui.loaders.corpora
+          ? <Spinner textId="loading-corpora" />
+          : <CorpusList actions={ actions } corpora={ corpora } dispatch={ dispatch } />
+        }
+      </form>
+    )
+  }
+}
 
 StartUpForm.contextTypes = {
   intl: intlShape

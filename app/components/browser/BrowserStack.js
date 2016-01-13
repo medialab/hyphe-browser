@@ -1,7 +1,13 @@
 import React from 'react'
 
-export default () => (
-  <div className="">
-    <h2>Stack management here</h2>
-  </div>
-)
+class BrowserStack extends React.Component {
+  render () {
+    return (
+      <div className="">
+        <h2>Stack management here</h2>
+      </div>
+    )
+  }
+}
+
+export default BrowserStack

@@ -2,11 +2,16 @@ import React, { PropTypes } from 'react'
 import { IntlProvider } from 'react-intl'
 import { connect } from 'react-redux'
 
-const App = ({ children, locale, messages }) => (
-  <IntlProvider locale={ locale } messages={ messages }>
-    { children }
-  </IntlProvider>
-)
+class App extends React.Component {
+  render () {
+    const { children, locale, messages } = this.props
+    return (
+      <IntlProvider locale={ locale } messages={ messages }>
+        { children }
+      </IntlProvider>
+    )
+  }
+}
 
 App.propTypes = {
   children: PropTypes.node,
