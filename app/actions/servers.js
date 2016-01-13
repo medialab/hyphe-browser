@@ -4,10 +4,11 @@ export const FETCH_CORPORA_REQUEST = '§_FETCH_CORPORA_REQUEST'
 export const FETCH_CORPORA_SUCCESS = '§_FETCH_CORPORA_SUCCESS'
 export const FETCH_CORPORA_FAILURE = '§_FETCH_CORPORA_FAILURE'
 
-// this aims the localStorage for now which should be async (localForage)
-export const CREATE_SERVER_REQUEST = '§_CREATE_SERVER_REQUEST'
-export const CREATE_SERVER_SUCCESS = '§_CREATE_SERVER_SUCCESS'
-export const CREATE_SERVER_FAILURE = '§_CREATE_SERVER_FAILURE'
+export const CREATE_SERVER = '§_CREATE_SERVER'
+export const DELETE_SERVER = '§_DELETE_SERVER'
+
+// to clear the localStorage
+export const RESET_SERVERS = '§_RESET_SERVERS'
 
 export const requestCorpora = (serverUrl) => ({
   type: FETCH_CORPORA_REQUEST,
@@ -33,27 +34,14 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
     }))
 }
 
-export const createServer = (server) => (dispatch) => {
-  dispatch({
-    type: CREATE_SERVER_REQUEST,
-    payload: { server }
-  })
+export const createServer = (server) => ({
+  type: CREATE_SERVER,
+  payload: { server }
+})
 
-  return Promise.resolve(localStorage.getItem('servers'))
-    .then((res) => res ? JSON.parse(res) : [])
-    .then((servers) => {
-      servers.push(server)
-      localStorage.setItem('servers', servers)
-      return servers
-    })
-    .then(() => {
-      dispatch({
-        type: CREATE_SERVER_SUCCESS,
-        payload: { server }
-      })
-    })
-    .catch((error) => dispatch({
-      type: CREATE_SERVER_FAILURE,
-      payload: { error, server }
-    }))
-}
+export const deleteServer = (server) => ({
+  type: DELETE_SERVER,
+  payload: { server }
+})
+
+export const resetServers = () => ({ type: RESET_SERVERS })

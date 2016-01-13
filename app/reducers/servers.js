@@ -1,7 +1,9 @@
 import createReducer from '../utils/create-reducer'
 import {
   FETCH_CORPORA_REQUEST,
-  CREATE_SERVER_SUCCESS
+  CREATE_SERVER,
+  DELETE_SERVER,
+  RESET_SERVERS
 } from '../actions/servers'
 
 const initialState = {
@@ -19,8 +21,17 @@ export default createReducer(initialState, {
     selected: state.list.find(s => s.url === serverUrl)
   }),
 
-  [CREATE_SERVER_SUCCESS]: (state, { server }) => ({
+  [CREATE_SERVER]: (state, { server }) => ({
     ...state,
     list: state.list.concat(server)
+  }),
+
+  [DELETE_SERVER]: (state, { server }) => ({
+    ...state,
+    list: state.list.filter((s) => s.name !== server.name)
+  }),
+
+  [RESET_SERVERS]: () => ({
+    ...initialState
   })
 })
