@@ -9,8 +9,16 @@ import {
 
 const initialState = {
   list: [
-    { name: 'dev', url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api' },
-    { name: 'demo', url: 'http://hyphe.medialab.sciences-po.fr/demo-api' }
+    {
+      id: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
+      name: 'dev',
+      url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api'
+    },
+    {
+      id: 'http://hyphe.medialab.sciences-po.fr/demo-api',
+      name: 'demo',
+      url: 'http://hyphe.medialab.sciences-po.fr/demo-api'
+    }
   ],
   selected: null
 }
@@ -22,24 +30,24 @@ export default createReducer(initialState, {
     selected: state.list.find(s => s.url === serverUrl)
   }),
 
-  [CREATE_SERVER]: (state, { server }) => ({
-    ...state,
-    list: state.list.concat(server)
-  }),
+  [CREATE_SERVER]: (state, { server }) => {
+    server.id = server.url
+    return {
+      ...state,
+      list: state.list.concat(server)
+    }
+  },
 
   [UPDATE_SERVER]: (state, { server }) => ({
     ...state,
-    list: state.list.map((s) => {
-      if (s.name === server.name) {
-        return server
-      }
-      return s
-    })
+    list: state.list.map(s => s.id === server.id ? server : s),
+    selected: server
   }),
 
   [DELETE_SERVER]: (state, { server }) => ({
     ...state,
-    list: state.list.filter((s) => s.name !== server.name)
+    list: state.list.filter(s => s.id !== server.id),
+    selected: null
   }),
 
   [RESET_SERVERS]: () => ({

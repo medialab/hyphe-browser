@@ -92,10 +92,20 @@ class ServerForm extends Component {
       ...this.state.data
     }
 
+    // clean unused info
+    delete server.passwordConfirm
+    if (!server.password) delete server.password
+
     this.state.mode === FORM_CREATE
       ? this.props.actions.createServer(server)
       : this.props.actions.updateServer(server)
 
+    this.props.dispatch(pushPath('/login'))
+  }
+
+  delete (evt) {
+    evt.preventDefault()
+    this.props.actions.deleteServer(this.props.selectedServer)
     this.props.dispatch(pushPath('/login'))
   }
 
@@ -123,6 +133,15 @@ class ServerForm extends Component {
           <Link className="btn btn-default" to="/login" disabled={ this.state.disabled }>
             <T id="cancel" />
           </Link>
+          { this.state.mode === FORM_EDIT
+            ? (
+              <button className="btn btn-negative" disabled={ this.state.disabled }
+                  onClick={ (evt) => this.delete(evt) }>
+                 <T id="delete" />
+              </button>
+            )
+            : null
+          }
         </div>
       </form>
     )
