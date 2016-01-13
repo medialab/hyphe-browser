@@ -89,9 +89,10 @@ a.btn {
 
 /** Header alignment **/
 
-header {
+header.toolbar.toolbar-header {
   display: flex;
   flex-direction: row;
+  min-height: 32px;
 }
 header h1.title {
   flex-grow: 1;
@@ -173,4 +174,10 @@ h1.title {
 .browser-tab-hyphe {
 }
 .browser-tab-new {
+}
+
+/** WebView height fix **/
+
+.browser-navigator, .browser-tab-content, .browser-tab-content webview {
+  height: 100%;
 }

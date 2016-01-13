@@ -16,6 +16,7 @@ class WebView extends React.Component {
     super({
       ua: WEBVIEW_UA,
       visible: true,
+      navigationActions: {},
       ...props
     })
   }
@@ -34,8 +35,14 @@ class WebView extends React.Component {
     // when props are updated, the proper callback is correctly called
     const update = (what, info) => this.props.onStatusUpdate(what, info)
 
-    // TODO handle navigation methods: goBack, goForward, stop, reload…
     // TODO add shortcut to webview.openDevTools()
+
+    // Declare available navigation actions
+    this.props.onNavigationActionsReady({
+      reload () { webview.reload() },
+      back () { webview.goBack() },
+      forward () { webview.goForward() }
+    })
 
     webview.addEventListener('did-start-loading', () => {
       update('start', webview.getURL())
@@ -87,7 +94,7 @@ class WebView extends React.Component {
   }
 
   render () {
-    const { url, ua, visible } = this.props
+    const { url, ua } = this.props
 
     return (
       <webview
@@ -95,7 +102,7 @@ class WebView extends React.Component {
         useragent={ ua }
         autosize="on"
         preload="./utils/webview-preload-script.js"
-        style={ { display: visible ? 'block' : 'none' } } />
+      />
     )
   }
 }
@@ -104,7 +111,7 @@ WebView.propTypes = {
   onStatusUpdate: React.PropTypes.func.isRequired,
   ua: React.PropTypes.string,
   url: React.PropTypes.string.isRequired,
-  visible: React.PropTypes.bool
+  onNavigationActionsReady: React.PropTypes.func
 }
 
 export default WebView
