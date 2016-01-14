@@ -38,6 +38,7 @@
   "on-server": "on {name} ({url})",
   "options": "Options",
   "password": "Password",
+  "password-mismatch": "Password fields must match",
   "reset-servers": "Reset servers",
   "save": "Save",
   "select-server": "Please select a server",
