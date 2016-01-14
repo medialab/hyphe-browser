@@ -167,6 +167,11 @@ h1.title {
   margin-right: 4px;
 }
 .browser-tab {
+  max-width: 300px;
+  min-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .browser-tab-emptyspace {
   flex-grow: 1;
