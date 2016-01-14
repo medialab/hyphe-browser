@@ -1,4 +1,7 @@
 // creation / edition form of a Hyphe server instance
+//
+// local validation errors :
+// - name and url must be filled
 
 import '../../css/login/server-form'
 
@@ -26,28 +29,20 @@ class ServerForm extends React.Component {
 
     this.state = {
       disabled: false,
+      submitted: false,
       errors: [],
       data: this.getInitData(mode),
       mode
     }
   }
 
-  // proxy for setState
-  setFormState (key, value) {
-    let state = {
-      ...this.state,
-      [key]: value
-    }
-    this.setState(state)
-  }
-
   // deal with fields values
   setDataState (key, value) {
-    let data = {
+    const data = {
       ...this.state.data,
       [key]: value
     }
-    this.setFormState('data', data)
+    this.setState({ data })
   }
 
   renderFormGroup (name, label) {
@@ -78,29 +73,39 @@ class ServerForm extends React.Component {
   onSubmit (evt) {
     // no real submit to the server
     evt.preventDefault()
-    this.setFormState('disabled', true)
-    this.setFormState('errors', [])
-
-    // validation
-    if (!this.state.data.url || !this.state.data.name) {
-      this.setFormState('disabled', false)
-      this.setFormState('errors', ['url-and-name-required'])
-      return
+    const newState = {
+      disabled: true,
+      submitted: true,
+      errors: []
     }
 
-    let server = {
-      ...this.state.data
+    if (!this.isValid()) {
+      newState.disabled = false
+      newState.errors = ['url-and-name-required']
+      // TODO deal with login / password when ready on server side
+      return this.setState(newState)
     }
+    this.setState(newState)
 
-    // clean unused info
-    delete server.passwordConfirm
-    if (!server.password) delete server.password
-
+    const server = this.cleanData()
     this.state.mode === FORM_CREATE
       ? this.props.actions.createServer(server)
       : this.props.actions.updateServer(server)
 
     this.props.dispatch(pushPath('/login'))
+  }
+
+  cleanData () {
+    let server = {
+      ...this.state.data
+    }
+    delete server.passwordConfirm
+    if (!server.password) delete server.password
+    return server
+  }
+
+  isValid () {
+    return this.state.data.url && this.state.data.name
   }
 
   delete (evt) {
@@ -123,6 +128,7 @@ class ServerForm extends React.Component {
 
         { this.renderFormGroup('url', 'api-url') }
         { this.renderFormGroup('name', 'server-name') }
+        { this.renderFormGroup('login') }
         { this.renderFormGroup('password') }
         { this.renderFormGroup('passwordConfirm', 'confirm-password') }
 
