@@ -34,8 +34,7 @@ export default createReducer(initialState, {
   // display loader
   [FETCH_CORPORA_REQUEST]: (state) => ({
     ...state,
-    loaders: { ...state.loaders, corpora: true },
-    error: false
+    loaders: { ...state.loaders, corpora: true }
   }),
   [FETCH_CORPORA_SUCCESS]: (state) => ({
     ...state,
@@ -43,18 +42,11 @@ export default createReducer(initialState, {
   }),
   [FETCH_CORPORA_FAILURE]: (state) => ({
     ...state,
-    loaders: { ...state.loaders, corpora: false },
-    error: true
+    loaders: { ...state.loaders, corpora: false }
   }),
 
-  [SHOW_ERROR]: (state, error) => ({
-    ...state,
-    error
-  }),
-  [HIDE_ERROR]: (state) => ({
-    ...state,
-    error: getEmptyError()
-  }),
+  [SHOW_ERROR]: (state, error) => ({ ...state, error }),
+  [HIDE_ERROR]: (state) => ({ ...state, error: getEmptyError() }),
 
   // display loader
   [FETCH_CORPUS_STATUS_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: true } }),

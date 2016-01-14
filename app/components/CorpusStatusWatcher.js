@@ -48,6 +48,8 @@ class CorpusStatusWatcher extends React.Component {
           })
           return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
             showError({ message: err.message, fatal: true })
+          }).then(() => {
+            hideError()
           })
         } else {
           // No resource, such a dramatic failure :(
@@ -57,9 +59,6 @@ class CorpusStatusWatcher extends React.Component {
             fatal: true
           })
         }
-      } else {
-        // Everything is awesome
-        hideError()
       }
     }).then(repeat, repeat) // Whatever happens next, repeat
   }
