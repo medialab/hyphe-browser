@@ -176,10 +176,6 @@ h1.title {
 .browser-tab-emptyspace {
   flex-grow: 1;
 }
-.browser-tab-hyphe {
-}
-.browser-tab-new {
-}
 .tab-group-specials-left,
 .tab-group-specials-right {
   flex-shrink: 1;
@@ -191,15 +187,18 @@ h1.title {
   z-index: 800;
 }
 .browser-tab-scroll-left,
-.browser-tab-scroll-right {
-  background: #ccc;
+.browser-tab-scroll-right,
+.browser-tab-new {
+  color: #333;
+  background: #fcfcfc;
   border: 1px solid #eee;
   border-radius: 1px;
 }
 .browser-tab-scroll-left.inactive,
 .browser-tab-scroll-right.inactive {
-  background: #eee;
-  color: #ccc;
+  background: #fff;
+  border: #B7B7B7;
+  color: #B7B7B7;
 }
 .tab-group-main .tab-item .icon-close-tab {
   left: initial;
