@@ -44,8 +44,10 @@
   "server-edition": "Server edition",
   "server-name": "Server name",
   "servers": "Servers",
+  "starting-corpus": "Starting corpus",
   "url-and-name-required": "URL and name fields are required",
   "used-ago": "Used {relative}",
+  "waiting-resources": "Waiting for available resources…",
   "webentities": "{count, plural, \n=0 {no web entity}\n=1 {1 web entity}\nother {# web entities}}",
   "welcome": "Welcome on Hyphe"
 }
