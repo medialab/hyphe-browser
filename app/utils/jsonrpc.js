@@ -1,11 +1,20 @@
+import { JSONRPC_DEBUG } from '../constants'
+
 // Sample usage: jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')('list_corpus')
-export default (uri) => (method, params = []) => (
-  fetch(uri, {
+export default (uri) => (method, params = []) => {
+  if (JSONRPC_DEBUG) console.debug('JSONRPC →', method, params, uri)
+
+  return fetch(uri, {
     method: 'POST',
     body: JSON.stringify({method, params})
   })
   .then((response) => response.json())
   .then(([row]) => {
+    if (JSONRPC_DEBUG) {
+      let m = row.code === 'fail' ? 'error' : 'debug'
+      console[m]('JSONRPC ←', method, row.code, row.result, row.message)
+    }
+
     if (row.code === 'success') {
       return row.result
     } else if (row.code === 'fail') {
@@ -14,4 +23,4 @@ export default (uri) => (method, params = []) => (
       throw new Error('Unrecognized response')
     }
   })
-)
+}
