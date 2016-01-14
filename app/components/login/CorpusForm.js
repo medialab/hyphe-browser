@@ -2,7 +2,7 @@
 
 import '../../css/login/corpus-form'
 
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -10,7 +10,7 @@ import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
 
-class CorpusForm extends Component {
+class CorpusForm extends React.Component {
 
   // generic form methods
 

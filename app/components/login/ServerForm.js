@@ -2,7 +2,7 @@
 
 import '../../css/login/server-form'
 
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -12,7 +12,7 @@ import { FormattedMessage as T } from 'react-intl'
 import * as actions from '../../actions/servers'
 import { FORM_CREATE, FORM_EDIT } from '../../constants'
 
-class ServerForm extends Component {
+class ServerForm extends React.Component {
 
   // generic form methods
 
