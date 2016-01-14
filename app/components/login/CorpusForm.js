@@ -1,5 +1,8 @@
 // creation form of a corpus
 
+// local validation errors :
+// - password must equals passwordConfirm
+
 import '../../css/login/corpus-form'
 
 import React, { PropTypes } from 'react'
@@ -18,27 +21,19 @@ class CorpusForm extends React.Component {
     super(props)
     this.state = {
       disabled: false,
+      submitted: false,
       errors: [],
       data: this.getInitData()
     }
   }
 
-  // proxy for setState
-  setFormState (key, value) {
-    let state = {
-      ...this.state,
-      [key]: value
-    }
-    this.setState(state)
-  }
-
   // deal with fields values
   setDataState (key, value) {
-    let data = {
+    const data = {
       ...this.state.data,
       [key]: value
     }
-    this.setFormState('data', data)
+    this.setState({ data })
   }
 
   renderFormGroup (name, label) {
@@ -65,32 +60,39 @@ class CorpusForm extends React.Component {
   onSubmit (evt) {
     // no real submit to the server
     evt.preventDefault()
-    this.setFormState('disabled', true)
-
-    if (!this.checkPassword()) {
-      this.setFormState('disabled', false)
-      this.setDataState('password', '')
-      this.setDataState('passwordConfirm', '')
-      // TODO error message
-      console.error('passwords must match')
-      return
+    const newState = {
+      disabled: true,
+      submitted: true,
+      errors: []
     }
 
-    let corpus = {
-      ...this.state.data
+    if (!this.isValid()) {
+      newState.disabled = false
+      newState.errors = ['password-mismatch']
+      newState.data = {
+        ...this.state.data,
+        password: '',
+        passwordConfirm: ''
+      }
+      return this.setState(newState)
     }
+    this.setState(newState)
 
-    // clean unused info
-    delete corpus.passwordConfirm
-    if (!corpus.name) delete corpus.name
-    if (!corpus.password) delete corpus.password
-
+    const corpus = this.cleanData()
     this.props.actions.createCorpus(this.props.server.url, corpus)
   }
 
-  // validation
+  cleanData () {
+    let corpus = {
+      ...this.state.data
+    }
+    delete corpus.passwordConfirm
+    if (!corpus.name) delete corpus.name
+    if (!corpus.password) delete corpus.password
+    return corpus
+  }
 
-  checkPassword () {
+  isValid () {
     return this.state.data.password === this.state.data.passwordConfirm
   }
 
@@ -101,6 +103,10 @@ class CorpusForm extends React.Component {
       <form className="corpus-form" onSubmit={ (evt) => this.onSubmit(evt) }>
         <h2 className="pane-centered-title"><T id="corpus-edition" /></h2>
         <div><T id="on-server" values={ server } /></div>
+
+        { this.state.errors.map((error) =>
+          <div className="form-error" key={ error }><T id={ error } /></div>
+        ) }
 
         <hr />
 
