@@ -11,6 +11,11 @@ import {
   SHOW_ERROR,
   HIDE_ERROR
 } from '../actions/browser'
+import {
+  DECLARE_PAGE_REQUEST,
+  DECLARE_PAGE_SUCCESS,
+  DECLARE_PAGE_FAILURE
+} from '../actions/webentities'
 
 const getEmptyError = () => ({
   id: null,
@@ -26,7 +31,8 @@ const initialState = {
   loaders: {
     // when fetching the list of corpora
     corpora: false,
-    corpus_status: false
+    corpus_status: false,
+    webentity: false
   }
 }
 
@@ -51,5 +57,10 @@ export default createReducer(initialState, {
   // display loader
   [FETCH_CORPUS_STATUS_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: true } }),
   [FETCH_CORPUS_STATUS_SUCCESS]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } }),
-  [FETCH_CORPUS_STATUS_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } })
+  [FETCH_CORPUS_STATUS_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } }),
+
+  // display loader
+  [DECLARE_PAGE_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: true } }),
+  [DECLARE_PAGE_SUCCESS]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: false } }),
+  [DECLARE_PAGE_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: false } })
 })

@@ -6,6 +6,7 @@ import BrowserTabUrlField from './BrowserTabUrlField'
 import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon } from '../../actions/tabs'
+import { declarePage } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -13,12 +14,12 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = { disableBack: true, disableForward: true }
+    this.state = { webentity: null, disableBack: true, disableForward: true }
     this.navigationActions = {} // Mutated by WebView
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, showError } = this.props
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, showError, declarePage, serverUrl, corpusId } = this.props
 
     if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
       this.setState({
@@ -30,10 +31,29 @@ class TabContent extends React.Component {
     switch (event) {
     case 'start':
       setTabStatus({ loading: true, url: info }, id)
+      this.setState({ webentity: null }) // TODO Use an action & reducer
       break
     case 'stop':
       setTabStatus({ loading: false, url: info }, id)
-      setTabUrl(info, id)
+      setTabUrl(info, id) // Trigger declare_page here
+      declarePage(serverUrl, corpusId, info).then(({ payload: { webentity } }) => {
+        // Interesting fields:
+        /*
+        created: true
+        crawling_status: "UNCRAWLED"
+        creation_date: "1452529632"
+        homepage: null FIXME never defined, is it really required on crawl?
+        id: "b3766d21-56fa-424f-916a-413fdf04e1b8"
+        indexing_status: "UNINDEXED"
+        last_modification_date: "1452529632"
+        lru_prefixes: Array
+        name: "Google"
+        startpages: Array
+        status: "DISCOVERED"
+        */
+        console.debug('Web Entity', webentity)
+        this.setState({ webentity: webentity }) // TODO Use an action & reducer
+      })
       break
     case 'title':
       setTabTitle(info, id)
@@ -76,7 +96,7 @@ class TabContent extends React.Component {
             </div>
             <div className="btn-group tab-toolbar-webentity">
               <Button size="large" icon="home" onClick={ () => this.navigationActions.back() } />
-              <input className="btn btn-large" type="text" value={ url.replace(/^.*\/\//, '') } readOnly />
+              <input className="btn btn-large" type="text" value={ this.state.webentity ? this.state.webentity.name : '…' } readOnly />
               <Button size="large" icon="pencil" onClick={ () => this.navigationActions.reload() } />
             </div>
           </div>
@@ -94,23 +114,28 @@ TabContent.propTypes = {
 
   active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
+  serverUrl: PropTypes.string.isRequired,
+  corpusId: PropTypes.string.isRequired,
 
   showError: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
   setTabStatus: PropTypes.func.isRequired,
   setTabTitle: PropTypes.func.isRequired,
-  setTabIcon: PropTypes.func.isRequired
+  setTabIcon: PropTypes.func.isRequired,
+  declarePage: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ tabs }, { id }) => {
+const mapStateToProps = ({ corpora, servers, tabs }, { id }) => {
   const tab = tabs.tabs.find((tab) => tab.id === id)
   return {
     id,
     active: tab.id === tabs.activeTab,
-    url: tab.url
+    url: tab.url,
+    serverUrl: servers.selected.url,
+    corpusId: corpora.selected.corpus_id
   }
 }
 
-const mapDispatchToProps = { showError, setTabUrl, setTabStatus, setTabTitle, setTabIcon }
+const mapDispatchToProps = { showError, setTabUrl, setTabStatus, setTabTitle, setTabIcon, declarePage }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
