@@ -95,9 +95,9 @@ class TabContent extends React.Component {
               <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
-              <Button size="large" icon="home" onClick={ () => this.navigationActions.back() } />
+              <Button size="large" icon="home" disabled={ !this.state.webentity || !this.state.webentity.homepage } onClick={ () => setTabUrl(this.state.webentity.homepage, id) } />
               <input className="btn btn-large" type="text" value={ this.state.webentity ? this.state.webentity.name : '…' } readOnly />
-              <Button size="large" icon="pencil" onClick={ () => this.navigationActions.reload() } />
+              <Button size="large" icon="pencil" disabled={ !this.state.webentity } onClick={ () => this.navigationActions.reload() } />
             </div>
           </div>
         </div>
