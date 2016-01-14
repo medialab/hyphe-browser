@@ -29,7 +29,7 @@ class StartUpForm extends React.Component {
             defaultValue={ selectedServer && selectedServer.url }
             onChange={ (evt) => { if (evt.target.value) actions.fetchCorpora(evt.target.value) } }
           >
-            <option value="">{ context.intl.formatMessage({ id: 'select-server' }) }</option>
+            <option value="">{ this.context.intl.formatMessage({ id: 'select-server' }) }</option>
             { servers.map((server) =>
               <option key={ server.url } value={ server.url }>
                 { server.name } ({ server.url })
