@@ -4,9 +4,6 @@ export const CORPUS_STATUS_WATCHER_INTERVAL = 5000
 export const LOCALES = ['en-US', 'fr-FR']
 export const DEFAULT_LOCALE = 'fr-FR'
 
-export const FORM_CREATE = 'FORM_CREATE'
-export const FORM_EDIT = 'FORM_EDIT'
-
 export const JSONRPC_DEBUG = true
 
 export const ERROR_CORPUS_NOT_STARTED = 'ERROR_CORPUS_NOT_STARTED'

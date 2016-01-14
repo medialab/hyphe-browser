@@ -13,7 +13,6 @@ import { pushPath } from 'redux-simple-router'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/servers'
-import { FORM_CREATE, FORM_EDIT } from '../../constants'
 
 class ServerForm extends React.Component {
 
@@ -22,16 +21,10 @@ class ServerForm extends React.Component {
   constructor (props) {
     super(props)
 
-    // beware, edit could be set to null
-    const mode = props.location.query.edit !== undefined
-      ? FORM_EDIT
-      : FORM_CREATE
-
     this.state = {
       submitting: false,
       errors: [],
-      data: this.getInitData(mode),
-      mode
+      data: this.getInitData()
     }
   }
 
@@ -57,9 +50,9 @@ class ServerForm extends React.Component {
     )
   }
 
-  getInitData (mode) {
-    if (mode === FORM_EDIT) {
-      return { ...this.props.selectedServer }
+  getInitData () {
+    if (this.props.editMode) {
+      return { ...this.props.server }
     }
     return {
       url: null,
@@ -86,7 +79,7 @@ class ServerForm extends React.Component {
     this.setState(newState)
 
     const server = this.cleanData()
-    this.state.mode === FORM_CREATE
+    !this.props.editMode
       ? this.props.actions.createServer(server)
       : this.props.actions.updateServer(server)
 
@@ -108,7 +101,7 @@ class ServerForm extends React.Component {
 
   delete (evt) {
     evt.preventDefault()
-    this.props.actions.deleteServer(this.props.selectedServer)
+    this.props.actions.deleteServer(this.props.server)
     this.props.dispatch(pushPath('/login'))
   }
 
@@ -137,7 +130,7 @@ class ServerForm extends React.Component {
           <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
             <T id="cancel" />
           </Link>
-          { this.state.mode === FORM_EDIT
+          { this.props.editMode
             ? (
               <button className="btn btn-negative" disabled={ this.state.submitting }
                   onClick={ (evt) => this.delete(evt) }>
@@ -155,12 +148,14 @@ class ServerForm extends React.Component {
 ServerForm.propTypes = {
   actions: PropTypes.object,
   dispatch: PropTypes.func,
-  location: PropTypes.object,
-  selectedServer: PropTypes.object
+  editMode: PropTypes.bool,
+  server: PropTypes.object
 }
 
-const mapStateToProps = (state) => ({
-  selectedServer: state.servers.selected
+const mapStateToProps = (state, { location }) => ({
+  // beware, edit could be set to null
+  editMode: location.query.edit !== undefined,
+  server: state.servers.selected
 })
 
 const mapDispatchToProps = (dispatch) => ({
