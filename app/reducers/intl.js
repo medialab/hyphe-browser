@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE } from '../constants'
 import createReducer from '../utils/create-reducer'
 import {
   SET_LOCALE_SUCCESS,
@@ -5,7 +6,7 @@ import {
 } from '../actions/intl'
 
 const initialState = {
-  locale: 'fr-FR',
+  locale: DEFAULT_LOCALE,
   messages: {}
 }
 
