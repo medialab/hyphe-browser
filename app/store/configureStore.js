@@ -10,7 +10,12 @@ const finalCreateStore = getCreateStoreModifier()(createStore)
 export default (initialState) => finalCreateStore(rootReducer, initialState)
 
 function getCreateStoreModifier () {
-  const storage = persistState(['servers'], { key: 'hyphe' })
+  // only these reducers will be persisted in the localStorage
+  const reducers = [
+    'options',
+    'servers'
+  ]
+  const storage = persistState(reducers, { key: 'hyphe' })
 
   if (process.env.NODE_ENV === 'development') {
     return compose(

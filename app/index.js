@@ -13,12 +13,13 @@ import configureStore from './store/configureStore'
 import { setLocale } from './actions/intl'
 import { DEFAULT_LOCALE } from './constants'
 
+import getOption from './utils/get-option'
 import jsonrpc from './utils/jsonrpc'
 
 const store = configureStore()
 
 // Initialize i18n
-store.dispatch(setLocale(DEFAULT_LOCALE)) // TODO from user preferences
+store.dispatch(setLocale(getOption('locale', DEFAULT_LOCALE)))
 
 // Reset URI
 location.hash = 'login'
