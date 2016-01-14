@@ -15,6 +15,7 @@ import {
 } from '../actions/browser'
 
 const getEmptyError = () => ({
+  id: null,
   message: null,
   fatal: false,
   icon: ''

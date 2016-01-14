@@ -4,7 +4,11 @@ import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
 import { intlShape } from 'react-intl'
-import { CORPUS_STATUS_WATCHER_INTERVAL } from '../constants'
+import {
+  CORPUS_STATUS_WATCHER_INTERVAL,
+  ERROR_CORPUS_NOT_STARTED,
+  ERROR_SERVER_NO_RESOURCE
+} from '../constants'
 
 class CorpusStatusWatcher extends React.Component {
 
@@ -37,13 +41,21 @@ class CorpusStatusWatcher extends React.Component {
       if (!status.corpus.ready) {
         if (status.hyphe.ram_left > 0 && status.hyphe.ports_left > 0) {
           // Resources available: start corpus
-          showError({ message: formatMessage({ id: 'corpus-not-started-starting' }), fatal: true })
+          showError({
+            id: ERROR_CORPUS_NOT_STARTED,
+            message: formatMessage({ id: 'corpus-not-started-starting' }),
+            fatal: true
+          })
           return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
             showError({ message: err.message, fatal: true })
           })
         } else {
           // No resource, such a dramatic failure :(
-          showError({ message: formatMessage({ id: 'corpus-not-started-no-resource' }), fatal: true })
+          showError({
+            id: ERROR_SERVER_NO_RESOURCE,
+            message: formatMessage({ id: 'corpus-not-started-no-resource' }),
+            fatal: true
+          })
         }
       } else {
         // Everything is awesome
