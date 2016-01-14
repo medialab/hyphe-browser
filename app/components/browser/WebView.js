@@ -85,10 +85,10 @@ class WebView extends React.Component {
     /**/
 
     // Loading status notifications
-    webview.addEventListener('did-start-commit', () => {
+    webview.addEventListener('did-start-loading', () => {
       if (!this.isLoading) {
         this.isLoading = true
-        this.props.onStatusUpdate('start', this.props.url)
+        update('start', webview.src)
       }
     })
     webview.addEventListener('did-frame-finish-load', ({ isMainFrame }) => {
