@@ -28,8 +28,7 @@ class ServerForm extends React.Component {
       : FORM_CREATE
 
     this.state = {
-      disabled: false,
-      submitted: false,
+      submitting: false,
       errors: [],
       data: this.getInitData(mode),
       mode
@@ -50,7 +49,7 @@ class ServerForm extends React.Component {
       <div className="form-group">
         <label><T id={ label || name } /></label>
         <input className="form-control"
-               disabled={ this.state.disabled }
+               disabled={ this.state.submitting }
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                value={ this.state.data[name] } />
@@ -74,13 +73,12 @@ class ServerForm extends React.Component {
     // no real submit to the server
     evt.preventDefault()
     const newState = {
-      disabled: true,
-      submitted: true,
+      submitting: true,
       errors: []
     }
 
     if (!this.isValid()) {
-      newState.disabled = false
+      newState.submitting = false
       newState.errors = ['url-and-name-required']
       // TODO deal with login / password when ready on server side
       return this.setState(newState)
@@ -133,15 +131,15 @@ class ServerForm extends React.Component {
         { this.renderFormGroup('passwordConfirm', 'confirm-password') }
 
         <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.disabled }>
+          <button className="btn btn-primary" disabled={ this.state.submitting }>
             <T id="save" />
           </button>
-          <Link className="btn btn-default" to="/login" disabled={ this.state.disabled }>
+          <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
             <T id="cancel" />
           </Link>
           { this.state.mode === FORM_EDIT
             ? (
-              <button className="btn btn-negative" disabled={ this.state.disabled }
+              <button className="btn btn-negative" disabled={ this.state.submitting }
                   onClick={ (evt) => this.delete(evt) }>
                  <T id="delete" />
               </button>

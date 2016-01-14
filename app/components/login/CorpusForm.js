@@ -20,8 +20,7 @@ class CorpusForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      disabled: false,
-      submitted: false,
+      submitting: false,
       errors: [],
       data: this.getInitData()
     }
@@ -41,7 +40,7 @@ class CorpusForm extends React.Component {
       <div className="form-group">
         <label><T id={ label || name } /></label>
         <input className="form-control"
-               disabled={ this.state.disabled }
+               disabled={ this.state.submitting }
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                value={ this.state.data[name] } />
@@ -61,13 +60,12 @@ class CorpusForm extends React.Component {
     // no real submit to the server
     evt.preventDefault()
     const newState = {
-      disabled: true,
-      submitted: true,
+      submitting: true,
       errors: []
     }
 
     if (!this.isValid()) {
-      newState.disabled = false
+      newState.submitting = false
       newState.errors = ['password-mismatch']
       newState.data = {
         ...this.state.data,
@@ -115,7 +113,7 @@ class CorpusForm extends React.Component {
         { this.renderFormGroup('passwordConfirm', 'confirm-password') }
 
         <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.disabled }>
+          <button className="btn btn-primary" disabled={ this.state.submitting }>
             <T id="create-corpus" />
           </button>
           <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
