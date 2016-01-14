@@ -118,8 +118,7 @@ class WebView extends React.Component {
     // When receiving the order of opening a new window
     // This can com from "window.open()", "target=frameName", etc…
     webview.addEventListener('new-window', ({ url, frameName }) => {
-      // TODO handle new window creation
-      console.log('TODO new window', url, frameName)
+      update('open', url, frameName)
     })
 
     // Handle right-click context menu

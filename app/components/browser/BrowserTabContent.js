@@ -5,7 +5,7 @@ import BrowserTabUrlField from './BrowserTabUrlField'
 
 import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
-import { setTabUrl, setTabStatus, setTabTitle, setTabIcon } from '../../actions/tabs'
+import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
 import { declarePage } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
@@ -19,7 +19,7 @@ class TabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, showError, declarePage, serverUrl, corpusId } = this.props
+    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon, showError, declarePage, serverUrl, corpusId } = this.props
 
     if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
       this.setState({
@@ -60,6 +60,9 @@ class TabContent extends React.Component {
       break
     case 'favicon':
       setTabIcon(info, id)
+      break
+    case 'open': // link in new tab
+      openTab(info)
       break
     case 'error':
       const err = networkErrors.createByCode(info.errorCode)
@@ -119,6 +122,7 @@ TabContent.propTypes = {
 
   showError: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
+  openTab: PropTypes.func.isRequired,
   setTabStatus: PropTypes.func.isRequired,
   setTabTitle: PropTypes.func.isRequired,
   setTabIcon: PropTypes.func.isRequired,
@@ -136,6 +140,6 @@ const mapStateToProps = ({ corpora, servers, tabs }, { id }) => {
   }
 }
 
-const mapDispatchToProps = { showError, setTabUrl, setTabStatus, setTabTitle, setTabIcon, declarePage }
+const mapDispatchToProps = { showError, setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon, declarePage }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
