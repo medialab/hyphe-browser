@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import WebView from './WebView'
-import Button from './Button'
+import Button from '../Button'
 import BrowserTabUrlField from './BrowserTabUrlField'
 
 import { connect } from 'react-redux'
@@ -13,15 +13,19 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
+    this.state = { disableBack: true, disableForward: true }
     this.navigationActions = {} // Mutated by WebView
-  }
-
-  shouldComponentUpdate ({ id, url, active }) {
-    return this.props.id !== id || this.props.url !== url || this.props.active !== active
   }
 
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, showError } = this.props
+
+    if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
+      this.setState({
+        disableBack: !this.navigationActions.canGoBack(),
+        disableForward: !this.navigationActions.canGoForward()
+      })
+    }
 
     switch (event) {
     case 'start':
@@ -63,8 +67,8 @@ class TabContent extends React.Component {
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <div className="btn-group tab-toolbar-navigation">
-              <Button size="large" icon="left-open" onClick={ () => this.navigationActions.back() } />
-              <Button size="large" icon="right-open" onClick={ () => this.navigationActions.forward() } />
+              <Button size="large" icon="left-open" disabled={ this.state.disableBack } onClick={ () => this.navigationActions.back() } />
+              <Button size="large" icon="right-open" disabled={ this.state.disableForward } onClick={ () => this.navigationActions.forward() } />
               <Button size="large" icon="ccw" onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">

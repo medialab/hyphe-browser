@@ -69,7 +69,9 @@ class WebView extends React.Component {
     this.props.onNavigationActionsReady({
       reload () { webview.reload() },
       back () { webview.goBack() },
-      forward () { webview.goForward() }
+      forward () { webview.goForward() },
+      canGoBack () { return webview.canGoBack() },
+      canGoForward () { return webview.canGoForward() }
     })
 
     /* TODO a constant to enable/disable those navigation logs * /
