@@ -2,9 +2,7 @@ import createReducer from '../utils/create-reducer'
 import {
   FETCH_CORPORA_REQUEST,
   FETCH_CORPORA_SUCCESS,
-  FETCH_CORPORA_FAILURE
-} from '../actions/servers'
-import {
+  FETCH_CORPORA_FAILURE,
   FETCH_CORPUS_STATUS_REQUEST,
   FETCH_CORPUS_STATUS_SUCCESS,
   FETCH_CORPUS_STATUS_FAILURE

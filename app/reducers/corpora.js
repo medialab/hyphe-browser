@@ -1,10 +1,10 @@
 import createReducer from '../utils/create-reducer'
-import { SELECT_CORPUS } from '../actions/corpora'
 import {
+  SELECT_CORPUS,
   FETCH_CORPORA_REQUEST,
-  FETCH_CORPORA_SUCCESS
-} from '../actions/servers'
-import { FETCH_CORPUS_STATUS_SUCCESS } from '../actions/corpora'
+  FETCH_CORPORA_SUCCESS,
+  FETCH_CORPUS_STATUS_SUCCESS
+} from '../actions/corpora'
 
 const initialState = {
   // TODO: transform it in a array here?

@@ -1,6 +1,18 @@
+// API calls in this file :
+// - list_corpus
+// - get_status
+// - start_corpus
+// - create_corpus
+
 import jsonrpc from '../utils/jsonrpc'
 
+// when clicking on the a <CorpusListItem />
 export const SELECT_CORPUS = '§_SELECT_CORPUS'
+
+// get a list of corpora from an instance
+export const FETCH_CORPORA_REQUEST = '§_FETCH_CORPORA_REQUEST'
+export const FETCH_CORPORA_SUCCESS = '§_FETCH_CORPORA_SUCCESS'
+export const FETCH_CORPORA_FAILURE = '§_FETCH_CORPORA_FAILURE'
 
 export const FETCH_CORPUS_STATUS_REQUEST = '§_FETCH_CORPUS_STATUS_REQUEST'
 export const FETCH_CORPUS_STATUS_SUCCESS = '§_FETCH_CORPUS_STATUS_SUCCESS'
@@ -14,11 +26,35 @@ export const CREATE_CORPUS_REQUEST = '§_CREATE_CORPUS_REQUEST'
 export const CREATE_CORPUS_SUCCESS = '§_CREATE_CORPUS_SUCCESS'
 export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 
+
 export const selectCorpus = (corpus) => ({
   type: SELECT_CORPUS,
   payload: { corpus }
 })
 
+export const requestCorpora = (serverUrl) => ({
+  type: FETCH_CORPORA_REQUEST,
+  payload: { serverUrl }
+})
+
+export const receiveCorpora = (serverUrl, corpora) => ({
+  type: FETCH_CORPORA_SUCCESS,
+  payload: {
+    serverUrl,
+    corpora
+  }
+})
+
+export const fetchCorpora = (serverUrl) => (dispatch) => {
+  dispatch(requestCorpora(serverUrl))
+
+  return jsonrpc(serverUrl)('list_corpus')
+    .then((res) => dispatch(receiveCorpora(serverUrl, res)))
+    .catch((error) => dispatch({
+      type: FETCH_CORPORA_FAILURE,
+      payload: { error, serverUrl }
+    }))
+}
 
 export const requestCorpusStatus = (corpus) => ({
   type: FETCH_CORPUS_STATUS_REQUEST,

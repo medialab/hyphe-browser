@@ -1,6 +1,6 @@
 import createReducer from '../utils/create-reducer'
+import { FETCH_CORPORA_REQUEST } from '../actions/corpora'
 import {
-  FETCH_CORPORA_REQUEST,
   CREATE_SERVER,
   UPDATE_SERVER,
   DELETE_SERVER,

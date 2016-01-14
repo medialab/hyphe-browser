@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
 
 if (process.env.DIRECT_ACCESS_CORPUS_TEST) {
   console.log('Defined environment variable $DIRECT_ACCESS_CORPUS_TEST: switch login form')
-  store.dispatch(require('./actions/servers').requestCorpora('http://hyphe.medialab.sciences-po.fr/dev-forccast-api'))
+  store.dispatch(require('./actions/corpora').requestCorpora('http://hyphe.medialab.sciences-po.fr/dev-forccast-api'))
   store.dispatch(require('./actions/corpora').selectCorpus({ corpus_id: 'test' }))
   store.dispatch(require('redux-simple-router').pushPath('browser'))
 }
