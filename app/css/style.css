@@ -190,9 +190,42 @@ h1.title {
   flex: 1;
   z-index: 800;
 }
+.browser-tab-scroll-left,
+.browser-tab-scroll-right {
+  background: #ccc;
+  border: 1px solid #eee;
+  border-radius: 1px;
+}
 .browser-tab-scroll-left.inactive,
 .browser-tab-scroll-right.inactive {
-  opacity: 0.5;
+  background: #eee;
+  color: #ccc;
+}
+.tab-group-main .tab-item .icon-close-tab {
+  left: initial;
+  right: 5%;
+}
+
+/** Tab toolbar **/
+
+.browser-tab-content .toolbar-actions {
+  display: flex;
+  flex-direction: row;
+}
+.tab-toolbar-navigation,
+.tab-toolbar-webentity {
+  flex-shrink: 1;
+  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
+}
+.tab-toolbar-url {
+  flex: 1;
+}
+.tab-toolbar-url input {
+  width: 100%;
+}
+.tab-toolbar-webentity input {
+  min-width: 100px;
+  max-width: 250px;
 }
 
 /** WebView height fix **/
