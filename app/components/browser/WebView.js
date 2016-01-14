@@ -19,17 +19,45 @@ class WebView extends React.Component {
       navigationActions: {},
       ...props
     })
+
+    this.isLoading = false
+    this.ignoreNextAbortedError = false
   }
 
-  shouldComponentUpdate ({ ua, url }) {
-    // Should re-render only if user-agent or frame URL has changed
-    // If "onStatusUpdate" is modified (because owner is re-rendered for example) we don't want to
-    // refresh the webview, but (**)
-    return this.props.ua !== ua && this.props.url !== url
+  shouldComponentUpdate () {
+    // Should never re-render, only use methods of webview tag
+    return false
+  }
+
+  componentWillReceiveProps ({ url, ua }) {
+    var refresh = false // Use this flag in case 'url' AND 'ua' are modified
+
+    if (ua && ua !== this.props.ua) {
+      this.node.setUserAgent(ua)
+      refresh = true
+    }
+
+    if (url !== this.props.url && url !== this.node.src) {
+      if (this.isLoading) {
+        // Ignore the next "Error -3 Aborted" if current page is still loading
+        this.ignoreNextAbortedError = true
+        setTimeout(() => this.ignoreNextAbortedError = false, 50)
+      }
+      // Set webview's URL
+      this.isLoading = true
+      this.props.onStatusUpdate('start', url)
+      this.node.src = url // This triggers navigation
+      refresh = false // So we don't want to call 'reload()'
+    }
+
+    if (refresh) {
+      this.node.reload()
+    }
   }
 
   componentDidMount () {
     const webview = findDOMNode(this)
+    this.node = webview
 
     // (**) beware always calling directly "this.props.onStatusUpdate" reference so that
     // when props are updated, the proper callback is correctly called
@@ -44,26 +72,49 @@ class WebView extends React.Component {
       forward () { webview.goForward() }
     })
 
-    webview.addEventListener('did-start-loading', () => {
-      update('start', webview.getURL())
+    /* TODO a constant to enable/disable those navigation logs * /
+    webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src))
+    webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src))
+    webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src))
+    webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src))
+    webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame))
+    webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url))
+    webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url))
+    /**/
+
+    // Loading status notifications
+    webview.addEventListener('did-start-commit', () => {
+      if (!this.isLoading) {
+        this.isLoading = true
+        this.props.onStatusUpdate('start', this.props.url)
+      }
+    })
+    webview.addEventListener('did-frame-finish-load', ({ isMainFrame }) => {
+      if (isMainFrame) {
+        this.isLoading = false
+        update('stop', webview.src)
+      }
     })
 
-    webview.addEventListener('did-stop-loading', () => {
-      update('stop', webview.getURL())
-    })
-
-    webview.addEventListener('did-fail-load', ({ errorCode, errorDescription, validatedURL }) => {
+    // In case of error, notify owner
+    webview.addEventListener('did-fail-load', ({ errorCode, errorDescription, validatedURL, isMainFrame }) => {
+      if (this.ignoreNextAbortedError && errorCode === -3) {
+        this.ignoreNextAbortedError = false
+        return
+      }
       update('error', { errorCode, errorDescription, validatedURL, pageURL: webview.getURL() })
     })
 
+    // Guest page metadata: title, favicon
     webview.addEventListener('page-title-set', ({ title, explicitSet }) => { // eslint-disable-line no-unused-vars
       update('title', title)
     })
-
     webview.addEventListener('page-favicon-updated', ({ favicons }) => {
       update('favicon', favicons[0])
     })
 
+    // When receiving the order of opening a new window
+    // This can com from "window.open()", "target=frameName", etc…
     webview.addEventListener('new-window', ({ url, frameName }) => {
       // TODO handle new window creation
       console.log('TODO new window', url, frameName)

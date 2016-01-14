@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import WebView from './WebView'
 import Button from './Button'
+import BrowserTabUrlField from './BrowserTabUrlField'
 
 import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
@@ -15,28 +16,38 @@ class TabContent extends React.Component {
     this.navigationActions = {} // Mutated by WebView
   }
 
+  shouldComponentUpdate ({ id, url, active }) {
+    return this.props.id !== id || this.props.url !== url || this.props.active !== active
+  }
+
   updateTabStatus (event, info) {
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, showError } = this.props
+
     switch (event) {
     case 'start':
-      this.props.setTabStatus({ loading: true, url: info }, this.props.id)
+      setTabStatus({ loading: true, url: info }, id)
       break
     case 'stop':
-      this.props.setTabStatus({ loading: false, url: info }, this.props.id)
+      setTabStatus({ loading: false, url: info }, id)
+      setTabUrl(info, id)
       break
     case 'title':
-      this.props.setTabTitle(info, this.props.id)
+      setTabTitle(info, id)
       break
     case 'favicon':
-      this.props.setTabIcon(info, this.props.id)
+      setTabIcon(info, id)
       break
     case 'error':
       const err = networkErrors.createByCode(info.errorCode)
       if (info.pageURL === info.validatedURL) {
         // Main page triggered the error, it's important
-        this.props.showError({ message: err.message, fatal: false, icon: 'attention', timeout: 10000 })
-        this.props.setTabStatus({ loading: false, url: info.pageURL, error: info }, this.props.id)
+        showError({ message: err.message, fatal: false, icon: 'attention', timeout: 10000 })
+        setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
       }
       // Anyway, log to console
+      if (process.env.NODE_ENV === 'development') {
+        console.debug(info) // eslint-disable-line no-console
+      }
       console.error(err) // eslint-disable-line no-console
       break
     default:
@@ -45,7 +56,7 @@ class TabContent extends React.Component {
   }
 
   render () {
-    const { onTabStatusUpdate, active, id, url } = this.props
+    const { active, id, url, setTabUrl } = this.props
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
@@ -57,11 +68,11 @@ class TabContent extends React.Component {
               <Button size="large" icon="ccw" onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">
-              <input className="btn btn-large" type="text" value={ url } />
+              <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
               <Button size="large" icon="home" onClick={ () => this.navigationActions.back() } />
-              <input className="btn btn-large" type="text" value={ 'WEBENTITY NAME' } />
+              <input className="btn btn-large" type="text" value={ url.replace(/^.*\/\//, '') } readOnly />
               <Button size="large" icon="pencil" onClick={ () => this.navigationActions.reload() } />
             </div>
           </div>
@@ -75,8 +86,9 @@ class TabContent extends React.Component {
 }
 
 TabContent.propTypes = {
-  active: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
+
+  active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
 
   showError: PropTypes.func.isRequired,
@@ -86,7 +98,14 @@ TabContent.propTypes = {
   setTabIcon: PropTypes.func.isRequired
 }
 
-const mapStateToProps = null
+const mapStateToProps = ({ tabs }, { id }) => {
+  const tab = tabs.tabs.find((tab) => tab.id === id)
+  return {
+    id,
+    active: tab.id === tabs.activeTab,
+    url: tab.url
+  }
+}
 
 const mapDispatchToProps = { showError, setTabUrl, setTabStatus, setTabTitle, setTabIcon }
 
