@@ -11,6 +11,7 @@ import CorpusLoginForm from './components/login/CorpusLoginForm'
 import ServerForm from './components/login/ServerForm'
 import StartUpForm from './components/login/StartUpForm'
 import Options from './components/login/Options'
+import Lobby from './components/login/Lobby'
 
 export default (
   <Route path="/" component={ App }>
@@ -24,6 +25,8 @@ export default (
       <Route path="server-form" component={ ServerForm } />
       // change language, reset server list…
       <Route path="options" component={ Options } />
+      // waiting room while corpus's starting
+      <Route path="lobby" component={ Lobby } />
       // select a server, a corpus and login to the latter
       <IndexRoute component={ StartUpForm } />
     </Route>
