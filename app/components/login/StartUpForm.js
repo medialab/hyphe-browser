@@ -21,7 +21,12 @@ class StartUpForm extends React.Component {
 
     return (
       <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
-        <h2 className="pane-centered-title"><T id="welcome" /></h2>
+        <h2 className="pane-centered-title">
+          <T id="welcome" />
+          <Link className="options-link" to="/login/options">
+            <span className="icon icon-cog"></span>
+          </Link>
+        </h2>
 
         <div className="form-group">
           <select
@@ -37,15 +42,12 @@ class StartUpForm extends React.Component {
             ) }
           </select>
         </div>
-        <div className="form-group">
+        <div className="form-actions">
           <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
           { selectedServer
-            ? <Link className="btn btn-primary" to="/login/server-form?edit"><T id="edit-server" /></Link>
+            ? <Link className="btn btn-default" to="/login/server-form?edit"><T id="edit-server" /></Link>
             : null
           }
-          <button className="btn btn-default" onClick={ () => actions.resetServers() }>
-            <T id="reset-servers" />
-          </button>
         </div>
 
         { ui.error === true
