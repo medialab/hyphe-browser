@@ -9,7 +9,13 @@ export default (uri) => (method, params = []) => {
     body: JSON.stringify({method, params})
   })
   .then((response) => response.json())
-  .then(([row]) => {
+  .then((result) => {
+    if (result && result.fault) {
+      throw result
+    }
+
+    const row = result[0]
+
     if (JSONRPC_DEBUG) {
       let m = row.code === 'fail' ? 'error' : 'debug'
       console[m]('JSONRPC ←', method, row.code, row.result, row.message)
@@ -22,5 +28,11 @@ export default (uri) => (method, params = []) => {
     } else {
       throw new Error('Unrecognized response')
     }
+  })
+  .catch((err) => {
+    if (JSONRPC_DEBUG) {
+      console.error('JSONRPC ←', method, err)
+    }
+    throw err
   })
 }
