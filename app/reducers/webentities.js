@@ -11,9 +11,10 @@ const initialState = {
   tabs: {} // tabId → WebEntity
 }
 
+
 export default createReducer(initialState, {
 
-  [DECLARE_PAGE_SUCCESS]: (state, webentity) => ({
+  [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => ({
     ...state,
     webentities: {
       ...state.webentities,
