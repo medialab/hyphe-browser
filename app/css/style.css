@@ -225,6 +225,16 @@ h1.title {
 .tab-toolbar-webentity input {
   min-width: 100px;
   max-width: 250px;
+  width: initial;
+}
+
+/** Tab url field **/
+
+.browser-tab-url em {
+  background: #ffff99;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-style: normal;
 }
 
 /** WebView height fix **/
