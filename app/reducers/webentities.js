@@ -4,6 +4,7 @@ import createReducer from '../utils/create-reducer'
 import {
   DECLARE_PAGE_SUCCESS,
   SET_WEBENTITY_HOMEPAGE_SUCCESS,
+  SET_WEBENTITY_NAME_SUCCESS,
   SET_TAB_WEBENTITY
 } from '../actions/webentities'
 
@@ -30,6 +31,17 @@ export default createReducer(initialState, {
       [webentityId]: {
         ...state.webentities[webentityId],
         homepage
+      }
+    }
+  }),
+
+  [SET_WEBENTITY_NAME_SUCCESS]: (state, { name, webentityId }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentityId]: {
+        ...state.webentities[webentityId],
+        name
       }
     }
   }),

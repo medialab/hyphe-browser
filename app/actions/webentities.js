@@ -1,6 +1,7 @@
 // API calls in this file :
 // - declare_page
 // - store.set_webentity_homepage
+// - store.rename_webentity
 
 import jsonrpc from '../utils/jsonrpc'
 
@@ -17,6 +18,12 @@ export const SET_WEBENTITY_HOMEPAGE = '§_SET_WEBENTITY_HOMEPAGE'
 export const SET_WEBENTITY_HOMEPAGE_REQUEST = '§_SET_WEBENTITY_HOMEPAGE_REQUEST'
 export const SET_WEBENTITY_HOMEPAGE_SUCCESS = '§_SET_WEBENTITY_HOMEPAGE_SUCCESS'
 export const SET_WEBENTITY_HOMEPAGE_FAILURE = '§_SET_WEBENTITY_HOMEPAGE_FAILURE'
+
+// setting webentity's name
+export const SET_WEBENTITY_NAME = '§_SET_WEBENTITY_NAME'
+export const SET_WEBENTITY_NAME_REQUEST = '§_SET_WEBENTITY_NAME_REQUEST'
+export const SET_WEBENTITY_NAME_SUCCESS = '§_SET_WEBENTITY_NAME_SUCCESS'
+export const SET_WEBENTITY_NAME_FAILURE = '§_SET_WEBENTITY_NAME_FAILURE'
 
 // attaching a fetched webentity to an open tab
 export const SET_TAB_WEBENTITY = '§_SET_TAB_WEBENTITY'
@@ -58,4 +65,12 @@ export const setWebentityHomepage = (serverUrl, corpusId, homepage, webentityId)
   return jsonrpc(serverUrl)('store.set_webentity_homepage', [webentityId, homepage, corpusId])
     .then(() => dispatch({ type: SET_WEBENTITY_HOMEPAGE_SUCCESS, payload: { serverUrl, corpusId, homepage, webentityId } }))
     .catch((error) => dispatch({ type: SET_WEBENTITY_HOMEPAGE_FAILURE, payload: { serverUrl, corpusId, homepage, webentityId, error } }))
+}
+
+export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dispatch) => {
+  dispatch({ type: SET_WEBENTITY_NAME_REQUEST, payload: { serverUrl, corpusId, name, webentityId } })
+
+  return jsonrpc(serverUrl)('store.rename_webentity', [webentityId, name, corpusId])
+    .then(() => dispatch({ type: SET_WEBENTITY_NAME_SUCCESS, payload: { serverUrl, corpusId, name, webentityId } }))
+    .catch((error) => dispatch({ type: SET_WEBENTITY_NAME_FAILURE, payload: { serverUrl, corpusId, name, webentityId, error } }))
 }

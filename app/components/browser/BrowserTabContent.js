@@ -6,10 +6,11 @@ import Button from '../Button'
 import BrowserTabUrlField from './BrowserTabUrlField'
 import BrowserSideBar from './BrowserSideBar'
 import SplitPane from 'react-split-pane'
+import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 
 import { showError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
-import { declarePage, setTabWebentity, setWebentityHomepage } from '../../actions/webentities'
+import { declarePage, setTabWebentity, setWebentityHomepage, setWebentityName } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -20,7 +21,7 @@ class TabContent extends React.Component {
     this.state = {
       disableBack: true, disableForward: true,
       adjust: false,
-      adjustHomepage: null
+      adjustHomepage: null, adjustName: null
     }
     this.navigationActions = {} // Mutated by WebView
   }
@@ -73,11 +74,15 @@ class TabContent extends React.Component {
   }
 
   saveAdjustChanges () {
-    const { serverUrl, corpusId, webentity, setWebentityHomepage } = this.props
+    const { serverUrl, corpusId, webentity, setWebentityHomepage, setWebentityName } = this.props
 
     if (this.state.adjustHomepage) {
       setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id)
       this.setState({ adjustHomepage: null })
+    }
+
+    if (this.state.adjustName !== webentity.name) {
+      setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id)
     }
 
     this.setState({ adjust: false })
@@ -127,10 +132,11 @@ class TabContent extends React.Component {
             </div>
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } adjust={ this.state.adjust } />
+              { id } → { webentity && webentity.id }
             </div>
             <div className="btn-group tab-toolbar-webentity">
               { this.renderHomeButton () }
-              <input className="btn btn-large" type="text" value={ webentity ? webentity.name : '…' } readOnly={ !this.state.adjust } />
+              <BrowserTabWebentityNameField initialValue={ webentity && webentity.name } editable={ this.state.adjust } onChange={ (name) => this.setState({ adjustName: name }) } />
               { this.renderAdjustButton() }
             </div>
           </div>
@@ -163,7 +169,8 @@ TabContent.propTypes = {
   setTabIcon: PropTypes.func.isRequired,
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
-  setWebentityHomepage: PropTypes.func.isRequired
+  setWebentityHomepage: PropTypes.func.isRequired,
+  setWebentityName: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
@@ -181,7 +188,7 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
 const mapDispatchToProps = {
   showError,
   setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
-  declarePage, setTabWebentity, setWebentityHomepage
+  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
