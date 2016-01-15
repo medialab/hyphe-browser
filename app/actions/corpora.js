@@ -5,6 +5,8 @@
 // - create_corpus
 
 import jsonrpc from '../utils/jsonrpc'
+// for redirections after success / errors from server
+import { pushPath } from 'redux-simple-router'
 
 // when clicking on the a <CorpusListItem />
 export const SELECT_CORPUS = '§_SELECT_CORPUS'
@@ -114,6 +116,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
     .then((res) => {
       dispatch(receiveCorpus(serverUrl, res))
       dispatch(fetchCorpora(serverUrl))
+      dispatch(pushPath('/login'))
     })
     .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,
