@@ -12,6 +12,7 @@ import { Link } from 'react-router'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
+import { ERROR_SERVER_NO_RESOURCE } from '../../constants'
 import Spinner from '../Spinner'
 
 class CorpusForm extends React.Component {
@@ -95,6 +96,15 @@ class CorpusForm extends React.Component {
     return this.state.data.password === this.state.data.passwordConfirm
   }
 
+  componentWillReceiveProps ({ serverError }) {
+    if (serverError && serverError.id === ERROR_SERVER_NO_RESOURCE) {
+      this.setState({
+        submitting: false,
+        errors: ['corpus-not-created-no-resource']
+      })
+    }
+  }
+
   render () {
     const { server } = this.props
 
@@ -131,11 +141,13 @@ class CorpusForm extends React.Component {
 
 CorpusForm.propTypes = {
   actions: PropTypes.object,
-  server: PropTypes.object
+  server: PropTypes.object,
+  serverError: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
-  server: state.servers.selected
+  server: state.servers.selected,
+  serverError: state.ui.error
 })
 
 const mapDispatchToProps = (dispatch) => ({

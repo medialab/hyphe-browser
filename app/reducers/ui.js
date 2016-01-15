@@ -5,7 +5,8 @@ import {
   FETCH_CORPORA_FAILURE,
   FETCH_CORPUS_STATUS_REQUEST,
   FETCH_CORPUS_STATUS_SUCCESS,
-  FETCH_CORPUS_STATUS_FAILURE
+  FETCH_CORPUS_STATUS_FAILURE,
+  CREATE_CORPUS_FAILURE
 } from '../actions/corpora'
 import {
   SHOW_ERROR,
@@ -16,6 +17,9 @@ import {
   DECLARE_PAGE_SUCCESS,
   DECLARE_PAGE_FAILURE
 } from '../actions/webentities'
+import {
+  ERROR_SERVER_NO_RESOURCE
+} from '../constants'
 
 const getEmptyError = () => ({
   id: null,
@@ -56,4 +60,6 @@ export default createReducer(initialState, {
   [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', true),
   [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
   [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
+
+  [CREATE_CORPUS_FAILURE]: (state, error) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })
 })
