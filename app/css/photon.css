@@ -3,6 +3,9 @@
 .btn:disabled, .btn[disabled] {
   background: white;
   border-color: #B7B7B7;
+}
+.btn:disabled, .btn[disabled],
+.btn:disabled span.icon, .btn[disabled] span.icon {
   color: #B7B7B7;
 }
 

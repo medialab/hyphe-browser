@@ -197,8 +197,8 @@ h1.title {
 .browser-tab-scroll-left.inactive,
 .browser-tab-scroll-right.inactive {
   background: #fff;
-  border: #B7B7B7;
-  color: #B7B7B7;
+  border: #ccc;
+  color: #ccc;
 }
 .tab-group-main .tab-item .icon-close-tab {
   left: initial;

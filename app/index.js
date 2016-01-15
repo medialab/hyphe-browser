@@ -1,4 +1,5 @@
 import './css/photon'
+import './css/style'
 
 import React from 'react'
 import { render } from 'react-dom'
