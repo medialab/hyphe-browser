@@ -18,6 +18,7 @@
   "corpus-load-status.PENDING": "Pending",
   "corpus-load-status.READY": "Ready",
   "corpus-name": "Corpus name",
+  "corpus-not-created-no-resource": "Corpus not created. No resource available to create corpus, please retry later.",
   "corpus-not-started-no-resource": "Corpus not started. No resource available to start corpus, please retry later.",
   "corpus-not-started-starting": "Corpus not started. Starting corpus now…",
   "corpus-status.DISCOVERED": "Discovered",
