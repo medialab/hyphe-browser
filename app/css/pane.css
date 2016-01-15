@@ -22,10 +22,6 @@
   width: 100%;
 }
 
-.Pane > webview {
-  overflow: scroll;
-}
-
 .Resizer {
   background: #000;
   opacity: .2;
