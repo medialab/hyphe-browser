@@ -83,6 +83,7 @@ class ServerForm extends React.Component {
       ? this.props.actions.createServer(server)
       : this.props.actions.updateServer(server)
 
+    // sync redirect
     this.props.dispatch(pushPath('/login'))
   }
 

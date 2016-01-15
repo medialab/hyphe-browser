@@ -12,6 +12,7 @@ import { Link } from 'react-router'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
+import Spinner from '../Spinner'
 
 class CorpusForm extends React.Component {
 
@@ -112,12 +113,17 @@ class CorpusForm extends React.Component {
         { this.renderFormGroup('password') }
         { this.renderFormGroup('passwordConfirm', 'confirm-password') }
 
-        <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.submitting }>
-            <T id="create-corpus" />
-          </button>
-          <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
-        </div>
+        { this.state.submitting
+          ? <Spinner />
+          : (
+            <div className="form-actions">
+              <button className="btn btn-primary" disabled={ this.state.submitting }>
+                <T id="create-corpus" />
+              </button>
+              <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
+            </div>
+          )
+        }
       </form>
     )
   }
