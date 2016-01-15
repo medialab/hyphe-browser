@@ -20,6 +20,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
 
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(({ result }) => result)
+    /* webentity's homepage must be set manually by user
     .then((webentity) => {
       if (!webentity.homepage) {
         // Set homepage to requested URL if not defined yet
@@ -31,6 +32,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
         return webentity
       }
     })
+    */
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
