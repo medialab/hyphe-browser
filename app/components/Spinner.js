@@ -16,7 +16,7 @@ class Spinner extends React.Component {
           </div>
         </div>
         <div className="spinner-text">
-          <T id={ this.props.textId } />
+          { this.props.textId ? <T id={ this.props.textId } /> : null }
         </div>
       </div>
     )
