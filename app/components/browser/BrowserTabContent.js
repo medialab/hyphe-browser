@@ -132,7 +132,6 @@ class TabContent extends React.Component {
             </div>
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } adjust={ this.state.adjust } />
-              { id } → { webentity && webentity.id }
             </div>
             <div className="btn-group tab-toolbar-webentity">
               { this.renderHomeButton () }
