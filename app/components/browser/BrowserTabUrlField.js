@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 
-import { highlightUrlHTML } from '../../utils/lru'
+import { highlightUrlHTML, urlToLru, lruToUrl } from '../../utils/lru'
 
 class BrowserTabUrlField extends React.Component {
 
@@ -10,7 +10,8 @@ class BrowserTabUrlField extends React.Component {
     this.state = {
       url: props.initialUrl,
       editing: false,
-      focusInput: false
+      focusInput: false,
+      prefix: ''
     }
   }
 
@@ -21,9 +22,12 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  shouldComponentUpdate ({ initialUrl, lruPrefixes }, { url, editing }) {
+  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector }, { url, editing }) {
     return this.state.url !== initialUrl || this.state.url !== url // update only if URL *really* changes
-      || this.props.lruPrefixes !== lruPrefixes || this.state.editing !== editing // Standard conditions on other props/state
+      // Standard conditions on other props/state
+      || this.props.lruPrefixes !== lruPrefixes
+      || this.state.editing !== editing
+      || this.props.prefixSelector !== prefixSelector
   }
 
   componentDidUpdate () {
@@ -54,7 +58,9 @@ class BrowserTabUrlField extends React.Component {
   }
 
   renderField () {
-    if (this.state.editing) {
+    if (this.props.prefixSelector) {
+      return this.renderPrefixSelector()
+    } else if (this.state.editing) {
       return this.renderFieldInput()
     } else {
       return this.renderFieldHighlighted()
@@ -77,6 +83,35 @@ class BrowserTabUrlField extends React.Component {
       dangerouslySetInnerHTML={ { __html: urlHTML } } />
   }
 
+  renderPrefixButton (label, index) {
+    if (label) {
+      return <button key={ 'prefix-selector-' + index } className='btn btn-default'>{ label }</button>
+    } else {
+      return null
+    }
+  }
+
+  renderPrefixSelector () {
+    const lru = urlToLru(this.state.url)
+
+    const parts = [ lru.scheme + '://' ]
+      .concat(lru.host.map((h) => '.' + h))
+      .concat([ lru.port && (':' + lru.port) ])
+      .concat((lru.path.length === 0 && lru.query || lru.fragment)
+        ? [ '/' ]
+        : lru.path.map((p) => '/' + p))
+      .concat([ lru.query && ('?' + lru.query) ])
+      .concat([ lru.fragment && ('#' + lru.fragment) ])
+
+    return (
+      <span className="form-control btn btn-large browser-tab-prefix-selector">
+        Prefix Selector (Work In Progress)
+        { parts.map((p, i) => this.renderPrefixButton(p, i)) }
+      </span>
+    )
+
+  }
+
   render () {
     return (
       <form onSubmit={ (e) => this.onSubmit(e) }>
@@ -89,7 +124,9 @@ class BrowserTabUrlField extends React.Component {
 BrowserTabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  prefixSelector: PropTypes.bool.isRequired,
+  onSubmitPrefix: PropTypes.func.isRequired
 }
 
 export default BrowserTabUrlField

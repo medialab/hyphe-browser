@@ -131,7 +131,9 @@ class TabContent extends React.Component {
               <Button size="large" icon="ccw" disabled={ this.state.adjust } onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">
-              <BrowserTabUrlField initialUrl={ url } lruPrefixes={ webentity && webentity.lru_prefixes } onSubmit={ (url) => setTabUrl(url, id) } adjust={ this.state.adjust } />
+              <BrowserTabUrlField initialUrl={ url } lruPrefixes={ webentity && webentity.lru_prefixes }
+                onSubmit={ (url) => setTabUrl(url, id) }
+                prefixSelector={ this.state.adjust } onSubmitPrefix={ (url) => console.log(url) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
               { this.renderHomeButton () }
