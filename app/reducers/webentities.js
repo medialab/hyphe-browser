@@ -2,12 +2,31 @@
 
 import createReducer from '../utils/create-reducer'
 import {
-  DECLARE_PAGE_REQUEST,
   DECLARE_PAGE_SUCCESS,
-  DECLARE_PAGE_FAILURE
+  SET_TAB_WEBENTITY
 } from '../actions/webentities'
 
-const initialState = {}
+const initialState = {
+  webentities: {}, // id → WebEntity
+  tabs: {} // tabId → WebEntity
+}
 
 export default createReducer(initialState, {
+
+  [DECLARE_PAGE_SUCCESS]: (state, webentity) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: webentity
+    }
+  }),
+
+  [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
+    ...state,
+    tabs: {
+      ...state.tabs,
+      [tabId]: webentityId
+    }
+  })
+
 })

@@ -7,6 +7,7 @@ import options from './options'
 import servers from './servers'
 import tabs from './tabs'
 import ui from './ui'
+import webentities from './webentities'
 
 export default combineReducers({
   corpora,
@@ -15,6 +16,7 @@ export default combineReducers({
   servers,
   tabs,
   ui,
+  webentities,
   // let redux store the current URL
   routing: routeReducer
 })

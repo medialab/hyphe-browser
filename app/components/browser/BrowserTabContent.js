@@ -6,7 +6,7 @@ import BrowserTabUrlField from './BrowserTabUrlField'
 import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
-import { declarePage } from '../../actions/webentities'
+import { declarePage, setTabWebentity } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -14,7 +14,7 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = { webentity: null, disableBack: true, disableForward: true }
+    this.state = { disableBack: true, disableForward: true }
     this.navigationActions = {} // Mutated by WebView
   }
 
@@ -31,12 +31,12 @@ class TabContent extends React.Component {
     switch (event) {
     case 'start':
       setTabStatus({ loading: true, url: info }, id)
-      this.setState({ webentity: null }) // TODO Use an action & reducer
+      setTabWebentity(id, null)
       break
     case 'stop':
       setTabStatus({ loading: false, url: info }, id)
       setTabUrl(info, id) // Trigger declare_page here
-      declarePage(serverUrl, corpusId, info).then(({ payload: { webentity } }) => {
+      declarePage(serverUrl, corpusId, info, id).then((webentity) => {
         // Interesting fields:
         /*
         created: true
@@ -52,7 +52,6 @@ class TabContent extends React.Component {
         status: "DISCOVERED"
         */
         console.debug('Web Entity', webentity)
-        this.setState({ webentity: webentity }) // TODO Use an action & reducer
       })
       break
     case 'title':
@@ -83,7 +82,7 @@ class TabContent extends React.Component {
   }
 
   render () {
-    const { active, id, url, setTabUrl } = this.props
+    const { active, id, url, webentity, setTabUrl } = this.props
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
@@ -98,9 +97,9 @@ class TabContent extends React.Component {
               <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
-              <Button size="large" icon="home" disabled={ !this.state.webentity || !this.state.webentity.homepage } onClick={ () => setTabUrl(this.state.webentity.homepage, id) } />
-              <input className="btn btn-large" type="text" value={ this.state.webentity ? this.state.webentity.name : '…' } readOnly />
-              <Button size="large" icon="pencil" disabled={ !this.state.webentity } onClick={ () => this.navigationActions.reload() } />
+              <Button size="large" icon="home" disabled={ !webentity || !webentity.homepage } onClick={ () => setTabUrl(webentity.homepage, id) } />
+              <input className="btn btn-large" type="text" value={ webentity ? webentity.name : '…' } readOnly />
+              <Button size="large" icon="pencil" disabled={ !webentity } onClick={ () => this.navigationActions.reload() } />
             </div>
           </div>
         </div>
@@ -119,6 +118,7 @@ TabContent.propTypes = {
   url: PropTypes.string.isRequired,
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
+  webentity: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
@@ -126,20 +126,22 @@ TabContent.propTypes = {
   setTabStatus: PropTypes.func.isRequired,
   setTabTitle: PropTypes.func.isRequired,
   setTabIcon: PropTypes.func.isRequired,
-  declarePage: PropTypes.func.isRequired
+  declarePage: PropTypes.func.isRequired,
+  setTabWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, tabs }, { id }) => {
+const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
   const tab = tabs.tabs.find((tab) => tab.id === id)
   return {
     id,
-    active: tab.id === tabs.activeTab,
+    active: id === tabs.activeTab,
     url: tab.url,
     serverUrl: servers.selected.url,
-    corpusId: corpora.selected.corpus_id
+    corpusId: corpora.selected.corpus_id,
+    webentity: webentities.tabs[id]
   }
 }
 
-const mapDispatchToProps = { showError, setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon, declarePage }
+const mapDispatchToProps = { showError, setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon, declarePage, setTabWebentity }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
