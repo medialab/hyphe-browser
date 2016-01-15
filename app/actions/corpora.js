@@ -8,6 +8,8 @@ import jsonrpc from '../utils/jsonrpc'
 // for redirections after success / errors from server
 import { pushPath } from 'redux-simple-router'
 
+import { createAction } from 'redux-actions'
+
 // when clicking on the a <CorpusListItem />
 export const SELECT_CORPUS = '§_SELECT_CORPUS'
 
@@ -29,24 +31,10 @@ export const CREATE_CORPUS_SUCCESS = '§_CREATE_CORPUS_SUCCESS'
 export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 
 
-export const selectCorpus = (corpus) => ({
-  type: SELECT_CORPUS,
-  payload: { corpus }
-})
+export const selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
 
-export const requestCorpora = (serverUrl) => ({
-  type: FETCH_CORPORA_REQUEST,
-  payload: { serverUrl }
-})
-
-export const receiveCorpora = (serverUrl, corpora) => ({
-  type: FETCH_CORPORA_SUCCESS,
-  payload: {
-    serverUrl,
-    corpora
-  }
-})
-
+export const requestCorpora = createAction(FETCH_CORPORA_REQUEST, (serverUrl) => ({ serverUrl }))
+export const receiveCorpora = createAction(FETCH_CORPORA_SUCCESS, (serverUrl, corpora) => ({ serverUrl, corpora }))
 export const fetchCorpora = (serverUrl) => (dispatch) => {
   dispatch(requestCorpora(serverUrl))
 
@@ -58,19 +46,8 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
     }))
 }
 
-export const requestCorpusStatus = (corpus) => ({
-  type: FETCH_CORPUS_STATUS_REQUEST,
-  payload: { corpus }
-})
-
-export const receiveCorpusStatus = (corpus, status) => ({
-  type: FETCH_CORPUS_STATUS_SUCCESS,
-  payload: {
-    corpus,
-    status
-  }
-})
-
+export const requestCorpusStatus = createAction(FETCH_CORPUS_STATUS_REQUEST, (corpus) => ({ corpus }))
+export const receiveCorpusStatus = createAction(FETCH_CORPUS_STATUS_SUCCESS, (corpus, status) => ({ corpus, status }))
 export const fetchCorpusStatus = (serverUrl, corpus) => (dispatch) => {
   dispatch(requestCorpusStatus(corpus))
 
@@ -93,14 +70,7 @@ export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
     }))
 }
 
-export const receiveCorpus = (serverUrl, corpus) => ({
-  type: CREATE_CORPUS_SUCCESS,
-  payload: {
-    serverUrl,
-    corpus
-  }
-})
-
+export const receiveCorpus = createAction(CREATE_CORPUS_SUCCESS, (serverUrl, corpus) => ({ serverUrl, corpus }))
 export const createCorpus = (serverUrl, corpus) => (dispatch) => {
   dispatch({
     type: CREATE_CORPUS_REQUEST,

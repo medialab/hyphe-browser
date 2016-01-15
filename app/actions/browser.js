@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions'
+
 export const SHOW_ERROR = '§_SHOW_ERROR'
 export const HIDE_ERROR = '§_HIDE_ERROR'
 
@@ -12,7 +14,4 @@ export const showError = ({ id, message, fatal, icon = 'alert', timeout = 0 }) =
   }
 }
 
-export const hideError = () => ({
-  type: HIDE_ERROR,
-  payload: {}
-})
+export const hideError = createAction(HIDE_ERROR)
