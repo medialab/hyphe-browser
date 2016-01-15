@@ -1,9 +1,12 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+
 import WebView from './WebView'
 import Button from '../Button'
 import BrowserTabUrlField from './BrowserTabUrlField'
+import BrowserSideBar from './BrowserSideBar'
+import SplitPane from 'react-split-pane'
 
-import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
 import { declarePage, setTabWebentity, setWebentityHomepage } from '../../actions/webentities'
@@ -132,9 +135,12 @@ class TabContent extends React.Component {
             </div>
           </div>
         </div>
-        <WebView id={ id } url={ url }
-          onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
-          onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />
+        <SplitPane split="vertical" minSize="100" defaultSize="150">
+          <BrowserSideBar />
+          <WebView id={ id } url={ url }
+            onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
+            onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />
+        </SplitPane>
       </div>
     )
   }
