@@ -76,12 +76,12 @@ class TabContent extends React.Component {
   saveAdjustChanges () {
     const { serverUrl, corpusId, webentity, setWebentityHomepage, setWebentityName } = this.props
 
-    if (this.state.adjustHomepage) {
+    if (this.state.adjustHomepage && this.state.adjustHomepage !== webentity.homepage) {
       setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id)
       this.setState({ adjustHomepage: null })
     }
 
-    if (this.state.adjustName !== webentity.name) {
+    if (this.state.adjustName && this.state.adjustName !== webentity.name) {
       setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id)
     }
 
