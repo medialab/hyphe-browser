@@ -6,7 +6,7 @@ import BrowserTabUrlField from './BrowserTabUrlField'
 import { connect } from 'react-redux'
 import { showError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
-import { declarePage, setTabWebentity } from '../../actions/webentities'
+import { declarePage, setTabWebentity, setWebentityHomepage } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -14,12 +14,16 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = { disableBack: true, disableForward: true }
+    this.state = {
+      disableBack: true, disableForward: true,
+      adjust: false,
+      adjustHomepage: null
+    }
     this.navigationActions = {} // Mutated by WebView
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon, showError, declarePage, serverUrl, corpusId } = this.props
+    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon, showError, declarePage, setTabWebentity, serverUrl, corpusId } = this.props
 
     if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
       this.setState({
@@ -35,24 +39,8 @@ class TabContent extends React.Component {
       break
     case 'stop':
       setTabStatus({ loading: false, url: info }, id)
-      setTabUrl(info, id) // Trigger declare_page here
-      declarePage(serverUrl, corpusId, info, id).then((webentity) => {
-        // Interesting fields:
-        /*
-        created: true
-        crawling_status: "UNCRAWLED"
-        creation_date: "1452529632"
-        homepage: null FIXME never defined, is it really required on crawl?
-        id: "b3766d21-56fa-424f-916a-413fdf04e1b8"
-        indexing_status: "UNINDEXED"
-        last_modification_date: "1452529632"
-        lru_prefixes: Array
-        name: "Google"
-        startpages: Array
-        status: "DISCOVERED"
-        */
-        console.debug('Web Entity', webentity)
-      })
+      setTabUrl(info, id)
+      declarePage(serverUrl, corpusId, info, id)
       break
     case 'title':
       setTabTitle(info, id)
@@ -81,6 +69,47 @@ class TabContent extends React.Component {
     }
   }
 
+  saveAdjustChanges () {
+    const { serverUrl, corpusId, webentity, setWebentityHomepage } = this.props
+
+    if (this.state.adjustHomepage) {
+      setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id)
+      this.setState({ adjustHomepage: null })
+    }
+
+    this.setState({ adjust: false })
+  }
+
+  renderHomeButton () {
+    const { webentity, setTabUrl, url, id } = this.props
+
+    if (this.state.adjust) {
+      return <Button size="large" icon="home" title="Set homepage"
+        disabled={ !webentity }
+        onClick={ () => this.setState({ adjustHomepage: url }) } />
+    } else if (webentity && webentity.homepage) {
+      return <Button size="large" icon="home" title={ 'Go to homepage (' + webentity.homepage + ')' }
+        disabled={ !webentity || webentity.homepage === url }
+        onClick={ () => setTabUrl(webentity.homepage, id) } />
+    } else {
+      return <Button size="large" icon="home" title="No homepage set"
+        disabled={ true }
+        onClick={ () => {} } />
+    }
+  }
+
+  renderAdjustButton () {
+    if (this.state.adjust) {
+      return <Button size="large" icon="check" title="Save changes"
+        disabled={ false }
+        onClick={ () => { this.saveAdjustChanges() } } />
+    } else {
+      return <Button size="large" icon="pencil" title="Adjust"
+        disabled={ !this.props.webentity }
+        onClick={ () => this.setState({ adjust: true }) } />
+    }
+  }
+
   render () {
     const { active, id, url, webentity, setTabUrl } = this.props
 
@@ -89,17 +118,17 @@ class TabContent extends React.Component {
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <div className="btn-group tab-toolbar-navigation">
-              <Button size="large" icon="left-open" disabled={ this.state.disableBack } onClick={ () => this.navigationActions.back() } />
-              <Button size="large" icon="right-open" disabled={ this.state.disableForward } onClick={ () => this.navigationActions.forward() } />
-              <Button size="large" icon="ccw" onClick={ () => this.navigationActions.reload() } />
+              <Button size="large" icon="left-open" disabled={ this.state.adjust || this.state.disableBack } onClick={ () => this.navigationActions.back() } />
+              <Button size="large" icon="right-open" disabled={ this.state.adjust || this.state.disableForward } onClick={ () => this.navigationActions.forward() } />
+              <Button size="large" icon="ccw" disabled={ this.state.adjust } onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">
-              <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } />
+              <BrowserTabUrlField initialUrl={ url } onSubmit={ (url) => setTabUrl(url, id) } adjust={ this.state.adjust } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
-              <Button size="large" icon="home" disabled={ !webentity || !webentity.homepage } onClick={ () => setTabUrl(webentity.homepage, id) } />
-              <input className="btn btn-large" type="text" value={ webentity ? webentity.name : '…' } readOnly />
-              <Button size="large" icon="pencil" disabled={ !webentity } onClick={ () => this.navigationActions.reload() } />
+              { this.renderHomeButton () }
+              <input className="btn btn-large" type="text" value={ webentity ? webentity.name : '…' } readOnly={ !this.state.adjust } />
+              { this.renderAdjustButton() }
             </div>
           </div>
         </div>
@@ -127,7 +156,8 @@ TabContent.propTypes = {
   setTabTitle: PropTypes.func.isRequired,
   setTabIcon: PropTypes.func.isRequired,
   declarePage: PropTypes.func.isRequired,
-  setTabWebentity: PropTypes.func.isRequired
+  setTabWebentity: PropTypes.func.isRequired,
+  setWebentityHomepage: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
@@ -138,10 +168,14 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
     url: tab.url,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
-    webentity: webentities.tabs[id]
+    webentity: webentities.webentities[webentities.tabs[id]]
   }
 }
 
-const mapDispatchToProps = { showError, setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon, declarePage, setTabWebentity }
+const mapDispatchToProps = {
+  showError,
+  setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
+  declarePage, setTabWebentity, setWebentityHomepage
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
