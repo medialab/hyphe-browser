@@ -36,31 +36,24 @@ const initialState = {
   }
 }
 
-export default createReducer(initialState, {
-  // display loader
-  [FETCH_CORPORA_REQUEST]: (state) => ({
-    ...state,
-    loaders: { ...state.loaders, corpora: true }
-  }),
-  [FETCH_CORPORA_SUCCESS]: (state) => ({
-    ...state,
-    loaders: { ...state.loaders, corpora: false }
-  }),
-  [FETCH_CORPORA_FAILURE]: (state) => ({
-    ...state,
-    loaders: { ...state.loaders, corpora: false }
-  }),
+const toggleLoader = (which, bool) => (state) => ({
+  ...state,
+  loaders: { ...state.loaders, [which]: bool }
+})
 
+export default createReducer(initialState, {
   [SHOW_ERROR]: (state, error) => ({ ...state, error }),
   [HIDE_ERROR]: (state) => ({ ...state, error: getEmptyError() }),
 
-  // display loader
-  [FETCH_CORPUS_STATUS_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: true } }),
-  [FETCH_CORPUS_STATUS_SUCCESS]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } }),
-  [FETCH_CORPUS_STATUS_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, corpus_status: false } }),
+  [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),
+  [FETCH_CORPORA_SUCCESS]: toggleLoader('corpora', false),
+  [FETCH_CORPORA_FAILURE]: toggleLoader('corpora', true),
 
-  // display loader
-  [DECLARE_PAGE_REQUEST]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: true } }),
-  [DECLARE_PAGE_SUCCESS]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: false } }),
-  [DECLARE_PAGE_FAILURE]: (state) => ({ ...state, loaders: { ...state.loaders, webentity: false } })
+  [FETCH_CORPUS_STATUS_REQUEST]: toggleLoader('corporus_status', true),
+  [FETCH_CORPUS_STATUS_SUCCESS]: toggleLoader('corporus_status', false),
+  [FETCH_CORPUS_STATUS_FAILURE]: toggleLoader('corporus_status', false),
+
+  [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', true),
+  [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
+  [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
 })
