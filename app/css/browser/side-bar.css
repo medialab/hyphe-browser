@@ -1,0 +1,19 @@
+.browser-side-bar {
+  text-align: center;
+}
+
+.browser-side-bar-status button {
+  border-bottom-width: 3px;
+}
+
+button.status-in {
+  border-bottom-color: #000;
+}
+
+button.status-undecided {
+  border-bottom-color: #ADA299
+}
+
+button.status-out {
+  border-bottom-color: #FAA;
+}
