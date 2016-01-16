@@ -12,6 +12,7 @@ import { FormattedMessage as T, intlShape } from 'react-intl'
 import actions from '../../actions'
 import CorpusList from './CorpusList'
 import Spinner from '../Spinner'
+import Button from '../Button'
 
 // the reset button is for dev purposes and should be put somewhere else in the final product
 
@@ -28,7 +29,7 @@ class StartUpForm extends React.Component {
           </Link>
         </h2>
 
-        <div className="form-group">
+        <div className="form-group inline">
           <select
             className="form-control server-list"
             defaultValue={ selectedServer && selectedServer.url }
@@ -41,6 +42,7 @@ class StartUpForm extends React.Component {
               </option>
             ) }
           </select>
+          <Button icon="play" onClick={ () => { if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url) } } />
         </div>
         <div className="form-actions">
           <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
