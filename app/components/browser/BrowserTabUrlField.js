@@ -110,14 +110,14 @@ class BrowserTabUrlField extends React.Component {
     return (
       <div className="form-control btn btn-large browser-tab-prefix-selector">
         <div className="btn-group" onMouseOut={ () => this.setState({ overPrefixUntil: -1 }) }>
-          { parts.map((p, i, a) => this.renderPrefixSelectorButton(p, i, a)) }
+          { parts.map((p, i, a) => this.renderPrefixSelectorButton(p, i, a, lruToUrl(lru))) }
         </div>
       </div>
     )
   }
 
   // One part of the prefix selector: hover to overview, click to choose
-  renderPrefixSelectorButton ([ prop, label, selected ], index, allParts) {
+  renderPrefixSelectorButton ([ prop, label, selected ], index, allParts, originalLruUrl) {
     if (label) {
       const classes = [
         'btn btn-default',
@@ -127,7 +127,7 @@ class BrowserTabUrlField extends React.Component {
       return (
         <button key={ 'prefix-selector-' + index } className={ cx(classes) }
           onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
-          onClick={ () => this.selectPrefix(allParts, index) }>
+          onClick={ () => this.selectPrefix(allParts, index, originalLruUrl) }>
           { label }
         </button>
       )
@@ -136,7 +136,7 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  selectPrefix (parts, index) {
+  selectPrefix (parts, index, originalLruUrl) {
     const selected = parts.slice(0, index + 1)
 
     // Build URL prefix from this
@@ -151,8 +151,9 @@ class BrowserTabUrlField extends React.Component {
       }[prop]()
       return o
     }, {})
+    const lruUrl = lruToUrl(lru)
 
-    this.props.onSelectPrefix(lruToUrl(lru))
+    this.props.onSelectPrefix(lruUrl, lruUrl !== originalLruUrl)
     this.setState({ userPrefixUntil: index })
   }
 
