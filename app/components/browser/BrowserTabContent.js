@@ -8,9 +8,9 @@ import BrowserSideBar from './BrowserSideBar'
 import SplitPane from 'react-split-pane'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 
-import { showError } from '../../actions/browser'
+import { showError, hideError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
-import { declarePage, setTabWebentity, setWebentityHomepage, setWebentityName } from '../../actions/webentities'
+import { declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -74,21 +74,32 @@ class TabContent extends React.Component {
   }
 
   saveAdjustChanges () {
-    const { serverUrl, corpusId, webentity, setWebentityHomepage, setWebentityName } = this.props
+    const {
+      id, serverUrl, corpusId, webentity,
+      setWebentityHomepage, setWebentityName, createWebentity,
+      showError, hideError } = this.props
 
-    if (this.state.adjustHomepage && this.state.adjustHomepage !== webentity.homepage) {
-      setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id)
-    }
-
-    if (this.state.adjustName && this.state.adjustName !== webentity.name) {
-      setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id)
-    }
+    var operations = []
 
     if (this.state.adjustPrefix) {
-      console.log('TODO create new webentity for this prefix', this.state.adjustPrefix)
+      // Create a new web entity
+      // Set its name and homepage at the same time + refresh tab by passing tab id
+      operations.push(createWebentity(serverUrl, corpusId, this.state.adjustPrefix, this.state.adjustName, this.state.adjustHomepage, id))
+    } else {
+      if (this.state.adjustHomepage && this.state.adjustHomepage !== webentity.homepage) {
+        operations.push(setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id))
+      }
+      if (this.state.adjustName && this.state.adjustName !== webentity.name) {
+        operations.push(setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id))
+      }
     }
 
-    this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null })
+    Promise.all(operations).then(() => {
+      hideError()
+      this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null })
+    }).catch((err) => {
+      showError({ message: err.message, fatal: false })
+    })
   }
 
   renderHomeButton () {
@@ -159,7 +170,7 @@ class TabContent extends React.Component {
 }
 
 TabContent.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired, // Tab's id (≠ webentity.id)
 
   active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
@@ -168,6 +179,7 @@ TabContent.propTypes = {
   webentity: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
+  hideError: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
   setTabStatus: PropTypes.func.isRequired,
@@ -176,7 +188,8 @@ TabContent.propTypes = {
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
-  setWebentityName: PropTypes.func.isRequired
+  setWebentityName: PropTypes.func.isRequired,
+  createWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
@@ -192,9 +205,9 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
 }
 
 const mapDispatchToProps = {
-  showError,
+  showError, hideError,
   setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
-  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName
+  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

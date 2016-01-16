@@ -5,7 +5,8 @@ import {
   DECLARE_PAGE_SUCCESS,
   SET_WEBENTITY_HOMEPAGE_SUCCESS,
   SET_WEBENTITY_NAME_SUCCESS,
-  SET_TAB_WEBENTITY
+  SET_TAB_WEBENTITY,
+  CREATE_WEBENTITY_SUCCESS
 } from '../actions/webentities'
 
 const initialState = {
@@ -51,6 +52,14 @@ export default createReducer(initialState, {
     tabs: {
       ...state.tabs,
       [tabId]: webentityId
+    }
+  }),
+
+  [CREATE_WEBENTITY_SUCCESS]: (state, { webentity }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: webentity
     }
   })
 
