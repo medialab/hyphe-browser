@@ -21,7 +21,7 @@ class TabContent extends React.Component {
     this.state = {
       disableBack: true, disableForward: true,
       adjust: false,
-      adjustHomepage: null, adjustName: null
+      adjustHomepage: null, adjustName: null, adjustPrefix: null
     }
     this.navigationActions = {} // Mutated by WebView
   }
@@ -78,14 +78,17 @@ class TabContent extends React.Component {
 
     if (this.state.adjustHomepage && this.state.adjustHomepage !== webentity.homepage) {
       setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id)
-      this.setState({ adjustHomepage: null })
     }
 
     if (this.state.adjustName && this.state.adjustName !== webentity.name) {
       setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id)
     }
 
-    this.setState({ adjust: false })
+    if (this.state.adjustPrefix) {
+      console.log('TODO create new webentity for this prefix', this.state.adjustPrefix)
+    }
+
+    this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null })
   }
 
   renderHomeButton () {
@@ -108,13 +111,15 @@ class TabContent extends React.Component {
 
   renderAdjustButton () {
     if (this.state.adjust) {
-      return <Button size="large" icon="check" title="Save changes"
-        disabled={ false }
-        onClick={ () => { this.saveAdjustChanges() } } />
+      return [
+        <Button key="cancel-adjust" size="large" icon="cancel" title="Cancel"
+          onClick={ () => this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />,
+        <Button key="apply-adjust" size="large" icon="check" title="Save changes"
+          onClick={ () => { this.saveAdjustChanges() } } />
+      ]
     } else {
-      return <Button size="large" icon="pencil" title="Adjust"
-        disabled={ !this.props.webentity }
-        onClick={ () => this.setState({ adjust: true }) } />
+      return <Button size="large" icon="pencil" title="Adjust" disabled={ !this.props.webentity }
+        onClick={ () => this.setState({ adjust: true, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />
     }
   }
 
@@ -133,7 +138,7 @@ class TabContent extends React.Component {
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField initialUrl={ url } lruPrefixes={ webentity && webentity.lru_prefixes }
                 onSubmit={ (url) => setTabUrl(url, id) }
-                prefixSelector={ this.state.adjust } onSubmitPrefix={ (url) => console.log(url) } />
+                prefixSelector={ this.state.adjust } onSelectPrefix={ (url) => this.setState({ adjustPrefix: url }) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
               { this.renderHomeButton () }

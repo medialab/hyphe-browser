@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
+import cx from 'classnames'
 
-import { highlightUrlHTML, urlToLru, lruToUrl } from '../../utils/lru'
+import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../../utils/lru'
 
 class BrowserTabUrlField extends React.Component {
 
@@ -11,23 +12,29 @@ class BrowserTabUrlField extends React.Component {
       url: props.initialUrl,
       editing: false,
       focusInput: false,
-      prefix: ''
+      overPrefixUntil: -1,
+      userPrefixUntil: -1
     }
   }
 
-  componentWillReceiveProps ({ initialUrl }) {
+  componentWillReceiveProps ({ initialUrl, prefixSelector }) {
+    if (prefixSelector && !this.props.prefixSelector) {
+      // Reset prefix information before rendering prefix selector
+      this.setState({ overPrefixUntil: -1, userPrefixUntil: -1 })
+    }
     if (initialUrl !== this.props.initialUrl && initialUrl !== this.state.url) {
       // Really a new URL (a priori incoming from Redux)
       this.setState({ url: initialUrl })
     }
   }
 
-  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector }, { url, editing }) {
+  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector }, { url, editing, overPrefixUntil }) {
     return this.state.url !== initialUrl || this.state.url !== url // update only if URL *really* changes
       // Standard conditions on other props/state
       || this.props.lruPrefixes !== lruPrefixes
       || this.state.editing !== editing
       || this.props.prefixSelector !== prefixSelector
+      || this.state.overPrefixUntil !== overPrefixUntil
   }
 
   componentDidUpdate () {
@@ -67,12 +74,14 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
+  // Read-write field: standard input
   renderFieldInput () {
     return <input className="form-control btn btn-large" type="text" value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
       onChange={ (e) => this.onChange(e) } />
   }
 
+  // Read-only field with highlights: click to edit
   renderFieldHighlighted () {
     const urlHTML = this.props.lruPrefixes
       ? highlightUrlHTML(this.props.lruPrefixes, this.state.url)
@@ -83,33 +92,68 @@ class BrowserTabUrlField extends React.Component {
       dangerouslySetInnerHTML={ { __html: urlHTML } } />
   }
 
-  renderPrefixButton (label, index) {
+  // LRU selector by prefix: click to select
+  renderPrefixSelector () {
+    const matching = longestMatching(this.props.lruPrefixes, this.state.url)
+    const lru = (matching && matching.lru) || parseLru({})
+    const url = urlToLru(this.state.url)
+
+    const parts = [ [ 'scheme', url.scheme + '://', url.scheme === lru.scheme ] ]
+      .concat(url.host.map((h, i) => [ 'host', '.' + h, url.host[i] === lru.host[i] ]))
+      .concat([ [ 'port', url.port && (':' + url.port), url.port === lru.port ] ])
+      .concat((url.path.length === 0 && (url.query || url.fragment))
+        ? [ [ 'path', '/', lru.path.length === 0 && (lru.query || lru.fragment) ] ]
+        : url.path.map((p, i) => [ 'path', '/' + p, url.path[i] === lru.path[i] ]))
+      .concat([ [ 'query', url.query && ('?' + url.query), url.query === lru.query ] ])
+      .concat([ [ 'fragment', url.fragment && ('#' + url.fragment), url.fragment === lru.fragment ] ])
+
+    return (
+      <div className="form-control btn btn-large browser-tab-prefix-selector">
+        <div className="btn-group" onMouseOut={ () => this.setState({ overPrefixUntil: -1 }) }>
+          { parts.map((p, i, a) => this.renderPrefixSelectorButton(p, i, a)) }
+        </div>
+      </div>
+    )
+  }
+
+  // One part of the prefix selector: hover to overview, click to choose
+  renderPrefixSelectorButton ([ prop, label, selected ], index, allParts) {
     if (label) {
-      return <button key={ 'prefix-selector-' + index } className='btn btn-default'>{ label }</button>
+      const classes = [
+        'btn btn-default',
+        { 'prefix-selected': (this.state.userPrefixUntil >= 0) ? (index <= this.state.userPrefixUntil) : selected },
+        { 'prefix-over': index <= this.state.overPrefixUntil }
+      ]
+      return (
+        <button key={ 'prefix-selector-' + index } className={ cx(classes) }
+          onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
+          onClick={ () => this.selectPrefix(allParts, index) }>
+          { label }
+        </button>
+      )
     } else {
       return null
     }
   }
 
-  renderPrefixSelector () {
-    const lru = urlToLru(this.state.url)
+  selectPrefix (parts, index) {
+    const selected = parts.slice(0, index + 1)
 
-    const parts = [ lru.scheme + '://' ]
-      .concat(lru.host.map((h) => '.' + h))
-      .concat([ lru.port && (':' + lru.port) ])
-      .concat((lru.path.length === 0 && lru.query || lru.fragment)
-        ? [ '/' ]
-        : lru.path.map((p) => '/' + p))
-      .concat([ lru.query && ('?' + lru.query) ])
-      .concat([ lru.fragment && ('#' + lru.fragment) ])
+    // Build URL prefix from this
+    const lru = selected.reduce((o, [prop, value]) => {
+      o[prop] = {
+        scheme: () => value.substring(0, value.length - 3), // remove '://'
+        host: () => (o.host || []).concat([ value.substring(1) ]), // remove '.' and concat
+        port: () => value.substring(1), // remove ':'
+        path: () => (o.path || []).concat([ value.substring(1) ]), // remove '.' and concat
+        query: () => value.substring(1), // remove '?'
+        fragment: () => value.substring(1) // remove '#'
+      }[prop]()
+      return o
+    }, {})
 
-    return (
-      <span className="form-control btn btn-large browser-tab-prefix-selector">
-        Prefix Selector (Work In Progress)
-        { parts.map((p, i) => this.renderPrefixButton(p, i)) }
-      </span>
-    )
-
+    this.props.onSelectPrefix(lruToUrl(lru))
+    this.setState({ userPrefixUntil: index })
   }
 
   render () {
@@ -126,7 +170,7 @@ BrowserTabUrlField.propTypes = {
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
   onSubmit: PropTypes.func.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
-  onSubmitPrefix: PropTypes.func.isRequired
+  onSelectPrefix: PropTypes.func.isRequired
 }
 
 export default BrowserTabUrlField

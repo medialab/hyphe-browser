@@ -236,6 +236,13 @@ h1.title {
   font-weight: bold;
   font-style: normal;
 }
+.browser-tab-prefix-selector .prefix-selected {
+  background: #ffff99;
+  font-weight: bold;
+}
+.browser-tab-prefix-selector .prefix-over {
+  background: #99ccff;
+}
 
 /** WebView height fix **/
 

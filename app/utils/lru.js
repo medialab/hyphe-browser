@@ -71,10 +71,6 @@ export function urlToLru (url) {
 
 // Convert a LRU (string or object) to a URL (string)
 export function lruToUrl (inputLru) {
-  if (typeof inputLru === 'string') {
-    return lruToUrl(parseLru(inputLru))
-  }
-
   const lru = parseLru(inputLru)
 
   const scheme = (lru.scheme || 'http') + '://'
