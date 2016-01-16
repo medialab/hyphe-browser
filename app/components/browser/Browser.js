@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 class Browser extends React.Component {
   render () {
     return (
-      <CorpusStatusWatcher className="window">
+      <CorpusStatusWatcher className="window browser-window">
         <Header />
         <BrowserStack />
         <BrowserTabs />

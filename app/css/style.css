@@ -239,36 +239,36 @@ h1.title {
 
 /** WebView height fix **/
 
-.window {
+.browser-window {
   display: flex;
   flex-direction: column;
 }
-.window > * {
+.browser-window > * {
   flex: 0 0 auto;
 }
-.window > .browser-navigator {
+.browser-window > .browser-navigator {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.window > .browser-navigator > * {
+.browser-window > .browser-navigator > * {
   flex: 0 0 auto;
 }
-.window > .browser-navigator > .browser-tab-content {
+.browser-window > .browser-navigator > .browser-tab-content {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.window > .browser-navigator > .browser-tab-content > * {
+.browser-window > .browser-navigator > .browser-tab-content > * {
   flex: 0 0 auto;
 }
-.window > .browser-navigator > .browser-tab-content .SplitPane {
+.browser-window > .browser-navigator > .browser-tab-content .SplitPane {
   /* override inline styles */
   position: initial !important;
   height: initial !important;
 }
 /* previous styles will cause the resizer to disappear, position:absolute puts it back,
 I honestly can't (and won't) explain why */
-.window > .browser-navigator > .browser-tab-content .SplitPane .Resizer {
+.browser-window > .browser-navigator > .browser-tab-content .SplitPane .Resizer {
   position: absolute;
 }
