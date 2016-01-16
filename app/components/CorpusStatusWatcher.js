@@ -33,8 +33,8 @@ class CorpusStatusWatcher extends React.Component {
     const { intl: { formatMessage } } = this.context
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
 
-    const repeat = () => {
-      this.watchTimeout = setTimeout(() => this.watchStatus(), CORPUS_STATUS_WATCHER_INTERVAL)
+    const repeat = (immediate = false) => {
+      this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)
     }
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
@@ -50,6 +50,8 @@ class CorpusStatusWatcher extends React.Component {
             showError({ message: err.message, fatal: true })
           }).then(() => {
             hideError()
+            // Specific case: we want the next status query to happen ASAP
+            return true
           })
         } else {
           // No resource, such a dramatic failure :(
@@ -60,7 +62,14 @@ class CorpusStatusWatcher extends React.Component {
           })
         }
       }
-    }).then(repeat, repeat) // Whatever happens next, repeat
+      // General case: wait before next status query
+      return false
+    }).then(
+      // success: repeat immediately or delayed
+      (immediate) => repeat(immediate),
+      // error: repeat delayed
+      () => repeat(false)
+    )
   }
 
   render () {
