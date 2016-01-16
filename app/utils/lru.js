@@ -152,7 +152,7 @@ export function highlightUrlHTML (lrus, url) {
         +(urlLru.port && ('<em>:' + urlLru.port + '</em>'))
         +path
         +(lruLru.query ? ('<em>?' + lruLru.query + '</em>') : (urlLru.query && ('?' + urlLru.query)))
-        +(lruLru.fragment ? ('<em>#' + lruLru.fragment + '</em>') : (urlLru.fragment && ('?' + urlLru.fragment)))
+        +(lruLru.fragment ? ('<em>#' + lruLru.fragment + '</em>') : (urlLru.fragment && ('#' + urlLru.fragment)))
 }
 
 /* Example:
