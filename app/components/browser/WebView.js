@@ -20,6 +20,7 @@ class WebView extends React.Component {
       ...props
     })
 
+    // Note those are attributes, not state properties, this is on purpose as any way we disabled re-rendering completely
     this.isLoading = false
     this.ignoreNextAbortedError = false
   }
@@ -75,8 +76,8 @@ class WebView extends React.Component {
     })
 
     /* TODO a constant to enable/disable those navigation logs * /
-    webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src))
-    webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src))
+    webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e))
+    webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e))
     webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src))
     webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src))
     webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame))
@@ -86,20 +87,16 @@ class WebView extends React.Component {
 
     // Loading status notifications
     webview.addEventListener('did-start-loading', () => {
-      if (!this.isLoading) {
-        this.isLoading = true
-        update('start', webview.src)
-      }
+      this.isLoading = true
+      update('start', webview.src)
     })
-    webview.addEventListener('did-frame-finish-load', ({ isMainFrame }) => {
-      if (isMainFrame) {
-        this.isLoading = false
-        update('stop', webview.src)
-      }
+    webview.addEventListener('did-stop-loading', ({  }) => {
+      this.isLoading = false
+      update('stop', webview.src)
     })
 
     // In case of error, notify owner
-    webview.addEventListener('did-fail-load', ({ errorCode, errorDescription, validatedURL, isMainFrame }) => {
+    webview.addEventListener('did-fail-load', ({ errorCode, errorDescription, validatedURL }) => {
       if (this.ignoreNextAbortedError && errorCode === -3) {
         this.ignoreNextAbortedError = false
         return
