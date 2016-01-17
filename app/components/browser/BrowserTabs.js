@@ -46,7 +46,7 @@ class BrowserTabs extends React.Component {
 
   renderTabs () {
     return this.props.tabs.map((tab) => (
-      <Tab { ...tab } key={ tab.id }  active={ this.props.activeTab === tab.id }
+      <Tab { ...tab } key={ tab.id } active={ this.props.activeTab === tab.id }
         selectTab={ this.props.selectTab } closeTab={ this.props.closeTab } />
     ))
   }
@@ -100,7 +100,8 @@ class BrowserTabs extends React.Component {
               onClick={ () => this.scrollTabs(+1) }>
               <span className="icon icon-right-dir"></span>
             </div>
-            <div className="browser-tab-new tab-item tab-item-fixed" onClick={ () => this.props.openTab('http://google.fr') }>
+            <div className="browser-tab-new tab-item tab-item-fixed"
+              onClick={ () => this.props.openTab('http://google.fr') }>
               <span className="icon icon-plus"></span>
             </div>
             <div className="browser-tab-hyphe tab-item tab-item-fixed">

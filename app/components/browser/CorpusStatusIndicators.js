@@ -4,7 +4,7 @@ import { intlShape } from 'react-intl'
 class CorpusStatusIndicators extends React.Component {
   render () {
     const { counters } = this.props
-    const { intl: { formatMessage } } = this.context
+    const { formatMessage } = this.context.intl
 
     return (
       <div className="corpus-statuses">

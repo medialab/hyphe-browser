@@ -11,7 +11,7 @@ class BrowserTab extends React.Component {
           ? <span className="icon icon-dot-3" /> // TODO loading icon in tab
           : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
         }
-        { title }
+        { ' ' + title }
       </div>
     )
   }

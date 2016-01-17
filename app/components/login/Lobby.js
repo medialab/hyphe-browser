@@ -2,7 +2,6 @@
 // then it auto redirects to the browser
 
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
@@ -59,4 +58,3 @@ const mapDispatchToProps = (dispatch) => ({
 const connectedLobby = connect(mapStateToProps, mapDispatchToProps)(Lobby)
 
 export default connectedLobby
-

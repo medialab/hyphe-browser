@@ -4,7 +4,7 @@ class BrowserStack extends React.Component {
   render () {
     return (
       <div className="browser-stack">
-        <h2>Stack management here</h2>
+        <h2>Stack area (TODO)</h2>
       </div>
     )
   }

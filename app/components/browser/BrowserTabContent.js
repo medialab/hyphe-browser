@@ -8,6 +8,8 @@ import BrowserSideBar from './BrowserSideBar'
 import SplitPane from 'react-split-pane'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 
+import { intlShape } from 'react-intl'
+
 import { showError, hideError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
 import { declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity } from '../../actions/webentities'
@@ -104,47 +106,54 @@ class TabContent extends React.Component {
 
   renderHomeButton () {
     const { webentity, setTabUrl, url, id } = this.props
+    const { formatMessage } = this.context.intl
 
     if (this.state.adjust) {
-      return <Button size="large" icon="home" title="Set homepage"
+      return <Button size="large" icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
         disabled={ !webentity }
         onClick={ () => this.setState({ adjustHomepage: url }) } />
     } else if (webentity && webentity.homepage) {
-      return <Button size="large" icon="home" title={ 'Go to homepage (' + webentity.homepage + ')' }
+      return <Button size="large" icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
         disabled={ !webentity || webentity.homepage === url }
         onClick={ () => setTabUrl(webentity.homepage, id) } />
     } else {
-      return <Button size="large" icon="home" title="No homepage set"
+      return <Button size="large" icon="home" title={ formatMessage({ id: 'no-homepage' }) }
         disabled={ true }
         onClick={ () => {} } />
     }
   }
 
   renderAdjustButton () {
+    const { formatMessage } = this.context.intl
+
     if (this.state.adjust) {
       return [
-        <Button key="cancel-adjust" size="large" icon="cancel" title="Cancel"
+        <Button key="cancel-adjust" size="large" icon="cancel" title={ formatMessage({ id: 'cancel' }) }
           onClick={ () => this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />,
-        <Button key="apply-adjust" size="large" icon="check" title="Save changes"
+        <Button key="apply-adjust" size="large" icon="check" title={ formatMessage({ id: 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
       ]
     } else {
-      return <Button size="large" icon="pencil" title="Adjust" disabled={ !this.props.webentity }
+      return <Button size="large" icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
         onClick={ () => this.setState({ adjust: true, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />
     }
   }
 
   render () {
     const { active, id, url, webentity, setTabUrl } = this.props
+    const { formatMessage } = this.context.intl
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <div className="btn-group tab-toolbar-navigation">
-              <Button size="large" icon="left-open" disabled={ this.state.adjust || this.state.disableBack } onClick={ () => this.navigationActions.back() } />
-              <Button size="large" icon="right-open" disabled={ this.state.adjust || this.state.disableForward } onClick={ () => this.navigationActions.forward() } />
-              <Button size="large" icon="ccw" disabled={ this.state.adjust } onClick={ () => this.navigationActions.reload() } />
+              <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ this.state.adjust || this.state.disableBack }
+                onClick={ () => this.navigationActions.back() } />
+              <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ this.state.adjust || this.state.disableForward }
+                onClick={ () => this.navigationActions.forward() } />
+              <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ this.state.adjust }
+                onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField initialUrl={ url } lruPrefixes={ webentity && webentity.lru_prefixes }
@@ -208,6 +217,10 @@ const mapDispatchToProps = {
   showError, hideError,
   setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
   declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity
+}
+
+TabContent.contextTypes = {
+  intl: intlShape
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

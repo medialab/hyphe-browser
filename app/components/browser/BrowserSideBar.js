@@ -1,22 +1,25 @@
 import '../../css/browser/side-bar'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
 
 import { connect } from 'react-redux'
+import { FormattedMessage as T, intlShape } from 'react-intl'
 
 class BrowserSideBar extends React.Component {
   render () {
+    const { formatMessage } = this.context.intl
+
     return (
       <aside className="browser-side-bar">
-        <h2>Status</h2>
+        <h2><T id="status" /></h2>
         <div className="btn-group browser-side-bar-status">
-          <button className="btn btn-large btn-default status-in">
+          <button className="btn btn-large btn-default status-in" title={ formatMessage({ id: 'corpus-status.IN' }) }>
             IN
           </button>
-          <button className="btn btn-large btn-default status-undecided">
+          <button className="btn btn-large btn-default status-undecided" title={ formatMessage({ id: 'corpus-status.UNDECIDED' }) }>
             ?
           </button>
-          <button className="btn btn-large btn-default status-out">
+          <button className="btn btn-large btn-default status-out" title={ formatMessage({ id: 'corpus-status.OUT' }) }>
             Out
           </button>
         </div>
@@ -28,8 +31,11 @@ class BrowserSideBar extends React.Component {
 BrowserSideBar.propTypes = {
 }
 
-const mapStateToProps = ({ ui }) => ({
+const mapStateToProps = ({ ui }) => ({ // eslint-disable-line
 })
 
-export default connect(mapStateToProps)(BrowserSideBar)
+BrowserSideBar.contextTypes = {
+  intl: intlShape
+}
 
+export default connect(mapStateToProps)(BrowserSideBar)

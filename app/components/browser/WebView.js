@@ -128,7 +128,7 @@ class WebView extends React.Component {
     webview.addEventListener('ipc-message', ({ channel, args }) => {
       if (channel !== 'show-contextmenu') return
 
-      const [ { x, y, hasSelection, href, img, video } ] = args
+      const [ { x, y, hasSelection, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
         menu.append(new MenuItem({ label: 'Open in new Tab', click: () => alert('openTab ' + href) }))
