@@ -4,6 +4,7 @@ import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB,
   SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
 } from '../actions/tabs'
+import { SELECT_CORPUS } from '../actions/corpora'
 
 
 const initialState = {
@@ -69,6 +70,9 @@ export default createReducer(initialState, {
   [SET_TAB_STATUS]: (state, { id, loading, error, url }) => ({
     ...state,
     tabs: state.tabs.map((tab) => (tab.id === id) ? { ...tab, loading, error, url: url || tab.url } : tab)
-  })
+  }),
+
+  // Reset state when selecting corpus
+  [SELECT_CORPUS]: () => ({ ...initialState })
 
 })

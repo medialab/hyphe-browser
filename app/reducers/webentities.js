@@ -8,6 +8,7 @@ import {
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS
 } from '../actions/webentities'
+import { SELECT_CORPUS } from '../actions/corpora'
 
 const initialState = {
   webentities: {}, // id → WebEntity
@@ -61,6 +62,9 @@ export default createReducer(initialState, {
       ...state.webentities,
       [webentity.id]: webentity
     }
-  })
+  }),
+
+  // Reset state when selecting corpus
+  [SELECT_CORPUS]: () => ({ ...initialState })
 
 })
