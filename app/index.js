@@ -43,13 +43,13 @@ render(rootElement, domRoot)
 
 // Debugging utilities
 if (process.env.NODE_ENV === 'development') {
-  console.log('Development: JSON RPC client set as global variable')
+  console.debug('Development: JSON RPC client set as global variable') // eslint-disable-line no-console
   window.client = jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')
 }
 
 
 if (process.env.DIRECT_ACCESS_CORPUS_TEST) {
-  console.log('Defined environment variable $DIRECT_ACCESS_CORPUS_TEST: switch login form')
+  console.debug('Defined environment variable $DIRECT_ACCESS_CORPUS_TEST: switch login form') // eslint-disable-line no-console
   store.dispatch(require('./actions/corpora').requestCorpora('http://hyphe.medialab.sciences-po.fr/dev-forccast-api'))
   store.dispatch(require('./actions/corpora').selectCorpus({ corpus_id: 'test' }))
   store.dispatch(require('redux-simple-router').pushPath('browser'))

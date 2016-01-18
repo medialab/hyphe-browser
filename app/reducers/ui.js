@@ -61,5 +61,5 @@ export default createReducer(initialState, {
   [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
   [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
 
-  [CREATE_CORPUS_FAILURE]: (state, error) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })
+  [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })
 })
