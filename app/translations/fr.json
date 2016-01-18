@@ -54,6 +54,7 @@
   "servers": "Serveurs",
   "set-homepage": "Définir la page d'accueil ({url})",
   "starting-corpus": "Démarrage du corpus",
+  "status": "Status",
   "url-and-name-required": "Les champs URL et nom sont requis",
   "used-ago": "Utilisé {relative}",
   "waiting-resources": "En attente de ressources…",
