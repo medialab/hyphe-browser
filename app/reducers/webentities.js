@@ -3,8 +3,12 @@
 import createReducer from '../utils/create-reducer'
 import {
   DECLARE_PAGE_SUCCESS,
+  SET_WEBENTITY_HOMEPAGE_REQUEST,
   SET_WEBENTITY_HOMEPAGE_SUCCESS,
+  SET_WEBENTITY_HOMEPAGE_FAILURE,
+  SET_WEBENTITY_NAME_REQUEST,
   SET_WEBENTITY_NAME_SUCCESS,
+  SET_WEBENTITY_NAME_FAILURE,
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
@@ -29,29 +33,20 @@ export default createReducer(initialState, {
     }
   }),
 
-  [SET_WEBENTITY_HOMEPAGE_SUCCESS]: (state, { homepage, webentityId }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentityId]: {
-        ...state.webentities[webentityId],
-        homepage
-      }
-    }
-  }),
+  ...optimisticUpdateWebentity(
+    'homepage',
+    SET_WEBENTITY_HOMEPAGE_REQUEST,
+    SET_WEBENTITY_HOMEPAGE_SUCCESS,
+    SET_WEBENTITY_HOMEPAGE_FAILURE
+  ),
 
-  [SET_WEBENTITY_NAME_SUCCESS]: (state, { name, webentityId }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentityId]: {
-        ...state.webentities[webentityId],
-        name
-      }
-    }
-  }),
+  ...optimisticUpdateWebentity(
+    'name',
+    SET_WEBENTITY_NAME_REQUEST,
+    SET_WEBENTITY_NAME_SUCCESS,
+    SET_WEBENTITY_NAME_FAILURE
+  ),
 
-  // Optimistic update
   ...optimisticUpdateWebentity(
     'status',
     SET_WEBENTITY_STATUS_REQUEST,
