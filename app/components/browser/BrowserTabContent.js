@@ -168,7 +168,7 @@ class TabContent extends React.Component {
           </div>
         </div>
         <SplitPane split="vertical" minSize="100" defaultSize="150">
-          <BrowserSideBar />
+          { webentity ? <BrowserSideBar webentity={ webentity } /> : <noscript /> }
           <WebView id={ id } url={ url }
             onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
             onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />

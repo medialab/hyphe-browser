@@ -1,14 +1,26 @@
 import '../../css/browser/side-bar'
 
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 
-class BrowserSideBar extends React.Component {
-  render () {
-    const { formatMessage } = this.context.intl
+import { getWebEntityActivityStatus } from '../../utils/status'
 
+
+class BrowserSideBar extends React.Component {
+  renderCrawlingStatus () {
+    const { webentity } = this.props
+
+    return (
+      <div>
+        <h3><T id="crawling-status" /></h3>
+        <strong><T id={ "crawling-status." + getWebEntityActivityStatus(webentity) } /></strong>
+      </div>
+    )
+  }
+
+  render () {
     return (
       <aside className="browser-side-bar">
         <h2><T id="status" /></h2>
@@ -23,12 +35,14 @@ class BrowserSideBar extends React.Component {
             Out
           </button>
         </div>
+        { this.renderCrawlingStatus() }
       </aside>
     )
   }
 }
 
 BrowserSideBar.propTypes = {
+  webentity: PropTypes.object.isRequired
 }
 
 const mapStateToProps = ({ ui }) => ({ // eslint-disable-line
