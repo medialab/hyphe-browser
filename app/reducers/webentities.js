@@ -52,29 +52,12 @@ export default createReducer(initialState, {
   }),
 
   // Optimistic update
-  [SET_WEBENTITY_STATUS_REQUEST]: (state, { status, webentityId }) => {
-    const webentity = state.webentities[webentityId]
-    return { ...state, webentities: { ...state.webentities, [webentityId]: {
-      ...webentity,
-      status, // optimistically update status
-      previousStatus: webentity.status // keep track of previous status for cancellation
-    }}}
-  },
-  [SET_WEBENTITY_STATUS_SUCCESS]: (state, { status, webentityId }) => {
-    const webentity = state.webentities[webentityId]
-    return { ...state, webentities: { ...state.webentities, [webentityId]: {
-      ...webentity,
-      previousStatus: undefined // remove track of previous status
-    }}}
-  },
-  [SET_WEBENTITY_STATUS_FAILURE]: (state, { status, webentityId }) => {
-    const webentity = state.webentities[webentityId]
-    return { ...state, webentities: { ...state.webentities, [webentityId]: {
-      ...webentity,
-      status: webentity.previousStatus, // restore previous status
-      previousStatus: undefined // remove track of previous status
-    }}}
-  },
+  ...optimisticUpdateWebentity(
+    'status',
+    SET_WEBENTITY_STATUS_REQUEST,
+    SET_WEBENTITY_STATUS_SUCCESS,
+    SET_WEBENTITY_STATUS_FAILURE
+  ),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
     ...state,
@@ -96,3 +79,39 @@ export default createReducer(initialState, {
   [SELECT_CORPUS]: () => ({ ...initialState })
 
 })
+
+
+function optimisticUpdateWebentity (field, request, success, failure) {
+  return {
+    [request]: updateWebentity((webentity, payload) => {
+      console.log('UPDATE', { request, webentity, payload })
+      return {
+        [field]: payload[field], // optimistically update field
+        [field + '_prev']: webentity[field] // keep track of previous value for cancellation
+      }
+    }),
+    [success]: updateWebentity((webentity, payload) => {
+      console.log('UPDATE', { success, webentity, payload })
+      return {
+        [field + '_prev']: undefined // remove track of previous value
+      }
+    }),
+    [failure]: updateWebentity((webentity, payload) => {
+      return {
+        [field]: webentity[field + '_prev'], // restore previous value
+        [field + '_prev']: undefined // remove track of previous value
+      }
+    })
+  }
+}
+
+function updateWebentity (updator) {
+  return (state, payload) => {
+    const id = payload.webentityId
+    const webentity = state.webentities[id]
+    console.log('updates', webentity, payload)
+    const updated = {...webentity, ...updator(webentity, payload)}
+    console.log('updated', updated)
+    return {...state, webentities: {...state.webentities, [id]: updated}}
+  }
+}
