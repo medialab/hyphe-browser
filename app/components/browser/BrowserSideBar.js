@@ -4,6 +4,7 @@ import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import cx from 'classnames'
 
 import { getWebEntityActivityStatus } from '../../utils/status'
 
@@ -20,20 +21,27 @@ class BrowserSideBar extends React.Component {
     )
   }
 
+  renderStatusButton (status) {
+    const { formatMessage } = this.context.intl
+    const { webentity } = this.props
+
+    return (
+      <button
+        className={ cx('btn btn-large btn-default', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
+        title={ formatMessage({ id: 'corpus-status.' + status }) }>
+        <T id={ 'corpus-status-label.' + status } />
+      </button>
+    )
+  }
+
   render () {
     return (
       <aside className="browser-side-bar">
         <h2><T id="status" /></h2>
         <div className="btn-group browser-side-bar-status">
-          <button className="btn btn-large btn-default status-in" title={ formatMessage({ id: 'corpus-status.IN' }) }>
-            IN
-          </button>
-          <button className="btn btn-large btn-default status-undecided" title={ formatMessage({ id: 'corpus-status.UNDECIDED' }) }>
-            ?
-          </button>
-          <button className="btn btn-large btn-default status-out" title={ formatMessage({ id: 'corpus-status.OUT' }) }>
-            Out
-          </button>
+          { this.renderStatusButton('IN') }
+          { this.renderStatusButton('UNDECIDED') }
+          { this.renderStatusButton('OUT') }
         </div>
         { this.renderCrawlingStatus() }
       </aside>

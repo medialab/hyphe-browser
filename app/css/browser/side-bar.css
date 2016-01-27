@@ -6,14 +6,28 @@
   border-bottom-width: 3px;
 }
 
+button.active-status {
+  font-weight: bold;
+  color: #FFF;
+}
+
 button.status-in {
   border-bottom-color: #000;
 }
+button.status-in.active-status {
+  background: #000;
+}
 
 button.status-undecided {
-  border-bottom-color: #ADA299
+  border-bottom-color: #ADA299;
+}
+button.status-undecided.active-status {
+  background: #ADA299;
 }
 
 button.status-out {
   border-bottom-color: #FAA;
+}
+button.status-out.active-status {
+  background: #FAA;
 }
