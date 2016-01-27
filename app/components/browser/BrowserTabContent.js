@@ -140,7 +140,7 @@ class TabContent extends React.Component {
   }
 
   render () {
-    const { active, id, url, webentity, setTabUrl } = this.props
+    const { active, id, url, webentity, setTabUrl, serverUrl, corpusId } = this.props
     const { formatMessage } = this.context.intl
 
     return (
@@ -168,7 +168,7 @@ class TabContent extends React.Component {
           </div>
         </div>
         <SplitPane split="vertical" minSize="100" defaultSize="150">
-          { webentity ? <BrowserSideBar webentity={ webentity } /> : <noscript /> }
+          { webentity ? <BrowserSideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
           <WebView id={ id } url={ url }
             onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
             onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />

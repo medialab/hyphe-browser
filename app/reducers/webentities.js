@@ -5,6 +5,9 @@ import {
   DECLARE_PAGE_SUCCESS,
   SET_WEBENTITY_HOMEPAGE_SUCCESS,
   SET_WEBENTITY_NAME_SUCCESS,
+  SET_WEBENTITY_STATUS_REQUEST,
+  SET_WEBENTITY_STATUS_SUCCESS,
+  SET_WEBENTITY_STATUS_FAILURE,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS
 } from '../actions/webentities'
@@ -47,6 +50,31 @@ export default createReducer(initialState, {
       }
     }
   }),
+
+  // Optimistic update
+  [SET_WEBENTITY_STATUS_REQUEST]: (state, { status, webentityId }) => {
+    const webentity = state.webentities[webentityId]
+    return { ...state, webentities: { ...state.webentities, [webentityId]: {
+      ...webentity,
+      status, // optimistically update status
+      previousStatus: webentity.status // keep track of previous status for cancellation
+    }}}
+  },
+  [SET_WEBENTITY_STATUS_SUCCESS]: (state, { status, webentityId }) => {
+    const webentity = state.webentities[webentityId]
+    return { ...state, webentities: { ...state.webentities, [webentityId]: {
+      ...webentity,
+      previousStatus: undefined // remove track of previous status
+    }}}
+  },
+  [SET_WEBENTITY_STATUS_FAILURE]: (state, { status, webentityId }) => {
+    const webentity = state.webentities[webentityId]
+    return { ...state, webentities: { ...state.webentities, [webentityId]: {
+      ...webentity,
+      status: webentity.previousStatus, // restore previous status
+      previousStatus: undefined // remove track of previous status
+    }}}
+  },
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
     ...state,

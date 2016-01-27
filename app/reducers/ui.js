@@ -15,10 +15,14 @@ import {
 import {
   DECLARE_PAGE_REQUEST,
   DECLARE_PAGE_SUCCESS,
-  DECLARE_PAGE_FAILURE
+  DECLARE_PAGE_FAILURE,
+  SET_WEBENTITY_STATUS_REQUEST,
+  SET_WEBENTITY_STATUS_SUCCESS,
+  SET_WEBENTITY_STATUS_FAILURE
 } from '../actions/webentities'
 import {
-  ERROR_SERVER_NO_RESOURCE
+  ERROR_SERVER_NO_RESOURCE,
+  ERROR_SET_WEBENTITY_STATUS
 } from '../constants'
 
 const getEmptyError = () => ({
@@ -36,12 +40,13 @@ const initialState = {
     // when fetching the list of corpora
     corpora: false,
     corpus_status: false,
-    webentity: false
+    webentity: false,
+    webentity_status: false
   }
 }
 
-const toggleLoader = (which, bool) => (state) => ({
-  ...state,
+const toggleLoader = (which, bool, error) => (state) => ({
+  error: error || state.error,
   loaders: { ...state.loaders, [which]: bool }
 })
 
@@ -60,6 +65,13 @@ export default createReducer(initialState, {
   [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', true),
   [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
   [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
+
+  [SET_WEBENTITY_STATUS_REQUEST]: toggleLoader('webentity_status', true),
+  [SET_WEBENTITY_STATUS_SUCCESS]: toggleLoader('webentity_status', false),
+  [SET_WEBENTITY_STATUS_FAILURE]: toggleLoader('webentity_status', false, {
+    id: ERROR_SET_WEBENTITY_STATUS,
+    message: ERROR_SET_WEBENTITY_STATUS // TODO pass a message id and let ErrorMessage do the translation
+  }),
 
   [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })
 })

@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
+import { setWebentityStatus } from '../../actions/webentities'
 import { getWebEntityActivityStatus } from '../../utils/status'
 
 
@@ -21,6 +22,22 @@ class BrowserSideBar extends React.Component {
     )
   }
 
+  setStatus (status) {
+    const { webentity, setWebentityStatus, serverUrl, corpusId } = this.props
+
+    if (status !== 'DISCOVERED' && status === webentity.status) {
+      // Click on current status = set to discovered
+      status = 'DISCOVERED'
+    }
+
+    if (status === 'IN') {
+      // Set to IN = go to "adjust" mode and validation triggers crawling
+      alert('TODO trigger crawling')
+    } else {
+      setWebentityStatus(serverUrl, corpusId, status, webentity.id)
+    }
+  }
+
   renderStatusButton (status) {
     const { formatMessage } = this.context.intl
     const { webentity } = this.props
@@ -28,7 +45,8 @@ class BrowserSideBar extends React.Component {
     return (
       <button
         className={ cx('btn btn-large btn-default', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
-        title={ formatMessage({ id: 'corpus-status.' + status }) }>
+        title={ formatMessage({ id: 'corpus-status.' + status }) }
+        onClick={ () => this.setStatus(status) }>
         <T id={ 'corpus-status-label.' + status } />
       </button>
     )
@@ -50,6 +68,8 @@ class BrowserSideBar extends React.Component {
 }
 
 BrowserSideBar.propTypes = {
+  serverUrl: PropTypes.string.isRequired,
+  corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired
 }
 
@@ -60,4 +80,4 @@ BrowserSideBar.contextTypes = {
   intl: intlShape
 }
 
-export default connect(mapStateToProps)(BrowserSideBar)
+export default connect(mapStateToProps, { setWebentityStatus })(BrowserSideBar)

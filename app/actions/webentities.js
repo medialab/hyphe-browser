@@ -3,6 +3,7 @@
 // - store.set_webentity_homepage
 // - store.rename_webentity
 // - store.declare_webentity_by_lruprefix_as_url
+// - store.set_webentity_status
 
 import jsonrpc from '../utils/jsonrpc'
 
@@ -22,6 +23,11 @@ export const SET_WEBENTITY_HOMEPAGE_FAILURE = '§_SET_WEBENTITY_HOMEPAGE_FAILURE
 export const SET_WEBENTITY_NAME_REQUEST = '§_SET_WEBENTITY_NAME_REQUEST'
 export const SET_WEBENTITY_NAME_SUCCESS = '§_SET_WEBENTITY_NAME_SUCCESS'
 export const SET_WEBENTITY_NAME_FAILURE = '§_SET_WEBENTITY_NAME_FAILURE'
+
+// setting webentity's status
+export const SET_WEBENTITY_STATUS_REQUEST = '§_SET_WEBENTITY_STATUS_REQUEST'
+export const SET_WEBENTITY_STATUS_SUCCESS = '§_SET_WEBENTITY_STATUS_SUCCESS'
+export const SET_WEBENTITY_STATUS_FAILURE = '§_SET_WEBENTITY_STATUS_FAILURE'
 
 // creating webentity
 export const CREATE_WEBENTITY_REQUEST = '§_CREATE_WEBENTITY_REQUEST'
@@ -76,6 +82,14 @@ export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dis
   return jsonrpc(serverUrl)('store.rename_webentity', [webentityId, name, corpusId])
     .then(() => dispatch({ type: SET_WEBENTITY_NAME_SUCCESS, payload: { serverUrl, corpusId, name, webentityId } }))
     .catch((error) => dispatch({ type: SET_WEBENTITY_NAME_FAILURE, payload: { serverUrl, corpusId, name, webentityId, error } }))
+}
+
+export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => (dispatch) => {
+  dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, status, webentityId } })
+
+  return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
+    .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status, webentityId } }))
+    .catch((error) => dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, status, webentityId, error } }))
 }
 
 export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null) => (dispatch) => {
