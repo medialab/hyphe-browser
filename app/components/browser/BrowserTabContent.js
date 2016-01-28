@@ -75,9 +75,9 @@ class TabContent extends React.Component {
   }
 
   saveAdjustChanges () {
-    const { saveAdjustedWebentity, hideAdjustWebentity, serverUrl, corpusId, webentity, adjusting, hideError, showError } = this.props
+    const { saveAdjustedWebentity, hideAdjustWebentity, serverUrl, corpusId, webentity, adjusting, hideError, showError, id } = this.props
 
-    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting)
+    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting, id)
       .then(() => {
         hideError()
         hideAdjustWebentity(webentity.id)

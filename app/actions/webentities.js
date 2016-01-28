@@ -137,7 +137,7 @@ export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTI
 export const showAdjustWebentity = (webentityId, crawl = false) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
 
-export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust) => (dispatch) => {
+export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } })
 
   const { prefix, homepage, name, crawl } = adjust
@@ -146,7 +146,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust) =>
   if (prefix) {
     // Create a new web entity
     // Set its name and homepage at the same time + refresh tab by passing tab id
-    operations.push(createWebentity(serverUrl, corpusId, prefix, name, homepage, webentity.id)(dispatch))
+    operations.push(createWebentity(serverUrl, corpusId, prefix, name, homepage, tabId)(dispatch))
   } else {
     if (homepage && homepage !== webentity.homepage) {
       operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
