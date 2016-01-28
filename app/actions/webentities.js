@@ -163,6 +163,10 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
         const id = prefix ? head.id : webentity.id
         const depth = CRAWL_DEPTH
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
+          .then(() => {
+            // Broadcast the information that webentity's status has been updated
+            dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
+          })
       }
     })
     .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))

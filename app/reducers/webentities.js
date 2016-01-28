@@ -95,9 +95,16 @@ function optimisticUpdateWebentity (field, request, success, failure) {
       [field]: payload[field], // optimistically update field
       [field + '_prev']: webentity[field] // keep track of previous value for cancellation
     })),
-    [success]: updateWebentity(() => ({
-      [field + '_prev']: undefined // remove track of previous value
-    })),
+    [success]: updateWebentity((webentity, payload) => {
+      console.log('SUCCESS', webentity, payload, {
+        [field]: payload[field], // in case we receive success with no previous request
+        [field + '_prev']: undefined // remove track of previous value
+      })
+      return {
+        [field]: payload[field], // in case we receive success with no previous request
+        [field + '_prev']: undefined // remove track of previous value
+      }
+    }),
     [failure]: updateWebentity((webentity) => ({
       [field]: webentity[field + '_prev'], // restore previous value
       [field + '_prev']: undefined // remove track of previous value
