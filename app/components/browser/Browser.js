@@ -1,11 +1,9 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import ErrorMessage from './ErrorMessage'
 import Header from './Header'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
 import CorpusStatusWatcher from '../CorpusStatusWatcher'
-
-import { connect } from 'react-redux'
 
 class Browser extends React.Component {
   render () {
@@ -14,18 +12,10 @@ class Browser extends React.Component {
         <Header />
         <BrowserStack />
         <BrowserTabs />
-        <ErrorMessage { ...this.props.error } />
+        <ErrorMessage />
       </CorpusStatusWatcher>
     )
   }
 }
 
-Browser.propTypes = {
-  error: PropTypes.shape(ErrorMessage.propTypes)
-}
-
-const mapStateToProps = ({ ui }) => ({
-  error: ui.error
-})
-
-export default connect(mapStateToProps)(Browser)
+export default Browser

@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 
+import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
+import { hideError } from '../../actions/browser'
 
 class ErrorMessage extends React.Component {
   render () {
@@ -25,7 +27,14 @@ ErrorMessage.propTypes = {
   messageId: PropTypes.string,
   messageValues: PropTypes.object,
   fatal: PropTypes.bool,
-  icon: PropTypes.string
+  icon: PropTypes.string,
+
+  hideError: PropTypes.func.isRequired
 }
 
-export default ErrorMessage
+const mapStateToProps = ({ ui }) => {
+  console.log('UI.ERROR', ui.error)
+  return ui.error
+}
+
+export default connect(mapStateToProps, { hideError })(ErrorMessage)
