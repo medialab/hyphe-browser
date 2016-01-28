@@ -79,19 +79,17 @@ export default createReducer(initialState, {
 function optimisticUpdateWebentity (field, request, success, failure) {
   return {
     [request]: updateWebentity((webentity, payload) => {
-      console.log('UPDATE', { request, webentity, payload })
       return {
         [field]: payload[field], // optimistically update field
         [field + '_prev']: webentity[field] // keep track of previous value for cancellation
       }
     }),
-    [success]: updateWebentity((webentity, payload) => {
-      console.log('UPDATE', { success, webentity, payload })
+    [success]: updateWebentity(() => {
       return {
         [field + '_prev']: undefined // remove track of previous value
       }
     }),
-    [failure]: updateWebentity((webentity, payload) => {
+    [failure]: updateWebentity((webentity) => {
       return {
         [field]: webentity[field + '_prev'], // restore previous value
         [field + '_prev']: undefined // remove track of previous value
@@ -104,9 +102,7 @@ function updateWebentity (updator) {
   return (state, payload) => {
     const id = payload.webentityId
     const webentity = state.webentities[id]
-    console.log('updates', webentity, payload)
     const updated = {...webentity, ...updator(webentity, payload)}
-    console.log('updated', updated)
     return {...state, webentities: {...state.webentities, [id]: updated}}
   }
 }
