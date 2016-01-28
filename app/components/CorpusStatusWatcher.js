@@ -3,7 +3,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
-import { intlShape } from 'react-intl'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
   ERROR_CORPUS_NOT_STARTED,
@@ -30,7 +29,6 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   watchStatus () {
-    const { intl: { formatMessage } } = this.context
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
 
     const repeat = (immediate = false) => {
@@ -41,13 +39,9 @@ class CorpusStatusWatcher extends React.Component {
       if (!status.corpus.ready) {
         if (status.hyphe.ram_left > 0 && status.hyphe.ports_left > 0) {
           // Resources available: start corpus
-          showError({
-            id: ERROR_CORPUS_NOT_STARTED,
-            message: formatMessage({ id: 'corpus-not-started-starting' }),
-            fatal: true
-          })
+          showError({ id: ERROR_CORPUS_NOT_STARTED, messageId: 'error.corpus-not-started-starting', fatal: true })
           return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
-            showError({ message: err.message, fatal: true })
+            showError({ messageId: 'error.corpus-failed-starting', messageValues: { error: err.message }, fatal: true })
           }).then(() => {
             hideError()
             // Specific case: we want the next status query to happen ASAP
@@ -55,11 +49,7 @@ class CorpusStatusWatcher extends React.Component {
           })
         } else {
           // No resource, such a dramatic failure :(
-          showError({
-            id: ERROR_SERVER_NO_RESOURCE,
-            message: formatMessage({ id: 'corpus-not-started-no-resource' }),
-            fatal: true
-          })
+          showError({ id: ERROR_SERVER_NO_RESOURCE, messageId: 'error.corpus-not-started-no-resource', fatal: true })
         }
       }
       // General case: wait before next status query
@@ -75,10 +65,6 @@ class CorpusStatusWatcher extends React.Component {
   render () {
     return <div className={ this.props.className }>{ this.props.children }</div>
   }
-}
-
-CorpusStatusWatcher.contextTypes = {
-  intl: intlShape
 }
 
 CorpusStatusWatcher.propTypes = {

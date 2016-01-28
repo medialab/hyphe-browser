@@ -53,7 +53,7 @@ class StartUpForm extends React.Component {
         </div>
 
         { ui.error === true
-          ? <div className="form-error"><T id="error-loading-corpora" /></div>
+          ? <div className="form-error"><T id="error.loading-corpora" /></div>
           : null
         }
 

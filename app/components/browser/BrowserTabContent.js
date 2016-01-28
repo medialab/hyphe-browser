@@ -61,7 +61,7 @@ class TabContent extends React.Component {
       const err = networkErrors.createByCode(info.errorCode)
       if (info.pageURL === info.validatedURL) {
         // Main page triggered the error, it's important
-        showError({ message: err.message, fatal: false, icon: 'attention', timeout: 10000 })
+        showError({ messageId: 'error.network-error', messageValues: { error: err.message }, fatal: false, icon: 'attention', timeout: 10000 })
         setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
       }
       // Anyway, log to console
@@ -100,7 +100,7 @@ class TabContent extends React.Component {
       hideError()
       this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null })
     }).catch((err) => {
-      showError({ message: err.message, fatal: false })
+      showError({ messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false })
     })
   }
 

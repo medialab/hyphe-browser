@@ -9,7 +9,6 @@ import cx from 'classnames'
 import { setWebentityStatus } from '../../actions/webentities'
 import { getWebEntityActivityStatus } from '../../utils/status'
 
-
 class BrowserSideBar extends React.Component {
   renderCrawlingStatus () {
     const { webentity } = this.props
@@ -17,7 +16,7 @@ class BrowserSideBar extends React.Component {
     return (
       <div>
         <h3><T id="crawling-status" /></h3>
-        <strong><T id={ "crawling-status." + getWebEntityActivityStatus(webentity) } /></strong>
+        <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong>
       </div>
     )
   }
@@ -70,7 +69,8 @@ class BrowserSideBar extends React.Component {
 BrowserSideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object.isRequired
+  webentity: PropTypes.object.isRequired,
+  setWebentityStatus: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ ui }) => ({ // eslint-disable-line

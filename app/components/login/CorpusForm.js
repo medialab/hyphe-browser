@@ -101,7 +101,7 @@ class CorpusForm extends React.Component {
     if (serverError && serverError.id === ERROR_SERVER_NO_RESOURCE) {
       this.setState({
         submitting: false,
-        errors: ['corpus-not-created-no-resource']
+        errors: ['error.corpus-not-created-no-resource']
       })
     }
   }
