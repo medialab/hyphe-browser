@@ -6,7 +6,8 @@ import {
   FETCH_CORPUS_STATUS_REQUEST,
   FETCH_CORPUS_STATUS_SUCCESS,
   FETCH_CORPUS_STATUS_FAILURE,
-  CREATE_CORPUS_FAILURE
+  CREATE_CORPUS_FAILURE,
+  SELECT_CORPUS
 } from '../actions/corpora'
 import {
   SHOW_ERROR,
@@ -57,6 +58,7 @@ const toggleLoader = (which, bool, err) => (state, { error }) => ({
 export default createReducer(initialState, {
   [SHOW_ERROR]: (state, error) => ({ ...state, error }),
   [HIDE_ERROR]: (state) => ({ ...state, error: emptyError }),
+  [SELECT_CORPUS]: (state) => ({ ...state, error: emptyError }),
 
   [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),
   [FETCH_CORPORA_SUCCESS]: toggleLoader('corpora', false),
