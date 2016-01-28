@@ -28,16 +28,16 @@ import {
   ERROR_SET_WEBENTITY_STATUS
 } from '../constants'
 
-const getEmptyError = () => ({
+const emptyError = {
   id: null,
   message: null,
   fatal: false,
   icon: ''
-})
+}
 
 const initialState = {
   // error message
-  error: getEmptyError(),
+  error: emptyError,
   // to display loaders in different places
   loaders: {
     // when fetching the list of corpora
@@ -56,7 +56,7 @@ const toggleLoader = (which, bool, err) => (state, { error }) => ({
 
 export default createReducer(initialState, {
   [SHOW_ERROR]: (state, error) => ({ ...state, error }),
-  [HIDE_ERROR]: (state) => ({ ...state, error: getEmptyError() }),
+  [HIDE_ERROR]: (state) => ({ ...state, error: emptyError }),
 
   [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),
   [FETCH_CORPORA_SUCCESS]: toggleLoader('corpora', false),
