@@ -1,4 +1,8 @@
-import { JSONRPC_DEBUG } from '../constants'
+import {
+  JSONRPC_DEBUG,
+  ERROR_JSONRPC_FETCH,
+  ERROR_JSONRPC_PARSE
+} from '../constants'
 
 // Sample usage: jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')('list_corpus')
 export default (uri) => (method, params = []) => {
@@ -8,7 +12,12 @@ export default (uri) => (method, params = []) => {
     method: 'POST',
     body: JSON.stringify({method, params})
   })
+  .catch(() => { throw new Error(ERROR_JSONRPC_FETCH) })
   .then((response) => response.json())
+  .catch((err) => {
+    if (err.message === ERROR_JSONRPC_FETCH) throw err
+    throw new Error(ERROR_JSONRPC_PARSE)
+  })
   .then((result) => {
     if (result && result.fault) {
       throw result
