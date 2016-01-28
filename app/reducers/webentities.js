@@ -81,7 +81,7 @@ export default createReducer(initialState, {
     ...state,
     adjustments: {
       ...state.adjustments,
-      [id]: state.adjustments[id]
+      [id]: (info && state.adjustments[id])
         ? {...state.adjustments[id], ...info}
         : info
     }
