@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import { setWebentityStatus } from '../../actions/webentities'
+import { setWebentityStatus, showAdjustWebentity } from '../../actions/webentities'
 import { getWebEntityActivityStatus } from '../../utils/status'
 
 class BrowserSideBar extends React.Component {
@@ -22,7 +22,7 @@ class BrowserSideBar extends React.Component {
   }
 
   setStatus (status) {
-    const { webentity, setWebentityStatus, serverUrl, corpusId } = this.props
+    const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId } = this.props
 
     if (status !== 'DISCOVERED' && status === webentity.status) {
       // Click on current status = set to discovered
@@ -31,7 +31,7 @@ class BrowserSideBar extends React.Component {
 
     if (status === 'IN') {
       // Set to IN = go to "adjust" mode and validation triggers crawling
-      alert('TODO trigger crawling')
+      showAdjustWebentity(webentity.id, true)
     } else {
       setWebentityStatus(serverUrl, corpusId, status, webentity.id)
     }
@@ -70,7 +70,9 @@ BrowserSideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
-  setWebentityStatus: PropTypes.func.isRequired
+
+  setWebentityStatus: PropTypes.func.isRequired,
+  showAdjustWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ ui }) => ({ // eslint-disable-line
@@ -80,4 +82,7 @@ BrowserSideBar.contextTypes = {
   intl: intlShape
 }
 
-export default connect(mapStateToProps, { setWebentityStatus })(BrowserSideBar)
+export default connect(mapStateToProps, {
+  setWebentityStatus,
+  showAdjustWebentity
+})(BrowserSideBar)

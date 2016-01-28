@@ -21,8 +21,8 @@ import { SELECT_CORPUS } from '../actions/corpora'
 
 const initialState = {
   webentities: {}, // id → WebEntity
-  tabs: {}, // tabId → weId
-  adjustments: {} // weId → adjustment { name, homepage, prefix }
+  tabs: {}, // tabId → webEntityId
+  adjustments: {} // webEntityId → adjustment { name, homepage, prefix, crawl }
 }
 
 

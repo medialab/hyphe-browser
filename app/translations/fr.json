@@ -61,6 +61,7 @@
   "password-mismatch": "Les champs mot de passe doivent correspondre",
   "reset-servers": "Réinitialiser les serveurs",
   "save": "Sauver",
+  "save-and-crawl": "Sauver et lancer le crawl",
   "select-server": "Sélectionnez un serveur",
   "server-edition": "Édition du serveur",
   "server-name": "Nom du server",

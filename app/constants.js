@@ -4,6 +4,8 @@ export const CORPUS_STATUS_WATCHER_INTERVAL = (process.env.NODE_ENV === 'develop
 export const LOCALES = ['en-US', 'fr-FR']
 export const DEFAULT_LOCALE = 'fr-FR'
 
+export const CRAWL_DEPTH = 1
+
 export const JSONRPC_DEBUG = true
 
 export const ERROR_JSONRPC_FETCH = 'ERROR_JSONRPC_FETCH'

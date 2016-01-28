@@ -61,6 +61,7 @@
   "password-mismatch": "Password fields must match",
   "reset-servers": "Reset servers",
   "save": "Save",
+  "save-and-crawl": "Save and crawl",
   "select-server": "Please select a server",
   "server-edition": "Server edition",
   "server-name": "Server name",

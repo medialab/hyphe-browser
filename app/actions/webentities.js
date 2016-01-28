@@ -4,9 +4,11 @@
 // - store.rename_webentity
 // - store.declare_webentity_by_lruprefix_as_url
 // - store.set_webentity_status
+// - crawl_webentity (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', phantom_timeouts = {}, corpus = '--hyphe--')
 
 import jsonrpc from '../utils/jsonrpc'
 
+import { CRAWL_DEPTH } from '../constants'
 import { createAction } from 'redux-actions'
 
 // adding a page to corpus
@@ -132,13 +134,13 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
 }
 
 export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
-export const showAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null })
+export const showAdjustWebentity = (webentityId, crawl = false) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
 
 export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } })
 
-  const { prefix, homepage, name } = adjust
+  const { prefix, homepage, name, crawl } = adjust
   var operations = []
 
   if (prefix) {
@@ -155,6 +157,14 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust) =>
   }
 
   return Promise.all(operations)
+    .then(([head]) => {
+      if (crawl) {
+        // if prefix, then webentity just been created, and we want this id, not the old one
+        const id = prefix ? head.id : webentity.id
+        const depth = CRAWL_DEPTH
+        return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
+      }
+    })
     .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))
     .catch((error) => {
       dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity, error } })
