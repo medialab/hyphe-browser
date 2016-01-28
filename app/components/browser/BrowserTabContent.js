@@ -12,7 +12,10 @@ import { intlShape } from 'react-intl'
 
 import { showError, hideError } from '../../actions/browser'
 import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
-import { declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity } from '../../actions/webentities'
+import {
+  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
+  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
+} from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
 
@@ -20,11 +23,7 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {
-      disableBack: true, disableForward: true,
-      adjust: false,
-      adjustHomepage: null, adjustName: null, adjustPrefix: null
-    }
+    this.state = { disableBack: true, disableForward: true }
     this.navigationActions = {} // Mutated by WebView
   }
 
@@ -76,42 +75,26 @@ class TabContent extends React.Component {
   }
 
   saveAdjustChanges () {
-    const {
-      id, serverUrl, corpusId, webentity,
-      setWebentityHomepage, setWebentityName, createWebentity,
-      showError, hideError } = this.props
+    const { saveAdjustedWebentity, serverUrl, corpusId, webentity, adjusting, hideError, showError } = this.props
 
-    var operations = []
-
-    if (this.state.adjustPrefix) {
-      // Create a new web entity
-      // Set its name and homepage at the same time + refresh tab by passing tab id
-      operations.push(createWebentity(serverUrl, corpusId, this.state.adjustPrefix, this.state.adjustName, this.state.adjustHomepage, id))
-    } else {
-      if (this.state.adjustHomepage && this.state.adjustHomepage !== webentity.homepage) {
-        operations.push(setWebentityHomepage(serverUrl, corpusId, this.state.adjustHomepage, webentity.id))
-      }
-      if (this.state.adjustName && this.state.adjustName !== webentity.name) {
-        operations.push(setWebentityName(serverUrl, corpusId, this.state.adjustName, webentity.id))
-      }
-    }
-
-    Promise.all(operations).then(() => {
-      hideError()
-      this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null })
-    }).catch((err) => {
-      showError({ messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false })
-    })
+    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting)
+      .then(() => {
+        hideError()
+        hideAdjustWebentity(webentity.id)
+      })
+      .catch((err) => {
+        showError({ messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false })
+      })
   }
 
   renderHomeButton () {
-    const { webentity, setTabUrl, url, id } = this.props
+    const { adjusting, setAdjustWebentity, webentity, setTabUrl, url, id } = this.props
     const { formatMessage } = this.context.intl
 
-    if (this.state.adjust) {
+    if (adjusting) {
       return <Button size="large" icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
         disabled={ !webentity }
-        onClick={ () => this.setState({ adjustHomepage: url }) } />
+        onClick={ () => setAdjustWebentity(webentity.id, { homepage: url }) } />
     } else if (webentity && webentity.homepage) {
       return <Button size="large" icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
         disabled={ !webentity || webentity.homepage === url }
@@ -124,23 +107,24 @@ class TabContent extends React.Component {
   }
 
   renderAdjustButton () {
+    const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity } = this.props
     const { formatMessage } = this.context.intl
 
-    if (this.state.adjust) {
+    if (adjusting) {
       return [
         <Button key="cancel-adjust" size="large" icon="cancel" title={ formatMessage({ id: 'cancel' }) }
-          onClick={ () => this.setState({ adjust: false, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />,
+          onClick={ () => hideAdjustWebentity(webentity.id) } />,
         <Button key="apply-adjust" size="large" icon="check" title={ formatMessage({ id: 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
       ]
     } else {
       return <Button size="large" icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
-        onClick={ () => this.setState({ adjust: true, adjustHomepage: null, adjustName: null, adjustPrefix: null }) } />
+        onClick={ () => showAdjustWebentity(webentity.id) } />
     }
   }
 
   render () {
-    const { active, id, url, webentity, setTabUrl, serverUrl, corpusId } = this.props
+    const { active, id, url, webentity, setTabUrl, serverUrl, corpusId, adjusting, setAdjustWebentity } = this.props
     const { formatMessage } = this.context.intl
 
     return (
@@ -148,21 +132,27 @@ class TabContent extends React.Component {
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <div className="btn-group tab-toolbar-navigation">
-              <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ this.state.adjust || this.state.disableBack }
+              <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ !!adjusting || this.state.disableBack }
                 onClick={ () => this.navigationActions.back() } />
-              <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ this.state.adjust || this.state.disableForward }
+              <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ !!adjusting || this.state.disableForward }
                 onClick={ () => this.navigationActions.forward() } />
-              <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ this.state.adjust }
+              <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ !!adjusting }
                 onClick={ () => this.navigationActions.reload() } />
             </div>
             <div className="btn-group tab-toolbar-url">
-              <BrowserTabUrlField initialUrl={ url } lruPrefixes={ webentity && webentity.lru_prefixes }
+              <BrowserTabUrlField
+                initialUrl={ url }
+                lruPrefixes={ webentity && webentity.lru_prefixes }
                 onSubmit={ (url) => setTabUrl(url, id) }
-                prefixSelector={ this.state.adjust } onSelectPrefix={ (url, modified) => this.setState({ adjustPrefix: modified ? url : null }) } />
+                prefixSelector={ !!adjusting }
+                onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
             </div>
             <div className="btn-group tab-toolbar-webentity">
               { this.renderHomeButton () }
-              <BrowserTabWebentityNameField initialValue={ webentity && webentity.name } editable={ this.state.adjust } onChange={ (name) => this.setState({ adjustName: name }) } />
+              <BrowserTabWebentityNameField
+                initialValue={ webentity && webentity.name }
+                editable={ !!adjusting }
+                onChange={ (name) => setAdjustWebentity(webentity.id, { name }) } />
               { this.renderAdjustButton() }
             </div>
           </div>
@@ -186,6 +176,7 @@ TabContent.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
+  adjusting: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
   hideError: PropTypes.func.isRequired,
@@ -198,25 +189,32 @@ TabContent.propTypes = {
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
-  createWebentity: PropTypes.func.isRequired
+  createWebentity: PropTypes.func.isRequired,
+  saveAdjustedWebentity: PropTypes.func.isRequired,
+  setAdjustWebentity: PropTypes.func.isRequired,
+  showAdjustWebentity: PropTypes.func.isRequired,
+  hideAdjustWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
   const tab = tabs.tabs.find((tab) => tab.id === id)
+  const webentity = webentities.webentities[webentities.tabs[id]]
   return {
     id,
     active: id === tabs.activeTab,
     url: tab.url,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
-    webentity: webentities.webentities[webentities.tabs[id]]
+    webentity: webentity,
+    adjusting: webentity && webentities.adjustments[webentity.id]
   }
 }
 
 const mapDispatchToProps = {
   showError, hideError,
   setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
-  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity
+  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
+  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
 }
 
 TabContent.contextTypes = {

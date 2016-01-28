@@ -47,6 +47,7 @@
   "error.loading-corpora": "Erreur de chargement des corpora",
   "error.network-error": "Erreur réseau ({error})",
   "error.save-webentity": "Échec de sauvegarde de l'entité web ({error})",
+  "error.set-webentity-status": "Échec de la modification du statut de l'entité web ({error})",
   "goto-homepage": "Aller à la page d'accueil ({url})",
   "languages": "Langages",
   "loading-corpora": "Chargement des corpora…",

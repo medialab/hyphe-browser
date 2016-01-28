@@ -18,7 +18,10 @@ import {
   DECLARE_PAGE_FAILURE,
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
-  SET_WEBENTITY_STATUS_FAILURE
+  SET_WEBENTITY_STATUS_FAILURE,
+  SAVE_ADJUSTED_WEBENTITY_REQUEST,
+  SAVE_ADJUSTED_WEBENTITY_SUCCESS,
+  SAVE_ADJUSTED_WEBENTITY_FAILURE
 } from '../actions/webentities'
 import {
   ERROR_SERVER_NO_RESOURCE,
@@ -41,12 +44,13 @@ const initialState = {
     corpora: false,
     corpus_status: false,
     webentity: false,
-    webentity_status: false
+    webentity_status: false,
+    webentity_adjust: false
   }
 }
 
-const toggleLoader = (which, bool, error) => (state) => ({
-  error: error || state.error,
+const toggleLoader = (which, bool, err) => (state, { error }) => ({
+  error: err ? {...err, messageValues: { error } } : state.error,
   loaders: { ...state.loaders, [which]: bool }
 })
 
@@ -70,7 +74,13 @@ export default createReducer(initialState, {
   [SET_WEBENTITY_STATUS_SUCCESS]: toggleLoader('webentity_status', false),
   [SET_WEBENTITY_STATUS_FAILURE]: toggleLoader('webentity_status', false, {
     id: ERROR_SET_WEBENTITY_STATUS,
-    message: ERROR_SET_WEBENTITY_STATUS // TODO pass a message id and let ErrorMessage do the translation
+    messageId: 'error.set-webentity-status'
+  }),
+
+  [SAVE_ADJUSTED_WEBENTITY_REQUEST]: toggleLoader('webentity_adjust', true),
+  [SAVE_ADJUSTED_WEBENTITY_SUCCESS]: toggleLoader('webentity_adjust', false),
+  [SAVE_ADJUSTED_WEBENTITY_FAILURE]: toggleLoader('webentity_adjust', false, {
+    messageId: 'error.save-webentity'
   }),
 
   [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })

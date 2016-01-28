@@ -13,13 +13,16 @@ import {
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
   SET_TAB_WEBENTITY,
-  CREATE_WEBENTITY_SUCCESS
+  CREATE_WEBENTITY_SUCCESS,
+  ADJUST_WEBENTITY
+  // Note we don't subscribe to SAVE_ADJUSTED_WEBENTITY_* because we're already plugged to its sub-actions
 } from '../actions/webentities'
 import { SELECT_CORPUS } from '../actions/corpora'
 
 const initialState = {
   webentities: {}, // id → WebEntity
-  tabs: {} // tabId → WebEntity
+  tabs: {}, // tabId → weId
+  adjustments: {} // weId → adjustment { name, homepage, prefix }
 }
 
 
@@ -71,8 +74,18 @@ export default createReducer(initialState, {
   }),
 
   // Reset state when selecting corpus
-  [SELECT_CORPUS]: () => ({ ...initialState })
+  [SELECT_CORPUS]: () => ({ ...initialState }),
 
+  // Keep track of current WE adjustments
+  [ADJUST_WEBENTITY]: (state, { id, info }) => ({
+    ...state,
+    adjustments: {
+      ...state.adjustments,
+      [id]: state.adjustments[id]
+        ? {...state.adjustments[id], ...info}
+        : info
+    }
+  })
 })
 
 

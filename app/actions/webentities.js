@@ -37,6 +37,12 @@ export const CREATE_WEBENTITY_FAILURE = '§_CREATE_WEBENTITY_FAILURE'
 // attaching a fetched webentity to an open tab
 export const SET_TAB_WEBENTITY = '§_SET_TAB_WEBENTITY'
 
+// adjust webentity
+export const ADJUST_WEBENTITY = '§_ADJUST_WEBENTITY' // false => close, true => open with defaults, object => update fields
+export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUEST'
+export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
+export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
+
 
 export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
@@ -73,7 +79,10 @@ export const setWebentityHomepage = (serverUrl, corpusId, homepage, webentityId)
 
   return jsonrpc(serverUrl)('store.set_webentity_homepage', [webentityId, homepage, corpusId])
     .then(() => dispatch({ type: SET_WEBENTITY_HOMEPAGE_SUCCESS, payload: { serverUrl, corpusId, homepage, webentityId } }))
-    .catch((error) => dispatch({ type: SET_WEBENTITY_HOMEPAGE_FAILURE, payload: { serverUrl, corpusId, homepage, webentityId, error } }))
+    .catch((error) => {
+      dispatch({ type: SET_WEBENTITY_HOMEPAGE_FAILURE, payload: { serverUrl, corpusId, homepage, webentityId, error } })
+      throw error
+    })
 }
 
 export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dispatch) => {
@@ -81,7 +90,10 @@ export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dis
 
   return jsonrpc(serverUrl)('store.rename_webentity', [webentityId, name, corpusId])
     .then(() => dispatch({ type: SET_WEBENTITY_NAME_SUCCESS, payload: { serverUrl, corpusId, name, webentityId } }))
-    .catch((error) => dispatch({ type: SET_WEBENTITY_NAME_FAILURE, payload: { serverUrl, corpusId, name, webentityId, error } }))
+    .catch((error) => {
+      dispatch({ type: SET_WEBENTITY_NAME_FAILURE, payload: { serverUrl, corpusId, name, webentityId, error } })
+      throw error
+    })
 }
 
 export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => (dispatch) => {
@@ -89,7 +101,10 @@ export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => 
 
   return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
     .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status, webentityId } }))
-    .catch((error) => dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, status, webentityId, error } }))
+    .catch((error) => {
+      dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, status, webentityId, error } })
+      throw error
+    })
 }
 
 export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null) => (dispatch) => {
@@ -110,5 +125,39 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
         return webentity
       }
     })
-    .catch((error) => dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error } }))
+    .catch((error) => {
+      dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error } })
+      throw error
+    })
+}
+
+export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
+export const showAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null })
+export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
+
+export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust) => (dispatch) => {
+  dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } })
+
+  const { prefix, homepage, name } = adjust
+  var operations = []
+
+  if (prefix) {
+    // Create a new web entity
+    // Set its name and homepage at the same time + refresh tab by passing tab id
+    operations.push(createWebentity(serverUrl, corpusId, prefix, name, homepage, webentity.id)(dispatch))
+  } else {
+    if (homepage && homepage !== webentity.homepage) {
+      operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
+    }
+    if (name && name !== webentity.name) {
+      operations.push(setWebentityName(serverUrl, corpusId, name, webentity.id)(dispatch))
+    }
+  }
+
+  return Promise.all(operations)
+    .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))
+    .catch((error) => {
+      dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity, error } })
+      throw error
+    })
 }

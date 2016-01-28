@@ -47,6 +47,7 @@
   "error.loading-corpora": "Error loading corpora",
   "error.network-error": "Network error ({error})",
   "error.save-webentity": "Failed saving webentity ({error})",
+  "error.set-webentity-status": "Failed setting webentity status ({error})",
   "goto-homepage": "Go to homepage ({url})",
   "languages": "Languages",
   "loading-corpora": "Loading corpora…",
