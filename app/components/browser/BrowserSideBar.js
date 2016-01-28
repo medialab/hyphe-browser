@@ -13,6 +13,10 @@ class BrowserSideBar extends React.Component {
   renderCrawlingStatus () {
     const { webentity } = this.props
 
+    if (!webentity) {
+      return <noscript />
+    }
+
     return (
       <div>
         <h3><T id="crawling-status" /></h3>
