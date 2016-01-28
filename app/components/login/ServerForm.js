@@ -37,14 +37,15 @@ class ServerForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup (name, label) {
+  renderFormGroup (name, label = name, type = 'text') {
     return (
       <div className="form-group">
-        <label><T id={ label || name } /></label>
+        <label><T id={ label } /></label>
         <input className="form-control"
                disabled={ this.state.submitting }
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
+               type={ type }
                value={ this.state.data[name] } />
       </div>
     )
@@ -121,8 +122,8 @@ class ServerForm extends React.Component {
         { this.renderFormGroup('url', 'api-url') }
         { this.renderFormGroup('name', 'server-name') }
         { this.renderFormGroup('login') }
-        { this.renderFormGroup('password') }
-        { this.renderFormGroup('passwordConfirm', 'confirm-password') }
+        { this.renderFormGroup('password', 'password', 'password') }
+        { this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
 
         <div className="form-actions">
           <button className="btn btn-primary" disabled={ this.state.submitting }>
