@@ -6,7 +6,7 @@ import { hideError } from '../../actions/browser'
 
 class ErrorMessage extends React.Component {
   render () {
-    const { messageId, messageValues, icon, fatal } = this.props
+    const { messageId, messageValues, icon, fatal, hideError } = this.props
 
     const message = messageId
       ? <T id={ messageId } values={ messageValues || {} } />
@@ -15,6 +15,7 @@ class ErrorMessage extends React.Component {
     return (
       <div className={ 'error-dialog-wrapper ' + (fatal ? 'blocking' : '') }>
         <div className={ 'error-dialog ' + (messageId ? 'visible' : 'hidden') }>
+          <a className="error-dialog-close" onClick={ () => hideError() }><span className="icon icon-cancel-circled" /></a>
           { icon ? <span className={ 'icon icon-' + icon } /> : null }
           <strong> { message }</strong>
         </div>

@@ -56,16 +56,20 @@ a.btn {
 
 .error-dialog {
   position: absolute;
-  width: 50%;
-  left: 25%;
+  width: 70%;
+  left: 15%;
   min-height: 50px;
-  max-height: 300px;
   background: rgba(200, 50, 50, 0.75);
   color: black;
   font-size: 24px;
   border-radius: 10px;
   padding: 10px;
   z-index: 999;
+}
+.error-dialog .error-dialog-close {
+  float: right;
+  color: #fff;
+  font-size: 28px;
 }
 .error-dialog.hidden {
   top: -400px;
