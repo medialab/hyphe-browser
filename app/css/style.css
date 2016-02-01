@@ -257,7 +257,11 @@ h1.title {
   background-repeat: no-repeat;
   background-position: right;
 }
-.browser-tab-url em {
+/* :first-child = scheme */
+.browser-tab-url em:first-child {
+  font-style: normal;
+}
+.browser-tab-url em:not(:first-child) {
   background: #ffff99;
   padding: 2px 5px;
   font-weight: bold;

@@ -90,7 +90,7 @@ class BrowserTabUrlField extends React.Component {
     if (!this.props.lruPrefixes) {
       return <span className={ className } onClick={ onClick }>{ this.state.url }</span>
     }
-    
+
     return <span className={ className } onClick={ onClick }
       dangerouslySetInnerHTML={ {
         __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url)
