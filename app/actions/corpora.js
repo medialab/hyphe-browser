@@ -6,7 +6,7 @@
 
 import jsonrpc from '../utils/jsonrpc'
 // for redirections after success / errors from server
-import { pushPath } from 'redux-simple-router'
+import { routeActions } from 'react-router-redux'
 
 import { createAction } from 'redux-actions'
 
@@ -86,7 +86,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
     .then((res) => {
       dispatch(receiveCorpus(serverUrl, res))
       dispatch(fetchCorpora(serverUrl))
-      dispatch(pushPath('/login'))
+      dispatch(routeActions.push('/login'))
     })
     .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,

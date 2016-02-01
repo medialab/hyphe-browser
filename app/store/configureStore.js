@@ -1,32 +1,30 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
+import { hashHistory } from 'react-router'
+import { syncHistory } from 'react-router-redux'
 import persistState from 'redux-localstorage'
 
 import rootReducer from '../reducers'
-import DevTools from '../components/DevTools' // make it NODE_ENV-dependent
 
-const finalCreateStore = getCreateStoreModifier()(createStore)
+// only these branches of the state tree will be persisted in the localStorage
+const branches = [ 'options', 'servers' ]
 
-export default (initialState) => finalCreateStore(rootReducer, initialState)
+// configureStore
+export default (initialState) => {
+  // configure middlewares
+  const routerMiddleware = syncHistory(hashHistory)
+  const middlewares = applyMiddleware(thunk, routerMiddleware)
 
-function getCreateStoreModifier () {
-  // only these reducers will be persisted in the localStorage
-  const reducers = [
-    'options',
-    'servers'
-  ]
-  const storage = persistState(reducers, { key: 'hyphe' })
+  const storage = persistState(branches, { key: 'hyphe' })
 
+  const enhancers = process.env.NODE_ENV === 'development'
+    ? compose(middlewares, storage, require('../components/DevTools').default.instrument())
+    : compose(middlewares, storage)
+
+  const store = createStore(rootReducer, initialState, enhancers)
+  // only needed to work correctly with redux devtools
   if (process.env.NODE_ENV === 'development') {
-    return compose(
-      applyMiddleware(thunk),
-      storage,
-      DevTools.instrument()
-    )
-  } else {
-    return compose(
-      applyMiddleware(thunk),
-      storage
-    )
+    routerMiddleware.listenForReplays(store)
   }
+  return store
 }

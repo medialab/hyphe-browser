@@ -3,7 +3,7 @@ import '../../css/login/corpus-list'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
-import { pushPath } from 'redux-simple-router'
+import { routeActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 // abstract component
@@ -14,7 +14,7 @@ class CorpusListItem extends React.Component {
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
 
     return (
-      <div onClick={ () => { actions.selectCorpus(corpus); dispatch(pushPath(path)) } }>
+      <div onClick={ () => { actions.selectCorpus(corpus); dispatch(routeActions.push(path)) } }>
         <h5 className="corpus-list-item-name">
           { corpus.password ? <span className="icon icon-lock"></span> : null }
           { corpus.name }

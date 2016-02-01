@@ -6,7 +6,6 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 // in this electron app it's easier to reason with hashHistory
 import { Router, hashHistory } from 'react-router'
-import { syncReduxAndRouter } from 'redux-simple-router'
 
 import routes from './routes'
 import DevTools from './components/DevTools'
@@ -24,7 +23,6 @@ store.dispatch(setLocale(getOption('locale', DEFAULT_LOCALE)))
 
 // Reset URI
 location.hash = 'login'
-syncReduxAndRouter(hashHistory, store)
 
 const domRoot = document.getElementById('root')
 
@@ -52,5 +50,5 @@ if (process.env.DIRECT_ACCESS_CORPUS_TEST) {
   console.debug('Defined environment variable $DIRECT_ACCESS_CORPUS_TEST: switch login form') // eslint-disable-line no-console
   store.dispatch(require('./actions/corpora').requestCorpora('http://hyphe.medialab.sciences-po.fr/dev-forccast-api'))
   store.dispatch(require('./actions/corpora').selectCorpus({ corpus_id: 'test' }))
-  store.dispatch(require('redux-simple-router').pushPath('browser'))
+  store.dispatch(require('react-router-redux').routeActions.push('browser'))
 }
