@@ -21,10 +21,15 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   render () {
-    const value = this.state.value || (this.props.editable ? '' : '…')
+    if (!this.state.value) {
+      // Loading
+      return <input className="form-control btn btn-large loading" type="text" readOnly />
+    }
 
-    return <input className="form-control btn btn-large" type="text" value={ value }
-      readOnly={ !this.props.editable } onChange={ (e) => this.onChange(e) }/>
+    return <input className="form-control btn btn-large" type="text"
+      value={ this.state.value }
+      readOnly={ !this.props.editable }
+      onChange={ (e) => this.onChange(e) }/>
   }
 }
 

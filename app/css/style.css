@@ -177,6 +177,16 @@ h1.title {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.browser-tab .loading {
+  background-image: url(../images/loading.svg);
+  float: left;
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 5px;
+}
 .browser-tab-emptyspace {
   flex-grow: 1;
 }
@@ -231,9 +241,22 @@ h1.title {
   max-width: 250px;
   width: initial;
 }
+.tab-toolbar-webentity input.loading {
+  background-image: url(../images/loading.svg);
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 
 /** Tab url field **/
 
+.browser-tab-url.loading {
+  background-image: url(../images/loading.svg);
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
 .browser-tab-url em {
   background: #ffff99;
   padding: 2px 5px;

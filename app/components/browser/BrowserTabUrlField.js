@@ -28,10 +28,11 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector }, { url, editing, overPrefixUntil }) {
+  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector, loading }, { url, editing, overPrefixUntil }) {
     return this.state.url !== initialUrl || this.state.url !== url // update only if URL *really* changes
       // Standard conditions on other props/state
       || this.props.lruPrefixes !== lruPrefixes
+      || this.props.loading !== loading
       || this.state.editing !== editing
       || this.props.prefixSelector !== prefixSelector
       || this.state.overPrefixUntil !== overPrefixUntil
@@ -83,13 +84,17 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-only field with highlights: click to edit
   renderFieldHighlighted () {
-    const urlHTML = this.props.lruPrefixes
-      ? highlightUrlHTML(this.props.lruPrefixes, this.state.url)
-      : this.state.url
+    const className = cx('form-control btn btn-large browser-tab-url', { loading: this.props.loading })
+    const onClick = () => this.setState({ editing: true, focusInput: true })
 
-    return <span className="form-control btn btn-large browser-tab-url"
-      onClick={ () => this.setState({ editing: true, focusInput: true }) }
-      dangerouslySetInnerHTML={ { __html: urlHTML } } />
+    if (!this.props.lruPrefixes) {
+      return <span className={ className } onClick={ onClick }>{ this.state.url }</span>
+    }
+    
+    return <span className={ className } onClick={ onClick }
+      dangerouslySetInnerHTML={ {
+        __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url)
+      } } />
   }
 
   // LRU selector by prefix: click to select
@@ -171,7 +176,8 @@ BrowserTabUrlField.propTypes = {
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
   onSubmit: PropTypes.func.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
-  onSelectPrefix: PropTypes.func.isRequired
+  onSelectPrefix: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
 }
 
 export default BrowserTabUrlField

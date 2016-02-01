@@ -124,8 +124,10 @@ class TabContent extends React.Component {
   }
 
   render () {
-    const { active, id, url, webentity, setTabUrl, serverUrl, corpusId, adjusting, setAdjustWebentity } = this.props
+    const { active, id, url, loading, webentity, setTabUrl, serverUrl, corpusId, adjusting, setAdjustWebentity } = this.props
     const { formatMessage } = this.context.intl
+
+    const ready = !loading && !!webentity
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
@@ -141,6 +143,7 @@ class TabContent extends React.Component {
             </div>
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField
+                loading={ !ready }
                 initialUrl={ url }
                 lruPrefixes={ webentity && webentity.lru_prefixes }
                 onSubmit={ (url) => setTabUrl(url, id) }
@@ -173,6 +176,7 @@ TabContent.propTypes = {
 
   active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
@@ -203,6 +207,7 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
     id,
     active: id === tabs.activeTab,
     url: tab.url,
+    loading: tab.loading,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,
