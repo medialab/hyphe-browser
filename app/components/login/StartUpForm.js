@@ -21,8 +21,37 @@ class StartUpForm extends React.Component {
     if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url)
   }
 
+  renderServerSelect () {
+    const { selectedServer, actions, servers } = this.props
+
+    let options = servers.map((s) => ({
+      label: `${s.name} (${s.url})`,
+      value: s.url,
+      key: s.url
+    }))
+
+    // add default option only when no server selected
+    if (!selectedServer || !selectedServer.url) {
+      options = [{
+        label: this.context.intl.formatMessage({ id: 'select-server' }),
+        value: '',
+        key: 'default'
+      }].concat(options)
+    }
+
+    return (
+      <select
+        className="form-control server-list"
+        defaultValue={ selectedServer && selectedServer.url }
+        onChange={ (evt) => { if (evt.target.value) actions.fetchCorpora(evt.target.value) } }
+      >
+        { options.map((o) => <option key={ o.key } value={ o.value }>{ o.label }</option>) }
+      </select>
+    )
+  }
+
   render () {
-    const { selectedServer, actions, servers, ui, corpora, dispatch } = this.props
+    const { selectedServer, actions, ui, corpora, dispatch } = this.props
 
     return (
       <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
@@ -34,18 +63,7 @@ class StartUpForm extends React.Component {
         </h2>
 
         <div className="form-group inline">
-          <select
-            className="form-control server-list"
-            defaultValue={ selectedServer && selectedServer.url }
-            onChange={ (evt) => { if (evt.target.value) actions.fetchCorpora(evt.target.value) } }
-          >
-            <option value="">{ this.context.intl.formatMessage({ id: 'select-server' }) }</option>
-            { servers.map((server) =>
-              <option key={ server.url } value={ server.url }>
-                { server.name } ({ server.url })
-              </option>
-            ) }
-          </select>
+          { this.renderServerSelect() }
           <Button icon="play" onClick={ () => { if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url) } } />
         </div>
         <div className="form-actions">
