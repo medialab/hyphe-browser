@@ -28,7 +28,8 @@ class TabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon, showError, declarePage, setTabWebentity, serverUrl, corpusId } = this.props
+    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon,
+      showError, declarePage, setTabWebentity, serverUrl, corpusId } = this.props
 
     if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
       this.setState({

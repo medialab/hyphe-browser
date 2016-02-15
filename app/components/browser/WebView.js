@@ -105,8 +105,9 @@ class WebView extends React.Component {
     })
 
     // Guest page metadata: title, favicon
-    webview.addEventListener('page-title-set', ({ title, explicitSet }) => { // eslint-disable-line no-unused-vars
+    webview.addEventListener('page-title-updated', ({ title, explicitSet }) => { // eslint-disable-line no-unused-vars
       update('title', title)
+      // TODO reset favicon on navigate
     })
     webview.addEventListener('page-favicon-updated', ({ favicons }) => {
       update('favicon', favicons[0])
