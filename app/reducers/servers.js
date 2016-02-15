@@ -33,11 +33,13 @@ export default createReducer(initialState, {
     selected: state.list.find(s => s.url === serverUrl)
   }),
 
+  // a newly created server is automatically selected
   [CREATE_SERVER]: (state, { server }) => {
     server.id = server.url
     return {
       ...state,
-      list: state.list.concat(server)
+      list: state.list.concat(server),
+      selected: server
     }
   },
 
