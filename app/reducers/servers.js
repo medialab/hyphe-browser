@@ -10,17 +10,20 @@ import {
 const initialState = {
   list: [
     {
-      id: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
-      name: 'dev',
-      url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api'
-    },
-    {
       id: 'http://hyphe.medialab.sciences-po.fr/demo-api',
       name: 'Serveur de démonstration - limité',
       url: 'http://hyphe.medialab.sciences-po.fr/demo-api'
     }
   ],
   selected: null
+}
+
+if (process.env.NODE_ENV === 'development') {
+  initialState.list.push({
+    id: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
+    name: 'dev',
+    url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api'
+  })
 }
 
 export default createReducer(initialState, {
