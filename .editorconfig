@@ -4,3 +4,6 @@ indent_size = 2
 [app/**.js]
 indent_style = space
 indent_size = 2
+[main.js]
+indent_style = space
+indent_size = 2
