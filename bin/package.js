@@ -1,8 +1,6 @@
-/* eslint no-shadow: 0, func-names: 0, no-unused-vars: 0, no-console: 0 */
-const os = require('os')
+/* eslint no-console: 0 */
 const packager = require('electron-packager')
 const del = require('del')
-const exec = require('child_process').exec
 const promisify = require('tiny-promisify')
 const webpack = require('webpack')
 const cfg = require('../webpack.config.production.js')

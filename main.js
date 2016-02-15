@@ -1,7 +1,14 @@
 /* eslint no-path-concat: 0, func-names:0 */
+
 var app = require('app')
 var BrowserWindow = require('browser-window')
 var Menu = require('menu')
+var isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
+
+// Force production environment in final binary
+if (isPackaged) {
+  process.env.NODE_ENV = 'production'
+}
 
 require('electron-debug')()
 require('crash-reporter').start()
@@ -13,7 +20,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', () => {
-  const window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
+  var window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
 
   if (process.env.NODE_ENV === 'development') {
     window.loadURL('file://' + __dirname + '/app/index-dev.html')
