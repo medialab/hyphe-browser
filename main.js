@@ -27,21 +27,10 @@ app.on('ready', () => {
     window = null
   })
 
-  if (process.env.NODE_ENV === 'development') {
-    window.openDevTools()
-  }
-
-  window.setMenu(Menu.buildFromTemplate([
+  const menus = [
     {
       label: '&Hyphe',
       submenu: [
-        {
-          label: '&Quit',
-          accelerator: 'Ctrl+Q',
-          click: () => {
-            app.quit()
-          }
-        },
         {
           label: '&Full Screen',
           accelerator: 'F11',
@@ -50,6 +39,29 @@ app.on('ready', () => {
           }
         },
         {
+          label: 'Reset',
+          accelerator: 'Ctrl+R',
+          click: () => {
+            window.reload()
+          }
+        },
+        {
+          label: '&Quit',
+          accelerator: 'Ctrl+Q',
+          click: () => {
+            app.quit()
+          }
+        }
+      ]
+    }
+  ]
+
+  if (process.env.NODE_ENV === 'development') {
+    window.openDevTools()
+    menus.push({
+      label: 'Debug',
+      submenu: [
+        {
           label: 'Toggle &Developer Tools',
           accelerator: 'Alt+Shift+C',
           click: () => {
@@ -57,6 +69,8 @@ app.on('ready', () => {
           }
         }
       ]
-    }
-  ]))
+    })
+  }
+
+  window.setMenu(Menu.buildFromTemplate(menus))
 })
