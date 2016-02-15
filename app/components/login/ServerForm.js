@@ -2,6 +2,8 @@
 //
 // local validation errors :
 // - name and url must be filled
+// async validation errors :
+// - url points to a non hyphe server
 
 import '../../css/login/server-form'
 
@@ -13,6 +15,8 @@ import { routeActions } from 'react-router-redux'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/servers'
+// for async validation
+import jsonrpc from '../../utils/jsonrpc'
 
 class ServerForm extends React.Component {
 
@@ -66,19 +70,33 @@ class ServerForm extends React.Component {
   onSubmit (evt) {
     // no real submit to the server
     evt.preventDefault()
+
     const newState = {
       submitting: true,
       errors: []
     }
 
+    // local validation errors
     if (!this.isValid()) {
       newState.submitting = false
       newState.errors = ['url-and-name-required']
       // TODO deal with login / password when ready on server side
       return this.setState(newState)
     }
-    this.setState(newState)
 
+    // async validation
+    jsonrpc(this.state.data.url)('list_corpus')
+      .then(() => {
+        this.setState(newState)
+        this.saveAndRedirect()
+      }, (err) => {
+        newState.submitting = false
+        newState.errors = ['error.server-url']
+        this.setState(newState)
+      })
+  }
+
+  saveAndRedirect () {
     const server = this.cleanData()
     !this.props.editMode
       ? this.props.actions.createServer(server)
@@ -97,6 +115,7 @@ class ServerForm extends React.Component {
     return server
   }
 
+  // local validation
   isValid () {
     return this.state.data.url && this.state.data.name
   }
