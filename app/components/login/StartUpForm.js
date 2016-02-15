@@ -14,9 +14,13 @@ import CorpusList from './CorpusList'
 import Spinner from '../Spinner'
 import Button from '../Button'
 
-// the reset button is for dev purposes and should be put somewhere else in the final product
-
 class StartUpForm extends React.Component {
+
+  componentDidMount () {
+    const { selectedServer, actions } = this.props
+    if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url)
+  }
+
   render () {
     const { selectedServer, actions, servers, ui, corpora, dispatch } = this.props
 
