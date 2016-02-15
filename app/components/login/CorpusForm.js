@@ -69,7 +69,7 @@ class CorpusForm extends React.Component {
 
     if (!this.isValid()) {
       newState.submitting = false
-      newState.errors = ['password-mismatch']
+      newState.errors = ['error.password-mismatch']
       newState.data = {
         ...this.state.data,
         password: '',

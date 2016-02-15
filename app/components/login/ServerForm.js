@@ -79,7 +79,7 @@ class ServerForm extends React.Component {
     // local validation errors
     if (!this.isValid()) {
       newState.submitting = false
-      newState.errors = ['url-and-name-required']
+      newState.errors = ['error.url-and-name-required']
       // TODO deal with login / password when ready on server side
       return this.setState(newState)
     }
