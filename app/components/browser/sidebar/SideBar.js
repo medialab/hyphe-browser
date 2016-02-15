@@ -1,4 +1,4 @@
-import '../../css/browser/side-bar'
+import '../../../css/browser/side-bar'
 
 import React, { PropTypes } from 'react'
 
@@ -6,10 +6,21 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import { setWebentityStatus, showAdjustWebentity } from '../../actions/webentities'
-import { getWebEntityActivityStatus } from '../../utils/status'
+import SideBarContext from './SideBarContext'
+import SideBarTags from './SideBarTags'
 
-class BrowserSideBar extends React.Component {
+import { setWebentityStatus, showAdjustWebentity } from '../../../actions/webentities'
+import { getWebEntityActivityStatus } from '../../../utils/status'
+
+class SideBar extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      tab: 'context'
+    }
+  }
+
   renderCrawlingStatus () {
     const { webentity } = this.props
 
@@ -55,6 +66,35 @@ class BrowserSideBar extends React.Component {
     )
   }
 
+  renderTabs () {
+    return (
+      <div className="sidebar-tabs">
+        <div className="tab-group">
+          <div
+            className={ cx('tab-item', { active: this.state.tab === 'context' }) }
+            onClick={ () => this.setState({ tab: 'context' }) }>
+            <span><T id="sidebar.tab-context" /></span>
+          </div>
+          <div
+            className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
+            onClick={ () => this.setState({ tab: 'tags' }) }>
+            <span><T id="sidebar.tab-tags" /></span>
+          </div>
+        </div>
+        { (this.state.tab === 'context') ? this.renderTabContext() : this.renderTabTags() }
+      </div>
+    )
+  }
+
+  renderTabContext () {
+    console.log('render sidebar context', SideBarContext)
+    return <SideBarContext serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+  }
+
+  renderTabTags () {
+    return <SideBarTags serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+  }
+
   render () {
     return (
       <aside className="browser-side-bar">
@@ -65,12 +105,13 @@ class BrowserSideBar extends React.Component {
           { this.renderStatusButton('OUT') }
         </div>
         { this.renderCrawlingStatus() }
+        { this.renderTabs() }
       </aside>
     )
   }
 }
 
-BrowserSideBar.propTypes = {
+SideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
@@ -82,11 +123,11 @@ BrowserSideBar.propTypes = {
 const mapStateToProps = ({ ui }) => ({ // eslint-disable-line
 })
 
-BrowserSideBar.contextTypes = {
+SideBar.contextTypes = {
   intl: intlShape
 }
 
 export default connect(mapStateToProps, {
   setWebentityStatus,
   showAdjustWebentity
-})(BrowserSideBar)
+})(SideBar)

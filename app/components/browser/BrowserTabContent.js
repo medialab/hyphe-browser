@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import WebView from './WebView'
 import Button from '../Button'
 import BrowserTabUrlField from './BrowserTabUrlField'
-import BrowserSideBar from './BrowserSideBar'
+import SideBar from './sidebar/SideBar'
 import SplitPane from 'react-split-pane'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 
@@ -65,7 +65,7 @@ class TabContent extends React.Component {
     case 'close': // from context menu
       closeTab(id)
       break
-    case 'error':
+    case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
       if (info.pageURL === info.validatedURL) {
         // Main page triggered the error, it's important
@@ -78,6 +78,7 @@ class TabContent extends React.Component {
       }
       console.error(err) // eslint-disable-line no-console
       break
+    }
     default:
       break
     }
@@ -187,7 +188,7 @@ class TabContent extends React.Component {
 
     return (
       <SplitPane split="vertical" minSize="100" defaultSize="150">
-        { webentity ? <BrowserSideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
+        { webentity ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
         { url === PAGE_HYPHE_HOME
           ? this.renderHypheHome()
           : <WebView id={ id } url={ url }
@@ -249,7 +250,7 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
     id,
     active: id === tabs.activeTab,
     url: tab.url,
-    loading: tab.loading,
+    loading: tab.loading || false,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,

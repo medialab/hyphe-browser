@@ -31,3 +31,7 @@ button.status-out {
 button.status-out.active-status {
   background: #FAA;
 }
+
+.sidebar-tabs {
+  margin-top: 40px;
+}
