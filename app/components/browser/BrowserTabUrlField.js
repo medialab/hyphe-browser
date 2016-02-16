@@ -125,7 +125,7 @@ class BrowserTabUrlField extends React.Component {
   renderPrefixSelectorButton ([ prop, label, selected ], index, allParts, originalLruUrl) {
     if (label) {
       const classes = [
-        'btn btn-default',
+        'btn btn-default prefix',
         { 'prefix-selected': (this.state.userPrefixUntil >= 0) ? (index <= this.state.userPrefixUntil) : selected },
         { 'prefix-over': index <= this.state.overPrefixUntil }
       ]
