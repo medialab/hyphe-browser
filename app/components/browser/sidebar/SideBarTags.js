@@ -3,13 +3,15 @@ import '../../../css/auto-suggest'
 
 import React, { PropTypes } from 'react'
 
+import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 import cx from 'classnames'
+import Autosuggest from 'react-autosuggest'
+import { intlShape } from 'react-intl'
+import Button from '../../Button'
 
 import { addTagsCategory, addTag } from '../../../actions/tags'
-
-import Autosuggest from 'react-autosuggest'
 
 
 const tags = [
@@ -28,10 +30,32 @@ class SideBarTags extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = { value: '', category: 'test', suggestions: tags }
+    this.state = { value: '', category: 'test', suggestions: tags, newCategory: '' }
+
+    this.addCategory = this.addCategory.bind(this)
+    this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
+  }
+
+  onChangeNewCategory (e) {
+    this.setState({ newCategory: e.target.value })
+  }
+
+  addCategory (e) {
+    e.preventDefault()
+
+    const { newCategory } = this.state
+    if (newCategory) {
+      const { serverUrl, corpusId, addTagsCategory } = this.props
+      addTagsCategory(serverUrl, corpusId, this.state.newCategory)
+      this.setState({ newCategory: '' })
+    } else {
+      findDOMNode(this).querySelector('form.tags-new-category input').focus()
+    }
   }
 
   render () {
+    const { formatMessage } = this.context.intl
+
     return (
       <div className="tags-container">
         { 'CAT: ' + JSON.stringify(this.props.categories) }
@@ -84,6 +108,11 @@ class SideBarTags extends React.Component {
               }
             } } />
         </form>
+
+        <form className="tags-new-category btn-group" onSubmit={ this.addCategory }>
+          <input className="form-control btn btn-large" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
+          <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
+        </form>
       </div>
     )
   }
@@ -91,7 +120,6 @@ class SideBarTags extends React.Component {
 
 
 function getSuggestions (value) {
-  console.log('getSuggestions', value)
   const inputValue = value.trim().toLowerCase()
   return tags.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1)
 }
@@ -123,6 +151,10 @@ const mapStateToProps = ({ corpora }, props) => {
     ...props,
     categories: corpora.list[props.corpusId].tagsCategories || []
   }
+}
+
+SideBarTags.contextTypes = {
+  intl: intlShape
 }
 
 export default connect(mapStateToProps, {

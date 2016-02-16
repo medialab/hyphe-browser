@@ -43,13 +43,33 @@ export default createReducer(initialState, {
     selected: corpus
   }),
 
-  [FETCH_TAGS_CATEGORIES_SUCCESS]: (state, { corpusId, categories }) => {
+  [FETCH_TAGS_CATEGORIES_SUCCESS]: updateTagsCategories((state, { corpusId, categories }) => {
     const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
     if (categories.join(',') === originalCategories.join(',')) {
+      return false
+    }
+
+    return ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
+  }),
+
+  [ADD_TAGS_CATEGORY_SUCCESS]: updateTagsCategories((state, { corpusId, category }) => {
+    const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
+    if (originalCategories.indexOf(category) !== -1) {
       return state
     }
 
-    const tagsCategories = ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
+    return originalCategories.concat([category])
+  })
+})
+
+function updateTagsCategories (getTagsCategories) {
+  return (state, payload) => {
+    const tagsCategories = getTagsCategories(state, payload)
+    if (!tagsCategories) {
+      return state
+    }
+
+    const { corpusId } = payload
     const selected = (state.selected && state.selected.corpus_id === corpusId)
       ? { ...state.selected, tagsCategories }
       : state.selected
@@ -63,4 +83,4 @@ export default createReducer(initialState, {
       list
     }
   }
-})
+}

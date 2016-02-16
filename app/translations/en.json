@@ -69,6 +69,7 @@
   "server-name": "Server name",
   "servers": "Servers",
   "set-homepage": "Set homepage ({url})",
+  "sidebar.add-tags-category": "New category",
   "sidebar.context-title": "TODO Context",
   "sidebar.tab-context": "Context",
   "sidebar.tab-tags": "Tags",

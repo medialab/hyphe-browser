@@ -87,7 +87,6 @@ class SideBar extends React.Component {
   }
 
   renderTabContext () {
-    console.log('render sidebar context', SideBarContext)
     return <SideBarContext serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 

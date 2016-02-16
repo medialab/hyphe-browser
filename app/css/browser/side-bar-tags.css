@@ -1,0 +1,5 @@
+form.tags-new-category {
+  display: flex;
+  flex-direction: row;
+  margin: 0 1em;
+}

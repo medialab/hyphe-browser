@@ -58,7 +58,7 @@ export const addTagsCategory = (serverUrl, corpusId, category) => (dispatch) => 
   // I guess an API should arise soon
   dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, category } })
   Promise.resolve()
-    .then((res) => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category, res } }))
+    .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
 

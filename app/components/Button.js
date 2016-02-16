@@ -17,7 +17,7 @@ class Button extends React.Component {
 Button.propTypes = {
   size: PropTypes.oneOf(['mini', 'large']),
   icon: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   disabled: PropTypes.bool,
   title: PropTypes.string
 }
