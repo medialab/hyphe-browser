@@ -47,10 +47,9 @@ export const fetchTagsCategories = (serverUrl, corpusId) => (dispatch) => {
 export const fetchTags = (serverUrl, corpusId, category) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_REQUEST, payload: { serverUrl, corpusId, category } })
   return jsonrpc(serverUrl)('store.get_tag_values', ['USER', category, corpusId])
-    .then((res) => {
-      console.log('fetchTags', res)
-      dispatch({ type: FETCH_TAGS_SUCCESS, payload: { serverUrl, corpusId, category, res } })
-      return res
+    .then((values) => {
+      dispatch({ type: FETCH_TAGS_SUCCESS, payload: { serverUrl, corpusId, category, values } })
+      return values
     })
     .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }

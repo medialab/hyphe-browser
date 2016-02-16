@@ -31,3 +31,13 @@ form.tags-new-tag .react-autosuggest__container button {
   flex-shrink: 1;
   flex-grow: 0;
 }
+
+.tags-container li .remove-tag {
+  color: #ccc;
+  font-size: 1.25em;
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+.tags-container li .remove-tag:hover {
+  color: #333;
+}

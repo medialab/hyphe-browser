@@ -1,8 +1,9 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
-import merge from 'lodash.merge'
+import mergeWith from 'lodash.mergewith'
 import set from 'lodash.set'
 import uniq from 'lodash.uniq'
+import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
 import {
   DECLARE_PAGE_SUCCESS,
@@ -68,17 +69,31 @@ export default createReducer(initialState, {
     SET_WEBENTITY_STATUS_FAILURE
   ),
 
-  ...optimisticUpdateWebentityTags(
-    ADD_TAG_REQUEST,
-    ADD_TAG_SUCCESS,
-    ADD_TAG_FAILURE
-  ),
+  // (Optimistically) add tag
+  [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => set(
+    { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
+    'tags.USER.' + category, uniq((webentity.tags.USER[category] || []).concat([value]))
+  )),
+  [ADD_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
+    ['tags_' + category + '_prev']: null
+  })),
+  [ADD_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
+    { ['tags_' + category + '_prev']: null },
+    'tags.USER.' + category, webentity['tags_' + category + '_prev']
+  )),
 
-  ...optimisticUpdateWebentityTags(
-    REMOVE_TAG_REQUEST,
-    REMOVE_TAG_SUCCESS,
-    REMOVE_TAG_FAILURE
-  ),
+  // (Optimistically) remove tag
+  [REMOVE_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => set(
+    { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
+    'tags.USER.' + category, without(webentity.tags.USER[category] || [], value)
+  )),
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
+    ['tags_' + category + '_prev']: null
+  })),
+  [REMOVE_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
+    { ['tags_' + category + '_prev']: null },
+    'tags.USER.' + category, webentity['tags_' + category + '_prev']
+  )),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
     ...state,
@@ -129,27 +144,16 @@ function optimisticUpdateWebentity (field, request, success, failure) {
   }
 }
 
-function optimisticUpdateWebentityTags (request, success, failure) {
-  return {
-    [request]: updateWebentity((webentity, { category, value }) => set(
-      { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
-      'tags.USER.' + category, uniq((webentity.tags.USER[category] || []).concat([value]))
-    )),
-    [success]: updateWebentity((webentity, { category }) => ({
-      ['tags_' + category + '_prev']: null
-    })),
-    [failure]: updateWebentity((webentity, { category }) => set(
-      { ['tags_' + category + '_prev']: null },
-      'tags.USER.' + category, webentity['tags_' + category + '_prev']
-    ))
-  }
-}
-
 function updateWebentity (updator) {
   return (state, payload) => {
     const id = payload.webentityId
     const webentity = state.webentities[id]
-    const updated = merge({}, webentity, updator(webentity, payload))
+    const updates = updator(webentity, payload)
+    const updated = mergeWith({}, webentity, updates, (prev, next) => {
+      if (Array.isArray(next)) {
+        return next // override arrays instead of merging them
+      }
+    })
     return {...state, webentities: {...state.webentities, [id]: updated}}
   }
 }

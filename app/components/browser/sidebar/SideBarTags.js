@@ -10,7 +10,7 @@ import Autosuggest from 'react-autosuggest'
 import { intlShape } from 'react-intl'
 import Button from '../../Button'
 
-import { addTagsCategory, addTag, fetchTags } from '../../../actions/tags'
+import { addTagsCategory, addTag, removeTag, fetchTags } from '../../../actions/tags'
 
 
 class SideBarTags extends React.Component {
@@ -137,6 +137,11 @@ class SideBarTags extends React.Component {
     )
   }
 
+  removeTag (category, value) {
+    const { serverUrl, corpusId, webentity, removeTag } = this.props
+    removeTag(serverUrl, corpusId, category, webentity.id, value)
+  }
+
   renderTag (category) {
     return (tag) => {
       const { formatMessage } = this.context.intl
@@ -144,7 +149,9 @@ class SideBarTags extends React.Component {
       return (
         <li key={ category + '/' + tag }>
           <strong className="tag-title">{ tag }</strong>
-          <a className="remove-tag" title={ formatMessage({ id: 'sidebar.remove-tag' }) }>×</a>
+          <span className="icon icon-erase remove-tag"
+            title={ formatMessage({ id: 'sidebar.remove-tag' }) }
+            onClick={ () => this.removeTag(category, tag) } />
         </li>
       )
     }
@@ -194,6 +201,7 @@ SideBarTags.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
 
   addTag: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   addTagsCategory: PropTypes.func.isRequired,
   fetchTags: PropTypes.func.isRequired
 }
@@ -212,5 +220,6 @@ SideBarTags.contextTypes = {
 export default connect(mapStateToProps, {
   addTagsCategory,
   addTag,
+  removeTag,
   fetchTags
 })(SideBarTags)
