@@ -21,6 +21,10 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   render () {
+    if (this.props.disabled) {
+      // PAGE_HYPHE_HOME
+      return <input className="form-control btn btn-large" type="text" disabled />
+    }
     if (!this.state.value) {
       // Loading
       return <input className="form-control btn btn-large loading" type="text" readOnly />
@@ -35,6 +39,7 @@ class BrowserTabWebentityNameField extends React.Component {
 
 BrowserTabWebentityNameField.propTypes = {
   initialValue: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
   editable: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 }

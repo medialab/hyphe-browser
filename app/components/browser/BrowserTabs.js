@@ -8,7 +8,10 @@ import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
 
 import { openTab, closeTab, selectTab } from '../../actions/tabs'
-import { SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB } from '../../constants'
+import {
+  PAGE_HYPHE_HOME,
+  SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB
+} from '../../constants'
 
 class BrowserTabs extends React.Component {
   constructor (props) {
@@ -31,7 +34,7 @@ class BrowserTabs extends React.Component {
     window.addEventListener('resize', this.onResize)
 
     ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, () => {
-      this.props.openTab('http://google.fr')
+      this.props.openTab(PAGE_HYPHE_HOME)
     })
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
@@ -116,7 +119,7 @@ class BrowserTabs extends React.Component {
               <span className="icon icon-right-dir"></span>
             </div>
             <div className="browser-tab-new tab-item tab-item-fixed"
-              onClick={ () => this.props.openTab('http://google.fr') }>
+              onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
               <span className="icon icon-plus"></span>
             </div>
             <div className="browser-tab-hyphe tab-item tab-item-fixed">

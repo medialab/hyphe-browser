@@ -19,3 +19,5 @@ export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
 export const SHORTCUT_OPEN_TAB = ['ctrl+n', 'ctrl+t']
 export const SHORTCUT_CLOSE_TAB = 'ctrl+w'
+
+export const PAGE_HYPHE_HOME = 'hyphe://home'

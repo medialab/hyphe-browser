@@ -10,6 +10,8 @@ import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 
 import { intlShape } from 'react-intl'
 
+import { PAGE_HYPHE_HOME } from '../../constants'
+
 import { showError, hideError } from '../../actions/browser'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
@@ -130,15 +132,23 @@ class TabContent extends React.Component {
     }
   }
 
-  render () {
-    const { active, id, url, loading, webentity, setTabUrl, serverUrl, corpusId,
-      adjusting, setAdjustWebentity } = this.props
+  renderHypheHome () {
+    return (
+      <div className="page-hyphe-home">
+        <h1>⇑</h1>
+        <p>Type a URL in the address bar above</p>
+        <p>TODO: google search engine</p>
+      </div>
+    )
+  }
+
+  renderToolbar () {
+    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity } = this.props
     const { formatMessage } = this.context.intl
 
-    const ready = !loading && !!webentity
+    const ready = url === PAGE_HYPHE_HOME || (!loading && !!webentity)
 
     return (
-      <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <div className="btn-group tab-toolbar-navigation">
@@ -162,18 +172,39 @@ class TabContent extends React.Component {
               { this.renderHomeButton () }
               <BrowserTabWebentityNameField
                 initialValue={ webentity && webentity.name }
+                disabled={ url === PAGE_HYPHE_HOME }
                 editable={ !!adjusting }
                 onChange={ (name) => setAdjustWebentity(webentity.id, { name }) } />
               { this.renderAdjustButton() }
             </div>
           </div>
         </div>
-        <SplitPane split="vertical" minSize="100" defaultSize="150">
-          { webentity ? <BrowserSideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
-          <WebView id={ id } url={ url }
+    )
+  }
+
+  renderSplitPane () {
+    const { id, url, webentity, serverUrl, corpusId } = this.props
+
+    return (
+      <SplitPane split="vertical" minSize="100" defaultSize="150">
+        { webentity ? <BrowserSideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
+        { url === PAGE_HYPHE_HOME
+          ? this.renderHypheHome()
+          : <WebView id={ id } url={ url }
             onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
             onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />
-        </SplitPane>
+        }
+      </SplitPane>
+    )
+  }
+
+  render () {
+    const { active, id } = this.props
+
+    return (
+      <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
+        { this.renderToolbar() }
+        { this.renderSplitPane() }
       </div>
     )
   }
