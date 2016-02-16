@@ -1,12 +1,12 @@
 import {
-  JSONRPC_DEBUG,
+  DEBUG_JSONRPC,
   ERROR_JSONRPC_FETCH,
   ERROR_JSONRPC_PARSE
 } from '../constants'
 
 // Sample usage: jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')('list_corpus')
 export default (uri) => (method, params = []) => {
-  if (JSONRPC_DEBUG) console.debug('JSONRPC →', method, params, uri) // eslint-disable-line no-console
+  if (DEBUG_JSONRPC) console.debug('JSONRPC →', method, params, uri) // eslint-disable-line no-console
 
   return fetch(uri, {
     method: 'POST',
@@ -25,7 +25,7 @@ export default (uri) => (method, params = []) => {
 
     const row = result[0]
 
-    if (JSONRPC_DEBUG) {
+    if (DEBUG_JSONRPC) {
       let m = row.code === 'fail' ? 'error' : 'debug'
       console[m]('JSONRPC ←', method, row.code, row.result, row.message) // eslint-disable-line no-console
     }
@@ -39,7 +39,7 @@ export default (uri) => (method, params = []) => {
     }
   })
   .catch((err) => {
-    if (JSONRPC_DEBUG) {
+    if (DEBUG_JSONRPC) {
       console.error('JSONRPC ←', method, err) // eslint-disable-line no-console
     }
     throw err

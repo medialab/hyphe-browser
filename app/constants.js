@@ -6,7 +6,9 @@ export const DEFAULT_LOCALE = 'fr-FR'
 
 export const CRAWL_DEPTH = 1
 
-export const JSONRPC_DEBUG = true
+// flag to add/remove verbosity in console
+export const DEBUG_JSONRPC = true
+export const DEBUG_WEBVIEW = false
 
 export const ERROR_JSONRPC_FETCH = 'ERROR_JSONRPC_FETCH'
 export const ERROR_JSONRPC_PARSE = 'ERROR_JSONRPC_PARSE'

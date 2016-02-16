@@ -1,6 +1,6 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
-import { WEBVIEW_UA } from '../../constants'
+import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 
 import remote from 'remote'
 
@@ -75,15 +75,15 @@ class WebView extends React.Component {
       canGoForward () { return webview.canGoForward() }
     })
 
-    /* TODO a constant to enable/disable those navigation logs * /
-    webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e))
-    webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e))
-    webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src))
-    webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src))
-    webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame))
-    webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url))
-    webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url))
-    /**/
+    if (DEBUG_WEBVIEW) {
+      webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e))
+      webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e))
+      webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src))
+      webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src))
+      webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame))
+      webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url))
+      webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url))
+    }
 
     // Loading status notifications
     webview.addEventListener('did-start-loading', () => {
