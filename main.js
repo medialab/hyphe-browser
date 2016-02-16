@@ -3,6 +3,8 @@
 var app = require('app')
 var BrowserWindow = require('browser-window')
 var Menu = require('menu')
+var ipc = require('electron').ipcMain
+var Shortcut = require('electron-shortcut')
 var isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 
 // Force production environment in final binary
@@ -80,4 +82,17 @@ app.on('ready', () => {
   }
 
   window.setMenu(Menu.buildFromTemplate(menus))
+
+  // shortcuts can only be handled here, in the main process
+  var shortcuts = new Map()
+
+  // ipcMain should be used, window.webContent.on is never triggered for ipc
+  ipc.on('registerShortcut', (_, accel) => {
+    shortcuts.set(accel, new Shortcut(accel, () => window.webContents.send(`shortcut-${accel}`)))
+  })
+
+  ipc.on('unregisterShortcut', (_, accel) => {
+    shortcuts.get(accel).unregister()
+    shortcuts.delete(accel)
+  })
 })

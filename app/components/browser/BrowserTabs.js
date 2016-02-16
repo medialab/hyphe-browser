@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
+import { connect } from 'react-redux'
 import cx from 'classnames'
+import { ipcRenderer as ipc } from 'electron'
 
 import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
 
-import { connect } from 'react-redux'
 import { openTab, closeTab, selectTab } from '../../actions/tabs'
+import { SHORTCUT_CLOSE_TAB } from '../../constants'
 
 class BrowserTabs extends React.Component {
   constructor (props) {
@@ -27,11 +29,18 @@ class BrowserTabs extends React.Component {
     this.tabsNode = node.querySelector('.tab-group-main')
     // Listen for resize
     window.addEventListener('resize', this.onResize)
+
+    ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
+      this.props.closeTab(this.props.activeTab)
+    })
+    ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
   }
 
   componentWillUnmount () {
     // Clear event listeners
     window.removeEventListener('resize', this.onResize)
+
+    ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
   }
 
   componentDidUpdate () {
