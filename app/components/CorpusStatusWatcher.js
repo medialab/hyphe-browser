@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
+import { fetchTagsCategories } from '../actions/tags'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
   ERROR_CORPUS_NOT_STARTED,
@@ -29,11 +30,14 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   watchStatus () {
-    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword } = this.props
+    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories } = this.props
 
     const repeat = (immediate = false) => {
       this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)
     }
+
+    // Asynchronously fetch tags categories
+    fetchTagsCategories(serverUrl, corpus.corpus_id)
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
@@ -76,7 +80,8 @@ CorpusStatusWatcher.propTypes = {
   hideError: React.PropTypes.func,
   serverUrl: React.PropTypes.string.isRequired,
   showError: React.PropTypes.func,
-  startCorpus: React.PropTypes.func
+  startCorpus: React.PropTypes.func,
+  fetchTagsCategories: React.PropTypes.func
 }
 
 const mapStateToProps = ({ corpora, servers }) => ({
@@ -89,7 +94,8 @@ const mapDispatchToProps = {
   showError,
   hideError,
   fetchCorpusStatus,
-  startCorpus
+  startCorpus,
+  fetchTagsCategories
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CorpusStatusWatcher)
