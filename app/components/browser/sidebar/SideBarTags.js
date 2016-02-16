@@ -34,6 +34,7 @@ class SideBarTags extends React.Component {
 
     this.addCategory = this.addCategory.bind(this)
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
+    this.renderTagsCategory = this.renderTagsCategory.bind(this)
   }
 
   onChangeNewCategory (e) {
@@ -53,6 +54,31 @@ class SideBarTags extends React.Component {
     }
   }
 
+  renderTagsCategory (category) {
+    const isFreeTags = (category === 'FREETAGS')
+    const freeTagsTitle = this.context.intl.formatMessage({ id: 'sidebar.freetags' })
+
+    return (
+      <li key={ category }>
+        <h3>{ isFreeTags ? freeTagsTitle : category }</h3>
+        <ul>
+          { tags.map((tag) => this.renderTag(category, tag)) }
+        </ul>
+      </li>
+    )
+  }
+
+  renderTag (category, tag) {
+    const { formatMessage } = this.context.intl
+
+    return (
+      <li key={ category + '/' + tag }>
+        <strong className="tag-title">{ tag }</strong>
+        <a className="remove-tag" title={ formatMessage({ id: 'sidebar.remove-tag' }) }>×</a>
+      </li>
+    )
+  }
+
   render () {
     const { formatMessage } = this.context.intl
 
@@ -61,26 +87,7 @@ class SideBarTags extends React.Component {
         { 'CAT: ' + JSON.stringify(this.props.categories) }
 
         <ul className="tags-sections">
-          <li>
-            <h3>Free tags</h3>
-            <ul>
-              <li><strong className="tag-title">Test 1</strong><a className="remove-tag">×</a></li>
-              <li><strong className="tag-title">Test 2</strong><a className="remove-tag">×</a></li>
-              <li><strong className="tag-title">Test 3</strong><a className="remove-tag">×</a></li>
-            </ul>
-          </li>
-          <li>
-            <h3>Test</h3>
-            <ul>
-              <li><strong className="tag-title">Test 1</strong><a className="remove-tag">×</a></li>
-            </ul>
-          </li>
-          <li>
-            <h3>Webentity</h3>
-            <ul>
-              <li><strong className="tag-title">Test 1</strong><a className="remove-tag">×</a></li>
-            </ul>
-          </li>
+          { this.props.categories.map(this.renderTagsCategory) }
         </ul>
 
         New tag

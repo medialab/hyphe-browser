@@ -71,6 +71,8 @@
   "set-homepage": "Définir la page d'accueil ({url})",
   "sidebar.add-tags-category": "Nouvelle catégorie",
   "sidebar.context-title": "TODO Contexte",
+  "sidebar.freetags": "Tags libres",
+  "sidebar.remove-tag": "Supprimer le tag",
   "sidebar.tab-context": "Contexte",
   "sidebar.tab-tags": "Tags",
   "sidebar.tags-title": "TODO Tags",
