@@ -251,6 +251,10 @@ h1.title {
 
 /** Tab url field **/
 
+.browser-tab-url {
+  min-height: 30px;
+}
+
 .browser-tab-url.loading {
   background-image: url(../images/loading.svg);
   background-size: 30px;

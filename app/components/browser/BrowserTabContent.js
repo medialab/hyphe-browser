@@ -163,7 +163,7 @@ class TabContent extends React.Component {
             <div className="btn-group tab-toolbar-url">
               <BrowserTabUrlField
                 loading={ !ready }
-                initialUrl={ url }
+                initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
                 lruPrefixes={ webentity && webentity.lru_prefixes }
                 onSubmit={ (url) => setTabUrl(url, id) }
                 prefixSelector={ !!adjusting }
