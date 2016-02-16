@@ -100,8 +100,17 @@ class SideBarTags extends React.Component {
     return (e) => {
       e.preventDefault()
       const { serverUrl, corpusId, webentity, addTag } = this.props
-      addTag(serverUrl, corpusId, category, webentity.id, this.state.tagValue[category])
+      const value = this.state.tagValue[category]
       this.onChangeTagValue(category, '')
+      addTag(serverUrl, corpusId, category, webentity.id, value).then(() => {
+        // Keep suggestions up to date
+        this.setState({
+          fullSuggestions: {
+            ...this.state.fullSuggestions,
+            [category]: (this.state.fullSuggestions[category] || []).concat(value)
+          }
+        })
+      })
     }
   }
 
