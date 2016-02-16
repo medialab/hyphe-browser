@@ -6,23 +6,11 @@ import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
-import cx from 'classnames'
 import Autosuggest from 'react-autosuggest'
 import { intlShape } from 'react-intl'
 import Button from '../../Button'
 
-import { addTagsCategory, addTag } from '../../../actions/tags'
-
-
-const tags = [
-  'Hello',
-  'Bob',
-  'Alice',
-  'John',
-  'How',
-  'Are',
-  'You'
-] // TODO get from API
+import { addTagsCategory, addTag, fetchTags } from '../../../actions/tags'
 
 
 class SideBarTags extends React.Component {
@@ -30,11 +18,36 @@ class SideBarTags extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = { value: '', category: 'test', suggestions: tags, newCategory: '' }
+    this.state = {
+      tagValue: {}, // [category]: string
+      fullSuggestions: {}, // [category]: Array<string>
+      currentSuggestions: [], // Array<string>
+      newCategory: ''
+    }
 
     this.addCategory = this.addCategory.bind(this)
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
     this.renderTagsCategory = this.renderTagsCategory.bind(this)
+    this.renderTag = this.renderTag.bind(this)
+    this.renderTagInput = this.renderTagInput.bind(this)
+    this.addTag = this.addTag.bind(this)
+  }
+
+  componentWillMount () {
+    this.updateFullSuggestions(this.props.categories)
+  }
+
+  componentReceiveProps ({ categories }) {
+    if (JSON.stringify(categories) !== JSON.stringify(this.props.categories)) {
+      this.updateFullSuggestions(categories)
+    }
+  }
+
+  updateFullSuggestions (categories) {
+    // Updated categories, fetch suggestions
+    categories.forEach((category) => {
+      this.fetchFullSuggestions(category)
+    })
   }
 
   onChangeNewCategory (e) {
@@ -55,28 +68,86 @@ class SideBarTags extends React.Component {
   }
 
   renderTagsCategory (category) {
+    const tags = (this.props.webentity.tags.USER || {})[category] || []
     const isFreeTags = (category === 'FREETAGS')
     const freeTagsTitle = this.context.intl.formatMessage({ id: 'sidebar.freetags' })
+    const canAddTag = isFreeTags || tags.length === 0
 
     return (
       <li key={ category }>
         <h3>{ isFreeTags ? freeTagsTitle : category }</h3>
         <ul>
-          { tags.map((tag) => this.renderTag(category, tag)) }
+          { tags.map(this.renderTag(category)) }
         </ul>
+        { canAddTag ? this.renderTagInput(category) : <noscript /> }
       </li>
     )
   }
 
-  renderTag (category, tag) {
+  fetchFullSuggestions (category) {
+    const { serverUrl, corpusId, fetchTags } = this.props
+    fetchTags(serverUrl, corpusId, category).then((tags) => {
+      this.setState({
+        fullSuggestions: {
+          ...this.state.fullSuggestions,
+          [category]: tags
+        }
+      })
+    })
+  }
+
+  addTag (category) {
+    return (e) => {
+      e.preventDefault()
+      const { serverUrl, corpusId, webentity, addTag } = this.props
+      addTag(serverUrl, corpusId, category, webentity.id, this.state.tagValue[category])
+      this.onChangeTagValue(category, '')
+    }
+  }
+
+  onChangeTagValue (category, value) {
+    this.setState({
+      tagValue: {
+        ...this.state.tagValue,
+        [category]: value
+      }
+    })
+  }
+
+  renderTagInput (category) {
     const { formatMessage } = this.context.intl
 
     return (
-      <li key={ category + '/' + tag }>
-        <strong className="tag-title">{ tag }</strong>
-        <a className="remove-tag" title={ formatMessage({ id: 'sidebar.remove-tag' }) }>×</a>
-      </li>
+      <form className="tags-new-tag btn-group" onSubmit={ this.addTag(category) }>
+        <Autosuggest
+          suggestions={ this.state.currentSuggestions }
+          onSuggestionsUpdateRequested={ ({ value }) => this.setState({ currentSuggestions: getSuggestions(this.state.fullSuggestions[category], value) }) }
+          getSuggestionValue={ getSuggestionValue }
+          renderSuggestion={ renderSuggestion }
+          shouldRenderSuggestions={ () => true }
+          inputProps={ {
+            className: 'form-control btn btn-large',
+            placeholder: 'New tag',
+            value: this.state.tagValue[category],
+            onChange: (e, { newValue }) => this.onChangeTagValue(category, newValue)
+          } }
+        />
+        <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tag' }) } />
+      </form>
     )
+  }
+
+  renderTag (category) {
+    return (tag) => {
+      const { formatMessage } = this.context.intl
+
+      return (
+        <li key={ category + '/' + tag }>
+          <strong className="tag-title">{ tag }</strong>
+          <a className="remove-tag" title={ formatMessage({ id: 'sidebar.remove-tag' }) }>×</a>
+        </li>
+      )
+    }
   }
 
   render () {
@@ -84,38 +155,11 @@ class SideBarTags extends React.Component {
 
     return (
       <div className="tags-container">
-        { 'CAT: ' + JSON.stringify(this.props.categories) }
-
         <ul className="tags-sections">
           { this.props.categories.map(this.renderTagsCategory) }
         </ul>
-
-        New tag
-
-        <form onSubmit={ (e) => {
-          e.preventDefault()
-          this.props.addTag(this.props.serverUrl, this.props.corpusId, this.state.category, this.props.webentity.id, this.state.value)
-          this.setState({ value: '' })
-        } }>
-          <Autosuggest
-            suggestions={ this.state.suggestions }
-            onSuggestionsUpdateRequested={ ({ value, reason }) => {
-              console.log('onSuggestionsUpdateRequested', value, reason)
-              this.setState({ suggestions: getSuggestions(value) })
-            } }
-            getSuggestionValue={ getSuggestionValue }
-            renderSuggestion={ renderSuggestion }
-            shouldRenderSuggestions={ () => true }
-            inputProps={ {
-              placeholder: 'New tag',
-              value: this.state.value,
-              onChange: (e, { newValue, method }) => {
-                console.log('onChange', newValue, method)
-                this.setState({ value: newValue })
-              }
-            } } />
-        </form>
-
+        <hr />
+        <h4><T id="sidebar.add-tags-category" /></h4>
         <form className="tags-new-category btn-group" onSubmit={ this.addCategory }>
           <input className="form-control btn btn-large" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
           <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
@@ -126,9 +170,9 @@ class SideBarTags extends React.Component {
 }
 
 
-function getSuggestions (value) {
+function getSuggestions (list, value) {
   const inputValue = value.trim().toLowerCase()
-  return tags.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1)
+  return list.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1)
 }
 
 function getSuggestionValue (suggestion) {
@@ -150,7 +194,8 @@ SideBarTags.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
 
   addTag: PropTypes.func.isRequired,
-  addTagsCategory: PropTypes.func.isRequired
+  addTagsCategory: PropTypes.func.isRequired,
+  fetchTags: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora }, props) => {
@@ -166,5 +211,6 @@ SideBarTags.contextTypes = {
 
 export default connect(mapStateToProps, {
   addTagsCategory,
-  addTag
+  addTag,
+  fetchTags
 })(SideBarTags)

@@ -34,9 +34,10 @@ export const REMOVE_TAG_FAILURE = '§_REMOVE_TAG_FAILURE'
 
 export const fetchTagsCategories = (serverUrl, corpusId) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_CATEGORIES_REQUEST, payload: { serverUrl, corpusId } })
-  jsonrpc(serverUrl)('store.get_tag_categories', ['USER', corpusId])
+  return jsonrpc(serverUrl)('store.get_tag_categories', ['USER', corpusId])
     .then((categories) => {
       dispatch({ type: FETCH_TAGS_CATEGORIES_SUCCESS, payload: { serverUrl, corpusId, categories } })
+      return categories
     })
     .catch((error) => {
       dispatch({ type: FETCH_TAGS_CATEGORIES_FAILURE, payload: { serverUrl, corpusId, error } })
@@ -45,10 +46,11 @@ export const fetchTagsCategories = (serverUrl, corpusId) => (dispatch) => {
 
 export const fetchTags = (serverUrl, corpusId, category) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_REQUEST, payload: { serverUrl, corpusId, category } })
-  jsonrpc(serverUrl)('store.get_tag_values', ['USER', category, corpusId])
+  return jsonrpc(serverUrl)('store.get_tag_values', ['USER', category, corpusId])
     .then((res) => {
       console.log('fetchTags', res)
       dispatch({ type: FETCH_TAGS_SUCCESS, payload: { serverUrl, corpusId, category, res } })
+      return res
     })
     .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
@@ -57,27 +59,21 @@ export const addTagsCategory = (serverUrl, corpusId, category) => (dispatch) => 
   // This is not a real async action as we don't have a backend service, but let's simulate it is
   // I guess an API should arise soon
   dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, category } })
-  Promise.resolve()
+  return Promise.resolve()
     .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
 
 export const addTag = (serverUrl, corpusId, category, webentityId, value) => (dispatch) => {
   dispatch({ type: ADD_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value } })
-  jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
-    .then((res) => {
-      console.log('addTag', res)
-      dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value, res } })
-    })
+  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
+    .then(() => dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value } }))
     .catch((error) => dispatch({ type: ADD_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, error } }))
 }
 
 export const removeTag = (serverUrl, corpusId, category, webentityId, value) => (dispatch) => {
   dispatch({ type: REMOVE_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value } })
-  jsonrpc(serverUrl)('store.rm_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
-    .then((res) => {
-      console.log('removeTag', res)
-      dispatch({ type: REMOVE_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value, res } })
-    })
+  return jsonrpc(serverUrl)('store.rm_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
+    .then(() => dispatch({ type: REMOVE_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value } }))
     .catch((error) => dispatch({ type: REMOVE_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, error } }))
 }

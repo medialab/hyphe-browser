@@ -3,3 +3,31 @@ form.tags-new-category {
   flex-direction: row;
   margin: 0 1em;
 }
+
+form.tags-new-tag {
+  display: flex;
+  flex-direction: row;
+}
+form.tags-new-tag .react-autosuggest__container {
+  flex: 1;
+  display: flex;
+}
+form.tags-new-tag .react-autosuggest__container input {
+  flex: 1;
+  margin-right: -1px;
+  /* from .form-control */
+  min-height: 25px;
+  padding: 5px 10px;
+  line-height: 1.6;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: 0;
+  /* from .btn-group>.btn:first-child */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+form.tags-new-tag .react-autosuggest__container button {
+  flex-shrink: 1;
+  flex-grow: 0;
+}

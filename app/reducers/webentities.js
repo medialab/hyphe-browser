@@ -1,5 +1,8 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
+import merge from 'lodash.merge'
+import set from 'lodash.set'
+import uniq from 'lodash.uniq'
 import createReducer from '../utils/create-reducer'
 import {
   DECLARE_PAGE_SUCCESS,
@@ -18,6 +21,14 @@ import {
   // Note we don't subscribe to SAVE_ADJUSTED_WEBENTITY_* because we're already plugged to its sub-actions
 } from '../actions/webentities'
 import { SELECT_CORPUS } from '../actions/corpora'
+import {
+  ADD_TAG_REQUEST,
+  ADD_TAG_SUCCESS,
+  ADD_TAG_FAILURE,
+  REMOVE_TAG_REQUEST,
+  REMOVE_TAG_SUCCESS,
+  REMOVE_TAG_FAILURE
+} from '../actions/tags'
 
 const initialState = {
   webentities: {}, // id → WebEntity
@@ -55,6 +66,18 @@ export default createReducer(initialState, {
     SET_WEBENTITY_STATUS_REQUEST,
     SET_WEBENTITY_STATUS_SUCCESS,
     SET_WEBENTITY_STATUS_FAILURE
+  ),
+
+  ...optimisticUpdateWebentityTags(
+    ADD_TAG_REQUEST,
+    ADD_TAG_SUCCESS,
+    ADD_TAG_FAILURE
+  ),
+
+  ...optimisticUpdateWebentityTags(
+    REMOVE_TAG_REQUEST,
+    REMOVE_TAG_SUCCESS,
+    REMOVE_TAG_FAILURE
   ),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
@@ -95,20 +118,30 @@ function optimisticUpdateWebentity (field, request, success, failure) {
       [field]: payload[field], // optimistically update field
       [field + '_prev']: webentity[field] // keep track of previous value for cancellation
     })),
-    [success]: updateWebentity((webentity, payload) => {
-      console.log('SUCCESS', webentity, payload, {
-        [field]: payload[field], // in case we receive success with no previous request
-        [field + '_prev']: undefined // remove track of previous value
-      })
-      return {
-        [field]: payload[field], // in case we receive success with no previous request
-        [field + '_prev']: undefined // remove track of previous value
-      }
-    }),
+    [success]: updateWebentity((webentity, payload) => ({
+      [field]: payload[field], // in case we receive success with no previous request
+      [field + '_prev']: null // remove track of previous value
+    })),
     [failure]: updateWebentity((webentity) => ({
       [field]: webentity[field + '_prev'], // restore previous value
-      [field + '_prev']: undefined // remove track of previous value
+      [field + '_prev']: null // remove track of previous value
     }))
+  }
+}
+
+function optimisticUpdateWebentityTags (request, success, failure) {
+  return {
+    [request]: updateWebentity((webentity, { category, value }) => set(
+      { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
+      'tags.USER.' + category, uniq((webentity.tags.USER[category] || []).concat([value]))
+    )),
+    [success]: updateWebentity((webentity, { category }) => ({
+      ['tags_' + category + '_prev']: null
+    })),
+    [failure]: updateWebentity((webentity, { category }) => set(
+      { ['tags_' + category + '_prev']: null },
+      'tags.USER.' + category, webentity['tags_' + category + '_prev']
+    ))
   }
 }
 
@@ -116,7 +149,7 @@ function updateWebentity (updator) {
   return (state, payload) => {
     const id = payload.webentityId
     const webentity = state.webentities[id]
-    const updated = {...webentity, ...updator(webentity, payload)}
+    const updated = merge({}, webentity, updator(webentity, payload))
     return {...state, webentities: {...state.webentities, [id]: updated}}
   }
 }
