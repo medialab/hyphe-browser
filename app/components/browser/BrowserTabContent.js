@@ -7,6 +7,7 @@ import BrowserTabUrlField from './BrowserTabUrlField'
 import SideBar from './sidebar/SideBar'
 import SplitPane from 'react-split-pane'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
+import PageHypheHome from './PageHypheHome'
 
 import { intlShape } from 'react-intl'
 
@@ -133,15 +134,6 @@ class TabContent extends React.Component {
     }
   }
 
-  renderHypheHome () {
-    return (
-      <div className="page-hyphe-home">
-        <h1>⇑</h1>
-        <p>Type a URL in the address bar above</p>
-        <p>TODO: google search engine</p>
-      </div>
-    )
-  }
 
   renderToolbar () {
     const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity } = this.props
@@ -190,7 +182,7 @@ class TabContent extends React.Component {
       <SplitPane split="vertical" minSize="100" defaultSize="150">
         { webentity ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
         { url === PAGE_HYPHE_HOME
-          ? this.renderHypheHome()
+          ? <PageHypheHome />
           : <WebView id={ id } url={ url }
             onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
             onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />

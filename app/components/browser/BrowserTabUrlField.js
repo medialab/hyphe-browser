@@ -88,7 +88,7 @@ class BrowserTabUrlField extends React.Component {
     const onClick = () => this.setState({ editing: true, focusInput: true })
 
     if (!this.props.lruPrefixes) {
-      return <span className={ className } onClick={ onClick }>{ this.state.url }</span>
+      return <span className={ className } onClick={ onClick }>{ this.state.url || <span className="browser-tab-url-placeholder">enter address</span> }</span>
     }
 
     return <span className={ className } onClick={ onClick }

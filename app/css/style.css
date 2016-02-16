@@ -278,6 +278,10 @@ h1.title {
 .browser-tab-prefix-selector .prefix-over {
   background: #99ccff;
 }
+.browser-tab-url-placeholder {
+  color: #999;
+  letter-spacing: .2em;
+}
 
 /** WebView height fix **/
 
@@ -313,9 +317,4 @@ h1.title {
 I honestly can't (and won't) explain why */
 .browser-window > .browser-navigator > .browser-tab-content .SplitPane .Resizer {
   position: absolute;
-}
-
-.page-hyphe-home {
-  font-size: 2em;
-  text-align: center;
 }
