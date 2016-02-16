@@ -8,7 +8,7 @@ import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
 
 import { openTab, closeTab, selectTab } from '../../actions/tabs'
-import { SHORTCUT_CLOSE_TAB } from '../../constants'
+import { SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB } from '../../constants'
 
 class BrowserTabs extends React.Component {
   constructor (props) {
@@ -30,6 +30,11 @@ class BrowserTabs extends React.Component {
     // Listen for resize
     window.addEventListener('resize', this.onResize)
 
+    ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, () => {
+      this.props.openTab('http://google.fr')
+    })
+    ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
+
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
       this.props.closeTab(this.props.activeTab)
     })
@@ -40,6 +45,7 @@ class BrowserTabs extends React.Component {
     // Clear event listeners
     window.removeEventListener('resize', this.onResize)
 
+    ipc.send('unregisterShortcut', SHORTCUT_OPEN_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
   }
 
