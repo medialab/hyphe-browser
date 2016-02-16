@@ -11,7 +11,10 @@ import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import { intlShape } from 'react-intl'
 
 import { showError, hideError } from '../../actions/browser'
-import { setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab } from '../../actions/tabs'
+import {
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon,
+  openTab, closeTab
+} from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
@@ -28,7 +31,7 @@ class TabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, openTab, setTabIcon,
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, openTab, closeTab,
       showError, declarePage, setTabWebentity, serverUrl, corpusId } = this.props
 
     if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
@@ -56,6 +59,9 @@ class TabContent extends React.Component {
       break
     case 'open': // link in new tab
       openTab(info)
+      break
+    case 'close': // from context menu
+      closeTab(id)
       break
     case 'error':
       const err = networkErrors.createByCode(info.errorCode)
@@ -125,7 +131,8 @@ class TabContent extends React.Component {
   }
 
   render () {
-    const { active, id, url, loading, webentity, setTabUrl, serverUrl, corpusId, adjusting, setAdjustWebentity } = this.props
+    const { active, id, url, loading, webentity, setTabUrl, serverUrl, corpusId,
+      adjusting, setAdjustWebentity } = this.props
     const { formatMessage } = this.context.intl
 
     const ready = !loading && !!webentity
@@ -185,11 +192,14 @@ TabContent.propTypes = {
 
   showError: PropTypes.func.isRequired,
   hideError: PropTypes.func.isRequired,
+
   setTabUrl: PropTypes.func.isRequired,
-  openTab: PropTypes.func.isRequired,
   setTabStatus: PropTypes.func.isRequired,
   setTabTitle: PropTypes.func.isRequired,
   setTabIcon: PropTypes.func.isRequired,
+  openTab: PropTypes.func.isRequired,
+  closeTab: PropTypes.func.isRequired,
+
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
@@ -218,7 +228,7 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
 
 const mapDispatchToProps = {
   showError, hideError,
-  setTabUrl, openTab ,setTabStatus, setTabTitle, setTabIcon,
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
   declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
 }

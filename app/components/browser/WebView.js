@@ -133,12 +133,13 @@ class WebView extends React.Component {
       const menu = new Menu()
       if (href) {
         menu.append(new MenuItem({ label: 'Open in new Tab', click: () => alert('openTab ' + href) }))
+        menu.append(new MenuItem({ label: 'Open in default browser', click: () => alert('openInBrowser ' + href) }))
       }
       if (hasSelection) {
         menu.append(new MenuItem({ label: 'Copy', click: () => alert('Copy') }))
       }
       menu.append(new MenuItem({ type: 'separator' }))
-      menu.append(new MenuItem({ label: 'Close Tab', click: () => alert('closeTab') }))
+      menu.append(new MenuItem({ label: 'Close Tab', click: () => update('close') }))
       menu.popup(remote.getCurrentWindow())
     })
   }
@@ -146,6 +147,7 @@ class WebView extends React.Component {
   render () {
     const { url, ua } = this.props
 
+    // the preload script below is used to handle right click context menu
     return (
       <webview
         src={ url }
