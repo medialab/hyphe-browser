@@ -1,15 +1,25 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
+
+import { PAGE_HYPHE_HOME } from '../constants'
 import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB,
   SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
+const pageHypheHome = {
+  url: PAGE_HYPHE_HOME,
+  id: uuid(),
+  title: 'New Tab',
+  icon: null,
+  loading: false,
+  error: null
+}
 
 const initialState = {
-  tabs: [], // tab: { url, id, title, icon, loading, error }
-  activeTab: null // id of active tab
+  tabs: [pageHypheHome], // tab: { url, id, title, icon, loading, error }
+  activeTab: pageHypheHome.id // id of active tab
 }
 
 export default createReducer(initialState, {
