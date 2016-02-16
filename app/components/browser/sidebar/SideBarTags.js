@@ -129,6 +129,7 @@ class SideBarTags extends React.Component {
     return (
       <form className="tags-new-tag btn-group" onSubmit={ this.addTag(category) }>
         <Autosuggest
+          id={ 'tags-' + category }
           suggestions={ this.state.currentSuggestions }
           onSuggestionsUpdateRequested={ ({ value }) => this.setState({ currentSuggestions: getSuggestions(this.state.fullSuggestions[category], value) }) }
           getSuggestionValue={ getSuggestionValue }
