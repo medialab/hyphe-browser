@@ -106,6 +106,10 @@ class SideBarTags extends React.Component {
   addTag (category, tag = null) {
     const { serverUrl, corpusId, webentity, addTag } = this.props
     const value = this.getEditedTagValue(category, tag)
+    if (!value) {
+      return Promise.resolve()
+    }
+
     this.changeEditedTagValue(category, '', tag)
     return addTag(serverUrl, corpusId, category, webentity.id, value, tag).then(() => {
       // Keep suggestions up to date
