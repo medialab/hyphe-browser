@@ -70,10 +70,13 @@ export default createReducer(initialState, {
   ),
 
   // (Optimistically) add tag
-  [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => set(
-    { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
-    'tags.USER.' + category, uniq((webentity.tags.USER[category] || []).concat([value]))
-  )),
+  [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {
+    const oldTags = webentity.tags.USER[category] || []
+    const newTags = updatedValue
+      ? oldTags.map((v) => (v === updatedValue) ? value : v)
+      : uniq(oldTags.concat([value]))
+    return set({ ['tags_' + category + '_prev']: oldTags }, 'tags.USER.' + category, newTags)
+  }),
   [ADD_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
     ['tags_' + category + '_prev']: null
   })),

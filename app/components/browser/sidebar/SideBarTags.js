@@ -27,12 +27,10 @@ class SideBarTags extends React.Component {
       // ['edit/' + category + '/' + value] : true
     }
 
+    // Force-bind methods used like `onEvent={ this.method }`
     this.addCategory = this.addCategory.bind(this)
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
     this.renderTagsCategory = this.renderTagsCategory.bind(this)
-    this.renderTag = this.renderTag.bind(this)
-    this.renderTagInput = this.renderTagInput.bind(this)
-    this.addTag = this.addTag.bind(this)
   }
 
   componentWillMount () {
@@ -98,29 +96,48 @@ class SideBarTags extends React.Component {
     })
   }
 
-  addTag (category, tag) {
+  addTagHandler (category, tag) {
     return (e) => {
       e.preventDefault()
-      const { serverUrl, corpusId, webentity, addTag } = this.props
-      const value = this.getEditedTagValue(category, tag)
-      this.changeEditedTagValue(category, '', tag)
-      return addTag(serverUrl, corpusId, category, webentity.id, value).then(() => {
-        // Keep suggestions up to date
-        this.setState({
-          fullSuggestions: {
-            ...this.state.fullSuggestions,
-            [category]: (this.state.fullSuggestions[category] || []).concat(value)
-          }
-        })
+      return this.addTag(category, tag)
+    }
+  }
+
+  addTag (category, tag) {
+    const { serverUrl, corpusId, webentity, addTag } = this.props
+    const value = this.getEditedTagValue(category, tag)
+    this.changeEditedTagValue(category, '', tag)
+    return addTag(serverUrl, corpusId, category, webentity.id, value, tag).then(() => {
+      // Keep suggestions up to date
+      this.setState({
+        fullSuggestions: {
+          ...this.state.fullSuggestions,
+          [category]: (this.state.fullSuggestions[category] || []).concat(value)
+        }
       })
+    })
+  }
+
+  updateTagHandler (category, tag) {
+    return (e) => {
+      e.preventDefault()
+      this.updateTag(category, tag)
     }
   }
 
   updateTag (category, tag) {
-    return (e) => {
-      e.preventDefault()
-      return this.removeTag(category, tag).then(() => this.addTag(category, tag)(e))
+    const value = this.getEditedTagValue(category, tag)
+    if (value === tag) {
+      this.changeEditedTagValue(category, '', tag)
+      return Promise.resolve()
     }
+
+    return this.addTag(category, tag).then(() => this.removeTag(category, tag))
+  }
+
+  removeTag (category, value) {
+    const { serverUrl, corpusId, webentity, removeTag } = this.props
+    return removeTag(serverUrl, corpusId, category, webentity.id, value)
   }
 
   changeEditedTagValue (category, value, tag) {
@@ -147,7 +164,7 @@ class SideBarTags extends React.Component {
     return (
       <form
         className={ cx('btn-group', { 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
-        onSubmit={ tag ? this.updateTag(category, tag) : this.addTag(category) }
+        onSubmit={ tag ? this.updateTagHandler(category, tag) : this.addTagHandler(category) }
         >
         <Autosuggest
           id={ 'tags-' + uniqSuffix }
@@ -167,11 +184,6 @@ class SideBarTags extends React.Component {
       <Button size="large" icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
       </form>
     )
-  }
-
-  removeTag (category, value) {
-    const { serverUrl, corpusId, webentity, removeTag } = this.props
-    return removeTag(serverUrl, corpusId, category, webentity.id, value)
   }
 
   editTag (category, tag) {

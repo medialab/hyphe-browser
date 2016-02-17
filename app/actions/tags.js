@@ -63,11 +63,11 @@ export const addTagsCategory = (serverUrl, corpusId, category) => (dispatch) => 
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
 
-export const addTag = (serverUrl, corpusId, category, webentityId, value) => (dispatch) => {
-  dispatch({ type: ADD_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value } })
+export const addTag = (serverUrl, corpusId, category, webentityId, value, updatedValue) => (dispatch) => {
+  dispatch({ type: ADD_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } })
   return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
-    .then(() => dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value } }))
-    .catch((error) => dispatch({ type: ADD_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, error } }))
+    .then(() => dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } }))
+    .catch((error) => dispatch({ type: ADD_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue, error } }))
 }
 
 export const removeTag = (serverUrl, corpusId, category, webentityId, value) => (dispatch) => {
