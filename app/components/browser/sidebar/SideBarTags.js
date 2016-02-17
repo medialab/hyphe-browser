@@ -132,6 +132,7 @@ class SideBarTags extends React.Component {
   updateTag (category, tag) {
     const value = this.getEditedTagValue(category, tag)
     if (value === tag || !value) {
+      this.editTag(category, tag, false)
       this.changeEditedTagValue(category, '', tag)
       return Promise.resolve()
     }
@@ -191,8 +192,8 @@ class SideBarTags extends React.Component {
     )
   }
 
-  editTag (category, tag) {
-    this.setState({ ['edit/' + category + '/' + tag]: true })
+  editTag (category, tag, edited) {
+    this.setState({ ['edit/' + category + '/' + tag]: edited })
   }
 
   isEditedTag (category, tag) {
@@ -210,7 +211,7 @@ class SideBarTags extends React.Component {
         <li key={ 'tag/view/' + category + '/' + tag } className="btn-group">
           <strong
             className="form-control btn tag-title"
-            onClick={ () => this.editTag(category, tag) }
+            onClick={ () => this.editTag(category, tag, true) }
           >{ tag }</strong>
           <span
             className="btn btn-default icon icon-erase remove-tag"
