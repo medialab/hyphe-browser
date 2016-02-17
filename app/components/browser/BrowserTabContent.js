@@ -255,14 +255,13 @@ TabContent.propTypes = {
   hideAdjustWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id }) => {
-  const tab = tabs.tabs.find((tab) => tab.id === id)
+const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loading }) => {
   const webentity = webentities.webentities[webentities.tabs[id]]
   return {
     id,
     active: id === tabs.activeTab,
-    url: tab.url,
-    loading: tab.loading || false,
+    url,
+    loading,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,

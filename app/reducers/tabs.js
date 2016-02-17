@@ -39,7 +39,8 @@ export default createReducer(initialState, {
     const tabs = state.tabs.filter((tab) => tab.id !== id)
     // if active tab is closed: switch to next tab (or last)
     const tabIndex = state.tabs.findIndex((tab) => tab.id === id)
-    const activeTab = (id === state.activeTab) ? (tabs[tabIndex] || tabs[tabs.length - 1]).id : state.activeTab
+    const nextTabId = (tabs[tabIndex] || tabs[tabs.length - 1] || {}).id || null
+    const activeTab = (id === state.activeTab) ? nextTabId : state.activeTab
 
     return {
       ...state,
