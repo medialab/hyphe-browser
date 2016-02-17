@@ -1,7 +1,7 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
-import open from 'open'
+import { ipcRenderer as ipc } from 'electron'
 
 import remote from 'remote'
 
@@ -133,14 +133,14 @@ class WebView extends React.Component {
       const [ { x, y, hasSelection, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
-        menu.append(new MenuItem({ label: 'Open in new Tab', click: () => alert('openTab ' + href) }))
-        menu.append(new MenuItem({ label: 'Open in default browser', click: () => open(href) }))
+        menu.append(new MenuItem({ label: 'Open in new tab', click: () => alert('openTab ' + href) }))
+        menu.append(new MenuItem({ label: 'Open in default browser', click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
         menu.append(new MenuItem({ label: 'Copy', click: () => alert('Copy') }))
       }
       menu.append(new MenuItem({ type: 'separator' }))
-      menu.append(new MenuItem({ label: 'Close Tab', click: () => update('close') }))
+      menu.append(new MenuItem({ label: 'Close tab', click: () => update('close') }))
       menu.popup(remote.getCurrentWindow())
     })
   }

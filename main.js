@@ -1,11 +1,14 @@
+'use strict'
+
 /* eslint no-path-concat: 0, func-names:0 */
 
-var app = require('app')
-var BrowserWindow = require('browser-window')
-var Menu = require('menu')
-var ipc = require('electron').ipcMain
-var Shortcut = require('electron-shortcut')
-var isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
+const app = require('app')
+const BrowserWindow = require('browser-window')
+const Menu = require('menu')
+const ipc = require('electron').ipcMain
+const Shortcut = require('electron-shortcut')
+const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
+const open = require('open')
 
 // Force production environment in final binary
 if (isPackaged) {
@@ -22,7 +25,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', () => {
-  var window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
+  let window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
 
   if (process.env.NODE_ENV === 'development') {
     window.loadURL('file://' + __dirname + '/app/index-dev.html')
@@ -84,7 +87,7 @@ app.on('ready', () => {
   window.setMenu(Menu.buildFromTemplate(menus))
 
   // shortcuts can only be handled here, in the main process
-  var shortcuts = new Map()
+  let shortcuts = new Map()
 
   // ipcMain should be used, window.webContent.on is never triggered for ipc
   ipc.on('registerShortcut', (_, accel) => {
@@ -94,5 +97,10 @@ app.on('ready', () => {
   ipc.on('unregisterShortcut', (_, accel) => {
     shortcuts.get(accel).unregister()
     shortcuts.delete(accel)
+  })
+
+  // Open files in external app
+  ipc.on('openExternal', (_, what, opener, cb) => {
+    open(what, opener, cb)
   })
 })

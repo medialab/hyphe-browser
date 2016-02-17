@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
-import open from 'open'
+import { ipcRenderer as ipc } from 'electron'
 
 import remote from 'remote'
 
@@ -27,13 +27,14 @@ class BrowserTab extends React.Component {
       if (!newTab) {
         const menu = new Menu()
         if (!loading && url) {
-          menu.append(new MenuItem({ label: 'Open in default browser', click: this.openInBrowser }))
           if (this.props.openTab) {
-            menu.append(new MenuItem({ label: 'Duplicate', click: this.duplicate }))
+            menu.append(new MenuItem({ label: 'Duplicate tab', click: this.duplicate }))
           }
+          menu.append(new MenuItem({ label: 'Open in default browser', click: this.openInBrowser }))
         }
         if (this.props.closeTab) {
-          menu.append(new MenuItem({ label: 'Close Tab', click: this.close }))
+          menu.append(new MenuItem({ type: 'separator' }))
+          menu.append(new MenuItem({ label: 'Close tab', click: this.close }))
         }
         menu.popup(remote.getCurrentWindow())
       }
@@ -41,7 +42,7 @@ class BrowserTab extends React.Component {
   }
 
   openInBrowser () {
-    open(this.props.url)
+    ipc.send('openExternal', this.props.url)
   }
 
   duplicate () {
