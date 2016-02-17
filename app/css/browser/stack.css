@@ -15,6 +15,19 @@
   .browser-stack-age {
   }
 
+  .browser-stack-selector {
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .browser-stack-selector label {
+    display: inline;
+  }
+
+  .browser-stack-selector .form-control {
+    width: auto;
+  }
+
 /* Bottom row */
 
 .browser-stack-wes {
@@ -25,9 +38,10 @@
     flex-grow: 1;
     text-align: center;
   }
+
   .browser-stack-wes-prev .icon {
-    float: left;
   }
 
   .browser-stack-wes-next .icon {
+    float: right;
   }
