@@ -198,6 +198,7 @@ class SideBarTags extends React.Component {
             placeholder: tag || 'New tag',
             value: this.getEditedTagValue(category, tag),
             autoFocus: !!tag,
+            onFocus: (e) => e.target.select(),
             onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
           } }
         />
