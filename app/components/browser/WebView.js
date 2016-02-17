@@ -1,6 +1,7 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
+import open from 'open'
 
 import remote from 'remote'
 
@@ -133,7 +134,7 @@ class WebView extends React.Component {
       const menu = new Menu()
       if (href) {
         menu.append(new MenuItem({ label: 'Open in new Tab', click: () => alert('openTab ' + href) }))
-        menu.append(new MenuItem({ label: 'Open in default browser', click: () => alert('openInBrowser ' + href) }))
+        menu.append(new MenuItem({ label: 'Open in default browser', click: () => open(href) }))
       }
       if (hasSelection) {
         menu.append(new MenuItem({ label: 'Copy', click: () => alert('Copy') }))

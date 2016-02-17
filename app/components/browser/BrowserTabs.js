@@ -69,6 +69,7 @@ class BrowserTabs extends React.Component {
         newTab={ tab.title === null }
         active={ this.props.activeTab === tab.id }
         selectTab={ this.props.selectTab }
+        openTab={ this.props.openTab }
         closeTab={ this.props.closeTab } />
     ))
   }
