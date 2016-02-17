@@ -24,6 +24,10 @@ ipc.on('request-contextmenu-info', function onRequestContextMenuInfo (e, pos) {
     img: null // string: href
   }
 
+  if (info.hasSelection) {
+    info.selectionText = window.getSelection().toString()
+  }
+
   var el = document.elementFromPoint(pos.x, pos.y)
 
   while (el && el.tagName) {

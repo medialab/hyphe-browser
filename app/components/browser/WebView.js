@@ -1,8 +1,8 @@
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
-import { ipcRenderer as ipc } from 'electron'
 
+import { ipcRenderer as ipc, clipboard } from 'electron'
 import remote from 'remote'
 
 const Menu = remote.require('menu')
@@ -130,14 +130,14 @@ class WebView extends React.Component {
     webview.addEventListener('ipc-message', ({ channel, args }) => {
       if (channel !== 'show-contextmenu') return
 
-      const [ { x, y, hasSelection, href, img, video } ] = args // eslint-disable-line
+      const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
         menu.append(new MenuItem({ label: 'Open in new tab', click: () => alert('openTab ' + href) }))
         menu.append(new MenuItem({ label: 'Open in default browser', click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
-        menu.append(new MenuItem({ label: 'Copy', click: () => alert('Copy') }))
+        menu.append(new MenuItem({ label: 'Copy', click: () => clipboard.writeText(selectionText) }))
       }
       menu.append(new MenuItem({ type: 'separator' }))
       menu.append(new MenuItem({ label: 'Close tab', click: () => update('close') }))
