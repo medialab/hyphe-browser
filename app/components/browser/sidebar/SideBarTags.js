@@ -203,7 +203,7 @@ class SideBarTags extends React.Component {
       }
 
       return (
-        <li key={ category + '/' + tag } className="btn-group">
+        <li key={ 'tag/view/' + category + '/' + tag } className="btn-group">
           <strong
             className="form-control btn tag-title"
             onClick={ () => this.editTag(category, tag) }
