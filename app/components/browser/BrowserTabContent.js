@@ -195,7 +195,7 @@ class TabContent extends React.Component {
   }
 
   renderSplitPane () {
-    const { id, url, webentity, setTabUrl, serverUrl, corpusId } = this.props
+    const { id, url, webentity, setTabUrl, serverUrl, corpusId, openTab } = this.props
 
     return (
       <SplitPane split="vertical" minSize="130" defaultSize="200">
@@ -203,8 +203,9 @@ class TabContent extends React.Component {
         { url === PAGE_HYPHE_HOME
           ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
           : <WebView id={ id } url={ url }
-            onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
-            onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) } />
+              onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
+              onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) }
+              openTab={ openTab } />
         }
       </SplitPane>
     )

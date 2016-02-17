@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 
@@ -133,7 +133,7 @@ class WebView extends React.Component {
       const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
-        menu.append(new MenuItem({ label: 'Open in new tab', click: () => alert('openTab ' + href) }))
+        menu.append(new MenuItem({ label: 'Open in new tab', click: () => this.props.openTab(href) }))
         menu.append(new MenuItem({ label: 'Open in default browser', click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
@@ -161,10 +161,11 @@ class WebView extends React.Component {
 }
 
 WebView.propTypes = {
-  onStatusUpdate: React.PropTypes.func.isRequired,
-  ua: React.PropTypes.string,
-  url: React.PropTypes.string.isRequired,
-  onNavigationActionsReady: React.PropTypes.func
+  onStatusUpdate: PropTypes.func.isRequired,
+  ua: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  onNavigationActionsReady: PropTypes.func,
+  openTab: PropTypes.func
 }
 
 export default WebView
