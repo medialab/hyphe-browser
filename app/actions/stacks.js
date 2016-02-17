@@ -11,7 +11,7 @@ export const fetchStack = (serverUrl, corpus, stack) => (dispatch) => {
   dispatch(requestStack(serverUrl, stack))
 
   return jsonrpc(serverUrl)(stack.method, stack.args.concat(corpus.corpus_id))
-    .then((res) => dispatch(receiveStack(serverUrl, stack, res)))
+    .then((res) => dispatch(receiveStack(serverUrl, stack, res.webentities)))
     .catch((error) => dispatch({
       type: FETCH_STACK_FAILURE,
       payload: { error, serverUrl, stack }

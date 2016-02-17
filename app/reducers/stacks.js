@@ -1,8 +1,14 @@
 import createReducer from '../utils/create-reducer'
 
+import {
+  FETCH_STACK_SUCCESS
+} from '../actions/stacks'
+
 // methods and args → for API calls
 const initialState = {
   selected: null,
+  lastRefresh: null,
+  webentities: [],
   list: [
     {
       name: 'PROSPECT',
@@ -27,7 +33,7 @@ const initialState = {
       description: 'OUT description',
       method: 'store.get_webentities_by_status',
       args: ['OUT', 'name', -1, 0]
-    },
+    }
     // {
     //   name: 'TOTAG',
     //   description: 'TOTAG description',
@@ -38,4 +44,10 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
+    ...state,
+    selected: stack,
+    lastRefresh: Date.now(),
+    webentities
+  })
 })
