@@ -14,6 +14,7 @@ class BrowserTab extends React.Component {
 
     this.close = this.close.bind(this)
     this.closeHandler = this.closeHandler.bind(this)
+    this.selectHandler = this.selectHandler.bind(this)
     this.openInBrowser = this.openInBrowser.bind(this)
     this.duplicate = this.duplicate.bind(this)
   }
