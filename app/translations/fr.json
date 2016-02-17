@@ -62,6 +62,7 @@
   "on-server": "sur {name} ({url})",
   "options": "Options",
   "password": "Mot de passe",
+  "refreshed-ago": "Rafraichi {relative}",
   "reset-servers": "Réinitialiser les serveurs",
   "save": "Sauver",
   "save-and-crawl": "Sauver et lancer le crawl",
