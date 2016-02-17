@@ -1,5 +1,6 @@
 import '../../css/browser/page-hyphe-home'
 import React, { PropTypes } from 'react'
+import { getSearchUrl } from '../../utils/search-web'
 
 class PageHypheHome extends React.Component {
 
@@ -10,7 +11,7 @@ class PageHypheHome extends React.Component {
 
   onSubmit (evt) {
     evt.preventDefault()
-    this.props.onSubmit(`https://google.fr/search?q=${this.state.q}`)
+    this.props.onSubmit(getSearchUrl(this.state.q))
   }
 
   render () {

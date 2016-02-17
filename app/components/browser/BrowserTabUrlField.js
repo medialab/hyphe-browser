@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import cx from 'classnames'
+import { isWebUri } from 'valid-url'
 
 import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../../utils/lru'
+import { getSearchUrl } from '../../utils/search-web'
 
 class BrowserTabUrlField extends React.Component {
 
@@ -48,9 +50,16 @@ class BrowserTabUrlField extends React.Component {
     e.preventDefault()
 
     const url = ((u) => {
-      if (!u.match(/:\/\//)) {
-        this.setState({ url: 'http://' + u })
-        return 'http://' + u
+      if (!isWebUri(u)) {
+        const httpu = 'http://' + u
+        if (isWebUri(httpu)) {
+          this.setState({ url: httpu })
+          return httpu
+        } else {
+          const searchu = getSearchUrl(u)
+          this.setState({ url: searchu })
+          return searchu
+        }
       } else {
         return u
       }

@@ -89,6 +89,7 @@
     "redux-localstorage": "^0.4.0",
     "redux-thunk": "^1.0.3",
     "tether": "^1.1.1",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "valid-url": "^1.0.9"
   }
 }
