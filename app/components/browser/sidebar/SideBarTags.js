@@ -1,6 +1,7 @@
 import '../../../css/browser/side-bar-tags'
 import '../../../css/auto-suggest'
 
+import uniq from 'lodash.uniq'
 import React, { PropTypes } from 'react'
 
 import { findDOMNode } from 'react-dom'
@@ -21,7 +22,7 @@ class SideBarTags extends React.Component {
 
     this.state = {
       tagValue: {}, // [category or (category + '/' + value)]: string
-      fullSuggestions: {}, // [category]: Array<string>
+      // ['full-suggestions/' + category] : Array<string>
       // ['suggestions/' + category + '/' + value] : Array<string>
       newCategory: ''
       // ['edit/' + category + '/' + value] : true
@@ -87,12 +88,7 @@ class SideBarTags extends React.Component {
   fetchFullSuggestions (category) {
     const { serverUrl, corpusId, fetchTags } = this.props
     fetchTags(serverUrl, corpusId, category).then((tags) => {
-      this.setState({
-        fullSuggestions: {
-          ...this.state.fullSuggestions,
-          [category]: tags
-        }
-      })
+      this.setState({ ['full-suggestions/' + category]: tags })
     })
   }
 
@@ -113,12 +109,9 @@ class SideBarTags extends React.Component {
     this.changeEditedTagValue(category, '', tag)
     return addTag(serverUrl, corpusId, category, webentity.id, value, tag).then(() => {
       // Keep suggestions up to date
-      this.setState({
-        fullSuggestions: {
-          ...this.state.fullSuggestions,
-          [category]: (this.state.fullSuggestions[category] || []).concat(value)
-        }
-      })
+      const prop = 'full-suggestions/' + category
+      const tags = uniq((this.state[prop] || []).concat(value))
+      this.setState({ [prop]: tags })
     })
   }
 
@@ -173,7 +166,7 @@ class SideBarTags extends React.Component {
   }
 
   getSuggestions (category, value) {
-    return getSuggestions(this.state.fullSuggestions[category] || [], value)
+    return getSuggestions(this.state['full-suggestions/' + category] || [], value)
   }
 
   renderTagInput (category, tag = null) {
