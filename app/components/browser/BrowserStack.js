@@ -3,19 +3,36 @@ import '../../css/browser/stack'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+import { fetchStack } from '../../actions/stacks'
+
 class BrowserStack extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      selectedStackName: this.props.selectedStack && this.props.selectedStack.name
+    }
+  }
+
+  fill () {
+    const stack = this.props.stacks.find(s => s.name === this.state.selectedStackName)
+    this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
+  }
+
   renderFiller () {
     if (!this.props.selectedStack) {
       return (
         <div className="browser-stack-filler toolbar-actions">
           <div className="browser-stack-selector">
-            <label>Choose a stack:</label>
-            <select className="form-control">
+            <select className="form-control"
+              defaultValue={ this.state.selectedStackName }
+              onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
+              <option value="">Select a stack</option>
               { this.props.stacks.map(s => (
-                <option value={ s.name }>{ s.description }</option>
-              ))}
+                <option key={ s.name } value={ s.name }>{ s.description }</option>
+              )) }
             </select>
-            <button className="btn btn-default">
+            <button className="btn btn-default"
+              onClick={ () => this.fill() }>
               <span className="icon icon-download"></span>
               Fill
             </button>
@@ -79,13 +96,23 @@ class BrowserStack extends React.Component {
 }
 
 BrowserStack.propTypes = {
+  corpus: PropTypes.object.isRequired,
+  server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
-  stacks: PropTypes.array.isRequired
+  stacks: PropTypes.array.isRequired,
+
+  fetchStack: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ stacks }) => ({
+const mapStateToProps = ({ corpora, servers, stacks }) => ({
+  corpus: corpora.selected,
+  server: servers.selected,
   selectedStack: stacks.selected,
   stacks: stacks.list
 })
 
-export default connect(mapStateToProps)(BrowserStack)
+const mapDispatchToProps = {
+  fetchStack
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BrowserStack)

@@ -20,10 +20,6 @@
     text-align: center;
   }
 
-  .browser-stack-selector label {
-    display: inline;
-  }
-
   .browser-stack-selector .form-control {
     width: auto;
   }
