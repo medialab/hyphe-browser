@@ -157,9 +157,9 @@ class SideBarTags extends React.Component {
       const { formatMessage } = this.context.intl
 
       return (
-        <li key={ category + '/' + tag }>
-          <strong className="tag-title">{ tag }</strong>
-          <span className="icon icon-erase remove-tag"
+        <li key={ category + '/' + tag } className="btn-group">
+          <strong className="form-control btn tag-title">{ tag }</strong>
+          <span className="btn btn-default icon icon-erase remove-tag"
             title={ formatMessage({ id: 'sidebar.remove-tag' }) }
             onClick={ () => this.removeTag(category, tag) } />
         </li>
