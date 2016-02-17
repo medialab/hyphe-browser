@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 
 class BrowserTab extends React.Component {
   render () {
-    const { active, id, title, icon, loading, selectTab, closeTab } = this.props
+    const { active, id, title, icon, loading, newTab, selectTab, closeTab } = this.props
 
     return (
       <div key={ id } className={ 'browser-tab tab-item ' + (active ? ' active' : '') } onClick={ () => selectTab(id) }>
@@ -11,7 +11,7 @@ class BrowserTab extends React.Component {
           ? <span className="loading" />
           : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
         }
-        { ' ' + (title || this.context.intl.formatMessage({ id: 'new-tab' })) }
+        { ' ' + (newTab ? this.context.intl.formatMessage({ id: 'new-tab' }) : title) }
       </div>
     )
   }
@@ -23,8 +23,13 @@ BrowserTab.propTypes = {
   title: PropTypes.string,
   icon: PropTypes.string,
   loading: PropTypes.bool,
+  newTab: PropTypes.bool,
   selectTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired
+}
+
+BrowserTab.contextTypes = {
+  intl: intlShape
 }
 
 export default BrowserTab

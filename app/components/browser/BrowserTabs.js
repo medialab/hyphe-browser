@@ -64,8 +64,12 @@ class BrowserTabs extends React.Component {
 
   renderTabs () {
     return this.props.tabs.map((tab) => (
-      <Tab { ...tab } key={ tab.id } active={ this.props.activeTab === tab.id }
-        selectTab={ this.props.selectTab } closeTab={ this.props.closeTab } />
+      <Tab key={ tab.id }
+        { ...tab }
+        newTab={ tab.title === null }
+        active={ this.props.activeTab === tab.id }
+        selectTab={ this.props.selectTab }
+        closeTab={ this.props.closeTab } />
     ))
   }
 
