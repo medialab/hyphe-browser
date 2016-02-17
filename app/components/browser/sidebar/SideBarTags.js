@@ -22,7 +22,7 @@ class SideBarTags extends React.Component {
     this.state = {
       tagValue: {}, // [category or (category + '/' + value)]: string
       fullSuggestions: {}, // [category]: Array<string>
-      currentSuggestions: [], // Array<string>
+      // ['suggestions/' + category + '/' + value] : Array<string>
       newCategory: ''
       // ['edit/' + category + '/' + value] : true
     }
@@ -146,7 +146,7 @@ class SideBarTags extends React.Component {
   }
 
   changeEditedTagValue (category, value, tag = null) {
-    const prop = category + ((tag === null) ? ('/' + tag) : '')
+    const prop = category + ((tag !== null) ? ('/' + tag) : '')
     this.setState({
       tagValue: {
         ...this.state.tagValue,
@@ -156,15 +156,29 @@ class SideBarTags extends React.Component {
   }
 
   getEditedTagValue (category, tag = null) {
-    const prop = category + ((tag === null) ? ('/' + tag) : '')
+    const prop = category + ((tag !== null) ? ('/' + tag) : '')
     return (typeof this.state.tagValue[prop] === 'string')
       ? this.state.tagValue[prop]
       : tag
   }
 
+  setCurrentSuggestions (suggestions, category, tag = null) {
+    const prop = 'suggestions/' + category + ((tag !== null) ? ('/' + tag) : '')
+    this.setState({ [prop]: suggestions })
+  }
+
+  getCurrentSuggestions (category, tag = null) {
+    const prop = 'suggestions/' + category + ((tag !== null) ? ('/' + tag) : '')
+    return this.state[prop] || this.getSuggestions(category, '')
+  }
+
+  getSuggestions (category, value) {
+    return getSuggestions(this.state.fullSuggestions[category] || [], value)
+  }
+
   renderTagInput (category, tag = null) {
     const { formatMessage } = this.context.intl
-    const uniqSuffix = category + ((tag === null) ? ('-' + tag) : '')
+    const uniqSuffix = category + ((tag !== null) ? ('-' + tag) : '')
 
     return (
       <form
@@ -174,8 +188,8 @@ class SideBarTags extends React.Component {
         >
         <Autosuggest
           id={ 'tags-' + uniqSuffix }
-          suggestions={ this.state.currentSuggestions }
-          onSuggestionsUpdateRequested={ ({ value }) => this.setState({ currentSuggestions: getSuggestions(this.state.fullSuggestions[category], value) }) }
+          suggestions={ this.getCurrentSuggestions(category, tag) }
+          onSuggestionsUpdateRequested={ ({ value }) => this.setCurrentSuggestions(this.getSuggestions(category, value), category, tag) }
           getSuggestionValue={ getSuggestionValue }
           renderSuggestion={ renderSuggestion }
           shouldRenderSuggestions={ () => true }
