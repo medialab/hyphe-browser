@@ -127,7 +127,7 @@ class SideBarTags extends React.Component {
 
   updateTag (category, tag) {
     const value = this.getEditedTagValue(category, tag)
-    if (value === tag) {
+    if (value === tag || !value) {
       this.changeEditedTagValue(category, '', tag)
       return Promise.resolve()
     }
