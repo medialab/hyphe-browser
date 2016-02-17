@@ -76,13 +76,13 @@ class WebView extends React.Component {
     })
 
     if (DEBUG_WEBVIEW) {
-      webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e))
-      webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e))
-      webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src))
-      webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src))
-      webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame))
-      webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url))
-      webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url))
+      webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e)) // eslint-disable-line no-console
+      webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e)) // eslint-disable-line no-console
+      webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src)) // eslint-disable-line no-console,no-unused-vars
+      webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src)) // eslint-disable-line no-console,no-unused-vars
+      webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame)) // eslint-disable-line no-console
+      webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url)) // eslint-disable-line no-console
+      webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url)) // eslint-disable-line no-console
     }
 
     // Loading status notifications
@@ -90,7 +90,7 @@ class WebView extends React.Component {
       this.isLoading = true
       update('start', webview.src)
     })
-    webview.addEventListener('did-stop-loading', ({  }) => {
+    webview.addEventListener('did-stop-loading', () => {
       this.isLoading = false
       update('stop', webview.src)
     })
