@@ -91,12 +91,13 @@ app.on('ready', () => {
 
   // ipcMain should be used, window.webContent.on is never triggered for ipc
   ipc.on('registerShortcut', (_, accel) => {
-    shortcuts.set(accel, new Shortcut(accel, () => window.webContents.send(`shortcut-${accel}`)))
+    shortcuts.set(JSON.stringify(accel), new Shortcut(accel, () => window.webContents.send(`shortcut-${accel}`)))
   })
 
   ipc.on('unregisterShortcut', (_, accel) => {
-    shortcuts.get(accel).unregister()
-    shortcuts.delete(accel)
+    const key = JSON.stringify(accel)
+    shortcuts.get(key).unregister()
+    shortcuts.delete(key)
   })
 
   // Open files in external app
