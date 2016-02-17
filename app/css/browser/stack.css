@@ -1,0 +1,33 @@
+.browser-stack {
+}
+
+/* Top row */
+
+.browser-stack-filler {
+  display: flex;
+}
+
+  .browser-stack-name {
+    flex-grow: 1;
+    font-weight: bold;
+  }
+
+  .browser-stack-age {
+  }
+
+/* Bottom row */
+
+.browser-stack-wes {
+  display: flex;
+}
+
+  .browser-stack-wes-selector {
+    flex-grow: 1;
+    text-align: center;
+  }
+  .browser-stack-wes-prev .icon {
+    float: left;
+  }
+
+  .browser-stack-wes-next .icon {
+  }
