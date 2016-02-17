@@ -96,14 +96,14 @@ class SideBarTags extends React.Component {
     })
   }
 
-  addTagHandler (category, tag) {
+  addTagHandler (category, tag = null) {
     return (e) => {
       e.preventDefault()
       return this.addTag(category, tag)
     }
   }
 
-  addTag (category, tag) {
+  addTag (category, tag = null) {
     const { serverUrl, corpusId, webentity, addTag } = this.props
     const value = this.getEditedTagValue(category, tag)
     this.changeEditedTagValue(category, '', tag)
@@ -140,8 +140,8 @@ class SideBarTags extends React.Component {
     return removeTag(serverUrl, corpusId, category, webentity.id, value)
   }
 
-  changeEditedTagValue (category, value, tag) {
-    const prop = category + (tag ? ('/' + tag) : '')
+  changeEditedTagValue (category, value, tag = null) {
+    const prop = category + ((tag === null) ? ('/' + tag) : '')
     this.setState({
       tagValue: {
         ...this.state.tagValue,
@@ -150,8 +150,8 @@ class SideBarTags extends React.Component {
     })
   }
 
-  getEditedTagValue (category, tag) {
-    const prop = category + (tag ? ('/' + tag) : '')
+  getEditedTagValue (category, tag = null) {
+    const prop = category + ((tag === null) ? ('/' + tag) : '')
     return (typeof this.state.tagValue[prop] === 'string')
       ? this.state.tagValue[prop]
       : tag
@@ -159,10 +159,11 @@ class SideBarTags extends React.Component {
 
   renderTagInput (category, tag = null) {
     const { formatMessage } = this.context.intl
-    const uniqSuffix = category + (tag ? ('-' + tag) : '')
+    const uniqSuffix = category + ((tag === null) ? ('-' + tag) : '')
 
     return (
       <form
+        key={ 'tag/edit/' + category + '/' + tag }
         className={ cx('btn-group', { 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
         onSubmit={ tag ? this.updateTagHandler(category, tag) : this.addTagHandler(category) }
         >
