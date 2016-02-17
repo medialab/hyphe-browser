@@ -24,12 +24,17 @@ import {
 } from '../../actions/webentities'
 
 import networkErrors from '@naholyr/chromium-net-errors'
+import { getSearchUrl } from '../../utils/search-web'
 
 class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = { disableBack: true, disableForward: true }
+    this.state = {
+      disableBack: true,
+      disableForward: true
+    }
+    this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
     this.navigationActions = {} // Mutated by WebView
   }
 
@@ -46,10 +51,12 @@ class TabContent extends React.Component {
 
     switch (event) {
     case 'start':
+      this.doNotRedirectToSearchOnNextDNSError = false
       setTabStatus({ loading: true, url: info }, id)
       setTabWebentity(id, null)
       break
     case 'stop':
+      this.doNotRedirectToSearchOnNextDNSError = false
       setTabStatus({ loading: false, url: info }, id)
       setTabUrl(info, id)
       declarePage(serverUrl, corpusId, info, id)
@@ -68,16 +75,29 @@ class TabContent extends React.Component {
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
-      if (info.pageURL === info.validatedURL) {
-        // Main page triggered the error, it's important
-        showError({ messageId: 'error.network-error', messageValues: { error: err.message }, fatal: false, icon: 'attention', timeout: 10000 })
-        setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
+      if (err.name === 'NameNotResolvedError') {
+        if (this.doNotRedirectToSearchOnNextDNSError) {
+          this.doNotRedirectToSearchOnNextDNSError = false
+        } else {
+          // DNS error: let's search instead
+          const term = info.pageURL.replace(/^.+:\/\//, '')
+          this.doNotRedirectToSearchOnNextDNSError = true
+          setTabUrl(getSearchUrl(term), id)
+          // Main page triggered the error, it's important
+          showError({ messageId: 'error.dns-error-search', fatal: false, icon: 'attention', timeout: 3000 })
+        }
+      } else {
+        if (info.pageURL === info.validatedURL) {
+          // Main page triggered the error, it's important
+          showError({ messageId: 'error.network-error', messageValues: { error: err.message }, fatal: false, icon: 'attention', timeout: 10000 })
+          setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
+        }
       }
       // Anyway, log to console
       if (process.env.NODE_ENV === 'development') {
         console.debug(info) // eslint-disable-line no-console
+        console.error(err) // eslint-disable-line no-console
       }
-      console.error(err) // eslint-disable-line no-console
       break
     }
     default:

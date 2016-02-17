@@ -44,6 +44,7 @@
   "error.corpus-not-created-no-resource": "Corpus not created. No resource available to create corpus, please retry later.",
   "error.corpus-not-started-no-resource": "Corpus not started. No resource available to start corpus, please retry later.",
   "error.corpus-not-started-starting": "Corpus not started. Starting corpus now…",
+  "error.dns-error-search": "Domain not found, a search has been triggered instead…",
   "error.loading-corpora": "Error loading corpora",
   "error.network-error": "Network error ({error})",
   "error.password-mismatch": "Password fields must match",

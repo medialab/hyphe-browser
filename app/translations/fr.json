@@ -44,6 +44,7 @@
   "error.corpus-not-created-no-resource": "Corpus non créé. Aucune ressource n'est disponible pour sa création, merci de réessayer plus tard.",
   "error.corpus-not-started-no-resource": "Corpus non démarré. Aucune ressource n'est disponible pour son démarrage, merci de réessayer plus tard.",
   "error.corpus-not-started-starting": "Corpus non démarré. Démarrage en cours…",
+  "error.dns-error-search": "Domaine non trouvable, une recherche web a été lancée à la place…",
   "error.loading-corpora": "Erreur de chargement des corpora",
   "error.network-error": "Erreur réseau ({error})",
   "error.password-mismatch": "Les champs mot de passe doivent correspondre",
