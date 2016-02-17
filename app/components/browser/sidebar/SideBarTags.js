@@ -176,9 +176,9 @@ class SideBarTags extends React.Component {
           shouldRenderSuggestions={ () => true }
           inputProps={ {
             className: 'form-control btn btn-large tag-input-' + uniqSuffix,
-            placeholder: 'New tag',
+            placeholder: tag || 'New tag',
             value: this.getEditedTagValue(category, tag),
-            autoFocus: true,
+            autoFocus: !!tag,
             onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
           } }
         />
