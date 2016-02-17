@@ -7,6 +7,7 @@ import corpora from './corpora'
 import intl from './intl'
 import options from './options'
 import servers from './servers'
+import stacks from './stacks'
 import tabs from './tabs'
 import ui from './ui'
 import webentities from './webentities'
@@ -17,6 +18,7 @@ export default combineReducers({
   intl,
   options,
   servers,
+  stacks,
   tabs,
   ui,
   webentities,
