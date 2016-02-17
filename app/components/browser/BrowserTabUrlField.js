@@ -49,6 +49,8 @@ class BrowserTabUrlField extends React.Component {
   onSubmit (e) {
     e.preventDefault()
 
+    this.setState({ editing: false })
+
     const url = ((u) => {
       if (!isWebUri(u)) {
         const httpu = 'http://' + u
@@ -86,7 +88,10 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-write field: standard input
   renderFieldInput () {
-    return <input className="form-control btn btn-large" type="text" value={ this.state.url }
+    return <input
+      className={ cx('form-control btn btn-large', { loading: this.props.loading }) }
+      type="text"
+      value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
       onChange={ (e) => this.onChange(e) } />
   }
