@@ -2,6 +2,7 @@ import '../../css/browser/stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 import { fetchStack } from '../../actions/stacks'
 
@@ -19,7 +20,9 @@ class BrowserStack extends React.Component {
   }
 
   renderFiller () {
-    if (!this.props.selectedStack) {
+    const { lastRefresh, selectedStack, stacks } = this.props
+
+    if (!selectedStack) {
       return (
         <div className="browser-stack-filler toolbar-actions">
           <div className="browser-stack-selector">
@@ -27,7 +30,7 @@ class BrowserStack extends React.Component {
               defaultValue={ this.state.selectedStackName }
               onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
               <option value="">Select a stack</option>
-              { this.props.stacks.map(s => (
+              { stacks.map(s => (
                 <option key={ s.name } value={ s.name }>{ s.description }</option>
               )) }
             </select>
@@ -43,10 +46,10 @@ class BrowserStack extends React.Component {
     return (
       <div className="browser-stack-filler toolbar-actions">
         <div className="browser-stack-name">
-          Stack description / name
+          { selectedStack.name }
         </div>
         <div className="browser-statck-age">
-          42min old
+          <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
           <button className="btn btn-default">
             <span className="icon icon-arrows-ccw"></span>
             Refresh
@@ -63,6 +66,8 @@ class BrowserStack extends React.Component {
   }
 
   renderWesSelector () {
+    const { webentities } = this.props
+
     return (
       <div className="browser-stack-wes toolbar-actions">
         <div>
@@ -72,8 +77,12 @@ class BrowserStack extends React.Component {
           </button>
         </div>
         <div className="browser-stack-wes-selector">
-          <span className="browser-stack-wes-counter">11 in stack</span>
-          <select><option>we -----------------------------</option></select>
+          <span className="browser-stack-wes-counter">{ webentities.length } in stack</span>
+          <select>
+            { webentities.map(w => (
+              <option id={ w.id }>{ w.name }</option>
+            )) }
+          </select>
         </div>
         <div>
           <button className="btn btn-default browser-stack-wes-next">
@@ -100,15 +109,18 @@ BrowserStack.propTypes = {
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
   stacks: PropTypes.array.isRequired,
+  webentities: PropTypes.array.isRequired,
 
   fetchStack: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks }) => ({
   corpus: corpora.selected,
+  lastRefresh: stacks.lastRefresh,
   server: servers.selected,
   selectedStack: stacks.selected,
-  stacks: stacks.list
+  stacks: stacks.list,
+  webentities: stacks.webentities
 })
 
 const mapDispatchToProps = {
