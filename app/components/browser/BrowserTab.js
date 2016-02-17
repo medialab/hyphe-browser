@@ -11,7 +11,7 @@ class BrowserTab extends React.Component {
           ? <span className="loading" />
           : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
         }
-        { ' ' + title }
+        { ' ' + (title || this.context.intl.formatMessage({ id: 'new-tab' })) }
       </div>
     )
   }

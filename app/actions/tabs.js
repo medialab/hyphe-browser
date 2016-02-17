@@ -8,7 +8,7 @@ export const SET_TAB_TITLE = '§_SET_TAB_TITLE'
 export const SET_TAB_ICON = '§_SET_TAB_ICON'
 export const SET_TAB_STATUS = '§_SET_TAB_STATUS'
 
-export const openTab = createAction(OPEN_TAB, (url = 'about:blank', title = 'New tab') => ({ url, title }))
+export const openTab = createAction(OPEN_TAB, (url = 'about:blank', title = null) => ({ url, title }))
 export const closeTab = createAction(CLOSE_TAB, (id) => id)
 export const selectTab = createAction(SELECT_TAB, (id) => id)
 export const setTabUrl = createAction(SET_TAB_URL, (url, id) => ({ id, url }))

@@ -58,6 +58,7 @@
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
   "name": "Nom",
+  "new-tab": "Nouvel onglet",
   "no-homepage": "Page d'accueil non définie",
   "on-server": "sur {name} ({url})",
   "options": "Options",

@@ -11,7 +11,7 @@ import { SELECT_CORPUS } from '../actions/corpora'
 const pageHypheHome = {
   url: PAGE_HYPHE_HOME,
   id: uuid(),
-  title: 'New Tab',
+  title: null,
   icon: null,
   loading: false,
   error: null

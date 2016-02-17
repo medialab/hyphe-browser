@@ -58,6 +58,7 @@
   "login": "Login",
   "login-corpus": "Login to {name}",
   "name": "Name",
+  "new-tab": "New tab",
   "no-homepage": "No homepage set",
   "on-server": "on {name} ({url})",
   "options": "Options",

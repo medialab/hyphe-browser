@@ -137,7 +137,7 @@ BrowserTabs.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     icon: PropTypes.string,
     loading: PropTypes.bool,
     error: PropTypes.object
