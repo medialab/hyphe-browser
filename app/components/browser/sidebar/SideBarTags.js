@@ -6,6 +6,7 @@ import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
+import cx from 'classnames'
 import Autosuggest from 'react-autosuggest'
 import { intlShape } from 'react-intl'
 import Button from '../../Button'
@@ -19,10 +20,11 @@ class SideBarTags extends React.Component {
     super(props)
 
     this.state = {
-      tagValue: {}, // [category]: string
+      tagValue: {}, // [category or (category + '/' + value)]: string
       fullSuggestions: {}, // [category]: Array<string>
       currentSuggestions: [], // Array<string>
       newCategory: ''
+      // ['edit/' + category + '/' + value] : true
     }
 
     this.addCategory = this.addCategory.bind(this)
@@ -96,13 +98,13 @@ class SideBarTags extends React.Component {
     })
   }
 
-  addTag (category) {
+  addTag (category, tag) {
     return (e) => {
       e.preventDefault()
       const { serverUrl, corpusId, webentity, addTag } = this.props
-      const value = this.state.tagValue[category]
-      this.onChangeTagValue(category, '')
-      addTag(serverUrl, corpusId, category, webentity.id, value).then(() => {
+      const value = this.getEditedTagValue(category, tag)
+      this.changeEditedTagValue(category, '', tag)
+      return addTag(serverUrl, corpusId, category, webentity.id, value).then(() => {
         // Keep suggestions up to date
         this.setState({
           fullSuggestions: {
@@ -114,54 +116,90 @@ class SideBarTags extends React.Component {
     }
   }
 
-  onChangeTagValue (category, value) {
+  updateTag (category, tag) {
+    return (e) => {
+      e.preventDefault()
+      return this.removeTag(category, tag).then(() => this.addTag(category, tag)(e))
+    }
+  }
+
+  changeEditedTagValue (category, value, tag) {
+    const prop = category + (tag ? ('/' + tag) : '')
     this.setState({
       tagValue: {
         ...this.state.tagValue,
-        [category]: value
+        [prop]: value
       }
     })
   }
 
-  renderTagInput (category) {
+  getEditedTagValue (category, tag) {
+    const prop = category + (tag ? ('/' + tag) : '')
+    return (typeof this.state.tagValue[prop] === 'string')
+      ? this.state.tagValue[prop]
+      : tag
+  }
+
+  renderTagInput (category, tag = null) {
     const { formatMessage } = this.context.intl
+    const uniqSuffix = category + (tag ? ('-' + tag) : '')
 
     return (
-      <form className="tags-new-tag btn-group" onSubmit={ this.addTag(category) }>
+      <form
+        className={ cx('btn-group', { 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
+        onSubmit={ tag ? this.updateTag(category, tag) : this.addTag(category) }
+        >
         <Autosuggest
-          id={ 'tags-' + category }
+          id={ 'tags-' + uniqSuffix }
           suggestions={ this.state.currentSuggestions }
           onSuggestionsUpdateRequested={ ({ value }) => this.setState({ currentSuggestions: getSuggestions(this.state.fullSuggestions[category], value) }) }
           getSuggestionValue={ getSuggestionValue }
           renderSuggestion={ renderSuggestion }
           shouldRenderSuggestions={ () => true }
           inputProps={ {
-            className: 'form-control btn btn-large',
+            className: 'form-control btn btn-large tag-input-' + uniqSuffix,
             placeholder: 'New tag',
-            value: this.state.tagValue[category],
-            onChange: (e, { newValue }) => this.onChangeTagValue(category, newValue)
+            value: this.getEditedTagValue(category, tag),
+            autoFocus: true,
+            onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
           } }
         />
-        <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tag' }) } />
+      <Button size="large" icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
       </form>
     )
   }
 
   removeTag (category, value) {
     const { serverUrl, corpusId, webentity, removeTag } = this.props
-    removeTag(serverUrl, corpusId, category, webentity.id, value)
+    return removeTag(serverUrl, corpusId, category, webentity.id, value)
+  }
+
+  editTag (category, tag) {
+    this.setState({ ['edit/' + category + '/' + tag]: true })
+  }
+
+  isEditedTag (category, tag) {
+    return !!this.state['edit/' + category + '/' + tag]
   }
 
   renderTag (category) {
     return (tag) => {
       const { formatMessage } = this.context.intl
+      if (this.isEditedTag(category, tag)) {
+        return this.renderTagInput(category, tag)
+      }
 
       return (
         <li key={ category + '/' + tag } className="btn-group">
-          <strong className="form-control btn tag-title">{ tag }</strong>
-          <span className="btn btn-default icon icon-erase remove-tag"
+          <strong
+            className="form-control btn tag-title"
+            onClick={ () => this.editTag(category, tag) }
+          >{ tag }</strong>
+          <span
+            className="btn btn-default icon icon-erase remove-tag"
             title={ formatMessage({ id: 'sidebar.remove-tag' }) }
-            onClick={ () => this.removeTag(category, tag) } />
+            onClick={ () => this.removeTag(category, tag) }
+          />
         </li>
       )
     }
