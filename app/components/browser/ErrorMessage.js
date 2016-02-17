@@ -34,7 +34,6 @@ ErrorMessage.propTypes = {
 }
 
 const mapStateToProps = ({ ui }) => {
-  console.log('UI.ERROR', ui.error)
   return ui.error
 }
 
