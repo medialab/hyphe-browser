@@ -65,7 +65,7 @@ class BrowserTabUrlField extends React.Component {
       } else {
         return u
       }
-    })(this.state.url)
+    })(this.state.url.trim())
 
     this.props.onSubmit(url)
   }
