@@ -179,7 +179,7 @@ class TabContent extends React.Component {
     const { id, url, webentity, setTabUrl, serverUrl, corpusId } = this.props
 
     return (
-      <SplitPane split="vertical" minSize="100" defaultSize="150">
+      <SplitPane split="vertical" minSize="130" defaultSize="200">
         { webentity ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
         { url === PAGE_HYPHE_HOME
           ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
