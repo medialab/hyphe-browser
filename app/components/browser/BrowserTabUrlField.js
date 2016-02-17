@@ -131,6 +131,7 @@ class BrowserTabUrlField extends React.Component {
       ]
       return (
         <button key={ 'prefix-selector-' + index } className={ cx(classes) }
+          disabled={ index <= 1 } // can't be limited to protocol and tld
           onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
           onClick={ () => this.selectPrefix(allParts, index, originalLruUrl) }>
           { label }
