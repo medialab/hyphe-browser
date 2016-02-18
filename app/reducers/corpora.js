@@ -4,6 +4,7 @@ import {
   SELECT_CORPUS,
   FETCH_CORPORA_REQUEST,
   FETCH_CORPORA_SUCCESS,
+  FETCH_SERVER_STATUS_SUCCESS,
   FETCH_CORPUS_STATUS_SUCCESS
 } from '../actions/corpora'
 import {
@@ -30,6 +31,11 @@ export default createReducer(initialState, {
     // we intiialize it to 'FREETAGS' but the full list will come from a call to fetchTagsCategories
     list: mapValues(corpora, (c) => ({ ...c, tagsCategories: ['FREETAGS'] })),
     selected: null
+  }),
+
+  [FETCH_SERVER_STATUS_SUCCESS]: (state, { status }) => ({
+    ...state,
+    status
   }),
 
   [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => ({

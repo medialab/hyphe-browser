@@ -19,6 +19,10 @@ export const FETCH_CORPORA_REQUEST = '§_FETCH_CORPORA_REQUEST'
 export const FETCH_CORPORA_SUCCESS = '§_FETCH_CORPORA_SUCCESS'
 export const FETCH_CORPORA_FAILURE = '§_FETCH_CORPORA_FAILURE'
 
+export const FETCH_SERVER_STATUS_REQUEST = '§_FETCH_SERVER_STATUS_REQUEST'
+export const FETCH_SERVER_STATUS_SUCCESS = '§_FETCH_SERVER_STATUS_SUCCESS'
+export const FETCH_SERVER_STATUS_FAILURE = '§_FETCH_SERVER_STATUS_FAILURE'
+
 export const FETCH_CORPUS_STATUS_REQUEST = '§_FETCH_CORPUS_STATUS_REQUEST'
 export const FETCH_CORPUS_STATUS_SUCCESS = '§_FETCH_CORPUS_STATUS_SUCCESS'
 export const FETCH_CORPUS_STATUS_FAILURE = '§_FETCH_CORPUS_STATUS_FAILURE'
@@ -47,6 +51,19 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
     .then((res) => dispatch(receiveCorpora(serverUrl, res)))
     .catch((error) => dispatch({
       type: FETCH_CORPORA_FAILURE,
+      payload: { error, serverUrl }
+    }))
+}
+
+export const requestServerStatus = createAction(FETCH_SERVER_STATUS_REQUEST, () => {})
+export const receiveServerStatus = createAction(FETCH_SERVER_STATUS_SUCCESS, (status) => ({ status }))
+export const fetchServerStatus = (serverUrl) => (dispatch) => {
+  dispatch(requestServerStatus())
+
+  return jsonrpc(serverUrl)('get_status')
+    .then((status) => dispatch(receiveServerStatus(status)))
+    .catch((error) => dispatch({
+      type: FETCH_SERVER_STATUS_FAILURE,
       payload: { error, serverUrl }
     }))
 }
@@ -90,7 +107,6 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
   return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
     .then((res) => {
       dispatch(receiveCorpus(serverUrl, res))
-      dispatch(fetchCorpora(serverUrl))
       dispatch(routeActions.push('/login'))
     })
     .catch((error) => dispatch({

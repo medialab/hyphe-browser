@@ -56,11 +56,17 @@ const CorpusList = (props) => {
     .sort()
     .map((k) => props.corpora[k])
 
+  const running = corpora.filter(x => x.ready).length
+
   if (!corpora.length) return <noscript />
 
   return (
     <div>
-      <h3><T id="available-corpora" values={ { count: corpora.length } } /></h3>
+      <h3>
+        <T id="available-corpora" values={ { count: corpora.length } } />
+        <span>, </span>
+        <T id="running-corpora" values={ { count: running } } />
+      </h3>
       <div className="form-group corpus-list-slider">
         <ul className="list-group corpus-list">
           { corpora.map((corpus) =>

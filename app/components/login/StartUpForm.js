@@ -17,12 +17,21 @@ import Button from '../Button'
 class StartUpForm extends React.Component {
 
   componentDidMount () {
+    this.refreshStatusAndCorpora()
+  }
+
+  refreshStatusAndCorpora (url) {
     const { selectedServer, actions } = this.props
-    if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url)
+    url = url || selectedServer && selectedServer.url
+
+    if (url) {
+      actions.fetchCorpora(url)
+      actions.fetchServerStatus(url)
+    }
   }
 
   renderServerSelect () {
-    const { selectedServer, actions, servers } = this.props
+    const { selectedServer, servers } = this.props
 
     let options = servers.map((s) => ({
       label: `${s.name} (${s.url})`,
@@ -43,7 +52,7 @@ class StartUpForm extends React.Component {
       <select
         className="form-control server-list"
         defaultValue={ selectedServer && selectedServer.url }
-        onChange={ (evt) => { if (evt.target.value) actions.fetchCorpora(evt.target.value) } }
+        onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
       >
         { options.map((o) => <option key={ o.key } value={ o.value }>{ o.label }</option>) }
       </select>
@@ -64,7 +73,7 @@ class StartUpForm extends React.Component {
 
         <div className="form-group inline">
           { this.renderServerSelect() }
-          <Button icon="play" onClick={ () => { if (selectedServer && selectedServer.url) actions.fetchCorpora(selectedServer.url) } } />
+          <Button icon="play" onClick={ () => { this.refreshStatusAndCorpora() } } />
         </div>
         <div className="form-actions">
           <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
@@ -101,6 +110,7 @@ StartUpForm.propTypes = {
   dispatch: PropTypes.func,
   selectedServer: PropTypes.object,
   servers: PropTypes.array.isRequired,
+  status: PropTypes.object,
   ui: PropTypes.object.isRequired
 }
 
@@ -108,6 +118,7 @@ const mapStateToProps = (state) => ({
   corpora: state.corpora.list,
   selectedServer: state.servers.selected,
   servers: state.servers.list,
+  status: state.corpora.status,
   ui: state.ui
 })
 
