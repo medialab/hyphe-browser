@@ -31,6 +31,7 @@ class BrowserTabs extends React.Component {
   componentDidMount () {
     const node = findDOMNode(this)
     this.tabsNode = node.querySelector('.tab-group-main')
+
     // Listen for resize
     window.addEventListener('resize', this.onResize)
 
@@ -40,7 +41,7 @@ class BrowserTabs extends React.Component {
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
-      this.props.closeTab(this.props.activeTabId)
+      this.props.closeTab(this.props.activeTab && this.props.activeTab.id)
     })
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
   }
