@@ -9,7 +9,6 @@ import cx from 'classnames'
 
 class SideBarContext extends React.Component {
   render () {
-    console.log('SideBarContext')
     return <strong><T id="sidebar.context-title" /></strong>
   }
 }
