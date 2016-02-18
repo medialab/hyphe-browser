@@ -71,7 +71,7 @@ export default createReducer(initialState, {
 
   // (Optimistically) add tag
   [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {
-    const oldTags = webentity.tags.USER[category] || []
+    const oldTags = ((webentity.tags || {}).USER || {})[category] || []
     const newTags = updatedValue
       ? oldTags.map((v) => (v === updatedValue) ? value : v)
       : uniq(oldTags.concat([value]))
