@@ -15,7 +15,7 @@ class CorpusLoginForm extends React.Component {
         <h2 className="pane-centered-title"><T id="login-corpus" values={ { name: this.props.corpus.name } } /></h2>
         <div className="form-group">
           <label><T id="password" /></label>
-          <input className="form-control" />
+          <input type="password" className="form-control" />
         </div>
         <div className="form-actions">
           <Link className="btn btn-primary" to="/browser"><T id="connect" /></Link>
