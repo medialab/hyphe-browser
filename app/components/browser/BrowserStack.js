@@ -2,7 +2,7 @@ import '../../css/browser/stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
+import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
 import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl } from '../../actions/tabs'
@@ -56,7 +56,7 @@ class BrowserStack extends React.Component {
             <select className="form-control"
               defaultValue={ this.state.selectedStackName }
               onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
-              <option key="prompt" value="">Select a stack</option>
+              <option key="prompt" value="">{ this.context.intl.formatMessage({ id: 'select-stack' }) }</option>
               { stacks.map(s => (
                 <option key={ s.name } value={ s.name }>{ s.description }</option>
               )) }
@@ -64,7 +64,7 @@ class BrowserStack extends React.Component {
             <button className="btn btn-default"
               onClick={ () => this.fill() }>
               <span className="icon icon-download"></span>
-              Fill
+              <T id="fill" />
             </button>
           </div>
         </div>
@@ -81,21 +81,21 @@ class BrowserStack extends React.Component {
           </div>
         </div>
         <div className="browser-stack-views">
-          Viewed { viewCount } / { webentities.length }
+          <T id="viewed" /> { viewCount } / { webentities.length }
         </div>
         <div className="browser-stack-age">
           <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
           <button className="btn btn-default"
               onClick={ () => this.fill() }>
             <span className="icon icon-arrows-ccw"></span>
-            Refresh
+            <T id="refresh" />
           </button>
         </div>
         <div>
           <button className="btn btn-default"
               onClick={ () => this.props.emptyStack() }>
             <span className="icon icon-trash"></span>
-            Empty
+            <T id="empty" />
           </button>
         </div>
       </div>
@@ -105,6 +105,7 @@ class BrowserStack extends React.Component {
   // bottom row
   renderWesSelector () {
     const { webentities } = this.props
+    const viewed = this.context.intl.formatMessage({ id: 'viewed' })
 
     return (
       <div className="browser-stack-wes toolbar-actions">
@@ -112,7 +113,7 @@ class BrowserStack extends React.Component {
           <button className="btn btn-default browser-stack-wes-prev"
             onClick={ () => this.rotateWebentity(-1) }>
             <span className="icon icon-left"></span>
-            Previous
+            <T id="previous" />
           </button>
         </div>
         <div className="browser-stack-wes-selector">
@@ -120,14 +121,14 @@ class BrowserStack extends React.Component {
             value={ this.state.selectedWebentityId }
             onChange={ (evt) => this.selectWebentity(evt.target.value) }>
             { webentities.map((w, i) => (
-              <option key={ w.id } value={ w.id }>{ i + 1 } - { w.viewed ? '[viewed] - ' : '' } { w.name } ({ w.homepage })</option>
+              <option key={ w.id } value={ w.id }>#{ i + 1 } - { w.viewed ? `[${viewed}] - ` : '' } { w.name } ({ w.homepage })</option>
             )) }
           </select>
         </div>
         <div>
           <button className="btn btn-default browser-stack-wes-next"
             onClick={ () => this.rotateWebentity(1) }>
-            Next
+            <T id="next" />
             <span className="icon icon-right"></span>
           </button>
         </div>
@@ -143,6 +144,10 @@ class BrowserStack extends React.Component {
       </div>
     )
   }
+}
+
+BrowserStack.contextTypes = {
+  intl: intlShape
 }
 
 BrowserStack.propTypes = {
