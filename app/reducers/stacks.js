@@ -1,6 +1,7 @@
 import createReducer from '../utils/create-reducer'
 
 import {
+  EMPTY_STACK,
   FETCH_STACK_SUCCESS
 } from '../actions/stacks'
 
@@ -44,6 +45,11 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  [EMPTY_STACK]: (state, { stack }) => ({
+    ...state,
+    selected: null
+  }),
+
   [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
     ...state,
     selected: stack,

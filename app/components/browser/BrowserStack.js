@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
-import { fetchStack } from '../../actions/stacks'
+import { emptyStack, fetchStack } from '../../actions/stacks'
 
 class BrowserStack extends React.Component {
   constructor (props) {
@@ -14,6 +14,7 @@ class BrowserStack extends React.Component {
     }
   }
 
+  // also called by refresh button
   fill () {
     const stack = this.props.stacks.find(s => s.name === this.state.selectedStackName)
     this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
@@ -50,13 +51,15 @@ class BrowserStack extends React.Component {
         </div>
         <div className="browser-statck-age">
           <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
-          <button className="btn btn-default">
+          <button className="btn btn-default"
+              onClick={ () => this.fill() }>
             <span className="icon icon-arrows-ccw"></span>
             Refresh
           </button>
         </div>
         <div>
-          <button className="btn btn-default">
+          <button className="btn btn-default"
+              onClick={ () => this.props.emptyStack() }>
             <span className="icon icon-trash"></span>
             Empty
           </button>
@@ -106,11 +109,13 @@ class BrowserStack extends React.Component {
 
 BrowserStack.propTypes = {
   corpus: PropTypes.object.isRequired,
+  lastRefresh: PropTypes.number,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
   stacks: PropTypes.array.isRequired,
   webentities: PropTypes.array.isRequired,
 
+  emptyStack: PropTypes.func.isRequired,
   fetchStack: PropTypes.func.isRequired
 }
 
@@ -124,6 +129,7 @@ const mapStateToProps = ({ corpora, servers, stacks }) => ({
 })
 
 const mapDispatchToProps = {
+  emptyStack,
   fetchStack
 }
 
