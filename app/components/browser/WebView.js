@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
+import { intlShape } from 'react-intl'
 
 import { ipcRenderer as ipc, clipboard } from 'electron'
 import remote from 'remote'
@@ -55,6 +56,10 @@ class WebView extends React.Component {
     if (refresh) {
       this.node.reload()
     }
+  }
+
+  translate (id) {
+    return this.context.intl.formatMessage({ id })
   }
 
   componentDidMount () {
@@ -133,14 +138,14 @@ class WebView extends React.Component {
       const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
-        menu.append(new MenuItem({ label: 'Open in new tab', click: () => this.props.openTab(href) }))
-        menu.append(new MenuItem({ label: 'Open in default browser', click: () => ipc.send('openExternal', href) }))
+        menu.append(new MenuItem({ label: this.translate('menu.open-in-new-tab'), click: () => this.props.openTab(href) }))
+        menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
-        menu.append(new MenuItem({ label: 'Copy', click: () => clipboard.writeText(selectionText) }))
+        menu.append(new MenuItem({ label: this.translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
       }
       menu.append(new MenuItem({ type: 'separator' }))
-      menu.append(new MenuItem({ label: 'Close tab', click: () => update('close') }))
+      menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => update('close') }))
       menu.popup(remote.getCurrentWindow())
     })
   }
@@ -158,6 +163,10 @@ class WebView extends React.Component {
       />
     )
   }
+}
+
+WebView.contextTypes = {
+  intl: intlShape
 }
 
 WebView.propTypes = {

@@ -25,20 +25,23 @@ class BrowserTab extends React.Component {
     el.addEventListener('contextmenu', (e) => {
       e.preventDefault()
 
-      const { newTab, loading, url } = this.props
+      const { newTab, loading, url, openTab, closeTab, navigable, fixed } = this.props
       if (!newTab) {
         const menu = new Menu()
-        if (!loading && url) {
-          if (this.props.openTab) {
-            menu.append(new MenuItem({ label: 'Duplicate tab', click: this.duplicate }))
+        if (!loading && url && navigable) {
+          if (openTab) {
+            menu.append(new MenuItem({ label: this.translate('menu.duplicate-tab'), click: this.duplicate }))
           }
-          menu.append(new MenuItem({ label: 'Open in default browser', click: this.openInBrowser }))
+          menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: this.openInBrowser }))
         }
-        if (this.props.closeTab) {
+        if (closeTab && !fixed) {
           menu.append(new MenuItem({ type: 'separator' }))
-          menu.append(new MenuItem({ label: 'Close tab', click: this.close }))
+          menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: this.close }))
         }
-        menu.popup(remote.getCurrentWindow())
+        // Do not show empty menu
+        if (menu.getItemCount() >= 1) {
+          menu.popup(remote.getCurrentWindow())
+        }
       }
     })
   }
@@ -65,6 +68,10 @@ class BrowserTab extends React.Component {
     this.props.selectTab(this.props.id)
   }
 
+  translate (id) {
+    return this.context.intl.formatMessage({ id })
+  }
+
   render () {
     const { active, id, title, icon, loading, newTab, fixed } = this.props
     const cls = cx('browser-tab', 'tab-item', { active }, { 'tab-item-fixed': fixed })
@@ -79,7 +86,7 @@ class BrowserTab extends React.Component {
           ? <span className="loading" />
           : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
         }
-        { ' ' + (newTab ? this.context.intl.formatMessage({ id: 'new-tab' }) : title) }
+        { ' ' + (newTab ? this.translate('new-tab') : title) }
       </div>
     )
   }
@@ -93,6 +100,7 @@ BrowserTab.propTypes = {
   icon: PropTypes.string,
   loading: PropTypes.bool,
   fixed: PropTypes.bool,
+  navigable: PropTypes.bool,
   newTab: PropTypes.bool,
   openTab: PropTypes.func,
   selectTab: PropTypes.func.isRequired,

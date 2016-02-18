@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import cx from 'classnames'
 import { isWebUri } from 'valid-url'
+import { FormattedMessage as T } from 'react-intl'
 
 import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../../utils/lru'
 import { getSearchUrl } from '../../utils/search-web'
@@ -102,7 +103,14 @@ class BrowserTabUrlField extends React.Component {
     const onClick = () => this.setState({ editing: true, focusInput: true })
 
     if (!this.props.lruPrefixes) {
-      return <span className={ className } onClick={ onClick }>{ this.state.url || <span className="browser-tab-url-placeholder">enter address</span> }</span>
+      return (
+        <span className={ className } onClick={ onClick }>
+          {
+            this.state.url ||
+            <span className="browser-tab-url-placeholder"><T id="empty-url" /></span>
+          }
+        </span>
+      )
     }
 
     return <span className={ className } onClick={ onClick }
