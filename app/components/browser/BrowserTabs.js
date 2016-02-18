@@ -69,6 +69,7 @@ class BrowserTabs extends React.Component {
         url={ tab.url }
         loading={ tab.loading || false }
         disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
+        disableNavigation={ !tab.navigable }
       />
     ))
   }

@@ -183,32 +183,59 @@ class TabContent extends React.Component {
     )
   }
 
-  renderToolbar () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity, disableWebentity } = this.props
+  renderNavigationToolbar () {
+    const { adjusting, disableNavigation } = this.props
     const { formatMessage } = this.context.intl
 
-    const ready = url === PAGE_HYPHE_HOME || (!loading && (disableWebentity || !!webentity))
+    if (disableNavigation) {
+      return <noscript />
+    }
+
+    return (
+      <div className="btn-group tab-toolbar-navigation">
+        <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ !!adjusting || this.state.disableBack }
+          onClick={ () => this.navigationActions.back() } />
+        <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ !!adjusting || this.state.disableForward }
+          onClick={ () => this.navigationActions.forward() } />
+        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ !!adjusting }
+          onClick={ () => this.navigationActions.reload() } />
+      </div>
+    )
+  }
+
+  renderUrlField () {
+    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity, disableWebentity, disableNavigation } = this.props
+    const ready = (url === PAGE_HYPHE_HOME) || (!loading && (disableWebentity || !!webentity))
+
+    if (disableNavigation) {
+      return <noscript />
+    }
+
+    return (
+      <div className="btn-group tab-toolbar-url">
+        <BrowserTabUrlField
+          loading={ !ready }
+          initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
+          lruPrefixes={ webentity && webentity.lru_prefixes }
+          onSubmit={ (url) => setTabUrl(url, id) }
+          prefixSelector={ !!adjusting }
+          onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
+      </div>
+    )
+  }
+
+  renderToolbar () {
+    const { disableWebentity, disableNavigation } = this.props
+
+    if (disableNavigation && disableWebentity) {
+      return <noscript />
+    }
 
     return (
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
-            <div className="btn-group tab-toolbar-navigation">
-              <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ !!adjusting || this.state.disableBack }
-                onClick={ () => this.navigationActions.back() } />
-              <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ !!adjusting || this.state.disableForward }
-                onClick={ () => this.navigationActions.forward() } />
-              <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ !!adjusting }
-                onClick={ () => this.navigationActions.reload() } />
-            </div>
-            <div className="btn-group tab-toolbar-url">
-              <BrowserTabUrlField
-                loading={ !ready }
-                initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
-                lruPrefixes={ webentity && webentity.lru_prefixes }
-                onSubmit={ (url) => setTabUrl(url, id) }
-                prefixSelector={ !!adjusting }
-                onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
-            </div>
+            { this.renderNavigationToolbar() }
+            { this.renderUrlField() }
             { this.renderWebentityToolbar() }
           </div>
         </div>
@@ -247,6 +274,7 @@ class TabContent extends React.Component {
 TabContent.propTypes = {
   id: PropTypes.string.isRequired, // Tab's id (≠ webentity.id)
   disableWebentity: PropTypes.bool,
+  disableNavigation: PropTypes.bool,
 
   active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
@@ -277,7 +305,7 @@ TabContent.propTypes = {
   hideAdjustWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loading, disableWebentity }) => {
+const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loading, disableWebentity, disableNavigation }) => {
   const webentity = webentities.webentities[webentities.tabs[id]]
   return {
     id,
@@ -288,7 +316,8 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loa
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,
     adjusting: webentity && webentities.adjustments[webentity.id],
-    disableWebentity
+    disableWebentity,
+    disableNavigation
   }
 }
 

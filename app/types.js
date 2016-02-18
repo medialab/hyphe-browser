@@ -10,5 +10,6 @@ export const tabShape = shape({
   icon: string,
   loading: bool,
   error: object,
-  fixed: bool
+  fixed: bool,
+  navigable: bool
 })

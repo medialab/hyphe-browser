@@ -9,24 +9,27 @@ import {
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
-const pageHypheHome = {
-  url: PAGE_HYPHE_HOME,
-  id: uuid(),
-  title: null,
-  icon: null,
+const defaultTab = {
+  title: null, // title === null is a specific case handled later
+  icon: null, // TODO default icon?
   loading: false,
   error: null,
-  fixed: false
+  fixed: false,
+  navigable: true
+}
+
+const pageHypheHome = {
+  ...defaultTab,
+  url: PAGE_HYPHE_HOME,
+  id: uuid()
 }
 
 const hypheTab = {
+  ...defaultTab,
   url: '{INSTANCE_HOME}/#/project/{CORPUS_ID}/network', // defined dynamically
   id: HYPHE_TAB_ID,
-  title: null,
-  icon: null,
-  loading: false,
-  error: null,
-  fixed: true
+  fixed: true,
+  navigable: false
 }
 
 const initialState = {
@@ -37,9 +40,12 @@ const initialState = {
 export default createReducer(initialState, {
 
   [OPEN_TAB]: (state, { url, title }) => {
-    const id = uuid()
-    const icon = null // TODO default icon
-    const tab = { url, id, title, icon }
+    const tab = {
+      ...defaultTab,
+      id: uuid(),
+      url,
+      title
+    }
 
     return {
       ...state,
