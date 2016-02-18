@@ -165,7 +165,7 @@ BrowserStack.propTypes = {
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, tabs }) => ({
-  activeTabId: tabs.activeTab,
+  activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpus: corpora.selected,
   lastRefresh: stacks.lastRefresh,
   server: servers.selected,
