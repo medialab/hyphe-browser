@@ -6,8 +6,9 @@ import { ipcRenderer as ipc } from 'electron'
 
 import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
+import { tabShape } from '../../types'
 
-import { openTab, closeTab, selectTab } from '../../actions/tabs'
+import { openTab, closeTab, selectTab, selectHypheTab } from '../../actions/tabs'
 import {
   PAGE_HYPHE_HOME,
   SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB
@@ -39,7 +40,7 @@ class BrowserTabs extends React.Component {
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
-      this.props.closeTab(this.props.activeTab)
+      this.props.closeTab(this.props.activeTabId)
     })
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
   }
@@ -71,7 +72,7 @@ class BrowserTabs extends React.Component {
       <Tab key={ tab.id }
         { ...tab }
         newTab={ tab.title === null }
-        active={ this.props.activeTab === tab.id }
+        active={ this.props.activeTabId === tab.id }
         selectTab={ this.props.selectTab }
         openTab={ this.props.openTab }
         closeTab={ this.props.closeTab }
@@ -105,6 +106,21 @@ class BrowserTabs extends React.Component {
     }
   }
 
+  renderHypheTab () {
+    const { instanceUrl, corpusId } = this.props
+
+    if (!instanceUrl || !corpusId) {
+      return <noscript />
+    }
+
+    return (
+      <div className="browser-tab-hyphe tab-item tab-item-fixed"
+        onClick={ () => this.props.selectHypheTab(instanceUrl, corpusId) }>
+        TODO Hyphe special tab
+      </div>
+    )
+  }
+
   render () {
     const tabGroupStyle = this.state.scroll === null ? {} : {
       marginLeft: '-' + this.state.scroll + 'px',
@@ -132,9 +148,7 @@ class BrowserTabs extends React.Component {
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
               <span className="icon icon-plus"></span>
             </div>
-            <div className="browser-tab-hyphe tab-item tab-item-fixed">
-              TODO Hyphe special tab
-            </div>
+            { this.renderHypheTab() }
           </div>
         </div>
         { this.renderTabContents() }
@@ -144,23 +158,25 @@ class BrowserTabs extends React.Component {
 }
 
 BrowserTabs.propTypes = {
-  tabs: PropTypes.arrayOf(PropTypes.shape({
-    url: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    icon: PropTypes.string,
-    loading: PropTypes.bool,
-    error: PropTypes.object
-  })).isRequired,
-  activeTab: PropTypes.string,
+  tabs: PropTypes.arrayOf(tabShape).isRequired,
+  activeTabId: PropTypes.string,
+
+  corpusId: PropTypes.string,
+  instanceUrl: PropTypes.string,
 
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
-  selectTab: PropTypes.func.isRequired
+  selectTab: PropTypes.func.isRequired,
+  selectHypheTab: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ tabs }) => tabs //  { tabs, activeTab }
+const mapStateToProps = ({ tabs, corpora, servers }) => ({
+  tabs: tabs.tabs,
+  activeTabId: tabs.activeTab && tabs.activeTab.id,
+  corpusId: corpora.selected && corpora.selected.corpus_id,
+  instanceUrl: servers.selected && servers.selected.home
+})
 
-const mapDispatchToProps = { openTab, closeTab, selectTab }
+const mapDispatchToProps = { openTab, closeTab, selectTab, selectHypheTab }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowserTabs)

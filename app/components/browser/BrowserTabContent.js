@@ -259,7 +259,7 @@ const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loa
   const webentity = webentities.webentities[webentities.tabs[id]]
   return {
     id,
-    active: id === tabs.activeTab,
+    active: tabs.activeTab && tabs.activeTab.id === id,
     url,
     loading,
     serverUrl: servers.selected.url,
