@@ -242,30 +242,43 @@ class TabContent extends React.Component {
     )
   }
 
+  renderContent () {
+    const { id, url, setTabUrl } = this.props
+
+    return (url === PAGE_HYPHE_HOME)
+      ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
+      : <WebView id={ id } url={ url }
+          onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
+          onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) }
+          openTab={ openTab } />
+  }
+
+  renderSinglePane () {
+    return (
+      <div className="Pane">
+        { this.renderContent() }
+      </div>
+    )
+  }
+
   renderSplitPane () {
-    const { id, url, webentity, setTabUrl, serverUrl, corpusId, openTab } = this.props
+    const { webentity, serverUrl, corpusId } = this.props
 
     return (
       <SplitPane split="vertical" minSize="130" defaultSize="200">
         { webentity ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
-        { url === PAGE_HYPHE_HOME
-          ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
-          : <WebView id={ id } url={ url }
-              onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
-              onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) }
-              openTab={ openTab } />
-        }
+        { this.renderContent() }
       </SplitPane>
     )
   }
 
   render () {
-    const { active, id } = this.props
+    const { active, id, disableWebentity } = this.props
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
         { this.renderToolbar() }
-        { this.renderSplitPane() }
+        { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
       </div>
     )
   }
