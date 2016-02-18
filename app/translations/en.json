@@ -54,6 +54,7 @@
   "error.server-url": "Failed to connect to provided URL",
   "error.set-webentity-status": "Failed setting webentity status ({error})",
   "error.url-and-name-required": "URL and name fields are required",
+  "error.wrong-password": "Wrong password",
   "fill": "Fill",
   "goto-homepage": "Go to homepage ({url})",
   "hyphe-tab-title": "Hyphe",
