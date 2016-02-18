@@ -18,7 +18,9 @@ export const fetchStack = (serverUrl, corpus, stack) => (dispatch) => {
   dispatch(requestStack(serverUrl, stack))
 
   return jsonrpc(serverUrl)(stack.method, stack.args.concat(corpus.corpus_id))
-    .then((res) => dispatch(receiveStack(serverUrl, stack, res)))
+    // when args contains a count, metadata are attached to res,
+    // meanwhile webentities are returned directly as an array if count == -1
+    .then((res) => dispatch(receiveStack(serverUrl, stack, res.webentities || res)))
     .catch((error) => dispatch({
       type: FETCH_STACK_FAILURE,
       payload: { error, serverUrl, stack }
