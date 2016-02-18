@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
-import { emptyStack, fetchStack } from '../../actions/stacks'
+import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl } from '../../actions/tabs'
 
 class BrowserStack extends React.Component {
@@ -25,6 +25,7 @@ class BrowserStack extends React.Component {
   selectWebentity (weId) {
     const webentity = this.props.webentities.find(x => x.id === weId)
     this.setState({ selectedWebentityId: webentity.id })
+    this.props.viewWebentity(webentity)
     this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
   }
 
@@ -45,7 +46,8 @@ class BrowserStack extends React.Component {
 
   // top row
   renderFiller () {
-    const { lastRefresh, selectedStack, stacks } = this.props
+    const { lastRefresh, selectedStack, stacks, webentities } = this.props
+    const viewCount = webentities.filter(x => x.viewed).length
 
     if (!selectedStack) {
       return (
@@ -70,10 +72,18 @@ class BrowserStack extends React.Component {
     }
     return (
       <div className="browser-stack-filler toolbar-actions">
-        <div className="browser-stack-name">
-          { selectedStack.name }
+        <div className="browser-stack-info">
+          <div className="browser-stack-name">
+            { selectedStack.name }
+          </div>
+          <div className="browser-stack-description">
+            { selectedStack.description }
+          </div>
         </div>
-        <div className="browser-statck-age">
+        <div className="browser-stack-views">
+          Viewed { viewCount } / { webentities.length }
+        </div>
+        <div className="browser-stack-age">
           <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
           <button className="btn btn-default"
               onClick={ () => this.fill() }>
@@ -106,12 +116,11 @@ class BrowserStack extends React.Component {
           </button>
         </div>
         <div className="browser-stack-wes-selector">
-          <span className="browser-stack-wes-counter">{ webentities.length } in stack</span>
           <select className="form-control"
             value={ this.state.selectedWebentityId }
             onChange={ (evt) => this.selectWebentity(evt.target.value) }>
-            { webentities.map(w => (
-              <option key={ w.id } value={ w.id }>{ w.name } ({ w.homepage })</option>
+            { webentities.map((w, i) => (
+              <option key={ w.id } value={ w.id }>{ i + 1 } - { w.viewed ? '[viewed] - ' : '' } { w.name } ({ w.homepage })</option>
             )) }
           </select>
         </div>
@@ -163,7 +172,8 @@ const mapStateToProps = ({ corpora, servers, stacks, tabs }) => ({
 const mapDispatchToProps = {
   emptyStack,
   fetchStack,
-  setTabUrl
+  setTabUrl,
+  viewWebentity
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowserStack)

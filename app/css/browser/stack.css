@@ -7,12 +7,20 @@
   display: flex;
 }
 
+  .browser-stack-info {
+  }
+
   .browser-stack-name {
-    flex-grow: 1;
     font-weight: bold;
   }
 
-  .browser-stack-age {
+  .browser-stack-views {
+    padding-left: 1em;
+    flex-grow: 1;
+  }
+
+  .browser-stack-age > span {
+    padding-right: 1em;
   }
 
   .browser-stack-selector {
@@ -29,6 +37,9 @@
 .browser-stack-wes {
   display: flex;
 }
+  .browser-stack-wes-index {
+    padding-right: .5em;
+  }
 
   .browser-stack-wes-selector {
     flex-grow: 1;

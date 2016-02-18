@@ -2,7 +2,8 @@ import createReducer from '../utils/create-reducer'
 
 import {
   EMPTY_STACK,
-  FETCH_STACK_SUCCESS
+  FETCH_STACK_SUCCESS,
+  VIEW_WEBENTITY
 } from '../actions/stacks'
 
 // methods and args → for API calls
@@ -55,5 +56,15 @@ export default createReducer(initialState, {
     selected: stack,
     lastRefresh: Date.now(),
     webentities
+  }),
+
+  [VIEW_WEBENTITY]: (state, { webentity }) => ({
+    ...state,
+    webentities: state.webentities.map((w) => {
+      if (w.id === webentity.id) {
+        w.viewed = true;
+      }
+      return w
+    })
   })
 })

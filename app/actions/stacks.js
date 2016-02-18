@@ -7,6 +7,8 @@ export const FETCH_STACK_REQUEST = '§_FETCH_STACK_REQUEST'
 export const FETCH_STACK_SUCCESS = '§_FETCH_STACK_SUCCESS'
 export const FETCH_STACK_FAILURE = '§_FETCH_STACK_FAILURE'
 
+export const VIEW_WEBENTITY = '§_VIEW_WEBENTITY'
+
 
 export const emptyStack = createAction(EMPTY_STACK, (stack) => ({ stack }))
 
@@ -22,3 +24,6 @@ export const fetchStack = (serverUrl, corpus, stack) => (dispatch) => {
       payload: { error, serverUrl, stack }
     }))
 }
+
+export const viewWebentity = createAction(VIEW_WEBENTITY, (webentity) => ({ webentity }))
+
