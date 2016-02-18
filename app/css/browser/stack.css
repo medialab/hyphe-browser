@@ -35,6 +35,10 @@
     text-align: center;
   }
 
+  .browser-stack-wes-selector .form-control {
+    width: auto;
+  }
+
   .browser-stack-wes-prev .icon {
   }
 
