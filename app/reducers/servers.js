@@ -12,7 +12,8 @@ const initialState = {
     {
       id: 'http://hyphe.medialab.sciences-po.fr/demo-api',
       name: 'Serveur de démonstration - limité',
-      url: 'http://hyphe.medialab.sciences-po.fr/demo-api'
+      url: 'http://hyphe.medialab.sciences-po.fr/demo-api',
+      home: 'http://hyphe.medialab.sciences-po.fr/demo'
     }
   ],
   selected: null
@@ -22,7 +23,8 @@ if (process.env.NODE_ENV === 'development') {
   initialState.list.push({
     id: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
     name: 'dev',
-    url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api'
+    url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
+    home: 'http://hyphe.medialab.sciences-po.fr/dev-forccast'
   })
 }
 

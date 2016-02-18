@@ -111,7 +111,12 @@ class ServerForm extends React.Component {
       ...this.state.data
     }
     delete server.passwordConfirm
-    if (!server.password) delete server.password
+    if (!server.password) {
+      delete server.password
+    }
+    if (!server.home) {
+      server.home = server.url.replace(/-api$/, '')
+    }
     return server
   }
 
