@@ -11,7 +11,8 @@ class BrowserStack extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedStackName: this.props.selectedStack && this.props.selectedStack.name
+      selectedStackName: this.props.selectedStack && this.props.selectedStack.name,
+      selectedWebentityId: null
     }
   }
 
@@ -23,9 +24,26 @@ class BrowserStack extends React.Component {
 
   selectWebentity (weId) {
     const webentity = this.props.webentities.find(x => x.id === weId)
+    this.setState({ selectedWebentityId: webentity.id })
     this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
   }
 
+  // used by Prev (-1) / Next (+1) buttons
+  rotateWebentity (offset) {
+    const { webentities } = this.props
+    const idx = webentities.findIndex(x => x.id === this.state.selectedWebentityId)
+    let webentity
+    if (idx === 0 && offset === -1) {
+      webentity = webentities[webentities.length - 1]
+    } else if (idx === webentities.length - 1 && offset === 1) {
+      webentity = webentities[0]
+    } else {
+      webentity = webentities[idx + offset]
+    }
+    this.selectWebentity(webentity.id)
+  }
+
+  // top row
   renderFiller () {
     const { lastRefresh, selectedStack, stacks } = this.props
 
@@ -74,13 +92,15 @@ class BrowserStack extends React.Component {
     )
   }
 
+  // bottom row
   renderWesSelector () {
     const { webentities } = this.props
 
     return (
       <div className="browser-stack-wes toolbar-actions">
         <div>
-          <button className="btn btn-default browser-stack-wes-prev">
+          <button className="btn btn-default browser-stack-wes-prev"
+            onClick={ () => this.rotateWebentity(-1) }>
             <span className="icon icon-left"></span>
             Previous
           </button>
@@ -88,6 +108,7 @@ class BrowserStack extends React.Component {
         <div className="browser-stack-wes-selector">
           <span className="browser-stack-wes-counter">{ webentities.length } in stack</span>
           <select className="form-control"
+            value={ this.state.selectedWebentityId }
             onChange={ (evt) => this.selectWebentity(evt.target.value) }>
             { webentities.map(w => (
               <option key={ w.id } value={ w.id }>{ w.name } ({ w.homepage })</option>
@@ -95,7 +116,8 @@ class BrowserStack extends React.Component {
           </select>
         </div>
         <div>
-          <button className="btn btn-default browser-stack-wes-next">
+          <button className="btn btn-default browser-stack-wes-next"
+            onClick={ () => this.rotateWebentity(1) }>
             Next
             <span className="icon icon-right"></span>
           </button>
