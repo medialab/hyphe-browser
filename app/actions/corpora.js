@@ -7,6 +7,7 @@
 import jsonrpc from '../utils/jsonrpc'
 // for redirections after success / errors from server
 import { routeActions } from 'react-router-redux'
+import { addHypheTab } from './tabs'
 
 import { createAction } from 'redux-actions'
 
@@ -31,7 +32,11 @@ export const CREATE_CORPUS_SUCCESS = '§_CREATE_CORPUS_SUCCESS'
 export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 
 
-export const selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
+const _selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
+export const selectCorpus = (server, corpus) => (dispatch) => {
+  dispatch(_selectCorpus(corpus))
+  dispatch(addHypheTab(server.home, corpus.corpus_id))
+}
 
 export const requestCorpora = createAction(FETCH_CORPORA_REQUEST, (serverUrl) => ({ serverUrl }))
 export const receiveCorpora = createAction(FETCH_CORPORA_SUCCESS, (serverUrl, corpora) => ({ serverUrl, corpora }))

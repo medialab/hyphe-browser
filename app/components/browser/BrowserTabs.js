@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { ipcRenderer as ipc } from 'electron'
+import { intlShape } from 'react-intl'
 
 import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
@@ -11,6 +12,7 @@ import { tabShape } from '../../types'
 import { openTab, closeTab, selectTab, selectHypheTab } from '../../actions/tabs'
 import {
   PAGE_HYPHE_HOME,
+  HYPHE_TAB_ID,
   SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB
 } from '../../constants'
 
@@ -41,7 +43,9 @@ class BrowserTabs extends React.Component {
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
-      this.props.closeTab(this.props.activeTab && this.props.activeTab.id)
+      if (this.props.activeTabId) {
+        this.props.closeTab(this.props.activeTabId)
+      }
     })
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
   }
@@ -64,21 +68,30 @@ class BrowserTabs extends React.Component {
         id={ tab.id }
         url={ tab.url }
         loading={ tab.loading || false }
+        disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
       />
     ))
   }
 
-  renderTabs () {
-    return this.props.tabs.map((tab) => (
-      <Tab key={ tab.id }
-        { ...tab }
-        newTab={ tab.title === null }
-        active={ this.props.activeTabId === tab.id }
-        selectTab={ this.props.selectTab }
-        openTab={ this.props.openTab }
-        closeTab={ this.props.closeTab }
-      />
-    ))
+  renderTabs (fixed) {
+    const { formatMessage } = this.context.intl
+
+    return this.props.tabs.filter((tab) => !!tab.fixed === fixed).map((tab) => {
+      const isNewTab = tab.id !== HYPHE_TAB_ID && tab.title === null
+      const title = tab.id === HYPHE_TAB_ID ? formatMessage({ id: 'hyphe-tab-title' }) : tab.title
+
+      return (
+        <Tab key={ tab.id }
+          { ...tab }
+          title={ title }
+          newTab={ isNewTab }
+          active={ this.props.activeTabId === tab.id }
+          selectTab={ this.props.selectTab }
+          openTab={ this.props.openTab }
+          closeTab={ this.props.closeTab }
+        />
+      )
+    })
   }
 
   updateTabsOverflow () {
@@ -107,21 +120,6 @@ class BrowserTabs extends React.Component {
     }
   }
 
-  renderHypheTab () {
-    const { instanceUrl, corpusId } = this.props
-
-    if (!instanceUrl || !corpusId) {
-      return <noscript />
-    }
-
-    return (
-      <div className="browser-tab-hyphe tab-item tab-item-fixed"
-        onClick={ () => this.props.selectHypheTab(instanceUrl, corpusId) }>
-        TODO Hyphe special tab
-      </div>
-    )
-  }
-
   render () {
     const tabGroupStyle = this.state.scroll === null ? {} : {
       marginLeft: '-' + this.state.scroll + 'px',
@@ -138,7 +136,7 @@ class BrowserTabs extends React.Component {
             </div>
           </div>
           <div className="tab-group tab-group-main" style={ tabGroupStyle }>
-            { this.renderTabs() }
+            { this.renderTabs(false) }
           </div>
           <div className="tab-group tab-group-specials-right">
             <div className={ cx('browser-tab-scroll-right', 'tab-item', 'tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll >= this.state.maxScroll }) }
@@ -149,13 +147,17 @@ class BrowserTabs extends React.Component {
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
               <span className="icon icon-plus"></span>
             </div>
-            { this.renderHypheTab() }
+            { this.renderTabs(true) }
           </div>
         </div>
         { this.renderTabContents() }
       </div>
     )
   }
+}
+
+BrowserTabs.contextTypes = {
+  intl: intlShape
 }
 
 BrowserTabs.propTypes = {
@@ -167,8 +169,7 @@ BrowserTabs.propTypes = {
 
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
-  selectTab: PropTypes.func.isRequired,
-  selectHypheTab: PropTypes.func.isRequired
+  selectTab: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ tabs, corpora, servers }) => ({

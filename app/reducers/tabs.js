@@ -1,10 +1,11 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
 
-import { PAGE_HYPHE_HOME } from '../constants'
+import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
 import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB,
-  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
+  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS,
+  ADD_HYPHE_TAB
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
@@ -14,7 +15,18 @@ const pageHypheHome = {
   title: null,
   icon: null,
   loading: false,
-  error: null
+  error: null,
+  fixed: false
+}
+
+const hypheTab = {
+  url: '{INSTANCE_HOME}/#/project/{CORPUS_ID}/network', // defined dynamically
+  id: HYPHE_TAB_ID,
+  title: null,
+  icon: null,
+  loading: false,
+  error: null,
+  fixed: true
 }
 
 const initialState = {
@@ -37,6 +49,12 @@ export default createReducer(initialState, {
   },
 
   [CLOSE_TAB]: (state, id) => {
+    const tab = state.tabs.find((tab) => tab.id === id)
+    if (tab.fixed) {
+      // Fixed tabs cannot be closed
+      return state
+    }
+
     const tabs = state.tabs.filter((tab) => tab.id !== id)
     // if active tab is closed: switch to next tab (or last)
     const tabIndex = state.tabs.findIndex((tab) => tab.id === id)
@@ -53,6 +71,16 @@ export default createReducer(initialState, {
   [SELECT_TAB]: (state, id) => ({
     ...state,
     activeTab: state.tabs.find((tab) => tab.id === id)
+  }),
+
+  [ADD_HYPHE_TAB]: (state, { instanceUrl, corpusId }) => ({
+    ...state,
+    tabs: state.tabs.concat([{
+      ...hypheTab,
+      url: hypheTab.url
+        .replace(/\{INSTANCE_HOME\}/g, instanceUrl)
+        .replace(/\{CORPUS_ID\}/g, corpusId)
+    }])
   }),
 
   [SET_TAB_URL]: (state, { id, url }) => updateTab(state, id, () => ({ url })),

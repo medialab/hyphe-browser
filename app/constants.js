@@ -21,3 +21,4 @@ export const SHORTCUT_OPEN_TAB = ['ctrl+n', 'ctrl+t']
 export const SHORTCUT_CLOSE_TAB = 'ctrl+w'
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
+export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'

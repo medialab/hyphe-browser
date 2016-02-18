@@ -8,23 +8,34 @@ import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 // abstract component
 class CorpusListItem extends React.Component {
-  render () {
+  constructor (props) {
+    super(props)
+    this.selectCorpus = this.selectCorpus.bind(this)
+  }
 
-    const { actions, corpus, dispatch } = this.props
+  selectCorpus () {
+    const { actions, server, corpus, dispatch } = this.props
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
+    actions.selectCorpus(server, corpus)
+    dispatch(routeActions.push(path))
+  }
+
+  render () {
+    const { password, name, status, webentities_in, created_at,
+      last_activity } = this.props.corpus
 
     return (
-      <div onClick={ () => { actions.selectCorpus(corpus); dispatch(routeActions.push(path)) } }>
+      <div onClick={ this.selectCorpus }>
         <h5 className="corpus-list-item-name">
-          { corpus.password ? <span className="icon icon-lock"></span> : null }
-          { corpus.name }
-          { corpus.status === 'ready' ? <span className="icon icon-play"></span> : null }
+          { password ? <span className="icon icon-lock"></span> : null }
+          { name }
+          { status === 'ready' ? <span className="icon icon-play"></span> : null }
         </h5>
-        <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
+        <div><T id="webentities" values={ { count: webentities_in } } /></div>
         <div className="corpus-list-item-dates">
-          <span><T id="created-ago" values={ { relative: <D value={ corpus.created_at } /> } } /></span>
+          <span><T id="created-ago" values={ { relative: <D value={ created_at } /> } } /></span>
           <span> - </span>
-          <span><T id="used-ago" values={ { relative: <D value={ corpus.last_activity } /> } } /></span>
+          <span><T id="used-ago" values={ { relative: <D value={ last_activity } /> } } /></span>
         </div>
       </div>
     )
@@ -34,12 +45,13 @@ class CorpusListItem extends React.Component {
 CorpusListItem.propTypes = {
   actions: PropTypes.object.isRequired,
   corpus: PropTypes.object.isRequired,
+  server: PropTypes.object.isRequired,
   dispatch: PropTypes.func
 }
 
 const CorpusList = (props) => {
 
-  const { actions, dispatch } = props
+  const { actions, server, dispatch } = props
   const corpora = Object.keys(props.corpora)
     .sort()
     .map((k) => props.corpora[k])
@@ -53,7 +65,7 @@ const CorpusList = (props) => {
         <ul className="list-group corpus-list">
           { corpora.map((corpus) =>
             <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-              <CorpusListItem actions={ actions } corpus={ corpus } dispatch={ dispatch } />
+              <CorpusListItem actions={ actions } server={ server } corpus={ corpus } dispatch={ dispatch } />
             </li>
           ) }
         </ul>
@@ -67,6 +79,7 @@ const CorpusList = (props) => {
 
 CorpusList.propTypes = {
   actions: PropTypes.object.isRequired,
+  server: PropTypes.object.isRequired,
   corpora: PropTypes.object.isRequired,
   dispatch: PropTypes.func
 }

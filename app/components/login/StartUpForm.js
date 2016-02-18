@@ -81,7 +81,10 @@ class StartUpForm extends React.Component {
 
         { ui.loaders.corpora
           ? <Spinner textId="loading-corpora" />
-          : <CorpusList actions={ actions } corpora={ corpora } dispatch={ dispatch } />
+          : (selectedServer
+            ? <CorpusList actions={ actions } server={ selectedServer } corpora={ corpora } dispatch={ dispatch } />
+            : <noscript />
+          )
         }
       </form>
     )
