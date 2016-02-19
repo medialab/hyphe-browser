@@ -46,7 +46,7 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
-  [EMPTY_STACK]: (state, { stack }) => ({
+  [EMPTY_STACK]: (state) => ({
     ...state,
     selected: null
   }),
@@ -62,7 +62,7 @@ export default createReducer(initialState, {
     ...state,
     webentities: state.webentities.map((w) => {
       if (w.id === webentity.id) {
-        w.viewed = true;
+        w.viewed = true
       }
       return w
     })
