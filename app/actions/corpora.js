@@ -105,9 +105,18 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
   // create_corpus does not return the full created corpus
   // so we must trigger a full fetch of all corpora
   return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
-    .then((res) => {
-      dispatch(receiveCorpus(serverUrl, res))
-      dispatch(routeActions.push('/login'))
+    .then((miniCorpus) => {
+      dispatch(receiveCorpus(serverUrl, miniCorpus))
+      return Promise.all([
+        Promise.resolve(miniCorpus),
+        dispatch(fetchCorpora(serverUrl))
+      ])
+      .then(([corpus, action]) => {
+        return dispatch(selectCorpus(serverUrl, action.payload.corpora[corpus.corpus_id]))
+      })
+      .then(() => {
+        dispatch(routeActions.push('/browser'))
+      }, (err) => console.error('→ browser', err))
     })
     .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,
