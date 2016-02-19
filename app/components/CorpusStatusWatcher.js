@@ -30,7 +30,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   watchStatus () {
-    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories, fetchTags } = this.props
+    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories } = this.props
 
     const repeat = (immediate = false) => {
       this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)

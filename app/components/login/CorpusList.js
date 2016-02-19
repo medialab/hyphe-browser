@@ -51,12 +51,10 @@ CorpusListItem.propTypes = {
 
 const CorpusList = (props) => {
 
-  const { actions, server, dispatch } = props
+  const { actions, dispatch, server, status } = props
   const corpora = Object.keys(props.corpora)
     .sort()
     .map((k) => props.corpora[k])
-
-  const running = corpora.filter(x => x.ready).length
 
   if (!corpora.length) return <noscript />
 
@@ -65,7 +63,8 @@ const CorpusList = (props) => {
       <h3>
         <T id="available-corpora" values={ { count: corpora.length } } />
         <span>, </span>
-        <T id="running-corpora" values={ { count: running } } />
+        <T id="running-corpora" values={ { count: status.corpus_running } } />
+        <span> / { status.corpus_running + status.ports_left } ports</span>
       </h3>
       <div className="form-group corpus-list-slider">
         <ul className="list-group corpus-list">
@@ -85,9 +84,10 @@ const CorpusList = (props) => {
 
 CorpusList.propTypes = {
   actions: PropTypes.object.isRequired,
-  server: PropTypes.object.isRequired,
+  dispatch: PropTypes.func,
   corpora: PropTypes.object.isRequired,
-  dispatch: PropTypes.func
+  server: PropTypes.object.isRequired,
+  status: PropTypes.object
 }
 
 export default CorpusList

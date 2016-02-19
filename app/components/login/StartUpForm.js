@@ -60,7 +60,7 @@ class StartUpForm extends React.Component {
   }
 
   render () {
-    const { selectedServer, actions, ui, corpora, dispatch } = this.props
+    const { actions, dispatch, corpora, status, selectedServer, ui } = this.props
 
     return (
       <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
@@ -91,7 +91,9 @@ class StartUpForm extends React.Component {
         { ui.loaders.corpora
           ? <Spinner textId="loading-corpora" />
           : (selectedServer
-            ? <CorpusList actions={ actions } server={ selectedServer } corpora={ corpora } dispatch={ dispatch } />
+            ? <CorpusList actions={ actions } dispatch={ dispatch }
+                corpora={ corpora } status={ status.hyphe }
+                server={ selectedServer } />
             : <noscript />
           )
         }
