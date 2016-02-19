@@ -1,9 +1,4 @@
-// This reducer should handle web entities status transitions, not implemented yet
-
-import mergeWith from 'lodash.mergewith'
-import set from 'lodash.set'
-import uniq from 'lodash.uniq'
-import without from 'lodash.without'
+import { Set, Map, fromJS } from 'immutable'
 import createReducer from '../utils/create-reducer'
 import {
   DECLARE_PAGE_SUCCESS,
@@ -31,22 +26,16 @@ import {
   REMOVE_TAG_FAILURE
 } from '../actions/tags'
 
-const initialState = {
-  webentities: {}, // id → WebEntity
-  tabs: {}, // tabId → webEntityId
-  adjustments: {} // webEntityId → adjustment { name, homepage, prefix, crawl }
-}
+const initialState = Map({
+  webentities: Map(), // id → WebEntity
+  tabs: Map(), // tabId → webEntityId
+  adjustments: Map() // webEntityId → adjustment { name, homepage, prefix, crawl }
+})
 
 
 export default createReducer(initialState, {
 
-  [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentity.id]: webentity
-    }
-  }),
+  [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => state.setIn(['webentities', webentity.id], immutableWebentity(webentity)),
 
   ...optimisticUpdateWebentity(
     'homepage',
@@ -71,92 +60,79 @@ export default createReducer(initialState, {
 
   // (Optimistically) add tag
   [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {
-    const oldTags = ((webentity.tags || {}).USER || {})[category] || []
-    const newTags = updatedValue
-      ? oldTags.map((v) => (v === updatedValue) ? value : v)
-      : uniq(oldTags.concat([value]))
-    return set({ ['tags_' + category + '_prev']: oldTags }, 'tags.USER.' + category, newTags)
+    const oldTags = webentity.getIn(['tags', 'USER', category]) || Set()
+    const newTags = oldTags.withMutations((tags) => tags.remove(updatedValue).add(value))
+    return Map().withMutations((m) => m
+      .set('tags_' + category + '_prev', oldTags)
+      .setIn(['tags', 'USER', category], newTags)
+    )
   }),
-  [ADD_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
-    ['tags_' + category + '_prev']: null
-  })),
-  [ADD_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
-    { ['tags_' + category + '_prev']: null },
-    'tags.USER.' + category, webentity['tags_' + category + '_prev']
+  [ADD_TAG_SUCCESS]: updateWebentity((webentity, { category }) => Map().asMutable()
+    .set('tags_' + category + '_prev', null)
+    .asImmutable()
+  ),
+  [ADD_TAG_FAILURE]: updateWebentity((webentity, { category }) => Map().withMutations((m) => m
+    .set('tags_' + category + '_prev', null)
+    .setIn(['tags', 'USER', category], webentity.get('tags_' + category + '_prev'))
   )),
 
   // (Optimistically) remove tag
-  [REMOVE_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => set(
-    { ['tags_' + category + '_prev']: webentity.tags.USER[category] },
-    'tags.USER.' + category, without(webentity.tags.USER[category] || [], value)
+  [REMOVE_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => Map().withMutations((m) => m
+    .set('tags_' + category + '_prev', webentity.getIn(['tags', 'USER', category]))
+    .updateIn(['tags', 'USER', category], (tags) => (tags && tags.remove(value)))
   )),
-  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
-    ['tags_' + category + '_prev']: null
-  })),
-  [REMOVE_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
-    { ['tags_' + category + '_prev']: null },
-    'tags.USER.' + category, webentity['tags_' + category + '_prev']
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => Map().asMutable()
+    .set('tags_' + category + '_prev', null)
+    .asImmutable()
+  ),
+  [REMOVE_TAG_FAILURE]: updateWebentity((webentity, { category }) => Map().withMutations((m) => m
+    .set('tags_' + category + '_prev', null)
+    .setIn(['tags', 'USER', category], webentity.get('tags_' + category + '_prev'))
   )),
 
-  [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
-    ...state,
-    tabs: {
-      ...state.tabs,
-      [tabId]: webentityId
-    }
-  }),
+  [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => state.setIn(['tabs', tabId], webentityId),
 
-  [CREATE_WEBENTITY_SUCCESS]: (state, { webentity }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentity.id]: webentity
-    }
-  }),
+  [CREATE_WEBENTITY_SUCCESS]: (state, { webentity }) => state.setIn(['webentities', webentity.id], immutableWebentity(webentity)),
 
   // Reset state when selecting corpus
-  [SELECT_CORPUS]: () => ({ ...initialState }),
+  [SELECT_CORPUS]: () => initialState,
 
   // Keep track of current WE adjustments
-  [ADJUST_WEBENTITY]: (state, { id, info }) => ({
-    ...state,
-    adjustments: {
-      ...state.adjustments,
-      [id]: (info && state.adjustments[id])
-        ? {...state.adjustments[id], ...info}
-        : info
-    }
-  })
+  [ADJUST_WEBENTITY]: (state, { id, info }) => state.mergeIn(['adjustments', id], info)
 })
 
 
 function optimisticUpdateWebentity (field, request, success, failure) {
   return {
-    [request]: updateWebentity((webentity, payload) => ({
-      [field]: payload[field], // optimistically update field
-      [field + '_prev']: webentity[field] // keep track of previous value for cancellation
-    })),
-    [success]: updateWebentity((webentity, payload) => ({
-      [field]: payload[field], // in case we receive success with no previous request
-      [field + '_prev']: null // remove track of previous value
-    })),
-    [failure]: updateWebentity((webentity) => ({
-      [field]: webentity[field + '_prev'], // restore previous value
-      [field + '_prev']: null // remove track of previous value
-    }))
+    [request]: updateWebentity((webentity, payload) => Map().withMutations((m) => m
+      .set(field, payload[field]) // optimistically update field
+      .set(field + '_prev', webentity.get(field)) // keep track of previous value for cancellation
+    )),
+    [success]: updateWebentity((webentity, payload) => Map().withMutations((m) => m
+      .set(field, payload[field]) // in case we receive success with no previous request
+      .set(field + '_prev', null) // remove track of previous value
+    )),
+    [failure]: updateWebentity((webentity) => Map().withMutations((m) => m
+      .set(field, webentity.get(field + '_prev')) // restore previous value
+      .set(field + '_prev', null) // remove track of previous value
+    ))
   }
 }
 
 function updateWebentity (updator) {
   return (state, payload) => {
-    const id = payload.webentityId
-    const webentity = state.webentities[id]
+    const webentity = state.getIn(['webentities', payload.webentityId])
+    if (!webentity) {
+      return state
+    }
+
     const updates = updator(webentity, payload)
-    const updated = mergeWith({}, webentity, updates, (prev, next) => {
-      if (Array.isArray(next)) {
-        return next // override arrays instead of merging them
-      }
-    })
-    return {...state, webentities: {...state.webentities, [id]: updated}}
+    return state.setIn(['webentities', payload.webentityId], webentity.mergeDeep(updates))
   }
+}
+
+function immutableWebentity (js) {
+  return fromJS(js)
+    // convert tags from lists to sets
+    .update('tags', (m) => m.map((cats) => cats.map(Set)))
 }

@@ -1,6 +1,7 @@
 // login to a corpus form
 
 import React, { PropTypes } from 'react'
+import { corpusShape } from '../../types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
@@ -24,7 +25,7 @@ class CorpusLoginForm extends React.Component {
     evt.preventDefault()
 
     this.setState({ submitting: true })
-    jsonrpc(this.props.server.url)('start_corpus', [this.props.corpus.corpus_id, this.state.password])
+    jsonrpc(this.props.server.url)('start_corpus', [this.props.corpus.get('corpus_id'), this.state.password])
       .then(() => {
         this.props.dispatch(routeActions.push('/browser'))
       }, () => {
@@ -36,7 +37,7 @@ class CorpusLoginForm extends React.Component {
   render () {
     return (
       <form className="server-form" onSubmit={ (evt) => { this.onSubmit(evt) } }>
-        <h2 className="pane-centered-title"><T id="login-corpus" values={ { name: this.props.corpus.name } } /></h2>
+        <h2 className="pane-centered-title"><T id="login-corpus" values={ { name: this.props.corpus.get('name') } } /></h2>
 
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
@@ -61,13 +62,13 @@ class CorpusLoginForm extends React.Component {
 
 CorpusLoginForm.propTypes = {
   actions: PropTypes.object.isRequired,
-  corpus: PropTypes.object,
+  corpus: corpusShape,
   dispatch: PropTypes.func,
   server: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
-  corpus: state.corpora.selected,
+  corpus: state.corpora.get('selected'),
   server: state.servers.selected
 })
 

@@ -2,6 +2,7 @@
 // then it auto redirects to the browser
 
 import React, { PropTypes } from 'react'
+import { corpusShape } from '../../types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
@@ -22,9 +23,9 @@ class Lobby extends React.Component {
     return (
       <CorpusStatusWatcher className="lobby">
         <h2 className="pane-centered-title">
-          { corpus.name }
+          { corpus.get('name') }
         </h2>
-        <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
+        <div><T id="webentities" values={ { count: corpus.get('webentities_in') } } /></div>
         { error && error.message === ERROR_CORPUS_NOT_STARTED
           ? <Spinner textId="starting-corpus" />
           : null
@@ -41,12 +42,12 @@ class Lobby extends React.Component {
 Lobby.propTypes = {
   actions: PropTypes.object,
   dispatch: PropTypes.func,
-  corpus: PropTypes.object,
+  corpus: corpusShape,
   error: PropTypes.any
 }
 
 const mapStateToProps = (state) => ({
-  corpus: state.corpora.selected,
+  corpus: state.corpora.get('selected'),
   error: state.ui.error
 })
 

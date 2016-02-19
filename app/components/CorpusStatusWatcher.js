@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
@@ -30,21 +30,21 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   watchStatus () {
-    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories } = this.props
+    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpusId, corpusPassword, fetchTagsCategories } = this.props
 
     const repeat = (immediate = false) => {
-      this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)
+      this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 25 : CORPUS_STATUS_WATCHER_INTERVAL)
     }
 
     // Asynchronously fetch tags categories
-    fetchTagsCategories(serverUrl, corpus.corpus_id)
+    fetchTagsCategories(serverUrl, corpusId)
 
-    fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
+    fetchCorpusStatus(serverUrl, corpusId).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
         if (status.hyphe.ram_left > 0 && status.hyphe.ports_left > 0) {
           // Resources available: start corpus
           showError({ id: ERROR_CORPUS_NOT_STARTED, messageId: 'error.corpus-not-started-starting', fatal: true })
-          return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
+          return startCorpus(serverUrl, corpusId, corpusPassword).catch((err) => {
             showError({ messageId: 'error.corpus-failed-starting', messageValues: { error: err.message }, fatal: true })
           }).then(() => {
             hideError()
@@ -72,21 +72,21 @@ class CorpusStatusWatcher extends React.Component {
 }
 
 CorpusStatusWatcher.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  corpus: React.PropTypes.object.isRequired,
-  corpusPassword: React.PropTypes.string,
-  fetchCorpusStatus: React.PropTypes.func,
-  hideError: React.PropTypes.func,
-  serverUrl: React.PropTypes.string.isRequired,
-  showError: React.PropTypes.func,
-  startCorpus: React.PropTypes.func,
-  fetchTagsCategories: React.PropTypes.func,
-  fetchTags: React.PropTypes.func
+  children: PropTypes.node,
+  className: PropTypes.string,
+  corpusId: PropTypes.string.isRequired,
+  corpusPassword: PropTypes.string,
+  fetchCorpusStatus: PropTypes.func,
+  hideError: PropTypes.func,
+  serverUrl: PropTypes.string.isRequired,
+  showError: PropTypes.func,
+  startCorpus: PropTypes.func,
+  fetchTagsCategories: PropTypes.func,
+  fetchTags: PropTypes.func
 }
 
 const mapStateToProps = ({ corpora, servers }) => ({
-  corpus: corpora.selected,
+  corpusId: corpora.getIn(['selected', 'corpus_id']),
   corpusPassword: null, // TODO
   serverUrl: servers.selected.url
 })

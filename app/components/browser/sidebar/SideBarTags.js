@@ -1,8 +1,10 @@
 import '../../../css/browser/side-bar-tags'
 import '../../../css/auto-suggest'
 
-import uniq from 'lodash.uniq'
 import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { webentityShape } from '../../../types'
+import { OrderedSet } from 'immutable'
 
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
@@ -22,7 +24,7 @@ class SideBarTags extends React.Component {
 
     this.state = {
       tagValue: {}, // [category or (category + '/' + value)]: string
-      // ['full-suggestions/' + category] : Array<string>
+      // ['full-suggestions/' + category] : OrderedSet<string>
       // ['suggestions/' + category + '/' + value] : Array<string>
       newCategory: ''
       // ['edit/' + category + '/' + value] : true
@@ -39,7 +41,7 @@ class SideBarTags extends React.Component {
   }
 
   componentReceiveProps ({ categories }) {
-    if (JSON.stringify(categories) !== JSON.stringify(this.props.categories)) {
+    if (categories !== this.props.categories) {
       this.updateFullSuggestions(categories)
     }
   }
@@ -69,16 +71,16 @@ class SideBarTags extends React.Component {
   }
 
   renderTagsCategory (category) {
-    const tags = (this.props.webentity.tags.USER || {})[category] || []
+    const tags = this.props.webentity.getIn(['tags', 'USER', category])
     const isFreeTags = (category === 'FREETAGS')
     const freeTagsTitle = this.context.intl.formatMessage({ id: 'sidebar.freetags' })
-    const canAddTag = isFreeTags || tags.length === 0
+    const canAddTag = isFreeTags || !tags || tags.isEmpty()
 
     return (
       <li key={ category }>
         <h3>{ isFreeTags ? freeTagsTitle : category }</h3>
         <ul>
-          { tags.map(this.renderTag(category)) }
+          { tags ? tags.map(this.renderTag(category)) : null }
         </ul>
         { canAddTag ? this.renderTagInput(category) : <noscript /> }
       </li>
@@ -88,7 +90,7 @@ class SideBarTags extends React.Component {
   fetchFullSuggestions (category) {
     const { serverUrl, corpusId, fetchTags } = this.props
     fetchTags(serverUrl, corpusId, category).then((tags) => {
-      this.setState({ ['full-suggestions/' + category]: tags })
+      this.setState({ ['full-suggestions/' + category]: OrderedSet(tags) })
     })
   }
 
@@ -107,10 +109,10 @@ class SideBarTags extends React.Component {
     }
 
     this.changeEditedTagValue(category, '', tag)
-    return addTag(serverUrl, corpusId, category, webentity.id, value, tag).then(() => {
+    return addTag(serverUrl, corpusId, category, webentity.get('id'), value, tag).then(() => {
       // Keep suggestions up to date
       const prop = 'full-suggestions/' + category
-      const tags = uniq((this.state[prop] || []).concat(value))
+      const tags = (this.state[prop] || OrderedSet()).add(value)
       this.setState({ [prop]: tags })
     })
   }
@@ -166,7 +168,7 @@ class SideBarTags extends React.Component {
   }
 
   getSuggestions (category, value) {
-    return getSuggestions(this.state['full-suggestions/' + category] || [], value)
+    return getSuggestions(this.state['full-suggestions/' + category], value)
   }
 
   renderTagInput (category, tag = null) {
@@ -252,8 +254,11 @@ class SideBarTags extends React.Component {
 
 
 function getSuggestions (list, value) {
+  if (!list) {
+    return []
+  }
   const inputValue = value.trim().toLowerCase()
-  return list.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1)
+  return list.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1).toArray()
 }
 
 function getSuggestionValue (suggestion) {
@@ -270,9 +275,9 @@ function renderSuggestion (suggestion) {
 SideBarTags.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object.isRequired,
+  webentity: webentityShape.isRequired,
 
-  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  categories: ImmutablePropTypes.orderedSetOf(PropTypes.string).isRequired,
 
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
@@ -283,7 +288,7 @@ SideBarTags.propTypes = {
 const mapStateToProps = ({ corpora }, props) => {
   return {
     ...props,
-    categories: corpora.list[props.corpusId].tagsCategories || []
+    categories: corpora.getIn(['list', props.corpusId, 'tagsCategories'])
   }
 }
 

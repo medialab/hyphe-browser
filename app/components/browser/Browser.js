@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ErrorMessage from './ErrorMessage'
 import Header from './Header'
@@ -9,7 +9,7 @@ import Spinner from '../Spinner'
 
 class Browser extends React.Component {
   render () {
-    if (!this.props.corpus) {
+    if (!this.props.ready) {
       // Corpus not yet selected
       return <Spinner />
     }
@@ -26,11 +26,11 @@ class Browser extends React.Component {
 }
 
 Browser.propTypes = {
-  corpus: React.PropTypes.object
+  ready: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = ({ corpora }) => ({
-  corpus: corpora.selected
+  ready: !!corpora.get('selected')
 })
 
 const mapDispatchToProps = {

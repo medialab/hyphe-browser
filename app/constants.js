@@ -5,6 +5,7 @@ export const LOCALES = ['en-US', 'fr-FR']
 export const DEFAULT_LOCALE = 'fr-FR'
 
 export const CRAWL_DEPTH = 1
+export const MAX_HYPHE_CRAWLS = 12
 
 // flag to add/remove verbosity in console
 export const DEBUG_JSONRPC = true

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { connect } from 'react-redux'
 
 import WebView from './WebView'
@@ -117,10 +118,10 @@ class TabContent extends React.Component {
       return
     }
 
-    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting, id)
+    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting.toObject(), id)
       .then(() => {
         hideError()
-        hideAdjustWebentity(webentity.id)
+        hideAdjustWebentity(webentity.get('id'))
       })
       .catch((err) => {
         showError({ messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false })
@@ -134,11 +135,11 @@ class TabContent extends React.Component {
     if (adjusting) {
       return <Button size="large" icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
         disabled={ !webentity }
-        onClick={ () => setAdjustWebentity(webentity.id, { homepage: url }) } />
-    } else if (webentity && webentity.homepage) {
-      return <Button size="large" icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
-        disabled={ !webentity || webentity.homepage === url }
-        onClick={ () => setTabUrl(webentity.homepage, id) } />
+        onClick={ () => setAdjustWebentity(webentity.get('id'), { homepage: url }) } />
+    } else if (webentity && webentity.get('homepage')) {
+      return <Button size="large" icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.get('homepage') }) }
+        disabled={ !webentity || webentity.get('homepage') === url }
+        onClick={ () => setTabUrl(webentity.get('homepage'), id) } />
     } else {
       return <Button size="large" icon="home" title={ formatMessage({ id: 'no-homepage' }) }
         disabled={ true }
@@ -153,13 +154,13 @@ class TabContent extends React.Component {
     if (adjusting) {
       return [
         <Button key="cancel-adjust" size="large" icon="cancel" title={ formatMessage({ id: 'cancel' }) }
-          onClick={ () => hideAdjustWebentity(webentity.id) } />,
+          onClick={ () => hideAdjustWebentity(webentity.get('id')) } />,
         <Button key="apply-adjust" size="large" icon="check" title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
       ]
     } else {
       return <Button size="large" icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
-        onClick={ () => showAdjustWebentity(webentity.id) } />
+        onClick={ () => showAdjustWebentity(webentity.get('id')) } />
     }
   }
 
@@ -174,10 +175,10 @@ class TabContent extends React.Component {
       <div className="btn-group tab-toolbar-webentity">
         { this.renderHomeButton () }
         <BrowserTabWebentityNameField
-          initialValue={ webentity && webentity.name }
+          initialValue={ webentity && webentity.get('name') }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !!adjusting }
-          onChange={ (name) => setAdjustWebentity(webentity.id, { name }) } />
+          onChange={ (name) => setAdjustWebentity(webentity.get('id'), { name }) } />
         { this.renderAdjustButton() }
       </div>
     )
@@ -216,10 +217,10 @@ class TabContent extends React.Component {
         <BrowserTabUrlField
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
-          lruPrefixes={ webentity && webentity.lru_prefixes }
+          lruPrefixes={ webentity && webentity.get('lru_prefixes') }
           onSubmit={ (url) => setTabUrl(url, id) }
           prefixSelector={ !!adjusting }
-          onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
+          onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.get('id'), { prefix: modified ? url : null }) } />
       </div>
     )
   }
@@ -294,7 +295,7 @@ TabContent.propTypes = {
   loading: PropTypes.bool.isRequired,
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object,
+  webentity: ImmutablePropTypes.map,
   adjusting: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
@@ -319,16 +320,18 @@ TabContent.propTypes = {
 }
 
 const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loading, disableWebentity, disableNavigation }) => {
-  const webentity = webentities.webentities[webentities.tabs[id]]
+  // id === tab's id, not webentity's id
+  const webentityId = webentities.getIn(['tabs', id])
+  const webentity = webentities.getIn(['webentities', webentityId])
   return {
     id,
     active: tabs.activeTab && tabs.activeTab.id === id,
     url,
     loading,
     serverUrl: servers.selected.url,
-    corpusId: corpora.selected.corpus_id,
+    corpusId: corpora.getIn(['selected', 'corpus_id']),
     webentity: webentity,
-    adjusting: webentity && webentities.adjustments[webentity.id],
+    adjusting: webentity && webentities.getIn(['adjustments', webentityId]),
     disableWebentity,
     disableNavigation
   }

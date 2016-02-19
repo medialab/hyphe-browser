@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { findDOMNode } from 'react-dom'
 import cx from 'classnames'
 import { isWebUri } from 'valid-url'
@@ -115,13 +116,13 @@ class BrowserTabUrlField extends React.Component {
 
     return <span className={ className } onClick={ onClick }
       dangerouslySetInnerHTML={ {
-        __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url)
+        __html: highlightUrlHTML(this.props.lruPrefixes.toArray(), this.state.url)
       } } />
   }
 
   // LRU selector by prefix: click to select
   renderPrefixSelector () {
-    const matching = longestMatching(this.props.lruPrefixes, this.state.url)
+    const matching = longestMatching(this.props.lruPrefixes.toArray(), this.state.url)
     const lru = (matching && matching.lru) || parseLru({})
     const url = urlToLru(this.state.url)
 
@@ -196,7 +197,7 @@ class BrowserTabUrlField extends React.Component {
 
 BrowserTabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
-  lruPrefixes: PropTypes.arrayOf(PropTypes.string),
+  lruPrefixes: ImmutablePropTypes.listOf(PropTypes.string),
   onSubmit: PropTypes.func.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
   onSelectPrefix: PropTypes.func.isRequired,

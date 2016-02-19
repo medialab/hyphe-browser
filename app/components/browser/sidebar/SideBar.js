@@ -1,6 +1,7 @@
 import '../../../css/browser/side-bar'
 
 import React, { PropTypes } from 'react'
+import { webentityShape } from '../../../types'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
@@ -31,7 +32,7 @@ class SideBar extends React.Component {
     return (
       <div>
         <h3><T id="crawling-status" /></h3>
-        <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong>
+        <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity.toObject()) } /></strong>
       </div>
     )
   }
@@ -39,16 +40,16 @@ class SideBar extends React.Component {
   setStatus (status) {
     const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId } = this.props
 
-    if (status !== 'DISCOVERED' && status === webentity.status) {
+    if (status !== 'DISCOVERED' && status === webentity.get('status')) {
       // Click on current status = set to discovered
       status = 'DISCOVERED'
     }
 
     if (status === 'IN') {
       // Set to IN = go to "adjust" mode and validation triggers crawling
-      showAdjustWebentity(webentity.id, true)
+      showAdjustWebentity(webentity.get('id'), true)
     } else {
-      setWebentityStatus(serverUrl, corpusId, status, webentity.id)
+      setWebentityStatus(serverUrl, corpusId, status, webentity.get('id'))
     }
   }
 
@@ -113,7 +114,7 @@ class SideBar extends React.Component {
 SideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object.isRequired,
+  webentity: webentityShape,
 
   setWebentityStatus: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired

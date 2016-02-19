@@ -176,7 +176,7 @@ BrowserTabs.propTypes = {
 const mapStateToProps = ({ tabs, corpora, servers }) => ({
   tabs: tabs.tabs,
   activeTabId: tabs.activeTab && tabs.activeTab.id,
-  corpusId: corpora.selected && corpora.selected.corpus_id,
+  corpusId: corpora.getIn(['selected', 'corpus_id']),
   instanceUrl: servers.selected && servers.selected.home
 })
 

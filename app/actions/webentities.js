@@ -148,11 +148,11 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     // Set its name and homepage at the same time + refresh tab by passing tab id
     operations.push(createWebentity(serverUrl, corpusId, prefix, name, homepage, tabId)(dispatch))
   } else {
-    if (homepage && homepage !== webentity.homepage) {
-      operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
+    if (homepage && homepage !== webentity.get('homepage')) {
+      operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.get('id'))(dispatch))
     }
-    if (name && name !== webentity.name) {
-      operations.push(setWebentityName(serverUrl, corpusId, name, webentity.id)(dispatch))
+    if (name && name !== webentity.get('name')) {
+      operations.push(setWebentityName(serverUrl, corpusId, name, webentity.get('id'))(dispatch))
     }
   }
 
@@ -160,7 +160,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     .then(([head]) => {
       if (crawl) {
         // if prefix, then webentity just been created, and we want this id, not the old one
-        const id = prefix ? head.id : webentity.id
+        const id = prefix ? head.id : webentity.get('id')
         const depth = CRAWL_DEPTH
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
           .then(() => {

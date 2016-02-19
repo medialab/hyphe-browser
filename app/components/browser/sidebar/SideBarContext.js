@@ -1,6 +1,7 @@
 import '../../../css/browser/side-bar'
 
 import React, { PropTypes } from 'react'
+import { webentityShape } from '../../../types'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
@@ -17,7 +18,7 @@ class SideBarContext extends React.Component {
 SideBarContext.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object.isRequired
+  webentity: webentityShape
 }
 
 const mapStateToProps = ({ ui }) => ({ // eslint-disable-line

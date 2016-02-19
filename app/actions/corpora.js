@@ -39,7 +39,7 @@ export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 const _selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
 export const selectCorpus = (server, corpus) => (dispatch) => {
   dispatch(_selectCorpus(corpus))
-  dispatch(addHypheTab(server.home, corpus.corpus_id))
+  dispatch(addHypheTab(server.home, corpus.get('corpus_id')))
 }
 
 export const requestCorpora = createAction(FETCH_CORPORA_REQUEST, (serverUrl) => ({ serverUrl }))
@@ -68,27 +68,27 @@ export const fetchServerStatus = (serverUrl) => (dispatch) => {
     }))
 }
 
-export const requestCorpusStatus = createAction(FETCH_CORPUS_STATUS_REQUEST, (corpus) => ({ corpus }))
-export const receiveCorpusStatus = createAction(FETCH_CORPUS_STATUS_SUCCESS, (corpus, status) => ({ corpus, status }))
-export const fetchCorpusStatus = (serverUrl, corpus) => (dispatch) => {
-  dispatch(requestCorpusStatus(corpus))
+export const requestCorpusStatus = createAction(FETCH_CORPUS_STATUS_REQUEST, (corpusId) => ({ corpusId }))
+export const receiveCorpusStatus = createAction(FETCH_CORPUS_STATUS_SUCCESS, (corpusId, status) => ({ corpusId, status }))
+export const fetchCorpusStatus = (serverUrl, corpusId) => (dispatch) => {
+  dispatch(requestCorpusStatus(corpusId))
 
-  return jsonrpc(serverUrl)('get_status', [corpus.corpus_id])
-    .then((status) => dispatch(receiveCorpusStatus(corpus, status)))
+  return jsonrpc(serverUrl)('get_status', [corpusId])
+    .then((status) => dispatch(receiveCorpusStatus(corpusId, status)))
     .catch((error) => dispatch({
       type: FETCH_CORPUS_STATUS_FAILURE,
-      payload: { error, serverUrl, corpus }
+      payload: { error, serverUrl, corpusId }
     }))
 }
 
-export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
-  dispatch({ type: START_CORPUS_REQUEST, payload: { corpus } })
+export const startCorpus = (serverUrl, corpusId, password) => (dispatch) => {
+  dispatch({ type: START_CORPUS_REQUEST, payload: { corpusId } })
 
-  return jsonrpc(serverUrl)('start_corpus', [corpus.corpus_id, password])
-    .then(() => dispatch({ type: START_CORPUS_SUCCESS, payload: { corpus } }))
+  return jsonrpc(serverUrl)('start_corpus', [corpusId, password])
+    .then(() => dispatch({ type: START_CORPUS_SUCCESS, payload: { corpusId } }))
     .catch((error) => dispatch({
       type: START_CORPUS_FAILURE,
-      payload: { error, corpus }
+      payload: { error, corpusId }
     }))
 }
 

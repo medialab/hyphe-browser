@@ -4,6 +4,9 @@ import '../../css/pane'
 import '../../css/login/start-up-form'
 
 import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { corpusShape, corpusStatusShape } from '../../types'
+
 import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -92,7 +95,7 @@ class StartUpForm extends React.Component {
           ? <Spinner textId="loading-corpora" />
           : (selectedServer
             ? <CorpusList actions={ actions } dispatch={ dispatch }
-                corpora={ corpora } status={ status.hyphe }
+                corpora={ corpora } status={ status.get('hyphe') }
                 server={ selectedServer } />
             : <noscript />
           )
@@ -108,19 +111,19 @@ StartUpForm.contextTypes = {
 
 StartUpForm.propTypes = {
   actions: PropTypes.object,
-  corpora: PropTypes.object.isRequired,
+  corpora: ImmutablePropTypes.mapOf(corpusShape).isRequired,
   dispatch: PropTypes.func,
   selectedServer: PropTypes.object,
   servers: PropTypes.array.isRequired,
-  status: PropTypes.object,
+  status: corpusStatusShape,
   ui: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-  corpora: state.corpora.list,
+  corpora: state.corpora.get('list'),
   selectedServer: state.servers.selected,
   servers: state.servers.list,
-  status: state.corpora.status,
+  status: state.corpora.get('status'),
   ui: state.ui
 })
 

@@ -1,4 +1,4 @@
-import mapValues from 'lodash.mapvalues'
+import { Iterable, Map, OrderedSet, fromJS } from 'immutable'
 import createReducer from '../utils/create-reducer'
 import {
   SELECT_CORPUS,
@@ -12,81 +12,61 @@ import {
   ADD_TAGS_CATEGORY_SUCCESS
 } from '../actions/tags'
 
-const initialState = {
+
+const initialTagsCategories = OrderedSet(['FREETAGS'])
+
+const emptyCorporaList = Map()
+
+const initialState = Map({
   // TODO: transform it in a array here?
-  list: {}, // [corpusId]: corpus
+  list: emptyCorporaList, // [corpusId]: corpus
   selected: null,
-  status: null // status of selected corpus
-}
-
-export default createReducer(initialState, {
-  [FETCH_CORPORA_REQUEST]: (state) => ({
-    ...state,
-    list: {},
-    selected: null
-  }),
-  [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
-    ...state,
-    // tagsCategories is maintained internally, it does not come from API,
-    // we intiialize it to 'FREETAGS' but the full list will come from a call to fetchTagsCategories
-    list: mapValues(corpora, (c) => ({ ...c, tagsCategories: ['FREETAGS'] })),
-    selected: null
-  }),
-
-  [FETCH_SERVER_STATUS_SUCCESS]: (state, { status }) => ({
-    ...state,
-    status
-  }),
-
-  [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => ({
-    ...state,
-    selected: corpus,
-    status
-  }),
-
-  [SELECT_CORPUS]: (state, { corpus }) => ({
-    ...state,
-    selected: corpus
-  }),
-
-  [FETCH_TAGS_CATEGORIES_SUCCESS]: updateTagsCategories((state, { corpusId, categories }) => {
-    const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
-    if (categories.join(',') === originalCategories.join(',')) {
-      return false
-    }
-
-    return ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
-  }),
-
-  [ADD_TAGS_CATEGORY_SUCCESS]: updateTagsCategories((state, { corpusId, category }) => {
-    const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
-    if (originalCategories.indexOf(category) !== -1) {
-      return state
-    }
-
-    return originalCategories.concat([category])
-  })
+  status: null // current status of selected corpus
 })
 
-function updateTagsCategories (getTagsCategories) {
-  return (state, payload) => {
-    const tagsCategories = getTagsCategories(state, payload)
-    if (!tagsCategories) {
-      return state
-    }
 
-    const { corpusId } = payload
-    const selected = (state.selected && state.selected.corpus_id === corpusId)
-      ? { ...state.selected, tagsCategories }
-      : state.selected
-    const list = state.list[corpusId]
-      ? { ...state.list, [corpusId]: { ...state.list[corpusId], tagsCategories } }
-      : state.list
+export default createReducer(initialState, {
+  [FETCH_CORPORA_REQUEST]: (state) => state.asMutable()
+    .set('selected', null)
+    .set('list', emptyCorporaList)
+    .asImmutable(),
+  [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => state.asMutable()
+    .set('selected', null)
+    // tagsCategories is maintained internally, it does not come from API,
+    // we initialize it to 'FREETAGS' but the full list will come from a call to fetchTagsCategories
+    .set('list', fromJS(corpora).map(initializeCorpus))
+    .asImmutable(),
 
-    return {
-      ...state,
-      selected,
-      list
+  [FETCH_SERVER_STATUS_SUCCESS]: (state, { status }) => state.set('status', fromJS(status)),
+
+  [FETCH_CORPUS_STATUS_SUCCESS]: (state, { status }) => state.update('status', s => (s || Map()).merge(status)),
+
+  [SELECT_CORPUS]: (state, { corpus }) => state.set('selected', initializeCorpus(corpus)),
+
+  [FETCH_TAGS_CATEGORIES_SUCCESS]: (state, { corpusId, categories }) =>
+    updateCorpus(state, corpusId, (corpus) => corpus.set('tagsCategories', OrderedSet(['FREETAGS'].concat(categories)))),
+
+  [ADD_TAGS_CATEGORY_SUCCESS]: (state, { corpusId, category }) =>
+    updateCorpus(state, corpusId, (corpus) => corpus.update('tagsCategories', cats => cats.add(category)))
+})
+
+function updateCorpus (state, corpusId, update) {
+  return state.withMutations(state => {
+    const original = state.getIn(['list', corpusId])
+    const updated = update(original)
+    state.setIn(['list', corpusId], updated)
+    if (original === state.get('selected')) {
+      state.set('selected', updated)
     }
+  })
+}
+
+function initializeCorpus (corpus) {
+  if (!Iterable.isIterable(corpus)) {
+    return initializeCorpus(fromJS(corpus))
   }
+
+  return corpus.has('tagsCategories')
+    ? corpus
+    : fromJS(corpus).set('tagsCategories', initialTagsCategories)
 }
