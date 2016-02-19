@@ -16,14 +16,20 @@ class BrowserStack extends React.Component {
     }
   }
 
+  // auto display first webentity in newly filled stack
+  componentWillReceiveProps (props) {
+    if (!this.props.selectedStack && props.selectedStack && props.webentities.length) {
+      this.selectWebentity(props.webentities[0])
+    }
+  }
+
   // also called by refresh button
   fill () {
     const stack = this.props.stacks.find(s => s.name === this.state.selectedStackName)
     this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
   }
 
-  selectWebentity (weId) {
-    const webentity = this.props.webentities.find(x => x.id === weId)
+  selectWebentity (webentity) {
     this.setState({ selectedWebentityId: webentity.id })
     this.props.viewWebentity(webentity)
     this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
@@ -41,7 +47,7 @@ class BrowserStack extends React.Component {
     } else {
       webentity = webentities[idx + offset]
     }
-    this.selectWebentity(webentity.id)
+    this.selectWebentity(webentity)
   }
 
   // top row
@@ -119,7 +125,7 @@ class BrowserStack extends React.Component {
         <div className="browser-stack-wes-selector">
           <select className="form-control"
             value={ this.state.selectedWebentityId }
-            onChange={ (evt) => this.selectWebentity(evt.target.value) }>
+            onChange={ (evt) => this.selectWebentity(webentities.find(x => x.id === evt.target.value)) }>
             { webentities.map((w, i) => (
               <option key={ w.id } value={ w.id }>#{ i + 1 } - { w.viewed ? `[${viewed}] - ` : '' } { w.name } ({ w.homepage })</option>
             )) }
@@ -161,7 +167,8 @@ BrowserStack.propTypes = {
 
   emptyStack: PropTypes.func.isRequired,
   fetchStack: PropTypes.func.isRequired,
-  setTabUrl: PropTypes.func.isRequired
+  setTabUrl: PropTypes.func.isRequired,
+  viewWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, tabs }) => ({
