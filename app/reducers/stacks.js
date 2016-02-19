@@ -5,6 +5,7 @@ import {
   FETCH_STACK_SUCCESS,
   VIEW_WEBENTITY
 } from '../actions/stacks'
+import { SELECT_CORPUS } from '../actions/corpora'
 
 // methods and args → for API calls
 const initialState = {
@@ -46,6 +47,14 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+  // reset
+  [SELECT_CORPUS]: (state) => ({
+    ...state,
+    selected: null,
+    lastRefresh: null,
+    webentities: []
+  }),
+
   [EMPTY_STACK]: (state) => ({
     ...state,
     selected: null
