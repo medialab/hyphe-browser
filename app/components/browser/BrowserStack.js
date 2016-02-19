@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
 import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
-import { setTabUrl } from '../../actions/tabs'
+import { setTabUrl, openTab } from '../../actions/tabs'
+import { HYPHE_TAB_ID } from '../../constants'
 
 class BrowserStack extends React.Component {
   constructor (props) {
@@ -32,7 +33,11 @@ class BrowserStack extends React.Component {
   selectWebentity (webentity) {
     this.setState({ selectedWebentityId: webentity.id })
     this.props.viewWebentity(webentity)
-    this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
+    if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
+      this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
+    } else {
+      this.props.openTab(webentity.homepage)
+    }
   }
 
   // used by Prev (-1) / Next (+1) buttons
@@ -168,6 +173,7 @@ BrowserStack.propTypes = {
   emptyStack: PropTypes.func.isRequired,
   fetchStack: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
+  openTab: PropTypes.func.isRequired,
   viewWebentity: PropTypes.func.isRequired
 }
 
@@ -185,6 +191,7 @@ const mapDispatchToProps = {
   emptyStack,
   fetchStack,
   setTabUrl,
+  openTab,
   viewWebentity
 }
 
