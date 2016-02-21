@@ -75,6 +75,7 @@ class TabContent extends React.Component {
       break
     case 'stop':
       setTabStatus({ loading: false, url: info }, id)
+      this.doNotRedirectToSearchOnNextDNSError = false
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
