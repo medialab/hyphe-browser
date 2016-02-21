@@ -14,7 +14,8 @@ import { openTab, closeTab, selectTab, selectHypheTab } from '../../actions/tabs
 import {
   PAGE_HYPHE_HOME,
   HYPHE_TAB_ID,
-  SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB
+  SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB,
+  SHORTCUT_RELOAD_TAB, SHORTCUT_FULL_RELOAD_TAB
 } from '../../constants'
 
 class BrowserTabs extends React.Component {
@@ -53,6 +54,20 @@ class BrowserTabs extends React.Component {
       }
     })
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
+
+    ipc.on(`shortcut-${SHORTCUT_RELOAD_TAB}`, () => {
+      if (this.props.activeTabId) {
+        this.reloadTab(this.props.activeTabId, false)
+      }
+    })
+    ipc.send('registerShortcut', SHORTCUT_RELOAD_TAB)
+
+    ipc.on(`shortcut-${SHORTCUT_FULL_RELOAD_TAB}`, () => {
+      if (this.props.activeTabId) {
+        this.reloadTab(this.props.activeTabId, true)
+      }
+    })
+    ipc.send('registerShortcut', SHORTCUT_FULL_RELOAD_TAB)
   }
 
   componentWillUnmount () {
@@ -67,14 +82,18 @@ class BrowserTabs extends React.Component {
     this.updateTabsOverflow()
   }
 
-  geteventBus (tabId) {
+  reloadTab (id, ignoreCache) {
+    this.getEventBus(id).emit('reload', ignoreCache)
+  }
+
+  getEventBus (tabId) {
     return this.tabEventBus[tabId] || (this.tabEventBus[tabId] = new EventBus())
   }
 
   renderTabContents () {
     return this.props.tabs.map((tab) => (
       <TabContent key={ tab.id }
-        eventBus={ this.geteventBus(tab.id) }
+        eventBus={ this.getEventBus(tab.id) }
         id={ tab.id }
         url={ tab.url }
         loading={ tab.loading || false }

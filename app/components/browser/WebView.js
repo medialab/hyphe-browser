@@ -97,7 +97,7 @@ class WebView extends React.Component {
     this.node = webview
 
     // Store handlers for future cleanup
-    this.reloadHandler = (full) => full ? webview.reloadIgnoringCache() : webview.reload()
+    this.reloadHandler = (ignoreCache) => ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
     this.goBackHandler = () => webview.goBack()
     this.goForwardHandler = () => webview.goForward()
     this.toggleDevToolsHandler = (doOpen) => {
