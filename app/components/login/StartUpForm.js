@@ -92,7 +92,7 @@ class StartUpForm extends React.Component {
           ? <Spinner textId="loading-corpora" />
           : (selectedServer
             ? <CorpusList actions={ actions } dispatch={ dispatch }
-                corpora={ corpora } status={ status.hyphe }
+                corpora={ corpora } status={ status && status.hyphe }
                 server={ selectedServer } />
             : <noscript />
           )

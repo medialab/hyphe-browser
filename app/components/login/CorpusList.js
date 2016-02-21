@@ -58,13 +58,21 @@ const CorpusList = (props) => {
 
   if (!corpora.length) return <noscript />
 
+  const hypheStatus = status
+    ? (
+      <span>
+        <span>, </span>
+        <T id="running-corpora" values={ { count: status.corpus_running } } />
+        <span> / { status.corpus_running + status.ports_left } ports</span>
+      </span>
+    )
+    : <noscript />
+
   return (
     <div>
       <h3>
         <T id="available-corpora" values={ { count: corpora.length } } />
-        <span>, </span>
-        <T id="running-corpora" values={ { count: status.corpus_running } } />
-        <span> / { status.corpus_running + status.ports_left } ports</span>
+        { hypheStatus }
       </h3>
       <div className="form-group corpus-list-slider">
         <ul className="list-group corpus-list">
