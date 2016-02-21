@@ -15,7 +15,12 @@ if (isPackaged) {
   process.env.NODE_ENV = 'production'
 }
 
-require('electron-debug')()
+if (process.env.NODE_ENV === 'development') {
+  require('electron-debug')({
+    showDevTools: true
+  })
+}
+
 require('crash-reporter').start()
 
 app.on('window-all-closed', () => {
@@ -51,13 +56,6 @@ app.on('ready', () => {
           }
         },
         {
-          label: 'Reset',
-          accelerator: 'Ctrl+R',
-          click: () => {
-            window.reload()
-          }
-        },
-        {
           label: '&Quit',
           accelerator: 'Ctrl+Q',
           click: () => {
@@ -69,7 +67,6 @@ app.on('ready', () => {
   ]
 
   if (process.env.NODE_ENV === 'development') {
-    window.openDevTools()
     menus.push({
       label: 'Debug',
       submenu: [
