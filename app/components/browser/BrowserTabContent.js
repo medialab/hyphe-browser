@@ -10,6 +10,7 @@ import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import PageHypheHome from './PageHypheHome'
 
 import { intlShape } from 'react-intl'
+import { eventBusShape } from '../../types'
 
 import { PAGE_HYPHE_HOME } from '../../constants'
 
@@ -30,26 +31,40 @@ class TabContent extends React.Component {
 
   constructor (props) {
     super(props)
+
     this.state = {
       disableBack: true,
       disableForward: true
     }
+
     this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
     this.doNotDeclarePageOnStop = false // idem
-    this.navigationActions = {} // Mutated by WebView
+  }
+
+  componentDidMount () {
+    const { eventBus, closeTab, id } = this.props
+    // Listen for webview navigability changes
+    this.navCanGoBackHandler = (able) => this.setState({ disableBack: !able })
+    eventBus.on('canGoBack', this.navCanGoBackHandler)
+    this.navCanGoForwardHandler = (able) => this.setState({ disableForward: !able })
+    eventBus.on('canGoForward', this.navCanGoForwardHandler)
+    this.navStatusHandler = (what, info) => this.updateTabStatus(what, info)
+    eventBus.on('status', this.navStatusHandler)
+    this.navCloseHandler = () => closeTab(id)
+    eventBus.on('close', this.navCloseHandler)
+  }
+
+  componentWillUnmount () {
+    const { eventBus } = this.props
+    eventBus.off('canGoBack', this.navCanGoBackHandler)
+    eventBus.off('canGoForward', this.navCanGoForwardHandler)
+    eventBus.off('status', this.navStatusHandler)
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, openTab, closeTab,
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, openTab,
       showError, declarePage, setTabWebentity, serverUrl, corpusId,
       disableWebentity } = this.props
-
-    if (this.navigationActions.canGoBack && this.navigationActions.canGoForward) {
-      this.setState({
-        disableBack: !this.navigationActions.canGoBack(),
-        disableForward: !this.navigationActions.canGoForward()
-      })
-    }
 
     switch (event) {
     case 'start':
@@ -77,9 +92,6 @@ class TabContent extends React.Component {
       break
     case 'open': // link in new tab
       openTab(info)
-      break
-    case 'close': // from context menu
-      closeTab(id)
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -194,11 +206,11 @@ class TabContent extends React.Component {
     return (
       <div className="btn-group tab-toolbar-navigation">
         <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ !!adjusting || this.state.disableBack }
-          onClick={ () => this.navigationActions.back() } />
+          onClick={ () => this.props.eventBus.emit('goBack') } />
         <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ !!adjusting || this.state.disableForward }
-          onClick={ () => this.navigationActions.forward() } />
+          onClick={ () => this.props.eventBus.emit('goForward') } />
         <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ !!adjusting }
-          onClick={ () => this.navigationActions.reload() } />
+          onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
       </div>
     )
   }
@@ -243,13 +255,12 @@ class TabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, setTabUrl } = this.props
+    const { id, url, setTabUrl, eventBus } = this.props
 
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
       : <WebView id={ id } url={ url }
-          onStatusUpdate={ (e, i) => this.updateTabStatus(e, i) }
-          onNavigationActionsReady={ (actions) => Object.assign(this.navigationActions, actions) }
+          eventBus={ eventBus }
           openTab={ openTab } />
   }
 
@@ -286,12 +297,13 @@ class TabContent extends React.Component {
 
 TabContent.propTypes = {
   id: PropTypes.string.isRequired, // Tab's id (≠ webentity.id)
-  disableWebentity: PropTypes.bool,
-  disableNavigation: PropTypes.bool,
-
-  active: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  disableWebentity: PropTypes.bool,
+  disableNavigation: PropTypes.bool,
+  eventBus: eventBusShape.isRequired,
+
+  active: PropTypes.bool.isRequired,
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
@@ -318,19 +330,23 @@ TabContent.propTypes = {
   hideAdjustWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, tabs, webentities }, { id, url, loading, disableWebentity, disableNavigation }) => {
+const mapStateToProps = (
+  { corpora, servers, tabs, webentities }, // store
+  { id, url, loading, disableWebentity, disableNavigation, eventBus } // own props
+) => {
   const webentity = webentities.webentities[webentities.tabs[id]]
   return {
     id,
-    active: tabs.activeTab && tabs.activeTab.id === id,
     url,
     loading,
+    disableWebentity,
+    disableNavigation,
+    eventBus,
+    active: tabs.activeTab && tabs.activeTab.id === id,
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,
-    adjusting: webentity && webentities.adjustments[webentity.id],
-    disableWebentity,
-    disableNavigation
+    adjusting: webentity && webentities.adjustments[webentity.id]
   }
 }
 

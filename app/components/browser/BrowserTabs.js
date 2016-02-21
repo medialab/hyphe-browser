@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { ipcRenderer as ipc } from 'electron'
 import { intlShape } from 'react-intl'
+import EventBus from 'jvent'
 
 import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
@@ -25,6 +26,10 @@ class BrowserTabs extends React.Component {
       scroll: 0,
       maxScroll: 0
     }
+
+    // Event emitter for each tab, not a state or prop as it's not supposed
+    // to trigger rerender
+    this.tabEventBus = {}
 
     // Bound as one method to make removeEventListener work properly
     this.onResize = () => this.updateTabsOverflow()
@@ -62,9 +67,14 @@ class BrowserTabs extends React.Component {
     this.updateTabsOverflow()
   }
 
+  geteventBus (tabId) {
+    return this.tabEventBus[tabId] || (this.tabEventBus[tabId] = new EventBus())
+  }
+
   renderTabContents () {
     return this.props.tabs.map((tab) => (
       <TabContent key={ tab.id }
+        eventBus={ this.geteventBus(tab.id) }
         id={ tab.id }
         url={ tab.url }
         loading={ tab.loading || false }

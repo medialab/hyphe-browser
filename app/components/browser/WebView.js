@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 import { intlShape } from 'react-intl'
+import { eventBusShape } from '../../types'
 
 import { ipcRenderer as ipc, clipboard } from 'electron'
 import remote from 'remote'
@@ -11,6 +12,25 @@ const MenuItem = remote.require('menu-item')
 
 /**
  * @see https://github.com/atom/electron/blob/master/docs/api/web-view-tag.md
+ *
+ * eventBus emits navigation events:
+ * - status(what: string, info: any)
+ *   maps to <webview> events:
+ *   - 'did-start-loading' => 'start' + url
+ *   - 'did-stop-loading' => 'stop' + url
+ *   - 'did-fail-load' => 'error' + { errorCode, errorDescription, validatedURL, pageURL }
+ *   - 'page-title-updated' => 'title' + title
+ *   - 'page-favicon-updated' => 'favicon' + faviconUrl
+ *   - 'new-window' (ctrl+click & co) => 'open' + url
+ * - canGoBack(boolean)
+ * - canGoForward(boolean)
+ * - close() when closing tab is requested
+ *
+ * It also listens to events so you can trigger navigation events:
+ * - reload(ignoreCache: bool)
+ * - goBack()
+ * - goForward()
+ * - toggleDevTools(forceOpen: bool)
  */
 class WebView extends React.Component {
 
@@ -18,7 +38,6 @@ class WebView extends React.Component {
     super({
       ua: WEBVIEW_UA,
       visible: true,
-      navigationActions: {},
       ...props
     })
 
@@ -33,7 +52,7 @@ class WebView extends React.Component {
   }
 
   componentWillReceiveProps ({ url, ua }) {
-    var refresh = false // Use this flag in case 'url' AND 'ua' are modified
+    let refresh = false // Use this flag in case 'url' AND 'ua' are modified
 
     if (ua && ua !== this.props.ua) {
       this.node.setUserAgent(ua)
@@ -48,9 +67,9 @@ class WebView extends React.Component {
       }
       // Set webview's URL
       this.isLoading = true
-      this.props.onStatusUpdate('start', url)
-      this.node.src = url // This triggers navigation
-      refresh = false // So we don't want to call 'reload()'
+      this.props.eventBus.emit('status', 'start', url)
+      this.node.src = url // This triggers refresh
+      refresh = false // So we don't have to trigger it ourselves
     }
 
     if (refresh) {
@@ -62,25 +81,59 @@ class WebView extends React.Component {
     return this.context.intl.formatMessage({ id })
   }
 
+  componentWillUnmount () {
+    const { eventBus } = this.props
+
+    eventBus.off('reload', this.reloadHandler)
+    eventBus.off('goBack', this.goBackHandler)
+    eventBus.off('goForward', this.goForwardHandler)
+    eventBus.off('toggleDevTools', this.toggleDevToolsHandler)
+  }
+
   componentDidMount () {
+    const { eventBus } = this.props
+
     const webview = findDOMNode(this)
     this.node = webview
 
-    // (**) beware always calling directly "this.props.onStatusUpdate" reference so that
-    // when props are updated, the proper callback is correctly called
-    const update = (what, info) => this.props.onStatusUpdate(what, info)
+    // Store handlers for future cleanup
+    this.reloadHandler = (full) => full ? webview.reloadIgnoringCache() : webview.reload()
+    this.goBackHandler = () => webview.goBack()
+    this.goForwardHandler = () => webview.goForward()
+    this.toggleDevToolsHandler = (doOpen) => {
+      if (doOpen === true || !webview.isDevToolsOpened()) {
+        webview.openDevTools()
+      } else if (doOpen === false || webview.isDevToolsOpened()) {
+        webview.closeDevTools()
+      }
+    }
 
-    // TODO add shortcut to webview.openDevTools()
+    // Notify changing (cached to avoid duplicate emits) status of navigability
+    let canGoBack = null
+    let canGoForward = null
+    const update = (what, info) => {
+      // Note: we use "this.props.eventBus" instead of destructued one, in case prop had been modified
+      this.props.eventBus.emit('status', what, info)
+
+      const newCanGoBack = webview.canGoBack()
+      const newCanGoForward = webview.canGoForward()
+      if (newCanGoBack !== canGoBack) {
+        canGoBack = newCanGoBack
+        this.props.eventBus.emit('canGoBack', canGoBack)
+      }
+      if (newCanGoForward !== canGoForward) {
+        canGoForward = newCanGoForward
+        this.props.eventBus.emit('canGoForward', canGoForward)
+      }
+    }
 
     // Declare available navigation actions
-    this.props.onNavigationActionsReady({
-      reload () { webview.reload() },
-      back () { webview.goBack() },
-      forward () { webview.goForward() },
-      canGoBack () { return webview.canGoBack() },
-      canGoForward () { return webview.canGoForward() }
-    })
+    eventBus.on('reload', this.reloadHandler)
+    eventBus.on('goBack', this.goBackHandler)
+    eventBus.on('goForward', this.goForwardHandler)
+    eventBus.on('toggleDevTools', this.toggleDevToolsHandler)
 
+    // If debug: log status changes
     if (DEBUG_WEBVIEW) {
       webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e)) // eslint-disable-line no-console
       webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e)) // eslint-disable-line no-console
@@ -145,7 +198,7 @@ class WebView extends React.Component {
         menu.append(new MenuItem({ label: this.translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
       }
       menu.append(new MenuItem({ type: 'separator' }))
-      menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => update('close') }))
+      menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => eventBus.emit('close') }))
       menu.popup(remote.getCurrentWindow())
     })
   }
@@ -170,10 +223,9 @@ WebView.contextTypes = {
 }
 
 WebView.propTypes = {
-  onStatusUpdate: PropTypes.func.isRequired,
   ua: PropTypes.string,
   url: PropTypes.string.isRequired,
-  onNavigationActionsReady: PropTypes.func,
+  eventBus: eventBusShape.isRequired,
   openTab: PropTypes.func
 }
 
