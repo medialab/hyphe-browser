@@ -42,7 +42,7 @@ class TabContent extends React.Component {
   }
 
   componentDidMount () {
-    const { eventBus, closeTab, id } = this.props
+    const { eventBus, openTab, closeTab, id } = this.props
     // Listen for webview navigability changes
     this.navCanGoBackHandler = (able) => this.setState({ disableBack: !able })
     eventBus.on('canGoBack', this.navCanGoBackHandler)
@@ -52,6 +52,8 @@ class TabContent extends React.Component {
     eventBus.on('status', this.navStatusHandler)
     this.navCloseHandler = () => closeTab(id)
     eventBus.on('close', this.navCloseHandler)
+    this.navOpenHandler = (url) => openTab(url)
+    eventBus.on('open', this.navOpenHandler)
   }
 
   componentWillUnmount () {
@@ -62,7 +64,7 @@ class TabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, openTab,
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, declarePage, setTabWebentity, serverUrl, corpusId,
       disableWebentity } = this.props
 
@@ -90,9 +92,6 @@ class TabContent extends React.Component {
       break
     case 'favicon':
       setTabIcon(info, id)
-      break
-    case 'open': // link in new tab
-      openTab(info)
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -261,8 +260,7 @@ class TabContent extends React.Component {
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
       : <WebView id={ id } url={ url }
-          eventBus={ eventBus }
-          openTab={ openTab } />
+          eventBus={ eventBus } />
   }
 
   renderSinglePane () {

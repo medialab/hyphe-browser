@@ -25,6 +25,7 @@ const MenuItem = remote.require('menu-item')
  * - canGoBack(boolean)
  * - canGoForward(boolean)
  * - close() when closing tab is requested
+ * - open(url) when opening a new url is requested
  *
  * It also listens to events so you can trigger navigation events:
  * - reload(ignoreCache: bool)
@@ -191,7 +192,7 @@ class WebView extends React.Component {
       const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
-        menu.append(new MenuItem({ label: this.translate('menu.open-in-new-tab'), click: () => this.props.openTab(href) }))
+        menu.append(new MenuItem({ label: this.translate('menu.open-in-new-tab'), click: () => eventBus.emit('open', href) }))
         menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
@@ -225,8 +226,7 @@ WebView.contextTypes = {
 WebView.propTypes = {
   ua: PropTypes.string,
   url: PropTypes.string.isRequired,
-  eventBus: eventBusShape.isRequired,
-  openTab: PropTypes.func
+  eventBus: eventBusShape.isRequired
 }
 
 export default WebView
