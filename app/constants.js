@@ -17,12 +17,12 @@ export const ERROR_CORPUS_NOT_STARTED = 'ERROR_CORPUS_NOT_STARTED'
 export const ERROR_SERVER_NO_RESOURCE = 'ERROR_SERVER_NO_RESOURCE'
 export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
-export const SHORTCUT_OPEN_TAB = ['ctrl+n', 'ctrl+t']
-export const SHORTCUT_CLOSE_TAB = 'ctrl+w'
-export const SHORTCUT_NEXT_TAB = ['ctrl+tab']
-export const SHORTCUT_PREV_TAB = ['ctrl+shift+tab']
-export const SHORTCUT_RELOAD_TAB = ['ctrl+r', 'f5']
-export const SHORTCUT_FULL_RELOAD_TAB = ['ctrl+shift+r', 'ctrl+f5', 'shift+f5']
+export const SHORTCUT_OPEN_TAB = ['CmdOrCtrl+N', 'CmdOrCtrl+T']
+export const SHORTCUT_CLOSE_TAB = 'CmdOrCtrl+W'
+export const SHORTCUT_NEXT_TAB = ['CmdOrCtrl+Tab']
+export const SHORTCUT_PREV_TAB = ['CmdOrCtrl+Shift+Tab']
+export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
+export const SHORTCUT_FULL_RELOAD_TAB = ['CmdOrCtrl+Shift+R', 'CmdOrCtrl+F5', 'Shift+F5']
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'

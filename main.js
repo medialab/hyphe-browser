@@ -57,7 +57,7 @@ app.on('ready', () => {
         },
         {
           label: '&Quit',
-          accelerator: 'Ctrl+Q',
+          accelerator: 'CmdOrCtrl+Q',
           click: () => {
             app.quit()
           }
