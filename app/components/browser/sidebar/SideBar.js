@@ -105,6 +105,7 @@ class SideBar extends React.Component {
         </div>
         { this.renderCrawlingStatus() }
         { this.renderTabs() }
+        { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : <noscript /> }
       </aside>
     )
   }
@@ -114,6 +115,7 @@ SideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
 
   setWebentityStatus: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired

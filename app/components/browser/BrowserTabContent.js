@@ -272,11 +272,13 @@ class TabContent extends React.Component {
   }
 
   renderSplitPane () {
-    const { webentity, serverUrl, corpusId } = this.props
+    const { webentity, serverUrl, corpusId, adjusting } = this.props
 
     return (
       <SplitPane split="vertical" minSize="130" defaultSize="200">
-        { webentity ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } /> : <noscript /> }
+        { webentity
+          ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
+          : <noscript /> }
         { this.renderContent() }
       </SplitPane>
     )
