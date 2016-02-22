@@ -76,6 +76,8 @@ class BrowserTabs extends React.Component {
 
     ipc.send('unregisterShortcut', SHORTCUT_OPEN_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
+    ipc.send('unregisterShortcut', SHORTCUT_RELOAD_TAB)
+    ipc.send('unregisterShortcut', SHORTCUT_FULL_RELOAD_TAB)
   }
 
   componentDidUpdate () {
