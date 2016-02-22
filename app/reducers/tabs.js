@@ -3,7 +3,7 @@ import uuid from 'uuid'
 
 import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
 import {
-  OPEN_TAB, CLOSE_TAB, SELECT_TAB,
+  OPEN_TAB, CLOSE_TAB, SELECT_TAB, SELECT_NEXT_TAB, SELECT_PREV_TAB,
   SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS,
   ADD_HYPHE_TAB
 } from '../actions/tabs'
@@ -65,24 +65,13 @@ export default createReducer(initialState, {
     const tabs = state.tabs.filter((tab) => tab.id !== id)
 
     // if active tab is closed: switch to next tab (or last)
-    let activeTab = state.activeTab
-    if (activeTab && activeTab.id === id) {
-      // Set to the one on the left
-      activeTab = state.tabs[state.tabs.findIndex((tab) => tab.id === id) - 1]
-      if (!activeTab) {
-        // No tab on the left? Set to last tab
-        activeTab = state.tabs[state.tabs.length - 1]
-        if (activeTab && activeTab.id === id) {
-          // Ooops, closed tab was already the last one, okay, set to previous one then
-          activeTab = state.tabs[state.tabs.length - 2]
-        }
-      }
+    if (state.activeTab && state.activeTab.id === id) {
+      state = prevNextTab(-1)(state)
     }
 
     return {
       ...state,
-      tabs,
-      activeTab
+      tabs
     }
   },
 
@@ -90,6 +79,9 @@ export default createReducer(initialState, {
     ...state,
     activeTab: state.tabs.find((tab) => tab.id === id)
   }),
+
+  [SELECT_NEXT_TAB]: prevNextTab(+1),
+  [SELECT_PREV_TAB]: prevNextTab(-1),
 
   [ADD_HYPHE_TAB]: (state, { instanceUrl, corpusId }) => ({
     ...state,
@@ -108,7 +100,6 @@ export default createReducer(initialState, {
 
   // Reset state when selecting corpus
   [SELECT_CORPUS]: () => ({ ...initialState })
-
 })
 
 
@@ -119,4 +110,32 @@ function updateTab (state, id, updates) {
   const activeTab = (state.activeTab && state.activeTab.id === id) ? updatedTab : state.activeTab
 
   return { ...state, tabs, activeTab }
+}
+
+function prevNextTab (diff) {
+  return (state) => {
+    if (!state.activeTab) {
+      return state
+    }
+
+    // navigate amongst fixed/unfixed tabs as closed independent groups…
+    let tabs = state.tabs.filter((tab) => tab.fixed === state.activeTab.fixed)
+    // …unless there are no other tab to switch to
+    if (tabs.length === 1) {
+      tabs = state.tabs
+    }
+
+    const currentIndex = tabs.findIndex((tab) => tab.id === state.activeTab.id)
+    let nextIndex = currentIndex + diff
+    if (nextIndex >= tabs.length) {
+      nextIndex = 0
+    } else if (nextIndex < 0) {
+      nextIndex = tabs.length - 1
+    }
+
+    return {
+      ...state,
+      activeTab: tabs[nextIndex]
+    }
+  }
 }

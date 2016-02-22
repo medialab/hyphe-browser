@@ -19,6 +19,8 @@ export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
 export const SHORTCUT_OPEN_TAB = ['ctrl+n', 'ctrl+t']
 export const SHORTCUT_CLOSE_TAB = 'ctrl+w'
+export const SHORTCUT_NEXT_TAB = ['ctrl+tab']
+export const SHORTCUT_PREV_TAB = ['ctrl+shift+tab']
 export const SHORTCUT_RELOAD_TAB = ['ctrl+r', 'f5']
 export const SHORTCUT_FULL_RELOAD_TAB = ['ctrl+shift+r', 'ctrl+f5', 'shift+f5']
 

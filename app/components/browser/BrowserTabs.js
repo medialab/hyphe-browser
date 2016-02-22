@@ -10,11 +10,12 @@ import Tab from './BrowserTab'
 import TabContent from './BrowserTabContent'
 import { tabShape } from '../../types'
 
-import { openTab, closeTab, selectTab, selectHypheTab } from '../../actions/tabs'
+import { openTab, closeTab, selectTab, selectHypheTab, selectNextTab, selectPrevTab } from '../../actions/tabs'
 import {
   PAGE_HYPHE_HOME,
   HYPHE_TAB_ID,
   SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB,
+  SHORTCUT_NEXT_TAB, SHORTCUT_PREV_TAB,
   SHORTCUT_RELOAD_TAB, SHORTCUT_FULL_RELOAD_TAB
 } from '../../constants'
 
@@ -55,6 +56,16 @@ class BrowserTabs extends React.Component {
     })
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
 
+    ipc.on(`shortcut-${SHORTCUT_NEXT_TAB}`, () => {
+      this.props.selectNextTab()
+    })
+    ipc.send('registerShortcut', SHORTCUT_NEXT_TAB)
+
+    ipc.on(`shortcut-${SHORTCUT_PREV_TAB}`, () => {
+      this.props.selectPrevTab(this.props.activeTabId)
+    })
+    ipc.send('registerShortcut', SHORTCUT_PREV_TAB)
+
     ipc.on(`shortcut-${SHORTCUT_RELOAD_TAB}`, () => {
       if (this.props.activeTabId) {
         this.reloadTab(this.props.activeTabId, false)
@@ -76,6 +87,8 @@ class BrowserTabs extends React.Component {
 
     ipc.send('unregisterShortcut', SHORTCUT_OPEN_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
+    ipc.send('unregisterShortcut', SHORTCUT_NEXT_TAB)
+    ipc.send('unregisterShortcut', SHORTCUT_PREV_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_RELOAD_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_FULL_RELOAD_TAB)
   }
@@ -201,6 +214,8 @@ BrowserTabs.propTypes = {
 
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
+  selectNextTab: PropTypes.func.isRequired,
+  selectPrevTab: PropTypes.func.isRequired,
   selectTab: PropTypes.func.isRequired
 }
 
@@ -211,6 +226,13 @@ const mapStateToProps = ({ tabs, corpora, servers }) => ({
   instanceUrl: servers.selected && servers.selected.home
 })
 
-const mapDispatchToProps = { openTab, closeTab, selectTab, selectHypheTab }
+const mapDispatchToProps = {
+  openTab,
+  closeTab,
+  selectNextTab,
+  selectPrevTab,
+  selectTab,
+  selectHypheTab
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowserTabs)
