@@ -19,8 +19,8 @@ export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
 export const SHORTCUT_OPEN_TAB = ['CmdOrCtrl+N', 'CmdOrCtrl+T']
 export const SHORTCUT_CLOSE_TAB = 'CmdOrCtrl+W'
-export const SHORTCUT_NEXT_TAB = ['CmdOrCtrl+Tab']
-export const SHORTCUT_PREV_TAB = ['CmdOrCtrl+Shift+Tab']
+export const SHORTCUT_NEXT_TAB = ['CmdOrCtrl+Tab', 'CmdOrCtrl+PageDown']
+export const SHORTCUT_PREV_TAB = ['CmdOrCtrl+Shift+Tab', 'CmdOrCtrl+PageUp']
 export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
 export const SHORTCUT_FULL_RELOAD_TAB = ['CmdOrCtrl+Shift+R', 'CmdOrCtrl+F5', 'Shift+F5']
 
