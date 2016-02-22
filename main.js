@@ -83,18 +83,14 @@ app.on('ready', () => {
 
   window.setMenu(Menu.buildFromTemplate(menus))
 
-  // shortcuts can only be handled here, in the main process
-  let shortcuts = new Map()
-
   // ipcMain should be used, window.webContent.on is never triggered for ipc
   ipc.on('registerShortcut', (_, accel) => {
-    shortcuts.set(JSON.stringify(accel), new Shortcut(accel, () => window.webContents.send(`shortcut-${accel}`)))
+    const eventName = `shortcut-${accel}`
+    Shortcut.register(accel, { autoRegister: false }, () => window.webContents.send(eventName))
   })
 
   ipc.on('unregisterShortcut', (_, accel) => {
-    const key = JSON.stringify(accel)
-    shortcuts.get(key).unregister()
-    shortcuts.delete(key)
+    Shortcut.unregister(accel)
   })
 
   // Open files in external app
