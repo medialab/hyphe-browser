@@ -44,40 +44,28 @@ class BrowserTabs extends React.Component {
     // Listen for resize
     window.addEventListener('resize', this.onResize)
 
-    ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, () => {
-      this.props.openTab(PAGE_HYPHE_HOME)
-    })
+    this.ipcOpenTabHandler = () => this.props.openTab(PAGE_HYPHE_HOME)
+    ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
-    ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, () => {
-      if (this.props.activeTabId) {
-        this.props.closeTab(this.props.activeTabId)
-      }
-    })
+    this.ipcCloseTabHandler = () => this.props.activeTabId && this.props.closeTab(this.props.activeTabId)
+    ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, this.ipcCloseTabHandler)
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
 
-    ipc.on(`shortcut-${SHORTCUT_NEXT_TAB}`, () => {
-      this.props.selectNextTab()
-    })
+    this.ipcNextTabHandler = () => this.props.selectNextTab()
+    ipc.on(`shortcut-${SHORTCUT_NEXT_TAB}`, this.ipcNextTabHandler)
     ipc.send('registerShortcut', SHORTCUT_NEXT_TAB)
 
-    ipc.on(`shortcut-${SHORTCUT_PREV_TAB}`, () => {
-      this.props.selectPrevTab(this.props.activeTabId)
-    })
+    this.ipcPrevTabHandler = () => this.props.selectPrevTab(this.props.activeTabId)
+    ipc.on(`shortcut-${SHORTCUT_PREV_TAB}`, this.ipcPrevTabHandler)
     ipc.send('registerShortcut', SHORTCUT_PREV_TAB)
 
-    ipc.on(`shortcut-${SHORTCUT_RELOAD_TAB}`, () => {
-      if (this.props.activeTabId) {
-        this.reloadTab(this.props.activeTabId, false)
-      }
-    })
+    this.ipcReloadHandler = () => this.props.activeTabId && this.reloadTab(this.props.activeTabId, false)
+    ipc.on(`shortcut-${SHORTCUT_RELOAD_TAB}`, this.ipcReloadHandler)
     ipc.send('registerShortcut', SHORTCUT_RELOAD_TAB)
 
-    ipc.on(`shortcut-${SHORTCUT_FULL_RELOAD_TAB}`, () => {
-      if (this.props.activeTabId) {
-        this.reloadTab(this.props.activeTabId, true)
-      }
-    })
+    this.ipcFullReloadHandler = () => this.props.activeTabId && this.reloadTab(this.props.activeTabId, true)
+    ipc.on(`shortcut-${SHORTCUT_FULL_RELOAD_TAB}`, this.ipcFullReloadHandler)
     ipc.send('registerShortcut', SHORTCUT_FULL_RELOAD_TAB)
   }
 
@@ -91,6 +79,13 @@ class BrowserTabs extends React.Component {
     ipc.send('unregisterShortcut', SHORTCUT_PREV_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_RELOAD_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_FULL_RELOAD_TAB)
+
+    ipc.removeListener(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
+    ipc.removeListener(`shortcut-${SHORTCUT_CLOSE_TAB}`, this.ipcCloseTabHandler)
+    ipc.removeListener(`shortcut-${SHORTCUT_NEXT_TAB}`, this.ipcNextTabHandler)
+    ipc.removeListener(`shortcut-${SHORTCUT_PREV_TAB}`, this.ipcPrevTabHandler)
+    ipc.removeListener(`shortcut-${SHORTCUT_RELOAD_TAB}`, this.ipcReloadHandler)
+    ipc.removeListener(`shortcut-${SHORTCUT_FULL_RELOAD_TAB}`, this.ipcFullReloadHandler)
   }
 
   componentDidUpdate () {
