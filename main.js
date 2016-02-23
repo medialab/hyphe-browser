@@ -127,4 +127,14 @@ app.on('ready', () => {
   ipc.on('openExternal', (_, what, opener, cb) => {
     open(what, opener, cb)
   })
+
+  // Handle certificate errors
+  app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
+    // TODO ask user to accept rendering?
+    // TODO warn user that this page is insecure
+    // TODO store URLs marked as insecure, because this even is triggered only once, so we won't be able to warn user more than once without this
+    event.preventDefault()
+    callback(true)
+  })
+
 })
