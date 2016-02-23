@@ -1,0 +1,39 @@
+.corpus-list-slider {
+  background: #FFF;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.corpus-list-item {
+  cursor: pointer;
+  text-align: center;
+}
+.corpus-list-item:hover {
+  background: #EFEBE8;
+}
+
+.corpus-list-item div {
+  cursor: pointer;
+}
+.corpus-list-item span {
+  cursor: pointer;
+}
+
+.corpus-list-item a {
+  display: block;
+  color: #555;
+  text-decoration: none;
+}
+
+.corpus-list-item-name .icon {
+  margin: 0 0.5em;
+}
+
+.corpus-list-item-name {
+  color: #428BCA;
+  cursor: pointer;
+}
+
+.corpus-list-item-dates {
+  font-size: 0.8em;
+}

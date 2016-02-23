@@ -1,0 +1,32 @@
+/* extension to photon */
+
+.btn:disabled, .btn[disabled] {
+  background: white;
+  border-color: #B7B7B7;
+}
+.btn:disabled, .btn[disabled],
+.btn:disabled span.icon, .btn[disabled] span.icon {
+  color: #B7B7B7;
+}
+
+input:disabled, input[disabled] {
+  background: #EEE;
+  color: #999;
+}
+
+.form-error {
+  color: #FB2F29;
+}
+
+/* inline form groups */
+
+.form-group.inline {
+  display: flex;
+  flex-direction: row;
+}
+.form-group.inline > * {
+  flex: 0 0 auto;
+}
+.form-group.inline .form-control {
+  flex: 1;
+}

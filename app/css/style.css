@@ -1,0 +1,325 @@
+/* will be supported on Chrome 49 */
+:root {
+  --primary-bg-color: #EFEBE8;
+  --secondary-bg-color: #F7F3F0;
+  --primary-blue-color: #428BCA;
+}
+
+body {
+  background: #EFEBE8;
+  color: #555;
+}
+
+a {
+  color: #428BCA;
+}
+
+a.btn {
+  text-decoration: none;
+}
+
+.window-content {
+  background: #EFEBE8;
+  color: #555;
+}
+
+.urlInputContainer {
+  display: flex;
+}
+.pane-one-half {
+  flex: none;
+  width: 50%;
+}
+.pane-one-third {
+  flex: none;
+  width: 33.3%;
+}
+.urlForm {
+  display: inline-block;
+  flex-grow: 1;
+  margin: 0 1em;
+}
+.urlInput {
+  display: inline-block;
+  width: 100%;
+}
+.paneWebView {
+  height: 88vh; /* TODO find a way for this thing to take the whole space, flexbox does not do the trick here */
+}
+.tabFavicon {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+
+/** Error dialog **/
+
+.error-dialog {
+  position: absolute;
+  width: 70%;
+  left: 15%;
+  min-height: 50px;
+  background: rgba(200, 50, 50, 0.75);
+  color: black;
+  font-size: 24px;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 999;
+}
+.error-dialog .error-dialog-close {
+  float: right;
+  color: #fff;
+  font-size: 28px;
+}
+.error-dialog.hidden {
+  top: -400px;
+}
+.error-dialog.visible {
+  top: 5px;
+}
+.error-dialog-wrapper {
+  position: static;
+}
+.error-dialog-wrapper.blocking {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(200, 200, 200, 0.75);
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+
+/** Header alignment **/
+
+header.toolbar.toolbar-header {
+  display: flex;
+  flex-direction: row;
+  min-height: 32px;
+}
+header h1.title {
+  flex-grow: 1;
+}
+
+/** Corpus status **/
+
+h1.title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.corpus-statuses {
+  display: flex;
+  flex-direction: row;
+  width: 160px;
+}
+.corpus-status {
+  flex-grow: 1;
+  margin: 1px;
+  padding: 1px;
+  background: #fff;
+  text-align: center;
+  font-size: 16px;
+}
+.corpus-status-IN {
+  border-bottom: 3px solid #333;
+}
+.corpus-status-UNDECIDED {
+  border-bottom: 3px solid #ADA299;
+}
+.corpus-status-OUT {
+  border-bottom: 3px solid #FAA;
+}
+.corpus-status-DISCOVERED {
+  border-bottom: 3px solid #93BDE0;
+}
+
+/** Disconnection **/
+
+.disconnect-link {
+  display: block;
+  margin: 0 5px 0 10px;
+}
+.icon-disconnect {
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/** Load indicators **/
+
+.corpus-loads {
+  display: flex;
+  flex-direction: row;
+  width: 160px;
+}
+
+.corpus-load {
+  flex-grow: 1;
+  margin: 1px;
+  padding: 1px;
+  background: #fff;
+  text-align: center;
+  font-size: 16px;
+}
+
+/** Tabs **/
+
+.tab-favicon {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.browser-tab {
+  max-width: 300px;
+  min-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.browser-tab .loading {
+  background-image: url(../images/loading.svg);
+  float: left;
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 5px;
+}
+.browser-tab-emptyspace {
+  flex-grow: 1;
+}
+.tab-group-specials-left,
+.tab-group-specials-right {
+  flex-shrink: 1;
+  flex-grow: 0;
+  z-index: 900;
+}
+.tab-group-main {
+  flex: 1;
+  z-index: 800;
+}
+.browser-tab-scroll-left,
+.browser-tab-scroll-right,
+.browser-tab-new {
+  color: #333;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+  border-radius: 1px;
+}
+.browser-tab-scroll-left.inactive,
+.browser-tab-scroll-right.inactive {
+  background: #fff;
+  border: #ccc;
+  color: #ccc;
+}
+.tab-group-main .tab-item .icon-close-tab {
+  left: initial;
+  right: 5%;
+}
+
+/** Tab toolbar **/
+
+.browser-tab-content .toolbar-actions {
+  display: flex;
+  flex-direction: row;
+}
+.tab-toolbar-navigation,
+.tab-toolbar-webentity {
+  flex-shrink: 1;
+  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
+}
+.tab-toolbar-url {
+  flex: 1;
+}
+.tab-toolbar-url input {
+  width: 100%;
+}
+.tab-toolbar-webentity input {
+  min-width: 100px;
+  max-width: 250px;
+  width: initial;
+}
+.tab-toolbar-webentity input.loading {
+  background-image: url(../images/loading.svg);
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+/** Tab url field **/
+
+.browser-tab-url {
+  min-height: 30px;
+}
+
+.browser-tab-url.loading {
+  background-image: url(../images/loading-url.gif);
+  background-repeat: repeat-x;
+  background-position: center;
+}
+/* :first-child = scheme */
+.browser-tab-url em:first-child {
+  font-style: normal;
+}
+.browser-tab-url em:not(:first-child) {
+  background: #ffff99;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-style: normal;
+}
+.browser-tab-prefix-selector .prefix {
+  max-width: 20em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.browser-tab-prefix-selector .prefix-selected {
+  background: #ffff99;
+  font-weight: bold;
+}
+.browser-tab-prefix-selector .prefix-over {
+  background: #99ccff;
+}
+.browser-tab-url-placeholder {
+  color: #999;
+  letter-spacing: .2em;
+}
+
+/** WebView height fix **/
+
+.browser-window {
+  display: flex;
+  flex-direction: column;
+}
+.browser-window > * {
+  flex: 0 0 auto;
+}
+.browser-window > .browser-navigator {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.browser-window > .browser-navigator > * {
+  flex: 0 0 auto;
+}
+.browser-window > .browser-navigator > .browser-tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.browser-window > .browser-navigator > .browser-tab-content > * {
+  flex: 0 0 auto;
+}
+.browser-window > .browser-navigator > .browser-tab-content .SplitPane {
+  /* override inline styles */
+  position: initial !important;
+  height: initial !important;
+}
+/* previous styles will cause the resizer to disappear, position:absolute puts it back,
+I honestly can't (and won't) explain why */
+.browser-window > .browser-navigator > .browser-tab-content .SplitPane .Resizer {
+  position: absolute;
+}

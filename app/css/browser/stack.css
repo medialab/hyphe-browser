@@ -1,0 +1,59 @@
+.browser-stack {
+}
+
+/* Top row */
+
+.browser-stack-filler {
+  display: flex;
+}
+
+  .browser-stack-info {
+  }
+
+  .browser-stack-name {
+    font-weight: bold;
+  }
+
+  .browser-stack-views {
+    padding-left: 1em;
+    flex-grow: 1;
+  }
+
+  .browser-stack-age > span {
+    padding-right: 1em;
+  }
+
+  .browser-stack-selector {
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .browser-stack-selector .form-control {
+    width: auto;
+  }
+
+/* Bottom row */
+
+.browser-stack-wes {
+  display: flex;
+}
+  .browser-stack-wes-index {
+    padding-right: .5em;
+  }
+
+  .browser-stack-wes-selector {
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .browser-stack-wes-selector .form-control {
+    max-width: 500px;
+    width: auto;
+  }
+
+  .browser-stack-wes-prev .icon {
+  }
+
+  .browser-stack-wes-next .icon {
+    float: right;
+  }

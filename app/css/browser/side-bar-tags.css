@@ -1,0 +1,81 @@
+ul.tags-sections {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.tags-sections > li {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 5px 5px 20px 5px;
+  padding: 0;
+}
+
+ul.tags-sections > li > h3 {
+  margin: 0 0 5px 0;
+  padding: 2px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px 10px 0 0;
+  background: #ccc;
+}
+
+ul.tags-sections > li > ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 5px;
+}
+
+ul.tags-sections > li > ul > li > .tag-title {
+  cursor: text;
+}
+
+form.tags-new-category {
+  display: flex;
+  flex-direction: row;
+  margin: 0 1em;
+}
+
+form.tags-new-tag,
+form.tags-edit-tag,
+ul.tags-sections > li > ul > li {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+form.tags-edit-tag .react-autosuggest__container,
+form.tags-new-tag .react-autosuggest__container {
+  flex: 1;
+  display: flex;
+}
+form.tags-new-tag .react-autosuggest__container input,
+form.tags-edit-tag .react-autosuggest__container input,
+ul.tags-sections > li > ul > li > .tag-title {
+  flex: 1;
+  margin-right: -1px;
+  /* from .form-control */
+  min-height: 15px;
+  padding: 2px 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: 0;
+  /* from .btn-group>.btn:first-child */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+form.tags-new-tag .react-autosuggest__container button,
+form.tags-edit-tag .react-autosuggest__container button,
+ul.tags-sections > li > ul > li > .remove-tag {
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
+.tags-container li .remove-tag {
+  color: #ccc;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+.tags-container li .remove-tag:hover {
+  color: #333;
+}
