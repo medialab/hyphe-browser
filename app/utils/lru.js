@@ -131,7 +131,7 @@ export function highlightUrlHTML (lrus, url) {
   // All {token}s will be surrounded by a '<em>' tag
 
   // subhost may be empty, but urlLru.host ≥ lruLru.host
-  const subhost = urlLru.host.slice(lruLru.host.length).join('.')
+  const subhost = urlLru.host.slice(lruLru.host.length).reverse().join('.')
   // same for path
   const subpath = urlLru.path.slice(lruLru.path.length).join('.')
   const path = (urlLru.path.length > 0)
