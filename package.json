@@ -11,7 +11,7 @@
     "watch-all": "npm-run-all --parallel watch:*",
     "dev": "npm-run-all --parallel watch:electron watch:dev-server",
     "start": "cross-env NODE_ENV=production electron .",
-    "release": "cross-env NODE_ENV=production node bin/package.js",
+    "release": "cross-env NODE_ENV=production node bin/package.js && cd release/ && ls | while read d; do cd $d; rm -f *.zip; zip -r HyBro-$d.zip *; cd ..; done && mv */*.zip .",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.production.js --progress --profile --colors",
     "watch:electron": "cross-env NODE_ENV=development electron .",
     "watch:dev-server": "cross-env NODE_ENV=development node dev-server.js"
