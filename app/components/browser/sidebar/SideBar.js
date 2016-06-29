@@ -36,6 +36,20 @@ class SideBar extends React.Component {
     )
   }
 
+  renderDegree () {
+    const { webentity } = this.props
+
+    if (!webentity) {
+      return null
+    }
+
+    return (
+      <div>
+        <h3><T id="indegree" /> { webentity.indegree } fois</h3>
+      </div>
+    )
+  }
+
   setStatus (status) {
     const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId } = this.props
 
@@ -104,6 +118,7 @@ class SideBar extends React.Component {
           { this.renderStatusButton('OUT') }
         </div>
         { this.renderCrawlingStatus() }
+        { this.renderDegree() }
         { this.renderTabs() }
         { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : null }
       </aside>
