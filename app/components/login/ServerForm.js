@@ -63,7 +63,6 @@ class ServerForm extends React.Component {
       url: null,
       name: null,
       password: null,
-      passwordConfirm: null
     }
   }
 
@@ -110,7 +109,6 @@ class ServerForm extends React.Component {
     let server = {
       ...this.state.data
     }
-    delete server.passwordConfirm
     if (!server.password) {
       delete server.password
     }
@@ -147,7 +145,6 @@ class ServerForm extends React.Component {
         { this.renderFormGroup('name', 'server-name') }
         { this.renderFormGroup('login') }
         { this.renderFormGroup('password', 'password', 'password') }
-        { this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
 
         <div className="form-actions">
           <button className="btn btn-primary" disabled={ this.state.submitting }>
