@@ -54,11 +54,9 @@ export const fetchTags = (serverUrl, corpusId, category) => (dispatch) => {
     .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
 
-export const addTagsCategory = (serverUrl, corpusId, category) => (dispatch) => {
-  // This is not a real async action as we don't have a backend service, but let's simulate it is
-  // I guess an API should arise soon
-  dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, category } })
-  return Promise.resolve()
+export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (dispatch) => {
+  dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, webentityId, category } })
+  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, "", corpusId])
     .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
