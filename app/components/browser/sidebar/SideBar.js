@@ -17,7 +17,7 @@ class SideBar extends React.Component {
     super(props)
 
     this.state = {
-      tab: 'context'
+      tab: 'tags'
     }
   }
 
