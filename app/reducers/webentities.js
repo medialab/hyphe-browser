@@ -16,6 +16,7 @@ import {
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
+  SET_WEBENTITY_CRAWLING_STATUS,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
   ADJUST_WEBENTITY
@@ -68,6 +69,8 @@ export default createReducer(initialState, {
     SET_WEBENTITY_STATUS_SUCCESS,
     SET_WEBENTITY_STATUS_FAILURE
   ),
+
+  [SET_WEBENTITY_CRAWLING_STATUS]: updateWebentity((webentity, { crawling_status }) => ({ crawling_status })),
 
   // (Optimistically) add tag
   [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {

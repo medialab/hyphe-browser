@@ -31,6 +31,8 @@ export const SET_WEBENTITY_STATUS_REQUEST = '§_SET_WEBENTITY_STATUS_REQUEST'
 export const SET_WEBENTITY_STATUS_SUCCESS = '§_SET_WEBENTITY_STATUS_SUCCESS'
 export const SET_WEBENTITY_STATUS_FAILURE = '§_SET_WEBENTITY_STATUS_FAILURE'
 
+export const SET_WEBENTITY_CRAWLING_STATUS = '§_SET_WEBENTITY_CRAWLING_STATUS'
+
 // creating webentity
 export const CREATE_WEBENTITY_REQUEST = '§_CREATE_WEBENTITY_REQUEST'
 export const CREATE_WEBENTITY_SUCCESS = '§_CREATE_WEBENTITY_SUCCESS'
@@ -166,6 +168,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
           .then(() => {
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
+            dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'RUNNING', webentityId: id } })
           })
       }
     })
