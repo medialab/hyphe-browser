@@ -94,7 +94,7 @@ class StartUpForm extends React.Component {
             ? <CorpusList actions={ actions } dispatch={ dispatch }
                 corpora={ corpora } status={ status && status.hyphe }
                 server={ selectedServer } />
-            : <noscript />
+            : null
           )
         }
       </form>

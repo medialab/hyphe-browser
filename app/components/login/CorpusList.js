@@ -56,7 +56,7 @@ const CorpusList = (props) => {
     .sort()
     .map((k) => props.corpora[k])
 
-  if (!corpora.length) return <noscript />
+  if (!corpora.length) return null
 
   const hypheStatus = status
     ? (
@@ -66,7 +66,7 @@ const CorpusList = (props) => {
         <span> / { status.corpus_running + status.ports_left } ports</span>
       </span>
     )
-    : <noscript />
+    : null
 
   return (
     <div>

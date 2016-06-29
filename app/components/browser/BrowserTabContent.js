@@ -179,7 +179,7 @@ class TabContent extends React.Component {
     const { url, webentity, adjusting, setAdjustWebentity, disableWebentity } = this.props
 
     if (disableWebentity) {
-      return <noscript />
+      return null
     }
 
     return (
@@ -200,7 +200,7 @@ class TabContent extends React.Component {
     const { formatMessage } = this.context.intl
 
     if (disableNavigation) {
-      return <noscript />
+      return null
     }
 
     return (
@@ -220,7 +220,7 @@ class TabContent extends React.Component {
     const ready = (url === PAGE_HYPHE_HOME) || (!loading && (disableWebentity || !!webentity))
 
     if (disableNavigation) {
-      return <noscript />
+      return null
     }
 
     return (
@@ -240,7 +240,7 @@ class TabContent extends React.Component {
     const { disableWebentity, disableNavigation } = this.props
 
     if (disableNavigation && disableWebentity) {
-      return <noscript />
+      return null
     }
 
     return (
@@ -278,7 +278,7 @@ class TabContent extends React.Component {
       <SplitPane split="vertical" minSize="130" defaultSize="200">
         { webentity
           ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
-          : <noscript /> }
+          : null }
         { this.renderContent() }
       </SplitPane>
     )

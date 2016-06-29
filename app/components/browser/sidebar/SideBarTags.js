@@ -80,7 +80,7 @@ class SideBarTags extends React.Component {
         <ul>
           { tags.map(this.renderTag(category)) }
         </ul>
-        { canAddTag ? this.renderTagInput(category) : <noscript /> }
+        { canAddTag ? this.renderTagInput(category) : null }
       </li>
     )
   }

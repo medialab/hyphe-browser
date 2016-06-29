@@ -25,7 +25,7 @@ class SideBar extends React.Component {
     const { webentity } = this.props
 
     if (!webentity) {
-      return <noscript />
+      return null
     }
 
     return (
@@ -105,7 +105,7 @@ class SideBar extends React.Component {
         </div>
         { this.renderCrawlingStatus() }
         { this.renderTabs() }
-        { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : <noscript /> }
+        { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : null }
       </aside>
     )
   }
