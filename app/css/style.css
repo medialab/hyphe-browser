@@ -230,6 +230,9 @@ h1.title {
   flex-shrink: 1;
   flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
 }
+.tab-toolbar-webentity {
+  width: 250px;
+}
 .tab-toolbar-url {
   flex: 1;
 }

@@ -246,9 +246,9 @@ class TabContent extends React.Component {
     return (
         <div className="toolbar toolbar-header">
           <div className="toolbar-actions">
-            { this.renderNavigationToolbar() }
-            { this.renderUrlField() }
             { this.renderWebentityToolbar() }
+            { this.renderUrlField() }
+            { this.renderNavigationToolbar() }
           </div>
         </div>
     )
