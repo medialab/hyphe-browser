@@ -83,18 +83,20 @@ class SideBar extends React.Component {
   renderTabs () {
     return (
       <div className="sidebar-tabs">
-        <div className="tab-group">
-          <div
-            className={ cx('tab-item', { active: this.state.tab === 'context' }) }
-            onClick={ () => this.setState({ tab: 'context' }) }>
-            <span><T id="sidebar.tab-context" /></span>
-          </div>
-          <div
-            className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
-            onClick={ () => this.setState({ tab: 'tags' }) }>
-            <span><T id="sidebar.tab-tags" /></span>
-          </div>
-        </div>
+         {   false &&
+             <div className="tab-group">
+              <div
+                className={ cx('tab-item', { active: this.state.tab === 'context' }) }
+                onClick={ () => this.setState({ tab: 'context' }) }>
+                <span><T id="sidebar.tab-context" /></span>
+              </div>
+              <div
+                className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
+                onClick={ () => this.setState({ tab: 'tags' }) }>
+                <span><T id="sidebar.tab-tags" /></span>
+              </div>
+            </div>
+        }
         { (this.state.tab === 'context') ? this.renderTabContext() : this.renderTabTags() }
       </div>
     )
