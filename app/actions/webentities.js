@@ -52,7 +52,6 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
 
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
-    .then(({ result }) => result) // declare_page does not return webentity directly but a { result } object
     /* webentity's homepage must be set manually by user
     .then((webentity) => {
       if (!webentity.homepage) {
