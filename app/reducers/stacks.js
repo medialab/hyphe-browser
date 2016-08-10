@@ -17,25 +17,29 @@ const initialState = {
       name: 'PROSPECT',
       description: 'PROSPECT description',
       method: 'store.advanced_search_webentities',
-      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true]
+      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true],
+      condition: 'DISCOVERED'
     },
     {
       name: 'IN',
       description: 'IN description',
       method: 'store.get_webentities_by_status',
-      args: ['IN', 'name', -1, 0]
+      args: ['IN', 'name', -1, 0],
+      condition: 'IN'
     },
     {
       name: 'UNDECIDED',
       description: 'UNDECIDED description',
       method: 'store.get_webentities_by_status',
-      args: ['UNDECIDED', 'name', -1, 0]
+      args: ['UNDECIDED', 'name', -1, 0],
+      condition: 'UNDECIDED'
     },
     {
       name: 'OUT',
       description: 'OUT description',
       method: 'store.get_webentities_by_status',
-      args: ['OUT', 'name', -1, 0]
+      args: ['OUT', 'name', -1, 0],
+      condition: 'OUT'
     }
     // {
     //   name: 'TOTAG',

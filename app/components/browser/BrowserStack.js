@@ -57,7 +57,7 @@ class BrowserStack extends React.Component {
 
   // top row
   renderFiller () {
-    const { lastRefresh, selectedStack, stacks, webentities } = this.props
+    const { lastRefresh, selectedStack, stacks, webentities, status } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
 
     if (!selectedStack) {
@@ -68,9 +68,13 @@ class BrowserStack extends React.Component {
               defaultValue={ this.state.selectedStackName }
               onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
               <option key="prompt" value="">{ this.context.intl.formatMessage({ id: 'select-stack' }) }</option>
-              { stacks.map(s => (
-                <option key={ s.name } value={ s.name }>{ s.description }</option>
-              )) }
+              { stacks.filter(s => (
+                  status.corpus.memory_structure.webentities[s.condition]
+                ))
+                .map(s => (
+                  <option key={ s.name } value={ s.name }>{ s.description }</option>
+                ))
+              }
             </select>
             <button className="btn btn-default"
               onClick={ () => this.fill() }>
@@ -164,6 +168,7 @@ BrowserStack.contextTypes = {
 BrowserStack.propTypes = {
   activeTabId: PropTypes.string,
   corpus: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
   lastRefresh: PropTypes.number,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
@@ -180,6 +185,7 @@ BrowserStack.propTypes = {
 const mapStateToProps = ({ corpora, servers, stacks, tabs }) => ({
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpus: corpora.selected,
+  status: corpora.status,
   lastRefresh: stacks.lastRefresh,
   server: servers.selected,
   selectedStack: stacks.selected,
