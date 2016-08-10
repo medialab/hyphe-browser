@@ -46,8 +46,11 @@ class SideBarTags extends React.Component {
 
   updateFullSuggestions (categories) {
     // Updated categories, fetch suggestions
-    categories.forEach((category) => {
-      this.fetchFullSuggestions(category)
+    const { serverUrl, corpusId, fetchTags } = this.props
+    fetchTags(serverUrl, corpusId).then((tags) => {
+      categories.forEach((category) => {
+        this.setState({ ['full-suggestions/' + category]: tags[category] })
+      })
     })
   }
 
@@ -83,13 +86,6 @@ class SideBarTags extends React.Component {
         { canAddTag ? this.renderTagInput(category) : null }
       </li>
     )
-  }
-
-  fetchFullSuggestions (category) {
-    const { serverUrl, corpusId, fetchTags } = this.props
-    fetchTags(serverUrl, corpusId, category).then((tags) => {
-      this.setState({ ['full-suggestions/' + category]: tags })
-    })
   }
 
   addTagHandler (category, tag = null) {
