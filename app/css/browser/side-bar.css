@@ -1,5 +1,6 @@
 .browser-side-bar {
   text-align: center;
+  overflow: auto;
 }
 
 .browser-side-bar-status button {
