@@ -21,6 +21,13 @@ const initialState = {
       condition: 'DISCOVERED'
     },
     {
+      name: 'TOTAG',
+      description: 'TOTAG description',
+      method: 'store.get_webentities_mistagged',
+      args: ['IN', true, false, 'name', -1, 0],
+      condition: 'IN'
+    },
+    {
       name: 'IN',
       description: 'IN description',
       method: 'store.get_webentities_by_status',
@@ -41,12 +48,6 @@ const initialState = {
       args: ['OUT', 'name', -1, 0],
       condition: 'OUT'
     }
-    // {
-    //   name: 'TOTAG',
-    //   description: 'TOTAG description',
-    //   method: 'unwritten_yet',
-    //   args: ['COMING...']
-    // }
   ]
 }
 
