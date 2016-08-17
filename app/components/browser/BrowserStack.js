@@ -69,7 +69,7 @@ class BrowserStack extends React.Component {
               onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
               <option key="prompt" value="">{ this.context.intl.formatMessage({ id: 'select-stack' }) }</option>
               { stacks.filter(s => (
-                  status.corpus.memory_structure.webentities[s.condition]
+                  status.corpus.memory_structure && status.corpus.memory_structure.webentities[s.condition]
                 ))
                 .map(s => (
                   <option key={ s.name } value={ s.name }>{ s.description }</option>
