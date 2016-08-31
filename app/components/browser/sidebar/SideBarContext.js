@@ -4,7 +4,6 @@ import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
-import cx from 'classnames'
 
 
 class SideBarContext extends React.Component {

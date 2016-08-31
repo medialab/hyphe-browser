@@ -88,7 +88,7 @@ class ServerForm extends React.Component {
       .then(() => {
         this.setState(newState)
         this.saveAndRedirect()
-      }, (err) => {
+      }, () => {
         newState.submitting = false
         newState.errors = ['error.server-url']
         this.setState(newState)
