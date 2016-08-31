@@ -51,12 +51,12 @@ export const fetchTags = (serverUrl, corpusId) => (dispatch) => {
       dispatch({ type: FETCH_TAGS_SUCCESS, payload: { serverUrl, corpusId, values } })
       return values
     })
-    .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, category, error } }))
+    .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, error } }))
 }
 
 export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (dispatch) => {
   dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, webentityId, category } })
-  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, "", corpusId])
+  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, '', corpusId])
     .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
