@@ -68,7 +68,7 @@
     "classnames": "^2.2.3",
     "electron-debug": "^0.5.1",
     "electron-shortcut": "^0.4.1",
-    "jvent": "^0.2.0",
+    "jvent": "^1.0.0",
     "lodash.mapvalues": "^4.2.0",
     "lodash.mergewith": "^4.2.0",
     "lodash.set": "^4.0.0",
