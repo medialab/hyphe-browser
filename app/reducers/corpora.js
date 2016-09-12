@@ -60,7 +60,7 @@ export default createReducer(initialState, {
 
   [ADD_TAGS_CATEGORY_SUCCESS]: updateTagsCategories((state, { corpusId, category }) => {
     const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
-    if (originalCategories.indexOf(category) !== -1) {
+    if (originalCategories.includes(category)) {
       return state
     }
 
