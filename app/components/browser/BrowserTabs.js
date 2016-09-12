@@ -115,14 +115,16 @@ class BrowserTabs extends React.Component {
 
   renderTabs (fixed) {
     const { formatMessage } = this.context.intl
+    const tabs = this.props.tabs.filter((tab) => !!tab.fixed === fixed)
 
-    return this.props.tabs.filter((tab) => !!tab.fixed === fixed).map((tab) => {
+    return tabs.map((tab) => {
       const isNewTab = tab.id !== HYPHE_TAB_ID && tab.title === null
       const title = tab.id === HYPHE_TAB_ID ? formatMessage({ id: 'hyphe-tab-title' }) : tab.title
 
       return (
         <Tab key={ tab.id }
           { ...tab }
+          closable={ tabs.length !== 1 }
           title={ title }
           newTab={ isNewTab }
           active={ this.props.activeTabId === tab.id }
