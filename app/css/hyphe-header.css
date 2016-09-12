@@ -1,6 +1,7 @@
 .hyphe-header {
   background: var(--color-black);
   color: var(--color-white);
+  font-family: var(--font-pt);
   padding: 5px;
   text-align: center;
 }
