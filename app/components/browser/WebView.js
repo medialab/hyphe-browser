@@ -34,11 +34,7 @@ const { Menu, MenuItem } = remote
 class WebView extends React.Component {
 
   constructor (props) {
-    super({
-      ua: WEBVIEW_UA,
-      visible: true,
-      ...props
-    })
+    super(props)
 
     // Note those are attributes, not state properties, this is on purpose as any way we disabled re-rendering completely
     this.isLoading = false
@@ -223,8 +219,14 @@ WebView.contextTypes = {
 
 WebView.propTypes = {
   ua: PropTypes.string,
+  visible: PropTypes.bool,
   url: PropTypes.string.isRequired,
   eventBus: eventBusShape.isRequired
+}
+
+WebView.defaultProps = {
+  ua: WEBVIEW_UA,
+  visible: true
 }
 
 export default WebView
