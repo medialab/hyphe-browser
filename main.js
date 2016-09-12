@@ -44,7 +44,7 @@ app.on('ready', () => {
   window.setMenu(null)
 
   // Debug menu, whatever environment
-  shortcuts.register('Alt+Shift+C', () => window.toggleDevTools())
+  shortcuts.register(['Shift+Ctrl+C', 'F12'], () => window.toggleDevTools())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
