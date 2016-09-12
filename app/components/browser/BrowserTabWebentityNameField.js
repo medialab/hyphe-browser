@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import cx from 'classnames'
 
 class BrowserTabWebentityNameField extends React.Component {
 
@@ -21,18 +22,10 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   render () {
-    if (this.props.disabled) {
-      // PAGE_HYPHE_HOME
-      return <input className="form-control btn btn-large" type="text" disabled />
-    }
-    if (!this.state.value) {
-      // Loading
-      return <input className="form-control btn btn-large loading" type="text" readOnly />
-    }
-
-    return <input className="form-control btn btn-large" type="text"
+    return <input className={ cx('form-control btn btn-large', { loading: !this.state.value }) }
+      disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       value={ this.state.value }
-      readOnly={ !this.props.editable }
+      readOnly={ !this.props.editable || !this.state.value }
       onChange={ (e) => this.onChange(e) }/>
   }
 }
