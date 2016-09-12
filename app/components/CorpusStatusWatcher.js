@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
 import { fetchTagsCategories, fetchTags } from '../actions/tags'
+import { fetchTLDs } from '../actions/webentities'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
   ERROR_CORPUS_NOT_STARTED,
@@ -19,6 +20,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   componentDidMount () {
+    this.initDataOnce()
     this.watchStatus()
   }
 
@@ -29,6 +31,7 @@ class CorpusStatusWatcher extends React.Component {
     }
   }
 
+  // Data that should be fetched frequently to keep an eye on their evolution (status)
   watchStatus () {
     const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories } = this.props
 
@@ -66,6 +69,13 @@ class CorpusStatusWatcher extends React.Component {
     )
   }
 
+  // Data that must be initialized only once
+  initDataOnce () {
+    const { fetchTLDs, showError, serverUrl, corpus } = this.props
+    fetchTLDs(serverUrl, corpus.corpus_id)
+    .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
+  }
+
   render () {
     return <div className={ this.props.className }>{ this.props.children }</div>
   }
@@ -82,7 +92,8 @@ CorpusStatusWatcher.propTypes = {
   showError: React.PropTypes.func,
   startCorpus: React.PropTypes.func,
   fetchTagsCategories: React.PropTypes.func,
-  fetchTags: React.PropTypes.func
+  fetchTags: React.PropTypes.func,
+  fetchTLDs: React.PropTypes.func
 }
 
 const mapStateToProps = ({ corpora, servers }) => ({
@@ -97,7 +108,8 @@ const mapDispatchToProps = {
   fetchCorpusStatus,
   startCorpus,
   fetchTagsCategories,
-  fetchTags
+  fetchTags,
+  fetchTLDs
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CorpusStatusWatcher)

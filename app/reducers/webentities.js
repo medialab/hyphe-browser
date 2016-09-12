@@ -19,7 +19,8 @@ import {
   SET_WEBENTITY_CRAWLING_STATUS,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
-  ADJUST_WEBENTITY
+  ADJUST_WEBENTITY,
+  FETCH_TLDS_SUCCESS
   // Note we don't subscribe to SAVE_ADJUSTED_WEBENTITY_* because we're already plugged to its sub-actions
 } from '../actions/webentities'
 import { SELECT_CORPUS } from '../actions/corpora'
@@ -33,6 +34,7 @@ import {
 } from '../actions/tags'
 
 const initialState = {
+  tlds: null,
   webentities: {}, // id → WebEntity
   tabs: {}, // tabId → webEntityId
   adjustments: {} // webEntityId → adjustment { name, homepage, prefix, crawl }
@@ -40,6 +42,11 @@ const initialState = {
 
 
 export default createReducer(initialState, {
+
+  [FETCH_TLDS_SUCCESS]: (state, { tlds }) => ({
+    ...state,
+    tlds
+  }),
 
   [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => ({
     ...state,

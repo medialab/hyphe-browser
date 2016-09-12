@@ -22,7 +22,10 @@ import {
   SET_WEBENTITY_STATUS_FAILURE,
   SAVE_ADJUSTED_WEBENTITY_REQUEST,
   SAVE_ADJUSTED_WEBENTITY_SUCCESS,
-  SAVE_ADJUSTED_WEBENTITY_FAILURE
+  SAVE_ADJUSTED_WEBENTITY_FAILURE,
+  FETCH_TLDS_REQUEST,
+  FETCH_TLDS_SUCCESS,
+  FETCH_TLDS_FAILURE
 } from '../actions/webentities'
 import {
   ERROR_SERVER_NO_RESOURCE,
@@ -41,12 +44,12 @@ const initialState = {
   error: emptyError,
   // to display loaders in different places
   loaders: {
-    // when fetching the list of corpora
     corpora: false,
     corpus_status: false,
     webentity: false,
     webentity_status: false,
-    webentity_adjust: false
+    webentity_adjust: false,
+    tlds: false
   }
 }
 
@@ -71,6 +74,10 @@ export default createReducer(initialState, {
   [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', true),
   [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
   [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
+
+  [FETCH_TLDS_REQUEST]: toggleLoader('tlds', true),
+  [FETCH_TLDS_SUCCESS]: toggleLoader('tlds', false),
+  [FETCH_TLDS_FAILURE]: toggleLoader('tlds', false),
 
   [SET_WEBENTITY_STATUS_REQUEST]: toggleLoader('webentity_status', true),
   [SET_WEBENTITY_STATUS_SUCCESS]: toggleLoader('webentity_status', false),

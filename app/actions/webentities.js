@@ -38,6 +38,11 @@ export const CREATE_WEBENTITY_REQUEST = '§_CREATE_WEBENTITY_REQUEST'
 export const CREATE_WEBENTITY_SUCCESS = '§_CREATE_WEBENTITY_SUCCESS'
 export const CREATE_WEBENTITY_FAILURE = '§_CREATE_WEBENTITY_FAILURE'
 
+// fetching TLDs
+export const FETCH_TLDS_REQUEST = '§_FETCH_TLDS_REQUEST'
+export const FETCH_TLDS_SUCCESS = '§_FETCH_TLDS_SUCCESS'
+export const FETCH_TLDS_FAILURE = '§_FETCH_TLDS_FAILURE'
+
 // attaching a fetched webentity to an open tab
 export const SET_TAB_WEBENTITY = '§_SET_TAB_WEBENTITY'
 
@@ -131,6 +136,17 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
     })
     .catch((error) => {
       dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error } })
+      throw error
+    })
+}
+
+export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
+  dispatch({ type: FETCH_TLDS_REQUEST, payload: { serverUrl, corpusId } })
+
+  return jsonrpc(serverUrl)('get_corpus_tlds', [corpusId])
+    .then(tlds => dispatch({ type: FETCH_TLDS_SUCCESS, payload: { serverUrl, corpusId, tlds } }))
+    .catch(error => {
+      dispatch({ type: FETCH_TLDS_FAILURE, payload: { serverUrl, corpusId, error } })
       throw error
     })
 }
