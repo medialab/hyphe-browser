@@ -6,7 +6,7 @@
 
 import jsonrpc from '../utils/jsonrpc'
 // for redirections after success / errors from server
-import { routeActions } from 'react-router-redux'
+import { routerActions } from 'react-router-redux'
 import { addHypheTab } from './tabs'
 
 import { createAction } from 'redux-actions'
@@ -115,7 +115,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
         return dispatch(selectCorpus(serverUrl, action.payload.corpora[corpus.corpus_id]))
       })
       .then(() => {
-        dispatch(routeActions.push('/browser'))
+        dispatch(routerActions.push('/browser'))
       }, (err) => console.error('→ browser', err))
     })
     .catch((error) => dispatch({

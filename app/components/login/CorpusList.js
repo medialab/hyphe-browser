@@ -3,7 +3,7 @@ import '../../css/login/corpus-list'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
-import { routeActions } from 'react-router-redux'
+import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
 // abstract component
@@ -17,7 +17,7 @@ class CorpusListItem extends React.Component {
     const { actions, server, corpus, dispatch } = this.props
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
     actions.selectCorpus(server, corpus)
-    dispatch(routeActions.push(path))
+    dispatch(routerActions.push(path))
   }
 
   render () {

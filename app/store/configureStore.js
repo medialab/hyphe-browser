@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { hashHistory } from 'react-router'
-import { syncHistory } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux'
 import persistState from 'redux-localstorage'
 
 import rootReducer from '../reducers'
@@ -18,9 +18,7 @@ const slicer = () => (state) =>
 
 // configureStore
 export default (initialState) => {
-  // configure middlewares
-  const routerMiddleware = syncHistory(hashHistory)
-  const middlewares = applyMiddleware(thunk, routerMiddleware)
+  const middlewares = applyMiddleware(thunk, routerMiddleware(hashHistory))
 
   const storage = persistState(null, { slicer, key: 'hyphe' })
 
@@ -28,10 +26,5 @@ export default (initialState) => {
     ? compose(middlewares, storage, require('../components/DevTools').default.instrument())
     : compose(middlewares, storage)
 
-  const store = createStore(rootReducer, initialState, enhancers)
-  // only needed to work correctly with redux devtools
-  if (process.env.NODE_ENV === 'development') {
-    routerMiddleware.listenForReplays(store)
-  }
-  return store
+  return createStore(rootReducer, initialState, enhancers)
 }

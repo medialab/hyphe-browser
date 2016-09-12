@@ -6,6 +6,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 // in this electron app it's easier to reason with hashHistory
 import { Router, hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 import routes from './routes'
 import DevTools from './components/DevTools'
@@ -21,6 +22,7 @@ const store = configureStore()
 // Initialize i18n
 store.dispatch(setLocale(getOption('locale', DEFAULT_LOCALE)))
 
+const history = syncHistoryWithStore(hashHistory, store)
 // Reset URI
 location.hash = 'login'
 
@@ -29,7 +31,7 @@ const domRoot = document.getElementById('root')
 const rootElement = (
   <Provider store={ store }>
     <div>
-      <Router history={ hashHistory }>
+      <Router history={ history }>
         { routes }
       </Router>
       { process.env.NODE_ENV === 'development' ? <DevTools /> : null }

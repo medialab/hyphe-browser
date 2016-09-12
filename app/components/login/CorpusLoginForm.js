@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import { routeActions } from 'react-router-redux'
+import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T } from 'react-intl'
 
 import * as actions from '../../actions/corpora'
@@ -26,7 +26,7 @@ class CorpusLoginForm extends React.Component {
     this.setState({ submitting: true })
     jsonrpc(this.props.server.url)('start_corpus', [this.props.corpus.corpus_id, this.state.password])
       .then(() => {
-        this.props.dispatch(routeActions.push('/browser'))
+        this.props.dispatch(routerActions.push('/browser'))
       }, () => {
         this.setState({ submitting: false, errors: ['error.wrong-password'] })
       })

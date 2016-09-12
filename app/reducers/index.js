@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 // let redux store the current location object
-import { routeReducer as routing } from 'react-router-redux'
+import { routerReducer as routing } from 'react-router-redux'
 
 // sub reducers
 import corpora from './corpora'
