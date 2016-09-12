@@ -2,13 +2,11 @@
 
 /* eslint no-path-concat: 0, func-names:0 */
 
-const app = require('app')
-const BrowserWindow = require('browser-window')
-const Menu = require('menu')
-const ipc = require('electron').ipcMain
-const Shortcut = require('electron-shortcut')
+const { app, BrowserWindow, Menu, ipcMain: ipc } = require('electron')
+//const Shortcut = require('electron-shortcut')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
+const shortcuts = require('electron-localshortcut')
 
 // Force production environment in final binary
 if (isPackaged) {
@@ -20,8 +18,6 @@ if (process.env.NODE_ENV === 'development') {
     showDevTools: true
   })
 }
-
-require('crash-reporter').start()
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -83,44 +79,18 @@ app.on('ready', () => {
 
   window.setMenu(Menu.buildFromTemplate(menus))
 
-  // shortcuts can only be handled here, in the main process
-  let shortcuts = new Map()
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
   app.setMaxListeners(25)
 
-  // Fix a bug in electron-shortcut that would make in never call removeListener and pile up "browser-window-focus" events
-  function newShortcut (accel, handler) {
-    let shortcut = new Shortcut(accel, handler)
-    shortcut.unregister = function () { // no arrow-function here, we *want* the reference to this
-      for (const event of Object.keys(this._shortcuts)) {
-        this._shortcuts[event].autoRegister = false // that does the trick of removing listener
-        this._shortcuts[event].unregister()
-      }
-    }
-    return shortcut
-  }
-
-  // ipcMain should be used, window.webContent.on is never triggered for ipc
+  // Register shortcuts from here, is it still required? Can't we use 'electron-localshortcut' directly in concerne components?
   ipc.on('registerShortcut', (_, accel) => {
-    const key = JSON.stringify(accel)
     const eventName = `shortcut-${accel}`
-    const shortcut = newShortcut(accel, () => window.webContents.send(eventName))
-    shortcut.register() // Force register, or we'll have to wait for an alt-tab to trigger blur/focus
-    shortcuts.set(key, shortcut)
+    shortcuts.register(accel, () => ipc.send(eventName))
   })
-
   ipc.on('unregisterShortcut', (_, accel) => {
-    const key = JSON.stringify(accel)
-    const shortcut = shortcuts.get(key)
-    if (shortcut) {
-      // a bug in 'electron-shortcut' forces us to set this prop to false in order to force
-      // removeListener, so that we don't pile up "browser-window-focus" events
-      shortcut.autoRegister = false
-      shortcuts.get(key).unregister()
-      shortcuts.delete(key)
-    }
+    shortcuts.unregister(accel)
   })
 
   // Open files in external app

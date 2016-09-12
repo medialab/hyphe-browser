@@ -4,11 +4,9 @@ import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 import { intlShape } from 'react-intl'
 import { eventBusShape } from '../../types'
 
-import { ipcRenderer as ipc, clipboard } from 'electron'
-import remote from 'remote'
+import { remote, ipcRenderer as ipc, clipboard } from 'electron'
 
-const Menu = remote.require('menu')
-const MenuItem = remote.require('menu-item')
+const { Menu, MenuItem } = remote
 
 /**
  * @see https://github.com/atom/electron/blob/master/docs/api/web-view-tag.md

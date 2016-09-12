@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
-import { ipcRenderer as ipc } from 'electron'
+import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
 
-import remote from 'remote'
-
-const Menu = remote.require('menu')
-const MenuItem = remote.require('menu-item')
+const { Menu, MenuItem } = remote
 
 class BrowserTab extends React.Component {
   constructor (props) {
