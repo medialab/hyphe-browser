@@ -321,8 +321,3 @@ h1.title {
   position: initial !important;
   height: initial !important;
 }
-/* previous styles will cause the resizer to disappear, position:absolute puts it back,
-I honestly can't (and won't) explain why */
-.browser-window > .browser-navigator > .browser-tab-content .SplitPane .Resizer {
-  position: absolute;
-}
