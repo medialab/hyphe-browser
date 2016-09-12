@@ -1,5 +1,7 @@
 import '../../css/browser/page-hyphe-home'
 import React, { PropTypes } from 'react'
+import { FormattedMessage as T, intlShape } from 'react-intl'
+
 import { getSearchUrl } from '../../utils/search-web'
 
 class PageHypheHome extends React.Component {
@@ -15,13 +17,16 @@ class PageHypheHome extends React.Component {
   }
 
   render () {
+    const formatMessage = this.context.intl.formatMessage
+
     return (
       <div className="page-hyphe-home">
         <form className="google-form" onSubmit={ (e) => { this.onSubmit(e) } }>
-          <div><img className="google-logo" src="images/logos/google.svg" /></div>
+          <h2><T id="google.search" /> <strong>Google</strong></h2>
           <div>
             <input type="search" value={ this.state.value }
-              onChange={ (e) => { this.setState({ q: e.target.value }) } } />
+              placeholder={ formatMessage({ id: 'google.placeholder' }) }
+              onChange={ ({ target }) => { this.setState({ q: target.value }) } } />
             <button>
               <span className="icon icon-search"></span>
             </button>
@@ -30,6 +35,10 @@ class PageHypheHome extends React.Component {
       </div>
     )
   }
+}
+
+PageHypheHome.contextTypes = {
+  intl: intlShape
 }
 
 PageHypheHome.propTypes = {

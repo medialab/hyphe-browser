@@ -3,7 +3,7 @@
 
 body {
   background: var(--color-white);
-  color: #555;
+  color: var(--color-black);
 }
 
 a {

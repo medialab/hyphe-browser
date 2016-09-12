@@ -56,6 +56,8 @@
   "error.url-and-name-required": "URL and name fields are required",
   "error.wrong-password": "Wrong password",
   "fill": "Fill",
+  "google.search": "Search on ",
+  "google.placeholder": "Search…",
   "goto-homepage": "Go to homepage ({url})",
   "hyphe-tab-title": "Hyphe",
   "indegree": "Linked",
