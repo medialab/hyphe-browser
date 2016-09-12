@@ -40,45 +40,11 @@ app.on('ready', () => {
     window = null
   })
 
-  const menus = [
-    {
-      label: '&Hyphe',
-      submenu: [
-        {
-          label: '&Full Screen',
-          accelerator: 'F11',
-          click: () => {
-            window.setFullScreen(!window.isFullScreen())
-          }
-        },
-        {
-          label: '&Quit',
-          accelerator: 'CmdOrCtrl+Q',
-          click: () => {
-            app.quit()
-          }
-        }
-      ]
-    }
-  ]
+  // Disable menubar
+  window.setMenu(null)
 
-  if (process.env.NODE_ENV === 'development') {
-    menus.push({
-      label: 'Debug',
-      submenu: [
-        {
-          label: 'Toggle &Developer Tools',
-          accelerator: 'Alt+Shift+C',
-          click: () => {
-            window.toggleDevTools()
-          }
-        }
-      ]
-    })
-  }
-
-  window.setMenu(Menu.buildFromTemplate(menus))
-
+  // Debug menu, whatever environment
+  shortcuts.register('Alt+Shift+C', () => window.toggleDevTools())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
