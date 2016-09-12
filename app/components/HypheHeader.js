@@ -3,20 +3,32 @@ import './../css/hyphe-header'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
+import { intlShape } from 'react-intl'
 
 class HypheHeader extends React.Component {
   render () {
+    const formatMessage = this.context.intl.formatMessage
+    const { corpus } = this.props
+
     let title = 'Hyphe Browser'
-    if (this.props.corpus) {
-      title += ' – ' + this.props.corpus.name
+    if (corpus) {
+      title += ' – ' + corpus.name
     }
 
     return (
       <header className="hyphe-header">
+        { corpus && <Link className="disconnection-link" to="login" title={ formatMessage({ id: 'disconnect' }) }>
+          <span className="icon icon-cancel-circled" />
+        </Link> }
         { title }
       </header>
     )
   }
+}
+
+HypheHeader.contextTypes = {
+  intl: intlShape
 }
 
 HypheHeader.propTypes = {
