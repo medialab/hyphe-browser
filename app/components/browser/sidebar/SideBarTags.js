@@ -135,7 +135,7 @@ class SideBarTags extends React.Component {
   }
 
   changeEditedTagValue (category, value, tag = null) {
-    const prop = category + ((tag !== null) ? ('/' + tag) : '')
+    const prop = getPropName(category, tag)
     this.setState({
       tagValue: {
         ...this.state.tagValue,
@@ -145,19 +145,19 @@ class SideBarTags extends React.Component {
   }
 
   getEditedTagValue (category, tag = null) {
-    const prop = category + ((tag !== null) ? ('/' + tag) : '')
+    const prop = getPropName(category, tag)
     return (typeof this.state.tagValue[prop] === 'string')
       ? this.state.tagValue[prop]
       : tag
   }
 
   setCurrentSuggestions (suggestions, category, tag = null) {
-    const prop = 'suggestions/' + category + ((tag !== null) ? ('/' + tag) : '')
+    const prop = 'suggestions/' + getPropName(category, tag)
     this.setState({ [prop]: suggestions })
   }
 
   getCurrentSuggestions (category, tag = null) {
-    const prop = 'suggestions/' + category + ((tag !== null) ? ('/' + tag) : '')
+    const prop = 'suggestions/' + getPropName(category, tag)
     return this.state[prop] || this.getSuggestions(category, '')
   }
 
@@ -178,14 +178,15 @@ class SideBarTags extends React.Component {
         <Autosuggest
           id={ 'tags-' + uniqSuffix }
           suggestions={ this.getCurrentSuggestions(category, tag) }
-          onSuggestionsUpdateRequested={ ({ value }) => this.setCurrentSuggestions(this.getSuggestions(category, value), category, tag) }
+          onSuggestionsFetchRequested={ ({ value }) => this.setCurrentSuggestions(this.getSuggestions(category, value), category, tag) }
+          onSuggestionsClearRequested={ () => this.setCurrentSuggestions([], category, tag) }
           getSuggestionValue={ getSuggestionValue }
           renderSuggestion={ renderSuggestion }
           shouldRenderSuggestions={ () => true }
           inputProps={ {
             className: 'form-control btn btn-large tag-input-' + uniqSuffix,
             placeholder: tag || 'New tag',
-            value: this.getEditedTagValue(category, tag),
+            value: this.getEditedTagValue(category, tag) || '',
             autoFocus: !!tag,
             onFocus: (e) => e.target.select(),
             onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
@@ -247,9 +248,13 @@ class SideBarTags extends React.Component {
 }
 
 
+function getPropName (category, tag = null) {
+  return category + ((tag !== null) ? ('/' + tag) : '')
+}
+
 function getSuggestions (list, value) {
   const inputValue = value.trim().toLowerCase()
-  return list.filter(tag => tag.toLowerCase().indexOf(inputValue) !== -1)
+  return list.filter(tag => tag.toLowerCase().includes(inputValue))
 }
 
 function getSuggestionValue (suggestion) {
