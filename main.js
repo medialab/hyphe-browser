@@ -17,6 +17,10 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({
     showDevTools: true
   })
+  const devtools = require('electron-devtools-installer')
+  devtools.default(devtools.REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.error('An error occurred during redux devtools install: ', err))
 }
 
 app.on('window-all-closed', () => {

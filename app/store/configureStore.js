@@ -23,7 +23,7 @@ export default (initialState) => {
   const storage = persistState(null, { slicer, key: 'hyphe' })
 
   const enhancers = process.env.NODE_ENV === 'development'
-    ? compose(middlewares, storage, require('../components/DevTools').default.instrument())
+    ? compose(middlewares, storage, window.devToolsExtension ? window.devToolsExtension() : f => f)
     : compose(middlewares, storage)
 
   return createStore(rootReducer, initialState, enhancers)

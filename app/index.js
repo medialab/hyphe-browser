@@ -9,7 +9,6 @@ import { Router, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
 import routes from './routes'
-import DevTools from './components/DevTools'
 import configureStore from './store/configureStore'
 import { setLocale } from './actions/intl'
 import { DEFAULT_LOCALE } from './constants'
@@ -34,7 +33,6 @@ const rootElement = (
       <Router history={ history }>
         { routes }
       </Router>
-      { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
     </div>
   </Provider>
 )
