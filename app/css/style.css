@@ -1,12 +1,7 @@
-/* will be supported on Chrome 49 */
-:root {
-  --primary-bg-color: #EFEBE8;
-  --secondary-bg-color: #F7F3F0;
-  --primary-blue-color: #428BCA;
-}
+@import './colors.css';
 
 body {
-  background: #EFEBE8;
+  background: var(--color-white);
   color: #555;
 }
 
@@ -18,9 +13,8 @@ a.btn {
   text-decoration: none;
 }
 
-.window-content {
-  background: #EFEBE8;
-  color: #555;
+.window, .window-content {
+  background: var(--color-white);
 }
 
 .urlInputContainer {
