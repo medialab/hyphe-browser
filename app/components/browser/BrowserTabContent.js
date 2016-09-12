@@ -259,8 +259,7 @@ class TabContent extends React.Component {
 
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
-      : <WebView id={ id } url={ url }
-          eventBus={ eventBus } />
+      : <WebView id={ id } url={ url } eventBus={ eventBus } />
   }
 
   renderSinglePane () {
@@ -278,7 +277,7 @@ class TabContent extends React.Component {
       <SplitPane split="vertical" minSize="130" defaultSize="200">
         { webentity
           ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
-          : null }
+          : <div></div> }
         { this.renderContent() }
       </SplitPane>
     )
