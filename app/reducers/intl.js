@@ -11,7 +11,6 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
-  // display loader
   [SET_LOCALE_SUCCESS]: (state, { locale, messages }) => ({
     ...state,
     locale,

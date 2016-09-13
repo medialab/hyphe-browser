@@ -5,6 +5,7 @@ import '../../css/pane'
 import React, { PropTypes } from 'react'
 
 import HypheHeader from '../HypheHeader'
+import HypheFooter from '../HypheFooter'
 
 class Login extends React.Component {
   render () {
@@ -16,6 +17,7 @@ class Login extends React.Component {
             { this.props.children  }
           </div>
         </div>
+        <HypheFooter />
       </div>
     )
   }

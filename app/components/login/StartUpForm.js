@@ -12,7 +12,6 @@ import { FormattedMessage as T, intlShape } from 'react-intl'
 import actions from '../../actions'
 import CorpusList from './CorpusList'
 import Spinner from '../Spinner'
-import Button from '../Button'
 
 class StartUpForm extends React.Component {
 
@@ -66,9 +65,6 @@ class StartUpForm extends React.Component {
       <form className="start-up-form" onSubmit={ (evt) => evt.preventDefault() }>
         <h2 className="pane-centered-title">
           <T id="welcome" />
-          <Link className="options-link" to="/login/options">
-            <span className="icon icon-cog"></span>
-          </Link>
         </h2>
 
         <div className="form-group inline">
@@ -117,7 +113,8 @@ const mapStateToProps = (state) => ({
   selectedServer: state.servers.selected,
   servers: state.servers.list,
   status: state.corpora.status,
-  ui: state.ui
+  ui: state.ui,
+  locale: state.intl.locale
 })
 
 const mapDispatchToProps = (dispatch) => ({

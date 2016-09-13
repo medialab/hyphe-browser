@@ -1,4 +1,6 @@
 // options page to change the language, reinit servers…
+// from Iteration 3, this page is not unreachable anymore,
+// i18n change is triggered in HypheFooter
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
@@ -49,7 +51,6 @@ class Options extends React.Component {
 
 Options.propTypes = {
   actions: PropTypes.object,
-  dispatch: PropTypes.func,
   locale: PropTypes.string,
   locales: PropTypes.array
 }
@@ -60,8 +61,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch),
-  dispatch
+  actions: bindActionCreators(actions, dispatch)
 })
 
 const connectedOptions = connect(mapStateToProps, mapDispatchToProps)(Options)
