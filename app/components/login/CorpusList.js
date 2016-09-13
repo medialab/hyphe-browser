@@ -31,7 +31,7 @@ class CorpusListItem extends React.Component {
           { name }
           { status === 'ready' && <span className="icon icon-play"></span> }
         </h5>
-        <div><T id="webentities" values={ { count: webentities_in } } /></div>
+        <div className="corpus-list-item-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
         <div className="corpus-list-item-dates">
           <span><T id="created-ago" values={ { relative: <D value={ created_at } /> } } /></span>
           <span> - </span>
@@ -67,7 +67,7 @@ const CorpusList = (props) => {
     )
 
   return (
-    <div>
+    <div className="corpus-list">
       <h3>
         <T id="available-corpora" values={ { count: corpora.length } } />
         { hypheStatus }

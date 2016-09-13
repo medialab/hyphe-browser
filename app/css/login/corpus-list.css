@@ -1,37 +1,43 @@
 .corpus-list-slider {
-  background: #FFF;
   height: 200px;
   overflow-y: scroll;
 }
 
 .corpus-list-item {
+  background: var(--color-white);
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
-  text-align: center;
+  font-family: var(--font-pt);
+  margin: 6px;
 }
 .corpus-list-item:hover {
-  background: #EFEBE8;
+  background: var(--color-grey);
 }
 
 .corpus-list-item div {
   cursor: pointer;
 }
+
 .corpus-list-item span {
   cursor: pointer;
 }
 
 .corpus-list-item a {
   display: block;
-  color: #555;
   text-decoration: none;
+}
+.corpus-list-item-name {
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .corpus-list-item-name .icon {
   margin: 0 0.5em;
 }
 
-.corpus-list-item-name {
-  color: #428BCA;
-  cursor: pointer;
+.corpus-list-item-webentities {
+  font-weight: bold;
 }
 
 .corpus-list-item-dates {
