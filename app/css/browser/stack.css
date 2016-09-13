@@ -1,7 +1,12 @@
 .browser-stack {
+  display: flex;
+  justify-content: space-around;
 }
 
 /* Right buttons */
+.stack-buttons {
+}
+
 .stack-button {
   background: none;
   border: none;
@@ -17,6 +22,13 @@
   cursor: pointer;
   font-family: var(--font-mont);
   font-weight: bold;
+}
+
+.stack-button-selected .stack-name {
+  background: var(--color-black);
+  border-radius: 6px;
+  color: var(--color-white);
+  padding: 6px;
 }
 
 .stack-counter {

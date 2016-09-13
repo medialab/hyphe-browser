@@ -3,6 +3,7 @@ import '../../css/browser/stack'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
+import cx from 'classnames'
 
 import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
@@ -56,9 +57,9 @@ class BrowserStack extends React.Component {
     this.selectWebentity(webentity)
   }
 
-  // right side
+  // right side, colored buttons
   renderStackButtons () {
-    const { status, stacks } = this.props
+    const { status, stacks, selectedStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
@@ -68,7 +69,9 @@ class BrowserStack extends React.Component {
     return (
       <span className="stack-buttons">
         { stacks.map((stack) =>
-          <button key={ stack.name } className={ `stack-button stack-button-${stack.name}` }
+          <button key={ stack.name }
+            className={ cx('stack-button', `stack-button-${stack.name}`,
+              {'stack-button-selected': stack.name === (selectedStack && selectedStack.name) }) }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
             <div className="stack-name">{ stack.name }</div>
             <div className="stack-counter">{ counters[stack.name] || 0 }</div>
@@ -78,47 +81,11 @@ class BrowserStack extends React.Component {
     )
   }
 
-  renderFiller () {
-    const { lastRefresh, selectedStack, webentities, status } = this.props
-    const viewCount = webentities.filter(x => x.viewed).length
-
-    if (!selectedStack) {
-      return this.renderStackButtons()
-    }
-
-    return (
-      <div className="browser-stack-filler toolbar-actions">
-        <div className="browser-stack-info">
-          <div className="browser-stack-name">
-            { selectedStack.name }
-          </div>
-        </div>
-        <div className="browser-stack-views">
-          <T id="viewed" /> { viewCount } / { webentities.length }
-        </div>
-        <div className="browser-stack-age">
-          <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
-          <button className="btn btn-default"
-              onClick={ () => this.fill() }>
-            <span className="icon icon-arrows-ccw"></span>
-            <T id="refresh" />
-          </button>
-        </div>
-        <div>
-          <button className="btn btn-default"
-              onClick={ () => this.props.emptyStack() }>
-            <span className="icon icon-trash"></span>
-            <T id="empty" />
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   // bottom row
   renderWesSelector () {
-    const { webentities } = this.props
+    const { webentities, lastRefresh } = this.props
     const viewed = this.context.intl.formatMessage({ id: 'viewed' })
+    const viewCount = webentities.filter(x => x.viewed).length
 
     return (
       <div className="browser-stack-wes toolbar-actions">
@@ -126,7 +93,6 @@ class BrowserStack extends React.Component {
           <button className="btn btn-default browser-stack-wes-prev"
             onClick={ () => this.rotateWebentity(-1) }>
             <span className="icon icon-left"></span>
-            <T id="previous" />
           </button>
         </div>
         <div className="browser-stack-wes-selector">
@@ -141,9 +107,18 @@ class BrowserStack extends React.Component {
         <div>
           <button className="btn btn-default browser-stack-wes-next"
             onClick={ () => this.rotateWebentity(1) }>
-            <T id="next" />
             <span className="icon icon-right"></span>
           </button>
+        </div>
+        <div className="browser-stack-age">
+          <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
+          <button className="btn btn-default"
+              onClick={ () => this.fill() }>
+            <span className="icon icon-arrows-ccw"></span>
+          </button>
+        </div>
+        <div className="browser-stack-views">
+          <T id="viewed" /> { viewCount } / { webentities.length }
         </div>
       </div>
     )
@@ -152,8 +127,8 @@ class BrowserStack extends React.Component {
   render () {
     return (
       <div className="browser-stack">
-        { this.renderFiller() }
         { this.props.selectedStack ? this.renderWesSelector() : null }
+        { this.renderStackButtons() }
       </div>
     )
   }
