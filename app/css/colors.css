@@ -3,10 +3,17 @@
   --color-grey: #e3e5e4;
   --color-black: #252b30;
   --color-blue: #014bf6;
-  /* for corpus indicators */
+
+  /* corpus load indicators in footer */
   --color-green: #488105;
   --color-orange: orange;
   --color-red: #c00;
+
+  /* corpus statuses in header */
+  --color-corpus-in: #333;
+  --color-corpus-out: #faa; /* salmon */
+  --color-corpus-undecided: #ada299;
+  --color-corpus-discovered: #93bde0; /* light blue */
 }
 
 

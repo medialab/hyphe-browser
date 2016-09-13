@@ -26,6 +26,8 @@
   "corpus-status-label.UNDECIDED": "?",
   "corpus-status.DISCOVERED": "Discovered",
   "corpus-status.IN": "In",
+  "corpus-status.IN_UNCRAWLED": "In uncrawled",
+  "corpus-status.IN_UNTAGGED": "In untagged",
   "corpus-status.OUT": "Out",
   "corpus-status.UNDECIDED": "?",
   "crawling-status": "Crawling status",
