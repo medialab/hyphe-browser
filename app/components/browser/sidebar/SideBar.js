@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
+import HypheFooter from './../../HypheFooter'
 import SideBarContext from './SideBarContext'
 import SideBarTags from './SideBarTags'
 
@@ -123,6 +124,7 @@ class SideBar extends React.Component {
         { this.renderDegree() }
         { this.renderTabs() }
         { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : null }
+        <HypheFooter status={ this.props.status } />
       </aside>
     )
   }

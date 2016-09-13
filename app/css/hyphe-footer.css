@@ -1,9 +1,11 @@
 .hyphe-footer {
   background: var(--color-white);
+  bottom: 0;
   color: var(--color-black);
   font-family: var(--font-pt);
   padding: 5px;
   padding-left: 2em;
+  position: absolute;
 }
 
 .hyphe-footer button {

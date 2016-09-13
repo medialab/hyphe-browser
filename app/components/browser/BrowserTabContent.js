@@ -263,6 +263,7 @@ class TabContent extends React.Component {
       : <WebView id={ id } url={ url } eventBus={ eventBus } />
   }
 
+  // google form for example
   renderSinglePane () {
     return (
       <div className="Pane">
@@ -273,12 +274,12 @@ class TabContent extends React.Component {
   }
 
   renderSplitPane () {
-    const { webentity, serverUrl, corpusId, adjusting } = this.props
+    const { webentity, serverUrl, corpusId, adjusting, status } = this.props
 
     return (
       <SplitPane split="vertical" minSize="130" defaultSize="200">
         { webentity
-          ? <SideBar webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
+          ? <SideBar status={ status } webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
           : <div></div> }
         { this.renderContent() }
       </SplitPane>
