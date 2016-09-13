@@ -77,9 +77,9 @@ class CorpusList extends React.Component {
           <T id="available-corpora" values={ { count: corpora.length } } />
           { hypheStatus }
         </h3>
-        <form>
+        <div className="corpus-list-filter-holder">
           <input className="corpus-list-filter" value={ this.state.filter } onChange={ ({ target }) => this.setState({ filter: target.value }) } />
-        </form>
+        </div>
         <div className="form-group corpus-list-slider">
           <ul className="list-group corpus-list">
             { corpora.map((corpus) =>
