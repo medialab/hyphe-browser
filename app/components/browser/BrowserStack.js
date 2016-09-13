@@ -8,8 +8,6 @@ import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { HYPHE_TAB_ID } from '../../constants'
 
-import CorpusStatusIndicators from './CorpusStatusIndicators'
-
 class BrowserStack extends React.Component {
   constructor (props) {
     super(props)
@@ -27,8 +25,9 @@ class BrowserStack extends React.Component {
   }
 
   // also called by refresh button
-  fill () {
-    const stack = this.props.stacks.find(s => s.name === this.state.selectedStackName)
+  fill (stackName) {
+    stackName = stackName || this.state.selectedStackName
+    const stack = this.props.stacks.find(s => s.name === stackName)
     this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
   }
 
@@ -58,7 +57,7 @@ class BrowserStack extends React.Component {
   }
 
   renderStackButtons () {
-    const { status } = this.props
+    const { status, stacks } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
@@ -66,14 +65,14 @@ class BrowserStack extends React.Component {
     const counters = status.corpus.memory_structure.webentities
 
     return (
-      <div className="corpus-statuses">
-        <span className="corpus-status corpus-status-UNDECIDED" title={ formatMessage({ id: 'corpus-status.UNDECIDED' }) }>{ counters.UNDECIDED }</span>
-        <span className="corpus-status corpus-status-IN" title={ formatMessage({ id: 'corpus-status.IN' }) }>{ counters.IN }</span>
-        <span className="corpus-status corpus-status-IN_UNTAGGED" title={ formatMessage({ id: 'corpus-status.IN_UNTAGGED' }) }>{ counters.IN_UNTAGGED }</span>
-        <span className="corpus-status corpus-status-IN_UNCRAWLED" title={ formatMessage({ id: 'corpus-status.IN_UNCRAWLED' }) }>{ counters.IN_UNCRAWLED }</span>
-        <span className="corpus-status corpus-status-OUT" title={ formatMessage({ id: 'corpus-status.OUT' }) }>{ counters.OUT }</span>
-        <span className="corpus-status corpus-status-DISCOVERED" title={ formatMessage({ id: 'corpus-status.DISCOVERED' }) }>{ counters.DISCOVERED }</span>
-      </div>
+      <span className="corpus-statuses">
+        { stacks.map((stack) =>
+          <button key={ stack.name } className="corpus-status corpus-status-TODO_STYLE"
+            onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
+            { stack.name }<br/>{ counters[stack.name] }
+          </button>
+        ) }
+      </span>
     )
   }
 
@@ -86,23 +85,6 @@ class BrowserStack extends React.Component {
       return (
         <div className="browser-stack-filler toolbar-actions">
           <div className="browser-stack-selector">
-            <select className="form-control"
-              defaultValue={ this.state.selectedStackName }
-              onChange={ (evt) => { if (evt.target.value) this.setState({ selectedStackName: evt.target.value }) } }>
-              <option key="prompt" value="">{ this.context.intl.formatMessage({ id: 'select-stack' }) }</option>
-              { stacks.filter(s => (
-                  status.corpus.memory_structure && status.corpus.memory_structure.webentities[s.condition]
-                ))
-                .map(s => (
-                  <option key={ s.name } value={ s.name }>{ s.description }</option>
-                ))
-              }
-            </select>
-            <button className="btn btn-default"
-              onClick={ () => this.fill() }>
-              <span className="icon icon-download"></span>
-              <T id="fill" />
-            </button>
             { this.renderStackButtons() }
           </div>
         </div>
