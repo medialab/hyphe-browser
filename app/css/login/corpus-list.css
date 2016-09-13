@@ -1,3 +1,15 @@
+.corpus-list form {
+  text-align: center;
+}
+
+.corpus-list-filter {
+  /* background: var(--color-white); */
+  border-radius: 6px;
+  border: none;
+  padding: 1em;
+  width: 90%;
+}
+
 .corpus-list-slider {
   height: 200px;
   overflow-y: scroll;

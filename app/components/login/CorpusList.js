@@ -6,7 +6,6 @@ import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
 
-// abstract component
 class CorpusListItem extends React.Component {
   constructor (props) {
     super(props)
@@ -49,43 +48,53 @@ CorpusListItem.propTypes = {
   dispatch: PropTypes.func
 }
 
-const CorpusList = (props) => {
+class CorpusList extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { filter: '' }
+  }
 
-  const { actions, dispatch, server, status } = props
-  const corpora = Object.keys(props.corpora)
-    .sort()
-    .map((k) => props.corpora[k])
+  render () {
+    const { actions, dispatch, server, status } = this.props
+    const corpora = Object.keys(this.props.corpora)
+      .filter(it => it.includes(this.state.filter))
+      .sort()
+      .map((k) => this.props.corpora[k])
 
-  if (!corpora.length) return null
+    if (!corpora.length) return null
 
-  const hypheStatus = status && Boolean(status.corpus_running) &&
-    (
-      <span>
-        <span>, </span>
-        <T id="running-corpora" values={ { count: status.corpus_running } } />
-      </span>
+    const hypheStatus = status && Boolean(status.corpus_running) &&
+      (
+        <span>
+          <span>, </span>
+          <T id="running-corpora" values={ { count: status.corpus_running } } />
+        </span>
+      )
+
+    return (
+      <div className="corpus-list">
+        <h3>
+          <T id="available-corpora" values={ { count: corpora.length } } />
+          { hypheStatus }
+        </h3>
+        <form>
+          <input className="corpus-list-filter" value={ this.state.filter } onChange={ ({ target }) => this.setState({ filter: target.value }) } />
+        </form>
+        <div className="form-group corpus-list-slider">
+          <ul className="list-group corpus-list">
+            { corpora.map((corpus) =>
+              <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
+                <CorpusListItem actions={ actions } server={ server } corpus={ corpus } dispatch={ dispatch } />
+              </li>
+            ) }
+          </ul>
+        </div>
+        <div className="form-actions">
+          <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
+        </div>
+      </div>
     )
-
-  return (
-    <div className="corpus-list">
-      <h3>
-        <T id="available-corpora" values={ { count: corpora.length } } />
-        { hypheStatus }
-      </h3>
-      <div className="form-group corpus-list-slider">
-        <ul className="list-group corpus-list">
-          { corpora.map((corpus) =>
-            <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-              <CorpusListItem actions={ actions } server={ server } corpus={ corpus } dispatch={ dispatch } />
-            </li>
-          ) }
-        </ul>
-      </div>
-      <div className="form-actions">
-        <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
-      </div>
-    </div>
-  )
+  }
 }
 
 CorpusList.propTypes = {
