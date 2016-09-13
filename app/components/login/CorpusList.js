@@ -58,7 +58,7 @@ const CorpusList = (props) => {
 
   if (!corpora.length) return null
 
-  const hypheStatus = status && status.corpus_running &&
+  const hypheStatus = status && Boolean(status.corpus_running) &&
     (
       <span>
         <span>, </span>
