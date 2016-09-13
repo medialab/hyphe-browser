@@ -57,11 +57,30 @@ class BrowserStack extends React.Component {
     this.selectWebentity(webentity)
   }
 
+  renderStackButtons () {
+    const { status } = this.props
+    const ready = status && status.corpus && status.corpus.ready
+    if (!ready) return null
+
+    const { formatMessage } = this.context.intl
+    const counters = status.corpus.memory_structure.webentities
+
+    return (
+      <div className="corpus-statuses">
+        <span className="corpus-status corpus-status-UNDECIDED" title={ formatMessage({ id: 'corpus-status.UNDECIDED' }) }>{ counters.UNDECIDED }</span>
+        <span className="corpus-status corpus-status-IN" title={ formatMessage({ id: 'corpus-status.IN' }) }>{ counters.IN }</span>
+        <span className="corpus-status corpus-status-IN_UNTAGGED" title={ formatMessage({ id: 'corpus-status.IN_UNTAGGED' }) }>{ counters.IN_UNTAGGED }</span>
+        <span className="corpus-status corpus-status-IN_UNCRAWLED" title={ formatMessage({ id: 'corpus-status.IN_UNCRAWLED' }) }>{ counters.IN_UNCRAWLED }</span>
+        <span className="corpus-status corpus-status-OUT" title={ formatMessage({ id: 'corpus-status.OUT' }) }>{ counters.OUT }</span>
+        <span className="corpus-status corpus-status-DISCOVERED" title={ formatMessage({ id: 'corpus-status.DISCOVERED' }) }>{ counters.DISCOVERED }</span>
+      </div>
+    )
+  }
+
   // top row
   renderFiller () {
     const { lastRefresh, selectedStack, stacks, webentities, status } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
-    const ready = status && status.corpus && status.corpus.ready
 
     if (!selectedStack) {
       return (
@@ -84,7 +103,7 @@ class BrowserStack extends React.Component {
               <span className="icon icon-download"></span>
               <T id="fill" />
             </button>
-            { ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
+            { this.renderStackButtons() }
           </div>
         </div>
       )
