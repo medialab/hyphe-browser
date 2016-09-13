@@ -16,9 +16,9 @@ class HypheFooter extends React.Component {
     return (
       <footer className="hyphe-footer">
         { locales.map((l, i) =>
-          <span>
+          <span key={ l }>
             <button className={ l === locale ? 'selected' : '' }
-              key={ l } onClick={ () => setLocale(l) }>{ l.substr(0, 2) }</button>
+              onClick={ () => setLocale(l) }>{ l.substr(0, 2) }</button>
             { i < locales.length - 1 ? '|' : '' }
           </span>
         ) }
