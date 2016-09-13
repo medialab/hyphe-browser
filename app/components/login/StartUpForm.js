@@ -73,14 +73,10 @@ class StartUpForm extends React.Component {
 
         <div className="form-group inline">
           { this.renderServerSelect() }
-          <Button icon="play" onClick={ () => { this.refreshStatusAndCorpora() } } />
+          { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="icon icon-pencil"></span></Link> }
         </div>
         <div className="form-actions">
-          <Link className="btn btn-primary" to="/login/server-form"><T id="add-server" /></Link>
-          { selectedServer
-            ? <Link className="btn btn-default" to="/login/server-form?edit"><T id="edit-server" /></Link>
-            : null
-          }
+          <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>
         </div>
 
         { ui.error === true

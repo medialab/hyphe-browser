@@ -133,7 +133,7 @@ class ServerForm extends React.Component {
 
     return (
       <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
-        <h2 className="pane-centered-title"><T id="server-edition" /></h2>
+        <h2 className="pane-centered-title"><T id={ this.props.editMode ? 'server-edition' : 'server-addition' } /></h2>
 
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
@@ -143,8 +143,9 @@ class ServerForm extends React.Component {
 
         { this.renderFormGroup('url', 'api-url') }
         { this.renderFormGroup('name', 'server-name') }
-        { this.renderFormGroup('login') }
-        { this.renderFormGroup('password', 'password', 'password') }
+
+        { false && this.renderFormGroup('login') }
+        { false && this.renderFormGroup('password', 'password', 'password') }
 
         <div className="form-actions">
           <button className="btn btn-primary" disabled={ this.state.submitting }>
@@ -153,14 +154,13 @@ class ServerForm extends React.Component {
           <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
             <T id="cancel" />
           </Link>
-          { this.props.editMode
-            ? (
+          { this.props.editMode &&
+            (
               <button className="btn btn-negative" disabled={ this.state.submitting }
                   onClick={ (evt) => this.delete(evt) }>
                  <T id="delete" />
               </button>
             )
-            : null
           }
         </div>
       </form>

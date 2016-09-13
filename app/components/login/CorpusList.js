@@ -27,9 +27,9 @@ class CorpusListItem extends React.Component {
     return (
       <div onClick={ this.selectCorpus }>
         <h5 className="corpus-list-item-name">
-          { password ? <span className="icon icon-lock"></span> : null }
+          { password && <span className="icon icon-lock"></span> }
           { name }
-          { status === 'ready' ? <span className="icon icon-play"></span> : null }
+          { status === 'ready' && <span className="icon icon-play"></span> }
         </h5>
         <div><T id="webentities" values={ { count: webentities_in } } /></div>
         <div className="corpus-list-item-dates">
@@ -58,15 +58,13 @@ const CorpusList = (props) => {
 
   if (!corpora.length) return null
 
-  const hypheStatus = status
-    ? (
+  const hypheStatus = status && status.corpus_running &&
+    (
       <span>
         <span>, </span>
         <T id="running-corpora" values={ { count: status.corpus_running } } />
-        <span> / { status.corpus_running + status.ports_left } ports</span>
       </span>
     )
-    : null
 
   return (
     <div>

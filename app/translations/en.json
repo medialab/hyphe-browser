@@ -1,5 +1,4 @@
 {
-  "add-server": "Add server",
   "adjust": "Adjust",
   "api-url": "API url",
   "available-corpora": "{count, plural, \n=0 {no corpus}\n=1 {1 corpus}\nother {# corpora}}",
@@ -39,7 +38,6 @@
   "created-ago": "Created {relative}",
   "delete": "Delete",
   "disconnect": "Disconnect",
-  "edit-server": "Edit this server",
   "empty": "Empty",
   "empty-url": "Enter address",
   "error.corpus-failed-starting": "Failed starting corpus ({error})",
@@ -86,6 +84,9 @@
   "save-and-crawl": "Save and crawl",
   "select-server": "Please select a server",
   "select-stack": "Please select a stack",
+  "server-add": "Add server",
+  "server-addition": "Server addition",
+  "server-edit": "Edit this server",
   "server-edition": "Server edition",
   "server-name": "Server name",
   "servers": "Servers",
