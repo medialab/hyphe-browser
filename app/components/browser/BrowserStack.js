@@ -81,11 +81,17 @@ class BrowserStack extends React.Component {
     )
   }
 
+  renderProgress () {
+    const { webentities } = this.props
+    const viewCount = webentities.filter(x => x.viewed).length
+
+    return <progress className="browser-stack-progress" value={ viewCount } max={ webentities.length } />
+  }
+
   // bottom row
   renderWesSelector () {
-    const { webentities, lastRefresh } = this.props
+    const { webentities } = this.props
     const viewed = this.context.intl.formatMessage({ id: 'viewed' })
-    const viewCount = webentities.filter(x => x.viewed).length
 
     return (
       <div className="browser-stack-wes toolbar-actions">
@@ -111,15 +117,12 @@ class BrowserStack extends React.Component {
           </button>
         </div>
         <div className="browser-stack-age">
-          <span><T id="refreshed-ago" values={ { relative: <D value={ lastRefresh } /> } } /></span>
           <button className="btn btn-default"
               onClick={ () => this.fill() }>
             <span className="icon icon-arrows-ccw"></span>
           </button>
         </div>
-        <div className="browser-stack-views">
-          <T id="viewed" /> { viewCount } / { webentities.length }
-        </div>
+        { this.renderProgress() }
       </div>
     )
   }

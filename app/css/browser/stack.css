@@ -77,3 +77,13 @@
   .browser-stack-wes-next .icon {
     float: right;
   }
+
+.browser-stack-progress,
+.browser-stack-progress::-webkit-progress-bar {
+  background: var(--color-grey);
+  height: 4px;
+}
+
+.browser-stack-progress::-webkit-progress-value {
+  background: var(--color-black);
+}
