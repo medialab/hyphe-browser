@@ -32,7 +32,7 @@ HypheHeader.contextTypes = {
 }
 
 HypheHeader.propTypes = {
-  corpus: PropTypes.object.isRequired,
+  corpus: PropTypes.object,
 }
 
 const mapStateToProps = ({ corpora }) => ({
