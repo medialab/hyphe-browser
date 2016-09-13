@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import HypheHeader from '../HypheHeader'
 import ErrorMessage from './ErrorMessage'
-import Header from './Header'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
 import CorpusStatusWatcher from '../CorpusStatusWatcher'
@@ -19,7 +18,6 @@ class Browser extends React.Component {
     return (
       <CorpusStatusWatcher className="window browser-window">
         <HypheHeader />
-        <Header />
         <BrowserStack />
         <BrowserTabs />
         <ErrorMessage />

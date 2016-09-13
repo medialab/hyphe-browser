@@ -8,6 +8,8 @@ import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { HYPHE_TAB_ID } from '../../constants'
 
+import CorpusStatusIndicators from './CorpusStatusIndicators'
+
 class BrowserStack extends React.Component {
   constructor (props) {
     super(props)
@@ -59,6 +61,7 @@ class BrowserStack extends React.Component {
   renderFiller () {
     const { lastRefresh, selectedStack, stacks, webentities, status } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
+    const ready = status && status.corpus && status.corpus.ready
 
     if (!selectedStack) {
       return (
@@ -81,6 +84,7 @@ class BrowserStack extends React.Component {
               <span className="icon icon-download"></span>
               <T id="fill" />
             </button>
+            { ready && <CorpusStatusIndicators counters={ status.corpus.memory_structure.webentities } /> }
           </div>
         </div>
       )
