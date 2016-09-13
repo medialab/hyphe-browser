@@ -113,8 +113,7 @@ const mapStateToProps = (state) => ({
   selectedServer: state.servers.selected,
   servers: state.servers.list,
   status: state.corpora.status,
-  ui: state.ui,
-  locale: state.intl.locale
+  ui: state.ui
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -36,7 +36,4 @@ const mapStateToProps = ({ corpora }) => ({
   corpus: corpora.selected
 })
 
-const mapDispatchToProps = {
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Browser)
+export default connect(mapStateToProps)(Browser)

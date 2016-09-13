@@ -6,7 +6,7 @@ class App extends React.Component {
   render () {
     const { children, locale, messages } = this.props
     return (
-      <IntlProvider locale={ locale } messages={ messages }>
+      <IntlProvider key={ locale } locale={ locale } messages={ messages }>
         { children }
       </IntlProvider>
     )
