@@ -56,6 +56,7 @@ class BrowserStack extends React.Component {
     this.selectWebentity(webentity)
   }
 
+  // right side
   renderStackButtons () {
     const { status, stacks } = this.props
     const ready = status && status.corpus && status.corpus.ready
@@ -65,39 +66,31 @@ class BrowserStack extends React.Component {
     const counters = status.corpus.memory_structure.webentities
 
     return (
-      <span className="corpus-statuses">
+      <span className="stack-buttons">
         { stacks.map((stack) =>
-          <button key={ stack.name } className="corpus-status corpus-status-TODO_STYLE"
+          <button key={ stack.name } className="stack-button stack-button-TODO_STYLE"
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
-            { stack.name }<br/>{ counters[stack.name] }
+            <div className="stack-name">{ stack.name }</div>
+            <div className="stack-counter">{ counters[stack.name] }</div>
           </button>
         ) }
       </span>
     )
   }
 
-  // top row
   renderFiller () {
-    const { lastRefresh, selectedStack, stacks, webentities, status } = this.props
+    const { lastRefresh, selectedStack, webentities, status } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
 
     if (!selectedStack) {
-      return (
-        <div className="browser-stack-filler toolbar-actions">
-          <div className="browser-stack-selector">
-            { this.renderStackButtons() }
-          </div>
-        </div>
-      )
+      return this.renderStackButtons()
     }
+
     return (
       <div className="browser-stack-filler toolbar-actions">
         <div className="browser-stack-info">
           <div className="browser-stack-name">
             { selectedStack.name }
-          </div>
-          <div className="browser-stack-description">
-            { selectedStack.description }
           </div>
         </div>
         <div className="browser-stack-views">

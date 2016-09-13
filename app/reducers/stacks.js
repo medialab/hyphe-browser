@@ -14,39 +14,40 @@ const initialState = {
   webentities: [],
   list: [
     {
-      name: 'PROSPECT',
-      description: 'PROSPECT description',
-      method: 'store.advanced_search_webentities',
-      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true],
-      condition: 'DISCOVERED'
-    },
-    {
-      name: 'TOTAG',
-      description: 'TOTAG description',
-      method: 'store.get_webentities_mistagged',
-      args: ['IN', true, false, 'name', -1, 0],
-      condition: 'IN'
-    },
-    {
-      name: 'IN',
-      description: 'IN description',
-      method: 'store.get_webentities_by_status',
-      args: ['IN', 'name', -1, 0],
-      condition: 'IN'
-    },
-    {
       name: 'UNDECIDED',
-      description: 'UNDECIDED description',
       method: 'store.get_webentities_by_status',
       args: ['UNDECIDED', 'name', -1, 0],
       condition: 'UNDECIDED'
     },
     {
+      name: 'IN',
+      method: 'store.get_webentities_by_status',
+      args: ['IN', 'name', -1, 0],
+      condition: 'IN'
+    },
+    {
+      name: 'IN_UNTAGGED',
+      method: 'store.get_webentities_mistagged',
+      args: ['IN', true, false, 'name', -1, 0],
+      condition: 'IN'
+    },
+    {
+      name: 'IN_UNCRAWLED',
+      method: 'store.get_webentities_uncrawled',
+      args: ['name', -1, 0],
+      condition: 'IN'
+    },
+    {
       name: 'OUT',
-      description: 'OUT description',
       method: 'store.get_webentities_by_status',
       args: ['OUT', 'name', -1, 0],
       condition: 'OUT'
+    },
+    {
+      name: 'PROSPECT',
+      method: 'store.advanced_search_webentities',
+      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true],
+      condition: 'DISCOVERED'
     }
   ]
 }
