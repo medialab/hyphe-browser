@@ -68,10 +68,10 @@ class BrowserStack extends React.Component {
     return (
       <span className="stack-buttons">
         { stacks.map((stack) =>
-          <button key={ stack.name } className="stack-button stack-button-TODO_STYLE"
+          <button key={ stack.name } className={ `stack-button stack-button-${stack.name}` }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
             <div className="stack-name">{ stack.name }</div>
-            <div className="stack-counter">{ counters[stack.name] }</div>
+            <div className="stack-counter">{ counters[stack.name] || 0 }</div>
           </button>
         ) }
       </span>
@@ -151,7 +151,7 @@ class BrowserStack extends React.Component {
 
   render () {
     return (
-      <div className="browser-stack toolbar">
+      <div className="browser-stack">
         { this.renderFiller() }
         { this.props.selectedStack ? this.renderWesSelector() : null }
       </div>

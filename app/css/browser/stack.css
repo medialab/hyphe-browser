@@ -1,38 +1,46 @@
 .browser-stack {
 }
 
-/* Top row */
-
-.browser-stack-filler {
-  display: flex;
+/* Right buttons */
+.stack-button {
+  background: none;
+  border: none;
+  margin-right: 1em;
+  text-align: left;
 }
 
-  .browser-stack-info {
-  }
+.stack-button:hover {
+  background: var(--color-grey);
+}
 
-  .browser-stack-name {
-    font-weight: bold;
-  }
+.stack-name {
+  cursor: pointer;
+  font-family: var(--font-mont);
+  font-weight: bold;
+}
 
-  .browser-stack-views {
-    padding-left: 1em;
-    flex-grow: 1;
-  }
+.stack-counter {
+  cursor: pointer;
+  font-family: var(--font-pt);
+}
 
-  .browser-stack-age > span {
-    padding-right: 1em;
-  }
+.stack-button-UNDECIDED .stack-counter {
+  color: var(--color-corpus--undecided);
+}
 
-  .browser-stack-selector {
-    flex-grow: 1;
-    text-align: center;
-  }
+.stack-button-IN .stack-counter,
+.stack-button-IN_UNTAGGED .stack-counter,
+.stack-button-IN_UNCRAWLED .stack-counter {
+  color: var(--color-corpus-in);
+}
 
-  .browser-stack-selector .form-control {
-    width: auto;
-  }
+.stack-button-OUT .stack-counter {
+  color: var(--color-corpus-out);
+}
 
-/* Bottom row */
+.stack-button-PROSPECT .stack-counter {
+  color: var(--color-corpus-discovered);
+}
 
 .browser-stack-wes {
   display: flex;
