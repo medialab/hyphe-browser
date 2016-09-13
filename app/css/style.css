@@ -142,23 +142,6 @@ h1.title {
   font-size: 20px;
 }
 
-/** Load indicators **/
-
-.corpus-loads {
-  display: flex;
-  flex-direction: row;
-  width: 160px;
-}
-
-.corpus-load {
-  flex-grow: 1;
-  margin: 1px;
-  padding: 1px;
-  background: #fff;
-  text-align: center;
-  font-size: 16px;
-}
-
 /** Tabs **/
 
 .tab-favicon {

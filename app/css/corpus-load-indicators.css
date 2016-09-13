@@ -1,0 +1,19 @@
+.corpus-loads {
+  margin-left: 2em;
+}
+.corpus-loads-title {
+  color: var(--color-blue);
+  font-weight: bold;
+}
+.corpus-loads > span {
+  margin-right: .8em;
+}
+
+.corpus-load-status-READY, .corpus-load-health-OK {
+  background: var(--color-green);
+  border-radius: 50%;
+  display: inline-block;
+  height: 12px;
+  vertical-align: baseline;
+  width: 12px;
+}
