@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../../utils/status'
+import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../utils/status'
 import { intlShape } from 'react-intl'
 
 class CorpusLoadIndicators extends React.Component {
@@ -24,7 +24,7 @@ class CorpusLoadIndicators extends React.Component {
     }[hypheCrawlingStatus]
 
     return (
-      <div className="corpus-loads">
+      <span className="corpus-loads">
         <span className="corpus-load corpus-load-status" title={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
           <span className={ 'corpus-load-status-' + corpusCrawlingStatus + ' icon icon-' + loadStatusIcon } />
         </span>
@@ -37,7 +37,7 @@ class CorpusLoadIndicators extends React.Component {
         <span className="corpus-load corpus-load-health" title={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
           <span className={ 'corpus-load-health-' + hypheCrawlingStatus + ' icon icon-' + loadHealthIcon } />
         </span>
-      </div>
+      </span>
     )
   }
 }

@@ -8,6 +8,7 @@ import SideBar from './sidebar/SideBar'
 import SplitPane from 'react-split-pane'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import PageHypheHome from './PageHypheHome'
+import HypheFooter from './../HypheFooter'
 
 import { intlShape } from 'react-intl'
 import { eventBusShape } from '../../types'
@@ -266,6 +267,7 @@ class TabContent extends React.Component {
     return (
       <div className="Pane">
         { this.renderContent() }
+        <HypheFooter status={ this.props.status } />
       </div>
     )
   }
@@ -308,6 +310,7 @@ TabContent.propTypes = {
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
   adjusting: PropTypes.object,
+  status: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
   hideError: PropTypes.func.isRequired,
@@ -346,7 +349,8 @@ const mapStateToProps = (
     serverUrl: servers.selected.url,
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,
-    adjusting: webentity && webentities.adjustments[webentity.id]
+    adjusting: webentity && webentities.adjustments[webentity.id],
+    status: corpora.status
   }
 }
 

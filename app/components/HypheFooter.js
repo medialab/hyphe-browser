@@ -7,14 +7,16 @@ import { intlShape } from 'react-intl'
 
 import { setLocale } from '../actions/intl'
 import { LOCALES } from '../constants'
+import CorpusLoadIndicators from './CorpusLoadIndicators'
 
 class HypheFooter extends React.Component {
   render () {
-    const formatMessage = this.context.intl.formatMessage
-    const { corpus, locale, locales, setLocale } = this.props
+    const { locale, locales, setLocale, status } = this.props
+    const ready = status && status.corpus && status.corpus.ready
 
     return (
       <footer className="hyphe-footer">
+        <span className="locales">
         { locales.map((l, i) =>
           <span key={ l }>
             <button className={ l === locale ? 'selected' : '' }
@@ -22,6 +24,8 @@ class HypheFooter extends React.Component {
             { i < locales.length - 1 ? '|' : '' }
           </span>
         ) }
+        </span>
+        { ready && <CorpusLoadIndicators status={ status } /> }
       </footer>
     )
   }
@@ -32,13 +36,14 @@ HypheFooter.contextTypes = {
 }
 
 HypheFooter.propTypes = {
-  corpus: PropTypes.object,
   locale: PropTypes.string,
-  locales: PropTypes.array
+  locales: PropTypes.array,
+  setLocale: PropTypes.func,
+  status: PropTypes.object
 }
 
 const mapStateToProps = ({ corpora, intl }) => ({
-  corpus: corpora.selected,
+  status: corpora.status,
   locale: intl.locale,
   locales: LOCALES
 })
