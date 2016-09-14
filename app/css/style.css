@@ -130,18 +130,6 @@ h1.title {
   border-bottom: 3px solid #93BDE0;
 }
 
-/** Disconnection **/
-
-.disconnect-link {
-  display: block;
-  margin: 0 5px 0 10px;
-}
-.icon-disconnect {
-  color: black;
-  font-weight: bold;
-  font-size: 20px;
-}
-
 /** Tabs **/
 
 .tab-favicon {

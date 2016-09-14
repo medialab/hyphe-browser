@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 class App extends React.Component {
   render () {
     const { children, locale, messages } = this.props
+    // key={ locale } let us refresh i18n strings from the footer
     return (
       <IntlProvider key={ locale } locale={ locale } messages={ messages }>
         { children }

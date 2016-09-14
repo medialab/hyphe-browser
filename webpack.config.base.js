@@ -7,7 +7,7 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader'],
+        loaders: ['babel'],
         exclude: /node_modules/
       },
       {
@@ -16,11 +16,15 @@ module.exports = {
       },
       {
         test: /\.json$/,
-        loaders: ['json-loader']
+        loaders: ['json']
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
         loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.styl$/,
+        loaders: ['style', 'css', 'stylus']
       }
     ]
   },
@@ -30,7 +34,7 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.css'],
+    extensions: ['', '.js', '.jsx', '.json', '.css', '.styl'],
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
   },
   plugins: [
