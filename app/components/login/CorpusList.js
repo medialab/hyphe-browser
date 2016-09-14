@@ -56,12 +56,13 @@ class CorpusList extends React.Component {
 
   render () {
     const { actions, dispatch, server, status } = this.props
-    const corpora = Object.keys(this.props.corpora)
-      .filter(it => it.includes(this.state.filter))
+    let corpora = Object.keys(this.props.corpora)
       .sort()
       .map((k) => this.props.corpora[k])
 
     if (!corpora.length) return null
+
+    corpora = corpora.filter(it => it.name.includes(this.state.filter))
 
     const hypheStatus = status && Boolean(status.corpus_running) &&
       (

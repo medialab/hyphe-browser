@@ -75,10 +75,7 @@ class StartUpForm extends React.Component {
           <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>
         </div>
 
-        { ui.error === true
-          ? <div className="form-error"><T id="error.loading-corpora" /></div>
-          : null
-        }
+        { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
 
         { ui.loaders.corpora
           ? <Spinner textId="loading-corpora" />
