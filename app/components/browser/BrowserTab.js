@@ -1,8 +1,11 @@
+import '../../css/browser/browser-tab'
+
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
 import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
+import { HYPHE_TAB_ID } from '../../constants'
 
 const { Menu, MenuItem } = remote
 
@@ -71,7 +74,10 @@ class BrowserTab extends React.Component {
 
   render () {
     const { active, id, title, icon, loading, newTab, fixed, closable } = this.props
-    const cls = cx('browser-tab', 'tab-item', { active }, { 'tab-item-fixed': fixed })
+    const cls = cx('browser-tab', 'tab-item', { active }, {
+      'browser-tab-item-fixed': fixed,
+      'browser-tab-item-hyphe': id === HYPHE_TAB_ID,
+    })
 
     return (
       <div key={ id } className={ cls } onClick={ this.selectHandler }>

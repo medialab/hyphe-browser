@@ -104,16 +104,6 @@ a.btn {
 .browser-tab-emptyspace {
   flex-grow: 1;
 }
-.tab-group-specials-left,
-.tab-group-specials-right {
-  flex-shrink: 1;
-  flex-grow: 0;
-  z-index: 900;
-}
-.tab-group-main {
-  flex: 1;
-  z-index: 800;
-}
 .browser-tab-scroll-left,
 .browser-tab-scroll-right,
 .browser-tab-new {

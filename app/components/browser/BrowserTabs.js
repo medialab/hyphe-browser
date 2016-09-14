@@ -172,23 +172,23 @@ class BrowserTabs extends React.Component {
 
     return (
       <div className={ cx('browser-tabs', { 'tab-overflow': this.state.overflow }) }>
-        <div className="tab-group">
-          <div className="tab-group tab-group-specials-left">
+        <div className="browser-tabs-group">
+          <div className="browser-tabs-group-edge">
             { this.renderTabs(true) }
-            <div className={ cx('browser-tab-scroll-left', 'tab-item', 'tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll <= 0 }) }
+            <div className={ cx('browser-tab-scroll-left', 'tab-item', 'browser-tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll <= 0 }) }
               onClick={ () => this.scrollTabs(-1) }>
               <span className="icon icon-left-dir"></span>
             </div>
           </div>
-          <div className="tab-group tab-group-main" style={ tabGroupStyle }>
+          <div className="browser-tabs-group-main" style={ tabGroupStyle }>
             { this.renderTabs(false) }
           </div>
-          <div className="tab-group tab-group-specials-right">
-            <div className={ cx('browser-tab-scroll-right', 'tab-item', 'tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll >= this.state.maxScroll }) }
+          <div className="browser-tabs-group-edge">
+            <div className={ cx('browser-tab-scroll-right', 'tab-item', 'browser-tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll >= this.state.maxScroll }) }
               onClick={ () => this.scrollTabs(+1) }>
               <span className="icon icon-right-dir"></span>
             </div>
-            <div className="browser-tab-new tab-item tab-item-fixed"
+            <div className="browser-tab-new tab-item browser-tab-item-fixed"
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
               <span className="icon icon-plus"></span>
             </div>

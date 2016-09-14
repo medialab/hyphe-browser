@@ -3,8 +3,25 @@
   flex-direction: column;
   flex: 1;
 
-  & > * {
+  > div {
     flex: 0 0 auto;
+  }
+
+  .browser-tabs-group,
+  .browser-tabs-group-edge,
+  .browser-tabs-group-main {
+    display: flex;
+  }
+
+  .browser-tabs-group-edge {
+    flex-shrink: 1;
+    flex-grow: 0;
+    z-index: 900;
+  }
+
+  .browser-tabs-group-main {
+    flex: 1;
+    z-index: 800;
   }
 
   .browser-tab-content {
