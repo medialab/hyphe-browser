@@ -58,12 +58,11 @@ class BrowserStack extends React.Component {
   }
 
   // right side, colored buttons to fill stack
-  renderStackButtons () {
+  renderStackFillers () {
     const { status, stacks, selectedStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
-    const { formatMessage } = this.context.intl
     const counters = status.corpus.memory_structure.webentities
 
     return (
@@ -89,19 +88,17 @@ class BrowserStack extends React.Component {
     return <progress value={ viewCount } max={ webentities.length } />
   }
 
-  // bottom row
+  // left side
   renderWesSelector () {
     const { webentities } = this.props
     const viewed = this.context.intl.formatMessage({ id: 'viewed' })
 
     return (
-      <div className="browser-stack-wes toolbar-actions">
-        <div>
-          <button className="btn btn-default browser-stack-wes-prev"
-            onClick={ () => this.rotateWebentity(-1) }>
-            <span className="icon icon-left"></span>
-          </button>
-        </div>
+      <div className="browser-stack-wes">
+        <button className="btn btn-default browser-stack-wes-prev"
+          onClick={ () => this.rotateWebentity(-1) }>
+          <span className="icon icon-left"></span>
+        </button>
         <div className="browser-stack-wes-selector">
           <select className="form-control"
             value={ this.state.selectedWebentityId }
@@ -110,20 +107,16 @@ class BrowserStack extends React.Component {
               <option key={ w.id } value={ w.id }>#{ i + 1 } - { w.viewed ? `[${viewed}] - ` : '' } { w.name } ({ w.homepage })</option>
             )) }
           </select>
+          { this.renderProgress() }
         </div>
-        <div>
-          <button className="btn btn-default browser-stack-wes-next"
-            onClick={ () => this.rotateWebentity(1) }>
-            <span className="icon icon-right"></span>
-          </button>
-        </div>
-        <div className="browser-stack-age">
-          <button className="btn btn-default"
-              onClick={ () => this.fill() }>
-            <span className="icon icon-arrows-ccw"></span>
-          </button>
-        </div>
-        { this.renderProgress() }
+        <button className="btn btn-default browser-stack-wes-next"
+          onClick={ () => this.rotateWebentity(1) }>
+          <span className="icon icon-right"></span>
+        </button>
+        <button className="btn btn-default"
+            onClick={ () => this.fill() }>
+          <span className="icon icon-arrows-ccw"></span>
+        </button>
       </div>
     )
   }
@@ -132,7 +125,7 @@ class BrowserStack extends React.Component {
     return (
       <div className="browser-stack">
         { this.props.selectedStack ? this.renderWesSelector() : null }
-        { this.renderStackButtons() }
+        { this.renderStackFillers() }
       </div>
     )
   }
