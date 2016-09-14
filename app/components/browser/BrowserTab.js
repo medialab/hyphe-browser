@@ -74,19 +74,19 @@ class BrowserTab extends React.Component {
 
   render () {
     const { active, id, title, icon, loading, newTab, fixed, closable } = this.props
-    const cls = cx('browser-tab', 'tab-item', { active }, {
+    const cls = cx('browser-tab-item', { active }, {
       'browser-tab-item-fixed': fixed,
       'browser-tab-item-hyphe': id === HYPHE_TAB_ID,
     })
 
     return (
       <div key={ id } className={ cls } onClick={ this.selectHandler }>
-        { !fixed && closable && <span className="icon icon-cancel-circled icon-close-tab" onClick={ this.closeHandler }></span> }
         { loading
           ? <span className="loading" />
-          : (icon ? <img src={ icon } width="16" height="16" className="tab-favicon" /> : null)
+          : (icon ? <img src={ icon } width="16" height="16" className="browser-tab-favicon" /> : null)
         }
-        { ' ' + (newTab ? this.translate('new-tab') : title) }
+        <span className="browser-tab-title">{ ' ' + (newTab ? this.translate('new-tab') : title) }</span>
+        { !fixed && closable && <span className="ti-close" onClick={ this.closeHandler }></span> }
       </div>
     )
   }

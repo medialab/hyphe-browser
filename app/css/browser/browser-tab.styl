@@ -1,5 +1,55 @@
+.browser-tab-item {
+  flex: 1;
+  font-family: var(--font-pt);
+  font-size: 0.9em;
+  margin-right: .5em;
+  max-width: 150px;
+  min-width: 50px;
+  padding: 3px;
+  position: relative;
+  text-align: center;
+
+  .loading {
+    background-image: url(../../images/loading.svg);
+    float: left;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 5px;
+  }
+
+  .browser-tab-title {
+    display: inline-block;
+    overflow: hidden;
+    padding-top: 4px;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+    white-space: nowrap;
+    width: 80%;
+  }
+
+  .ti-close {
+    position: absolute;
+    right: 2px;
+    top: 10px;
+  }
+
+  &::after {
+    background: var(--color-grey);
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 2px;
+    -webkit-transform: perspective(100px) rotateX(30deg);
+    width: 100%;
+    z-index: -1;
+  }
+}
+
 .browser-tab-item-fixed {
-  background: none;
   flex: none;
   padding: 3px 10px;
 }
@@ -7,4 +57,13 @@
 .browser-tab-item-hyphe {
   color: var(--color-blue);
   font-weight: bold;
+
+  &::after {
+    display: none;
+  }
+}
+
+.browser-tab-favicon {
+  vertical-align: middle;
+  margin-right: 4px;
 }

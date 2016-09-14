@@ -41,3 +41,19 @@
   }
 }
 
+.browser-tab-new {
+  margin-left: .5em;
+  position: relative;
+}
+
+.browser-tab-new::after {
+  background: var(--color-grey);
+  content: '';
+  display: block;
+  height: 60%;
+  position: absolute;
+  top: 7px;
+  transform: skewX(20deg);
+  width: 20px;
+  z-index: -1;
+}

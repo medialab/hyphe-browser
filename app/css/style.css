@@ -78,51 +78,6 @@ a.btn {
   z-index: 999;
 }
 
-/** Tabs **/
-
-.tab-favicon {
-  vertical-align: middle;
-  margin-right: 4px;
-}
-.browser-tab {
-  max-width: 300px;
-  min-width: 50px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.browser-tab .loading {
-  background-image: url(../images/loading.svg);
-  float: left;
-  width: 20px;
-  height: 20px;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-left: 5px;
-}
-.browser-tab-emptyspace {
-  flex-grow: 1;
-}
-.browser-tab-scroll-left,
-.browser-tab-scroll-right,
-.browser-tab-new {
-  color: #333;
-  background: #fcfcfc;
-  border: 1px solid #eee;
-  border-radius: 1px;
-}
-.browser-tab-scroll-left.inactive,
-.browser-tab-scroll-right.inactive {
-  background: #fff;
-  border: #ccc;
-  color: #ccc;
-}
-.tab-group-main .tab-item .icon-close-tab {
-  left: initial;
-  right: 5%;
-}
-
 /** Tab toolbar **/
 
 .browser-tab-content .toolbar-actions {

@@ -41,7 +41,7 @@ class BrowserTabs extends React.Component {
 
   componentDidMount () {
     const node = findDOMNode(this)
-    this.tabsNode = node.querySelector('.tab-group-main')
+    this.tabsNode = node.querySelector('.browser-tabs-group-main')
 
     // Listen for resize
     window.addEventListener('resize', this.onResize)
@@ -157,7 +157,7 @@ class BrowserTabs extends React.Component {
       return // disabled
     }
 
-    const oneTabWidth = this.tabsNode.querySelector('.tab-item').clientWidth
+    const oneTabWidth = this.tabsNode.querySelector('.browser-tab-item').clientWidth
     const scroll = Math.min(this.state.maxScroll, Math.max(0, this.state.scroll + offset * oneTabWidth))
     if (this.state.scroll !== scroll) {
       this.setState({ scroll })
@@ -175,22 +175,11 @@ class BrowserTabs extends React.Component {
         <div className="browser-tabs-group">
           <div className="browser-tabs-group-edge">
             { this.renderTabs(true) }
-            <div className={ cx('browser-tab-scroll-left', 'tab-item', 'browser-tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll <= 0 }) }
-              onClick={ () => this.scrollTabs(-1) }>
-              <span className="icon icon-left-dir"></span>
-            </div>
           </div>
           <div className="browser-tabs-group-main" style={ tabGroupStyle }>
             { this.renderTabs(false) }
-          </div>
-          <div className="browser-tabs-group-edge">
-            <div className={ cx('browser-tab-scroll-right', 'tab-item', 'browser-tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll >= this.state.maxScroll }) }
-              onClick={ () => this.scrollTabs(+1) }>
-              <span className="icon icon-right-dir"></span>
-            </div>
-            <div className="browser-tab-new tab-item browser-tab-item-fixed"
+            <div className="browser-tab-new"
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
-              <span className="icon icon-plus"></span>
             </div>
           </div>
         </div>
