@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions'
 
-export const SHOW_ERROR = '§_SHOW_ERROR'
-export const HIDE_ERROR = '§_HIDE_ERROR'
+export const SHOW_NOTIFICATION = '§_SHOW_NOTIFICATION'
+export const HIDE_NOTIFICATION = '§_HIDE_NOTIFICATION'
 
-export const showError = ({ id, messageId, messageValues = {}, fatal, icon = 'alert', timeout = 0 }) => (dispatch) => {
+export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
-    type: SHOW_ERROR,
-    payload: { id, messageId, messageValues, fatal, icon, timeout }
+    type: SHOW_NOTIFICATION,
+    payload: { id, messageId, messageValues, type, timeout }
   })
 
   if (timeout) {
@@ -14,4 +14,12 @@ export const showError = ({ id, messageId, messageValues = {}, fatal, icon = 'al
   }
 }
 
-export const hideError = createAction(HIDE_ERROR)
+export const hideNotification = createAction(HIDE_NOTIFICATION)
+
+
+// shortcut for back compat
+
+export const showError = ({ id, messageId, messageValues, fatal = false, timeout }) => dispatch =>
+  showNotification({ id, messageId, messageValues, type: fatal ? 'error' : 'warning', timeout })(dispatch)
+
+export const hideError = hideNotification

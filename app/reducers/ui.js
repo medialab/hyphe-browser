@@ -10,8 +10,8 @@ import {
   SELECT_CORPUS
 } from '../actions/corpora'
 import {
-  SHOW_ERROR,
-  HIDE_ERROR
+  SHOW_NOTIFICATION,
+  HIDE_NOTIFICATION
 } from '../actions/browser'
 import {
   DECLARE_PAGE_REQUEST,
@@ -32,16 +32,16 @@ import {
   ERROR_SET_WEBENTITY_STATUS
 } from '../constants'
 
-const emptyError = {
+const emptyNotification = {
   id: null,
   message: null,
-  fatal: false,
+  type: '',
   icon: ''
 }
 
 const initialState = {
-  // error message
-  error: emptyError,
+  // current notification
+  notification: emptyNotification,
   // to display loaders in different places
   loaders: {
     corpora: false,
@@ -53,15 +53,15 @@ const initialState = {
   }
 }
 
-const toggleLoader = (which, bool, err) => (state, { error }) => ({
-  error: err ? {...err, messageValues: { error } } : state.error,
-  loaders: { ...state.loaders, [which]: bool }
+const toggleLoader = (loader, enabled, err) => (state, { error }) => ({
+  notification: err ? {...err, type: 'error', messageValues: { error } } : state.notification,
+  loaders: { ...state.loaders, [loader]: enabled }
 })
 
 export default createReducer(initialState, {
-  [SHOW_ERROR]: (state, error) => ({ ...state, error }),
-  [HIDE_ERROR]: (state) => ({ ...state, error: emptyError }),
-  [SELECT_CORPUS]: (state) => ({ ...state, error: emptyError }),
+  [SHOW_NOTIFICATION]: (state, notification) => ({ ...state, notification }),
+  [HIDE_NOTIFICATION]: (state) => ({ ...state, notification: emptyNotification }),
+  [SELECT_CORPUS]: (state) => ({ ...state, notification: emptyNotification }),
 
   [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),
   [FETCH_CORPORA_SUCCESS]: toggleLoader('corpora', false),
@@ -92,5 +92,8 @@ export default createReducer(initialState, {
     messageId: 'error.save-webentity'
   }),
 
-  [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({ ...state, error: { id: ERROR_SERVER_NO_RESOURCE } })
+  [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({
+    ...state,
+    notification: { id: ERROR_SERVER_NO_RESOURCE }
+  })
 })

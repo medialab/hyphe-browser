@@ -1,22 +1,23 @@
+import '../../css/browser/notification'
+
 import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 import { hideError } from '../../actions/browser'
 
-class ErrorMessage extends React.Component {
+class Notification extends React.Component {
   render () {
-    const { messageId, messageValues, icon, fatal, hideError } = this.props
+    const { messageId, messageValues, type = 'error', hideError } = this.props
 
     const message = messageId
       ? <T id={ messageId } values={ messageValues || {} } />
       : ''
 
     return (
-      <div className={ 'error-dialog-wrapper ' + (fatal ? 'blocking' : '') }>
-        <div className={ 'error-dialog ' + (messageId ? 'visible' : 'hidden') }>
+      <div className={ `notification-container ${messageId ? 'visible' : 'hidden'}` }>
+        <div className={ `notification notification-${type}` }>
           <a className="error-dialog-close" onClick={ () => hideError() }><span className="icon icon-cancel-circled" /></a>
-          { icon ? <span className={ 'icon icon-' + icon } /> : null }
           <strong> { message }</strong>
         </div>
       </div>
@@ -24,17 +25,14 @@ class ErrorMessage extends React.Component {
   }
 }
 
-ErrorMessage.propTypes = {
+Notification.propTypes = {
   messageId: PropTypes.string,
   messageValues: PropTypes.object,
-  fatal: PropTypes.bool,
-  icon: PropTypes.string,
+  type: PropTypes.oneOf(['notice', 'warning', 'error']),
 
   hideError: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ ui }) => {
-  return ui.error
-}
+const mapStateToProps = ({ ui }) => ui.notification
 
-export default connect(mapStateToProps, { hideError })(ErrorMessage)
+export default connect(mapStateToProps, { hideError })(Notification)

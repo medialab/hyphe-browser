@@ -1,0 +1,32 @@
+.notification-container
+  display block
+  position absolute
+  height 28px
+  top 0
+  left 0
+  right 0
+  z-index 999
+  text-align center
+
+  .notification
+    background #014bf6
+    border-radius 6px
+    display inline-block
+    margin 0 auto
+    padding 4px 8px
+    height 28px
+    line-height 20px
+
+    font-family PTMono-Bold
+    font-size 14px
+    color #faf9f8
+
+    .error-dialog-close
+      float right
+      margin 0 0 0 8px
+
+  &.hidden
+    top -2000px
+
+  &.visible
+    top 0
