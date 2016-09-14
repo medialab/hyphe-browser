@@ -28,7 +28,7 @@ class PageHypheHome extends React.Component {
               placeholder={ formatMessage({ id: 'google.placeholder' }) }
               onChange={ ({ target }) => { this.setState({ q: target.value }) } } />
             <button>
-              <span className="icon icon-search"></span>
+              <span className="ti-search"></span>
             </button>
           </div>
         </form>

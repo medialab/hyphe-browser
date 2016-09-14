@@ -1,5 +1,6 @@
 @import './colors.css';
 @import './fonts.css';
+@import './buttons.css';
 
 body {
   background: var(--color-white);

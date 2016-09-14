@@ -1,5 +1,6 @@
 import './css/photon'
 import './css/style'
+import './css/themify-icons'
 
 import React from 'react'
 import { render } from 'react-dom'

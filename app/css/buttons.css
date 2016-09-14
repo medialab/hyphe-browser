@@ -1,0 +1,24 @@
+.btn {
+  box-shadow: none;
+  border: none;
+  display: inline-block;
+  font-family: var(--font-pt);
+  padding: 1em;
+}
+
+.btn-primary {
+  background: var(--color-black);
+}
+
+.btn-primary:active {
+  background: var(--color-blue);
+}
+
+.btn-default {
+  background: var(--color-gray);
+}
+
+.btn-negative {
+  background: var(--color-red);
+}
+

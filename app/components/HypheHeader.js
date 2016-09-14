@@ -19,7 +19,7 @@ class HypheHeader extends React.Component {
     return (
       <header className="hyphe-header">
         { corpus && <Link className="disconnection" to="login" title={ formatMessage({ id: 'disconnect' }) }>
-          <span className="icon icon-cancel-circled" />
+          <span className="ti-close"></span>
         </Link> }
         { title }
       </header>

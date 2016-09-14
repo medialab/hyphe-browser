@@ -69,7 +69,7 @@ class StartUpForm extends React.Component {
 
         <div className="form-group inline">
           { this.renderServerSelect() }
-          { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="icon icon-pencil"></span></Link> }
+          { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="ti-pencil"></span></Link> }
         </div>
         <div className="form-actions">
           <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>

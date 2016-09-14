@@ -97,7 +97,7 @@ class BrowserStack extends React.Component {
       <div className="browser-stack-wes">
         <button className="btn btn-default browser-stack-wes-prev"
           onClick={ () => this.rotateWebentity(-1) }>
-          <span className="icon icon-left"></span>
+          <span className="ti-arrow-circle-left"></span>
         </button>
         <div className="browser-stack-wes-selector">
           <select className="form-control"
@@ -111,11 +111,11 @@ class BrowserStack extends React.Component {
         </div>
         <button className="btn btn-default browser-stack-wes-next"
           onClick={ () => this.rotateWebentity(1) }>
-          <span className="icon icon-right"></span>
+          <span className="ti-arrow-circle-right"></span>
         </button>
         <button className="btn btn-default"
             onClick={ () => this.fill() }>
-          <span className="icon icon-arrows-ccw"></span>
+          <span className="ti-share-alt"></span>
         </button>
       </div>
     )
