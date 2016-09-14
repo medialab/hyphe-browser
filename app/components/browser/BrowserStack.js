@@ -115,7 +115,7 @@ class BrowserStack extends React.Component {
         </button>
         <button className="btn btn-default"
             onClick={ () => this.fill() }>
-          <span className="ti-share-alt"></span>
+          <span className="ti-loop"></span>
         </button>
       </div>
     )
