@@ -1,4 +1,4 @@
-import '../../css/browser/stack'
+import '../../css/browser/browser-stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
@@ -57,7 +57,7 @@ class BrowserStack extends React.Component {
     this.selectWebentity(webentity)
   }
 
-  // right side, colored buttons
+  // right side, colored buttons to fill stack
   renderStackButtons () {
     const { status, stacks, selectedStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
@@ -67,14 +67,14 @@ class BrowserStack extends React.Component {
     const counters = status.corpus.memory_structure.webentities
 
     return (
-      <span className="stack-buttons">
+      <span className="fillers">
         { stacks.map((stack) =>
           <button key={ stack.name }
-            className={ cx('stack-button', `stack-button-${stack.name}`,
-              {'stack-button-selected': stack.name === (selectedStack && selectedStack.name) }) }
+            className={ cx('filler', `filler-${stack.name}`,
+              {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
-            <div className="stack-name">{ stack.name }</div>
-            <div className="stack-counter">{ counters[stack.name] || 0 }</div>
+            <div className="filler-name">{ stack.name }</div>
+            <div className="filler-counter">{ counters[stack.name] || 0 }</div>
           </button>
         ) }
       </span>
@@ -85,7 +85,7 @@ class BrowserStack extends React.Component {
     const { webentities } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
 
-    return <progress className="browser-stack-progress" value={ viewCount } max={ webentities.length } />
+    return <progress value={ viewCount } max={ webentities.length } />
   }
 
   // bottom row

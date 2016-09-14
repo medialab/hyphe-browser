@@ -85,51 +85,6 @@ a.btn {
   z-index: 999;
 }
 
-
-/** Header alignment **/
-
-header.toolbar.toolbar-header {
-  display: flex;
-  flex-direction: row;
-  min-height: 32px;
-}
-header h1.title {
-  flex-grow: 1;
-}
-
-/** Corpus status **/
-
-h1.title {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.corpus-statuses {
-  display: flex;
-  flex-direction: row;
-  width: 160px;
-}
-.corpus-status {
-  flex-grow: 1;
-  margin: 1px;
-  padding: 1px;
-  background: #fff;
-  text-align: center;
-  font-size: 16px;
-}
-.corpus-status-IN {
-  border-bottom: 3px solid #333;
-}
-.corpus-status-UNDECIDED {
-  border-bottom: 3px solid #ADA299;
-}
-.corpus-status-OUT {
-  border-bottom: 3px solid #FAA;
-}
-.corpus-status-DISCOVERED {
-  border-bottom: 3px solid #93BDE0;
-}
-
 /** Tabs **/
 
 .tab-favicon {
