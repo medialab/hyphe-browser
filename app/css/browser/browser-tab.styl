@@ -47,6 +47,16 @@
     width: 100%;
     z-index: -1;
   }
+
+  &.active {
+    .browser-tab-title, .browser-tab-favicon {
+      display: none;
+    }
+
+    &::after {
+      background: var(--color-grey-light);
+    }
+  }
 }
 
 .browser-tab-item-fixed {
@@ -59,6 +69,10 @@
   font-weight: bold;
 
   &::after {
+    display: none;
+  }
+
+  .browser-tab-favicon {
     display: none;
   }
 }
