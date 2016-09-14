@@ -13,7 +13,7 @@ class HypheHeader extends React.Component {
 
     let title = 'Hyphe Browser'
     if (corpus) {
-      title += ' – ' + corpus.name
+      title += ' | ' + corpus.name
     }
 
     return (
