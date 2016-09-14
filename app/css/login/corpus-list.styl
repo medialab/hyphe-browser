@@ -12,7 +12,7 @@
 
 .corpus-list-slider {
   height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .corpus-list-item {
@@ -22,30 +22,32 @@
   cursor: pointer;
   font-family: var(--font-pt);
   margin: 6px;
-}
-.corpus-list-item:hover {
-  background: var(--color-grey);
+
+  &:hover {
+    background: var(--color-grey);
+  }
+
+  div {
+    cursor: pointer;
+  }
+
+  span {
+    cursor: pointer;
+  }
+
+  a {
+    display: block;
+    text-decoration: none;
+  }
 }
 
-.corpus-list-item div {
-  cursor: pointer;
-}
-
-.corpus-list-item span {
-  cursor: pointer;
-}
-
-.corpus-list-item a {
-  display: block;
-  text-decoration: none;
-}
 .corpus-list-item-name {
   cursor: pointer;
   font-weight: bold;
-}
 
-.corpus-list-item-name .icon {
-  margin: 0 0.5em;
+  .icon {
+    margin: 0 0.5em;
+  }
 }
 
 .corpus-list-item-webentities {
