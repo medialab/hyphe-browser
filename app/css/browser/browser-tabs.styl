@@ -1,0 +1,26 @@
+.browser-tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  & > * {
+    flex: 0 0 auto;
+  }
+
+  .browser-tab-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    & > * {
+      flex: 0 0 auto;
+    }
+
+    .SplitPane {
+      /* override inline styles */
+      position: initial !important;
+      height: initial !important;
+    }
+  }
+}
+

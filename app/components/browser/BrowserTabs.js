@@ -1,3 +1,5 @@
+import '../../css/browser/browser-tabs'
+
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
@@ -169,9 +171,10 @@ class BrowserTabs extends React.Component {
     }
 
     return (
-      <div className={ cx('browser-navigator', { 'tab-overflow': this.state.overflow }) }>
+      <div className={ cx('browser-tabs', { 'tab-overflow': this.state.overflow }) }>
         <div className="tab-group">
           <div className="tab-group tab-group-specials-left">
+            { this.renderTabs(true) }
             <div className={ cx('browser-tab-scroll-left', 'tab-item', 'tab-item-fixed', { 'inactive': !this.state.overflow || this.state.scroll <= 0 }) }
               onClick={ () => this.scrollTabs(-1) }>
               <span className="icon icon-left-dir"></span>
@@ -189,7 +192,6 @@ class BrowserTabs extends React.Component {
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
               <span className="icon icon-plus"></span>
             </div>
-            { this.renderTabs(true) }
           </div>
         </div>
         { this.renderTabContents() }

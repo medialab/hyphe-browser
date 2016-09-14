@@ -214,24 +214,3 @@ a.btn {
 .browser-window > * {
   flex: 0 0 auto;
 }
-.browser-window > .browser-navigator {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.browser-window > .browser-navigator > * {
-  flex: 0 0 auto;
-}
-.browser-window > .browser-navigator > .browser-tab-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.browser-window > .browser-navigator > .browser-tab-content > * {
-  flex: 0 0 auto;
-}
-.browser-window > .browser-navigator > .browser-tab-content .SplitPane {
-  /* override inline styles */
-  position: initial !important;
-  height: initial !important;
-}
