@@ -43,6 +43,41 @@ export function parseLru (input) {
   return result
 }
 
+function _getTLD (hostArray, tldTree, rindex = 0, tld = '') {
+  if (rindex >= hostArray.length) {
+    return tld
+  }
+
+  const chunk = hostArray[hostArray.length - 1 - rindex]
+  const subTree = tldTree[chunk]
+
+  // Stop-chunk
+  if (tldTree['!' + chunk]) {
+    return tld
+  }
+
+  // Should continue appending tld part?
+  if (tldTree['*'] || subTree) {
+    tld = tld ? (chunk + '.' + tld) : chunk
+  }
+
+  // Keep traversing if found deeper parts
+  return subTree ? _getTLD(hostArray, subTree, rindex + 1, tld) : tld
+}
+
+function _lruHostInfo (host, tldTree) {
+  const parts = host.toLowerCase().split('.')
+  if (tldTree) {
+    const tld = _getTLD(parts, tldTree)
+    if (tld) {
+      const nbTldParts = tld.split('.').length
+      return [ parts.slice(0, parts.length - nbTldParts), tld ]
+    }
+  }
+  // No TLD found
+  return [ parts, '' ]
+}
+
 // Convert a URL (string) to LRU object
 // TODO use new tldTree method
 export function urlToLru (url, tldTree) {
@@ -52,13 +87,14 @@ export function urlToLru (url, tldTree) {
     const authorityMatch = authorityRegExp.exec(authority)
     if (authorityMatch) {
       const [/* trash */, /* user */, /* password */, matchedHost, port] = authorityMatch
-      const host = specialHostsRegExp.test(matchedHost)
-        ? [ matchedHost.toLowerCase() ]
-        : matchedHost.toLowerCase().split('.')
+      const [ host, tld ] = specialHostsRegExp.test(matchedHost)
+        ? [ [ matchedHost.toLowerCase() ], '' ]
+        : _lruHostInfo(matchedHost, tldTree)
 
       return {
         scheme: scheme || 'http',
-        host: host.reverse(),
+        host: host.slice().reverse(), // Clone here to not reverse original object and mess up with logging
+        tld: tld || '',
         port: port || '',
         path: (path || '').split('/').filter((s) => !!s),
         query: query || '',
