@@ -29,9 +29,9 @@ export function parseLru (input) {
     } else if (type=='p') {
       result.path.push(name)
     } else if (type=='q') {
-      result.query = unescape(name)
+      result.query = decodeURIComponent(name)
     } else if (type=='f') {
-      result.fragment = unescape(name)
+      result.fragment = decodeURIComponent(name)
     }
   })
 
