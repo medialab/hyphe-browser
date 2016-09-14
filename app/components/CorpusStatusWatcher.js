@@ -20,7 +20,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   componentDidMount () {
-    this.initDataOnce()
+    this.shouldInitializedCorpusData = true
     this.watchStatus()
   }
 
@@ -58,6 +58,12 @@ class CorpusStatusWatcher extends React.Component {
           // No resource, such a dramatic failure :(
           showError({ id: ERROR_SERVER_NO_RESOURCE, messageId: 'error.corpus-not-started-no-resource', fatal: true })
         }
+      } else {
+        // Corpus is ready: initialize data
+        if (this.shouldInitializedCorpusData) {
+          this.shouldInitializedCorpusData = false
+          this.initDataOnceStarted()
+        }
       }
       // General case: wait before next status query
       return false
@@ -70,7 +76,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   // Data that must be initialized only once
-  initDataOnce () {
+  initDataOnceStarted () {
     const { fetchTLDs, showError, serverUrl, corpus } = this.props
     fetchTLDs(serverUrl, corpus.corpus_id)
     .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
