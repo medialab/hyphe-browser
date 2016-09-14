@@ -8,7 +8,7 @@ class Button extends React.Component {
 
     return (
       <button className={ classNames('btn btn-default', size && ('btn-' + size)) } { ...props }>
-        <span className={ 'icon icon-' + icon }></span>
+        <span className={ 'ti-' + icon }></span>
       </button>
     )
   }

@@ -1,3 +1,5 @@
+import '../../css/browser/browser-tab-content'
+
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
@@ -206,11 +208,11 @@ class TabContent extends React.Component {
 
     return (
       <div className="btn-group tab-toolbar-navigation">
-        <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="left-open" disabled={ !!adjusting || this.state.disableBack }
+        <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
           onClick={ () => this.props.eventBus.emit('goBack') } />
-        <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="right-open" disabled={ !!adjusting || this.state.disableForward }
+        <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
           onClick={ () => this.props.eventBus.emit('goForward') } />
-        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="ccw" disabled={ !!adjusting }
+        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="reload" disabled={ !!adjusting }
           onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
       </div>
     )
@@ -246,7 +248,7 @@ class TabContent extends React.Component {
     }
 
     return (
-        <div className="toolbar toolbar-header">
+        <div className="browser-tab-toolbar">
           <div className="toolbar-actions">
             { this.renderWebentityToolbar() }
             { this.renderUrlField() }
