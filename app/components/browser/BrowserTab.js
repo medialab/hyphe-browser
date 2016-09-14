@@ -80,7 +80,7 @@ class BrowserTab extends React.Component {
     })
 
     return (
-      <div key={ id } className={ cls } onClick={ this.selectHandler }>
+      <div key={ id } className={ cls } onClick={ this.selectHandler } title={ title }>
         { loading
           ? <span className="loading" />
           : (icon ? <img src={ icon } width="16" height="16" className="browser-tab-favicon" /> : null)
