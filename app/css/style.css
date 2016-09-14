@@ -21,14 +21,6 @@ a.btn {
 .urlInputContainer {
   display: flex;
 }
-.pane-one-half {
-  flex: none;
-  width: 50%;
-}
-.pane-one-third {
-  flex: none;
-  width: 33.3%;
-}
 .urlForm {
   display: inline-block;
   flex-grow: 1;

@@ -16,19 +16,19 @@ class CorpusLoadIndicators extends React.Component {
     const hypheCrawlingStatus = getHypheCrawlingStatus({ max_crawls: 12, ...status.hyphe })
 
     return (
-      <span className="corpus-loads">
-        <span className="corpus-loads-title">Hyphe</span>
-        <span className="corpus-load-status" title={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
-          <span className={ 'corpus-load-status-' + corpusCrawlingStatus } />
+      <span className="corpus-load-indicators">
+        <span className="corpus-load-title">Hyphe</span>
+        <span title={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
+          <span className={ 'corpus-load corpus-load-status-' + corpusCrawlingStatus } />
         </span>
-        <span className="corpus-load-pending" title={ formatMessage({ id: 'corpus-load-pending' }) }>
+        <span title={ formatMessage({ id: 'corpus-load-pending' }) }>
           { status.corpus.crawler.jobs_pending }
         </span>
-        <span className="corpus-load-running" title={ formatMessage({ id: 'corpus-load-running' }) }>
+        <span title={ formatMessage({ id: 'corpus-load-running' }) }>
           { status.corpus.crawler.jobs_running }
         </span>
-        <span className="corpus-load-health" title={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
-          <span className={ 'corpus-load-health-' + hypheCrawlingStatus } />
+        <span title={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
+          <span className={ 'corpus-load corpus-load-health-' + hypheCrawlingStatus } />
         </span>
       </span>
     )
