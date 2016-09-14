@@ -68,12 +68,31 @@
   color: var(--color-blue);
   font-weight: bold;
 
+  .loading {
+    display: none;
+  }
+
+  .browser-tab-title {
+    margin-left: 1em;
+  }
+
   &::after {
     display: none;
   }
 
   .browser-tab-favicon {
     display: none;
+  }
+
+  &.active {
+    .browser-tab-title {
+      display: inline-block;
+    }
+
+    &::after {
+      background: var(--color-grey-light);
+      display: block;
+    }
   }
 }
 
