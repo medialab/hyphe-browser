@@ -83,7 +83,7 @@ class BrowserTab extends React.Component {
       <div key={ id } className={ cls } onClick={ this.selectHandler } title={ title }>
         { loading
           ? <span className="loading" />
-          : (icon ? <img src={ icon } width="16" height="16" className="browser-tab-favicon" /> : null)
+          : (icon && <img src={ icon } width="16" height="16" className="browser-tab-favicon" />)
         }
         <span className="browser-tab-title">{ ' ' + (newTab ? this.translate('new-tab') : title) }</span>
         { !fixed && closable && <span className="ti-close" onClick={ this.closeHandler }></span> }
