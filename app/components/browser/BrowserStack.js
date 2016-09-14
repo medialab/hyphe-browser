@@ -69,7 +69,7 @@ class BrowserStack extends React.Component {
       <span className="fillers">
         { stacks.map((stack) =>
           <button key={ stack.name }
-            className={ cx('filler', `filler-${stack.name}`,
+            className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
             <div className="filler-name">{ stack.name }</div>

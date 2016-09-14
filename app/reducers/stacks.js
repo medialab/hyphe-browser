@@ -26,13 +26,13 @@ const initialState = {
       condition: 'IN'
     },
     {
-      name: 'IN_UNTAGGED',
+      name: 'IN NOT TAG',
       method: 'store.get_webentities_mistagged',
       args: ['IN', true, false, 'name', -1, 0],
       condition: 'IN'
     },
     {
-      name: 'IN_UNCRAWLED',
+      name: 'IN NOT CRAWLED',
       method: 'store.get_webentities_uncrawled',
       args: ['name', -1, 0],
       condition: 'IN'
