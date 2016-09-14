@@ -82,7 +82,8 @@ class BrowserStack extends React.Component {
   }
 
   renderProgress () {
-    const { webentities } = this.props
+    const { webentities, selectedStack } = this.props
+    if (!selectedStack) return
     const viewCount = webentities.filter(x => x.viewed).length
 
     return <progress value={ viewCount } max={ webentities.length } />
