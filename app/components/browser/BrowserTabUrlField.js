@@ -115,15 +115,15 @@ class BrowserTabUrlField extends React.Component {
 
     return <span className={ className } onClick={ onClick }
       dangerouslySetInnerHTML={ {
-        __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url)
+        __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url, this.props.tlds)
       } } />
   }
 
   // LRU selector by prefix: click to select
   renderPrefixSelector () {
-    const matching = longestMatching(this.props.lruPrefixes, this.state.url)
+    const matching = longestMatching(this.props.lruPrefixes, this.state.url, this.props.tlds)
     const lru = (matching && matching.lru) || parseLru({})
-    const url = urlToLru(this.state.url)
+    const url = urlToLru(this.state.url, this.props.tlds)
 
     const parts = [ [ 'scheme', url.scheme + '://', url.scheme === lru.scheme ] ]
       .concat(url.host.map((h, i) => [ 'host', '.' + h, url.host[i] === lru.host[i] ]))
@@ -200,7 +200,8 @@ BrowserTabUrlField.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
   onSelectPrefix: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  tlds: PropTypes.object
 }
 
 export default BrowserTabUrlField

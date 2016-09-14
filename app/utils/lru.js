@@ -44,7 +44,8 @@ export function parseLru (input) {
 }
 
 // Convert a URL (string) to LRU object
-export function urlToLru (url) {
+// TODO use new tldTree method
+export function urlToLru (url, tldTree) {
   const urlMatch = urlToLruRegExp.exec(url)
   if (urlMatch) {
     const [/* trash */, scheme, authority, path, query, fragment] = urlMatch
@@ -84,9 +85,9 @@ export function lruToUrl (inputLru) {
 }
 
 // Check if a LRU (string or object) matches a URL (string) or other LRU (string or object)
-export function match (lru, url) {
+export function match (lru, url, tldTree) {
   const lruLru = parseLru(lru)
-  const urlLru = urlToLru(url)
+  const urlLru = urlToLru(url, tldTree)
 
   // Now we want to check if LRU matches URL, which means:
   // - url.host starts with lru.host (they're reversed)
@@ -102,12 +103,12 @@ export function match (lru, url) {
 
 // Returns the longest LRU matching given URL (string) or other LRU (string or object)
 // Returns an object { index (number), lru (object), url (string) }
-export function longestMatching (lrus, url) {
+export function longestMatching (lrus, url, tldTree) {
   return lrus
     // Ensure all LRUs are valid LRU objects
     .map(parseLru)
     // Test for each LRU, and keep track of index to get back to original LRU at end of process
-    .map((lru, index) => (match(lru, url) && { lru, index }))
+    .map((lru, index) => (match(lru, url, tldTree) && { lru, index }))
     // Keep only matched values
     .filter((matched) => matched)
     // Convert LRU to strings
@@ -117,15 +118,15 @@ export function longestMatching (lrus, url) {
 }
 
 // Returns the URL (string) with injected '<em>' tags around parts matched by longest LRU (string or object)
-export function highlightUrlHTML (lrus, url) {
-  const matched = longestMatching(lrus, url)
+export function highlightUrlHTML (lrus, url, tldTree) {
+  const matched = longestMatching(lrus, url, tldTree)
 
   if (!matched) {
     return url
   }
 
   const lruLru = matched.lru
-  const urlLru = urlToLru(url)
+  const urlLru = urlToLru(url, tldTree)
 
   // General case: {scheme}://subhost.{host}:{port}/{path}/subpath?{query}#{fragment}
   // All {token}s will be surrounded by a '<em>' tag
@@ -163,7 +164,7 @@ highlightUrlHTML([
   's:https|h:com|h:google|h:www|f:fragment',
   's:https|h:com|h:google|h:www',
   's:https|h:com|h:google|h:www'
-], 'https://subdomain.www.google.com/toto/tata#fragment')
+], 'https://subdomain.www.google.com/toto/tata#fragment', tldTree)
 
 → '<em>https</em>://subdomain.<em>com.google.www</em><em>/toto</em>/tata<em>#fragment</em>'
 */

@@ -217,7 +217,7 @@ class TabContent extends React.Component {
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity, disableWebentity, disableNavigation } = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity, disableWebentity, disableNavigation, tlds } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || (!loading && (disableWebentity || !!webentity))
 
     if (disableNavigation) {
@@ -232,6 +232,7 @@ class TabContent extends React.Component {
           lruPrefixes={ webentity && webentity.lru_prefixes }
           onSubmit={ (url) => setTabUrl(url, id) }
           prefixSelector={ !!adjusting }
+          tlds={ tlds }
           onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
       </div>
     )
@@ -312,6 +313,7 @@ TabContent.propTypes = {
   webentity: PropTypes.object,
   adjusting: PropTypes.object,
   status: PropTypes.object,
+  tlds: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
   hideError: PropTypes.func.isRequired,
@@ -351,7 +353,8 @@ const mapStateToProps = (
     corpusId: corpora.selected.corpus_id,
     webentity: webentity,
     adjusting: webentity && webentities.adjustments[webentity.id],
-    status: corpora.status
+    status: corpora.status,
+    tlds: webentities.tlds
   }
 }
 
