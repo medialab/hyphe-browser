@@ -81,6 +81,25 @@ class BrowserStack extends React.Component {
     )
   }
 
+  renderWesList () {
+    const { selectedStack, webentities } = this.props
+    const viewed = this.context.intl.formatMessage({ id: 'viewed' })
+
+    if (!this.selectedStack) {
+      return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
+    }
+
+    return (
+      <select className="form-control"
+        value={ this.state.selectedWebentityId }
+        onChange={ (evt) => this.selectWebentity(webentities.find(x => x.id === evt.target.value)) }>
+        { webentities.map((w, i) => (
+          <option key={ w.id } value={ w.id }>#{ i + 1 } - { w.viewed ? `[${viewed}] - ` : '' } { w.name } ({ w.homepage })</option>
+        )) }
+      </select>
+    )
+  }
+
   renderProgress () {
     const { webentities, selectedStack } = this.props
     if (!selectedStack) return
@@ -91,8 +110,7 @@ class BrowserStack extends React.Component {
 
   // left side
   renderWesSelector () {
-    const { selectedStack, webentities } = this.props
-    const viewed = this.context.intl.formatMessage({ id: 'viewed' })
+    const { selectedStack } = this.props
 
     return (
       <div className="browser-stack-wes">
@@ -102,13 +120,7 @@ class BrowserStack extends React.Component {
           <span className="ti-arrow-circle-left"></span>
         </button>
         <div className="browser-stack-wes-selector">
-          <select className="form-control"
-            value={ this.state.selectedWebentityId }
-            onChange={ (evt) => this.selectWebentity(webentities.find(x => x.id === evt.target.value)) }>
-            { webentities.map((w, i) => (
-              <option key={ w.id } value={ w.id }>#{ i + 1 } - { w.viewed ? `[${viewed}] - ` : '' } { w.name } ({ w.homepage })</option>
-            )) }
-          </select>
+          { this.renderWesList() }
           { this.renderProgress() }
         </div>
         <button className="btn btn-default"
