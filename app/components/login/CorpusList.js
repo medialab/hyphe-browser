@@ -3,20 +3,20 @@ import '../../css/login/corpus-list'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
+import { connect } from 'react-redux'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
+import { selectCorpus } from '../../actions/corpora'
+import Spinner from '../Spinner'
+
 class CorpusListItem extends React.Component {
-  constructor (props) {
-    super(props)
-    this.selectCorpus = this.selectCorpus.bind(this)
-  }
 
   selectCorpus () {
-    const { actions, server, corpus, dispatch } = this.props
+    const { server, corpus, selectCorpus, routerPush } = this.props
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
-    actions.selectCorpus(server, corpus)
-    dispatch(routerActions.push(path))
+    selectCorpus(server, corpus)
+    routerPush(path)
   }
 
   render () {
@@ -24,7 +24,7 @@ class CorpusListItem extends React.Component {
       last_activity } = this.props.corpus
 
     return (
-      <div onClick={ this.selectCorpus }>
+      <div onClick={ () => this.selectCorpus() }>
         <h5 className="corpus-list-item-name">
           { password && <span className="icon icon-lock"></span> }
           { name }
@@ -42,10 +42,12 @@ class CorpusListItem extends React.Component {
 }
 
 CorpusListItem.propTypes = {
-  actions: PropTypes.object.isRequired,
   corpus: PropTypes.object.isRequired,
   server: PropTypes.object.isRequired,
-  dispatch: PropTypes.func
+
+  // actions
+  selectCorpus: PropTypes.func,
+  routerPush: PropTypes.func
 }
 
 class CorpusList extends React.Component {
@@ -55,7 +57,11 @@ class CorpusList extends React.Component {
   }
 
   render () {
-    const { actions, dispatch, server, status } = this.props
+    const { server, status, ui, selectCorpus, routerPush } = this.props
+
+    if (ui.loaders.corpora) return <Spinner textId="loading-corpora" />
+    if (!server) return null
+
     let corpora = Object.keys(this.props.corpora)
       .sort()
       .map((k) => this.props.corpora[k])
@@ -79,6 +85,7 @@ class CorpusList extends React.Component {
           <T id="available-corpora" values={ { count: corpora.length } } />
           { hypheStatus }
         </h3>
+        { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
         <div className="corpus-list-filter">
           <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
             onChange={ ({ target }) => this.setState({ filter: target.value }) } />
@@ -88,7 +95,8 @@ class CorpusList extends React.Component {
           <ul className="list-group corpus-list">
             { corpora.map((corpus) =>
               <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-                <CorpusListItem actions={ actions } server={ server } corpus={ corpus } dispatch={ dispatch } />
+                <CorpusListItem corpus={ corpus } server={ server }
+                  selectCorpus={ selectCorpus } routerPush={ routerPush } />
               </li>
             ) }
           </ul>
@@ -106,11 +114,26 @@ CorpusList.contextTypes = {
 }
 
 CorpusList.propTypes = {
-  actions: PropTypes.object.isRequired,
-  dispatch: PropTypes.func,
   corpora: PropTypes.object.isRequired,
-  server: PropTypes.object.isRequired,
-  status: PropTypes.object
+  server: PropTypes.object,
+  status: PropTypes.object,
+  ui: PropTypes.object.isRequired,
+
+  // actions
+  selectCorpus: PropTypes.func,
+  routerPush: PropTypes.func
 }
 
-export default CorpusList
+const mapStateToProps = (state) => ({
+  corpora: state.corpora.list,
+  server: state.servers.selected,
+  status: state.corpora.status && state.corpora.status.hyphe,
+  ui: state.ui
+})
+
+const mapDispatchToProps = {
+  selectCorpus,
+  routerPush: routerActions.push
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CorpusList)

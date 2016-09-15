@@ -60,9 +60,9 @@ class ServerForm extends React.Component {
       return { ...this.props.server }
     }
     return {
-      url: null,
-      name: null,
-      password: null,
+      url: undefined,
+      name: undefined,
+      password: undefined,
     }
   }
 
@@ -133,36 +133,33 @@ class ServerForm extends React.Component {
 
     return (
       <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
-        <h2 className="pane-centered-title"><T id={ this.props.editMode ? 'server-edition' : 'server-addition' } /></h2>
-          <main className="pane-centered-main">
 
-          { this.state.errors.map((error) =>
-            <div className="form-error" key={ error }><T id={ error } /></div>
-          ) }
+        { this.state.errors.map((error) =>
+          <div className="form-error" key={ error }><T id={ error } /></div>
+        ) }
 
-          { this.renderFormGroup('url', 'api-url') }
-          { this.renderFormGroup('name', 'server-name') }
+        { this.renderFormGroup('url', 'api-url') }
+        { this.renderFormGroup('name', 'server-name') }
 
-          { false && this.renderFormGroup('login') }
-          { false && this.renderFormGroup('password', 'password', 'password') }
+        { false && this.renderFormGroup('login') }
+        { false && this.renderFormGroup('password', 'password', 'password') }
 
-          <div className="form-actions">
-            <button className="btn btn-primary" disabled={ this.state.submitting }>
-              <T id="save" />
-            </button>
-            <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
-              <T id="cancel" />
-            </Link>
-            { this.props.editMode &&
-              (
-                <button className="btn btn-negative" disabled={ this.state.submitting }
-                    onClick={ (evt) => this.delete(evt) }>
-                   <T id="delete" />
-                </button>
-              )
-            }
-          </div>
-        </main>
+        <div className="form-actions">
+          <button className="btn btn-primary" disabled={ this.state.submitting }>
+            <T id="save" />
+          </button>
+          <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
+            <T id="cancel" />
+          </Link>
+          { this.props.editMode &&
+            (
+              <button className="btn btn-negative" disabled={ this.state.submitting }
+                  onClick={ (evt) => this.delete(evt) }>
+                 <T id="delete" />
+              </button>
+            )
+          }
+        </div>
       </form>
     )
   }
@@ -186,6 +183,4 @@ const mapDispatchToProps = (dispatch) => ({
   dispatch
 })
 
-const ConnectedServerForm = connect(mapStateToProps, mapDispatchToProps)(ServerForm)
-
-export default ConnectedServerForm
+export default connect(mapStateToProps, mapDispatchToProps)(ServerForm)

@@ -4,7 +4,8 @@ import {
   CREATE_SERVER,
   UPDATE_SERVER,
   DELETE_SERVER,
-  RESET_SERVERS
+  RESET_SERVERS,
+  DESELECT_SERVER
 } from '../actions/servers'
 
 const initialState = {
@@ -59,5 +60,10 @@ export default createReducer(initialState, {
 
   [RESET_SERVERS]: () => ({
     ...initialState
+  }),
+
+  [DESELECT_SERVER]: (state) => ({
+    ...state,
+    selected: null
   })
 })

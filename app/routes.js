@@ -7,15 +7,16 @@ import Browser from './components/browser/Browser'
 // login components
 import Login from './components/login/Login'
 import CorpusForm from './components/login/CorpusForm'
+import CorpusList from './components/login/CorpusList'
 import CorpusLoginForm from './components/login/CorpusLoginForm'
 import ServerForm from './components/login/ServerForm'
-import StartUpForm from './components/login/StartUpForm'
 import Options from './components/login/Options'
 import Lobby from './components/login/Lobby'
 
 export default (
   <Route path="/" component={ App }>
 
+    // only display the servers dropdown
     <Route path="login" component={ Login }>
       // create a new corpus
       <Route path="corpus-form" component={ CorpusForm } />
@@ -28,7 +29,7 @@ export default (
       // waiting room while corpus's starting
       <Route path="lobby" component={ Lobby } />
       // select a server, a corpus and login to the latter
-      <IndexRoute component={ StartUpForm } />
+      <IndexRoute component={ CorpusList } />
     </Route>
 
     <Route path="browser" component={ Browser } />

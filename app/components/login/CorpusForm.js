@@ -107,18 +107,11 @@ class CorpusForm extends React.Component {
   }
 
   render () {
-    const { server } = this.props
-
     return (
       <form className="corpus-form" onSubmit={ (evt) => this.onSubmit(evt) }>
-        <h2 className="pane-centered-title"><T id="corpus-edition" /></h2>
-        <div><T id="on-server" values={ server } /></div>
-
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
-
-        <hr />
 
         { this.renderFormGroup('name', 'corpus-name') }
         { this.renderFormGroup('password', 'password', 'password') }
