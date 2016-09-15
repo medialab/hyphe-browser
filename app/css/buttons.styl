@@ -1,9 +1,14 @@
 .btn {
   box-shadow: none;
   border: none;
+  cursor: pointer;
   display: inline-block;
   font-family: var(--font-pt);
   padding: 1em;
+
+  span, span::before {
+    cursor: pointer;
+  }
 }
 
 .btn-primary {
@@ -27,4 +32,9 @@
 .btn[disabled] {
   background: none;
   color: var(--color-grey);
+  cursor: default;
+
+  span, span::before {
+    cursor: default;
+  }
 }
