@@ -59,6 +59,7 @@ class BrowserStack extends React.Component {
 
   // right side, colored buttons to fill stack
   renderStackFillers () {
+    const { formatMessage } = this.context.intl
     const { status, stacks, selectedStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
@@ -72,7 +73,7 @@ class BrowserStack extends React.Component {
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
-            <div className="filler-name">{ stack.name }</div>
+            <div className="filler-name">{ formatMessage({ id: 'corpus-status.' + stack.name }) }</div>
             <div className="filler-counter">{ counters[stack.name] || 0 }</div>
           </button>
         ) }

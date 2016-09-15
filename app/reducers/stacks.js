@@ -26,13 +26,13 @@ const initialState = {
       condition: 'IN'
     },
     {
-      name: 'IN NOT TAG',
+      name: 'IN_UNTAGGED',
       method: 'store.get_webentities_mistagged',
       args: ['IN', true, false, 'name', -1, 0],
       condition: 'IN'
     },
     {
-      name: 'IN NOT CRAWLED',
+      name: 'IN_UNCRAWLED',
       method: 'store.get_webentities_uncrawled',
       args: ['name', -1, 0],
       condition: 'IN'
@@ -44,7 +44,7 @@ const initialState = {
       condition: 'OUT'
     },
     {
-      name: 'PROSPECT',
+      name: 'DISCOVERED',
       method: 'store.advanced_search_webentities',
       args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true],
       condition: 'DISCOVERED'

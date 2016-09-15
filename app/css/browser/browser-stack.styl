@@ -57,6 +57,7 @@
     font-size: 12px;
     font-weight: bold;
     padding: 3px;
+    text-transform: uppercase;
   }
 
   .filler-counter {
@@ -81,8 +82,8 @@
   // see colors.styl
 
   .filler-UNDECIDED .filler-counter,
-  .filler-IN_NOT_TAG .filler-counter,
-  .filler-IN_NOT_CRAWLED .filler-counter {
+  .filler-IN_UNTAGGED .filler-counter,
+  .filler-IN_UNCRAWLED .filler-counter {
     color: var(--color-corpus-undecided);
   }
 
@@ -94,7 +95,7 @@
     color: var(--color-corpus-out);
   }
 
-  .filler-PROSPECT .filler-counter {
+  .filler-DISCOVERED .filler-counter {
     color: var(--color-corpus-discovered);
   }
 
