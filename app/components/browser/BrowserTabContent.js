@@ -68,11 +68,12 @@ class TabContent extends React.Component {
 
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
-      showError, declarePage, setTabWebentity, serverUrl, corpusId,
-      disableWebentity } = this.props
+      showError, hideError, declarePage, setTabWebentity, serverUrl,
+      corpusId, disableWebentity } = this.props
 
     switch (event) {
     case 'start':
+      hideError()
       setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity) {
         setTabWebentity(id, null)
@@ -105,11 +106,11 @@ class TabContent extends React.Component {
         const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
         setTabUrl(getSearchUrl(term), id)
         // Still show a dedicated error messag
-        showError({ messageId: 'error.dns-error-search', fatal: false, icon: 'attention', timeout: 3000 })
+        showError({ messageId: 'error.dns-error-search' })
       } else if (info.pageURL === info.validatedURL) {
         // Main page triggered the error, it's important
         this.doNotDeclarePageOnStop = true
-        showError({ messageId: 'error.network-error', messageValues: { error: err.message }, fatal: false, icon: 'attention', timeout: 10000 })
+        showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
         setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
       }
       // Anyway, log to console
