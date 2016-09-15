@@ -46,13 +46,23 @@ a.btn {
   display: flex;
   flex-direction: row;
 }
-.tab-toolbar-navigation,
 .tab-toolbar-webentity {
-  flex-shrink: 1;
-  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
-}
-.tab-toolbar-webentity {
-  min-width: 250px;
+  min-width: 260px;
+
+  input {
+    font-size: 12px;
+    min-width: 100px;
+    max-width: 250px;
+    padding: 12px;
+    width: initial;
+
+    &.loading {
+      background-image: url(../images/loading.svg);
+      background-size: 25px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
 }
 .tab-toolbar-url {
   flex: 1;
@@ -60,40 +70,33 @@ a.btn {
 .tab-toolbar-url input {
   width: 100%;
 }
-.tab-toolbar-webentity input {
-  min-width: 100px;
-  max-width: 250px;
-  width: initial;
-}
-.tab-toolbar-webentity input.loading {
-  background-image: url(../images/loading.svg);
-  background-size: 25px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
 
 
 /** Tab url field **/
 
 .browser-tab-url {
+  font-size: 12px;
   min-height: 30px;
+  padding: 10px;
+
+  &.loading {
+    background-image: url(../images/loading-url.gif);
+    background-repeat: repeat-x;
+    background-position: center;
+  }
+
+  /* :first-child = scheme */
+  em:first-child {
+    font-style: normal;
+  }
+  em:not(:first-child) {
+    background: #ffff99;
+    padding: 2px 5px;
+    font-weight: bold;
+    font-style: normal;
+  }
 }
 
-.browser-tab-url.loading {
-  background-image: url(../images/loading-url.gif);
-  background-repeat: repeat-x;
-  background-position: center;
-}
-/* :first-child = scheme */
-.browser-tab-url em:first-child {
-  font-style: normal;
-}
-.browser-tab-url em:not(:first-child) {
-  background: #ffff99;
-  padding: 2px 5px;
-  font-weight: bold;
-  font-style: normal;
-}
 .browser-tab-prefix-selector .prefix {
   max-width: 20em;
   overflow: hidden;

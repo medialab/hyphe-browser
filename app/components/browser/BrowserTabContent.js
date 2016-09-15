@@ -187,7 +187,7 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="btn-group tab-toolbar-webentity">
+      <div className="tab-toolbar-webentity">
         { this.renderHomeButton () }
         <BrowserTabWebentityNameField
           initialValue={ webentity && webentity.name }
@@ -208,13 +208,13 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="btn-group tab-toolbar-navigation">
+      <div className="tab-toolbar-navigation">
+        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="reload" disabled={ !!adjusting }
+          onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
         <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
           onClick={ () => this.props.eventBus.emit('goBack') } />
         <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
           onClick={ () => this.props.eventBus.emit('goForward') } />
-        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="reload" disabled={ !!adjusting }
-          onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
       </div>
     )
   }
