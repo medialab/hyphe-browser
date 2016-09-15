@@ -102,11 +102,17 @@ class BrowserTabs extends React.Component {
     return this.tabEventBus[tabId] || (this.tabEventBus[tabId] = new EventBus())
   }
 
+  getWebentity (tabId) {
+    const { webentities } = this.props
+    return webentities && webentities.webentities[webentities.tabs[tabId]]
+  }
+
   renderTabContents () {
     return this.props.tabs.map((tab) => (
       <TabContent key={ tab.id }
         eventBus={ this.getEventBus(tab.id) }
         id={ tab.id }
+        webentity={ this.getWebentity(tab.id) }
         url={ tab.url }
         loading={ tab.loading || false }
         disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
@@ -128,6 +134,7 @@ class BrowserTabs extends React.Component {
           { ...tab }
           closable={ tabs.length !== 1 }
           title={ title }
+          webentity={ this.getWebentity(tab.id) }
           newTab={ isNewTab }
           active={ this.props.activeTabId === tab.id }
           selectTab={ this.props.selectTab }
@@ -200,6 +207,8 @@ BrowserTabs.propTypes = {
   corpusId: PropTypes.string,
   instanceUrl: PropTypes.string,
 
+  webentities: PropTypes.object,
+
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   selectNextTab: PropTypes.func.isRequired,
@@ -207,11 +216,12 @@ BrowserTabs.propTypes = {
   selectTab: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ tabs, corpora, servers }) => ({
+const mapStateToProps = ({ tabs, corpora, servers, webentities }) => ({
   tabs: tabs.tabs,
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpusId: corpora.selected && corpora.selected.corpus_id,
-  instanceUrl: servers.selected && servers.selected.home
+  instanceUrl: servers.selected && servers.selected.home,
+  webentities: webentities
 })
 
 const mapDispatchToProps = {

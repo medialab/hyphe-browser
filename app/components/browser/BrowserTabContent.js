@@ -340,25 +340,22 @@ TabContent.propTypes = {
 
 const mapStateToProps = (
   { corpora, servers, tabs, webentities }, // store
-  { id, url, loading, disableWebentity, disableNavigation, eventBus } // own props
-) => {
-  const webentity = webentities.webentities[webentities.tabs[id]]
-  return {
-    id,
-    url,
-    loading,
-    disableWebentity,
-    disableNavigation,
-    eventBus,
-    active: tabs.activeTab && tabs.activeTab.id === id,
-    serverUrl: servers.selected.url,
-    corpusId: corpora.selected.corpus_id,
-    webentity: webentity,
-    adjusting: webentity && webentities.adjustments[webentity.id],
-    status: corpora.status,
-    tlds: webentities.tlds
-  }
-}
+  { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
+) => ({
+  id,
+  url,
+  loading,
+  disableWebentity,
+  disableNavigation,
+  eventBus,
+  active: tabs.activeTab && tabs.activeTab.id === id,
+  serverUrl: servers.selected.url,
+  corpusId: corpora.selected.corpus_id,
+  webentity: webentity,
+  adjusting: webentity && webentities.adjustments[webentity.id],
+  status: corpora.status,
+  tlds: webentities.tlds
+})
 
 const mapDispatchToProps = {
   showError, hideError,

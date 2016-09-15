@@ -73,11 +73,16 @@ class BrowserTab extends React.Component {
   }
 
   render () {
-    const { active, id, title, icon, loading, newTab, fixed, closable } = this.props
+    const { active, id, title, webentity, icon, loading, newTab, fixed, closable } = this.props
     const cls = cx('browser-tab-item', { active }, {
       'browser-tab-item-fixed': fixed,
       'browser-tab-item-hyphe': id === HYPHE_TAB_ID,
     })
+    const label = newTab
+      ? this.translate('new-tab')
+      : webentity && webentity.name
+        ? webentity.name
+        : title
 
     return (
       <div key={ id } className={ cls } onClick={ this.selectHandler } title={ title }>
@@ -85,7 +90,7 @@ class BrowserTab extends React.Component {
           ? <span className="loading" />
           : (icon && <img src={ icon } width="16" height="16" className="browser-tab-favicon" />)
         }
-        <span className="browser-tab-title">{ ' ' + (newTab ? this.translate('new-tab') : title) }</span>
+        <span className="browser-tab-title">{ label }</span>
         { !fixed && closable && <span className="ti-close" onClick={ this.closeHandler }></span> }
       </div>
     )
@@ -98,6 +103,7 @@ BrowserTab.propTypes = {
   title: PropTypes.string,
   url: PropTypes.string,
   icon: PropTypes.string,
+  webentity: PropTypes.object,
   loading: PropTypes.bool,
   fixed: PropTypes.bool,
   // tab not closable when is the last one
