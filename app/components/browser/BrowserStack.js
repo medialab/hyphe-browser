@@ -81,13 +81,30 @@ class BrowserStack extends React.Component {
     )
   }
 
+  renderWebListItem (w) {
+    return (
+      <span className="browser-stack-wes-list-item">
+        { w.name }
+      </span>
+    )
+  }
+
   renderWesList () {
     const { selectedStack, webentities } = this.props
     const viewed = this.context.intl.formatMessage({ id: 'viewed' })
 
-    if (!this.selectedStack) {
+    if (!selectedStack) {
       return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
     }
+
+    const webentity = webentities.find(it => it.id === this.state.selectedWebentityId)
+
+    return (
+      <div className="browser-stack-wes-list">
+        { this.renderWebListItem(webentity) }
+        <span className="browser-stack-toggle ti-exchange-vertical"></span>
+      </div>
+    )
 
     return (
       <select className="form-control"

@@ -3,16 +3,33 @@
   padding: 22px 1em 1em 1em;
 
   // left side
-
-  .browser-stack-wes-empty-list {
-    background: var(--color-grey);
+  .browser-stack-wes-empty-list,
+  .browser-stack-wes-list {
     border-radius: var(--radius);
-    color: var(--color-black);
     font-family: var(--font-pt);
     font-size: 12px;
     height: 38px;
     padding: 12px;
     width: 310px;
+  }
+
+  .browser-stack-wes-empty-list {
+    background: var(--color-grey);
+    color: var(--color-black);
+  }
+
+  .browser-stack-wes-list {
+    background: var(--color-black);
+    color: var(--color-white);
+    position: relative;
+    text-align: left;
+
+    .browser-stack-toggle {
+      font-size: 18px;
+      position: absolute;
+      right: 8px;
+      vertical-align: middle;
+    }
   }
 
   progress,
