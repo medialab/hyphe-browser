@@ -68,6 +68,7 @@
   },
   "dependencies": {
     "@naholyr/chromium-net-errors": "^1.0.4",
+    "animate.css": "^3.5.2",
     "classnames": "^2.2.5",
     "electron-debug": "^1.0.1",
     "electron-devtools-installer": "^2.0.1",

@@ -1,4 +1,5 @@
 import '../../css/browser/notification'
+import 'animate.css'
 
 import React, { PropTypes } from 'react'
 
@@ -10,15 +11,17 @@ class Notification extends React.Component {
   render () {
     const { messageId, messageValues, type = 'error', hideError } = this.props
 
-    const message = messageId
-      ? <T id={ messageId } values={ messageValues || {} } />
-      : ''
+    if (!messageId) {
+      return null
+    }
+
+    const message = <T id={ messageId } values={ messageValues || {} } />
 
     return (
-      <div className={ `notification-container ${messageId ? 'visible' : 'hidden'}` }>
-        <div className={ `notification notification-${type}` }>
+      <div className="notification-container">
+        <div className={ `animated bounceInDown notification notification-${type}` }>
           <a className="error-dialog-close" onClick={ () => hideError() }><span className="icon icon-cancel-circled" /></a>
-          <strong> { message }</strong>
+          <strong>{ message }</strong>
         </div>
       </div>
     )
