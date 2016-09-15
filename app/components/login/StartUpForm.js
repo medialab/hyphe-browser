@@ -8,6 +8,7 @@ import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import { routerActions } from 'react-router-redux'
 
 import actions from '../../actions'
 import CorpusList from './CorpusList'
@@ -20,6 +21,10 @@ class StartUpForm extends React.Component {
   }
 
   refreshStatusAndCorpora (url) {
+    if (url === 'add') {
+      this.props.dispatch(routerActions.push('/login/server-form'))
+      return
+    }
     const { selectedServer, actions } = this.props
     url = url || selectedServer && selectedServer.url
 
@@ -31,6 +36,7 @@ class StartUpForm extends React.Component {
 
   renderServerSelect () {
     const { selectedServer, servers } = this.props
+    const { formatMessage } = this.context.intl
 
     let options = servers.map((s) => ({
       label: `${s.name} (${s.url})`,
@@ -40,12 +46,18 @@ class StartUpForm extends React.Component {
 
     // add default option only when no server selected
     if (!selectedServer || !selectedServer.url) {
-      options = [{
-        label: this.context.intl.formatMessage({ id: 'select-server' }),
+      options.unshift({
+        label: formatMessage({ id: 'select-server' }),
         value: '',
         key: 'default'
-      }].concat(options)
+      })
     }
+
+    options.push({
+      label: formatMessage({ id: 'server-add' }),
+      value: 'add',
+      key: 'server-add'
+    })
 
     return (
       <select
@@ -71,9 +83,6 @@ class StartUpForm extends React.Component {
           <div className="form-group inline">
             { this.renderServerSelect() }
             { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="ti-pencil"></span></Link> }
-          </div>
-          <div className="form-actions">
-            <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>
           </div>
 
           { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
