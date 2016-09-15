@@ -22,3 +22,9 @@
   background: var(--color-red);
 }
 
+
+.btn:disabled,
+.btn[disabled] {
+  background: none;
+  color: var(--color-grey);
+}

@@ -91,12 +91,13 @@ class BrowserStack extends React.Component {
 
   // left side
   renderWesSelector () {
-    const { webentities } = this.props
+    const { selectedStack, webentities } = this.props
     const viewed = this.context.intl.formatMessage({ id: 'viewed' })
 
     return (
       <div className="browser-stack-wes">
         <button className="btn btn-default"
+          disabled={ !selectedStack }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-arrow-circle-left"></span>
         </button>
@@ -111,11 +112,13 @@ class BrowserStack extends React.Component {
           { this.renderProgress() }
         </div>
         <button className="btn btn-default"
+          disabled={ !selectedStack }
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-arrow-circle-right"></span>
         </button>
         <button className="btn btn-default"
-            onClick={ () => this.fill() }>
+          disabled={ !selectedStack }
+          onClick={ () => this.fill() }>
           <span className="ti-loop"></span>
         </button>
       </div>
@@ -125,7 +128,7 @@ class BrowserStack extends React.Component {
   render () {
     return (
       <div className="browser-stack">
-        { this.props.selectedStack ? this.renderWesSelector() : null }
+        { this.renderWesSelector() }
         { this.renderStackFillers() }
       </div>
     )
