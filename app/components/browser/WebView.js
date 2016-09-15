@@ -164,7 +164,10 @@ class WebView extends React.Component {
       // TODO reset favicon on navigate
     })
     webview.addEventListener('page-favicon-updated', ({ favicons }) => {
-      update('favicon', favicons[0])
+      // don't display 404 icons
+      fetch(favicons[0]).then((res) => {
+        if (res.status === 200) update('favicon', favicons[0])
+      })
     })
 
     // When receiving the order of opening a new window
