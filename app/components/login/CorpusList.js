@@ -4,7 +4,7 @@ import '../../css/login/corpus-list'
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
-import { FormattedMessage as T, FormattedRelative as D } from 'react-intl'
+import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
 class CorpusListItem extends React.Component {
   constructor (props) {
@@ -64,6 +64,7 @@ class CorpusList extends React.Component {
 
     corpora = corpora.filter(it => it.name.includes(this.state.filter))
 
+    const formatMessage = this.context.intl.formatMessage
     const hypheStatus = status && Boolean(status.corpus_running) &&
       (
         <span>
@@ -78,8 +79,10 @@ class CorpusList extends React.Component {
           <T id="available-corpora" values={ { count: corpora.length } } />
           { hypheStatus }
         </h3>
-        <div className="corpus-list-filter-holder">
-          <input className="corpus-list-filter" value={ this.state.filter } onChange={ ({ target }) => this.setState({ filter: target.value }) } />
+        <div className="corpus-list-filter">
+          <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
+            onChange={ ({ target }) => this.setState({ filter: target.value }) } />
+          <span className="ti-search"></span>
         </div>
         <div className="form-group corpus-list-slider">
           <ul className="list-group corpus-list">
@@ -96,6 +99,10 @@ class CorpusList extends React.Component {
       </div>
     )
   }
+}
+
+CorpusList.contextTypes = {
+  intl: intlShape
 }
 
 CorpusList.propTypes = {

@@ -66,26 +66,28 @@ class StartUpForm extends React.Component {
         <h2 className="pane-centered-title">
           <T id="welcome" />
         </h2>
+        <main className="pane-centered-main">
 
-        <div className="form-group inline">
-          { this.renderServerSelect() }
-          { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="ti-pencil"></span></Link> }
-        </div>
-        <div className="form-actions">
-          <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>
-        </div>
+          <div className="form-group inline">
+            { this.renderServerSelect() }
+            { selectedServer && <Link className="btn btn-default" to="/login/server-form?edit"><span className="ti-pencil"></span></Link> }
+          </div>
+          <div className="form-actions">
+            <Link className="btn btn-primary" to="/login/server-form"><T id="server-add" /></Link>
+          </div>
 
-        { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
+          { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
 
-        { ui.loaders.corpora
-          ? <Spinner textId="loading-corpora" />
-          : (selectedServer
-            ? <CorpusList actions={ actions } dispatch={ dispatch }
-                corpora={ corpora } status={ status && status.hyphe }
-                server={ selectedServer } />
-            : null
-          )
-        }
+          { ui.loaders.corpora
+            ? <Spinner textId="loading-corpora" />
+            : (selectedServer
+              ? <CorpusList actions={ actions } dispatch={ dispatch }
+                  corpora={ corpora } status={ status && status.hyphe }
+                  server={ selectedServer } />
+              : null
+            )
+          }
+        </main>
       </form>
     )
   }

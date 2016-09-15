@@ -1,14 +1,24 @@
-.corpus-list-filter-holder {
+.corpus-list-filter {
+  position: relative;
   text-align: center;
+
+  input {
+    background: var(--color-white);
+    border-radius: var(--radius);
+    border: none;
+    margin-bottom: 12px;
+    padding: 1em 3em 1em 1em;
+    width: 100%;
+
+  }
+  span {
+    font-size: 14px;
+    position: absolute;
+    right: .8em;
+    top: 16px;
+  }
 }
 
-.corpus-list-filter {
-  /* background: var(--color-white); */
-  border-radius: 6px;
-  border: none;
-  padding: 1em;
-  width: 90%;
-}
 
 .corpus-list-slider {
   height: 200px;
@@ -17,14 +27,14 @@
 
 .corpus-list-item {
   background: var(--color-white);
-  border-radius: 6px;
+  border-radius: var(--radius);
   border: none;
   cursor: pointer;
   font-family: var(--font-pt);
-  margin: 6px;
+  margin: 6px 0;
 
   &:hover {
-    background: var(--color-grey);
+    background: var(--color-grey-light);
   }
 
   div {

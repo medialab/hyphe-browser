@@ -10,6 +10,7 @@
   "confirm-password": "Répéter le mot de passe",
   "connect": "Connecter",
   "corpus-edition": "Édition du corpus",
+  "corpus-list-placeholder": "Rechercher un corpus…",
   "corpus-load-health": "Charge des robots Hyphe : {status}",
   "corpus-load-health.ERROR": "Erreur",
   "corpus-load-health.OK": "OK",

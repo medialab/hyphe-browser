@@ -10,6 +10,7 @@
   "confirm-password": "Confirm password",
   "connect": "Connect",
   "corpus-edition": "Corpus edition",
+  "corpus-list-placeholder": "Search corpus…",
   "corpus-load-health": "Crawlers health: {status}",
   "corpus-load-health.ERROR": "Error",
   "corpus-load-health.OK": "OK",

@@ -1,3 +1,10 @@
+.server-list {
+  background: var(--color-black);
+  border-radius: var(--radius);
+  color: var(--color-white);
+  padding: 1em;
+}
+
 .options-link {
   color: #555;
   float: right;
