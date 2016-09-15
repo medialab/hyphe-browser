@@ -96,7 +96,7 @@ class BrowserStack extends React.Component {
 
     return (
       <div className="browser-stack-wes">
-        <button className="btn btn-default browser-stack-wes-prev"
+        <button className="btn btn-default"
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-arrow-circle-left"></span>
         </button>
@@ -110,7 +110,7 @@ class BrowserStack extends React.Component {
           </select>
           { this.renderProgress() }
         </div>
-        <button className="btn btn-default browser-stack-wes-next"
+        <button className="btn btn-default"
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-arrow-circle-right"></span>
         </button>
