@@ -281,7 +281,7 @@ class TabContent extends React.Component {
     const { webentity, serverUrl, corpusId, adjusting, status } = this.props
 
     return (
-      <SplitPane split="vertical" minSize="130" defaultSize="200">
+      <SplitPane split="vertical" minSize="300" defaultSize="400">
         { webentity
           ? <SideBar status={ status } webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
           : <div></div> }

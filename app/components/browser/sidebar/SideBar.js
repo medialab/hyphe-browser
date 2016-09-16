@@ -22,35 +22,6 @@ class SideBar extends React.Component {
     }
   }
 
-  renderCrawlingStatus () {
-    const { webentity } = this.props
-
-    if (!webentity) {
-      return null
-    }
-
-    return (
-      <div>
-        <h3><T id="crawling-status" /></h3>
-        <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong>
-      </div>
-    )
-  }
-
-  renderDegree () {
-    const { webentity } = this.props
-
-    if (!webentity) {
-      return null
-    }
-
-    return (
-      <div>
-        <h3><T id="indegree" /> { webentity.indegree } fois</h3>
-      </div>
-    )
-  }
-
   setStatus (status) {
     const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId } = this.props
 
@@ -65,6 +36,35 @@ class SideBar extends React.Component {
     } else {
       setWebentityStatus(serverUrl, corpusId, status, webentity.id)
     }
+  }
+
+  renderInfo () {
+    const { webentity } = this.props
+    if (!webentity) return null
+
+    return (
+      <div className="browser-side-bar-info">
+        <h3><span>Info</span></h3>
+        <div><T id="indegree" /> <strong>{ webentity.indegree }</strong></div>
+        <div><T id="crawled" /> <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong></div>
+      </div>
+    )
+  }
+
+  renderStatus () {
+    const { webentity } = this.props
+    if (!webentity) return null
+
+    return (
+      <div className="browser-side-bar-status">
+        <h3><span><T id="status" /></span></h3>
+        <div>
+          { this.renderStatusButton('UNDECIDED') }
+          { this.renderStatusButton('IN') }
+          { this.renderStatusButton('OUT') }
+        </div>
+      </div>
+    )
   }
 
   renderStatusButton (status) {
@@ -84,19 +84,19 @@ class SideBar extends React.Component {
   renderTabs () {
     return (
       <div className="sidebar-tabs">
-         {   false &&
-             <div className="tab-group">
-              <div
-                className={ cx('tab-item', { active: this.state.tab === 'context' }) }
-                onClick={ () => this.setState({ tab: 'context' }) }>
-                <span><T id="sidebar.tab-context" /></span>
-              </div>
-              <div
-                className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
-                onClick={ () => this.setState({ tab: 'tags' }) }>
-                <span><T id="sidebar.tab-tags" /></span>
-              </div>
+         { false &&
+           <div className="tab-group">
+            <div
+              className={ cx('tab-item', { active: this.state.tab === 'context' }) }
+              onClick={ () => this.setState({ tab: 'context' }) }>
+              <span><T id="sidebar.tab-context" /></span>
             </div>
+            <div
+              className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
+              onClick={ () => this.setState({ tab: 'tags' }) }>
+              <span><T id="sidebar.tab-tags" /></span>
+            </div>
+          </div>
         }
         { (this.state.tab === 'context') ? this.renderTabContext() : this.renderTabTags() }
       </div>
@@ -114,16 +114,12 @@ class SideBar extends React.Component {
   render () {
     return (
       <aside className="browser-side-bar">
-        <h2><T id="status" /></h2>
-        <div className="btn-group browser-side-bar-status">
-          { this.renderStatusButton('IN') }
-          { this.renderStatusButton('UNDECIDED') }
-          { this.renderStatusButton('OUT') }
+        <div className="browser-side-bar-cols">
+          { this.renderInfo() }
+          { this.renderStatus() }
         </div>
-        { this.renderCrawlingStatus() }
-        { this.renderDegree() }
         { this.renderTabs() }
-        { this.props.disabled ? <div className="browser-sidebar-disabled-layer" /> : null }
+        { this.props.disabled && <div className="browser-sidebar-disabled-layer" /> }
         <HypheFooter status={ this.props.status } />
       </aside>
     )

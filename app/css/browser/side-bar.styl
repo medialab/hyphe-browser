@@ -2,6 +2,46 @@
   background: var(--color-grey-light);
   text-align: center;
   overflow: auto;
+  padding: 0 20px;
+
+  h3 {
+    font-family: var(--font-mont);
+    font-size: 13px;
+    position: relative;
+    text-align: center;
+
+    span {
+      background: var(--color-grey-light);
+      position: relative;
+      z-index: 1;
+    }
+
+    &::after {
+      background: var(--color-grey);
+      content: '';
+      display: block;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+    }
+  }
+
+  .browser-side-bar-cols {
+    display: flex;
+    justify-content: space-around;
+
+    > div {
+      padding: 0 30px;
+      width: 50%;
+    }
+  }
+
+  .browser-side-bar-info {
+    font-family: var(--font-pt);
+    font-size: 12px;
+    text-align: left;
+  }
 
   .hyphe-footer {
     background: var(--color-grey-light);
