@@ -6,7 +6,9 @@
 
   .browser-stack-wes {
     display: flex;
-    min-width: 300px;
+    flex-grow: 1;
+    max-width: 400px;
+    min-width: 200px;
 
     // prev, next, refill
     .btn {
@@ -15,17 +17,21 @@
     }
   }
 
+  .browser-stack-wes-selector {
+    flex-grow: 1;
+  }
+
   // html dropdown
 
   .browser-stack-wes-empty-list,
   .browser-stack-wes-list {
     border-radius: var(--radius);
     display: flex;
+    flex-grow: 1;
     font-family: var(--font-pt);
     font-size: 12px;
     height: 38px;
     padding: 12px 8px;
-    width: 310px;
   }
 
   .browser-stack-wes-empty-list {
@@ -56,7 +62,8 @@
 
     .we-indegree {
       border-left: 1px solid var(--color-white);
-      padding-left: 1em;
+      padding-left: .5em;
+      margin-left: .5em;
     }
 
     @media (max-width: 1024px) {
