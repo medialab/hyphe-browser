@@ -50,6 +50,7 @@ CorpusListItem.propTypes = {
   routerPush: PropTypes.func
 }
 
+
 class CorpusList extends React.Component {
   constructor (props) {
     super(props)
@@ -57,7 +58,9 @@ class CorpusList extends React.Component {
   }
 
   render () {
+    const formatMessage = this.context.intl.formatMessage
     const { server, status, ui, selectCorpus, routerPush } = this.props
+    const hypheFull = status && !status.ports_left || !status.ram_left
 
     if (ui.loaders.corpora) return <Spinner textId="loading-corpora" />
     if (!server) return null
@@ -70,7 +73,9 @@ class CorpusList extends React.Component {
 
     corpora = corpora.filter(it => it.name.includes(this.state.filter))
 
-    const formatMessage = this.context.intl.formatMessage
+    // only display corpora already started
+    if (hypheFull) corpora = corpora.filter(it => it.status === 'ready')
+
     const hypheStatus = status && Boolean(status.corpus_running) &&
       (
         <span>
@@ -101,9 +106,9 @@ class CorpusList extends React.Component {
             ) }
           </ul>
         </div>
-        <div className="form-actions">
+        { !hypheFull && <div className="form-actions">
           <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
-        </div>
+        </div> }
       </div>
     )
   }
