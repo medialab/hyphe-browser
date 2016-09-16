@@ -2,7 +2,7 @@ import '../../css/browser/browser-stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
+import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
 import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
@@ -85,6 +85,7 @@ class BrowserStack extends React.Component {
   renderWebListItem (w) {
     return (
       <span className="browser-stack-wes-list-item">
+        { w.viewed && <span className="viewed ti-check"></span> }
         { w.name }
       </span>
     )
