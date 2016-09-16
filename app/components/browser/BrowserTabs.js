@@ -44,7 +44,7 @@ class BrowserTabs extends React.Component {
     this.tabsNode = node.querySelector('.browser-tabs-group-main')
 
     // Listen for resize
-    window.addEventListener('resize', this.onResize)
+    // window.addEventListener('resize', this.onResize)
 
     this.ipcOpenTabHandler = () => this.props.openTab(PAGE_HYPHE_HOME)
     ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
@@ -72,8 +72,7 @@ class BrowserTabs extends React.Component {
   }
 
   componentWillUnmount () {
-    // Clear event listeners
-    window.removeEventListener('resize', this.onResize)
+    // window.removeEventListener('resize', this.onResize)
 
     ipc.send('unregisterShortcut', SHORTCUT_OPEN_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
@@ -91,7 +90,7 @@ class BrowserTabs extends React.Component {
   }
 
   componentDidUpdate () {
-    this.updateTabsOverflow()
+    // this.updateTabsOverflow()
   }
 
   reloadTab (id, ignoreCache) {
@@ -145,6 +144,7 @@ class BrowserTabs extends React.Component {
     })
   }
 
+  // disabled for now
   updateTabsOverflow () {
     const style = getComputedStyle(this.tabsNode)
     const tabsNodeVisibleWidth = this.tabsNode.clientWidth - parseInt(style['padding-left']) - parseInt(style['padding-right'])
