@@ -87,7 +87,8 @@ class BrowserStack extends React.Component {
 
   renderWebListItem (w) {
     return (
-      <div className={ cx('browser-stack-wes-list-item', { selected: this.state.selectedWebentityId === w.id }) }>
+      <div className={ cx('browser-stack-wes-list-item', { selected: this.state.selectedWebentityId === w.id }) }
+        onClick={ (evt) => this.selectWebentity(w) }>
         { w.viewed && <span className="we-viewed ti-check"></span> }
         <span className="we-name">{ w.name }</span>
         <span className="we-indegree">{ w.indegree }</span>
@@ -102,15 +103,13 @@ class BrowserStack extends React.Component {
 
   renderWesList () {
     const { selectedStack, webentities } = this.props
-    const viewed = this.context.intl.formatMessage({ id: 'viewed' })
 
     if (!selectedStack) {
       return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
     }
 
-    const webentity = webentities.find(it => it.id === this.state.selectedWebentityId)
-
     if (!this.state.expanded) {
+      const webentity = webentities.find(it => it.id === this.state.selectedWebentityId)
       return (
         <div className="browser-stack-wes-list">
           { this.renderWebListItem(webentity) }
@@ -120,19 +119,12 @@ class BrowserStack extends React.Component {
     }
 
     return (
-      <div className="browser-stack-wes-list">
+      <div className="browser-stack-wes-list expanded">
         <Infinite className="browser-stack-wes-infinite" containerHeight={ 350 } elementHeight={ 35 }>
-          { webentities.map((w, i) => this.renderWebListItem(w)) }
+          { webentities.map(w => this.renderWebListItem(w)) }
         </Infinite>
         { this.renderToggle() }
       </div>
-    )
-
-    return (
-      <select className="form-control"
-        value={ this.state.selectedWebentityId }
-        onChange={ (evt) => this.selectWebentity(webentities.find(x => x.id === evt.target.value)) }>
-      </select>
     )
   }
 

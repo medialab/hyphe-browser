@@ -46,7 +46,7 @@ const initialState = {
     {
       name: 'DISCOVERED',
       method: 'store.advanced_search_webentities',
-      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 50, 0, false, false, true],
+      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false, true],
       condition: 'DISCOVERED'
     }
   ]
