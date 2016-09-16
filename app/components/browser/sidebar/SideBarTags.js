@@ -79,7 +79,7 @@ class SideBarTags extends React.Component {
 
     return (
       <li key={ category }>
-        <h3>{ isFreeTags ? freeTagsTitle : category }</h3>
+        <h3><span>{ isFreeTags ? freeTagsTitle : category }</span></h3>
         <ul>
           { tags.map(this.renderTag(category)) }
         </ul>
@@ -233,15 +233,14 @@ class SideBarTags extends React.Component {
 
     return (
       <div className="tags-container">
-        <ul className="tags-sections">
-          { this.props.categories.map(this.renderTagsCategory) }
-        </ul>
-        <hr />
-        <h4><T id="sidebar.add-tags-category" /></h4>
+        <h3><T id="sidebar.categories" /></h3>
         <form className="tags-new-category btn-group" onSubmit={ this.addCategory }>
           <input className="form-control btn btn-large" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
           <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
         </form>
+        <ul className="tags-sections">
+          { this.props.categories.map(this.renderTagsCategory) }
+        </ul>
       </div>
     )
   }

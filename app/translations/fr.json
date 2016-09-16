@@ -94,6 +94,7 @@
   "set-homepage": "Définir la page d'accueil ({url})",
   "sidebar.add-tag": "Ajouter tag",
   "sidebar.add-tags-category": "Nouvelle catégorie",
+  "sidebar.categories": "Categories",
   "sidebar.context-title": "TODO Contexte",
   "sidebar.freetags": "Tags libres",
   "sidebar.remove-tag": "Supprimer le tag",

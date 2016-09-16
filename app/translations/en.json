@@ -94,6 +94,7 @@
   "set-homepage": "Set homepage ({url})",
   "sidebar.add-tag": "Add tag",
   "sidebar.add-tags-category": "New category",
+  "sidebar.categories": "Categories",
   "sidebar.context-title": "TODO Context",
   "sidebar.freetags": "Free tags",
   "sidebar.remove-tag": "Remove tag",
