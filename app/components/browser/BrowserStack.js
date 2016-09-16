@@ -23,7 +23,8 @@ class BrowserStack extends React.Component {
 
   // auto display first webentity in newly filled stack
   componentWillReceiveProps (props) {
-    if (!this.props.selectedStack && props.selectedStack && props.webentities.length) {
+    if ((!this.props.selectedStack && props.selectedStack && props.webentities.length)
+        || this.props.lastRefresh !== props.lastRefresh) {
       this.selectWebentity(props.webentities[0])
     }
   }
