@@ -72,6 +72,7 @@ class BrowserStack extends React.Component {
           <button key={ stack.name }
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
+            disabled={ !counters[stack.name] }
             onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
             <div className="filler-name">{ formatMessage({ id: 'corpus-status.' + stack.name }) }</div>
             <div className="filler-counter">{ counters[stack.name] || 0 }</div>

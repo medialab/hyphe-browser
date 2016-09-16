@@ -64,6 +64,8 @@
       background: var(--color-grey-light);
     }
 
+    // separators
+
     &::after {
       background: var(--color-black);
       content: ''
@@ -77,34 +79,51 @@
     &:last-child::after {
       display: none;
     }
+
+    // content
+
+    .filler-name {
+      cursor: pointer;
+      font-family: var(--font-mont);
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px;
+      text-transform: uppercase;
+    }
+
+    .filler-counter {
+      cursor: pointer;
+      font-family: var(--font-pt);
+      font-size: 11px;
+      opacity: 0.75;
+      padding-left: 6px;
+    }
+
+    // selected
+
+    &.selected {
+      .filler-name {
+        background: var(--color-black);
+        border-radius: var(--radius);
+        color: var(--color-white);
+      }
+
+      .filler-counter {
+        opacity: 1;
+      }
+    }
+
+    // disabled
+
+    &[disabled]:hover {
+      background: none;
+
+      .filler-name, .filler-counter {
+        cursor: default;
+      }
+    }
   }
 
-  .filler-name {
-    cursor: pointer;
-    font-family: var(--font-mont);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 3px;
-    text-transform: uppercase;
-  }
-
-  .filler-counter {
-    cursor: pointer;
-    font-family: var(--font-pt);
-    font-size: 11px;
-    opacity: 0.75;
-    padding-left: 6px;
-  }
-
-  .filler.selected .filler-name {
-    background: var(--color-black);
-    border-radius: var(--radius);
-    color: var(--color-white);
-  }
-
-  .filler.selected .filler-counter {
-    opacity: 1;
-  }
 
 
   // see colors.styl
