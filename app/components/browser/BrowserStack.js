@@ -83,11 +83,13 @@ class BrowserStack extends React.Component {
   }
 
   renderWebListItem (w) {
+    console.info(w)
     return (
-      <span className="browser-stack-wes-list-item">
-        { w.viewed && <span className="viewed ti-check"></span> }
-        { w.name }
-      </span>
+      <div className="browser-stack-wes-list-item">
+        { w.viewed && <span className="we-viewed ti-check"></span> }
+        <span className="we-name">{ w.name }</span>
+        <span className="we-indegree">{ w.indegree }</span>
+      </div>
     )
   }
 
