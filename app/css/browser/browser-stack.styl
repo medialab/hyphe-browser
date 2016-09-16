@@ -26,17 +26,22 @@
   .browser-stack-wes-empty-list,
   .browser-stack-wes-list {
     border-radius: var(--radius);
-    display: flex;
     flex-grow: 1;
     font-family: var(--font-pt);
     font-size: 12px;
     height: 38px;
-    padding: 12px 8px;
   }
 
   .browser-stack-wes-empty-list {
     background: var(--color-grey);
     color: var(--color-black);
+
+    // placeholder message
+    span {
+      display: block;
+      padding: 8px;
+      text-align: center;
+    }
   }
 
   .browser-stack-wes-list {
@@ -44,12 +49,32 @@
     color: var(--color-white);
     position: relative;
     text-align: left;
+    // TODO issue with ::after pseudo elements of tabs
+    z-index: 1000;
+  }
 
+  .browser-stack-wes-infinite {
+    background: var(--color-black);
+    border-radius: var(--radius);
+    flex-grow: 1;
+
+    &::-webkit-scrollbar {
+      width:  6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-white);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--color-black);
+    }
   }
 
   .browser-stack-wes-list-item {
     display: flex;
-    flex-grow: 1;
+    padding: 8px;
+    padding-right: 30px;
 
     .we-viewed {
       margin-right: .5em;
@@ -63,7 +88,7 @@
     .we-indegree {
       border-left: 1px solid var(--color-white);
       padding-left: .5em;
-      margin-left: .5em;
+      margin: 0 .5em;
     }
 
     @media (max-width: 1024px) {
@@ -71,12 +96,27 @@
         display: none;
       }
     }
+
+    &.selected {
+      color: var(--color-blue);
+
+      .we-indegree {
+        border-left: 1px solid var(--color-blue);
+      }
+    }
   }
 
   .browser-stack-toggle {
-    flex-shring: 0;
+    cursor: pointer;
     font-size: 18px;
     margin-left: 8px;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+
+    &.expanded {
+      color: var(--color-blue);
+    }
   }
 
 
