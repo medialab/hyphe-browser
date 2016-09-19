@@ -166,7 +166,11 @@ class WebView extends React.Component {
     webview.addEventListener('page-favicon-updated', ({ favicons }) => {
       // don't display 404 icons
       fetch(favicons[0]).then((res) => {
-        if (res.status === 200) update('favicon', favicons[0])
+        const favicon = (res.status === 200)
+          ? favicons[0]
+          // http://probablyprogramming.com/2009/03/15/the-tiniest-gif-ever
+          : 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+        update('favicon', favicon)
       })
     })
 
