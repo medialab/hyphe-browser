@@ -106,5 +106,6 @@
   "waiting-resources": "En attente de ressources…",
   "webentities": "{count, plural, \n=0 {aucune entité web}\n=1 {1 entité web}\nother {# entités web}}",
   "welcome": "Bienvenue sur Hyphe",
-  "viewed": "Vu"
+  "viewed": "Vu",
+  "webentity-info-created": "Nouvelle entité"
 }
