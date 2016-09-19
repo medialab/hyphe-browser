@@ -25,18 +25,9 @@ class BrowserTabs extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      overflow: false,
-      scroll: 0,
-      maxScroll: 0
-    }
-
     // Event emitter for each tab, not a state or prop as it's not supposed
     // to trigger rerender
     this.tabEventBus = {}
-
-    // Bound as one method to make removeEventListener work properly
-    this.onResize = () => this.updateTabsOverflow()
   }
 
   componentDidMount () {
@@ -144,46 +135,14 @@ class BrowserTabs extends React.Component {
     })
   }
 
-  // disabled for now
-  updateTabsOverflow () {
-    const style = getComputedStyle(this.tabsNode)
-    const tabsNodeVisibleWidth = this.tabsNode.clientWidth - parseInt(style['padding-left']) - parseInt(style['padding-right'])
-    const maxScroll = this.tabsNode.scrollWidth - tabsNodeVisibleWidth
-    const overflow = (maxScroll > 0)
-    if (this.state.overflow !== overflow) {
-      // Overflow modified: reset scroll
-      this.setState({ overflow, maxScroll, scroll: 0 })
-    } else if (this.state.maxScroll !== maxScroll) {
-      // Only scroll max size has changed: shrink current scroll is necessary
-      this.setState({ maxScroll, scroll: Math.min(this.state.scroll, maxScroll) })
-    }
-  }
-
-  scrollTabs (offset) { // +1 = scroll right, -1 = scroll left
-    if (!this.state.overflow) {
-      return // disabled
-    }
-
-    const oneTabWidth = this.tabsNode.querySelector('.browser-tab-item').clientWidth
-    const scroll = Math.min(this.state.maxScroll, Math.max(0, this.state.scroll + offset * oneTabWidth))
-    if (this.state.scroll !== scroll) {
-      this.setState({ scroll })
-    }
-  }
-
   render () {
-    const tabGroupStyle = this.state.scroll === null ? {} : {
-      marginLeft: '-' + this.state.scroll + 'px',
-      paddingRight: this.state.scroll + 'px'
-    }
-
     return (
-      <div className={ cx('browser-tabs', { 'tab-overflow': this.state.overflow }) }>
+      <div className="browser-tabs">
         <div className="browser-tabs-group">
           <div className="browser-tabs-group-edge">
             { this.renderTabs(true) }
           </div>
-          <div className="browser-tabs-group-main" style={ tabGroupStyle }>
+          <div className="browser-tabs-group-main">
             { this.renderTabs(false) }
             <div className="browser-tab-new"
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>

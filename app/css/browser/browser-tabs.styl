@@ -26,7 +26,7 @@
   .browser-tabs-group-main {
     flex: 1;
     // to display the create new tab button
-    padding-right: 25px;
+    padding-right: 30px;
     z-index: 80;
   }
 
@@ -50,16 +50,21 @@
 .browser-tab-new {
   margin-left: .5em;
   position: relative;
+
+  &::after {
+    background: var(--color-grey);
+    content: '';
+    display: block;
+    height: 60%;
+    position: absolute;
+    top: 7px;
+    transform: skewX(20deg);
+    width: 20px;
+    z-index: -1;
+  }
+
+  &:hover::after {
+    background: var(--color-black);
+  }
 }
 
-.browser-tab-new::after {
-  background: var(--color-grey);
-  content: '';
-  display: block;
-  height: 60%;
-  position: absolute;
-  top: 7px;
-  transform: skewX(20deg);
-  width: 20px;
-  z-index: -1;
-}
