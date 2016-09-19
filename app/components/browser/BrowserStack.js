@@ -109,7 +109,7 @@ class BrowserStack extends React.Component {
       return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
     }
 
-    if (!this.state.expanded) {
+    if (!this.state.expanded && this.state.selectedWebentityId) {
       const webentity = webentities.find(it => it.id === this.state.selectedWebentityId)
       return (
         <div className="browser-stack-wes-list">
