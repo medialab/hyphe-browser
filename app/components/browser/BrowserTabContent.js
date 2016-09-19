@@ -168,7 +168,7 @@ class TabContent extends React.Component {
 
     if (adjusting) {
       return [
-        <Button key="cancel-adjust" size="large" icon="cancel" title={ formatMessage({ id: 'cancel' }) }
+        <Button key="cancel-adjust" size="large" icon="close" title={ formatMessage({ id: 'cancel' }) }
           onClick={ () => hideAdjustWebentity(webentity.id) } />,
         <Button key="apply-adjust" size="large" icon="check" title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
