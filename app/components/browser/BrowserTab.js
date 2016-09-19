@@ -7,6 +7,8 @@ import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
 import { HYPHE_TAB_ID } from '../../constants'
 
+import '../../css/browser/browser-tab-toolbar'
+
 const { Menu, MenuItem } = remote
 
 class BrowserTab extends React.Component {

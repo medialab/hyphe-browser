@@ -7,8 +7,6 @@ import { FormattedMessage as T } from 'react-intl'
 import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../../utils/lru'
 import { getSearchUrl } from '../../utils/search-web'
 
-import '../../css/browser/browser-tab-url-field'
-
 class BrowserTabUrlField extends React.Component {
 
   constructor (props) {
@@ -191,7 +189,7 @@ class BrowserTabUrlField extends React.Component {
 
   render () {
     return (
-      <form onSubmit={ (e) => this.onSubmit(e) }>
+      <form onSubmit={ (e) => this.onSubmit(e) } className="over-overlay">
         { this.renderField() }
       </form>
     )

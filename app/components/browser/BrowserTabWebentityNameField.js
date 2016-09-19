@@ -22,7 +22,7 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   render () {
-    return <input className={ cx('form-control btn btn-large', { loading: !this.state.value }) }
+    return <input className={ cx('form-control btn btn-large over-overlay', { loading: !this.state.value }) }
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       value={ this.state.value }
       readOnly={ !this.props.editable || !this.state.value }

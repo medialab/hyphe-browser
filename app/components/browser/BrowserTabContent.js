@@ -2,6 +2,7 @@ import '../../css/browser/browser-tab-content'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import cx from 'classnames'
 
 import WebView from './WebView'
 import Button from '../Button'
@@ -187,7 +188,7 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="tab-toolbar-webentity">
+      <div className={ cx('tab-toolbar-webentity over-overlay', { adjusting }) }>
         { this.renderHomeButton () }
         <BrowserTabWebentityNameField
           initialValue={ webentity && webentity.name }

@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import '../../css/browser/browser'
+
 import HypheHeader from '../HypheHeader'
 import Notification from './Notification'
 import BrowserStack from './BrowserStack'
@@ -15,23 +17,30 @@ class Browser extends React.Component {
       return <Spinner />
     }
 
+    const showOverlay = this.props.isAdjusting
+
+    console.log('SHOW OVERLAY?', showOverlay)
+
     return (
       <CorpusStatusWatcher className="window browser-window">
         <HypheHeader />
         <BrowserStack />
         <BrowserTabs />
         <Notification />
+        { showOverlay ? <div className="global-overlay" /> : null }
       </CorpusStatusWatcher>
     )
   }
 }
 
 Browser.propTypes = {
-  corpus: React.PropTypes.object
+  corpus: React.PropTypes.object,
+  isAdjusting: React.PropTypes.bool.isRequired
 }
 
-const mapStateToProps = ({ corpora }) => ({
-  corpus: corpora.selected
+const mapStateToProps = ({ corpora, webentities }) => ({
+  corpus: corpora.selected,
+  isAdjusting: Object.keys(webentities.adjustments).some(webentityId => webentities.adjustments[webentityId] !== null)
 })
 
 export default connect(mapStateToProps)(Browser)
