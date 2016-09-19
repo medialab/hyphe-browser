@@ -1,0 +1,92 @@
+
+.browser-tab-url {
+  min-height: 30px;
+}
+
+.browser-tab-url.loading {
+  background-image: url(../../images/loading-url.gif);
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* :first-child = scheme */
+.browser-tab-url em:first-child {
+  font-style: normal;
+}
+.browser-tab-url em:not(:first-child) {
+  background: #ffff99;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-style: normal;
+}
+.browser-tab-prefix-selector .prefix {
+  max-width: 20em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.browser-tab-prefix-selector .prefix-selected {
+  background: #ffff99;
+  font-weight: bold;
+}
+.browser-tab-prefix-selector .prefix-over {
+  background: #99ccff;
+}
+.browser-tab-url-placeholder {
+  color: #999;
+  letter-spacing: .2em;
+}
+
+
+/** Tab toolbar **/
+
+.browser-tab-content .toolbar-actions {
+  display: flex;
+  flex-direction: row;
+}
+.tab-toolbar-navigation,
+.tab-toolbar-webentity {
+  flex-shrink: 1;
+  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
+}
+.tab-toolbar-webentity {
+  min-width: 250px;
+}
+.tab-toolbar-url {
+  flex: 1;
+}
+.tab-toolbar-url input {
+  width: 100%;
+}
+.tab-toolbar-webentity input {
+  min-width: 250px;
+  max-width: 350px;
+  width: initial;
+  padding: 5px;
+}
+.tab-toolbar-webentity input.loading {
+  background-image: url(../../images/loading.svg);
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+/* compensate .btn paddings */
+
+.browser-tab-toolbar {
+  input, .browser-tab-url, .browser-tab-prefix-selector {
+    height: 36px;
+  }
+  .browser-tab-prefix-selector {
+    padding: 5px;
+    .btn-group {
+      .btn {
+        padding: 5px;
+      }
+      .btn+.btn {
+        border: none // disable stupid photon rule
+      }
+    }
+  }
+}
