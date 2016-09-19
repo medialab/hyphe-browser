@@ -46,7 +46,7 @@ class SideBar extends React.Component {
       <div className="browser-side-bar-info">
         <h3><span>Info</span></h3>
         <div><T id="indegree" /> <strong>{ webentity.indegree }</strong></div>
-        <div><T id="crawled" /> <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong></div>
+        <div><T id="crawling-status" /> <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong></div>
       </div>
     )
   }
