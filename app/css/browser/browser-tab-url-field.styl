@@ -73,10 +73,10 @@
 }
 
 
-/* compensate .btn paddings */
+/* (try to) compensate .btn paddings */
 
 .browser-tab-toolbar {
-  input, .browser-tab-url, .browser-tab-prefix-selector {
+  input, .browser-tab-url, .browser-tab-prefix-selector, .tab-toolbar-url {
     height: 36px;
   }
   .browser-tab-prefix-selector {
@@ -86,8 +86,11 @@
         padding: 5px;
       }
       .btn+.btn {
-        border: none // disable stupid photon rule
+        border: none; // disable stupid photon rule
       }
     }
+  }
+  .tab-toolbar-url .btn {
+    padding: 8px;
   }
 }
