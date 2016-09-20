@@ -35,7 +35,28 @@
   .browser-side-bar-homepage-url {
     color: var(--color-black);
     opacity: 0.4;
+    overflow: hidden;
     text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 340px;
+  }
+
+  // home button
+  .browser-side-bar-homepage {
+    button:last-child {
+      color: var(--color-black);
+      opacity: 0.4;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &[disabled] {
+        color: var(--color-blue);
+        opacity: 1;
+      }
+    }
   }
 
   .browser-side-bar-cols {

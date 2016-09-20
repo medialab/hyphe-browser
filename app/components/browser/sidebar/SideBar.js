@@ -6,11 +6,12 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
+import Button from '../../Button'
 import HypheFooter from './../../HypheFooter'
 import SideBarContext from './SideBarContext'
 import SideBarTags from './SideBarTags'
 
-import { setWebentityStatus, showAdjustWebentity } from '../../../actions/webentities'
+import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage } from '../../../actions/webentities'
 import { setTabUrl } from '../../../actions/tabs'
 import { getWebEntityActivityStatus } from '../../../utils/status'
 
@@ -114,16 +115,21 @@ class SideBar extends React.Component {
   }
 
   renderHomepage () {
-    const { webentity, setTabUrl, url, tabId } = this.props
+    const { webentity, setTabUrl, url, tabId, serverUrl, corpusId } = this.props
     const { formatMessage } = this.context.intl
+    const disabled = `${webentity.homepage}/` === url
 
     return (
       <div className="browser-side-bar-homepage">
-        <button className="btn btn-default browser-side-bar-homepage-url" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
-          disabled={ !webentity || webentity.homepage === url }
+        <button className="btn btn-default browser-side-bar-homepage-url"
+          title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
+          disabled={ disabled }
           onClick={ () => setTabUrl(webentity.homepage, tabId) }>
           { webentity.homepage }
         </button>
+        <Button icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
+          disabled={ disabled }
+          onClick={ () => setWebentityHomepage(serverUrl, corpusId, url, webentity.id) } />
       </div>
     )
   }
@@ -161,6 +167,7 @@ SideBar.propTypes = {
   url: PropTypes.string.isRequired,
 
   setTabUrl: PropTypes.func.isRequired,
+  setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired
 }
@@ -174,6 +181,7 @@ SideBar.contextTypes = {
 
 export default connect(mapStateToProps, {
   setTabUrl,
+  setWebentityHomepage,
   setWebentityStatus,
   showAdjustWebentity
 })(SideBar)
