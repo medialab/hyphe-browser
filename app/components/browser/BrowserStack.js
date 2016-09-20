@@ -4,20 +4,19 @@ import '../../css/browser/browser-stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { intlShape } from 'react-intl'
 import cx from 'classnames'
-import Infinite from 'react-infinite'
 
 import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { HYPHE_TAB_ID } from '../../constants'
+import BrowserStackWesList from './BrowserStackWesList'
 
 class BrowserStack extends React.Component {
   constructor (props) {
     super(props)
+
     this.state = {
-      // infinite list
-      expanded: false,
       selectedStackName: this.props.selectedStack && this.props.selectedStack.name,
       selectedWebentityId: null
     }
@@ -88,49 +87,6 @@ class BrowserStack extends React.Component {
     )
   }
 
-  renderWebListItem (w) {
-    return (
-      <div className={ cx('browser-stack-wes-list-item', { selected: this.state.selectedWebentityId === w.id }) }
-        onClick={ (evt) => this.selectWebentity(w) }>
-        { w.viewed && <span className="we-viewed ti-check"></span> }
-        <span className="we-name">{ w.name }</span>
-        <span className="we-indegree">{ w.indegree }</span>
-      </div>
-    )
-  }
-
-  renderToggle () {
-    return <span className={ cx('browser-stack-toggle', 'ti-exchange-vertical', { expanded: this.state.expanded }) }
-            onClick={ () => this.setState({ expanded: !this.state.expanded }) }></span>
-  }
-
-  renderWesList () {
-    const { selectedStack, webentities } = this.props
-
-    if (!selectedStack) {
-      return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
-    }
-
-    if (!this.state.expanded && this.state.selectedWebentityId) {
-      const webentity = webentities.find(it => it.id === this.state.selectedWebentityId)
-      return (
-        <div className="browser-stack-wes-list">
-          { this.renderWebListItem(webentity) }
-          { this.renderToggle() }
-        </div>
-      )
-    }
-
-    return (
-      <div className="browser-stack-wes-list expanded">
-        <Infinite className="browser-stack-wes-infinite" containerHeight={ 350 } elementHeight={ 35 }>
-          { webentities.map(w => this.renderWebListItem(w)) }
-        </Infinite>
-        { this.renderToggle() }
-      </div>
-    )
-  }
-
   renderProgress () {
     const { webentities, selectedStack } = this.props
     if (!selectedStack) return
@@ -141,7 +97,7 @@ class BrowserStack extends React.Component {
 
   // left side
   renderWesSelector () {
-    const { selectedStack } = this.props
+    const { selectedStack, webentities } = this.props
 
     return (
       <div className="browser-stack-wes">
@@ -151,7 +107,9 @@ class BrowserStack extends React.Component {
           <span className="ti-arrow-circle-left"></span>
         </button>
         <div className="browser-stack-wes-selector">
-          { this.renderWesList() }
+          <BrowserStackWesList selectedStack={ selectedStack } webentities={ webentities }
+            selectedWebentityId={ this.state.selectedWebentityId }
+            selectWebentity={ (w) => this.selectWebentity(w) }/>
           { this.renderProgress() }
         </div>
         <button className="btn btn-default"
