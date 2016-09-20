@@ -1,4 +1,7 @@
-import '../../css/browser/browser-tab'
+// small upper part of tabs (favicon, close button…)
+
+import '../../css/browser/browser-tab-label'
+import '../../css/browser/browser-tab-toolbar'
 
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
@@ -7,11 +10,10 @@ import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
 import { HYPHE_TAB_ID } from '../../constants'
 
-import '../../css/browser/browser-tab-toolbar'
 
 const { Menu, MenuItem } = remote
 
-class BrowserTab extends React.Component {
+class BrowserTabLabel extends React.Component {
   constructor (props) {
     super(props)
 
@@ -76,9 +78,9 @@ class BrowserTab extends React.Component {
 
   render () {
     const { active, id, title, webentity, icon, loading, newTab, fixed, closable } = this.props
-    const cls = cx('browser-tab-item', { active }, {
-      'browser-tab-item-fixed': fixed,
-      'browser-tab-item-hyphe': id === HYPHE_TAB_ID,
+    const cls = cx('browser-tab-label', { active }, {
+      'browser-tab-label-fixed': fixed,
+      'browser-tab-label-hyphe': id === HYPHE_TAB_ID,
     })
     const label = newTab
       ? this.translate('new-tab')
@@ -101,7 +103,7 @@ class BrowserTab extends React.Component {
   }
 }
 
-BrowserTab.propTypes = {
+BrowserTabLabel.propTypes = {
   id: PropTypes.string.isRequired,
   active: PropTypes.bool,
   title: PropTypes.string,
@@ -119,8 +121,8 @@ BrowserTab.propTypes = {
   closeTab: PropTypes.func.isRequired,
 }
 
-BrowserTab.contextTypes = {
+BrowserTabLabel.contextTypes = {
   intl: intlShape
 }
 
-export default BrowserTab
+export default BrowserTabLabel

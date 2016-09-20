@@ -1,14 +1,14 @@
+// browser-tab-labels, browser-contents
+
 import '../../css/browser/browser-tabs'
 
 import React, { PropTypes } from 'react'
-import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import cx from 'classnames'
 import { ipcRenderer as ipc } from 'electron'
 import { intlShape } from 'react-intl'
 import EventBus from 'jvent'
 
-import Tab from './BrowserTab'
+import TabLabel from './BrowserTabLabel'
 import TabContent from './BrowserTabContent'
 import { tabShape } from '../../types'
 
@@ -31,12 +31,6 @@ class BrowserTabs extends React.Component {
   }
 
   componentDidMount () {
-    const node = findDOMNode(this)
-    this.tabsNode = node.querySelector('.browser-tabs-group-main')
-
-    // Listen for resize
-    // window.addEventListener('resize', this.onResize)
-
     this.ipcOpenTabHandler = () => this.props.openTab(PAGE_HYPHE_HOME)
     ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
@@ -63,8 +57,6 @@ class BrowserTabs extends React.Component {
   }
 
   componentWillUnmount () {
-    // window.removeEventListener('resize', this.onResize)
-
     ipc.send('unregisterShortcut', SHORTCUT_OPEN_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_CLOSE_TAB)
     ipc.send('unregisterShortcut', SHORTCUT_NEXT_TAB)
@@ -107,7 +99,7 @@ class BrowserTabs extends React.Component {
     ))
   }
 
-  renderTabs (fixed) {
+  renderTabLabels (fixed) {
     const { formatMessage } = this.context.intl
     const tabs = this.props.tabs.filter((tab) => !!tab.fixed === fixed)
 
@@ -116,7 +108,7 @@ class BrowserTabs extends React.Component {
       const title = tab.id === HYPHE_TAB_ID ? formatMessage({ id: 'hyphe-tab-title' }) : tab.title
 
       return (
-        <Tab key={ tab.id }
+        <TabLabel key={ tab.id }
           { ...tab }
           closable={ tabs.length !== 1 }
           title={ title }
@@ -134,12 +126,12 @@ class BrowserTabs extends React.Component {
   render () {
     return (
       <div className="browser-tabs">
-        <div className="browser-tabs-group">
-          <div className="browser-tabs-group-edge">
-            { this.renderTabs(true) }
+        <div className="browser-tab-labels">
+          <div className="browser-tab-labels-edge">
+            { this.renderTabLabels(true) }
           </div>
-          <div className="browser-tabs-group-main">
-            { this.renderTabs(false) }
+          <div className="browser-tab-labels-main">
+            { this.renderTabLabels(false) }
             <div className="browser-tab-new"
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
             </div>

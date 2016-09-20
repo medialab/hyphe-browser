@@ -3,27 +3,23 @@
   flex-direction: column;
   flex: 1;
 
-  > div {
-    flex: 0 0 auto;
-  }
-
-  > .browser-tabs-group {
+  > .browser-tab-labels {
     overflow: hidden;
   }
 
-  .browser-tabs-group,
-  .browser-tabs-group-edge,
-  .browser-tabs-group-main {
+  .browser-tab-labels,
+  .browser-tab-labels-edge,
+  .browser-tab-labels-main {
     display: flex;
   }
 
-  .browser-tabs-group-edge {
+  .browser-tab-labels-edge {
     flex-shrink: 1;
     flex-grow: 0;
     z-index: 90;
   }
 
-  .browser-tabs-group-main {
+  .browser-tab-labels-main {
     flex: 1;
     // to display the create new tab button
     padding-right: 30px;
@@ -31,23 +27,9 @@
     z-index: 80;
   }
 
-  .browser-tab-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    & > * {
-      flex: 0 0 auto;
-    }
-
-    .SplitPane {
-      /* override inline styles */
-      position: initial !important;
-      height: initial !important;
-    }
-  }
 }
 
+// button
 .browser-tab-new {
   margin-left: .5em;
   position: relative;
