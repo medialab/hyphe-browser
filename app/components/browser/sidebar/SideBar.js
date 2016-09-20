@@ -11,6 +11,7 @@ import SideBarContext from './SideBarContext'
 import SideBarTags from './SideBarTags'
 
 import { setWebentityStatus, showAdjustWebentity } from '../../../actions/webentities'
+import { setTabUrl } from '../../../actions/tabs'
 import { getWebEntityActivityStatus } from '../../../utils/status'
 
 class SideBar extends React.Component {
@@ -112,9 +113,25 @@ class SideBar extends React.Component {
     return <SideBarTags serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
+  renderHomepage () {
+    const { webentity, setTabUrl, url, tabId } = this.props
+    const { formatMessage } = this.context.intl
+
+    return (
+      <div className="browser-side-bar-homepage">
+        <button className="btn btn-default browser-side-bar-homepage-url" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
+          disabled={ !webentity || webentity.homepage === url }
+          onClick={ () => setTabUrl(webentity.homepage, tabId) }>
+          { webentity.homepage }
+        </button>
+      </div>
+    )
+  }
+
   render () {
     return (
       <aside className="browser-side-bar">
+        { this.renderHomepage() }
         <div className="browser-side-bar-cols">
           { this.renderInfo() }
           { this.renderStatus() }
@@ -132,7 +149,9 @@ SideBar.propTypes = {
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  tabId: PropTypes.string.isRequired,
 
+  setTabUrl: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired
 }
@@ -145,6 +164,7 @@ SideBar.contextTypes = {
 }
 
 export default connect(mapStateToProps, {
+  setTabUrl,
   setWebentityStatus,
   showAdjustWebentity
 })(SideBar)

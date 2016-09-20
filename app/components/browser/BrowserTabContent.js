@@ -275,12 +275,13 @@ class TabContent extends React.Component {
   }
 
   renderSplitPane () {
-    const { webentity, serverUrl, corpusId, adjusting, status } = this.props
+    const { webentity, serverUrl, corpusId, adjusting, status, id } = this.props
 
     return (
       <div className="browser-tab-content-cols">
         { webentity
-          ? <SideBar status={ status } webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
+          ? <SideBar status={ status } webentity={ webentity } tabId={ id }
+              serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
           : <div></div> }
         { this.renderContent() }
       </div>
