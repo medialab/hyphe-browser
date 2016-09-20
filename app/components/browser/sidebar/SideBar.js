@@ -86,7 +86,7 @@ class SideBar extends React.Component {
 
   renderTabs () {
     return (
-      <div className="sidebar-tabs">
+      <div className="browser-side-bar-tabs">
          { false &&
            <div className="tab-group">
             <div

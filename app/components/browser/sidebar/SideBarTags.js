@@ -172,7 +172,7 @@ class SideBarTags extends React.Component {
     return (
       <form
         key={ 'tag/edit/' + category + '/' + tag }
-        className={ cx('btn-group', { 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
+        className={ cx({ 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
         onSubmit={ tag ? this.updateTagHandler(category, tag) : this.addTagHandler(category) }
         >
         <Autosuggest
@@ -184,7 +184,7 @@ class SideBarTags extends React.Component {
           renderSuggestion={ renderSuggestion }
           shouldRenderSuggestions={ () => true }
           inputProps={ {
-            className: 'form-control btn tag-input-' + uniqSuffix,
+            className: 'tag-input-' + uniqSuffix,
             placeholder: tag || 'New tag',
             value: this.getEditedTagValue(category, tag) || '',
             autoFocus: !!tag,
@@ -192,7 +192,7 @@ class SideBarTags extends React.Component {
             onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
           } }
         />
-      <Button icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
+        <Button icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
       </form>
     )
   }
@@ -213,16 +213,14 @@ class SideBarTags extends React.Component {
       }
 
       return (
-        <li key={ 'tag/view/' + category + '/' + tag } className="btn-group">
-          <strong
-            className="form-control btn tag-title"
-            onClick={ () => this.editTag(category, tag, true) }
-          >{ tag }</strong>
+        <li key={ 'tag/view/' + category + '/' + tag }>
           <span
-            className="btn btn-default icon icon-erase remove-tag"
-            title={ formatMessage({ id: 'sidebar.remove-tag' }) }
+            className="tag-title"
+            onClick={ () => this.editTag(category, tag, true) }>
+            { tag }</span>
+          <Button icon="eraser"
             onClick={ () => this.removeTag(category, tag) }
-          />
+            title={ formatMessage({ id: 'remove.add-tag' }) } />
         </li>
       )
     }
@@ -234,8 +232,8 @@ class SideBarTags extends React.Component {
     return (
       <div className="tags-container">
         <h3><T id="sidebar.categories" /></h3>
-        <form className="tags-new-category btn-group" onSubmit={ this.addCategory }>
-          <input className="form-control btn" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
+        <form className="tags-new-category" onSubmit={ this.addCategory }>
+          <input className="form-control" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
           <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
         </form>
         <ul className="tags-sections">
