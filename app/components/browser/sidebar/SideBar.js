@@ -129,6 +129,14 @@ class SideBar extends React.Component {
   }
 
   render () {
+    if (!this.props.webentity) {
+      return (
+        <aside className="browser-side-bar">
+          <HypheFooter status={ this.props.status } />
+        </aside>
+      )
+    }
+
     return (
       <aside className="browser-side-bar">
         { this.renderHomepage() }
@@ -150,6 +158,7 @@ SideBar.propTypes = {
   webentity: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   tabId: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 
   setTabUrl: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
