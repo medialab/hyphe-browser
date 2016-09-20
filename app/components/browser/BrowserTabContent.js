@@ -249,11 +249,9 @@ class TabContent extends React.Component {
 
     return (
         <div className="browser-tab-toolbar">
-          <div className="toolbar-actions">
-            { this.renderWebentityToolbar() }
-            { this.renderUrlField() }
-            { this.renderNavigationToolbar() }
-          </div>
+          { this.renderWebentityToolbar() }
+          { this.renderUrlField() }
+          { this.renderNavigationToolbar() }
         </div>
     )
   }
