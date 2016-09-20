@@ -270,7 +270,7 @@ class TabContent extends React.Component {
   // google form for example
   renderSinglePane () {
     return (
-      <div className="Pane">
+      <div>
         { this.renderContent() }
         <HypheFooter status={ this.props.status } />
       </div>
@@ -281,12 +281,12 @@ class TabContent extends React.Component {
     const { webentity, serverUrl, corpusId, adjusting, status } = this.props
 
     return (
-      <SplitPane split="vertical" minSize="300" defaultSize="400">
+      <div className="browser-tab-content-cols">
         { webentity
           ? <SideBar status={ status } webentity={ webentity } serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
           : <div></div> }
         { this.renderContent() }
-      </SplitPane>
+      </div>
     )
   }
 
