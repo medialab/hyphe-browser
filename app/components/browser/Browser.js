@@ -19,15 +19,13 @@ class Browser extends React.Component {
 
     const showOverlay = this.props.isAdjusting
 
-    console.log('SHOW OVERLAY?', showOverlay)
-
     return (
       <CorpusStatusWatcher className="window browser-window">
         <HypheHeader />
         <BrowserStack />
         <BrowserTabs />
         <Notification />
-        { showOverlay ? <div className="global-overlay" /> : null }
+        { showOverlay && <div className="global-overlay" /> }
       </CorpusStatusWatcher>
     )
   }

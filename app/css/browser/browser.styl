@@ -3,18 +3,18 @@
   flex-direction: column;
 
   .global-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    background: var(--color-black);
     bottom: 0;
+    left: 0;
     margin: auto;
+    opacity: 0.5;
+    position: absolute;
+    right: 0;
+    top: 0;
     z-index: 998;
-    opacity:0.5;
-    background:#252b30;
   }
 
-  .over-overlay {
+  .over-overlay.adjusting {
     z-index: 999;
     position: relative; // should be overriden carefully
   }
