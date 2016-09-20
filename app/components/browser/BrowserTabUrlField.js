@@ -92,7 +92,7 @@ class BrowserTabUrlField extends React.Component {
   // Read-write field: standard input
   renderFieldInput () {
     return <input
-      className={ cx('form-control btn btn-large', { loading: this.props.loading }) }
+      className={ cx('form-control btn', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
@@ -101,7 +101,7 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-only field with highlights: click to edit
   renderFieldHighlighted () {
-    const className = cx('form-control btn btn-large browser-tab-url', { loading: this.props.loading })
+    const className = cx('form-control btn browser-tab-url', { loading: this.props.loading })
     const onClick = () => this.setState({ editing: true, focusInput: true })
 
     if (!this.props.lruPrefixes) {
@@ -138,7 +138,7 @@ class BrowserTabUrlField extends React.Component {
       .concat([ [ 'fragment', url.fragment && ('#' + url.fragment), url.fragment === lru.fragment ] ])
 
     return (
-      <div className="form-control btn btn-large browser-tab-prefix-selector">
+      <div className="form-control btn browser-tab-prefix-selector">
         <div className="btn-group" onMouseOut={ () => this.setState({ overPrefixUntil: -1 }) }>
           { parts.map((p, i, a) => this.renderPrefixSelectorButton(p, i, a, lruToUrl(lru))) }
         </div>

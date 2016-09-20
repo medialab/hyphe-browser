@@ -74,7 +74,7 @@ class SideBar extends React.Component {
 
     return (
       <button
-        className={ cx('btn btn-large btn-default', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
+        className={ cx('btn btn-default', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
         title={ formatMessage({ id: 'corpus-status.' + status }) }
         onClick={ () => this.setStatus(status) }>
         <span>{ formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>

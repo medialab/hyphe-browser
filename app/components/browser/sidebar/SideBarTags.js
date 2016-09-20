@@ -184,7 +184,7 @@ class SideBarTags extends React.Component {
           renderSuggestion={ renderSuggestion }
           shouldRenderSuggestions={ () => true }
           inputProps={ {
-            className: 'form-control btn btn-large tag-input-' + uniqSuffix,
+            className: 'form-control btn tag-input-' + uniqSuffix,
             placeholder: tag || 'New tag',
             value: this.getEditedTagValue(category, tag) || '',
             autoFocus: !!tag,
@@ -192,7 +192,7 @@ class SideBarTags extends React.Component {
             onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
           } }
         />
-      <Button size="large" icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
+      <Button icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
       </form>
     )
   }
@@ -235,8 +235,8 @@ class SideBarTags extends React.Component {
       <div className="tags-container">
         <h3><T id="sidebar.categories" /></h3>
         <form className="tags-new-category btn-group" onSubmit={ this.addCategory }>
-          <input className="form-control btn btn-large" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
-          <Button size="large" icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
+          <input className="form-control btn" type="text" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
+          <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
         </form>
         <ul className="tags-sections">
           { this.props.categories.map(this.renderTagsCategory) }

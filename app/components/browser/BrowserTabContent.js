@@ -147,15 +147,15 @@ class TabContent extends React.Component {
     const { formatMessage } = this.context.intl
 
     if (adjusting) {
-      return <Button size="large" icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
+      return <Button icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
         disabled={ !webentity }
         onClick={ () => setAdjustWebentity(webentity.id, { homepage: url }) } />
     } else if (webentity && webentity.homepage) {
-      return <Button size="large" icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
+      return <Button icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
         disabled={ !webentity || webentity.homepage === url }
         onClick={ () => setTabUrl(webentity.homepage, id) } />
     } else {
-      return <Button size="large" icon="home" title={ formatMessage({ id: 'no-homepage' }) }
+      return <Button icon="home" title={ formatMessage({ id: 'no-homepage' }) }
         disabled={ true }
         onClick={ () => {} } />
     }
@@ -167,13 +167,13 @@ class TabContent extends React.Component {
 
     if (adjusting) {
       return [
-        <Button key="cancel-adjust" size="large" icon="close" title={ formatMessage({ id: 'cancel' }) }
+        <Button key="cancel-adjust" icon="close" title={ formatMessage({ id: 'cancel' }) }
           onClick={ () => hideAdjustWebentity(webentity.id) } />,
-        <Button key="apply-adjust" size="large" icon="check" title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
+        <Button key="apply-adjust" icon="check" title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
       ]
     } else {
-      return <Button size="large" icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
+      return <Button icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
         onClick={ () => showAdjustWebentity(webentity.id) } />
     }
   }
@@ -208,11 +208,11 @@ class TabContent extends React.Component {
 
     return (
       <div className="browser-tab-toolbar-navigation">
-        <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="reload" disabled={ !!adjusting }
+        <Button title={ formatMessage({ id: 'browse-reload' }) } icon="reload" disabled={ !!adjusting }
           onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
-        <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
+        <Button title={ formatMessage({ id: 'browse-back' }) } icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
           onClick={ () => this.props.eventBus.emit('goBack') } />
-        <Button title={ formatMessage({ id: 'browse-forward' }) } size="large" icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
+        <Button title={ formatMessage({ id: 'browse-forward' }) } icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
           onClick={ () => this.props.eventBus.emit('goForward') } />
       </div>
     )
