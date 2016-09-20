@@ -1,14 +1,20 @@
 .browser-stack {
   display: flex;
-  padding: 22px 1em 1em 1em;
+  padding: 22px 1em 1em 30px;
+
+  @media (max-width: 1024px) {
+    padding-left: 25px;
+  }
 
   // left side
 
   .browser-stack-wes {
     display: flex;
-    flex-grow: 1;
-    max-width: 400px;
-    min-width: 200px;
+    width: 400px;
+
+    @media (max-width: 1024px) {
+      width: 296px;
+    }
 
     // prev, next, refill
     .btn {
@@ -18,7 +24,13 @@
   }
 
   .browser-stack-wes-selector {
-    flex-grow: 1;
+    width: 316px;
+
+    @media (max-width: 1024px) {
+      .we-indegree {
+        width: 208px;
+      }
+    }
   }
 
   // html dropdown
