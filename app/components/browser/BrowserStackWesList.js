@@ -50,9 +50,15 @@ class BrowserStackWesList extends React.Component {
       )
     }
 
+    const limit = 18
+    const elementHeight = 35
+    const containerHeight = webentities.length < limit
+      ? webentities.length * elementHeight
+      : limit * elementHeight
+
     return (
       <div className="browser-stack-wes-list expanded">
-        <Infinite className="browser-stack-wes-infinite" containerHeight={ 350 } elementHeight={ 35 }>
+        <Infinite className="browser-stack-wes-infinite" containerHeight={ containerHeight } elementHeight={ elementHeight }>
           { webentities.map(w => this.renderWebListItem(w)) }
         </Infinite>
         { this.renderToggle() }
