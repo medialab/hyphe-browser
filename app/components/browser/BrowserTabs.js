@@ -80,10 +80,6 @@ class BrowserTabs extends React.Component {
     ipc.removeListener(`shortcut-${SHORTCUT_FULL_RELOAD_TAB}`, this.ipcFullReloadHandler)
   }
 
-  componentDidUpdate () {
-    // this.updateTabsOverflow()
-  }
-
   reloadTab (id, ignoreCache) {
     this.getEventBus(id).emit('reload', ignoreCache)
   }

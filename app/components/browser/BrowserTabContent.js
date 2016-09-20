@@ -2,7 +2,9 @@ import '../../css/browser/browser-tab-content'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { intlShape } from 'react-intl'
 import cx from 'classnames'
+import networkErrors from '@naholyr/chromium-net-errors'
 
 import WebView from './WebView'
 import Button from '../Button'
@@ -13,9 +15,7 @@ import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import PageHypheHome from './PageHypheHome'
 import HypheFooter from './../HypheFooter'
 
-import { intlShape } from 'react-intl'
 import { eventBusShape } from '../../types'
-
 import { PAGE_HYPHE_HOME } from '../../constants'
 
 import { showError, hideError } from '../../actions/browser'
@@ -28,7 +28,6 @@ import {
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
 } from '../../actions/webentities'
 
-import networkErrors from '@naholyr/chromium-net-errors'
 import { getSearchUrl } from '../../utils/search-web'
 
 class TabContent extends React.Component {
@@ -209,7 +208,7 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="tab-toolbar-navigation">
+      <div className="browser-tab-toolbar-navigation">
         <Button title={ formatMessage({ id: 'browse-reload' }) } size="large" icon="reload" disabled={ !!adjusting }
           onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
         <Button title={ formatMessage({ id: 'browse-back' }) } size="large" icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
