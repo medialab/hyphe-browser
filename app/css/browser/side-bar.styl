@@ -36,17 +36,25 @@
     color: var(--color-black);
     opacity: 0.4;
     overflow: hidden;
+    padding: 0;
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 340px;
+    width: 356px;
+
+    @media (max-width: 1024px) {
+      width: 235px;
+    }
   }
 
   // home button
   .browser-side-bar-homepage {
+    text-align: left;
+
     button:last-child {
       color: var(--color-black);
       opacity: 0.4;
+      padding: 0;
 
       &:hover {
         opacity: 1;

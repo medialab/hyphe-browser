@@ -142,25 +142,6 @@ class TabContent extends React.Component {
       })
   }
 
-  renderHomeButton () {
-    const { adjusting, setAdjustWebentity, webentity, setTabUrl, url, id } = this.props
-    const { formatMessage } = this.context.intl
-
-    if (adjusting) {
-      return <Button icon="home" title={ formatMessage({ id: 'set-homepage' }, { url: url }) }
-        disabled={ !webentity }
-        onClick={ () => setAdjustWebentity(webentity.id, { homepage: url }) } />
-    } else if (webentity && webentity.homepage) {
-      return <Button icon="home" title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
-        disabled={ !webentity || webentity.homepage === url }
-        onClick={ () => setTabUrl(webentity.homepage, id) } />
-    } else {
-      return <Button icon="home" title={ formatMessage({ id: 'no-homepage' }) }
-        disabled={ true }
-        onClick={ () => {} } />
-    }
-  }
-
   renderAdjustButton () {
     const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity } = this.props
     const { formatMessage } = this.context.intl
@@ -187,7 +168,6 @@ class TabContent extends React.Component {
 
     return (
       <div className={ cx('browser-tab-toolbar-webentity over-overlay', { adjusting }) }>
-        { this.renderHomeButton () }
         <BrowserTabWebentityNameField
           initialValue={ webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }

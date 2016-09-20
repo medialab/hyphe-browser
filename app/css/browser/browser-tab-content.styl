@@ -12,6 +12,7 @@
   background: var(--color-grey-light);
   display: flex;
   padding-top: 8px;
+  padding-left: 20px;
 }
 
 .browser-tab-toolbar-webentity,
@@ -21,13 +22,14 @@
 }
 
 .browser-tab-toolbar-webentity {
-  min-width: 250px;
-
   input {
-    min-width: 250px;
-    max-width: 350px;
-    width: initial;
+    margin-right: 20px;
     padding: 5px;
+    width: 376px;
+
+    @media (max-width: 1024px) {
+      width: 266px;
+    }
 
     &.loading {
       background-image: url(../../images/loading.svg);
@@ -38,16 +40,16 @@
   }
 
   &.adjusting {
-    button:nth-child(3), button:nth-child(4) {
-      background:#252b30;
-      height:36px;
-      color: white;
+    button:nth-child(2), button:nth-child(3) {
+      background: var(--color-black);
+      color: var(--color-white);
+      height: 36px;
     }
-    button:nth-child(3) {
+    button:nth-child(2) {
       margin-left: 5px;
       border-radius: 5px 0 0 5px;
     }
-    button:nth-child(4) {
+    button:nth-child(3) {
       margin-right: 5px;
       border-radius: 0 5px 5px 0;
     }
