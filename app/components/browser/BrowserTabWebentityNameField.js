@@ -1,3 +1,5 @@
+import '../../css/browser/browser-tab-webentity-name-field'
+
 import React, { PropTypes } from 'react'
 import cx from 'classnames'
 

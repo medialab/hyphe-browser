@@ -1,3 +1,5 @@
+import '../../css/browser/browser-tab-url-field'
+
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import cx from 'classnames'

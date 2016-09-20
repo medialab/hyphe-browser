@@ -186,7 +186,7 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className={ cx('tab-toolbar-webentity over-overlay', { adjusting }) }>
+      <div className={ cx('browser-tab-toolbar-webentity over-overlay', { adjusting }) }>
         { this.renderHomeButton () }
         <BrowserTabWebentityNameField
           initialValue={ webentity && webentity.name }
@@ -227,7 +227,7 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="btn-group tab-toolbar-url">
+      <div className="browser-tab-toolbar-url">
         <BrowserTabUrlField
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }

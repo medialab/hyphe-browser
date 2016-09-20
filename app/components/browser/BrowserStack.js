@@ -1,3 +1,5 @@
+// upper part with stack list on the left and stack fillers on the right
+
 import '../../css/browser/browser-stack'
 
 import React, { PropTypes } from 'react'
