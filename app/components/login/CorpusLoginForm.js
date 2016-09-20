@@ -30,19 +30,18 @@ class CorpusLoginForm extends React.Component {
       }, () => {
         this.setState({ submitting: false, errors: ['error.wrong-password'] })
       })
-
   }
 
   render () {
     return (
       <form className="server-form" onSubmit={ (evt) => { this.onSubmit(evt) } }>
-        <h2 className="pane-centered-title"><T id="login-corpus" values={ { name: this.props.corpus.name } } /></h2>
+        <h3 className="pane-centered-title">
+          <T id="login-corpus" values={ { name: this.props.corpus.name } } />
+        </h3>
 
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
-
-        <hr />
 
         <div className="form-group">
           <label><T id="password" /></label>

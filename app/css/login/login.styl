@@ -1,3 +1,25 @@
+.pane-centered {
+  margin: auto;
+  width: 50vh;
+}
+
+.pane-centered-title {
+  font-family: var(--font-mont);
+  margin-top: 0;
+  text-align: center;
+}
+
+.pane-centered-main {
+  background: var(--color-grey);
+  border-radius: var(--radius);
+  transition: background .2s linear;
+  padding: 1em;
+
+  &.naked {
+    background: var(--color-white);
+  }
+}
+
 .server-list {
   background: var(--color-black);
   border-radius: var(--radius);

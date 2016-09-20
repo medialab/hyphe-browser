@@ -1,4 +1,3 @@
-import '../../css/pane'
 import '../../css/login/login'
 
 import React, { PropTypes } from 'react'
@@ -6,6 +5,7 @@ import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import { routerActions } from 'react-router-redux'
+import cx from 'classnames'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import { deselectServer } from '../../actions/servers'
@@ -79,7 +79,7 @@ class Login extends React.Component {
           <div className="pane-centered">
 
             <h2 className="pane-centered-title"><T id="welcome" /></h2>
-            <main className="pane-centered-main">
+            <main className={cx('pane-centered-main', { naked: !selectedServer })}>
               <div className="form-group inline">
                 { this.renderServerSelect() }
                 { selectedServer && location.pathname === '/login' && <Link className="btn btn-default" to="/login/server-form?edit">
