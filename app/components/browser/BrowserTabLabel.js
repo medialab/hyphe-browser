@@ -9,7 +9,6 @@ import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
 import { HYPHE_TAB_ID } from '../../constants'
 
-
 const { Menu, MenuItem } = remote
 
 class BrowserTabLabel extends React.Component {
@@ -28,7 +27,7 @@ class BrowserTabLabel extends React.Component {
     el.addEventListener('contextmenu', (e) => {
       e.preventDefault()
 
-      const { newTab, loading, url, openTab, closeTab, navigable, fixed } = this.props
+      const { newTab, loading, url, openTab, closeTab, navigable, fixed, closable } = this.props
       if (!newTab) {
         const menu = new Menu()
         if (!loading && url && navigable) {
@@ -37,7 +36,7 @@ class BrowserTabLabel extends React.Component {
           }
           menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: this.openInBrowser }))
         }
-        if (closeTab && !fixed) {
+        if (closable && closeTab && !fixed) {
           menu.append(new MenuItem({ type: 'separator' }))
           menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: this.close }))
         }

@@ -237,11 +237,11 @@ class TabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, setTabUrl, eventBus } = this.props
+    const { id, url, setTabUrl, eventBus, closable } = this.props
 
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
-      : <WebView id={ id } url={ url } eventBus={ eventBus } />
+      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } />
   }
 
   // google form for example
@@ -282,6 +282,7 @@ TabContent.propTypes = {
   id: PropTypes.string.isRequired, // Tab's id (≠ webentity.id)
   url: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  closable: PropTypes.bool,
   disableWebentity: PropTypes.bool,
   disableNavigation: PropTypes.bool,
   eventBus: eventBusShape.isRequired,

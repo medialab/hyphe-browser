@@ -92,6 +92,7 @@ class BrowserTabs extends React.Component {
         id={ tab.id }
         webentity={ this.getWebentity(tab.id) }
         url={ tab.url }
+        closable={ this.props.tabs.length !== 2 }
         loading={ tab.loading || false }
         disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
         disableNavigation={ !tab.navigable }

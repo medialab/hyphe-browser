@@ -199,9 +199,13 @@ class WebView extends React.Component {
       if (hasSelection) {
         menu.append(new MenuItem({ label: this.translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
       }
-      menu.append(new MenuItem({ type: 'separator' }))
-      menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => eventBus.emit('close') }))
-      menu.popup(remote.getCurrentWindow())
+      if (this.props.closable) {
+        menu.append(new MenuItem({ type: 'separator' }))
+        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => eventBus.emit('close') }))
+      }
+      if (menu.getItemCount() >= 1) {
+        menu.popup(remote.getCurrentWindow())
+      }
     })
   }
 
@@ -227,6 +231,7 @@ WebView.contextTypes = {
 WebView.propTypes = {
   ua: PropTypes.string,
   visible: PropTypes.bool,
+  closable: PropTypes.closable,
   url: PropTypes.string.isRequired,
   eventBus: eventBusShape.isRequired
 }
