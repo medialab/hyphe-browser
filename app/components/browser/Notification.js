@@ -31,7 +31,7 @@ class Notification extends React.Component {
 Notification.propTypes = {
   messageId: PropTypes.string,
   messageValues: PropTypes.object,
-  type: PropTypes.oneOf(['notice', 'warning', 'error']),
+  type: PropTypes.oneOf(['', 'notice', 'warning', 'error']),
 
   hideError: PropTypes.func.isRequired
 }
