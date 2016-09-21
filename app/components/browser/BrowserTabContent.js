@@ -247,7 +247,7 @@ class TabContent extends React.Component {
   // google form for example
   renderSinglePane () {
     return (
-      <div>
+      <div className="browser-tab-content-full">
         { this.renderContent() }
         <HypheFooter status={ this.props.status } />
       </div>
