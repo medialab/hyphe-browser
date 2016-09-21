@@ -35,7 +35,8 @@ class BrowserTabs extends React.Component {
     ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
-    this.ipcCloseTabHandler = () => this.props.activeTabId && this.props.closeTab(this.props.activeTabId)
+    this.ipcCloseTabHandler = () =>
+      this.props.tabs.length > 2 && this.props.activeTabId && this.props.closeTab(this.props.activeTabId)
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, this.ipcCloseTabHandler)
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
 
@@ -92,7 +93,7 @@ class BrowserTabs extends React.Component {
         id={ tab.id }
         webentity={ this.getWebentity(tab.id) }
         url={ tab.url }
-        closable={ this.props.tabs.length !== 2 }
+        closable={ this.props.tabs.length > 2 }
         loading={ tab.loading || false }
         disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
         disableNavigation={ !tab.navigable }
