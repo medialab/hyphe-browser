@@ -57,9 +57,9 @@ app.on('ready', () => {
   app.setMaxListeners(25)
 
   // Register shortcuts from here, is it still required? Can't we use 'electron-localshortcut' directly in concerne components?
-  ipc.on('registerShortcut', (_, accel) => {
+  ipc.on('registerShortcut', (event, accel) => {
     const eventName = `shortcut-${accel}`
-    shortcuts.register(accel, () => ipc.send(eventName))
+    shortcuts.register(accel, () => event.sender.send(eventName))
   })
   ipc.on('unregisterShortcut', (_, accel) => {
     shortcuts.unregister(accel)
