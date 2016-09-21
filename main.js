@@ -2,7 +2,7 @@
 
 /* eslint no-path-concat: 0, func-names:0 */
 
-const { app, BrowserWindow, Menu, ipcMain: ipc } = require('electron')
+const { app, BrowserWindow, ipcMain: ipc } = require('electron')
 //const Shortcut = require('electron-shortcut')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
@@ -18,9 +18,11 @@ if (process.env.NODE_ENV === 'development') {
     showDevTools: true
   })
   const devtools = require('electron-devtools-installer')
-  devtools.default(devtools.REDUX_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.error('An error occurred during redux devtools install: ', err))
+  ;[ 'REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS' ].forEach(t => {
+    devtools.default(devtools[t])
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.error('An error occurred during redux devtools install: ', err))
+  })
 }
 
 app.on('window-all-closed', () => {
