@@ -128,7 +128,7 @@ class BrowserTabUrlField extends React.Component {
     const url = urlToLru(this.state.url, this.props.tlds)
 
     const parts = [ [ 'scheme', url.scheme + '://', url.scheme === lru.scheme ] ]
-      .concat( url.tld ? [ [ 'tld', url.tld ] ] : [])
+      .concat( url.tld ? [ [ 'tld', url.tld, url.tld === lru.tld ] ] : [])
       .concat(url.host.map((h, i) => [ 'host', '.' + h, url.host[i] === lru.host[i] ]))
       .concat([ [ 'port', url.port && (':' + url.port), url.port === lru.port ] ])
       .concat((url.path.length === 0 && (url.query || url.fragment))
@@ -151,7 +151,7 @@ class BrowserTabUrlField extends React.Component {
     if (label) {
       const classes = [
         'btn btn-default prefix',
-        { 'prefix-selected': (this.state.userPrefixUntil >= 0) ? (index <= this.state.userPrefixUntil) : selected },
+        { 'prefix-selected': (this.state.userPrefixUntil >= 1) ? (index <= this.state.userPrefixUntil) : selected },
         { 'prefix-over': index <= this.state.overPrefixUntil }
       ]
       return (
