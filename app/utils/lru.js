@@ -3,10 +3,12 @@ const authorityRegExp = /^(?:([^:]+)(?::([^@]+))?\@)?(\[[\da-f]*:[\da-f:]*\]|[^\
 const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*\]/i
 
 // Convert a LRU (string or object) to fully qualified LRU object
-export function parseLru (input) {
+// full host: right to left (i.e: [com, faceboook, fr-fr, wwww])
+export function parseLru (input, tldTree) {
   var result = {
     scheme: null,
     host: [],
+    tld: '',
     port: '',
     path: [],
     query: '',
@@ -18,7 +20,7 @@ export function parseLru (input) {
   }
 
   input.replace(/\|$/, '').split('|').forEach(function (stem){
-    var type = stem.substr(0, 1)
+    const type = stem.substr(0, 1)
     const name = stem.substr(2, stem.length - 2)
     if (type=='s') {
       result.scheme = name.toLowerCase()
@@ -35,6 +37,13 @@ export function parseLru (input) {
     }
   })
 
+  // Split full host info into TLD + host
+  const [ rhost, tld ] = _lruHostInfo(result.host.slice().reverse().join('.'), tldTree)
+  if (tld) {
+    result.tld = tld
+    result.host = rhost.splice('.').reverse()
+  }
+
   // Remove standard port
   if ((result.scheme === 'http' && result.port === '80') || (result.scheme === 'https' && result.port === '443')) {
     result.port = ''
@@ -43,6 +52,7 @@ export function parseLru (input) {
   return result
 }
 
+// hostArray: natural order (i.e. [fr-fr, facebook, com])
 function _getTLD (hostArray, tldTree, rindex = 0, tld = '') {
   if (rindex >= hostArray.length) {
     return tld
@@ -65,6 +75,7 @@ function _getTLD (hostArray, tldTree, rindex = 0, tld = '') {
   return subTree ? _getTLD(hostArray, subTree, rindex + 1, tld) : tld
 }
 
+// host: natural order, string, i.e: 'fr-fr.facebook.com'
 function _lruHostInfo (host, tldTree) {
   const parts = host.toLowerCase().split('.')
   if (tldTree) {
@@ -79,7 +90,7 @@ function _lruHostInfo (host, tldTree) {
 }
 
 // Convert a URL (string) to LRU object
-// TODO use new tldTree method
+// output host: reverse order (i.e: [facebook, fr-fr])
 export function urlToLru (url, tldTree) {
   const urlMatch = urlToLruRegExp.exec(url)
   if (urlMatch) {
@@ -107,22 +118,23 @@ export function urlToLru (url, tldTree) {
 }
 
 // Convert a LRU (string or object) to a URL (string)
-export function lruToUrl (inputLru) {
-  const lru = parseLru(inputLru)
+export function lruToUrl (inputLru, tldTree) {
+  const lru = parseLru(inputLru, tldTree)
 
   const scheme = (lru.scheme || 'http') + '://'
+  const tld = lru.tld ? '.' + lru.tld : ''
   const host = lru.host.reduce((s, p) => p + (s ? '.' : '') + s, '')
   const port = lru.port && (':' + lru.port)
   const path = (lru.path.length > 0) ? ('/' + lru.path.join('/')) : ''
   const query = lru.query && ('?' + lru.query)
   const fragment = lru.fragment && ('#' + lru.fragment)
 
-  return scheme + host + port + path + query + fragment
+  return scheme + host + tld + port + path + query + fragment
 }
 
 // Check if a LRU (string or object) matches a URL (string) or other LRU (string or object)
 export function match (lru, url, tldTree) {
-  const lruLru = parseLru(lru)
+  const lruLru = parseLru(lru, tldTree)
   const urlLru = urlToLru(url, tldTree)
 
   // Now we want to check if LRU matches URL, which means:
@@ -130,6 +142,7 @@ export function match (lru, url, tldTree) {
   // - url.path starts with lru.path (they're in original order)
   // - query, fragment, scheme, port are the same
   return urlLru.scheme === lruLru.scheme
+      && urlLru.tld === lruLru.tld
       && urlLru.host.join('.').startsWith(lruLru.host.join('.'))
       && urlLru.port === lruLru.port
       && urlLru.path.join('.').startsWith(lruLru.path.join('.'))
@@ -142,7 +155,7 @@ export function match (lru, url, tldTree) {
 export function longestMatching (lrus, url, tldTree) {
   return lrus
     // Ensure all LRUs are valid LRU objects
-    .map(parseLru)
+    .map(lru => parseLru(lru, tldTree))
     // Test for each LRU, and keep track of index to get back to original LRU at end of process
     .map((lru, index) => (match(lru, url, tldTree) && { lru, index }))
     // Keep only matched values
@@ -182,6 +195,7 @@ export function highlightUrlHTML (lrus, url, tldTree) {
   return '<em>' + urlLru.scheme + '</em>://'
         +(subhost && (subhost + '.'))
         +'<em>' + lruLru.host.slice().reverse().join('.') + '</em>'
+        +(urlLru.tld && ('<em>.' + urlLru.tld + '</em>'))
         +(urlLru.port && ('<em>:' + urlLru.port + '</em>'))
         +path
         +(lruLru.query ? ('<em>?' + lruLru.query + '</em>') : (urlLru.query && ('?' + urlLru.query)))

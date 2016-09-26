@@ -124,7 +124,7 @@ class BrowserTabUrlField extends React.Component {
   // LRU selector by prefix: click to select
   renderPrefixSelector () {
     const matching = longestMatching(this.props.lruPrefixes, this.state.url, this.props.tlds)
-    const lru = (matching && matching.lru) || parseLru({})
+    const lru = (matching && matching.lru) || parseLru({}, this.props.tlds)
     const url = urlToLru(this.state.url, this.props.tlds)
 
     const parts = [ [ 'scheme', url.scheme + '://', url.scheme === lru.scheme ] ]
@@ -183,7 +183,7 @@ class BrowserTabUrlField extends React.Component {
       }[prop]()
       return o
     }, {})
-    const lruUrl = lruToUrl(lru)
+    const lruUrl = lruToUrl(lru, this.props.tlds)
 
     this.props.onSelectPrefix(lruUrl, lruUrl !== originalLruUrl)
     this.setState({ userPrefixUntil: index })
