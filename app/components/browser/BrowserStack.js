@@ -102,21 +102,28 @@ class BrowserStack extends React.Component {
   renderWesSelector () {
     const { selectedStack, webentities } = this.props
 
+    // disable next / prev
+    const isFirst = webentities &&
+      this.state.selectedWebentityId === webentities[0].id
+    const isLast = webentities &&
+      this.state.selectedWebentityId === webentities[webentities.length - 1].id
+
     return (
       <div className="browser-stack-wes">
         <button className="btn btn-default"
-          disabled={ !selectedStack }
+          disabled={ !selectedStack || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-arrow-circle-left"></span>
         </button>
         <div className="browser-stack-wes-selector">
-          <BrowserStackWesList selectedStack={ selectedStack } webentities={ webentities }
+          <BrowserStackWesList selectedStack={ selectedStack }
+            webentities={ webentities }
             selectedWebentityId={ this.state.selectedWebentityId }
             selectWebentity={ (w) => this.selectWebentity(w) }/>
           { this.renderProgress() }
         </div>
         <button className="btn btn-default"
-          disabled={ !selectedStack }
+          disabled={ !selectedStack || isLast }
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-arrow-circle-right"></span>
         </button>
