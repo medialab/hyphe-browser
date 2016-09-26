@@ -11,17 +11,14 @@ class HypheHeader extends React.Component {
     const formatMessage = this.context.intl.formatMessage
     const { corpus } = this.props
 
-    let title = 'Hyphe Browser'
-    if (corpus) {
-      title += ' | ' + corpus.name
-    }
+    if (!corpus) return null
 
     return (
       <header className="hyphe-header">
-        { corpus && <Link className="disconnection" to="login" title={ formatMessage({ id: 'disconnect' }) }>
+        <Link className="disconnection" to="login" title={ formatMessage({ id: 'disconnect' }) }>
           <span className="ti-close"></span>
-        </Link> }
-        { title }
+        </Link>
+        { corpus.name }
       </header>
     )
   }
