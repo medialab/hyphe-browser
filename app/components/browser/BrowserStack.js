@@ -103,9 +103,9 @@ class BrowserStack extends React.Component {
     const { selectedStack, webentities } = this.props
 
     // disable next / prev
-    const isFirst = webentities &&
+    const isFirst = webentities.length &&
       this.state.selectedWebentityId === webentities[0].id
-    const isLast = webentities &&
+    const isLast = webentities.length &&
       this.state.selectedWebentityId === webentities[webentities.length - 1].id
 
     return (
