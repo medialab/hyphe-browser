@@ -71,9 +71,12 @@ class BrowserStack extends React.Component {
 
     const counters = status.corpus.memory_structure.webentities
 
+    // do not display this stack button if empty
+    const usefulStacks = stacks.filter(s => s.name !== 'IN_UNCRAWLED' || counters[s.name])
+
     return (
       <span className="fillers">
-        { stacks.map((stack) =>
+        { usefulStacks.map((stack) =>
           <button key={ stack.name }
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
