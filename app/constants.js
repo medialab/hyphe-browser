@@ -17,12 +17,12 @@ export const ERROR_CORPUS_NOT_STARTED = 'ERROR_CORPUS_NOT_STARTED'
 export const ERROR_SERVER_NO_RESOURCE = 'ERROR_SERVER_NO_RESOURCE'
 export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
-export const SHORTCUT_OPEN_TAB = ['Ctrl+N', 'Ctrl+T', 'Command+N', 'Command+T']
-export const SHORTCUT_CLOSE_TAB = ['Ctrl+W', 'Command+W']
-export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Command+Tab', 'Command+PageDown']
-export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'Ctrl+PageUp', 'Command+Shift+Tab', 'Command+PageUp']
-export const SHORTCUT_RELOAD_TAB = ['Ctrl+R', 'Command+R', 'F5']
-export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Command+Shift+R', 'Command+F5']
+export const SHORTCUT_OPEN_TAB = ['Ctrl+N', 'Ctrl+T', 'Cmd+N', 'Cmd+T']
+export const SHORTCUT_CLOSE_TAB = ['Ctrl+W', 'Cmd+W']
+export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Cmd+Tab', 'Cmd+PageDown']
+export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'Ctrl+PageUp', 'Cmd+Shift+Tab', 'Cmd+PageUp']
+export const SHORTCUT_RELOAD_TAB = ['Ctrl+R', 'Cmd+R', 'F5']
+export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Cmd+Shift+R', 'Cmd+F5']
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'

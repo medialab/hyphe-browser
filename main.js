@@ -3,7 +3,6 @@
 /* eslint no-path-concat: 0, func-names:0 */
 
 const { app, BrowserWindow, ipcMain: ipc } = require('electron')
-//const Shortcut = require('electron-shortcut')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
 const shortcuts = require('electron-localshortcut')
@@ -50,19 +49,30 @@ app.on('ready', () => {
   window.setMenu(null)
 
   // Debug menu, whatever environment
-  shortcuts.register(['Shift+Ctrl+C', 'F12'], () => window.toggleDevTools())
+  shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
+  shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
+  shortcuts.register('F12', () => window.toggleDevTools())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
   app.setMaxListeners(25)
 
-  // Register shortcuts from here, is it still required? Can't we use 'electron-localshortcut' directly in concerne components?
-  ipc.on('registerShortcut', (event, accel) => {
-    const eventName = `shortcut-${accel}`
-    shortcuts.register(accel, () => event.sender.send(eventName))
+  // Register shortcuts from here
+  // Rendered app cannot register shortcuts directly, we have to use IPC,
+  // on the other hand the rendered app must execute the callback
+  // So this event is just used to notify rendered app that an expected key combination has been pressed
+  ipc.on('registerShortcut', (event, accels) => {
+    const eventName = `shortcut-${accels}`
+    if (!Array.isArray(accels)) {
+      accels = [accels]
+    }
+    accels.forEach(accel => shortcuts.register(accel, () => event.sender.send(eventName)))
   })
-  ipc.on('unregisterShortcut', (_, accel) => {
-    shortcuts.unregister(accel)
+  ipc.on('unregisterShortcut', (_, accels) => {
+    if (!Array.isArray(accels)) {
+      accels = [accels]
+    }
+    accels.forEach(accel => shortcuts.unregister(accel))
   })
 
   // Open files in external app
