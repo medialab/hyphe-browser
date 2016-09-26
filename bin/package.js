@@ -13,7 +13,8 @@ const webpackP = promisify(webpack)
 const ignored = [
   '/test($|/)',
   '/bin($|/)',
-  '/release*'
+  '/release*',
+  '/mockup*'
 ]
 const devModules = Object.keys(pkg.devDependencies).map((name) => '/node_modules/' + name + '($|/)')
 const packOptions = {
