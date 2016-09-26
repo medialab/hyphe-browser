@@ -161,10 +161,12 @@ class SideBar extends React.Component {
 SideBar.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
-  webentity: PropTypes.object.isRequired,
+  webentity: PropTypes.object,
   disabled: PropTypes.bool,
   tabId: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+
+  status: PropTypes.object,
 
   setTabUrl: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
