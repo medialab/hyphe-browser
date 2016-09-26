@@ -145,13 +145,15 @@ class SideBar extends React.Component {
 
     return (
       <aside className="browser-side-bar">
-        { this.renderHomepage() }
-        <div className="browser-side-bar-cols">
-          { this.renderInfo() }
-          { this.renderStatus() }
+        <div className="browser-side-bar-scroll">
+          { this.renderHomepage() }
+          <div className="browser-side-bar-cols">
+            { this.renderInfo() }
+            { this.renderStatus() }
+          </div>
+          { this.renderTabs() }
+          { this.props.disabled && <div className="browser-sidebar-disabled-layer" /> }
         </div>
-        { this.renderTabs() }
-        { this.props.disabled && <div className="browser-sidebar-disabled-layer" /> }
         <HypheFooter status={ this.props.status } />
       </aside>
     )
