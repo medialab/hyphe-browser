@@ -103,31 +103,19 @@
       position: relative;
       width: 38px;
 
-      &.active-status {
-        background: var(--color-black);
+      &.status-undecided.active-status {
+        background: var(--color-corpus-undecided);
         color: var(--color-white);
       }
 
-      &::after {
-        content: '';
-        display: block;
-        height: 2px;
-        left: 5px;
-        position: absolute;
-        top: 42px;
-        width: 28px;
-      }
-
-      &.status-undecided::after {
-        background: var(--color-corpus-undecided);
-      }
-
-      &.status-in::after {
+      &.status-in.active-status {
         background: var(--color-corpus-in);
+        color: var(--color-white);
       }
 
-      &.status-out::after {
+      &.status-out.active-status {
         background: var(--color-corpus-out);
+        color: var(--color-white);
       }
     }
   }

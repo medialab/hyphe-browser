@@ -11,10 +11,10 @@
   --color-red: #c00;
 
   /* corpus statuses in header */
-  --color-corpus-in: #333;
-  --color-corpus-out: #faa; /* salmon */
-  --color-corpus-undecided: #ada299;
-  --color-corpus-discovered: #93bde0; /* light blue */
+  --color-corpus-in: #535e77; /* navy */
+  --color-corpus-out: #89373e; /* brown */
+  --color-corpus-undecided: #baac42; /* gold */
+  --color-corpus-discovered: #9cb8d3; /* light blue */
 }
 
 

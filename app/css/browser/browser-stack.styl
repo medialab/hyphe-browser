@@ -205,7 +205,6 @@
       cursor: pointer;
       font-family: var(--font-pt);
       font-size: 11px;
-      opacity: 0.75;
       padding-left: 6px;
     }
 
@@ -236,13 +235,13 @@
 
   // see colors.styl
 
-  .filler-UNDECIDED .filler-counter,
-  .filler-IN_UNTAGGED .filler-counter,
-  .filler-IN_UNCRAWLED .filler-counter {
+  .filler-UNDECIDED .filler-counter {
     color: var(--color-corpus-undecided);
   }
 
-  .filler-IN .filler-counter {
+  .filler-IN .filler-counter,
+  .filler-IN_UNTAGGED .filler-counter,
+  .filler-IN_UNCRAWLED .filler-counter {
     color: var(--color-corpus-in);
   }
 
