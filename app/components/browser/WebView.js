@@ -86,10 +86,14 @@ class WebView extends React.Component {
   }
 
   componentDidMount () {
-    const { eventBus } = this.props
+    const { eventBus, ua } = this.props
 
     const webview = findDOMNode(this)
     this.node = webview
+
+    // Set attributes that React does not recognize itself
+    webview.setAttribute('useragent', ua)
+    webview.setAttribute('autosize', 'on')
 
     // Store handlers for future cleanup
     this.reloadHandler = (ignoreCache) => ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
@@ -210,14 +214,10 @@ class WebView extends React.Component {
   }
 
   render () {
-    const { url, ua } = this.props
-
     // the preload script below is used to handle right click context menu
     return (
       <webview
-        src={ url }
-        useragent={ ua }
-        autosize="on"
+        src={ this.props.url }
         preload="./utils/webview-preload-script.js"
       />
     )
@@ -231,7 +231,7 @@ WebView.contextTypes = {
 WebView.propTypes = {
   ua: PropTypes.string,
   visible: PropTypes.bool,
-  closable: PropTypes.closable,
+  closable: PropTypes.bool,
   url: PropTypes.string.isRequired,
   eventBus: eventBusShape.isRequired
 }
