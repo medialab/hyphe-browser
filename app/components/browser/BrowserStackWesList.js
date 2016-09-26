@@ -1,21 +1,15 @@
 // infinite webentities list
+import '../../css/browser/browser-stack-wes-list'
+
+import 'react-select/dist/react-select.css'
+import 'react-virtualized/styles.css'
+import 'react-virtualized-select/styles.css'
 
 import React, { PropTypes } from 'react'
-import Infinite from 'react-infinite'
-import { FormattedMessage as T, intlShape } from 'react-intl'
-import cx from 'classnames'
-import onClickOutside from 'react-onclickoutside'
+import Select from 'react-virtualized-select'
+import { intlShape } from 'react-intl'
 
 class BrowserStackWesList extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = { expanded: false }
-  }
-
-  handleClickOutside () {
-    this.setState({ expanded: false })
-  }
 
   renderWebListItem (w) {
     return (
@@ -28,41 +22,21 @@ class BrowserStackWesList extends React.Component {
     )
   }
 
-  renderToggle () {
-    return <span className={ cx('browser-stack-toggle', 'ti-exchange-vertical', { expanded: this.state.expanded }) }
-             onClick={ () => this.setState({ expanded: !this.state.expanded }) }></span>
-  }
-
   render () {
-    const { selectedStack, webentities, selectedWebentityId } = this.props
-
-    if (!selectedStack) {
-      return <div className="browser-stack-wes-empty-list"><T id="select-stack" /></div>
-    }
-
-    if (!this.state.expanded && selectedWebentityId) {
-      const webentity = webentities.find(it => it.id === selectedWebentityId)
-      return (
-        <div className="browser-stack-wes-list">
-          { this.renderWebListItem(webentity) }
-          { this.renderToggle() }
-        </div>
-      )
-    }
-
-    const limit = 18
-    const elementHeight = 35
-    const containerHeight = webentities.length < limit
-      ? webentities.length * elementHeight
-      : limit * elementHeight
+    const { formatMessage } = this.context.intl
+    const { webentities, selectWebentity } = this.props
+    const options = webentities.map(w => ({ label: w.name, value: w.id }))
 
     return (
-      <div className="browser-stack-wes-list expanded">
-        <Infinite className="browser-stack-wes-infinite" containerHeight={ containerHeight } elementHeight={ elementHeight }>
-          { webentities.map(w => this.renderWebListItem(w)) }
-        </Infinite>
-        { this.renderToggle() }
-      </div>
+        <Select className="browser-state-wes-list"
+          clearable={ false }
+          disabled={ !options.length }
+          onChange={ ({ value }) => selectWebentity(webentities.find(w => w.id === value)) }
+          options={ options }
+          placeholder={ formatMessage({id : 'select-stack' }) }
+          searchable={ false }
+          value={ this.props.selectedWebentityId }
+          />
     )
   }
 }
@@ -79,4 +53,4 @@ BrowserStackWesList.propTypes = {
   selectWebentity: PropTypes.func
 }
 
-export default onClickOutside(BrowserStackWesList)
+export default BrowserStackWesList

@@ -1,6 +1,7 @@
 .browser-stack {
   display: flex;
   padding: 22px 1em 1em 30px;
+  z-index: 90;
 
   @media (max-width: 1024px) {
     padding-left: 25px;
@@ -32,115 +33,6 @@
       }
     }
   }
-
-  // html dropdown
-
-  .browser-stack-wes-empty-list,
-  .browser-stack-wes-list {
-    border-radius: var(--radius);
-    flex-grow: 1;
-    font-family: var(--font-pt);
-    font-size: 12px;
-    height: 38px;
-  }
-
-  .browser-stack-wes-empty-list {
-    background: var(--color-grey);
-    color: var(--color-black);
-
-    // placeholder message
-    span {
-      display: block;
-      padding: 8px;
-      text-align: center;
-    }
-  }
-
-  .browser-stack-wes-list {
-    background: var(--color-black);
-    color: var(--color-white);
-    position: relative;
-    text-align: left;
-    // TODO issue with ::after pseudo elements of tabs
-    z-index: 100;
-  }
-
-  .browser-stack-wes-infinite {
-    background: var(--color-black);
-    border-radius: var(--radius);
-    flex-grow: 1;
-
-    &::-webkit-scrollbar {
-      width:  6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: var(--color-white);
-    }
-
-    &::-webkit-scrollbar-track {
-        background: var(--color-black);
-    }
-  }
-
-  .browser-stack-wes-list-item {
-    cursor: pointer;
-    display: flex;
-    padding: 8px;
-    padding-right: 30px;
-
-    .we-viewed {
-      margin-right: .5em;
-    }
-
-    .we-name {
-      cursor: pointer;
-      flex-grow: 1;
-      font-weight: bold;
-    }
-
-    .we-indegree {
-      border-left: 1px solid var(--color-white);
-      padding-left: .5em;
-      margin: 0 .5em;
-    }
-
-    @media (max-width: 1024px) {
-      .we-indegree {
-        display: none;
-      }
-    }
-
-    &:hover {
-      color: var(--color-grey);
-
-      .we-indegree {
-        border-left: 1px solid var(--color-grey);
-      }
-    }
-  }
-
-  .expanded .browser-stack-wes-list-item.selected {
-    color: var(--color-blue);
-
-    .we-indegree {
-      border-left: 1px solid var(--color-blue);
-    }
-  }
-
-  .browser-stack-toggle {
-    cursor: pointer;
-    font-size: 18px;
-    margin-left: 8px;
-    position: absolute;
-    right: 8px;
-    top: 8px;
-
-    &.expanded {
-      color: var(--color-blue);
-    }
-  }
-
 
   progress,
   progress::-webkit-progress-bar {
