@@ -20,7 +20,7 @@ class SideBar extends React.Component {
     super(props)
 
     this.state = {
-      tab: 'tags'
+      section: 'tags'
     }
   }
 
@@ -38,6 +38,10 @@ class SideBar extends React.Component {
     } else {
       setWebentityStatus(serverUrl, corpusId, status, webentity.id)
     }
+  }
+
+  toggleSection () {
+    this.setState({ section: this.state.section === 'tags' ? 'context' : 'tags' })
   }
 
   renderInfo () {
@@ -86,22 +90,16 @@ class SideBar extends React.Component {
 
   renderTabs () {
     return (
-      <div className="browser-side-bar-tabs">
-         { false &&
-           <div className="tab-group">
-            <div
-              className={ cx('tab-item', { active: this.state.tab === 'context' }) }
-              onClick={ () => this.setState({ tab: 'context' }) }>
-              <span><T id="sidebar.tab-context" /></span>
-            </div>
-            <div
-              className={ cx('tab-item', { active: this.state.tab === 'tags' }) }
-              onClick={ () => this.setState({ tab: 'tags' }) }>
-              <span><T id="sidebar.tab-tags" /></span>
-            </div>
-          </div>
-        }
-        { (this.state.tab === 'context') ? this.renderTabContext() : this.renderTabTags() }
+      <div className="browser-side-bar-sections">
+        { this.renderTabTags() }
+        <h3 onClick={ () => this.toggleSection() }>
+          <span className={ cx({
+            'ti-angle-down': this.state.section === 'tags',
+            'ti-angle-up': this.state.section === 'context'
+          }) }>
+          </span>
+        </h3>
+        { this.state.section === 'context' && this.renderTabContext() }
       </div>
     )
   }
