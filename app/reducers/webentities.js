@@ -5,6 +5,7 @@ import set from 'lodash.set'
 import uniq from 'lodash.uniq'
 import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
+import { VIEW_WEBENTITY } from '../actions/stacks'
 import {
   DECLARE_PAGE_SUCCESS,
   SET_WEBENTITY_HOMEPAGE_REQUEST,
@@ -37,7 +38,8 @@ const initialState = {
   tlds: null,
   webentities: {}, // id → WebEntity
   tabs: {}, // tabId → webEntityId
-  adjustments: {} // webEntityId → adjustment { name, homepage, prefix, crawl }
+  adjustments: {}, // webEntityId → adjustment { name, homepage, prefix, crawl }
+  selected: null
 }
 
 
@@ -136,6 +138,11 @@ export default createReducer(initialState, {
         ? {...state.adjustments[id], ...info}
         : info
     }
+  }),
+
+  [VIEW_WEBENTITY]: (state, { webentity }) => ({
+    ...state,
+    selected: webentity
   })
 })
 

@@ -13,15 +13,6 @@ import { HYPHE_TAB_ID } from '../../constants'
 import BrowserStackWesList from './BrowserStackWesList'
 
 class BrowserStack extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      selectedStack: this.props.selectedStack,
-      selectedWebentity: null
-    }
-  }
-
   // auto display first webentity in newly filled stack
   componentWillReceiveProps (props) {
     if ((!this.props.selectedStack && props.selectedStack && props.webentities.length)
@@ -35,7 +26,6 @@ class BrowserStack extends React.Component {
   }
 
   selectWebentity (webentity) {
-    this.setState({ selectedWebentity: webentity })
     this.props.viewWebentity(webentity)
     if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
       this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
@@ -47,7 +37,7 @@ class BrowserStack extends React.Component {
   // used by Prev (-1) / Next (+1) buttons
   rotateWebentity (offset) {
     const { webentities } = this.props
-    const idx = webentities.findIndex(x => x.id === this.state.selectedWebentity.id)
+    const idx = webentities.findIndex(x => x.id === this.props.selectedWebentity.id)
     let webentity
     if (idx === 0 && offset === -1) {
       webentity = webentities[webentities.length - 1]
@@ -78,7 +68,7 @@ class BrowserStack extends React.Component {
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             disabled={ !counters[stack.name] }
-            onClick={ () => { this.setState({ selectedStack: stack }); this.fill(stack) } }>
+            onClick={ () => { this.fill(stack) } }>
             <div className="filler-name">{ formatMessage({ id: 'corpus-status.' + stack.name }) }</div>
             <div className="filler-counter">{ counters[stack.name] || 0 }</div>
           </button>
@@ -97,8 +87,7 @@ class BrowserStack extends React.Component {
 
   // left side
   renderWesSelector () {
-    const { selectedStack, webentities } = this.props
-    const { selectedWebentity } = this.state
+    const { selectedStack, selectedWebentity, webentities } = this.props
 
     // disable next / prev
     const isFirst = webentities.length && selectedWebentity &&
@@ -154,6 +143,7 @@ BrowserStack.propTypes = {
   lastRefresh: PropTypes.number,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
+  selectedWebentity: PropTypes.any,
   stacks: PropTypes.array.isRequired,
   webentities: PropTypes.array.isRequired,
 
@@ -164,13 +154,14 @@ BrowserStack.propTypes = {
   viewWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, stacks, tabs }) => ({
+const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities }) => ({
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpus: corpora.selected,
   status: corpora.status,
   lastRefresh: stacks.lastRefresh,
   server: servers.selected,
   selectedStack: stacks.selected,
+  selectedWebentity: webentities.selected,
   stacks: stacks.list,
   webentities: stacks.webentities
 })
