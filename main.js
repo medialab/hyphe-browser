@@ -105,24 +105,35 @@ function getMenuBar () {
       label: '&Edit',
       submenu: [
         {
-          label: 'Cut',
-          accelerator: 'Cmd+X',
-          selector: 'cut:'
+          role: 'undo',
+          accelerator: 'Cmd+Z'
         },
         {
-          label: 'Copy',
-          accelerator: 'Cmd+C',
-          selector: 'copy:'
+          role: 'redo',
+          accelerator: 'Cmd+Shift+Z'
         },
         {
-          label: 'Paste',
-          accelerator: 'Cmd+V',
-          selector: 'paste:'
+          type: 'separator'
         },
         {
-          label: 'Select All',
-          accelerator: 'Cmd+A',
-          selector: 'selectAll:'
+          role: 'cut',
+          accelerator: 'Cmd+X'
+        },
+        {
+          role: 'copy',
+          accelerator: 'Cmd+C'
+        },
+        {
+          role: 'paste',
+          accelerator: 'Cmd+V'
+        },
+        {
+          role: 'pasteandmatchstyle',
+          accelerator: 'Cmd+Shift+V'
+        },
+        {
+          role: 'selectall',
+          accelerator: 'Cmd+A'
         }
       ]
     }
