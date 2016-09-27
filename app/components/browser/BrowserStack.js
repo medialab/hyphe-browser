@@ -17,8 +17,8 @@ class BrowserStack extends React.Component {
     super(props)
 
     this.state = {
-      selectedStackName: this.props.selectedStack && this.props.selectedStack.name,
-      selectedWebentityId: null
+      selectedStack: this.props.selectedStack,
+      selectedWebentity: null
     }
   }
 
@@ -30,15 +30,12 @@ class BrowserStack extends React.Component {
     }
   }
 
-  // also called by refresh button
-  fill (stackName) {
-    stackName = stackName || this.state.selectedStackName
-    const stack = this.props.stacks.find(s => s.name === stackName)
+  fill (stack) {
     this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
   }
 
   selectWebentity (webentity) {
-    this.setState({ selectedWebentityId: webentity.id })
+    this.setState({ selectedWebentity: webentity })
     this.props.viewWebentity(webentity)
     if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
       this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
@@ -50,7 +47,7 @@ class BrowserStack extends React.Component {
   // used by Prev (-1) / Next (+1) buttons
   rotateWebentity (offset) {
     const { webentities } = this.props
-    const idx = webentities.findIndex(x => x.id === this.state.selectedWebentityId)
+    const idx = webentities.findIndex(x => x.id === this.state.selectedWebentity.id)
     let webentity
     if (idx === 0 && offset === -1) {
       webentity = webentities[webentities.length - 1]
@@ -81,7 +78,7 @@ class BrowserStack extends React.Component {
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             disabled={ !counters[stack.name] }
-            onClick={ () => { this.setState({ selectedStackName: stack.name }); this.fill(stack.name) } }>
+            onClick={ () => { this.setState({ selectedStack: stack }); this.fill(stack) } }>
             <div className="filler-name">{ formatMessage({ id: 'corpus-status.' + stack.name }) }</div>
             <div className="filler-counter">{ counters[stack.name] || 0 }</div>
           </button>
@@ -101,37 +98,37 @@ class BrowserStack extends React.Component {
   // left side
   renderWesSelector () {
     const { selectedStack, webentities } = this.props
+    const { selectedWebentity } = this.state
 
     // disable next / prev
-    const isFirst = webentities.length &&
-      this.state.selectedWebentityId === webentities[0].id
-    const isLast = webentities.length &&
-      this.state.selectedWebentityId === webentities[webentities.length - 1].id
+    const isFirst = webentities.length && selectedWebentity &&
+      selectedWebentity.id === webentities[0].id
+    const isLast = webentities.length && selectedWebentity &&
+      selectedWebentity.id === webentities[webentities.length - 1].id
 
     return (
       <div className="browser-stack-wes">
+
         <button className="btn btn-default"
           disabled={ !selectedStack || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
-          <span className="ti-arrow-circle-left"></span>
+          <span className="ti-angle-left"></span>
         </button>
+
         <div className="browser-stack-wes-selector">
           <BrowserStackWesList selectedStack={ selectedStack }
             webentities={ webentities }
-            selectedWebentityId={ this.state.selectedWebentityId }
+            selectedWebentity={ selectedWebentity }
             selectWebentity={ (w) => this.selectWebentity(w) }/>
           { this.renderProgress() }
         </div>
+
         <button className="btn btn-default"
           disabled={ !selectedStack || isLast }
           onClick={ () => this.rotateWebentity(1) }>
-          <span className="ti-arrow-circle-right"></span>
+          <span className="ti-angle-right"></span>
         </button>
-        <button className="btn btn-default"
-          disabled={ !selectedStack }
-          onClick={ () => this.fill() }>
-          <span className="ti-loop"></span>
-        </button>
+
       </div>
     )
   }

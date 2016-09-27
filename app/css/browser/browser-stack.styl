@@ -17,21 +17,31 @@
       width: 296px;
     }
 
-    // prev, next, refill
+    // prev, next
     .btn {
-      font-size: 16px;
+      font-size: 10px;
       padding: 6px;
+
+      span {
+        background: var(--color-black);
+        border-radius: 50%;
+        padding: 4px;
+        &::before {
+          color: var(--color-white);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .btn[disabled] {
+      span {
+        background: var(--color-grey);
+      }
     }
   }
 
   .browser-stack-wes-selector {
     width: 316px;
-
-    @media (max-width: 1024px) {
-      .we-indegree {
-        width: 208px;
-      }
-    }
   }
 
   progress,
@@ -51,7 +61,7 @@
 
   .fillers {
     display: flex;
-    margin-left: 3em;
+    margin-left: 24px;
   }
 
   .filler {
@@ -61,6 +71,10 @@
     padding: 0 1em;
     position: relative;
     text-align: left;
+
+    @media (max-width: 1124px) {
+      padding: 0 .6em;
+    }
 
     &:hover {
       background: var(--color-grey-light);
@@ -91,6 +105,10 @@
       font-weight: bold;
       padding: 0 10px;
       text-transform: uppercase;
+
+      @media (max-width: 1124px) {
+        font-size: 11px;
+      }
     }
 
     .filler-counter {

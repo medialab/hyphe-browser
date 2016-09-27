@@ -1,114 +1,165 @@
 .browser-stack-wes-list {
-  position: relative;
-  z-index: 10000;
+  // upper part
+
+  .Select-control {
+    border: 0;
+    font-family: var(--font-pt);
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  // black bg
+  .Select-value {
+    background: var(--color-black);
+
+    .we-name, .we-indegree {
+      color: var(--color-white);
+      &::before {
+        color: var(--color-white);
+      }
+    }
+  }
+
+  // double arrows on the right
+  .ti-exchange-vertical {
+    color: var(--color-white);
+    font-size: 18px;
+    vertical-align: middle;
+  }
+
+  // grey bg
+  &.is-open {
+    .Select-value {
+      background: var(--color-grey);
+
+      .we-name, .we-indegree {
+        color: var(--color-black);
+        &::before {
+          color: var(--color-black);
+        }
+      }
+    }
+
+    .ti-exchange-vertical {
+      color: var(--color-blue);
+    }
+  }
+
+  &.is-disabled {
+    .Select-control {
+      background: var(--color-grey);
+    }
+  }
+
+  // upper label
+  .browser-stack-wes-value {
+    display: flex;
+
+    .we-indegree {
+      margin: 0 1.5em;
+    }
+  }
+
+  .we-name {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .we-indegree {
+    flex-shrink: 0;
+    position: relative;
+    text-align: right;
+    width: 3em;
+
+    &::before {
+      color var(--color-black);
+      content: '|'
+      display: inline
+      left: 0;
+      position: absolute;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .browser-stack-wes-value {
+      .we-name {
+        margin-right: 20px;
+      }
+    }
+
+    .we-indegree {
+      display: none;
+    }
+  }
+
+  // each option in the select
+  .browser-stack-wes-item {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-family: var(--font-pt);
+    font-size: 12px;
+    padding: 0 .5rem;
+
+    &.selected {
+      color: var(--color-blue);
+
+      .we-indegree {
+        &::before {
+          color var(--color-blue);
+        }
+      }
+    }
+
+    &.focused {
+      background: var(--color-grey-light);
+    }
+
+    &.focused.selected {
+      background: none;
+    }
+
+    .we-name {
+      cursor: pointer;
+    }
+
+    &.viewed .we-name {
+      font-weight: bold;
+    }
+
+    .we-indegree {
+      padding-left: .5em;
+      margin: 0 .5em;
+    }
+  }
 
   .Select-menu-outer {
-    z-index: 10000;
+    background: var(--color-grey);
+    border: 0;
+    // keep in sync with maxHeight in <Select>
+    max-height: 502px;
+    padding-right: 12px;
+    padding-bottom: 12px;
+  }
+
+  .Select-menu {
+    // keep in sync with maxHeight in <Select>
+    max-height: 490px;
+  }
+
+  // scrollbar
+  .VirtualSelectGrid {
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-blue);
+    }
+    &::-webkit-scrollbar-track {
+        background: var(--color-grey-light);
+    }
   }
 }
-// .browser-stack-wes-empty-list,
-// .browser-stack-wes-list {
-//   border-radius: var(--radius);
-//   flex-grow: 1;
-//   font-family: var(--font-pt);
-//   font-size: 12px;
-//   height: 38px;
-// }
-
-// .browser-stack-wes-empty-list {
-//   background: var(--color-grey);
-//   color: var(--color-black);
-
-//   // placeholder message
-//   span {
-//     display: block;
-//     padding: 8px;
-//     text-align: center;
-//   }
-// }
-
-// .browser-stack-wes-list {
-//   background: var(--color-black);
-//   color: var(--color-white);
-//   position: relative;
-//   text-align: left;
-//   // TODO issue with ::after pseudo elements of tabs
-//   z-index: 100;
-// }
-
-// .browser-stack-wes-infinite {
-//   background: var(--color-black);
-//   border-radius: var(--radius);
-//   flex-grow: 1;
-
-//   &::-webkit-scrollbar {
-//     width:  6px;
-//   }
-
-//   &::-webkit-scrollbar-thumb {
-//       background: var(--color-white);
-//   }
-
-//   &::-webkit-scrollbar-track {
-//       background: var(--color-black);
-//   }
-// }
-
-// .browser-stack-wes-list-item {
-//   cursor: pointer;
-//   display: flex;
-//   padding: 8px;
-//   padding-right: 30px;
-
-//   .we-viewed {
-//     margin-right: .5em;
-//   }
-
-//   .we-name {
-//     cursor: pointer;
-//     flex-grow: 1;
-//     font-weight: bold;
-//   }
-
-//   .we-indegree {
-//     border-left: 1px solid var(--color-white);
-//     padding-left: .5em;
-//     margin: 0 .5em;
-//   }
-
-//   @media (max-width: 1024px) {
-//     .we-indegree {
-//       display: none;
-//     }
-//   }
-
-//   &:hover {
-//     color: var(--color-grey);
-
-//     .we-indegree {
-//       border-left: 1px solid var(--color-grey);
-//     }
-//   }
-// }
-
-// .expanded .browser-stack-wes-list-item.selected {
-//   color: var(--color-blue);
-
-//   .we-indegree {
-//     border-left: 1px solid var(--color-blue);
-//   }
-// }
-
-// .browser-stack-toggle {
-//   cursor: pointer;
-//   font-size: 18px;
-//   margin-left: 8px;
-//   position: absolute;
-//   right: 8px;
-//   top: 8px;
-
-//   &.expanded {
-//     color: var(--color-blue);
-//   }
-// }
 

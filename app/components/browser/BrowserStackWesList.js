@@ -1,21 +1,44 @@
 // infinite webentities list
-import '../../css/browser/browser-stack-wes-list'
-
 import 'react-select/dist/react-select.css'
-import 'react-virtualized/styles.css'
-import 'react-virtualized-select/styles.css'
+import '../../css/browser/browser-stack-wes-list'
 
 import React, { PropTypes } from 'react'
 import Select from 'react-virtualized-select'
 import { intlShape } from 'react-intl'
+import cx from 'classnames'
 
 class BrowserStackWesList extends React.Component {
 
-  renderWebListItem (w) {
+  renderArrow () {
+    return <span className="ti-exchange-vertical"></span>
+  }
+
+  renderOption ({ focusedOption, focusOption, key, labelKey, option, selectValue, style }) {
+    const w = option
+    const className = cx('browser-stack-wes-item', {
+      focused: option === focusedOption,
+      viewed: w.viewed,
+      selected: w.id === this.props.selectedWebentity.id
+    })
+
+    const events = option.disabled
+      ? {}
+      : {
+        onClick: () => selectValue(option),
+        onMouseOver: () => focusOption(option)
+      }
+
     return (
-      <div className={ cx('browser-stack-wes-list-item', { selected: this.props.selectedWebentityId === w.id }) }
-        onClick={ () => this.props.selectWebentity(w) }>
-        { w.viewed && <span className="we-viewed ti-check"></span> }
+      <div className={ className } key={ key } style={ style } { ...events }>
+        <span className="we-name" title={ w.name }>{ w.name }</span>
+        <span className="we-indegree">{ w.indegree }</span>
+      </div>
+    )
+  }
+
+  renderValue (w) {
+    return (
+      <div className="browser-stack-wes-value">
         <span className="we-name">{ w.name }</span>
         <span className="we-indegree">{ w.indegree }</span>
       </div>
@@ -24,19 +47,25 @@ class BrowserStackWesList extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { webentities, selectWebentity } = this.props
-    const options = webentities.map(w => ({ label: w.name, value: w.id }))
+    const { webentities, selectedWebentity, selectWebentity } = this.props
 
     return (
-        <Select className="browser-state-wes-list"
+        <Select className="browser-stack-wes-list"
+          arrowRenderer={ () => this.renderArrow() }
           clearable={ false }
-          disabled={ !options.length }
-          onChange={ ({ value }) => selectWebentity(webentities.find(w => w.id === value)) }
-          options={ options }
+          disabled={ !webentities.length }
+          labelKey={ 'name' }
+          // keep in sync with .Select-menu-outer, .Select-menu max-height
+          maxHeight={ 490 }
+          onChange={ (v) => selectWebentity(v) }
+          options={ webentities || [] }
+          optionRenderer={ (o) => this.renderOption(o) }
           placeholder={ formatMessage({id : 'select-stack' }) }
           searchable={ false }
-          value={ this.props.selectedWebentityId }
-          />
+          value={ selectedWebentity && selectedWebentity.id }
+          valueKey={ 'id' }
+          valueRenderer={ (v) => this.renderValue(v) }
+        />
     )
   }
 }
@@ -47,7 +76,7 @@ BrowserStackWesList.contextTypes = {
 
 BrowserStackWesList.propTypes = {
   selectedStack: PropTypes.any,
-  selectedWebentityId: PropTypes.any,
+  selectedWebentity: PropTypes.any,
   webentities: PropTypes.array,
 
   selectWebentity: PropTypes.func
