@@ -100,7 +100,7 @@ class TabContent extends React.Component {
       const err = networkErrors.createByCode(info.errorCode)
       if (err.name === 'NameNotResolvedError' && !this.doNotRedirectToSearchOnNextDNSError) {
         // DNS error: let's search instead
-        this.doNotDeclarePageOnStop = true
+        this.doNotDeclarePageOnStop = false
         this.doNotRedirectToSearchOnNextDNSError = true
         const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
         setTabUrl(getSearchUrl(term), id)
