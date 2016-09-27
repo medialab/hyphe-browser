@@ -18,7 +18,7 @@ export const ERROR_SERVER_NO_RESOURCE = 'ERROR_SERVER_NO_RESOURCE'
 export const ERROR_SET_WEBENTITY_STATUS = 'ERROR_SET_WEBENTITY_STATUS'
 
 export const SHORTCUT_OPEN_TAB = ['Ctrl+N', 'Ctrl+T', 'Cmd+N', 'Cmd+T']
-export const SHORTCUT_CLOSE_TAB = ['Ctrl+W', 'Cmd+W']
+export const SHORTCUT_CLOSE_TAB = ['Ctrl+W', 'Ctrl+F4', 'Cmd+W', 'Cmd+F4']
 export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Cmd+Tab', 'Cmd+PageDown']
 export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'Ctrl+PageUp', 'Cmd+Shift+Tab', 'Cmd+PageUp']
 export const SHORTCUT_RELOAD_TAB = ['Ctrl+R', 'Cmd+R', 'F5']
