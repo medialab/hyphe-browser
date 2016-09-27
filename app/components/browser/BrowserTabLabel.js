@@ -62,6 +62,8 @@ class BrowserTabLabel extends React.Component {
 
   closeHandler (e) {
     e.preventDefault()
+    // do not trigger a selectTab just after
+    e.stopPropagation()
     this.close()
   }
 
