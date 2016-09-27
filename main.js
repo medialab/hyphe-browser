@@ -2,7 +2,7 @@
 
 /* eslint no-path-concat: 0, func-names:0 */
 
-const { app, BrowserWindow, ipcMain: ipc } = require('electron')
+const { app, BrowserWindow, ipcMain: ipc, Menu } = require('electron')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
 const shortcuts = require('electron-localshortcut')
@@ -48,7 +48,7 @@ app.on('ready', () => {
   })
 
   // Disable menubar
-  window.setMenu(null)
+  window.setMenu(getMenuBar())
 
   // Debug menu, whatever environment
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
@@ -92,3 +92,39 @@ app.on('ready', () => {
   })
 
 })
+
+
+function getMenuBar () {
+  if (process.platform !== 'darwin') {
+    return null
+  }
+
+  // With Mac OS we have to enable menu bar with standard copy/paste shortcuts to enable them (cf. electron/electron#2308)
+  return Menu.buildFromTemplate([
+    {
+      label: '&Edit',
+      submenu: [
+        {
+          label: 'Cut',
+          accelerator: 'Cmd+X',
+          selector: 'cut:'
+        },
+        {
+          label: 'Copy',
+          accelerator: 'Cmd+C',
+          selector: 'copy:'
+        },
+        {
+          label: 'Paste',
+          accelerator: 'Cmd+V',
+          selector: 'paste:'
+        },
+        {
+          label: 'Select All',
+          accelerator: 'Cmd+A',
+          selector: 'selectAll:'
+        }
+      ]
+    }
+  ])
+}
