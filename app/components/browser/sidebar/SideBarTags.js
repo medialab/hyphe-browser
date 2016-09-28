@@ -3,13 +3,15 @@ import '../../../css/auto-suggest'
 
 import uniq from 'lodash.uniq'
 import React, { PropTypes } from 'react'
-
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 import cx from 'classnames'
 import Autosuggest from 'react-autosuggest'
 import { intlShape } from 'react-intl'
+import partition from 'lodash.partition'
+
+
 import Button from '../../Button'
 
 import { addTagsCategory, addTag, removeTag, fetchTags } from '../../../actions/tags'
@@ -74,18 +76,17 @@ class SideBarTags extends React.Component {
 
   renderTagsCategory (category) {
     const tags = (this.props.webentity.tags.USER || {})[category] || []
-    const isFreeTags = (category === 'FREETAGS')
     const freeTagsTitle = this.context.intl.formatMessage({ id: 'sidebar.freetags' })
-    const canAddTag = isFreeTags || tags.length === 0
+    const canAddTag = isFreeTags(category) || tags.length === 0
 
     return (
-      <li key={ category }>
-        <h3><span>{ isFreeTags ? freeTagsTitle : category }</span></h3>
+      <div className="browser-side-bar-category" key={ category }>
+        <h3><span>{ isFreeTags(category) ? freeTagsTitle : category }</span></h3>
         <ul>
           { tags.map(this.renderTag(category)) }
         </ul>
         { canAddTag ? this.renderTagInput(category) : null }
-      </li>
+      </div>
     )
   }
 
@@ -221,25 +222,26 @@ class SideBarTags extends React.Component {
             { tag }</span>
           <Button icon="eraser"
             onClick={ () => this.removeTag(category, tag) }
-            title={ formatMessage({ id: 'remove.add-tag' }) } />
+            title={ formatMessage({ id: 'sidebar.remove-tag' }) } />
         </li>
       )
     }
   }
 
+  // free tags should be first, then other categories, then add category field
   render () {
     const { formatMessage } = this.context.intl
+    const [freeTags, cats] = partition(this.props.categories, isFreeTags)
 
     return (
-      <div className="tags-container">
+      <div className="browser-side-bar-tags">
+        { this.renderTagsCategory(freeTags[0]) }
         <h3><T id="sidebar.categories" /></h3>
+        { cats.map(this.renderTagsCategory) }
         <form className="tags-new-category" onSubmit={ this.addCategory }>
           <input className="form-control" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
           <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
         </form>
-        <ul className="tags-sections">
-          { this.props.categories.map(this.renderTagsCategory) }
-        </ul>
       </div>
     )
   }
@@ -265,6 +267,13 @@ function renderSuggestion (suggestion) {
   )
 }
 
+function  isFreeTags (category) {
+  return category === 'FREETAGS'
+}
+
+SideBarTags.contextTypes = {
+  intl: intlShape
+}
 
 SideBarTags.propTypes = {
   serverUrl: PropTypes.string.isRequired,
@@ -273,6 +282,7 @@ SideBarTags.propTypes = {
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
 
+  // actions
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
   addTagsCategory: PropTypes.func.isRequired,
@@ -286,13 +296,9 @@ const mapStateToProps = ({ corpora }, props) => {
   }
 }
 
-SideBarTags.contextTypes = {
-  intl: intlShape
-}
-
 export default connect(mapStateToProps, {
-  addTagsCategory,
   addTag,
   removeTag,
+  addTagsCategory,
   fetchTags
 })(SideBarTags)

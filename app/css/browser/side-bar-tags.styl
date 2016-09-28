@@ -1,4 +1,4 @@
-.tags-container {
+.browser-side-bar-tags {
   ul {
     list-style-type: none;
     margin: 0;
@@ -20,6 +20,12 @@
     cursor: text;
     text-align: left;
   }
+
+  .browser-side-bar-category {
+    li {
+      display: flex;
+    }
+  }
 }
 
 form.tags-new-category {
@@ -27,7 +33,6 @@ form.tags-new-category {
 }
 
 form.tags-new-tag,
-form.tags-edit-tag,
-ul.tags-sections > li > ul > li {
+form.tags-edit-tag {
   display: flex;
 }
