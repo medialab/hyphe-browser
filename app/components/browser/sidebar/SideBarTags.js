@@ -7,9 +7,9 @@ import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 import cx from 'classnames'
-import Autosuggest from 'react-autosuggest'
 import { intlShape } from 'react-intl'
 import partition from 'lodash.partition'
+import Autosuggest from 'react-autosuggest'
 
 
 import Button from '../../Button'
@@ -72,22 +72,6 @@ class SideBarTags extends React.Component {
     } else {
       findDOMNode(this).querySelector('form.tags-new-category input').focus()
     }
-  }
-
-  renderTagsCategory (category) {
-    const tags = (this.props.webentity.tags.USER || {})[category] || []
-    const freeTagsTitle = this.context.intl.formatMessage({ id: 'sidebar.freetags' })
-    const canAddTag = isFreeTags(category) || tags.length === 0
-
-    return (
-      <div className="browser-side-bar-category" key={ category }>
-        <h3><span>{ isFreeTags(category) ? freeTagsTitle : category }</span></h3>
-        <ul>
-          { tags.map(this.renderTag(category)) }
-        </ul>
-        { canAddTag ? this.renderTagInput(category) : null }
-      </div>
-    )
   }
 
   addTagHandler (category, tag = null) {
@@ -153,6 +137,8 @@ class SideBarTags extends React.Component {
       : tag
   }
 
+  // suggestions
+
   setCurrentSuggestions (suggestions, category, tag = null) {
     const prop = 'suggestions/' + getPropName(category, tag)
     this.setState({ [prop]: suggestions })
@@ -166,6 +152,16 @@ class SideBarTags extends React.Component {
   getSuggestions (category, value) {
     return getSuggestions(this.state['full-suggestions/' + category] || [], value)
   }
+
+  editTag (category, tag, edited) {
+    this.setState({ ['edit/' + category + '/' + tag]: edited })
+  }
+
+  isEditedTag (category, tag) {
+    return !!this.state['edit/' + category + '/' + tag]
+  }
+
+  // renderers
 
   renderTagInput (category, tag = null) {
     const { formatMessage } = this.context.intl
@@ -199,14 +195,6 @@ class SideBarTags extends React.Component {
     )
   }
 
-  editTag (category, tag, edited) {
-    this.setState({ ['edit/' + category + '/' + tag]: edited })
-  }
-
-  isEditedTag (category, tag) {
-    return !!this.state['edit/' + category + '/' + tag]
-  }
-
   renderTag (category) {
     return (tag) => {
       const { formatMessage } = this.context.intl
@@ -228,6 +216,35 @@ class SideBarTags extends React.Component {
     }
   }
 
+  // big textarea-like with many tags
+  renderFreeTagsCategory (category) {
+    return (
+      <div className="browser-side-bar-tags-free-tags" key={ category }>
+        <h3><span>{ this.context.intl.formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
+        { this.renderTagInput(category) }
+      </div>
+    )
+  }
+
+  // simpler input with only one tag to fill
+  renderTagsCategory (category) {
+    const tags = (this.props.webentity.tags.USER || {})[category] || []
+    const canAddTag = tags.length === 0
+
+    return (
+      <div className="browser-side-bar-tags-category" key={ category }>
+        <h4 className="category-name">{ category }</h4>
+        <div>
+          <ul>
+            { tags.map(this.renderTag(category)) }
+          </ul>
+          { canAddTag ? this.renderTagInput(category) : null }
+        </div>
+      </div>
+    )
+  }
+
+
   // free tags should be first, then other categories, then add category field
   render () {
     const { formatMessage } = this.context.intl
@@ -235,11 +252,16 @@ class SideBarTags extends React.Component {
 
     return (
       <div className="browser-side-bar-tags">
-        { this.renderTagsCategory(freeTags[0]) }
+        { this.renderFreeTagsCategory(freeTags[0]) }
+
         <h3><T id="sidebar.categories" /></h3>
         { cats.map(this.renderTagsCategory) }
-        <form className="tags-new-category" onSubmit={ this.addCategory }>
-          <input className="form-control" value={ this.state.newCategory } onInput={ this.onChangeNewCategory } />
+
+        <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
+          <input className="form-control"
+            placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+            value={ this.state.newCategory }
+            onInput={ this.onChangeNewCategory } />
           <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
         </form>
       </div>
