@@ -74,20 +74,16 @@ class Login extends React.Component {
     return (
       <div className="window">
         <HypheHeader />
-        <div className="window-content">
           <div className="pane-centered">
-
             <h2 className="pane-centered-title"><T id="welcome" /></h2>
             <main className={cx('pane-centered-main', { naked: !selectedServer })}>
-              <div className="server-list">
-                { this.renderServerSelect() }
-                { selectedServer && location.pathname === '/login' && <Link className="btn btn-default" to="/login/server-form?edit">
-                    <span className="ti-pencil"></span></Link> }
-              </div>
+            <div className="server-list">
+              { this.renderServerSelect() }
+              { selectedServer && location.pathname === '/login' && <Link className="btn btn-default" to="/login/server-form?edit">
+                  <span className="ti-pencil"></span></Link> }
+            </div>
             { this.props.children  }
             </main>
-
-          </div>
         </div>
         <HypheFooter />
       </div>
