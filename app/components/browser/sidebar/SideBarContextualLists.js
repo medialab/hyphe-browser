@@ -1,6 +1,6 @@
 // lists of links at the bottom of the sidebar
 
-import '../../../css/browser/side-bar'
+import '../../../css/browser/side-bar-contextual-lists'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
@@ -11,9 +11,16 @@ class List extends React.Component {
   render () {
     const { links } = this.props
     return (
-      <ul className="browser-side-bar-contextual-list">
-        { links.map(link => <li key={ link.url }>{ link.url }</li>) }
-      </ul>
+      <div className="browser-side-bar-contextual-list">
+        <ul>
+          { links.map(link =>
+            <li key={ link.url }>
+              <div className="link-name">Name</div>
+              <div className="link-url">{ link.url }</div>
+            </li>
+          ) }
+        </ul>
+      </div>
     )
   }
 }
