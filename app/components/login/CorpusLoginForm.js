@@ -45,7 +45,7 @@ class CorpusLoginForm extends React.Component {
 
         <div className="form-group">
           <label><T id="password" /></label>
-          <input type="password" className="form-control" onChange={ (evt) => this.setState({ password: evt.target.value }) }/>
+          <input type="password" onChange={ (evt) => this.setState({ password: evt.target.value }) }/>
         </div>
         <div className="form-actions">
           <button className="btn btn-primary" disabled={ this.state.submitting }>

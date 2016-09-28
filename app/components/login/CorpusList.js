@@ -91,12 +91,12 @@ class CorpusList extends React.Component {
           { hypheStatus }
         </h3>
         { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
-        <div className="corpus-list-filter">
+        <div className="form-group corpus-list-filter">
           <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
             onChange={ ({ target }) => this.setState({ filter: target.value }) } />
           <span className="ti-search"></span>
         </div>
-        <div className="form-group corpus-list-slider">
+        <div className="corpus-list-slider">
           <ul className="list-group corpus-list">
             { corpora.map((corpus) =>
               <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>

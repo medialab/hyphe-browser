@@ -2,8 +2,11 @@
   --color-white: #faf9f8;
   --color-grey: #e3e5e4;
   --color-grey-light: #f1f1f1;
+  --color-grey-dark: #979797;
   --color-black: #252b30;
   --color-blue: #014bf6;
+
+  --color-error: #89373e;
 
   /* corpus load indicators in footer */
   --color-green: #488105;

@@ -3,26 +3,33 @@
   text-align: center;
 
   input {
-    background: var(--color-white);
-    border-radius: var(--radius);
-    border: none;
-    margin-bottom: 12px;
-    padding: 1em 3em 1em 1em;
-    width: 100%;
-
+    // leave room for icon
+    padding-right: 3em;
   }
+
   span {
     font-size: 14px;
     position: absolute;
-    right: .8em;
-    top: 16px;
+    right: 10px;
+    top: 14px;
   }
 }
 
-
 .corpus-list-slider {
   height: 200px;
+  margin-bottom: 10px;
   overflow-y: auto;
+  padding-right: 10px;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-black);
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--color-grey-light);
+  }
 }
 
 .corpus-list-item {

@@ -3,8 +3,6 @@
 // local validation errors :
 // - password must equals passwordConfirm
 
-import '../../css/login/corpus-form'
-
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -41,8 +39,7 @@ class CorpusForm extends React.Component {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
-        <input className="form-control"
-               disabled={ this.state.submitting }
+        <input disabled={ this.state.submitting }
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                type={ type }
