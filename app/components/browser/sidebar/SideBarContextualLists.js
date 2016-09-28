@@ -5,8 +5,14 @@ import '../../../css/browser/side-bar-contextual-lists'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import cx from 'classnames'
 
-import { fetchMostLinked } from '../../../actions/contextual-lists'
+import {
+  fetchMostLinked,
+  fetchParents,
+  fetchSubs,
+  selectContextualList
+} from '../../../actions/contextual-lists'
 
 class List extends React.Component {
   render () {
@@ -33,27 +39,48 @@ class SideBarContextualLists extends React.Component {
   }
 
   componentWillReceiveProps (props) {
-    if (JSON.stringify(props.mostLinked) !== JSON.stringify(this.props.mostLinked))
-      this.updateCurrentList()
+    // change in nav
+    if (props.selected !== this.props.selected)
+      this.updateCurrentList(props.selected)
+    // change of list content
+    if (JSON.stringify(props[props.selected]) !== JSON.stringify(this.props[props.selected]))
+      this.updateCurrentList(props.selected)
   }
 
-  updateCurrentList () {
-    const { serverUrl, corpusId, webentity, fetchMostLinked } = this.props
-    fetchMostLinked(serverUrl, corpusId, webentity.id)
+  updateCurrentList (selected) {
+    const { serverUrl, corpusId, webentity,
+      fetchMostLinked, fetchParents, fetchSubs } = this.props
+
+    // TODO DRY
+    switch (selected) {
+    case 'mostLinked':
+      fetchMostLinked(serverUrl, corpusId, webentity.id)
+      break
+
+    case 'parents':
+      fetchParents(serverUrl, corpusId, webentity.id)
+      break
+
+    case 'subs':
+      fetchSubs(serverUrl, corpusId, webentity.id)
+      break
+    }
   }
 
   render () {
-    const { mostLinked } = this.props
-    if (!mostLinked.length) return <strong>empty!!</strong>
+    const { selectContextualList, selected } = this.props
 
     return (
       <div className="browser-side-bar-contextual-lists">
         <nav>
-          <button className="btn btn-default selected"><T id="sidebar.contextual.mostLinked" /></button>
-          <button className="btn btn-default"><T id="sidebar.contextual.parents" /></button>
-          <button className="btn btn-default"><T id="sidebar.contextual.subs" /></button>
+          { ['mostLinked', 'parents', 'subs'].map(l =>
+            <button className={ cx('btn', 'btn-default', { selected: l === selected }) }
+              key={ l } onClick={ () => selectContextualList(l) }>
+              <T id={ `sidebar.contextual.${l}` } />
+            </button>
+          ) }
+          <List links={ this.props[selected] } />
         </nav>
-        <List links={ mostLinked } />
       </div>
     )
   }
@@ -69,14 +96,26 @@ SideBarContextualLists.propTypes = {
   webentity: PropTypes.object.isRequired,
 
   mostLinked: PropTypes.array,
+  parents: PropTypes.array,
+  subs: PropTypes.array,
+  selected: PropTypes.string,
 
-  fetchMostLinked: PropTypes.func
+  fetchMostLinked: PropTypes.func,
+  fetchParents: PropTypes.func,
+  fetchSubs: PropTypes.func,
+  selectContextualList: PropTypes.func
 }
 
 const mapStateToProps = ({ contextualLists }) => ({ // eslint-disable-line
-  mostLinked: contextualLists.mostLinked
+  mostLinked: contextualLists.mostLinked,
+  parents: contextualLists.parents,
+  subs: contextualLists.subs,
+  selected: contextualLists.selected
 })
 
 export default connect(mapStateToProps, {
-  fetchMostLinked
+  fetchMostLinked,
+  fetchParents,
+  fetchSubs,
+  selectContextualList
 })(SideBarContextualLists)
