@@ -1,8 +1,0 @@
-input:disabled, input[disabled] {
-  background: #EEE;
-  color: #999;
-}
-
-.form-error {
-  color: #FB2F29;
-}

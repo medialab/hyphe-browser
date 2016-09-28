@@ -1,4 +1,3 @@
-import './css/photon'
 import './css/style'
 import './css/themify-icons'
 
