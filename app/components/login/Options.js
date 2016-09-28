@@ -22,7 +22,7 @@ class Options extends React.Component {
         <h4><T id="languages" /></h4>
         <div className="form-actions">
           <select
-            className="form-control languages-list"
+            className="languages-list"
             defaultValue={ locale }
             onChange={ (evt) => { actions.setLocale(evt.target.value) } }
           >

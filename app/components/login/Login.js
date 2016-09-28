@@ -59,7 +59,6 @@ class Login extends React.Component {
 
     return (
       <select
-        className="form-control server-list"
         defaultValue={ selectedServer && selectedServer.url }
         disabled={ location.pathname !== '/login' }
         onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
@@ -80,7 +79,7 @@ class Login extends React.Component {
 
             <h2 className="pane-centered-title"><T id="welcome" /></h2>
             <main className={cx('pane-centered-main', { naked: !selectedServer })}>
-              <div className="form-group inline">
+              <div className="server-list">
                 { this.renderServerSelect() }
                 { selectedServer && location.pathname === '/login' && <Link className="btn btn-default" to="/login/server-form?edit">
                     <span className="ti-pencil"></span></Link> }

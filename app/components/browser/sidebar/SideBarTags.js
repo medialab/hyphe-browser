@@ -258,8 +258,7 @@ class SideBarTags extends React.Component {
         { cats.map(this.renderTagsCategory) }
 
         <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
-          <input className="form-control"
-            placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+          <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
             value={ this.state.newCategory }
             onInput={ this.onChangeNewCategory } />
           <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
