@@ -4,6 +4,7 @@ import '../../../css/browser/side-bar-contextual-lists'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { FormattedMessage as T, intlShape } from 'react-intl'
 
 import { fetchMostLinked } from '../../../actions/contextual-lists'
 
@@ -46,11 +47,21 @@ class SideBarContextualLists extends React.Component {
     if (!mostLinked.length) return <strong>empty!!</strong>
 
     return (
-      <List links={ mostLinked } />
+      <div className="browser-side-bar-contextual-lists">
+        <nav>
+          <button className="btn btn-default selected"><T id="sidebar.contextual.mostLinked" /></button>
+          <button className="btn btn-default"><T id="sidebar.contextual.parents" /></button>
+          <button className="btn btn-default"><T id="sidebar.contextual.subs" /></button>
+        </nav>
+        <List links={ mostLinked } />
+      </div>
     )
   }
 }
 
+SideBarContextualLists.contextTypes = {
+  intl: intlShape
+}
 
 SideBarContextualLists.propTypes = {
   serverUrl: PropTypes.string.isRequired,
