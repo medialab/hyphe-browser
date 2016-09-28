@@ -8,7 +8,7 @@ import cx from 'classnames'
 
 import Button from '../../Button'
 import HypheFooter from './../../HypheFooter'
-import SideBarContext from './SideBarContext'
+import SideBarContextualLists from './SideBarContextualLists'
 import SideBarTags from './SideBarTags'
 
 import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage } from '../../../actions/webentities'
@@ -105,7 +105,7 @@ class SideBar extends React.Component {
   }
 
   renderTabContext () {
-    return <SideBarContext serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return <SideBarContextualLists serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
   renderTabTags () {

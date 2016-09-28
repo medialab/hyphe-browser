@@ -38,6 +38,7 @@ class SideBarTags extends React.Component {
     this.updateFullSuggestions(this.props.categories)
   }
 
+  // TODO missing will
   componentReceiveProps ({ categories }) {
     if (JSON.stringify(categories) !== JSON.stringify(this.props.categories)) {
       this.updateFullSuggestions(categories)
