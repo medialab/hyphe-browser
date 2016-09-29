@@ -92,7 +92,7 @@ class BrowserTabUrlField extends React.Component {
   // Read-write field: standard input
   renderFieldInput () {
     return <input
-      className={ cx('form-control btn', { loading: this.props.loading }) }
+      className={ cx('btn', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
@@ -101,7 +101,7 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-only field with highlights: click to edit
   renderFieldHighlighted () {
-    const className = cx('form-control btn browser-tab-url', { loading: this.props.loading })
+    const className = cx('btn browser-tab-url', { loading: this.props.loading })
     const onClick = () => this.setState({ editing: true, focusInput: true })
 
     if (!this.props.lruPrefixes) {

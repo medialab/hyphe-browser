@@ -5,17 +5,6 @@
     padding: 0;
   }
 
-  input, .tag-title {
-    background-color: var(--color-white);
-    border-radius: var(--radius);
-    border: 0;
-    color: var(--color-black);
-    flex: 1;
-    font-family: var(--font-pt);
-    outline: 0;
-    padding: .8em;
-  }
-
   .tag-title {
     cursor: text;
     text-align: left;
@@ -43,9 +32,9 @@
     // fake button when not focused
     input {
       background: var(--color-grey);
+      border-color: var(--color-grey);
       cursor: pointer;
       padding-right: 30px;
-      width: 100%;
 
       &::-webkit-input-placeholder {
         color: var(--color-black)

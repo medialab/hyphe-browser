@@ -23,9 +23,6 @@
 
 .browser-tab-toolbar-webentity {
   input {
-    border: 0
-    border-radius: var(--radius);
-    font-family: var(--font-pt);
     font-size: 12px;
     font-weight: bold;
     margin-right: 20px;
@@ -66,12 +63,11 @@
   flex: 1;
   overflow: hidden;
 
-  input {
-    width: 100%;
-  }
-
   .browser-tab-url {
+    background: var(--color-white);
+    font-size: 12px;
     min-height: 30px;
+    width: 100%;
 
     /* :first-child = scheme */
     em:first-child {
