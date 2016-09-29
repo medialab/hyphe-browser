@@ -278,10 +278,15 @@ class TabContent extends React.Component {
   }
 }
 
+TabContent.contextTypes = {
+  intl: intlShape
+}
+
 TabContent.propTypes = {
   id: PropTypes.string.isRequired, // Tab's id (≠ webentity.id)
   url: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  locale: PropTypes.string.isRequired,
   closable: PropTypes.bool,
   disableWebentity: PropTypes.bool,
   disableNavigation: PropTypes.bool,
@@ -317,12 +322,13 @@ TabContent.propTypes = {
 }
 
 const mapStateToProps = (
-  { corpora, servers, tabs, webentities }, // store
+  { corpora, intl: { locale }, servers, tabs, webentities }, // store
   { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
 ) => ({
   id,
   url,
   loading,
+  locale,
   disableWebentity,
   disableNavigation,
   eventBus,
@@ -340,10 +346,6 @@ const mapDispatchToProps = {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
   declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
-}
-
-TabContent.contextTypes = {
-  intl: intlShape
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

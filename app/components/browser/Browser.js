@@ -33,7 +33,7 @@ class Browser extends React.Component {
 Browser.propTypes = {
   corpus: PropTypes.object,
   isAdjusting: PropTypes.bool.isRequired,
-  locale: PropTypes.object.isRequired
+  locale: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = ({ corpora, webentities, intl: { locale } }) => ({

@@ -302,6 +302,7 @@ SideBarTags.propTypes = {
   webentity: PropTypes.object.isRequired,
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  locale: PropTypes.string.isRequired,
 
   // actions
   addTag: PropTypes.func.isRequired,
@@ -310,12 +311,11 @@ SideBarTags.propTypes = {
   fetchTags: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora }, props) => {
-  return {
-    ...props,
-    categories: corpora.list[props.corpusId].tagsCategories || []
-  }
-}
+const mapStateToProps = ({ corpora, intl: { locale } }, props) => ({
+  ...props,
+  categories: corpora.list[props.corpusId].tagsCategories || [],
+  locale
+})
 
 export default connect(mapStateToProps, {
   addTag,

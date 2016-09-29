@@ -110,7 +110,7 @@ SideBarContextualLists.propTypes = {
   selectContextualList: PropTypes.func
 }
 
-const mapStateToProps = ({ contextualLists }) => ({ // eslint-disable-line
+const mapStateToProps = ({ contextualLists }) => ({
   mostLinked: contextualLists.mostLinked,
   parents: contextualLists.parents,
   subs: contextualLists.subs,

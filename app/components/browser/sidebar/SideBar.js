@@ -133,10 +133,12 @@ class SideBar extends React.Component {
   }
 
   render () {
-    if (!this.props.webentity) {
+    const { disabled, status, webentity } = this.props
+
+    if (!webentity) {
       return (
         <aside className="browser-side-bar">
-          <HypheFooter status={ this.props.status } />
+          <HypheFooter status={ status } />
         </aside>
       )
     }
@@ -150,12 +152,16 @@ class SideBar extends React.Component {
             { this.renderStatus() }
           </div>
           { this.renderTabs() }
-          { this.props.disabled && <div className="browser-sidebar-disabled-layer" /> }
+          { disabled && <div className="browser-sidebar-disabled-layer" /> }
         </div>
-        <HypheFooter status={ this.props.status } />
+        <HypheFooter status={ status } />
       </aside>
     )
   }
+}
+
+SideBar.contextTypes = {
+  intl: intlShape
 }
 
 SideBar.propTypes = {
@@ -165,21 +171,19 @@ SideBar.propTypes = {
   disabled: PropTypes.bool,
   tabId: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-
+  locale: PropTypes.string.isRequired,
   status: PropTypes.object,
 
+  // actions
   setTabUrl: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ ui }) => ({ // eslint-disable-line
+const mapStateToProps = ({ intl: { locale } }) => ({
+  locale
 })
-
-SideBar.contextTypes = {
-  intl: intlShape
-}
 
 export default connect(mapStateToProps, {
   setTabUrl,

@@ -112,6 +112,8 @@ BrowserTabLabel.propTypes = {
   // tab not closable when is the last one
   closable: PropTypes.bool,
   navigable: PropTypes.bool,
+
+  // actions
   newTab: PropTypes.bool,
   openTab: PropTypes.func,
   selectTab: PropTypes.func.isRequired,

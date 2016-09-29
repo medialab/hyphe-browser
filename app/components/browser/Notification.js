@@ -32,10 +32,15 @@ Notification.propTypes = {
   messageId: PropTypes.string,
   messageValues: PropTypes.object,
   type: PropTypes.oneOf(['', 'notice', 'warning', 'error']),
+  locale: PropTypes.string.isRequired,
 
+  // actions
   hideError: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ ui }) => ui.notification
+const mapStateToProps = ({ intl: { locale }, ui }) => ({
+  ...ui.notification,
+  locale
+})
 
 export default connect(mapStateToProps, { hideError })(Notification)

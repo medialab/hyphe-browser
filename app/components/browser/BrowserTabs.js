@@ -152,12 +152,12 @@ BrowserTabs.contextTypes = {
 BrowserTabs.propTypes = {
   tabs: PropTypes.arrayOf(tabShape).isRequired,
   activeTabId: PropTypes.string,
-
   corpusId: PropTypes.string,
   instanceUrl: PropTypes.string,
-
+  locale: PropTypes.string.isRequired,
   webentities: PropTypes.object,
 
+  // actions
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   selectNextTab: PropTypes.func.isRequired,
@@ -165,21 +165,20 @@ BrowserTabs.propTypes = {
   selectTab: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ tabs, corpora, servers, webentities }) => ({
+const mapStateToProps = ({ tabs, corpora, intl: { locale }, servers, webentities }) => ({
   tabs: tabs.tabs,
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpusId: corpora.selected && corpora.selected.corpus_id,
   instanceUrl: servers.selected && servers.selected.home,
-  webentities: webentities
+  locale,
+  webentities: webentities,
 })
 
-const mapDispatchToProps = {
+export default connect(mapStateToProps, {
   openTab,
   closeTab,
   selectNextTab,
   selectPrevTab,
   selectTab,
   selectHypheTab
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BrowserTabs)
+})(BrowserTabs)

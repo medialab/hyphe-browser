@@ -79,6 +79,7 @@ BrowserStackWesList.propTypes = {
   selectedWebentity: PropTypes.any,
   webentities: PropTypes.array,
 
+  // actions
   selectWebentity: PropTypes.func
 }
 
