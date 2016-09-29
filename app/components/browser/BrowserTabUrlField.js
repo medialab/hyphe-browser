@@ -191,7 +191,7 @@ class BrowserTabUrlField extends React.Component {
 
   render () {
     return (
-      <form onSubmit={ (e) => this.onSubmit(e) } className={cx('over-overlay', { adjusting: this.props.prefixSelector })}>
+      <form onSubmit={ (e) => this.onSubmit(e) } className={ cx('over-overlay', { adjusting: this.props.prefixSelector }) }>
         { this.renderField() }
       </form>
     )

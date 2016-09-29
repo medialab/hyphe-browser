@@ -32,6 +32,10 @@ class List extends React.Component {
   }
 }
 
+List.propTypes = {
+  links: PropTypes.array
+}
+
 
 class SideBarContextualLists extends React.Component {
   componentDidMount () {

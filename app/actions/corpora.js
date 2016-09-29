@@ -116,7 +116,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
       })
       .then(() => {
         dispatch(routerActions.push('/browser'))
-      }, (err) => console.error('→ browser', err))
+      }, (err) => console.error('→ browser', err)) // eslint-disable-line
     })
     .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,

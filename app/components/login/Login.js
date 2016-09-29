@@ -9,7 +9,6 @@ import cx from 'classnames'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import { deselectServer } from '../../actions/servers'
-import HypheHeader from '../HypheHeader'
 import HypheFooter from '../HypheFooter'
 
 class Login extends React.Component {
@@ -74,7 +73,7 @@ class Login extends React.Component {
       <div className="window">
         <div className="pane-centered">
           <h2 className="pane-centered-title"><T id="welcome" /></h2>
-          <main className={cx('pane-centered-main', { naked: !selectedServer })}>
+          <main className={ cx('pane-centered-main', { naked: !selectedServer }) }>
           <div className="form-group server-list">
             { this.renderServerSelect() }
             { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">
@@ -90,7 +89,7 @@ class Login extends React.Component {
 }
 
 Login.contextTypes = {
-  intl: intlShape
+  intl: intlShape,
 }
 
 Login.propTypes = {
@@ -98,7 +97,7 @@ Login.propTypes = {
   selectedServer: PropTypes.object,
   servers: PropTypes.array.isRequired,
   // router
-  pathname: PropTypes.string,
+  location: PropTypes.object,
 
   // actions
   fetchCorpora: PropTypes.func,

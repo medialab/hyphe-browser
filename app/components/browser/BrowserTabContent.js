@@ -329,7 +329,7 @@ const mapStateToProps = (
   active: tabs.activeTab && tabs.activeTab.id === id,
   serverUrl: servers.selected.url,
   corpusId: corpora.selected.corpus_id,
-  webentity: webentity,
+  webentity,
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
   tlds: webentities.tlds

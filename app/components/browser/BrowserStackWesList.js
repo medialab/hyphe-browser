@@ -13,7 +13,7 @@ class BrowserStackWesList extends React.Component {
     return <span className="ti-exchange-vertical"></span>
   }
 
-  renderOption ({ focusedOption, focusOption, key, labelKey, option, selectValue, style }) {
+  renderOption ({ focusedOption, focusOption, key, option, selectValue, style }) {
     const w = option
     const className = cx('browser-stack-wes-item', {
       focused: option === focusedOption,
