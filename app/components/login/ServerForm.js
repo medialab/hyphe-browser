@@ -7,7 +7,6 @@
 
 
 import React, { PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
@@ -100,7 +99,7 @@ class ServerForm extends React.Component {
       : this.props.updateServer(server)
 
     // sync redirect
-    this.props.dispatch(routerActions.push('/login'))
+    this.props.routerPush('/login')
   }
 
   cleanData () {
@@ -124,7 +123,7 @@ class ServerForm extends React.Component {
   delete (evt) {
     evt.preventDefault()
     this.props.deleteServer(this.props.server)
-    this.props.dispatch(routerActions.push('/login'))
+    this.props.routerPush('/login')
   }
 
   render () {
@@ -172,6 +171,7 @@ ServerForm.propTypes = {
   createServer: PropTypes.func,
   updateServer: PropTypes.func,
   deleteServer: PropTypes.func,
+  routerPush: PropTypes.func,
 }
 
 const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({
@@ -185,4 +185,5 @@ export default connect(mapStateToProps, {
   createServer,
   updateServer,
   deleteServer,
+  routerPush: routerActions.push,
 })(ServerForm)

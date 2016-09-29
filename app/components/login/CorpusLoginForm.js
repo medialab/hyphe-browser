@@ -24,7 +24,7 @@ class CorpusLoginForm extends React.Component {
     this.setState({ submitting: true })
     jsonrpc(this.props.server.url)('start_corpus', [this.props.corpus.corpus_id, this.state.password])
       .then(() => {
-        this.props.dispatch(routerActions.push('/browser'))
+        this.props.routerPush('/browser')
       }, () => {
         this.setState({ submitting: false, errors: ['error.wrong-password'] })
       })
@@ -62,13 +62,14 @@ CorpusLoginForm.propTypes = {
   server: PropTypes.object,
 
   // action
-  dispatch: PropTypes.func
+  routerPush: PropTypes.func,
 }
 
 const mapStateToProps = ({ corpora, intl: { locale }, servers }) => ({
   corpus: corpora.selected,
   locale,
-  server: servers.selected
+  server: servers.selected,
+  routerPush: routerActions.push,
 })
 
 export default connect(mapStateToProps)(CorpusLoginForm)
