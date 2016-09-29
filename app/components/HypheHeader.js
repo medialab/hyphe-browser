@@ -8,14 +8,14 @@ import { intlShape } from 'react-intl'
 
 class HypheHeader extends React.Component {
   render () {
-    const formatMessage = this.context.intl.formatMessage
+    const { formatMessage } = this.context.intl
     const { corpus } = this.props
 
     if (!corpus) return null
 
     return (
       <header className="hyphe-header">
-        <Link className="disconnection" to="login" title={ formatMessage({ id: 'disconnect' }) }>
+        <Link className="disconnection hint--left" to="login" aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }>
           <span className="ti-close"></span>
         </Link>
         { corpus.name }

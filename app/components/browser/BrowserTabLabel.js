@@ -72,18 +72,15 @@ class BrowserTabLabel extends React.Component {
     this.props.selectTab(this.props.id)
   }
 
-  translate (id) {
-    return this.context.intl.formatMessage({ id })
-  }
-
   render () {
+    const { formatMessage } = this.context.intl
     const { active, id, title, webentity, icon, loading, newTab, fixed, closable } = this.props
     const cls = cx('browser-tab-label', { active }, {
       'browser-tab-label-fixed': fixed,
       'browser-tab-label-hyphe': id === HYPHE_TAB_ID,
     })
     const label = newTab
-      ? this.translate('new-tab')
+      ? formatMessage({ id: 'new-tab'})
       : webentity && webentity.name
         ? webentity.name
         : title

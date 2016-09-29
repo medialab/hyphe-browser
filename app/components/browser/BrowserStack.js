@@ -87,6 +87,7 @@ class BrowserStack extends React.Component {
 
   // left side
   renderWesSelector () {
+    const { formatMessage } = this.context.intl
     const { selectedStack, selectedWebentity, webentities } = this.props
 
     // disable next / prev
@@ -98,7 +99,8 @@ class BrowserStack extends React.Component {
     return (
       <div className="browser-stack-wes">
 
-        <button className="btn btn-default"
+        <button className="btn btn-default hint--right"
+          aria-label={ formatMessage({ id: 'tooltip.stack-previous' }) }
           disabled={ !selectedStack || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-angle-left"></span>
@@ -112,7 +114,8 @@ class BrowserStack extends React.Component {
           { this.renderProgress() }
         </div>
 
-        <button className="btn btn-default"
+        <button className="btn btn-default hint--left"
+          aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
           disabled={ !selectedStack || isLast }
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-angle-right"></span>

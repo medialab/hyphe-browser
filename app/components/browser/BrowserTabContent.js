@@ -179,8 +179,8 @@ class TabContent extends React.Component {
   }
 
   renderNavigationToolbar () {
-    const { adjusting, disableNavigation } = this.props
     const { formatMessage } = this.context.intl
+    const { adjusting, disableNavigation } = this.props
 
     if (disableNavigation) {
       return null
