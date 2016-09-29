@@ -80,8 +80,8 @@ class SideBar extends React.Component {
 
     return (
       <button
-        className={ cx('btn btn-default', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
-        title={ formatMessage({ id: 'corpus-status.' + status }) }
+        className={ cx('btn btn-default hint--bottom', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
+        aria-label={ formatMessage({ id: 'corpus-status.' + status }) }
         onClick={ () => this.setStatus(status) }>
         <span>{ formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>
       </button>
@@ -119,8 +119,8 @@ class SideBar extends React.Component {
 
     return (
       <div className="browser-side-bar-homepage">
-        <button className="btn btn-default browser-side-bar-homepage-url"
-          title={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
+        <button className="btn btn-default browser-side-bar-homepage-url hint--bottom"
+          aria-label={ formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
           disabled={ disabled }
           onClick={ () => setTabUrl(webentity.homepage, tabId) }>
           { webentity.homepage }

@@ -82,7 +82,7 @@ class BrowserStack extends React.Component {
     if (!selectedStack) return
     const viewCount = webentities.filter(x => x.viewed).length
 
-    return <progress value={ viewCount } max={ webentities.length } />
+    return <progress className="hint--bottom" aria-label={ `${viewCount} / ${webentities.length}` } value={ viewCount } max={ webentities.length } />
   }
 
   // left side

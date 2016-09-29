@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react'
 class Button extends React.Component {
   render () {
     const { icon, onClick, disabled = false, title } = this.props
-    const props = { disabled, onClick, title }
+    const props = { disabled, onClick }
 
     return (
-      <button className="btn btn-default" { ...props }>
+      <button className="btn btn-default hint--left" { ...props } aria-label={ title }>
         <span className={ 'ti-' + icon }></span>
       </button>
     )
