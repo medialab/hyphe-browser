@@ -28,7 +28,7 @@ export default createReducer(initialState, {
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,
     // tagsCategories is maintained internally, it does not come from API,
-    // we intiialize it to 'FREETAGS' but the full list will come from a call to fetchTagsCategories
+    // we initialize it to 'FREETAGS' but the full list will come from a call to fetchTagsCategories in <CorpusStatusWatcher />
     list: mapValues(corpora, (c) => ({ ...c, tagsCategories: ['FREETAGS'] })),
     selected: null
   }),

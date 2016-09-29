@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
-import { fetchTagsCategories, fetchTags } from '../actions/tags'
+import { fetchTagsCategories } from '../actions/tags'
 import { fetchTLDs } from '../actions/webentities'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
@@ -100,7 +100,6 @@ CorpusStatusWatcher.propTypes = {
   showError: React.PropTypes.func,
   startCorpus: React.PropTypes.func,
   fetchTagsCategories: React.PropTypes.func,
-  fetchTags: React.PropTypes.func,
   fetchTLDs: React.PropTypes.func
 }
 
@@ -116,6 +115,5 @@ export default connect(mapStateToProps, {
   fetchCorpusStatus,
   startCorpus,
   fetchTagsCategories,
-  fetchTags,
   fetchTLDs
 })(CorpusStatusWatcher)
