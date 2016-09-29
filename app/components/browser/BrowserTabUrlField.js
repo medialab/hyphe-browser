@@ -92,7 +92,7 @@ class BrowserTabUrlField extends React.Component {
   // Read-write field: standard input
   renderFieldInput () {
     return <input
-      className={ cx('btn', { loading: this.props.loading }) }
+      className={ cx('btn browser-tab-url', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
@@ -174,7 +174,7 @@ class BrowserTabUrlField extends React.Component {
     const lru = selected.reduce((o, [prop, value]) => {
       o[prop] = {
         scheme: () => value.substring(0, value.length - 3), // remove '://'
-        tld: () => o.tld,
+        tld: () => value,
         host: () => (o.host || []).concat([ value.substring(1) ]), // remove '.' and concat
         port: () => value.substring(1), // remove ':'
         path: () => (o.path || []).concat([ value.substring(1) ]), // remove '.' and concat

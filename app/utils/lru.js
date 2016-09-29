@@ -166,6 +166,14 @@ export function longestMatching (lrus, url, tldTree) {
     .sort((o1, o2) => (o2.url.length - o1.url.length))[0]
 }
 
+export function hasExactMatching (lrus, url, tldTree) {
+  return lrus
+    // Ensure all LRUs are valid LRU objects
+    .map(lru => parseLru(lru, tldTree))
+    // Test for each LRU
+    .some(lru => match(lru, url, tldTree))
+}
+
 // Returns the URL (string) with injected '<em>' tags around parts matched by longest LRU (string or object)
 export function highlightUrlHTML (lrus, url, tldTree) {
   const matched = longestMatching(lrus, url, tldTree)
@@ -218,3 +226,45 @@ highlightUrlHTML([
 
 → '<em>https</em>://subdomain.<em>com.google.www</em><em>/toto</em>/tata<em>#fragment</em>'
 */
+
+
+export function urlToName (url, tldTree) {
+  const lru = urlToLru(url, tldTree)
+
+  if (!lru) {
+    return '<Impossible to Name> ' + url
+  }
+
+  const tld = lru.tld
+  const tldLength = tld ? tld.split('.').length : 0
+
+  let name = lru.host
+    .map((d, i) => (tldLength && i === tldLength) ? toDomainCase(d) : d.replace(/\[]/g, ''))
+    .filter((d, i) => d !== 'www' && (!tldLength || i > tldLength - 1))
+    .reverse()
+    .join('.')
+
+  if (lru.port && lru.port !== '80') {
+    name += ' :' + lru.port
+  }
+
+  if (lru.path.length === 1 && lru.path[0].trim().length > 0) {
+    name += ' /' + decodeURIComponent(lru.path[0])
+  } else if (lru.path.length > 1) {
+    name += ' /…/' + decodeURIComponent(lru.path[lru.path.length - 1])
+  }
+
+  if (lru.query && lru.query.length > 0) {
+    name += ' ?' + decodeURIComponent(lru.query)
+  }
+
+  if (lru.fragment && lru.fragment.length > 0) {
+    name += ' #' + decodeURIComponent(lru.fragment)
+  }
+
+  return name
+}
+
+function toDomainCase (s) {
+  return s.replace(/\w[^ -]*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+}

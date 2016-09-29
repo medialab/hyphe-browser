@@ -8,8 +8,11 @@
 
 import jsonrpc from '../utils/jsonrpc'
 
-import { CRAWL_DEPTH } from '../constants'
+import { CRAWL_DEPTH, NOTICE_WEBENTITY_CREATED, NOTICE_WEBENTITY_CREATED_TIMEOUT } from '../constants'
 import { createAction } from 'redux-actions'
+
+import { showNotification } from './browser'
+
 
 // adding a page to corpus
 export const DECLARE_PAGE_REQUEST = '§_DECLARE_PAGE_REQUEST'
@@ -164,7 +167,9 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
   if (prefix) {
     // Create a new web entity
     // Set its name and homepage at the same time + refresh tab by passing tab id
-    operations.push(createWebentity(serverUrl, corpusId, prefix, name, homepage, tabId)(dispatch))
+    // Note: since https://trello.com/c/74rYBHON/130-urlbar-creer-une-nouvelle-webentite-pour-un-prefixe
+    // name and homepage are not set here (but where?)
+    operations.push(createWebentity(serverUrl, corpusId, prefix, null, null, tabId)(dispatch))
   } else {
     if (homepage && homepage !== webentity.homepage) {
       operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
@@ -176,6 +181,9 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 
   return Promise.all(operations)
     .then(([head]) => {
+      if (head.created) {
+        showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_CREATED_TIMEOUT })
+      }
       if (crawl) {
         // if prefix, then webentity just been created, and we want this id, not the old one
         const id = prefix ? head.id : webentity.id

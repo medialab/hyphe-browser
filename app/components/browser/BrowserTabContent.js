@@ -28,6 +28,7 @@ import {
 } from '../../actions/webentities'
 
 import { getSearchUrl } from '../../utils/search-web'
+import { urlToName, hasExactMatching } from '../../utils/lru'
 
 class TabContent extends React.Component {
 
@@ -36,7 +37,8 @@ class TabContent extends React.Component {
 
     this.state = {
       disableBack: true,
-      disableForward: true
+      disableForward: true,
+      disableApplyButton: true
     }
 
     this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
@@ -148,13 +150,20 @@ class TabContent extends React.Component {
 
     if (adjusting) {
       return [
-        <Button key="cancel-adjust" icon="close" title={ formatMessage({ id: 'cancel' }) }
+        // Note this button is hidden and replaced with a click on overlay
+        // we keep it for back compat with nth-child rules and simplier rollback
+        <Button key="cancel-adjust" icon="close"
+          title={ formatMessage({ id: 'cancel' }) }
           onClick={ () => hideAdjustWebentity(webentity.id) } />,
-        <Button key="apply-adjust" icon="check" title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
+        <Button key="apply-adjust" icon="check"
+          disabled={ this.state.disableApplyButton }
+          title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ () => { this.saveAdjustChanges() } } />
       ]
     } else {
-      return <Button icon="pencil" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
+      return <Button
+        className='btn-adjust'
+        icon="plus" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
         onClick={ () => showAdjustWebentity(webentity.id) } />
     }
   }
@@ -169,9 +178,9 @@ class TabContent extends React.Component {
     return (
       <div className={ cx('browser-tab-toolbar-webentity over-overlay', { adjusting }) }>
         <BrowserTabWebentityNameField
-          initialValue={ webentity && webentity.name }
+          initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
-          editable={ !!adjusting }
+          editable={ !adjusting }
           onChange={ (name) => setAdjustWebentity(webentity.id, { name }) } />
         { this.renderAdjustButton() }
       </div>
@@ -199,7 +208,7 @@ class TabContent extends React.Component {
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, setAdjustWebentity, disableWebentity, disableNavigation, tlds } = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || (!loading && (disableWebentity || !!webentity))
 
     if (disableNavigation) {
@@ -215,9 +224,20 @@ class TabContent extends React.Component {
           onSubmit={ (url) => setTabUrl(url, id) }
           prefixSelector={ !!adjusting }
           tlds={ tlds }
-          onSelectPrefix={ (url, modified) => setAdjustWebentity(webentity.id, { prefix: modified ? url : null }) } />
+          onSelectPrefix={ (url, modified) => this.onSelectPrefix(url, modified) } />
       </div>
     )
+  }
+
+  onSelectPrefix (url, modified) {
+    const { webentity, setAdjustWebentity } = this.props
+
+    this.setState({
+      disableApplyButton: hasExactMatching(webentity.lru_prefixes, url, this.props.tlds),
+      webentityName: urlToName(url)
+    })
+
+    setAdjustWebentity(webentity.id, { prefix: modified ? url : null })
   }
 
   renderToolbar () {
@@ -266,13 +286,20 @@ class TabContent extends React.Component {
     )
   }
 
+  renderOverlay () {
+    const { webentity, hideAdjustWebentity } = this.props
+
+    return <div className="global-overlay" onClick={ () => hideAdjustWebentity(webentity.id) } />
+  }
+
   render () {
-    const { active, id, disableWebentity } = this.props
+    const { active, id, disableWebentity, adjusting } = this.props
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
+        { adjusting && this.renderOverlay() }
       </div>
     )
   }

@@ -1,0 +1,54 @@
+.browser-tab-toolbar-webentity {
+  flex-shrink: 1;
+  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
+}
+
+.browser-tab-toolbar-webentity {
+  input {
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 20px;
+    padding: 5px 10px;
+    text-overflow: ellipsis;
+    width: 376px;
+
+    @media (max-width: 1024px) {
+      width: 266px;
+    }
+
+    &.loading {
+      background-image: url(../../images/loading.svg);
+      background-size: 25px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  &.adjusting {
+    button:nth-child(2), button:nth-child(3) {
+      background: var(--color-black);
+      color: var(--color-white);
+      height: 36px;
+    }
+    button:nth-child(2) {
+      margin-left: 5px;
+      border-radius: 5px 0 0 5px;
+    }
+    button:nth-child(3) {
+      margin-right: 5px;
+      border-radius: 0 5px 5px 0;
+    }
+    button:nth-child(3):disabled {
+      opacity: 0.5;
+    }
+
+    // Cancel button is gone, we click on overlay to cancel
+    // but for sake of simplicity (and easy revert), we let it here and just hide it
+    button:nth-child(2) {
+      display: none;
+    }
+    button:nth-child(3) {
+      border-radius: 5px;
+    }
+  }
+}

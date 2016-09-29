@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames'
 
+import '../../css/browser/browser-tab-webentity-name-field'
+
 class BrowserTabWebentityNameField extends React.Component {
 
   constructor (props) {
@@ -22,7 +24,7 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   render () {
-    return <input className={ cx('over-overlay', { loading: !this.state.value }) }
+    return <input className={ cx('browser-tab-webentity-name over-overlay', { loading: !this.state.value }) }
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       value={ this.state.value }
       readOnly={ !this.props.editable || !this.state.value }

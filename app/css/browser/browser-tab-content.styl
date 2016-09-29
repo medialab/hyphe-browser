@@ -4,163 +4,58 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-}
 
-// webentity, url, navigation
+  // webentity, url, navigation
 
-.browser-tab-toolbar {
-  background: var(--color-grey-light);
-  display: flex;
-  padding-top: 8px;
-  padding-left: 20px;
-}
+  .browser-tab-toolbar {
+    background: var(--color-grey-light);
+    display: flex;
+    padding-top: 8px;
+    padding-left: 20px;
 
-.browser-tab-toolbar-webentity,
-.browser-tab-toolbar-navigation {
-  flex-shrink: 1;
-  flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
-}
+    // prev, next, reload
+    .browser-tab-toolbar-navigation {
+      flex-shrink: 1;
+      flex-grow: 0;
 
-.browser-tab-toolbar-webentity {
-  input {
-    font-size: 12px;
-    font-weight: bold;
-    margin-right: 20px;
-    padding: 5px 10px;
-    text-overflow: ellipsis;
-    width: 376px;
+      button {
+        padding: 1em .5em;
 
-    @media (max-width: 1024px) {
-      width: 266px;
-    }
-
-    &.loading {
-      background-image: url(../../images/loading.svg);
-      background-size: 25px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
-
-  &.adjusting {
-    button:nth-child(2), button:nth-child(3) {
-      background: var(--color-black);
-      color: var(--color-white);
-      height: 36px;
-    }
-    button:nth-child(2) {
-      margin-left: 5px;
-      border-radius: 5px 0 0 5px;
-    }
-    button:nth-child(3) {
-      margin-right: 5px;
-      border-radius: 0 5px 5px 0;
-    }
-  }
-}
-
-.browser-tab-toolbar-url {
-  flex: 1;
-  overflow: hidden;
-
-  .browser-tab-url {
-    background: var(--color-white);
-    font-size: 12px;
-    min-height: 30px;
-    width: 100%;
-
-    /* :first-child = scheme */
-    em:first-child {
-      font-style: normal;
-    }
-
-    em:not(:first-child) {
-      background: #ffff99;
-      padding: 2px 5px;
-      font-weight: bold;
-      font-style: normal;
-    }
-
-    &.loading {
-      background-image: url(../../images/loading-url.gif);
-      background-position: center;
-      background-repeat: repeat-x;
-    }
-  }
-
-  .browser-tab-prefix-selector {
-    .prefix {
-      max-width: 20em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-   .prefix-selected {
-      background: #ffff99;
-      font-weight: bold;
-    }
-
-    .prefix-over {
-      background: #99ccff;
-    }
-  }
-
-  .browser-tab-url-placeholder {
-    color: #999;
-    letter-spacing: .2em;
-  }
-}
-
-/* (try to) compensate .btn paddings */
-
-.browser-tab-toolbar {
-  input, .browser-tab-url, .browser-tab-prefix-selector, .browser-tab-toolbar-url {
-    height: 36px;
-  }
-  .browser-tab-prefix-selector {
-    padding: 5px;
-    .btn-group {
-      .btn {
-        padding: 5px;
-      }
-      .btn+.btn {
-        border: none; // disable stupid photon rule
+        span {
+          font-size: 16px;
+        }
       }
     }
   }
-  .browser-tab-toolbar-url .btn {
-    padding: 8px;
+
+  // below toolbar
+
+  .browser-tab-content-cols {
+    display: flex;
+    flex-grow: 1;
   }
-}
 
-// prev, next, reload
-.browser-tab-toolbar-navigation {
-  flex-shrink: 1;
-  flex-grow: 0;
+  .browser-tab-content-full {
+    display: flex;
+    flex-grow: 1;
+  }
 
-  button {
-    padding: 1em .5em;
+  webview {
+    flex-grow: 1;
+  }
 
+  // By setting position to absolute, button goes out of the flux
+  // URL bar can then take the empty space
+  // By *not* setting any left/top/bottom/right information, button just stays where it would
+  // have been in position relative, which means he'll appear being *in* the URL bar, on the left part
+  .btn-adjust {
+    position: absolute;
     span {
-      font-size: 16px;
+      background:#e3e5e4;
+      border-radius:2px;
+      padding: 5px;
+      margin-left: -5px;
     }
   }
+
 }
-
-// below toolbar
-
-.browser-tab-content-cols {
-  display: flex;
-  flex-grow: 1;
-}
-
-.browser-tab-content-full {
-  display: flex;
-  flex-grow: 1;
-}
-
-webview {
-  flex-grow: 1;
-}
-

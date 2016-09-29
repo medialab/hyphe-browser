@@ -24,7 +24,6 @@ class Browser extends React.Component {
         <BrowserStack />
         <BrowserTabs />
         <Notification />
-        { isAdjusting && <div className="global-overlay" /> }
       </CorpusStatusWatcher>
     )
   }
@@ -32,13 +31,11 @@ class Browser extends React.Component {
 
 Browser.propTypes = {
   corpus: PropTypes.object,
-  isAdjusting: PropTypes.bool.isRequired,
   locale: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = ({ corpora, webentities, intl: { locale } }) => ({
+const mapStateToProps = ({ corpora, intl: { locale } }) => ({
   corpus: corpora.selected,
-  isAdjusting: Object.keys(webentities.adjustments).some(webentityId => webentities.adjustments[webentityId] !== null),
   // hack needed to propagate locale change
   locale
 })

@@ -112,5 +112,6 @@
   "webentities": "{count, plural, \n=0 {aucune entité web}\n=1 {1 entité web}\nother {# entités web}}",
   "welcome": "Bienvenue sur Hyphe",
   "viewed": "Vu",
-  "webentity-info-created": "Nouvelle entité"
+  "webentity-info-created-sidebar": "Nouvelle entité",
+  "webentity-info-created-notification": "Nouvelle entité créée avec succès"
 }
