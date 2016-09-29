@@ -1,4 +1,4 @@
-
+// displayed when a server is selected
 import '../../css/login/corpus-list'
 
 import React, { PropTypes } from 'react'
@@ -20,8 +20,7 @@ class CorpusListItem extends React.Component {
   }
 
   render () {
-    const { password, name, status, webentities_in, created_at,
-      last_activity } = this.props.corpus
+    const { password, name, status, webentities_in, created_at, last_activity } = this.props.corpus
 
     return (
       <div onClick={ () => this.selectCorpus() }>
@@ -46,8 +45,8 @@ CorpusListItem.propTypes = {
   server: PropTypes.object.isRequired,
 
   // actions
+  routerPush: PropTypes.func,
   selectCorpus: PropTypes.func,
-  routerPush: PropTypes.func
 }
 
 
@@ -120,25 +119,25 @@ CorpusList.contextTypes = {
 
 CorpusList.propTypes = {
   corpora: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
   server: PropTypes.object,
   status: PropTypes.object,
   ui: PropTypes.object.isRequired,
 
   // actions
+  routerPush: PropTypes.func,
   selectCorpus: PropTypes.func,
-  routerPush: PropTypes.func
 }
 
-const mapStateToProps = (state) => ({
-  corpora: state.corpora.list,
-  server: state.servers.selected,
-  status: state.corpora.status && state.corpora.status.hyphe,
-  ui: state.ui
+const mapStateToProps = ({ corpora, servers, intl: { locale }, ui }) => ({
+  corpora: corpora.list,
+  locale,
+  server: servers.selected,
+  status: corpora.status && corpora.status.hyphe,
+  ui
 })
 
-const mapDispatchToProps = {
+export default connect(mapStateToProps, {
+  routerPush: routerActions.push,
   selectCorpus,
-  routerPush: routerActions.push
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CorpusList)
+})(CorpusList)

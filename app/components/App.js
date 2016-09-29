@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 
 class App extends React.Component {
   render () {
-    const { children, locale, messages } = this.props
-    // key={ locale } let us refresh i18n strings from the footer
+    const { locale, messages, children } = this.props
+    // key={ locale } could let us refresh i18n strings from the footer but it's too destructive
     return (
-      <IntlProvider key={ locale } locale={ locale } messages={ messages }>
+      <IntlProvider locale={ locale } messages={ messages }>
         { children }
       </IntlProvider>
     )
@@ -15,14 +15,16 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  children: PropTypes.node,
   locale: PropTypes.string,
-  messages: PropTypes.object
+  messages: PropTypes.object,
+
+  // ownProps
+  children: PropTypes.node,
 }
 
-const mapStateToProps = ({ intl }, { children }) => ({
-  locale: intl.locale,
-  messages: intl.messages,
+const mapStateToProps = ({ intl: { locale, messages } }, { children }) => ({
+  locale,
+  messages,
   children
 })
 

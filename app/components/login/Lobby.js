@@ -2,11 +2,9 @@
 // then it auto redirects to the browser
 
 import React, { PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 
-import actions from '../../actions'
 import {
   ERROR_CORPUS_NOT_STARTED,
   ERROR_SERVER_NO_RESOURCE
@@ -16,7 +14,6 @@ import CorpusStatusWatcher from '../CorpusStatusWatcher'
 
 class Lobby extends React.Component {
   render () {
-
     const { corpus, error } = this.props
 
     return (
@@ -39,22 +36,15 @@ class Lobby extends React.Component {
 }
 
 Lobby.propTypes = {
-  actions: PropTypes.object,
-  dispatch: PropTypes.func,
   corpus: PropTypes.object,
-  error: PropTypes.any
+  locale: PropTypes.string.isRequired,
+  error: PropTypes.any,
 }
 
-const mapStateToProps = (state) => ({
-  corpus: state.corpora.selected,
-  error: state.ui.error
+const mapStateToProps = ({ corpora, intl: { locale }, ui }) => ({
+  corpus: corpora.selected,
+  locale,
+  error: ui.error
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch),
-  dispatch
-})
-
-const connectedLobby = connect(mapStateToProps, mapDispatchToProps)(Lobby)
-
-export default connectedLobby
+export default connect(mapStateToProps)(Lobby)

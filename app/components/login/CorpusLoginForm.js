@@ -1,13 +1,11 @@
 // login to a corpus form
 
 import React, { PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T } from 'react-intl'
 
-import * as actions from '../../actions/corpora'
 import jsonrpc from '../../utils/jsonrpc'
 
 class CorpusLoginForm extends React.Component {
@@ -59,22 +57,19 @@ class CorpusLoginForm extends React.Component {
 }
 
 CorpusLoginForm.propTypes = {
-  actions: PropTypes.object.isRequired,
   corpus: PropTypes.object,
-  dispatch: PropTypes.func,
-  server: PropTypes.object
+  locale: PropTypes.string.isRequired,
+  server: PropTypes.object,
+
+  // action
+  dispatch: PropTypes.func
 }
 
-const mapStateToProps = (state) => ({
-  corpus: state.corpora.selected,
-  server: state.servers.selected
+const mapStateToProps = ({ corpora, intl: { locale }, servers }) => ({
+  corpus: corpora.selected,
+  locale,
+  server: servers.selected
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch),
-  dispatch
-})
+export default connect(mapStateToProps)(CorpusLoginForm)
 
-const ConnectedCorpusLoginForm = connect(mapStateToProps, mapDispatchToProps)(CorpusLoginForm)
-
-export default ConnectedCorpusLoginForm

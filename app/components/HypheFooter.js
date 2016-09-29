@@ -11,7 +11,7 @@ import CorpusLoadIndicators from './CorpusLoadIndicators'
 
 class HypheFooter extends React.Component {
   render () {
-    const { locale, locales, setLocale, status } = this.props
+    const { locale, locales, status, setLocale } = this.props
     const ready = status && status.corpus && status.corpus.ready
 
     return (
@@ -36,16 +36,18 @@ HypheFooter.contextTypes = {
 }
 
 HypheFooter.propTypes = {
-  locale: PropTypes.string,
+  locale: PropTypes.string.isRequired,
   locales: PropTypes.array,
+  status: PropTypes.object,
+
+  // actions
   setLocale: PropTypes.func,
-  status: PropTypes.object
 }
 
-const mapStateToProps = ({ corpora, intl }) => ({
+const mapStateToProps = ({ corpora, intl: { locale } }) => ({
+  locale,
+  locales: LOCALES,
   status: corpora.status,
-  locale: intl.locale,
-  locales: LOCALES
 })
 
 export default connect(mapStateToProps, { setLocale })(HypheFooter)

@@ -13,7 +13,7 @@ import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T } from 'react-intl'
 
-import * as actions from '../../actions/servers'
+import { createServer, updateServer, deleteServer } from '../../actions/servers'
 // for async validation
 import jsonrpc from '../../utils/jsonrpc'
 
@@ -96,8 +96,8 @@ class ServerForm extends React.Component {
   saveAndRedirect () {
     const server = this.cleanData()
     !this.props.editMode
-      ? this.props.actions.createServer(server)
-      : this.props.actions.updateServer(server)
+      ? this.props.createServer(server)
+      : this.props.updateServer(server)
 
     // sync redirect
     this.props.dispatch(routerActions.push('/login'))
@@ -123,7 +123,7 @@ class ServerForm extends React.Component {
 
   delete (evt) {
     evt.preventDefault()
-    this.props.actions.deleteServer(this.props.server)
+    this.props.deleteServer(this.props.server)
     this.props.dispatch(routerActions.push('/login'))
   }
 
@@ -164,21 +164,25 @@ class ServerForm extends React.Component {
 }
 
 ServerForm.propTypes = {
-  actions: PropTypes.object,
-  dispatch: PropTypes.func,
   editMode: PropTypes.bool,
-  server: PropTypes.object
+  locale: PropTypes.string.isRequired,
+  server: PropTypes.object,
+
+  // actions
+  createServer: PropTypes.func,
+  updateServer: PropTypes.func,
+  deleteServer: PropTypes.func,
 }
 
-const mapStateToProps = (state, { location }) => ({
+const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({
   // beware, edit could be set to null
   editMode: location.query.edit !== undefined,
-  server: state.servers.selected
+  locale,
+  server: servers.selected
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch),
-  dispatch
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerForm)
+export default connect(mapStateToProps, {
+  createServer,
+  updateServer,
+  deleteServer,
+})(ServerForm)

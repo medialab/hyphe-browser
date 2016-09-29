@@ -88,13 +88,15 @@ class CorpusStatusWatcher extends React.Component {
 }
 
 CorpusStatusWatcher.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
   corpus: React.PropTypes.object.isRequired,
   corpusPassword: React.PropTypes.string,
+  serverUrl: React.PropTypes.string.isRequired,
+  children: React.PropTypes.node,
+  className: React.PropTypes.string,
+
+  // actions
   fetchCorpusStatus: React.PropTypes.func,
   hideError: React.PropTypes.func,
-  serverUrl: React.PropTypes.string.isRequired,
   showError: React.PropTypes.func,
   startCorpus: React.PropTypes.func,
   fetchTagsCategories: React.PropTypes.func,
@@ -108,7 +110,7 @@ const mapStateToProps = ({ corpora, servers }) => ({
   serverUrl: servers.selected.url
 })
 
-const mapDispatchToProps = {
+export default connect(mapStateToProps, {
   showError,
   hideError,
   fetchCorpusStatus,
@@ -116,6 +118,4 @@ const mapDispatchToProps = {
   fetchTagsCategories,
   fetchTags,
   fetchTLDs
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CorpusStatusWatcher)
+})(CorpusStatusWatcher)

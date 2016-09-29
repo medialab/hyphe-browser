@@ -30,10 +30,12 @@ HypheHeader.contextTypes = {
 
 HypheHeader.propTypes = {
   corpus: PropTypes.object,
+  locale: PropTypes.string.isRequired
 }
 
-const mapStateToProps = ({ corpora }) => ({
-  corpus: corpora.selected
+const mapStateToProps = ({ corpora, intl: { locale } }) => ({
+  corpus: corpora.selected,
+  locale
 })
 
 export default connect(mapStateToProps)(HypheHeader)

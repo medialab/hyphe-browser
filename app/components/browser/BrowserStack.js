@@ -100,7 +100,7 @@ class BrowserStack extends React.Component {
       <div className="browser-stack-wes">
 
         <button className="btn btn-default hint--right"
-          aria-label={ formatMessage({ id: 'tooltip.stack-previous' }) }
+          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
           disabled={ !selectedStack || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-angle-left"></span>
@@ -144,37 +144,38 @@ BrowserStack.propTypes = {
   corpus: PropTypes.object.isRequired,
   status: PropTypes.object.isRequired,
   lastRefresh: PropTypes.number,
+  locale: PropTypes.string.isRequired,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
   selectedWebentity: PropTypes.any,
   stacks: PropTypes.array.isRequired,
   webentities: PropTypes.array.isRequired,
 
+  // actions
   emptyStack: PropTypes.func.isRequired,
   fetchStack: PropTypes.func.isRequired,
-  setTabUrl: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
+  setTabUrl: PropTypes.func.isRequired,
   viewWebentity: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities }) => ({
+const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { locale } }) => ({
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpus: corpora.selected,
   status: corpora.status,
   lastRefresh: stacks.lastRefresh,
+  locale,
   server: servers.selected,
   selectedStack: stacks.selected,
   selectedWebentity: webentities.selected,
   stacks: stacks.list,
-  webentities: stacks.webentities
+  webentities: stacks.webentities,
 })
 
-const mapDispatchToProps = {
+export default connect(mapStateToProps, {
   emptyStack,
   fetchStack,
-  setTabUrl,
   openTab,
+  setTabUrl,
   viewWebentity
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BrowserStack)
+})(BrowserStack)

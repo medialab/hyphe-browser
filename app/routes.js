@@ -28,7 +28,7 @@ export default (
       <Route path="options" component={ Options } />
       // waiting room while corpus's starting
       <Route path="lobby" component={ Lobby } />
-      // select a server, a corpus and login to the latter
+      // select a server, a corpus and login to the later
       <IndexRoute component={ CorpusList } />
     </Route>
 

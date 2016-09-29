@@ -1,7 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
-
 import '../../css/browser/browser'
+
+import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 
 import HypheHeader from '../HypheHeader'
 import Notification from './Notification'
@@ -12,12 +12,11 @@ import Spinner from '../Spinner'
 
 class Browser extends React.Component {
   render () {
-    if (!this.props.corpus) {
+    const { corpus, isAdjusting } = this.props
+    if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
     }
-
-    const showOverlay = this.props.isAdjusting
 
     return (
       <CorpusStatusWatcher className="window browser-window">
@@ -25,20 +24,23 @@ class Browser extends React.Component {
         <BrowserStack />
         <BrowserTabs />
         <Notification />
-        { showOverlay && <div className="global-overlay" /> }
+        { isAdjusting && <div className="global-overlay" /> }
       </CorpusStatusWatcher>
     )
   }
 }
 
 Browser.propTypes = {
-  corpus: React.PropTypes.object,
-  isAdjusting: React.PropTypes.bool.isRequired
+  corpus: PropTypes.object,
+  isAdjusting: PropTypes.bool.isRequired,
+  locale: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ corpora, webentities }) => ({
+const mapStateToProps = ({ corpora, webentities, intl: { locale } }) => ({
   corpus: corpora.selected,
-  isAdjusting: Object.keys(webentities.adjustments).some(webentityId => webentities.adjustments[webentityId] !== null)
+  isAdjusting: Object.keys(webentities.adjustments).some(webentityId => webentities.adjustments[webentityId] !== null),
+  // hack needed to propagate locale change
+  locale
 })
 
 export default connect(mapStateToProps)(Browser)

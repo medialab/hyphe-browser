@@ -4,12 +4,11 @@
 // - password must equals passwordConfirm
 
 import React, { PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { FormattedMessage as T } from 'react-intl'
 
-import * as actions from '../../actions/corpora'
+import { createCorpus } from '../../actions/corpora'
 import { ERROR_SERVER_NO_RESOURCE } from '../../constants'
 import Spinner from '../Spinner'
 
@@ -77,7 +76,7 @@ class CorpusForm extends React.Component {
     this.setState(newState)
 
     const corpus = this.cleanData()
-    this.props.actions.createCorpus(this.props.server.url, corpus)
+    this.props.createCorpus(this.props.server.url, corpus)
   }
 
   cleanData () {
@@ -131,20 +130,22 @@ class CorpusForm extends React.Component {
 }
 
 CorpusForm.propTypes = {
-  actions: PropTypes.object,
+  locale: PropTypes.string.isRequired,
   server: PropTypes.object,
-  serverError: PropTypes.object
+  serverError: PropTypes.object,
+
+  // actions
+  createCorpus: PropTypes.func
 }
 
-const mapStateToProps = (state) => ({
-  server: state.servers.selected,
-  serverError: state.ui.error
+const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({
+  locale,
+  server: servers.selected,
+  serverError: ui.error
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
-})
-
-const ConnectedCorpusForm = connect(mapStateToProps, mapDispatchToProps)(CorpusForm)
+const ConnectedCorpusForm = connect(mapStateToProps, {
+  createCorpus
+})(CorpusForm)
 
 export default ConnectedCorpusForm

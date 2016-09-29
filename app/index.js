@@ -29,11 +29,7 @@ const domRoot = document.getElementById('root')
 
 const rootElement = (
   <Provider store={ store }>
-    <div>
-      <Router history={ history }>
-        { routes }
-      </Router>
-    </div>
+    <Router history={ history } routes={ routes } />
   </Provider>
 )
 

@@ -79,7 +79,7 @@ class Login extends React.Component {
             { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">
                 <span className="ti-pencil"></span></Link> }
           </div>
-          { this.props.children  }
+          { this.props.children }
           </main>
         </div>
         <HypheFooter />
@@ -96,26 +96,28 @@ Login.propTypes = {
   children: PropTypes.node,
   selectedServer: PropTypes.object,
   servers: PropTypes.array.isRequired,
+
   // router
   location: PropTypes.object,
 
   // actions
+  deselectServer: PropTypes.func,
   fetchCorpora: PropTypes.func,
   fetchServerStatus: PropTypes.func,
-  deselectServer: PropTypes.func,
   routerPush: PropTypes.func
 }
 
 // router infos are given in ownProps
-const mapStateToProps = (state) => ({
-  selectedServer: state.servers.selected,
-  servers: state.servers.list
+const mapStateToProps = ({ servers, intl: { locale } }) => ({
+  selectedServer: servers.selected,
+  servers: servers.list,
+  locale
 })
 
 const mapDispatchToProps = {
+  deselectServer,
   fetchCorpora,
   fetchServerStatus,
-  deselectServer,
   routerPush: routerActions.push
 }
 
