@@ -6,6 +6,8 @@
 
 import jsonrpc from '../utils/jsonrpc'
 
+import { TAGS_NS } from '../constants'
+
 // get list of tag categories for a given corpusId
 export const FETCH_TAGS_CATEGORIES_REQUEST = '§_FETCH_TAGS_CATEGORIES_REQUEST'
 export const FETCH_TAGS_CATEGORIES_SUCCESS = '§_FETCH_TAGS_CATEGORIES_SUCCESS'
@@ -34,19 +36,17 @@ export const REMOVE_TAG_FAILURE = '§_REMOVE_TAG_FAILURE'
 
 export const fetchTagsCategories = (serverUrl, corpusId) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_CATEGORIES_REQUEST, payload: { serverUrl, corpusId } })
-  return jsonrpc(serverUrl)('store.get_tag_categories', ['USER', corpusId])
+  return jsonrpc(serverUrl)('store.get_tag_categories', [TAGS_NS, corpusId])
     .then((categories) => {
       dispatch({ type: FETCH_TAGS_CATEGORIES_SUCCESS, payload: { serverUrl, corpusId, categories } })
       return categories
     })
-    .catch((error) => {
-      dispatch({ type: FETCH_TAGS_CATEGORIES_FAILURE, payload: { serverUrl, corpusId, error } })
-    })
+    .catch((error) => { dispatch({ type: FETCH_TAGS_CATEGORIES_FAILURE, payload: { serverUrl, corpusId, error } }) })
 }
 
 export const fetchTags = (serverUrl, corpusId) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_REQUEST, payload: { serverUrl, corpusId} })
-  return jsonrpc(serverUrl)('store.get_tags', ['USER', corpusId])
+  return jsonrpc(serverUrl)('store.get_tags', [TAGS_NS, corpusId])
     .then((values) => {
       dispatch({ type: FETCH_TAGS_SUCCESS, payload: { serverUrl, corpusId, values } })
       return values
@@ -56,21 +56,21 @@ export const fetchTags = (serverUrl, corpusId) => (dispatch) => {
 
 export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (dispatch) => {
   dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, webentityId, category } })
-  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, '', corpusId])
+  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, TAGS_NS, category, '', corpusId])
     .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
     .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
 }
 
 export const addTag = (serverUrl, corpusId, category, webentityId, value, updatedValue) => (dispatch) => {
   dispatch({ type: ADD_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } })
-  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
+  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, TAGS_NS, category, value, corpusId])
     .then(() => dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } }))
     .catch((error) => dispatch({ type: ADD_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue, error } }))
 }
 
 export const removeTag = (serverUrl, corpusId, category, webentityId, value) => (dispatch) => {
   dispatch({ type: REMOVE_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value } })
-  return jsonrpc(serverUrl)('store.rm_webentity_tag_value', [webentityId, 'USER', category, value, corpusId])
+  return jsonrpc(serverUrl)('store.rm_webentity_tag_value', [webentityId, TAGS_NS, category, value, corpusId])
     .then(() => dispatch({ type: REMOVE_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value } }))
     .catch((error) => dispatch({ type: REMOVE_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, error } }))
 }

@@ -12,6 +12,7 @@ import partition from 'lodash.partition'
 import Autosuggest from 'react-autosuggest'
 
 
+import { TAGS_NS } from '../../../constants'
 import Button from '../../Button'
 
 import { addTagsCategory, addTag, removeTag, fetchTags } from '../../../actions/tags'
@@ -228,7 +229,7 @@ class SideBarTags extends React.Component {
 
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
-    const tags = (this.props.webentity.tags.USER || {})[category] || []
+    const tags = (this.props.webentity.tags[TAGS_NS] || {})[category] || []
     const canAddTag = tags.length === 0
 
     return (

@@ -26,3 +26,6 @@ export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
+
+// tags categories are contained in namespaces, this is the default one
+export const TAGS_NS = 'USER'
