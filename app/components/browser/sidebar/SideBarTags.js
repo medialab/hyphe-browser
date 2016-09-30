@@ -1,18 +1,12 @@
 import '../../../css/browser/side-bar-tags'
-import '../../../css/auto-suggest'
 
-import uniq from 'lodash.uniq'
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import { FormattedMessage as T } from 'react-intl'
-import cx from 'classnames'
-import { intlShape } from 'react-intl'
-import Autosuggest from 'react-autosuggest'
+import { FormattedMessage as T, intlShape } from 'react-intl'
 import { Creatable } from 'react-select'
 import partition from 'lodash.partition'
 import difference from 'lodash.difference'
-
 
 import { TAGS_NS } from '../../../constants'
 import Button from '../../Button'
@@ -26,11 +20,7 @@ class SideBarTags extends React.Component {
     super(props)
 
     this.state = {
-      tagValue: {}, // [category or (category + '/' + value)]: string
-      // ['full-suggestions/' + category] : Array<string>
-      // ['suggestions/' + category + '/' + value] : Array<string>
       newCategory: ''
-      // ['edit/' + category + '/' + value] : true
     }
 
     // prepopulate inputs
@@ -62,7 +52,7 @@ class SideBarTags extends React.Component {
     const { serverUrl, corpusId, fetchTags } = this.props
     fetchTags(serverUrl, corpusId).then((tags) => {
       categories.forEach((category) => {
-        this.setState({ ['full-suggestions/' + category]: tags[category] })
+        this.setState({ ['suggestions/' + category]: tags[category] })
       })
     })
   }
@@ -84,148 +74,6 @@ class SideBarTags extends React.Component {
     }
   }
 
-  addTagHandler (category, tag = null) {
-    return (e) => {
-      e.preventDefault()
-      return this.addTag(category, tag)
-    }
-  }
-
-  addTag (category, tag = null) {
-    const { serverUrl, corpusId, webentity, addTag } = this.props
-    const value = this.getEditedTagValue(category, tag)
-    if (!value) {
-      return Promise.resolve()
-    }
-
-    this.changeEditedTagValue(category, '', tag)
-    return addTag(serverUrl, corpusId, category, webentity.id, value, tag).then(() => {
-      // Keep suggestions up to date
-      const prop = 'full-suggestions/' + category
-      const tags = uniq((this.state[prop] || []).concat(value))
-      this.setState({ [prop]: tags })
-    })
-  }
-
-  updateTagHandler (category, tag) {
-    return (e) => {
-      e.preventDefault()
-      this.updateTag(category, tag)
-    }
-  }
-
-  updateTag (category, tag) {
-    const value = this.getEditedTagValue(category, tag)
-    if (value === tag || !value) {
-      this.editTag(category, tag, false)
-      this.changeEditedTagValue(category, '', tag)
-      return Promise.resolve()
-    }
-
-    return this.addTag(category, tag).then(() => this.removeTag(category, tag))
-  }
-
-  removeTag (category, value) {
-    const { serverUrl, corpusId, webentity, removeTag } = this.props
-    return removeTag(serverUrl, corpusId, category, webentity.id, value)
-  }
-
-  changeEditedTagValue (category, value, tag = null) {
-    const prop = getPropName(category, tag)
-    this.setState({
-      tagValue: {
-        ...this.state.tagValue,
-        [prop]: value
-      }
-    })
-  }
-
-  getEditedTagValue (category, tag = null) {
-    const prop = getPropName(category, tag)
-    return (typeof this.state.tagValue[prop] === 'string')
-      ? this.state.tagValue[prop]
-      : tag
-  }
-
-  // suggestions
-
-  setCurrentSuggestions (suggestions, category, tag = null) {
-    const prop = 'suggestions/' + getPropName(category, tag)
-    this.setState({ [prop]: suggestions })
-  }
-
-  getCurrentSuggestions (category, tag = null) {
-    const prop = 'suggestions/' + getPropName(category, tag)
-    return this.state[prop] || this.getSuggestions(category, '')
-  }
-
-  getSuggestions (category, value) {
-    return getSuggestions(this.state['full-suggestions/' + category] || [], value)
-  }
-
-  editTag (category, tag, edited) {
-    this.setState({ ['edit/' + category + '/' + tag]: edited })
-  }
-
-  isEditedTag (category, tag) {
-    return !!this.state['edit/' + category + '/' + tag]
-  }
-
-  // renderers
-
-  renderTagInput (category, tag = null) {
-    const { formatMessage } = this.context.intl
-    const uniqSuffix = category + ((tag !== null) ? ('-' + tag) : '')
-
-    return (
-      <form
-        key={ 'tag/edit/' + category + '/' + tag }
-        className={ cx({ 'tags-new-tag': !tag, 'tags-edit-tag': !!tag }) }
-        onSubmit={ tag ? this.updateTagHandler(category, tag) : this.addTagHandler(category) }
-        >
-        <Autosuggest
-          id={ 'tags-' + uniqSuffix }
-          suggestions={ this.getCurrentSuggestions(category, tag) }
-          onSuggestionsFetchRequested={ ({ value }) => this.setCurrentSuggestions(this.getSuggestions(category, value), category, tag) }
-          onSuggestionsClearRequested={ () => this.setCurrentSuggestions([], category, tag) }
-          getSuggestionValue={ getSuggestionValue }
-          renderSuggestion={ renderSuggestion }
-          shouldRenderSuggestions={ () => true }
-          inputProps={ {
-            className: 'tag-input-' + uniqSuffix,
-            placeholder: tag || 'New tag',
-            value: this.getEditedTagValue(category, tag) || '',
-            autoFocus: !!tag,
-            onFocus: (e) => e.target.select(),
-            onChange: (e, { newValue }) => this.changeEditedTagValue(category, newValue, tag)
-          } }
-        />
-        <Button icon={ tag ? 'pencil' : 'plus' } title={ formatMessage({ id: 'sidebar.add-tag' }) } />
-      </form>
-    )
-  }
-
-  renderTag (category) {
-    return (tag) => {
-      const { formatMessage } = this.context.intl
-      if (this.isEditedTag(category, tag)) {
-        return this.renderTagInput(category, tag)
-      }
-
-      return (
-        <li key={ 'tag/view/' + category + '/' + tag }>
-          <span
-            className="tag-title"
-            onClick={ () => this.editTag(category, tag, true) }>
-            { tag }</span>
-          <Button icon="eraser"
-            onClick={ () => this.removeTag(category, tag) }
-            title={ formatMessage({ id: 'sidebar.remove-tag' }) } />
-        </li>
-      )
-    }
-  }
-
   onChangeCreatable (options, category) {
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
     const key = `values/${category}`
@@ -235,19 +83,15 @@ class SideBarTags extends React.Component {
     const addedTags = difference(nextTags, previousTags)
     const removedTags = difference(previousTags, nextTags)
 
-    addedTags.map(tag => {
-      addTag(serverUrl, corpusId, category, webentity.id, tag, tag)
-    })
-    removedTags.map(tag => {
-      removeTag(serverUrl, corpusId, category, webentity.id, tag)
-    })
+    addedTags.map(tag => addTag(serverUrl, corpusId, category, webentity.id, tag, tag))
+    removedTags.map(tag => removeTag(serverUrl, corpusId, category, webentity.id, tag))
 
     this.setState({ [key]: nextTags })
   }
 
   // big textarea-like with many tags
   renderFreeTagsCategory (category) {
-    const suggestions = this.state[`full-suggestions/${category}`] || []
+    const suggestions = this.state[`suggestions/${category}`] || []
     const values = this.state[`values/${category}`] || []
 
     // TODO 118n
@@ -269,7 +113,7 @@ class SideBarTags extends React.Component {
 
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
-    const suggestions = this.state[`full-suggestions/${category}`] || []
+    const suggestions = this.state[`suggestions/${category}`] || []
     const values = this.state[`values/${category}`] || []
 
     return (
@@ -311,26 +155,6 @@ class SideBarTags extends React.Component {
       </div>
     )
   }
-}
-
-
-function getPropName (category, tag = null) {
-  return category + ((tag !== null) ? ('/' + tag) : '')
-}
-
-function getSuggestions (list, value) {
-  const inputValue = value.trim().toLowerCase()
-  return list.filter(tag => tag.toLowerCase().includes(inputValue))
-}
-
-function getSuggestionValue (suggestion) {
-  return suggestion
-}
-
-function renderSuggestion (suggestion) {
-  return (
-    <span>{ suggestion }</span>
-  )
 }
 
 function  isFreeTags (category) {
