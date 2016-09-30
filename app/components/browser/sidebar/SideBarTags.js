@@ -8,9 +8,10 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
 import cx from 'classnames'
 import { intlShape } from 'react-intl'
-import partition from 'lodash.partition'
 import Autosuggest from 'react-autosuggest'
 import { Creatable } from 'react-select'
+import partition from 'lodash.partition'
+import difference from 'lodash.difference'
 
 
 import { TAGS_NS } from '../../../constants'
@@ -31,6 +32,15 @@ class SideBarTags extends React.Component {
       newCategory: ''
       // ['edit/' + category + '/' + value] : true
     }
+
+    // prepopulate inputs
+    const userTags = props.webentity.tags[TAGS_NS]
+    if (userTags) {
+      Object.keys(userTags).forEach(k => {
+        this.state[`values/${k}`] = userTags[k]
+      })
+    }
+    console.info(this.state)
 
     // Force-bind methods used like `onEvent={ this.method }`
     this.addCategory = this.addCategory.bind(this)
@@ -217,9 +227,31 @@ class SideBarTags extends React.Component {
     }
   }
 
+  onChangeCreatable (options, category) {
+    const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
+    const key = `values/${category}`
+
+    const previousTags = this.state[key]
+    const nextTags = options.map(o => o.value)
+    const addedTags = difference(nextTags, previousTags)
+    const removedTags = difference(previousTags, nextTags)
+
+    addedTags.map(tag => {
+      addTag(serverUrl, corpusId, category, webentity.id, tag, tag)
+    })
+    removedTags.map(tag => {
+      removeTag(serverUrl, corpusId, category, webentity.id, tag)
+    })
+
+    console.info(previousTags, nextTags, addedTags, removedTags)
+    this.setState({ [key]: nextTags })
+  }
+
   // big textarea-like with many tags
   renderFreeTagsCategory (category) {
-    const options = (this.state[`full-suggestions/${category}`] || []).map(tag => ({ label: tag, value: tag }))
+    const toOption = (tag) => ({ label: tag.toLowerCase(), value: tag.toLowerCase() })
+    const suggestions = (this.state[`full-suggestions/${category}`] || [])
+    const values = this.state[`values/${category}`] || []
 
     // TODO 118n
     return (
@@ -228,15 +260,12 @@ class SideBarTags extends React.Component {
         <Creatable
           clearable={ false }
           multi={ true }
-          newOptionCreator={ ({ label }) => ({ label: label.toLowerCase(), value: label.toLowerCase() }) }
-          options={ options }
-          onChange={ (options) => {
-            console.info('onChange', options)
-            this.setState({ yolo: options })
-          } }
+          newOptionCreator={ ({ label }) => toOption(label) }
+          options={ suggestions.map(toOption) }
+          onChange={ (options) => this.onChangeCreatable(options, category) }
           placeholder={ 'Select tags…' }
           promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
-          value={ this.state.yolo } />
+          value={ values.map(toOption) } />
       </div>
     )
   }
