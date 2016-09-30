@@ -6,10 +6,13 @@ import '../../css/browser/browser-tab-webentity-name-field'
 
 class BrowserTabWebentityNameField extends React.Component {
 
-  onKeyPress (e) {
-    if (e.charCode === 13) {
+  onKeyUp (e) {
+    if (e.keyCode === 13) { // ENTER
       e.stopPropagation()
-      this.props.onChange(e.target.value);
+      this.props.onChange(e.target.value)
+    } else if (e.keyCode === 27) { // ESCAPE
+      e.stopPropagation()
+      e.target.value = this.props.initialValue
     }
   }
 
@@ -25,7 +28,7 @@ class BrowserTabWebentityNameField extends React.Component {
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       defaultValue={ this.props.initialValue }
       readOnly={ !this.props.editable || !this.props.initialValue }
-      onKeyPress={ e => this.onKeyPress(e) } />
+      onKeyUp={ e => this.onKeyUp(e) } />
   }
 }
 
