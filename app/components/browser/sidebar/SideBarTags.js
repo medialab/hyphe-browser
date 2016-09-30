@@ -89,21 +89,21 @@ class SideBarTags extends React.Component {
 
   // big textarea-like with many tags
   renderFreeTagsCategory (category) {
+    const { formatMessage } = this.context.intl
     const suggestions = this.state[`suggestions/${category}`] || []
     const values = this.state[`values/${category}`] || []
 
-    // TODO 118n
     return (
       <div className="browser-side-bar-tags-free-tags" key={ category }>
-        <h3><span>{ this.context.intl.formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
+        <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
         <Creatable
           clearable={ false }
           multi={ true }
           newOptionCreator={ ({ label }) => toOption(label) }
           options={ suggestions.map(toOption) }
           onChange={ (options) => this.onChangeCreatable(options, category) }
-          placeholder={ 'Select tags…' }
-          promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
+          placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
+          promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
           value={ values.map(toOption) } />
       </div>
     )
@@ -111,6 +111,7 @@ class SideBarTags extends React.Component {
 
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
+    const { formatMessage } = this.context.intl
     const suggestions = this.state[`suggestions/${category}`] || []
     const values = this.state[`values/${category}`] || []
 
@@ -125,7 +126,7 @@ class SideBarTags extends React.Component {
             options={ suggestions.map(toOption) }
             onChange={ (option) => this.onChangeCreatable([option], category) }
             placeholder={ '' }
-            promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
+            promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
             value={ values.map(toOption)[0] || '' } />
         </div>
       </div>
