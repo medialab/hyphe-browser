@@ -11,7 +11,8 @@ import {
 } from '../actions/corpora'
 import {
   SHOW_NOTIFICATION,
-  HIDE_NOTIFICATION
+  HIDE_NOTIFICATION,
+  TOGGLE_DO_NOT_SHOW_AGAIN
 } from '../actions/browser'
 import {
   DECLARE_PAGE_REQUEST,
@@ -50,10 +51,16 @@ const initialState = {
     webentity_status: false,
     webentity_adjust: false,
     tlds: false
+  },
+  // for messages having a "do not show again" options
+  // this is only for the session, maybe it shall be persisted in the future
+  doNotShow: {
+    crawlPopup: false
   }
 }
 
 const toggleLoader = (loader, enabled, err) => (state, { error }) => ({
+  ...state,
   notification: err ? {...err, type: 'error', messageValues: { error } } : state.notification,
   loaders: { ...state.loaders, [loader]: enabled }
 })
@@ -95,5 +102,13 @@ export default createReducer(initialState, {
   [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({
     ...state,
     notification: { id: ERROR_SERVER_NO_RESOURCE }
-  })
+  }),
+
+  [TOGGLE_DO_NOT_SHOW_AGAIN]: (state, { key }) => ({
+    ...state,
+    doNotShow: {
+      ...state.doNotShow,
+      [key]: !state.doNotShow[key]
+    }
+  }),
 })

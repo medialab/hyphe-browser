@@ -3,6 +3,8 @@ import { createAction } from 'redux-actions'
 export const SHOW_NOTIFICATION = '§_SHOW_NOTIFICATION'
 export const HIDE_NOTIFICATION = '§_HIDE_NOTIFICATION'
 
+export const TOGGLE_DO_NOT_SHOW_AGAIN = '§_TOGGLE_DO_NOT_SHOW_AGAIN'
+
 export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
     type: SHOW_NOTIFICATION,
@@ -15,6 +17,8 @@ export const showNotification = ({ id, messageId, messageValues = {}, type = 'no
 }
 
 export const hideNotification = createAction(HIDE_NOTIFICATION)
+
+export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, key => ({ key }))
 
 
 // shortcut for back compat

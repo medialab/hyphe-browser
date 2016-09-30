@@ -13,11 +13,12 @@ import SideBar from './sidebar/SideBar'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import PageHypheHome from './PageHypheHome'
 import HypheFooter from './../HypheFooter'
+import { FormattedMessage as T } from 'react-intl'
 
 import { eventBusShape } from '../../types'
 import { PAGE_HYPHE_HOME } from '../../constants'
 
-import { showError, hideError } from '../../actions/browser'
+import { showError, hideError, toggleDoNotShowAgain } from '../../actions/browser'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
   openTab, closeTab
@@ -58,6 +59,13 @@ class TabContent extends React.Component {
     eventBus.on('close', this.navCloseHandler)
     this.navOpenHandler = (url) => openTab(url)
     eventBus.on('open', this.navOpenHandler)
+  }
+
+  componentWillReceiveProps (props) {
+    // Handle the case when user clicked "IN" button and does *not* want to show a popup
+    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup && (!this.props.adjusting || !this.props.adjusting.crawl)) {
+      this.saveAdjustChanges(props)
+    }
   }
 
   componentWillUnmount () {
@@ -126,9 +134,9 @@ class TabContent extends React.Component {
     }
   }
 
-  saveAdjustChanges () {
+  saveAdjustChanges (props) {
     const { saveAdjustedWebentity, hideAdjustWebentity, serverUrl, corpusId,
-      webentity, adjusting, hideError, showError, id, disableWebentity } = this.props
+      webentity, adjusting, hideError, showError, id, disableWebentity } = props
 
     if (disableWebentity) {
       return
@@ -158,7 +166,7 @@ class TabContent extends React.Component {
         <Button key="apply-adjust" icon="check"
           disabled={ this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
-          onClick={ () => { this.saveAdjustChanges() } } />
+          onClick={ () => { this.saveAdjustChanges(this.props) } } />
       ]
     } else {
       return <Button
@@ -179,7 +187,7 @@ class TabContent extends React.Component {
     // which means we won't use 'setAdjustWebentity' to keep track of name change, but instead
     // directly update name on user's validation
     return (
-      <div className={ cx('browser-tab-toolbar-webentity over-overlay', { adjusting }) }>
+      <div className={ cx('browser-tab-toolbar-webentity', { 'over-overlay': adjusting && !adjusting.crawl, adjusting }) }>
         <BrowserTabWebentityNameField
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
@@ -226,6 +234,7 @@ class TabContent extends React.Component {
           lruPrefixes={ webentity && webentity.lru_prefixes }
           onSubmit={ (url) => setTabUrl(url, id) }
           prefixSelector={ !!adjusting }
+          className={ cx({ 'over-overlay': adjusting && !adjusting.crawl }) }
           tlds={ tlds }
           onSelectPrefix={ (url, modified) => this.onSelectPrefix(url, modified) } />
       </div>
@@ -295,14 +304,33 @@ class TabContent extends React.Component {
     return <div className="global-overlay" onClick={ () => hideAdjustWebentity(webentity.id) } />
   }
 
+  renderCrawlPopup () {
+    const { webentity, hideAdjustWebentity, saving, noCrawlPopup, toggleDoNotShowAgain } = this.props
+
+    return (
+      <div className="crawl-popup">
+        <strong><T id="webentity-crawl-popup-message" /></strong>
+        <div className="crawl-popup-footer">
+          <label>
+            <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ () => toggleDoNotShowAgain('crawlPopup') } />
+            <T id="do-not-show-again" />
+          </label>
+          <button disabled={ saving } className="apply-crawl" onClick={ () => { this.saveAdjustChanges(this.props) } }><T id="launch" /></button>
+          <button disabled={ saving } className="cancel-crawl" onClick={ () => { hideAdjustWebentity(webentity.id) } }><T id="cancel" /></button>
+        </div>
+      </div>
+    )
+  }
+
   render () {
-    const { active, id, disableWebentity, adjusting } = this.props
+    const { active, id, disableWebentity, adjusting, noCrawlPopup } = this.props
 
     return (
       <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } }>
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
-        { adjusting && this.renderOverlay() }
+        { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
+        { adjusting && (!noCrawlPopup || !adjusting.crawl) && this.renderOverlay() }
       </div>
     )
   }
@@ -323,6 +351,8 @@ TabContent.propTypes = {
   eventBus: eventBusShape.isRequired,
 
   active: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  noCrawlPopup: PropTypes.bool.isRequired,
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
@@ -347,11 +377,12 @@ TabContent.propTypes = {
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
-  hideAdjustWebentity: PropTypes.func.isRequired
+  hideAdjustWebentity: PropTypes.func.isRequired,
+  toggleDoNotShowAgain: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (
-  { corpora, intl: { locale }, servers, tabs, webentities }, // store
+  { corpora, intl: { locale }, servers, tabs, webentities, ui: { loaders, doNotShow } }, // store
   { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
 ) => ({
   id,
@@ -367,14 +398,16 @@ const mapStateToProps = (
   webentity,
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
-  tlds: webentities.tlds
+  tlds: webentities.tlds,
+  saving: loaders.webentity_adjust,
+  noCrawlPopup: doNotShow.crawlPopup
 })
 
 const mapDispatchToProps = {
-  showError, hideError,
+  showError, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
   declarePage, setTabWebentity, setWebentityName, createWebentity,
-  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
+  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

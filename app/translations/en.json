@@ -37,6 +37,7 @@
   "create-corpus": "Create corpus",
   "created-ago": "Created {relative}",
   "delete": "Delete",
+  "do-not-show-again": "Do not show me this message again",
   "empty": "Empty",
   "empty-url": "Enter address",
   "error.corpus-failed-starting": "Failed starting corpus ({error})",
@@ -60,6 +61,7 @@
   "hyphe-tab-title": "H",
   "indegree": "Linked by",
   "languages": "Languages",
+  "launch": "Launch!",
   "loading-corpora": "Loading corpora…",
   "login": "Login",
   "login-corpus": "Login to {name}",
@@ -112,5 +114,6 @@
   "welcome": "Welcome on Hyphe",
   "viewed": "Viewed",
   "webentity-info-created-sidebar": "New entity",
-  "webentity-info-created-notification": "New entity created successfully"
+  "webentity-info-created-notification": "New entity created successfully",
+  "webentity-crawl-popup-message": "By clicking \"IN\" you will start the crawling of this page.\nAre you sure you wish to procede?"
 }

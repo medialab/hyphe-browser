@@ -159,7 +159,7 @@ export const showAdjustWebentity = (webentityId, crawl = false) => setAdjustWebe
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
 
 export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
-  dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } })
+  dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })
 
   const { prefix, homepage, name, crawl } = adjust
   var operations = []

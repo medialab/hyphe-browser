@@ -191,7 +191,7 @@ class BrowserTabUrlField extends React.Component {
 
   render () {
     return (
-      <form onSubmit={ (e) => this.onSubmit(e) } className={ cx('over-overlay', { adjusting: this.props.prefixSelector }) }>
+      <form onSubmit={ (e) => this.onSubmit(e) } className={ cx(this.props.className, { adjusting: this.props.prefixSelector }) }>
         { this.renderField() }
       </form>
     )
@@ -205,7 +205,12 @@ BrowserTabUrlField.propTypes = {
   prefixSelector: PropTypes.bool.isRequired,
   onSelectPrefix: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  tlds: PropTypes.object
+  tlds: PropTypes.object,
+  className: PropTypes.string
+}
+
+BrowserTabUrlField.defaultProps = {
+  className: ''
 }
 
 export default BrowserTabUrlField

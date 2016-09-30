@@ -37,6 +37,7 @@
   "create-corpus": "Ajouter corpus",
   "created-ago": "Créé {relative}",
   "delete": "Supprimer",
+  "do-not-show-again": "Ne plus afficher ce message",
   "empty": "Vider",
   "empty-url": "Entrer une adresse web",
   "error.corpus-failed-starting": "Échec du démarrage du corpus ({error})",
@@ -60,6 +61,7 @@
   "indegree": "Linké par",
   "hyphe-tab-title": "H",
   "languages": "Langages",
+  "launch": "Démarrer !",
   "loading-corpora": "Chargement des corpora…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
@@ -112,5 +114,6 @@
   "welcome": "Bienvenue sur Hyphe",
   "viewed": "Vu",
   "webentity-info-created-sidebar": "Nouvelle entité",
-  "webentity-info-created-notification": "Nouvelle entité créée avec succès"
+  "webentity-info-created-notification": "Nouvelle entité créée avec succès",
+  "webentity-crawl-popup-message": "En cliquant sur sur \"IN\" vous lancerez le crawling de cette page.\nVoulez-vous continuer ?"
 }
