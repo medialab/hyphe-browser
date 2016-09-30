@@ -67,10 +67,8 @@ class SideBarTags extends React.Component {
     const { newCategory } = this.state
     if (newCategory) {
       const { serverUrl, corpusId, webentity, addTagsCategory } = this.props
-      addTagsCategory(serverUrl, corpusId, webentity.id, this.state.newCategory)
+      addTagsCategory(serverUrl, corpusId, webentity.id, newCategory)
       this.setState({ newCategory: '' })
-    } else {
-      findDOMNode(this).querySelector('form.tags-new-category input').focus()
     }
   }
 
