@@ -54,6 +54,7 @@ export const fetchTags = (serverUrl, corpusId) => (dispatch) => {
     .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, error } }))
 }
 
+// create an dummy empty tag in the category
 export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (dispatch) => {
   dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, webentityId, category } })
   return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, TAGS_NS, category, '', corpusId])
