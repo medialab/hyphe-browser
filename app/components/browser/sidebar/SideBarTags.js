@@ -40,7 +40,6 @@ class SideBarTags extends React.Component {
         this.state[`values/${k}`] = userTags[k]
       })
     }
-    console.info(this.state)
 
     // Force-bind methods used like `onEvent={ this.method }`
     this.addCategory = this.addCategory.bind(this)
@@ -231,7 +230,7 @@ class SideBarTags extends React.Component {
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
     const key = `values/${category}`
 
-    const previousTags = this.state[key]
+    const previousTags = this.state[key] || []
     const nextTags = options.map(o => o.value)
     const addedTags = difference(nextTags, previousTags)
     const removedTags = difference(previousTags, nextTags)
@@ -243,14 +242,12 @@ class SideBarTags extends React.Component {
       removeTag(serverUrl, corpusId, category, webentity.id, tag)
     })
 
-    console.info(previousTags, nextTags, addedTags, removedTags)
     this.setState({ [key]: nextTags })
   }
 
   // big textarea-like with many tags
   renderFreeTagsCategory (category) {
-    const toOption = (tag) => ({ label: tag.toLowerCase(), value: tag.toLowerCase() })
-    const suggestions = (this.state[`full-suggestions/${category}`] || [])
+    const suggestions = this.state[`full-suggestions/${category}`] || []
     const values = this.state[`values/${category}`] || []
 
     // TODO 118n
@@ -272,30 +269,26 @@ class SideBarTags extends React.Component {
 
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
-    const tags = (this.props.webentity.tags[TAGS_NS] || {})[category] || []
-    const options = (this.state[`full-suggestions/${category}`] || []).map(tag => ({ label: tag, value: tag }))
+    const suggestions = this.state[`full-suggestions/${category}`] || []
+    const values = this.state[`values/${category}`] || []
 
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
         <h4 className="category-name">{ category }</h4>
         <div className="category-tag">
           <Creatable
-            clearable={ true }
+            clearable={ false }
             multi={ false }
-            newOptionCreator={ ({ label }) => ({ label: label.toLowerCase(), value: label.toLowerCase() }) }
-            options={ options }
-            onChange={ (options) => {
-              console.info('onChange', options)
-              this.setState({ [category]: options })
-            } }
-            placeholder={ 'Add tag…' }
+            newOptionCreator={ ({ label }) => toOption(label) }
+            options={ suggestions.map(toOption) }
+            onChange={ (option) => this.onChangeCreatable([option], category) }
+            placeholder={ '' }
             promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
-            value={ this.state[category] } />
+            value={ values.map(toOption)[0] || '' } />
         </div>
       </div>
     )
   }
-
 
   // free tags should be first, then other categories, then add category field
   render () {
@@ -342,6 +335,12 @@ function renderSuggestion (suggestion) {
 
 function  isFreeTags (category) {
   return category === 'FREETAGS'
+}
+
+function toOption (tag) {
+  return tag
+    ? { label: tag.toLowerCase(), value: tag.toLowerCase() }
+    : { label: '', value: '' }
 }
 
 SideBarTags.contextTypes = {
