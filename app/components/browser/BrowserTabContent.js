@@ -23,7 +23,7 @@ import {
   openTab, closeTab
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
+  declarePage, setTabWebentity, setWebentityName, createWebentity,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
 } from '../../actions/webentities'
 
@@ -169,19 +169,22 @@ class TabContent extends React.Component {
   }
 
   renderWebentityToolbar () {
-    const { url, webentity, adjusting, setAdjustWebentity, disableWebentity } = this.props
+    const { setWebentityName, serverUrl, corpusId, url, webentity, adjusting, disableWebentity } = this.props
 
     if (disableWebentity) {
       return null
     }
 
+    // Note: webentity name field is disabled while adjusting, and enabled while NOT adjusting
+    // which means we won't use 'setAdjustWebentity' to keep track of name change, but instead
+    // directly update name on user's validation
     return (
       <div className={ cx('browser-tab-toolbar-webentity over-overlay', { adjusting }) }>
         <BrowserTabWebentityNameField
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
-          onChange={ (name) => setAdjustWebentity(webentity.id, { name }) } />
+          onChange={ name => setWebentityName(serverUrl, corpusId, name, webentity.id) } />
         { this.renderAdjustButton() }
       </div>
     )
@@ -339,7 +342,6 @@ TabContent.propTypes = {
 
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
-  setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
   createWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
@@ -371,7 +373,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, hideError,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
-  declarePage, setTabWebentity, setWebentityHomepage, setWebentityName, createWebentity,
+  declarePage, setTabWebentity, setWebentityName, createWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
 }
 
