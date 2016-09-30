@@ -299,7 +299,7 @@ class TabContent extends React.Component {
     const { active, id, disableWebentity, adjusting } = this.props
 
     return (
-      <div key={ id } className="browser-tab-content" style={ active ? {} : { display: 'none' } }>
+      <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } }>
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { adjusting && this.renderOverlay() }
