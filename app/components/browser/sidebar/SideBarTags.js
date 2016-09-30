@@ -1,11 +1,11 @@
 import '../../../css/browser/side-bar-tags'
 
 import React, { PropTypes } from 'react'
-import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import { Creatable } from 'react-select'
 import partition from 'lodash.partition'
+import uniq from 'lodash.uniq'
 import difference from 'lodash.difference'
 
 import { TAGS_NS } from '../../../constants'
@@ -20,7 +20,9 @@ class SideBarTags extends React.Component {
     super(props)
 
     this.state = {
-      newCategory: ''
+      newCategory: '',
+      // to avoid disappearing categories if new categories come from corpus-watcher just after creation
+      categories: []
     }
 
     // prepopulate inputs
@@ -57,8 +59,8 @@ class SideBarTags extends React.Component {
     })
   }
 
-  onChangeNewCategory (e) {
-    this.setState({ newCategory: e.target.value })
+  onChangeNewCategory ({ target }) {
+    this.setState({ newCategory: target.value })
   }
 
   addCategory (e) {
@@ -68,7 +70,7 @@ class SideBarTags extends React.Component {
     if (newCategory) {
       const { serverUrl, corpusId, webentity, addTagsCategory } = this.props
       addTagsCategory(serverUrl, corpusId, webentity.id, newCategory)
-      this.setState({ newCategory: '' })
+      this.setState({ newCategory: '', categories: this.state.categories.concat(newCategory) })
     }
   }
 
@@ -137,13 +139,14 @@ class SideBarTags extends React.Component {
   render () {
     const { formatMessage } = this.context.intl
     const [freeTags, cats] = partition(this.props.categories, isFreeTags)
+    const categories = uniq((cats || []).concat(this.state.categories).filter(x => x))
 
     return (
       <div className="browser-side-bar-tags">
         { this.renderFreeTagsCategory(freeTags[0]) }
 
         <h3><T id="sidebar.categories" /></h3>
-        { cats.map(this.renderTagsCategory) }
+        { categories.map(this.renderTagsCategory) }
 
         <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
           <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
