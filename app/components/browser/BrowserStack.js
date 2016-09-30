@@ -69,8 +69,12 @@ class BrowserStack extends React.Component {
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
             disabled={ !counters[stack.name] }
             onClick={ () => { this.fill(stack) } }>
-            <div className="filler-name">{ formatMessage({ id: 'corpus-status.' + stack.name }) }</div>
-            <div className="filler-counter">{ counters[stack.name] || 0 }</div>
+            <div className="filler-name hint--bottom" aria-label={ formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name }) }>
+              { formatMessage({ id: 'corpus-status.' + stack.name }) }
+            </div>
+            <div className="filler-counter">
+              { counters[stack.name] || 0 }
+            </div>
           </button>
         ) }
       </span>

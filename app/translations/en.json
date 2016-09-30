@@ -54,7 +54,7 @@
   "error.set-webentity-status": "Failed setting webentity status ({error})",
   "error.url-and-name-required": "URL and name fields are required",
   "error.wrong-password": "Wrong password",
-  "fill": "Fill",
+  "fill": "Fill with ",
   "google.search": "Search on ",
   "google.placeholder": "Search…",
   "goto-homepage": "Go to homepage ({url})",

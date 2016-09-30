@@ -54,7 +54,7 @@
   "error.set-webentity-status": "Échec de la modification du statut de l'entité web ({error})",
   "error.url-and-name-required": "Les champs URL et nom sont requis",
   "error.wrong-password": "Mauvais mot de passe",
-  "fill": "Remplir",
+  "fill": "Remplir avec ",
   "google.search": "Rechercher sur ",
   "google.placeholder": "Rechercher…",
   "goto-homepage": "Aller à la page d'accueil ({url})",
