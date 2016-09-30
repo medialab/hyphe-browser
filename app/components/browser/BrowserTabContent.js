@@ -38,7 +38,7 @@ class TabContent extends React.Component {
     this.state = {
       disableBack: true,
       disableForward: true,
-      disableApplyButton: true
+      disableApplyButton: false
     }
 
     this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
@@ -233,10 +233,10 @@ class TabContent extends React.Component {
   }
 
   onSelectPrefix (url, modified) {
-    const { webentity, setAdjustWebentity } = this.props
+    const { webentity, setAdjustWebentity, adjusting } = this.props
 
     this.setState({
-      disableApplyButton: hasExactMatching(webentity.lru_prefixes, url, this.props.tlds),
+      disableApplyButton: !adjusting.crawl && hasExactMatching(webentity.lru_prefixes, url, this.props.tlds),
       webentityName: urlToName(url)
     })
 
