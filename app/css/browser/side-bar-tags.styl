@@ -1,16 +1,6 @@
 // see https://github.com/JedWatson/react-select/blob/master/scss/control.scss
 
 .browser-side-bar-tags {
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .tag-title {
-    cursor: text;
-    text-align: left;
-  }
 
   .browser-side-bar-tags-category {
     display: flex;
@@ -23,8 +13,9 @@
       text-align: left;
       width: 150px;
     }
-    li {
-      display: flex;
+
+    .category-tag {
+      flex-grow: 1;
     }
   }
 
@@ -77,19 +68,21 @@
     }
 
     // tag with the small cross before
-    .Select-value {
-      background: var(--color-grey-light);
-      border: 0;
-      color: var(--color-black);
-      font-family: var(--font-pt);
-      font-size: 12px;
-
-      .Select-value-icon {
+    &.Select--multi {
+      .Select-value {
+        background: var(--color-grey-light);
         border: 0;
+        color: var(--color-black);
+        font-family: var(--font-pt);
+        font-size: 12px;
 
-        &:hover {
-          background: var(--color-grey);
-          color: var(--color-black);
+        .Select-value-icon {
+          border: 0;
+
+          &:hover {
+            background: var(--color-grey);
+            color: var(--color-black);
+          }
         }
       }
     }
@@ -112,12 +105,13 @@
     }
 
     .Select-option {
+      background: var(--color-white);
       padding-left: 12px;
       text-align: left;
 
       &.is-selected, &.is-focused, &:hover {
+        background: var(--color-white);
         color: var(--color-blue);
-        background: var(--color-grey);
       }
     }
 

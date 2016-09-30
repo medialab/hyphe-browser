@@ -219,7 +219,7 @@ class SideBarTags extends React.Component {
 
   // big textarea-like with many tags
   renderFreeTagsCategory (category) {
-    const options = (this.state['full-suggestions/FREETAGS'] || []).map(tag => ({ label: tag, value: tag }))
+    const options = (this.state[`full-suggestions/${category}`] || []).map(tag => ({ label: tag, value: tag }))
 
     // TODO 118n
     return (
@@ -244,16 +244,24 @@ class SideBarTags extends React.Component {
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
     const tags = (this.props.webentity.tags[TAGS_NS] || {})[category] || []
-    const canAddTag = tags.length === 0
+    const options = (this.state[`full-suggestions/${category}`] || []).map(tag => ({ label: tag, value: tag }))
 
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
         <h4 className="category-name">{ category }</h4>
-        <div>
-          <ul>
-            { tags.map(this.renderTag(category)) }
-          </ul>
-          { canAddTag ? this.renderTagInput(category) : null }
+        <div className="category-tag">
+          <Creatable
+            clearable={ true }
+            multi={ false }
+            newOptionCreator={ ({ label }) => ({ label: label.toLowerCase(), value: label.toLowerCase() }) }
+            options={ options }
+            onChange={ (options) => {
+              console.info('onChange', options)
+              this.setState({ [category]: options })
+            } }
+            placeholder={ 'Add tag…' }
+            promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
+            value={ this.state[category] } />
         </div>
       </div>
     )
