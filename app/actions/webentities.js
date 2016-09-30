@@ -181,7 +181,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 
   return Promise.all(operations)
     .then(([head]) => {
-      if (head.created) {
+      if (prefix && head.created) {
         showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_CREATED_TIMEOUT })
       }
       if (crawl) {
