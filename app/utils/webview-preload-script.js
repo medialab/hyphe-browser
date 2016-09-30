@@ -57,3 +57,39 @@ ipc.on('request-contextmenu-info', function onRequestContextMenuInfo (e, pos) {
 
   ipc.sendToHost('show-contextmenu', info)
 })
+
+window.addEventListener('DOMContentLoaded', () => {
+  const style = document.createElement('style')
+  style.appendChild(document.createTextNode(''))
+  document.head.appendChild(style)
+  style.sheet.insertRule(`
+    a::before {
+      display: block;
+      opacity: 0;
+    }
+  `)
+  style.sheet.insertRule(`
+    a:hover::before {
+      background: #eee;
+      border-left: 1px solid #ddd;
+      border-top-left-radius: 5px;
+      border-top: 1px solid #ddd;
+      bottom: 0;
+      color: #333;
+      content: attr(href);
+      font-family: sans-serif;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+      margin: 0;
+      opacity: 1;
+      padding: 5px;
+      position: fixed;
+      right: 0;
+      text-shadow: none;
+      text-transform: lowercase;
+      z-index: 100000;
+    }
+  `)
+})
