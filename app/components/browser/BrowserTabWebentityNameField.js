@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { findDOMNode } from 'react-dom'
 import cx from 'classnames'
 
 import '../../css/browser/browser-tab-webentity-name-field'
@@ -10,6 +11,13 @@ class BrowserTabWebentityNameField extends React.Component {
       e.stopPropagation()
       this.props.onChange(e.target.value);
     }
+  }
+
+  // React told me:
+  // "Well dude, you chose to make an uncontrolled input, now YOU control it yourself"
+  // Had to agree
+  componentWillReceiveProps ({ initialValue }) {
+    findDOMNode(this).value = initialValue
   }
 
   render () {
