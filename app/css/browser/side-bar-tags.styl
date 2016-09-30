@@ -107,12 +107,17 @@
       z-index: 2;
     }
 
-    .VirtualizedSelectOption {
+    .Select-menu {
+      border-radius: var(--radius);
+    }
+
+    .Select-option {
       padding-left: 12px;
       text-align: left;
 
-      &:hover {
+      &.is-selected, &.is-focused, &:hover {
         color: var(--color-blue);
+        background: var(--color-grey);
       }
     }
 

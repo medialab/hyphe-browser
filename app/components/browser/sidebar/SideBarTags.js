@@ -10,7 +10,7 @@ import cx from 'classnames'
 import { intlShape } from 'react-intl'
 import partition from 'lodash.partition'
 import Autosuggest from 'react-autosuggest'
-import Select from 'react-virtualized-select'
+import { Creatable } from 'react-select'
 
 
 import { TAGS_NS } from '../../../constants'
@@ -221,17 +221,21 @@ class SideBarTags extends React.Component {
   renderFreeTagsCategory (category) {
     const options = (this.state['full-suggestions/FREETAGS'] || []).map(tag => ({ label: tag, value: tag }))
 
+    // TODO 118n
     return (
       <div className="browser-side-bar-tags-free-tags" key={ category }>
         <h3><span>{ this.context.intl.formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
-        <Select
+        <Creatable
           clearable={ false }
           multi={ true }
+          newOptionCreator={ ({ label }) => ({ label: label.toLowerCase(), value: label.toLowerCase() }) }
           options={ options }
           onChange={ (options) => {
             console.info('onChange', options)
             this.setState({ yolo: options })
           } }
+          placeholder={ 'Select tags…' }
+          promptTextCreator={ (tag) => `Create new tag: "${tag}"` }
           value={ this.state.yolo } />
       </div>
     )
