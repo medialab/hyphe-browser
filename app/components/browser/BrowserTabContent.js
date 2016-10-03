@@ -165,15 +165,17 @@ class TabContent extends React.Component {
         // Note this button is hidden and replaced with a click on overlay
         // we keep it for back compat with nth-child rules and simplier rollback
         <Button key="cancel-adjust" icon="close"
+          disabled={ saving }
           title={ formatMessage({ id: 'cancel' }) }
           onClick={ () => hideAdjustWebentity(webentity.id) } />,
         <Button key="apply-adjust" icon="check"
-          disabled={ this.state.disableApplyButton }
+          disabled={ saving || this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ () => { this.saveAdjustChanges(this.props) } } />
       ]
     } else {
       return <Button
+        disabled={ saving }
         className='btn-adjust'
         icon="plus" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
         onClick={ () => showAdjustWebentity(webentity.id) } />
