@@ -167,11 +167,9 @@ export function longestMatching (lrus, url, tldTree) {
 }
 
 export function hasExactMatching (lrus, url, tldTree) {
-  return lrus
-    // Ensure all LRUs are valid LRU objects
-    .map(lru => parseLru(lru, tldTree))
-    // Test for each LRU
-    .some(lru => match(lru, url, tldTree))
+  const cleanUrl = lruToUrl(urlToLru(url, tldTree), tldTree)
+  // Matches exactly if final URL is the same
+  return lrus.some(lru => lruToUrl(parseLru(lru, tldTree), tldTree) === cleanUrl)
 }
 
 // Returns the URL (string) with injected '<em>' tags around parts matched by longest LRU (string or object)
