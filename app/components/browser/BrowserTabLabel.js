@@ -22,28 +22,30 @@ class BrowserTabLabel extends React.Component {
     this.duplicate = this.duplicate.bind(this)
   }
 
+  translate (id) {
+    return this.context.intl.formatMessage({ id })
+  }
+
   componentDidMount () {
     const el = findDOMNode(this)
     el.addEventListener('contextmenu', (e) => {
       e.preventDefault()
 
       const { newTab, loading, url, openTab, closeTab, navigable, fixed, closable } = this.props
-      if (!newTab) {
-        const menu = new Menu()
-        if (!loading && url && navigable) {
-          if (openTab) {
-            menu.append(new MenuItem({ label: this.translate('menu.duplicate-tab'), click: this.duplicate }))
-          }
-          menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: this.openInBrowser }))
+      const menu = new Menu()
+      if (!newTab && !loading && url && navigable) {
+        if (openTab) {
+          menu.append(new MenuItem({ label: this.translate('menu.duplicate-tab'), click: this.duplicate }))
         }
-        if (closable && closeTab && !fixed) {
-          menu.append(new MenuItem({ type: 'separator' }))
-          menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: this.close }))
-        }
-        // Do not show empty menu
-        if (menu.getItemCount() >= 1) {
-          menu.popup(remote.getCurrentWindow())
-        }
+        menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: this.openInBrowser }))
+      }
+      if (closable && closeTab && !fixed) {
+        if (menu.getItemCount() >= 1) menu.append(new MenuItem({ type: 'separator' }))
+        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: this.close }))
+      }
+      // Do not show empty menu
+      if (menu.getItemCount() >= 1) {
+        menu.popup(remote.getCurrentWindow())
       }
     })
   }
