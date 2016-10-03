@@ -104,11 +104,11 @@ export default createReducer(initialState, {
     notification: { id: ERROR_SERVER_NO_RESOURCE }
   }),
 
-  [TOGGLE_DO_NOT_SHOW_AGAIN]: (state, { key }) => ({
+  [TOGGLE_DO_NOT_SHOW_AGAIN]: (state, { key, hide = null }) => ({
     ...state,
     doNotShow: {
       ...state.doNotShow,
-      [key]: !state.doNotShow[key]
+      [key]: hide !== null ? hide : !state.doNotShow[key]
     }
   }),
 })

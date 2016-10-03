@@ -18,7 +18,7 @@ export const showNotification = ({ id, messageId, messageValues = {}, type = 'no
 
 export const hideNotification = createAction(HIDE_NOTIFICATION)
 
-export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, key => ({ key }))
+export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key, hide = null) => ({ key, hide }))
 
 
 // shortcut for back compat

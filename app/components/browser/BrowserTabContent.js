@@ -39,7 +39,8 @@ class TabContent extends React.Component {
     this.state = {
       disableBack: true,
       disableForward: true,
-      disableApplyButton: false
+      disableApplyButton: false,
+      setDoNotShowAgainAfterSubmit: null
     }
 
     this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
@@ -138,6 +139,9 @@ class TabContent extends React.Component {
     const { saveAdjustedWebentity, hideAdjustWebentity, serverUrl, corpusId,
       webentity, adjusting, hideError, showError, id, disableWebentity } = props
 
+    // no change by default
+    this.setState({ setDoNotShowAgainAfterSubmit: null })
+
     if (disableWebentity) {
       return
     }
@@ -153,7 +157,7 @@ class TabContent extends React.Component {
   }
 
   renderAdjustButton () {
-    const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity } = this.props
+    const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity, saving } = this.props
     const { formatMessage } = this.context.intl
 
     if (adjusting) {
@@ -307,16 +311,38 @@ class TabContent extends React.Component {
   renderCrawlPopup () {
     const { webentity, hideAdjustWebentity, saving, noCrawlPopup, toggleDoNotShowAgain } = this.props
 
+    const markToggleOnSubmit = e => {
+      this.setState({ setDoNotShowAgainAfterSubmit: e.target.checked })
+    }
+
+    const doToggle = () => {
+      if (this.state.setDoNotShowAgainAfterSubmit !== null) {
+        toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
+      }
+    }
+
+    const apply = e => {
+      e.preventDefault()
+      doToggle()
+      this.saveAdjustChanges(this.props)
+    }
+
+    const cancel = e => {
+      e.preventDefault()
+      doToggle()
+      hideAdjustWebentity(webentity.id)
+    }
+
     return (
       <div className="crawl-popup">
         <strong><T id="webentity-crawl-popup-message" /></strong>
         <div className="crawl-popup-footer">
           <label>
-            <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ () => toggleDoNotShowAgain('crawlPopup') } />
+            <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
             <T id="do-not-show-again" />
           </label>
-          <button disabled={ saving } className="apply-crawl" onClick={ () => { this.saveAdjustChanges(this.props) } }><T id="launch" /></button>
-          <button disabled={ saving } className="cancel-crawl" onClick={ () => { hideAdjustWebentity(webentity.id) } }><T id="cancel" /></button>
+          <button disabled={ saving } className="apply-crawl" onClick={ apply }><T id="launch" /></button>
+          <button disabled={ saving } className="cancel-crawl" onClick={ cancel }><T id="cancel" /></button>
         </div>
       </div>
     )
