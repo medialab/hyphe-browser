@@ -9,7 +9,7 @@ import {
 } from '../actions/corpora'
 import {
   FETCH_TAGS_CATEGORIES_SUCCESS,
-  ADD_TAGS_CATEGORY_SUCCESS
+  ADD_TAGS_CATEGORY
 } from '../actions/tags'
 
 const initialState = {
@@ -58,7 +58,7 @@ export default createReducer(initialState, {
     return ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
   }),
 
-  [ADD_TAGS_CATEGORY_SUCCESS]: updateTagsCategories((state, { corpusId, category }) => {
+  [ADD_TAGS_CATEGORY]: updateTagsCategories((state, { corpusId, category }) => {
     const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
     if (originalCategories.includes(category)) {
       return state

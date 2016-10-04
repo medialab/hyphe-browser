@@ -19,9 +19,7 @@ export const FETCH_TAGS_SUCCESS = '§_FETCH_TAGS_SUCCESS'
 export const FETCH_TAGS_FAILURE = '§_FETCH_TAGS_FAILURE'
 
 // add a category
-export const ADD_TAGS_CATEGORY_REQUEST = '§_ADD_TAGS_CATEGORY_REQUEST'
-export const ADD_TAGS_CATEGORY_SUCCESS = '§_ADD_TAGS_CATEGORY_SUCCESS'
-export const ADD_TAGS_CATEGORY_FAILURE = '§_ADD_TAGS_CATEGORY_FAILURE'
+export const ADD_TAGS_CATEGORY = '§_ADD_TAGS_CATEGORY'
 
 // add a tag
 export const ADD_TAG_REQUEST = '§_ADD_TAG_REQUEST'
@@ -54,12 +52,8 @@ export const fetchTags = (serverUrl, corpusId) => (dispatch) => {
     .catch((error) => dispatch({ type: FETCH_TAGS_FAILURE, payload: { serverUrl, corpusId, error } }))
 }
 
-// create an dummy empty tag in the category
 export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (dispatch) => {
-  dispatch({ type: ADD_TAGS_CATEGORY_REQUEST, payload: { serverUrl, corpusId, webentityId, category } })
-  return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, TAGS_NS, category, '', corpusId])
-    .then(() => dispatch({ type: ADD_TAGS_CATEGORY_SUCCESS, payload: { serverUrl, corpusId, category } }))
-    .catch((error) => dispatch({ type: ADD_TAGS_CATEGORY_FAILURE, payload: { serverUrl, corpusId, category, error } }))
+  dispatch({ type: ADD_TAGS_CATEGORY, payload: { serverUrl, corpusId, category } })
 }
 
 export const addTag = (serverUrl, corpusId, category, webentityId, value, updatedValue) => (dispatch) => {
