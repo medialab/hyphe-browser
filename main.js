@@ -105,13 +105,20 @@ function getMenuBar () {
     {
       label: '&Edit',
       submenu: [
-        {
+     /* {
           role: 'undo',
           accelerator: 'Cmd+Z'
         },
         {
           role: 'redo',
           accelerator: 'Cmd+Shift+Z'
+        },
+        {
+          type: 'separator'
+        }, */
+        {
+          role: 'selectall',
+          accelerator: 'Cmd+A'
         },
         {
           type: 'separator'
@@ -129,12 +136,11 @@ function getMenuBar () {
           accelerator: 'Cmd+V'
         },
         {
-          role: 'pasteandmatchstyle',
-          accelerator: 'Cmd+Shift+V'
+          type: 'separator'
         },
         {
-          role: 'selectall',
-          accelerator: 'Cmd+A'
+          role: 'quit',
+          accelerator: 'Cmd+Q'
         }
       ]
     }
