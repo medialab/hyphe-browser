@@ -48,7 +48,8 @@ app.on('ready', () => {
   })
 
   // Disable menubar
-  window.setMenu(getMenuBar())
+  const menu = getMenuBar()
+  Menu.setApplicationMenu(menu)
 
   // Debug menu, whatever environment
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
