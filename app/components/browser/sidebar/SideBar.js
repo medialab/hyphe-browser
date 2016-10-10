@@ -94,8 +94,8 @@ class SideBar extends React.Component {
         { this.renderTabTags() }
         <h3 onClick={ () => this.toggleSection() }>
           <span className={ cx({
-            'ti-angle-down': this.state.section === 'tags',
-            'ti-angle-up': this.state.section === 'context'
+            'ti-angle-down': this.state.section === 'context',
+            'ti-angle-up': this.state.section === 'tags'
           }) }>
           </span>
         </h3>
@@ -105,11 +105,13 @@ class SideBar extends React.Component {
   }
 
   renderTabContext () {
-    return <SideBarContextualLists serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return <SideBarContextualLists serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
   renderTabTags () {
-    return <SideBarTags serverUrl={ this.props.serverUrl } corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return <SideBarTags serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity } hideCategories={ this.state.section === 'context' } />
   }
 
   renderHomepage () {

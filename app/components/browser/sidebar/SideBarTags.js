@@ -145,15 +145,17 @@ class SideBarTags extends React.Component {
       <div className="browser-side-bar-tags">
         { this.renderFreeTagsCategory(freeTags[0]) }
 
-        <h3><T id="sidebar.categories" /></h3>
-        { categories.map(this.renderTagsCategory) }
+        { !this.props.hideCategories && <div>
+          <h3><T id="sidebar.categories" /></h3>
+          { categories.map(this.renderTagsCategory) }
 
-        <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
-          <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
-            value={ this.state.newCategory }
-            onInput={ this.onChangeNewCategory } />
-          <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
-        </form>
+          <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
+            <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+              value={ this.state.newCategory }
+              onInput={ this.onChangeNewCategory } />
+            <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
+          </form>
+        </div> }
       </div>
     )
   }
@@ -180,6 +182,7 @@ SideBarTags.propTypes = {
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   locale: PropTypes.string.isRequired,
+  hideCategories: PropTypes.bool,
 
   // actions
   addTag: PropTypes.func.isRequired,
