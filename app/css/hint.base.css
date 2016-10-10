@@ -24,7 +24,7 @@
  * Classes added:
  * 	1) hint
  */
-[class*="hint--"] {
+[class*="hint--"]:not([disabled]) {
   position: relative;
   display: inline-block;
   /**
