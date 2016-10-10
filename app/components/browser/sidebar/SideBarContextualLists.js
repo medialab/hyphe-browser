@@ -14,15 +14,20 @@ import {
   selectContextualList
 } from '../../../actions/contextual-lists'
 
-class List extends React.Component {
+class _List extends React.Component {
   render () {
+    const { formatMessage } = this.context.intl
     const { links } = this.props
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.map(link =>
             <li key={ link.url }>
-              <div className="link-name">Name</div>
+              <div className="link-name">
+                { formatMessage({ id: 'linked' }) }
+                <span className="link-linked">{ link.linked }</span>
+                { formatMessage({ id: 'times' }) }
+              </div>
               <div className="link-url">{ link.url }</div>
             </li>
           ) }
@@ -32,9 +37,15 @@ class List extends React.Component {
   }
 }
 
-List.propTypes = {
+_List.contextTypes = {
+  intl: intlShape
+}
+
+_List.propTypes = {
   links: PropTypes.array
 }
+
+const List = connect(({ intl: { locale } }) => ({ locale }))(_List)
 
 
 class SideBarContextualLists extends React.Component {
@@ -110,11 +121,12 @@ SideBarContextualLists.propTypes = {
   selectContextualList: PropTypes.func
 }
 
-const mapStateToProps = ({ contextualLists }) => ({
+const mapStateToProps = ({ contextualLists, intl: { locale } }) => ({
   mostLinked: contextualLists.mostLinked,
   parents: contextualLists.parents,
   subs: contextualLists.subs,
-  selected: contextualLists.selected
+  selected: contextualLists.selected,
+  locale
 })
 
 export default connect(mapStateToProps, {
