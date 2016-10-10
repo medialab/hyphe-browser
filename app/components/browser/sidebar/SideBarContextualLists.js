@@ -68,16 +68,16 @@ class SideBarContextualLists extends React.Component {
 
     // TODO DRY
     switch (selected) {
-    case 'mostLinked':
-      fetchMostLinked(serverUrl, corpusId, webentity.id)
-      break
-
     case 'parents':
       fetchParents(serverUrl, corpusId, webentity.id)
       break
 
     case 'subs':
       fetchSubs(serverUrl, corpusId, webentity.id)
+      break
+
+    default:
+      fetchMostLinked(serverUrl, corpusId, webentity.id)
       break
     }
   }
