@@ -59,37 +59,38 @@ ipc.on('request-contextmenu-info', function onRequestContextMenuInfo (e, pos) {
 })
 
 window.addEventListener('DOMContentLoaded', () => {
-  const style = document.createElement('style')
-  style.appendChild(document.createTextNode(''))
-  document.head.appendChild(style)
-  style.sheet.insertRule(`
-    a::before {
-      display: block;
-      opacity: 0;
+  const style = {
+    background: '#eee',
+    borderLeft: '1px solid #ddd',
+    borderTopLeftRadius: '5px',
+    borderTop: '1px solid #ddd',
+    bottom: 0,
+    color: '#333',
+    fontFamily: 'sans-serif',
+    fontSize: '12px',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 1,
+    margin: 0,
+    padding: '5px',
+    position: 'fixed',
+    right: 0,
+    zIndex: 100000
+  }
+
+  const bubble = document.createElement('div')
+  Object.assign(bubble.style, style)
+  document.body.appendChild(bubble)
+
+  document.body.addEventListener('mouseover', ({ target }) => {
+    if (target.tagName === 'A' || target.parentElement && target.parentElement.tagName === 'A') {
+      bubble.style.display = 'block'
+      bubble.textContent = target.href || target.parentElement && target.parentElement.href
     }
-  `)
-  style.sheet.insertRule(`
-    a:hover::before {
-      background: #eee;
-      border-left: 1px solid #ddd;
-      border-top-left-radius: 5px;
-      border-top: 1px solid #ddd;
-      bottom: 0;
-      color: #333;
-      content: attr(href);
-      font-family: sans-serif;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: normal;
-      line-height: 1;
-      margin: 0;
-      opacity: 1;
-      padding: 5px;
-      position: fixed;
-      right: 0;
-      text-shadow: none;
-      text-transform: lowercase;
-      z-index: 100000;
+  })
+  document.body.addEventListener('mouseout', ({ target }) => {
+    if (target.tagName === 'A' || target.parentElement && target.parentElement.tagName === 'A') {
+      bubble.style.display = 'none'
     }
-  `)
+  })
 })
