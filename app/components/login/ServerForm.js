@@ -130,7 +130,6 @@ class ServerForm extends React.Component {
 
     return (
       <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
-
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }

@@ -68,12 +68,14 @@ class Login extends React.Component {
 
   render () {
     const { selectedServer, location } = this.props
+    // hide grey background?
+    const naked = !selectedServer && !location.pathname.includes('server-form')
 
     return (
       <div className="window">
         <div className="pane-centered">
           <h2 className="pane-centered-title"><T id="welcome" /></h2>
-          <main className={ cx('pane-centered-main', { naked: !selectedServer }) }>
+          <main className={ cx('pane-centered-main', { naked }) }>
           <div className="form-group server-list">
             { this.renderServerSelect() }
             { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">

@@ -42,7 +42,7 @@ class CorpusForm extends React.Component {
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                type={ type }
-               value={ this.state.data[name] } />
+               value={ this.state.data[name] || '' } />
       </div>
     )
   }
