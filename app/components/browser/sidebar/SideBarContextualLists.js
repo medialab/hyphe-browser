@@ -33,12 +33,11 @@ class _List extends React.Component {
         <ul>
           { links.map(link =>
             <li key={ link.url }>
-              <div className="link-name">
-                { formatMessage({ id: 'linked' }) }
-                <span className="link-linked">{ link.linked }</span>
-                { formatMessage({ id: 'times' }) }
-              </div>
               <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
+              { link.linked ? <div className="link-name">
+                { formatMessage({ id: 'linked' }) }
+                <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
+                </div> : <br/> }
             </li>
           ) }
         </ul>
