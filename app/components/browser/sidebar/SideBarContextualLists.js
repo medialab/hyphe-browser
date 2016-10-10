@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
+import { setTabUrl, openTab } from '../../../actions/tabs'
 import {
   fetchMostLinked,
   fetchParents,
@@ -15,6 +16,15 @@ import {
 } from '../../../actions/contextual-lists'
 
 class _List extends React.Component {
+  onClick (url) {
+    const { activeTabId, name, setTabUrl, openTab } = this.props
+    if (name === 'mostLinked') {
+      setTabUrl(url, activeTabId)
+    } else {
+      openTab(url)
+    }
+  }
+
   render () {
     const { formatMessage } = this.context.intl
     const { links } = this.props
@@ -28,7 +38,7 @@ class _List extends React.Component {
                 <span className="link-linked">{ link.linked }</span>
                 { formatMessage({ id: 'times' }) }
               </div>
-              <div className="link-url">{ link.url }</div>
+              <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
             </li>
           ) }
         </ul>
@@ -42,10 +52,23 @@ _List.contextTypes = {
 }
 
 _List.propTypes = {
-  links: PropTypes.array
+  activeTabId: PropTypes.string,
+  links: PropTypes.array,
+  name: PropTypes.string,
+
+  setTabUrl: PropTypes.func,
+  openTab: PropTypes.func
 }
 
-const List = connect(({ intl: { locale } }) => ({ locale }))(_List)
+const _mapStateToProps = ({ tabs, intl: { locale } }) => ({
+  activeTabId: tabs.activeTab && tabs.activeTab.id,
+  locale
+})
+
+const List = connect(_mapStateToProps, {
+  setTabUrl,
+  openTab,
+})(_List)
 
 
 class SideBarContextualLists extends React.Component {
@@ -94,7 +117,7 @@ class SideBarContextualLists extends React.Component {
               <T id={ `sidebar.contextual.${l}` } />
             </button>
           ) }
-          <List links={ this.props[selected] } />
+          <List links={ this.props[selected] } name={ selected } />
         </nav>
       </div>
     )
@@ -133,5 +156,5 @@ export default connect(mapStateToProps, {
   fetchMostLinked,
   fetchParents,
   fetchSubs,
-  selectContextualList
+  selectContextualList,
 })(SideBarContextualLists)
