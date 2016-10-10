@@ -106,7 +106,7 @@ class SideBarContextualLists extends React.Component {
   }
 
   render () {
-    const { selectContextualList, selected } = this.props
+    const { selectContextualList, selected, loading } = this.props
 
     return (
       <div className="browser-side-bar-contextual-lists">
@@ -117,7 +117,10 @@ class SideBarContextualLists extends React.Component {
               <T id={ `sidebar.contextual.${l}` } />
             </button>
           ) }
-          <List links={ this.props[selected] } name={ selected } />
+          { loading
+            ? <T id="loading-contextual-links" />
+            : <List links={ this.props[selected] } name={ selected } />
+          }
         </nav>
       </div>
     )
@@ -149,6 +152,8 @@ const mapStateToProps = ({ contextualLists, intl: { locale } }) => ({
   parents: contextualLists.parents,
   subs: contextualLists.subs,
   selected: contextualLists.selected,
+  loading: contextualLists.loading,
+
   locale
 })
 

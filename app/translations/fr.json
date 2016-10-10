@@ -64,6 +64,7 @@
   "launch": "Démarrer !",
   "linked": "Cité",
   "loading-corpora": "Chargement des corpora…",
+  "loading-contextual-links": "Chargement des liens…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
   "menu.close-tab": "Fermer l'onglet",

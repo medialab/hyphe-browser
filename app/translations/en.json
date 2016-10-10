@@ -64,6 +64,7 @@
   "launch": "Launch!",
   "linked": "Linked",
   "loading-corpora": "Loading corpora…",
+  "loading-contextual-links": "Loading links…",
   "login": "Login",
   "login-corpus": "Login to {name}",
   "menu.close-tab": "Close tab",
