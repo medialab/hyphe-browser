@@ -31,7 +31,7 @@ class _List extends React.Component {
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
-          { links.map(link =>
+          { links.length ? links.map(link =>
             <li key={ link.url }>
               <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
               { link.linked ? <div className="link-name">
@@ -39,7 +39,7 @@ class _List extends React.Component {
                 <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
                 </div> : <br/> }
             </li>
-          ) }
+          ) : formatMessage({ id: 'none' }) }
         </ul>
       </div>
     )

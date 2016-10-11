@@ -89,15 +89,16 @@ class SideBar extends React.Component {
   }
 
   renderTabs () {
+    const { formatMessage } = this.context.intl
     return (
       <div className="browser-side-bar-sections">
         { this.renderTabTags() }
         <h3 onClick={ () => this.toggleSection() }>
+          <span>{ formatMessage({ id: 'context'}) }</span>
           <span className={ cx({
             'ti-angle-down': this.state.section === 'context',
             'ti-angle-up': this.state.section === 'tags'
-          }) }>
-          </span>
+          }) }></span>
         </h3>
         { this.state.section === 'context' && this.renderTabContext() }
       </div>
