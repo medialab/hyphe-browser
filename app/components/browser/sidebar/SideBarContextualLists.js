@@ -72,16 +72,20 @@ const List = connect(_mapStateToProps, {
 
 class SideBarContextualLists extends React.Component {
   componentDidMount () {
-    this.updateCurrentList()
+    const { serverUrl, corpusId, webentity,
+      fetchMostLinked, fetchParents, fetchSubs } = this.props
+    fetchMostLinked(serverUrl, corpusId, webentity.id)
+    fetchParents(serverUrl, corpusId, webentity.id)
+    fetchSubs(serverUrl, corpusId, webentity.id)
   }
 
   componentWillReceiveProps (props) {
     // change in nav
-    if (props.selected !== this.props.selected)
+    /*if (props.selected !== this.props.selected)
       this.updateCurrentList(props.selected)
     // change of list content
     if (JSON.stringify(props[props.selected]) !== JSON.stringify(this.props[props.selected]))
-      this.updateCurrentList(props.selected)
+      this.updateCurrentList(props.selected) */
   }
 
   updateCurrentList (selected) {

@@ -36,6 +36,6 @@ export default createReducer(initialState, {
   [SELECT_CONTEXTUAL_LIST]: (state, { selected }) => ({
     ...state,
     selected,
-    loading: true
+    loading: false
   })
 })
