@@ -101,7 +101,7 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-only field with highlights: click to edit
   renderFieldHighlighted () {
-    const className = cx('btn browser-tab-url', { loading: this.props.loading })
+    const className = cx('btn browser-tab-url', { loading: this.props.loading }, { startcrawl: this.props.crawlquery } )
     const onClick = () => this.setState({ editing: true, focusInput: true })
 
     if (!this.props.lruPrefixes) {
@@ -202,6 +202,7 @@ BrowserTabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
   onSubmit: PropTypes.func.isRequired,
+  crawlquery: PropTypes.bool.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
   onSelectPrefix: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,

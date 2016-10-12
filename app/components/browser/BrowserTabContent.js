@@ -160,7 +160,7 @@ class TabContent extends React.Component {
     const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity, saving } = this.props
     const { formatMessage } = this.context.intl
 
-    if (adjusting) {
+    if (adjusting && !adjusting.crawl) {
       return [
         // Note this button is hidden and replaced with a click on overlay
         // we keep it for back compat with nth-child rules and simplier rollback
@@ -239,8 +239,9 @@ class TabContent extends React.Component {
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.lru_prefixes }
           onSubmit={ (url) => setTabUrl(url, id) }
-          prefixSelector={ !!adjusting }
-          className={ cx({ 'over-overlay': adjusting && !adjusting.crawl }) }
+          crawlquery={ adjusting && adjusting.crawl }
+          prefixSelector={ !!adjusting && !adjusting.crawl }
+          className={ cx({ 'over-overlay': adjusting, adjusting}) }
           tlds={ tlds }
           onSelectPrefix={ (url, modified) => this.onSelectPrefix(url, modified) } />
       </div>
@@ -339,6 +340,8 @@ class TabContent extends React.Component {
       <div className="crawl-popup">
         <strong><T id="webentity-crawl-popup-title" /></strong>
         <p><T id="webentity-crawl-popup-message" /></p>
+        <p><T id="webentity-crawl-popup-message-2" /></p>
+        <p><T id="webentity-crawl-popup-message-3" /></p>
         <div className="crawl-popup-footer">
           <label>
             <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />

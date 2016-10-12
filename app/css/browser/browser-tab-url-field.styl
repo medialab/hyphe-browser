@@ -17,7 +17,7 @@
     }
 
     em:not(:first-child) {
-      background: #e3e5e4;
+      background: var(--color-grey);
       padding: 2px 0px;
       font-weight: bold;
       font-style: normal;
@@ -34,6 +34,12 @@
       background-image: url(../../images/loading-url.gif);
       background-position: center;
       background-repeat: repeat-x;
+    }
+
+    &.startcrawl {
+      em:not(:first-child) {
+        background: var(--color-blue-light);
+      }
     }
   }
 

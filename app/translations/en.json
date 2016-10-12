@@ -121,5 +121,7 @@
   "webentity-info-created-sidebar": "New entity",
   "webentity-info-created-notification": "New entity created successfully",
   "webentity-crawl-popup-title": "WARNING!",
-  "webentity-crawl-popup-message": "Setting this webentity's status as \"IN\" will start crawling webpages linked from here starting like the blue highlighted prefixed url above.\nAre you sure you wish to procede?\nRemember to adjust the name and the homepage of the webentity also if necessary!"
+  "webentity-crawl-popup-message": "Setting this webentity's status as \"IN\" will start crawling webpages linked from here starting like the blue highlighted prefixed url above.",
+  "webentity-crawl-popup-message-2": "Are you sure you wish to procede?",
+  "webentity-crawl-popup-message-3": "Remember to adjust the name and the homepage of the webentity also if necessary!"
 }

@@ -121,5 +121,7 @@
   "webentity-info-created-sidebar": "Nouvelle entité",
   "webentity-info-created-notification": "Nouvelle entité créée avec succès",
   "webentity-crawl-popup-title": "ATTENTION !",
-  "webentity-crawl-popup-message": "En déclarant le statut de cette webentité à \"IN\", vous démarrerez le crawl des pages web commençant comme le préfixe d'url surligné ci-dessus en bleu.\nÊtes-vous sûr de vouloir continuer ?\nPensez à ajuster ensuite le nom et la page d'accueil de la webentité si nécessaire !"
+  "webentity-crawl-popup-message": "En déclarant le statut de cette webentité à \"IN\", vous démarrerez le crawl des pages web commençant comme le préfixe d'url surligné ci-dessus en bleu.",
+  "webentity-crawl-popup-message-2": "Êtes-vous sûr de vouloir continuer ?",
+  "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la page d'accueil de la webentité si nécessaire !"
 }
