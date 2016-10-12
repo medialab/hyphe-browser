@@ -33,11 +33,12 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector, loading }, { url, editing, overPrefixUntil }) {
+  shouldComponentUpdate ({ initialUrl, lruPrefixes, prefixSelector, loading, crawlquery }, { url, editing, overPrefixUntil }) {
     return this.state.url !== initialUrl || this.state.url !== url // update only if URL *really* changes
       // Standard conditions on other props/state
       || this.props.lruPrefixes !== lruPrefixes
       || this.props.loading !== loading
+      || this.props.crawlquery !== crawlquery
       || this.state.editing !== editing
       || this.props.prefixSelector !== prefixSelector
       || this.state.overPrefixUntil !== overPrefixUntil
