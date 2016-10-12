@@ -239,7 +239,7 @@ class TabContent extends React.Component {
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.lru_prefixes }
           onSubmit={ (url) => setTabUrl(url, id) }
-          crawlquery={ adjusting && adjusting.crawl }
+          crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
           className={ cx({ 'over-overlay': adjusting, adjusting}) }
           tlds={ tlds }
