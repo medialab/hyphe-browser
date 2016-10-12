@@ -66,7 +66,7 @@
   "linked": "Linked ",
   "linkedtimes": "{count, plural, \n=1 {once}\n=2 {twice}\nother {# times}}",
   "loading-corpora": "Loading corpora…",
-  "loading-contextual-links": "Loading links…",
+  "loading-contextual-links": "Loading…",
   "login": "Login",
   "login-corpus": "Login to {name}",
   "menu.close-tab": "Close tab",
@@ -120,5 +120,6 @@
   "viewed": "Viewed",
   "webentity-info-created-sidebar": "New entity",
   "webentity-info-created-notification": "New entity created successfully",
-  "webentity-crawl-popup-message": "By clicking \"IN\" you will start the crawling of this page.\nAre you sure you wish to procede?"
+  "webentity-crawl-popup-title": "WARNING!",
+  "webentity-crawl-popup-message": "Setting this webentity's status as \"IN\" will start crawling webpages linked from here starting like the blue highlighted prefixed url above.\nAre you sure you wish to procede?\nRemember to adjust the name and the homepage of the webentity also if necessary!"
 }

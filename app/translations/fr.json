@@ -66,7 +66,7 @@
   "linked": "Cité ",
   "linkedtimes": "{count, plural, \n=1 {une fois}\nother {# fois}}",
   "loading-corpora": "Chargement des corpora…",
-  "loading-contextual-links": "Chargement des liens…",
+  "loading-contextual-links": "Chargement…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
   "menu.close-tab": "Fermer l'onglet",
@@ -120,5 +120,6 @@
   "viewed": "Vu",
   "webentity-info-created-sidebar": "Nouvelle entité",
   "webentity-info-created-notification": "Nouvelle entité créée avec succès",
-  "webentity-crawl-popup-message": "En cliquant sur sur \"IN\" vous lancerez le crawling de cette page.\nVoulez-vous continuer ?"
+  "webentity-crawl-popup-title": "ATTENTION !",
+  "webentity-crawl-popup-message": "En déclarant le statut de cette webentité à \"IN\", vous démarrerez le crawl des pages web commençant comme le préfixe d'url surligné ci-dessus en bleu.\nÊtes-vous sûr de vouloir continuer ?\nPensez à ajuster ensuite le nom et la page d'accueil de la webentité si nécessaire !"
 }

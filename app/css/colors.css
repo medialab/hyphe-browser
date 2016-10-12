@@ -4,7 +4,8 @@
   --color-grey-light: #f1f1f1;
   --color-grey-dark: #979797;
   --color-black: #252b30;
-  --color-blue: #014bf6;
+  --color-blue: #326BDB;
+  --color-blue-light: #99ccff;
 
   --color-error: #89373e;
 
@@ -19,5 +20,4 @@
   --color-corpus-undecided: #baac42; /* gold */
   --color-corpus-discovered: #9cb8d3; /* light blue */
 }
-
 
