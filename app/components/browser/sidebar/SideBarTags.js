@@ -3,6 +3,7 @@ import '../../../css/browser/side-bar-tags'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import cx from 'classnames'
 import { Creatable } from 'react-select'
 import partition from 'lodash.partition'
 import uniq from 'lodash.uniq'
@@ -22,7 +23,8 @@ class SideBarTags extends React.Component {
     this.state = {
       newCategory: '',
       // to avoid disappearing categories if new categories come from corpus-watcher just after creation
-      categories: []
+      categories: [],
+      hideCategories: false
     }
 
     // prepopulate inputs
@@ -37,6 +39,10 @@ class SideBarTags extends React.Component {
     this.addCategory = this.addCategory.bind(this)
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
     this.renderTagsCategory = this.renderTagsCategory.bind(this)
+  }
+
+  toggleCategories () {
+    this.setState({ hideCategories : !this.state.hideCategories })
   }
 
   componentWillMount () {
@@ -145,17 +151,26 @@ class SideBarTags extends React.Component {
       <div className="browser-side-bar-tags">
         { this.renderFreeTagsCategory(freeTags[0]) }
 
-        { !this.props.hideCategories && <div>
-          <h3><T id="sidebar.categories" /></h3>
-          { categories.map(this.renderTagsCategory) }
+        <div>
+          <h3 onClick={ () => this.toggleCategories() }>
+            <T id="sidebar.categories" />
+            <span className={ cx({
+              'ti-angle-up': !this.state.hideCategories,
+              'ti-angle-down': this.state.hideCategories
+            }) }></span>
+          </h3>
 
-          <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
-            <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
-              value={ this.state.newCategory }
-              onInput={ this.onChangeNewCategory } />
-            <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
-          </form>
-        </div> }
+          { !this.state.hideCategories && <div>
+            { categories.map(this.renderTagsCategory) }
+
+            <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
+              <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+                value={ this.state.newCategory }
+                onInput={ this.onChangeNewCategory } />
+              <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
+            </form>
+          </div> }
+        </div>
       </div>
     )
   }
@@ -182,7 +197,6 @@ SideBarTags.propTypes = {
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   locale: PropTypes.string.isRequired,
-  hideCategories: PropTypes.bool,
 
   // actions
   addTag: PropTypes.func.isRequired,

@@ -92,15 +92,15 @@ class SideBar extends React.Component {
     const { formatMessage } = this.context.intl
     return (
       <div className="browser-side-bar-sections">
-        { this.renderTabTags() }
         <h3 onClick={ () => this.toggleSection() }>
           <span>{ formatMessage({ id: 'context'}) }</span>
           <span className={ cx({
-            'ti-angle-down': this.state.section === 'context',
-            'ti-angle-up': this.state.section === 'tags'
+            'ti-angle-up': this.state.section === 'context',
+            'ti-angle-down': this.state.section === 'tags'
           }) }></span>
         </h3>
         { this.state.section === 'context' && this.renderTabContext() }
+        { this.renderTabTags() }
       </div>
     )
   }
@@ -112,7 +112,7 @@ class SideBar extends React.Component {
 
   renderTabTags () {
     return <SideBarTags serverUrl={ this.props.serverUrl }
-      corpusId={ this.props.corpusId } webentity={ this.props.webentity } hideCategories={ this.state.section === 'context' } />
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
   renderHomepage () {
