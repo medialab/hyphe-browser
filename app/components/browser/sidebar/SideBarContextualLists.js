@@ -27,18 +27,24 @@ class _List extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { links } = this.props
+    const { name, links } = this.props
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.length ? links.map(link =>
-            <li key={ link.url }>
-              <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
-              { link.linked ? <div className="link-name">
-                { formatMessage({ id: 'linked' }) }
-                <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
-                </div> : <br/> }
-            </li>
+            ( name === 'mostLinked' ? 
+              <li key={ link.url }>
+                <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
+                { link.linked ? <div className="link-linked">
+                  { formatMessage({ id: 'linked' }) }
+                  <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
+                  </div> : <br/> }
+              </li> :
+              <li key={ link.id }>
+                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>{ link.name }</div>
+                <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
+              </li>
+            )
           ) : formatMessage({ id: 'none' }) }
         </ul>
       </div>
