@@ -29,7 +29,7 @@ import {
 } from '../../actions/webentities'
 
 import { getSearchUrl } from '../../utils/search-web'
-import { urlToName, hasExactMatching } from '../../utils/lru'
+import { urlToName, hasExactMatching, compareUrls } from '../../utils/lru'
 
 class TabContent extends React.Component {
 
@@ -78,8 +78,7 @@ class TabContent extends React.Component {
   }
 
   samePage (info) {
-    if (!info) return false
-    return this.state.previousUrl.replace(/#[^#]*$/, '') === info.replace(/#[^#]*$/, '')
+    return compareUrls(this.state.previousUrl, info)
   }
 
   updateTabStatus (event, info) {

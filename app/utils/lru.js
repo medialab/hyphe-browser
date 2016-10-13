@@ -266,3 +266,12 @@ export function urlToName (url, tldTree) {
 function toDomainCase (s) {
   return s.replace(/\w[^ -]*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 }
+
+function simplierUrl(url) {
+  return url.replace(/#[^#]*$/, '').replace(/\/$/, '')
+}
+
+export function compareUrls(url1, url2) {
+  if (!url1 || !url2) return false
+  return simplierUrl(url1) === simplierUrl(url2)
+}

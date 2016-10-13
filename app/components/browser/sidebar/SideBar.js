@@ -14,6 +14,7 @@ import SideBarTags from './SideBarTags'
 import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage } from '../../../actions/webentities'
 import { setTabUrl } from '../../../actions/tabs'
 import { getWebEntityActivityStatus } from '../../../utils/status'
+import { compareUrls } from '../../../utils/lru'
 
 class SideBar extends React.Component {
   constructor (props) {
@@ -118,7 +119,7 @@ class SideBar extends React.Component {
   renderHomepage () {
     const { webentity, setTabUrl, url, tabId, serverUrl, corpusId } = this.props
     const { formatMessage } = this.context.intl
-    const disabled = `${webentity.homepage}/` === url
+    const disabled = compareUrls(webentity.homepage, url)
 
     return (
       <div className="browser-side-bar-homepage">

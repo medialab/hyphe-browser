@@ -14,6 +14,7 @@ import {
   fetchSubs,
   selectContextualList
 } from '../../../actions/contextual-lists'
+import { compareUrls } from '../../../utils/lru'
 
 class _List extends React.Component {
   onClick (url) {
@@ -35,7 +36,7 @@ class _List extends React.Component {
           { links.length ? links.map(link =>
             ( name === 'mostLinked' ? 
               <li key={ link.url } title={ link.url }>
-                { link.url.replace(/\/$/, '') !== activeTabUrl.replace(/\/$/, '') ?
+                { !compareUrls(link.url, activeTabUrl) ?
                   <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
                   <div className="link-url inactive" >{ link.url }</div>
                 }
