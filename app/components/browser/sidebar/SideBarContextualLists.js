@@ -34,7 +34,7 @@ class _List extends React.Component {
         <ul>
           { links.length ? links.map(link =>
             ( name === 'mostLinked' ? 
-              <li key={ link.url }>
+              <li key={ link.url } title={ link.url }>
                 { link.url.replace(/\/$/, '') !== activeTabUrl.replace(/\/$/, '') ?
                   <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
                   <div className="link-url inactive" >{ link.url }</div>
@@ -45,7 +45,7 @@ class _List extends React.Component {
                 </div> :
                 <br/> }
               </li> :
-              <li key={ link.id }>
+              <li key={ link.id } title={ link.name + "\n" + link.homepage }>
                 <div className="link-name" onClick={ () => this.onClick(link.homepage) }>{ link.name }</div>
                 <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
               </li>
