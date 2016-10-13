@@ -27,18 +27,23 @@ class _List extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { name, links } = this.props
+    const { name, links, activeTabUrl } = this.props
+
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.length ? links.map(link =>
             ( name === 'mostLinked' ? 
               <li key={ link.url }>
-                <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div>
+                { link.url.replace(/\/$/, '') !== activeTabUrl.replace(/\/$/, '') ?
+                  <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
+                  <div className="link-url inactive" >{ link.url }</div>
+                }
                 { link.linked ? <div className="link-linked">
                   { formatMessage({ id: 'linked' }) }
                   <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
-                  </div> : <br/> }
+                </div> :
+                <br/> }
               </li> :
               <li key={ link.id }>
                 <div className="link-name" onClick={ () => this.onClick(link.homepage) }>{ link.name }</div>
@@ -58,6 +63,7 @@ _List.contextTypes = {
 
 _List.propTypes = {
   activeTabId: PropTypes.string,
+  activeTabUrl: PropTypes.string,
   links: PropTypes.array,
   name: PropTypes.string,
 
@@ -67,6 +73,7 @@ _List.propTypes = {
 
 const _mapStateToProps = ({ tabs, intl: { locale } }) => ({
   activeTabId: tabs.activeTab && tabs.activeTab.id,
+  activeTabUrl: (tabs.activeTab ? tabs.activeTab.url : ''),
   locale
 })
 

@@ -65,11 +65,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      &.inactive {
+        color: var(--color-blue)
+      }
     }
 
     .link-url:hover {
       cursor: pointer;
       text-decoration: underline;
+
+      &.inactive {
+        cursor: initial;
+        text-decoration: none;
+      }
     }
   }
 }
