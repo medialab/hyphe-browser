@@ -1,5 +1,5 @@
 {
-  "adjust": "Adjust",
+  "adjust": "Create a new entity for this url",
   "api-url": "API url",
   "available-corpora": "{count, plural, \n=0 {no corpus}\n=1 {1 corpus}\nother {# corpora}}",
   "back": "Back",
