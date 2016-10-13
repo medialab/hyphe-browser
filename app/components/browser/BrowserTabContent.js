@@ -37,6 +37,7 @@ class TabContent extends React.Component {
     super(props)
 
     this.state = {
+      previousUrl: '',
       disableBack: true,
       disableForward: true,
       disableApplyButton: false,
@@ -76,16 +77,34 @@ class TabContent extends React.Component {
     eventBus.off('status', this.navStatusHandler)
   }
 
+  samePage (info) {
+    if (!info) return false
+    return this.state.previousUrl.replace(/#[^#]*$/, '') === info.replace(/#[^#]*$/, '')
+  }
+
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, hideError, declarePage, setTabWebentity, serverUrl,
       corpusId, disableWebentity } = this.props
 
+    // In Hyphe special tab, when link with target=_blank
+    if (event === 'open' && disableWebentity) {
+      // if link points to a Hyphe page, load within special tab
+      if (this.samePage(info)) {
+        event = 'start'
+      }
+      // otherwise open new tab
+      else {
+        this.props.eventBus.emit('open', info)
+      }
+    }
+
     switch (event) {
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
-      if (!disableWebentity) {
+      // avoid refreshing webentity when only changing url's anchor
+      if (!this.samePage(info) && !disableWebentity) {
         setTabWebentity(id, null)
       }
       break
@@ -95,11 +114,15 @@ class TabContent extends React.Component {
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
-          declarePage(serverUrl, corpusId, info, id)
+          // do not declare pages with only change in anchor
+          if (!this.samePage(info)) {
+            declarePage(serverUrl, corpusId, info, id)
+          }
         } else {
           this.doNotDeclarePageOnStop = false
         }
       }
+      this.state.previousUrl = info
       break
     case 'title':
       setTabTitle(info, id)
@@ -206,7 +229,7 @@ class TabContent extends React.Component {
 
   renderNavigationToolbar () {
     const { formatMessage } = this.context.intl
-    const { adjusting, disableNavigation } = this.props
+    const { adjusting, disableNavigation, eventBus } = this.props
 
     if (disableNavigation) {
       return null
@@ -215,11 +238,11 @@ class TabContent extends React.Component {
     return (
       <div className="browser-tab-toolbar-navigation">
         <Button title={ formatMessage({ id: 'browse-reload' }) } icon="reload" disabled={ !!adjusting }
-          onClick={ (e) => this.props.eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
+          onClick={ (e) => eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
         <Button title={ formatMessage({ id: 'browse-back' }) } icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
-          onClick={ () => this.props.eventBus.emit('goBack') } />
+          onClick={ () => eventBus.emit('goBack') } />
         <Button title={ formatMessage({ id: 'browse-forward' }) } icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
-          onClick={ () => this.props.eventBus.emit('goForward') } />
+          onClick={ () => eventBus.emit('goForward') } />
       </div>
     )
   }
