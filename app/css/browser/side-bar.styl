@@ -59,6 +59,17 @@
     }
   }
 
+  .browser-side-bar-homepage-url:hover {
+    opacity: 1;
+    text-decoration: underline;
+
+    &:disabled {
+      opacity: 0.4;
+      text-decoration: none;
+      color: var(--color-black);
+    }
+  }
+
   // home button
   .browser-side-bar-homepage {
     text-align: left;
@@ -70,6 +81,7 @@
 
       &:hover {
         opacity: 1;
+        color: var(--color-blue)
       }
 
       &[disabled] {

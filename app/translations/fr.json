@@ -58,7 +58,8 @@
   "fill": "Remplir avec ",
   "google.search": "Rechercher sur ",
   "google.placeholder": "Rechercher…",
-  "goto-homepage": "Aller à la page d'accueil ({url})",
+  "goto-homepage": "Ouvrir la Homepage\n{url}",
+  "here-homepage": "Ceci est la Homepage",
   "indegree": "Linké par",
   "hyphe-tab-title": "H",
   "languages": "Langages",
@@ -74,10 +75,10 @@
   "menu.duplicate-tab": "Dupliquer l'onglet",
   "menu.open-in-browser": "Ouvrir dans votre navigateur",
   "menu.open-in-new-tab": "Ouvrir dans un nouvel onglet",
+  "missing-homepage": "Homepage pas encore définie",
   "name": "Nom",
   "new-tab": "Nouvel onglet",
   "next": "Suivant",
-  "no-homepage": "Page d'accueil non définie",
   "none": "Aucune",
   "on-server": "sur {name} ({url})",
   "options": "Options",
@@ -123,5 +124,5 @@
   "webentity-crawl-popup-title": "ATTENTION !",
   "webentity-crawl-popup-message": "En déclarant le statut de cette webentité à \"IN\", vous démarrerez le crawl des pages web commençant comme le préfixe d'url surligné ci-dessus en bleu.",
   "webentity-crawl-popup-message-2": "Êtes-vous sûr de vouloir continuer ?",
-  "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la page d'accueil de la webentité si nécessaire !"
+  "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la Homepage de la webentité si nécessaire !"
 }
