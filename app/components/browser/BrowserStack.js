@@ -86,7 +86,7 @@ class BrowserStack extends React.Component {
     if (!selectedStack) return
     const viewCount = webentities.filter(x => x.viewed).length
 
-    return <progress className="hint--bottom" aria-label={ `${viewCount} / ${webentities.length}` } value={ viewCount } max={ webentities.length } />
+    return <progress className="hint--right" aria-label={ `${viewCount} / ${webentities.length}` } value={ viewCount } max={ webentities.length } />
   }
 
   // left side
@@ -103,7 +103,7 @@ class BrowserStack extends React.Component {
     return (
       <div className="browser-stack-wes">
 
-        <button className="btn btn-default hint--right"
+        <button className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
           disabled={ !selectedStack || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
@@ -118,7 +118,7 @@ class BrowserStack extends React.Component {
           { this.renderProgress() }
         </div>
 
-        <button className="btn btn-default hint--left"
+        <button className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
           disabled={ !selectedStack || isLast }
           onClick={ () => this.rotateWebentity(1) }>

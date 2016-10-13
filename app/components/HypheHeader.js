@@ -15,7 +15,7 @@ class HypheHeader extends React.Component {
 
     return (
       <header className="hyphe-header">
-        <Link className="disconnection hint--left" to="login" aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }>
+        <Link className="disconnection hint--bottom-left" to="login" aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }>
           <span className="ti-close"></span>
         </Link>
         { corpus.name }
