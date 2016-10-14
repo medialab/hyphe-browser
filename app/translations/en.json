@@ -106,7 +106,7 @@
   "sidebar.tab-tags": "Tags",
   "sidebar.select-tags": "Add tag…",
   "sidebar.create-tag": "Create new tag: ",
-  "sidebar.contextual.mostLinked": "Most linked pages",
+  "sidebar.contextual.mostLinked": "Linked pages",
   "sidebar.contextual.parents": "Parent entities",
   "sidebar.contextual.subs": "Sub entities",
   "starting-corpus": "Starting corpus",

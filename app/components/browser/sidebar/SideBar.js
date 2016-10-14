@@ -52,9 +52,9 @@ class SideBar extends React.Component {
     return (
       <div className="browser-side-bar-info">
         <h3><span>Info</span></h3>
-        { webentity.created && <div className="webentity-created"><T id="webentity-info-created-sidebar" /></div> }
-        <div><T id="indegree" /> <strong>{ webentity.indegree }</strong></div>
-        <div><T id="crawling-status" /> <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong></div>
+        { webentity.created && <div className="webentity-created textinfo"><T id="webentity-info-created-sidebar" /></div> }
+        <div className="textinfo"><T id="indegree" /> <strong>{ webentity.indegree }</strong></div>
+        <div className="textinfo"><T id="crawling-status" /> <strong><T id={ 'crawling-status.' + getWebEntityActivityStatus(webentity) } /></strong></div>
       </div>
     )
   }
