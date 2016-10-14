@@ -11,6 +11,7 @@
   position: relative;
   text-align: center;
   white-space: nowrap;
+  cursor: pointer;
 
   .loading {
     background-image: url(../../images/loading.svg);
@@ -33,12 +34,14 @@
     vertical-align: bottom;
     white-space: nowrap;
     width: 70%;
+    cursor: pointer;
   }
 
   .ti-close {
     position: absolute;
     right: 2px;
     top: 14px;
+    cursor: pointer;
   }
 
   &::after {
@@ -55,6 +58,11 @@
 
   &.active {
     z-index: 1;
+    cursor: initial;
+
+    .browser-tab-title {
+      cursor: initial;
+    }
 
     &::after {
       background: var(--color-grey-light);
@@ -71,6 +79,7 @@
   color: var(--color-blue);
   font-weight: bold;
   font-size: 14px;
+  cursor: pointer;
 
   .loading {
     display: none;
@@ -80,6 +89,7 @@
     margin-left: 12px;
     padding-right: 0;
     padding-top: 6px;
+    cursor: pointer;
   }
 
   &::after {
@@ -100,8 +110,11 @@
   }
 
   &.active {
+    cursor: initial;
+
     .browser-tab-title {
       display: inline-block;
+      cursor: initial;
     }
 
     &::after {
