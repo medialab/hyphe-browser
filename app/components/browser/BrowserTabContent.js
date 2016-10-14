@@ -365,8 +365,8 @@ class TabContent extends React.Component {
         <p><T id="webentity-crawl-popup-message-2" /></p>
         <p><T id="webentity-crawl-popup-message-3" /></p>
         <div className="crawl-popup-footer">
+          <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
           <label>
-            <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
             <T id="do-not-show-again" />
           </label>
           <button disabled={ saving } className="apply-crawl" onClick={ apply }><T id="launch" /></button>
