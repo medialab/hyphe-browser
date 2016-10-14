@@ -35,6 +35,7 @@
       background: var(--color-grey);
 
       .we-name, .we-indegree {
+        display: none;
         color: var(--color-black);
         &::before {
           color: var(--color-black);
@@ -73,7 +74,8 @@
     flex-shrink: 0;
     position: relative;
     text-align: right;
-    width: 3em;
+    width: 45px;
+    padding-right: 5px;
 
     &::before {
       color var(--color-black);
@@ -127,7 +129,7 @@
       cursor: pointer;
     }
 
-    &.viewed .we-name {
+    &.viewed .we-name, &.viewed .we-indegree {
       font-weight: bold;
     }
 
