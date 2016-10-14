@@ -46,27 +46,37 @@
 
   .browser-side-bar-homepage-url {
     color: var(--color-black);
-    opacity: 0.4;
-    overflow: hidden;
-    padding: 0;
+    opacity: 0.5;
+    padding: 0px 0px 2px 8px;
     text-align: left;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     width: 346px;
+    
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: initial;
+
+      &:hover:not([disabled]) {
+        cursor:pointer;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline;
+      cursor: pointer;
+
+      &.inactive {
+        opacity: 0.5;
+        text-decoration: none;
+        color: var(--color-black);
+        cursor: initial;
+      }
+    }
 
     @media (max-width: 1024px) {
       width: 235px;
-    }
-  }
-
-  .browser-side-bar-homepage-url:hover {
-    opacity: 1;
-    text-decoration: underline;
-
-    &:disabled {
-      opacity: 0.4;
-      text-decoration: none;
-      color: var(--color-black);
     }
   }
 
@@ -74,10 +84,11 @@
   .browser-side-bar-homepage {
     text-align: left;
 
-    button:last-child {
+    button:first-child {
       color: var(--color-black);
-      opacity: 0.4;
+      opacity: 0.5;
       padding: 0;
+      font-size: 15px;
 
       &:hover {
         opacity: 1;

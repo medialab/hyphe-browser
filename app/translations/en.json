@@ -58,7 +58,7 @@
   "fill": "Fill with ",
   "google.search": "Search on ",
   "google.placeholder": "Search…",
-  "goto-homepage": "Open Homepage\n{url}",
+  "goto-homepage": "Open Homepage {url}",
   "here-homepage": "This page is the Homepage",
   "hyphe-tab-title": "H",
   "indegree": "Linked by",
