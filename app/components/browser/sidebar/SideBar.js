@@ -117,7 +117,7 @@ class SideBar extends React.Component {
   }
 
   renderHomepage () {
-    const { webentity, setTabUrl, url, tabId, serverUrl, corpusId } = this.props
+    const { webentity, setTabUrl, url, tabId, serverUrl, corpusId, setWebentityHomepage } = this.props
     const { formatMessage } = this.context.intl
     const onHomepage = compareUrls(webentity.homepage, url)
 
