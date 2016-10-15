@@ -101,7 +101,7 @@ function getMenuBar () {
   }
 
   // With Mac OS we have to enable menu bar with standard copy/paste shortcuts to enable them (cf. electron/electron#2308)
-  return Menu.buildFromTemplate([
+  const menu = Menu.buildFromTemplate([
     {
       label: '&Edit',
       submenu: [
@@ -143,6 +143,43 @@ function getMenuBar () {
           accelerator: 'Cmd+Q'
         }
       ]
+    },
+    {
+      label: '&Navigation',
+      submenu: [
+        {
+          label: '&Close tab',
+          accelerator: 'Cmd+W',
+          disabled: true // enabled on demande
+        }
+      ]
     }
   ])
+
+  // Handle close tab shortcut
+
+  // Detect when trying to register this shortcut
+  // Note we can't import app/constants.js because of ES6 modules
+  const closeTabBaseShortcut = 'Ctrl+W'
+
+  // Keep a copy of generated MenuItem to disable/enable on demand
+  const closeTabItem = menu.items[1].submenu.items[0]
+  closeTabItem.enabled = false // Initially disabled, wait for shortcut to be registered
+
+  // Wait for request for registering Ctrl+W by guest app, store sender
+  // Send back event to sender when user presses Cmd+W or clicks app menu
+  ipc.on('registerShortcut', (event, accels) => {
+    if (accels.includes(closeTabBaseShortcut)) {
+      closeTabItem.click = () => event.sender.send(`shortcut-${accels}`)
+      closeTabItem.enabled = true
+    }
+  })
+  ipc.on('unregisterShortcut', (_, accels) => {
+    if (accels.includes(closeTabBaseShortcut)) {
+      closeTabItem.click = () => { }
+      closeTabItem.enabled = false
+    }
+  })
+
+  return menu
 }
