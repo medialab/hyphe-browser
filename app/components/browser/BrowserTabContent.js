@@ -220,10 +220,17 @@ class TabContent extends React.Component {
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
-          onChange={ name => setWebentityName(serverUrl, corpusId, name, webentity.id) } />
+          onChange={ name => this.updateName(name) } />
         { this.renderAdjustButton() }
       </div>
     )
+  }
+
+  updateName (name) {
+    const { setWebentityName, serverUrl, corpusId, webentity } = this.props
+
+    this.setState({ webentityName: name })
+    setWebentityName(serverUrl, corpusId, name, webentity.id)
   }
 
   renderNavigationToolbar () {
