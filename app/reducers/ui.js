@@ -67,7 +67,12 @@ const toggleLoader = (loader, enabled, err) => (state, { error }) => ({
 
 export default createReducer(initialState, {
   [SHOW_NOTIFICATION]: (state, notification) => ({ ...state, notification }),
-  [HIDE_NOTIFICATION]: (state) => ({ ...state, notification: emptyNotification }),
+  [HIDE_NOTIFICATION]: (state, { id, type }) => ({
+    ...state,
+    notification: (id ? state.notification.id === id : state.notification.type === type)
+      ? emptyNotification // id matches, or no id and type matches (general case of hideError())
+      : state.notification // no match, keep it
+  }),
   [SELECT_CORPUS]: (state) => ({ ...state, notification: emptyNotification }),
 
   [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),

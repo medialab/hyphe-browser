@@ -12,11 +12,11 @@ export const showNotification = ({ id, messageId, messageValues = {}, type = 'no
   })
 
   if (timeout) {
-    setTimeout(() => dispatch(hideError()), timeout)
+    setTimeout(() => dispatch(hideNotification(id)), timeout)
   }
 }
 
-export const hideNotification = createAction(HIDE_NOTIFICATION)
+export const hideNotification = createAction(HIDE_NOTIFICATION, (id, type) => ({ id, type }))
 
 export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key, hide = null) => ({ key, hide }))
 
@@ -26,4 +26,4 @@ export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key,
 export const showError = ({ id, messageId, messageValues, fatal = false, timeout }) => dispatch =>
   showNotification({ id, messageId, messageValues, type: fatal ? 'error' : 'warning', timeout })(dispatch)
 
-export const hideError = hideNotification
+export const hideError = id => hideNotification(id, 'error')
