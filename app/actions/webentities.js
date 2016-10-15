@@ -182,7 +182,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
   return Promise.all(operations)
     .then(([head]) => {
       if (prefix && head.created) {
-        showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_CREATED_TIMEOUT })
+        dispatch(showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_CREATED_TIMEOUT }))
       }
       if (crawl) {
         // if prefix, then webentity just been created, and we want this id, not the old one
