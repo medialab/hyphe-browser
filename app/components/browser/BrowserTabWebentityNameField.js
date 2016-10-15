@@ -19,6 +19,7 @@ class BrowserTabWebentityNameField extends React.Component {
     if (e.keyCode === 13) { // ENTER
       e.stopPropagation()
       this.setState({ dirty: false })
+      e.target.blur()
       this.props.onChange(e.target.value)
     } else if (e.keyCode === 27) { // ESCAPE
       e.stopPropagation()
