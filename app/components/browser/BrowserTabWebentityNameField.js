@@ -18,15 +18,15 @@ class BrowserTabWebentityNameField extends React.Component {
   }
 
   onKeyUp (e) {
-    if (e.keyCode === 13) { // ENTER
+    if (~[13, 27].indexOf(e.keyCode)) {
       e.stopPropagation()
       this.setState({ dirty: false, editing: false })
       e.target.blur()
-      this.props.onChange(e.target.value)
-    } else if (e.keyCode === 27) { // ESCAPE
-      e.stopPropagation()
-      this.setState({ dirty: false })
-      e.target.value = this.props.initialValue
+      if (e.keyCode === 13) { // ENTER
+        this.props.onChange(e.target.value)
+      } else if (e.keyCode === 27) { // ESCAPE
+        e.target.value = this.props.initialValue
+      }
     }
   }
 
