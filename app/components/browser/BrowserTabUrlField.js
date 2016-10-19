@@ -116,7 +116,7 @@ class BrowserTabUrlField extends React.Component {
       )
     }
 
-    return <span className={ className } onClick={ onClick }
+    return <span className={ className } onClick={ this.props.crawlquery ? null : onClick }
       dangerouslySetInnerHTML={ {
         __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url, this.props.tlds)
       } } />
