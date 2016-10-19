@@ -46,6 +46,8 @@ class TabContent extends React.Component {
 
     this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
     this.doNotDeclarePageOnStop = false // idem
+
+    this._onKeyUp = this.onKeyUp.bind(this)
   }
 
   componentDidMount () {
@@ -383,11 +385,19 @@ class TabContent extends React.Component {
     )
   }
 
+  onKeyUp (e) {
+    const { webentity, adjusting, hideAdjustWebentity } = this.props
+    if (adjusting && e.keyCode === 27) { // ESCAPE
+      e.stopPropagation()
+      hideAdjustWebentity(webentity.id)
+    }
+  }
+
   render () {
     const { active, id, disableWebentity, adjusting, noCrawlPopup } = this.props
 
     return (
-      <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } }>
+      <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
