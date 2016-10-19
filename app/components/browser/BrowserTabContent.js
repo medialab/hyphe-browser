@@ -363,7 +363,6 @@ class TabContent extends React.Component {
 
     const cancel = e => {
       e.preventDefault()
-      doToggle()
       hideAdjustWebentity(webentity.id)
     }
 
