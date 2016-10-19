@@ -1,9 +1,7 @@
 .browser-tab-toolbar-webentity {
   flex-shrink: 1;
   flex-grow: 0; /* Do not grow bigger, empty space will be occupied by URL field */
-}
 
-.browser-tab-toolbar-webentity {
   input {
     font-size: 12px;
     font-weight: bold;
@@ -11,6 +9,7 @@
     padding: 5px 10px;
     text-overflow: ellipsis;
     width: 376px;
+    cursor: text;
 
     @media (max-width: 1024px) {
       width: 266px;
@@ -21,6 +20,12 @@
   &.adjusting {
     input:focus {
       border: 1px solid var(--color-white)!important;
+    }
+
+    &.over-overlay {
+      input {
+        cursor: default;
+      }
     }
 
     button:nth-child(2), button:nth-child(3) {

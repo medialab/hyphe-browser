@@ -29,7 +29,7 @@
     input {
       background: var(--color-grey);
       border-color: var(--color-grey);
-      cursor: pointer;
+      cursor: text;
       padding-right: 30px;
 
       &::-webkit-input-placeholder {
@@ -38,7 +38,6 @@
 
       &:focus {
         background: var(--color-white);
-        cursor: text;
 
         &::-webkit-input-placeholder {
           color: var(--color-white);
@@ -76,6 +75,7 @@
       font-family: var(--font-pt);
       font-size: 12px;
       text-align: left;
+      cursor: text;
     }
 
     // tag with the small cross before
@@ -119,6 +119,7 @@
       background: var(--color-white);
       padding-left: 12px;
       text-align: left;
+      cursor: pointer;
 
       &.is-selected, &.is-focused, &:hover {
         background: var(--color-white);

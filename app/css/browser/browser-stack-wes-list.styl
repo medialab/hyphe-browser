@@ -2,19 +2,27 @@
 
 .browser-stack-wes-list {
   // upper part
+  cursor: pointer;
 
   .Select-control {
     border: 0;
     font-family: var(--font-pt);
     font-size: 12px;
     font-weight: bold;
+    cursor: pointer;
+
+    .Select-arrow-zone {
+      cursor: pointer;
+    }
   }
 
   // black bg
   .Select-value {
     background: var(--color-black);
+    cursor: pointer;
 
     .we-name, .we-indegree {
+      cursor: pointer;
       color: var(--color-white);
       &::before {
         color: var(--color-white);
@@ -27,6 +35,7 @@
     color: var(--color-white);
     font-size: 18px;
     vertical-align: middle;
+    cursor: pointer;
   }
 
   // grey bg
@@ -49,14 +58,18 @@
   }
 
   &.is-disabled {
+    cursor: default;
+
     .Select-control {
       background: var(--color-grey);
+      cursor: default;
     }
   }
 
   // upper label
   .browser-stack-wes-value {
     display: flex;
+    cursor: pointer;
 
     .we-indegree {
       margin: 0 1.5em;
@@ -125,7 +138,7 @@
       background: none;
     }
 
-    .we-name {
+    .we-name, .we-indegree {
       cursor: pointer;
     }
 

@@ -7,12 +7,17 @@
     font-size: 12px;
     min-height: 30px;
     width: 100%;
+    cursor: text;
 
     text-align: left;
     padding-left: 35px;
 
     &.btn {
       padding-top: 10px;
+    }
+
+    em {
+      cursor: inherit;
     }
 
     /* :first-child = scheme */
@@ -42,6 +47,12 @@
     }
 
     &.startcrawl {
+      cursor: default;
+
+      em {
+        cursor: default;
+      }
+
       em:not(:first-child) {
         background: var(--color-blue-light);
       }
@@ -50,6 +61,7 @@
 
   .browser-tab-prefix-selector {
     text-align: left;
+    cursor: initial;
 
     .btn-group {
       .btn.prefix {
