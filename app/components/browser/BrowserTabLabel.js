@@ -83,9 +83,11 @@ class BrowserTabLabel extends React.Component {
     })
     const label = newTab
       ? formatMessage({ id: 'new-tab'})
-      : webentity && webentity.name
-        ? webentity.name
-        : title
+      : id === HYPHE_TAB_ID 
+        ? 'H'
+        : webentity && webentity.name
+          ? webentity.name
+          : title
 
     // use of <object> explained here: http://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js
     // because medialab return a 200 with no favicon :s
