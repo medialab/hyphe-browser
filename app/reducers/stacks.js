@@ -14,10 +14,10 @@ const initialState = {
   webentities: [],
   list: [
     {
-      name: 'UNDECIDED',
-      method: 'store.get_webentities_by_status',
-      args: ['UNDECIDED', 'name', -1, 0],
-      condition: 'UNDECIDED'
+      name: 'DISCOVERED',
+      method: 'store.advanced_search_webentities',
+      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false, true],
+      condition: 'DISCOVERED'
     },
     {
       name: 'IN',
@@ -38,16 +38,16 @@ const initialState = {
       condition: 'IN'
     },
     {
+      name: 'UNDECIDED',
+      method: 'store.get_webentities_by_status',
+      args: ['UNDECIDED', 'name', -1, 0],
+      condition: 'UNDECIDED'
+    },
+    {
       name: 'OUT',
       method: 'store.get_webentities_by_status',
       args: ['OUT', 'name', -1, 0],
       condition: 'OUT'
-    },
-    {
-      name: 'DISCOVERED',
-      method: 'store.advanced_search_webentities',
-      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false, true],
-      condition: 'DISCOVERED'
     }
   ]
 }

@@ -67,8 +67,8 @@ class SideBar extends React.Component {
       <div className="browser-side-bar-status">
         <h3><span><T id="status" /></span></h3>
         <div>
-          { this.renderStatusButton('UNDECIDED') }
           { this.renderStatusButton('IN') }
+          { this.renderStatusButton('UNDECIDED') }
           { this.renderStatusButton('OUT') }
         </div>
       </div>
@@ -84,7 +84,7 @@ class SideBar extends React.Component {
         className={ cx('btn btn-default hint--bottom', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
         aria-label={ formatMessage({ id: 'corpus-status.' + status }) }
         onClick={ () => this.setStatus(status) }>
-        <span>{ formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>
+        <span>{ status === 'UNDECIDED' ? '?' : formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>
       </button>
     )
   }
