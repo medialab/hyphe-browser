@@ -82,17 +82,16 @@ class BrowserStack extends React.Component {
   }
 
   renderProgress () {
-    const { webentities, selectedStack } = this.props
-    if (!selectedStack) return
+    const { webentities, selectedStack, loading } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
 
-    return <progress className="hint--right" aria-label={ `${viewCount} / ${webentities.length}` } value={ viewCount } max={ webentities.length } />
+    return <progress className="hint--right" aria-label={ loading || !selectedStack ? "" : `${viewCount} / ${webentities.length}` } value={ loading ? 0 : viewCount } max={ webentities.length } />
   }
 
   // left side
   renderWesSelector () {
     const { formatMessage } = this.context.intl
-    const { selectedStack, selectedWebentity, webentities } = this.props
+    const { selectedStack, selectedWebentity, webentities, loading } = this.props
 
     // disable next / prev
     const isFirst = webentities.length && selectedWebentity &&
@@ -105,7 +104,7 @@ class BrowserStack extends React.Component {
 
         <button className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
-          disabled={ !selectedStack || isFirst }
+          disabled={ !selectedStack || loading || isFirst }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-angle-left"></span>
         </button>
@@ -120,7 +119,7 @@ class BrowserStack extends React.Component {
 
         <button className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
-          disabled={ !selectedStack || isLast }
+          disabled={ !selectedStack || loading || isLast }
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-angle-right"></span>
         </button>
@@ -148,6 +147,7 @@ BrowserStack.propTypes = {
   corpus: PropTypes.object.isRequired,
   status: PropTypes.object.isRequired,
   lastRefresh: PropTypes.number,
+  loading: PropTypes.bool,
   locale: PropTypes.string.isRequired,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
@@ -168,6 +168,7 @@ const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { 
   corpus: corpora.selected,
   status: corpora.status,
   lastRefresh: stacks.lastRefresh,
+  loading: stacks.loading,
   locale,
   server: servers.selected,
   selectedStack: stacks.selected,

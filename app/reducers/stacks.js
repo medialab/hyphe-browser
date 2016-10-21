@@ -2,7 +2,9 @@ import createReducer from '../utils/create-reducer'
 
 import {
   EMPTY_STACK,
+  FETCH_STACK_REQUEST,
   FETCH_STACK_SUCCESS,
+  FETCH_STACK_ERROR,
   VIEW_WEBENTITY
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
@@ -66,11 +68,22 @@ export default createReducer(initialState, {
     selected: null
   }),
 
-  [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
+  [FETCH_STACK_REQUEST]: (state, { stack }) => ({
     ...state,
     selected: stack,
+    loading: true
+  }),
+
+  [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
+    ...state,
+    loading: false,
     lastRefresh: Date.now(),
     webentities
+  }),
+
+  [FETCH_STACK_ERROR]: (state) => ({
+    ...state,
+    loading: false
   }),
 
   [VIEW_WEBENTITY]: (state, { webentity }) => ({

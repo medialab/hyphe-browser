@@ -3,6 +3,7 @@ import 'react-select/dist/react-select.css'
 import '../../css/browser/browser-stack-wes-list'
 
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 import Select from 'react-virtualized-select'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
@@ -47,20 +48,20 @@ class BrowserStackWesList extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { webentities, selectedWebentity, selectWebentity } = this.props
+    const { webentities, selectedWebentity, selectWebentity, loadingStack } = this.props
 
     return (
         <Select className="browser-stack-wes-list"
           arrowRenderer={ () => this.renderArrow() }
           clearable={ false }
-          disabled={ !webentities.length }
+          disabled={ loadingStack || !webentities.length }
           labelKey={ 'name' }
           // keep in sync with .Select-menu-outer, .Select-menu max-height
           maxHeight={ 490 }
           onChange={ (v) => selectWebentity(v) }
-          options={ webentities || [] }
+          options={ !loadingStack && webentities ? webentities : [] }
           optionRenderer={ (o) => this.renderOption(o) }
-          placeholder={ formatMessage({id : 'select-stack' }) }
+          placeholder={ formatMessage({id : loadingStack ? 'loading' : 'select-stack' }) }
           searchable={ false }
           value={ selectedWebentity && selectedWebentity.id }
           valueKey={ 'id' }
@@ -75,7 +76,7 @@ BrowserStackWesList.contextTypes = {
 }
 
 BrowserStackWesList.propTypes = {
-  selectedStack: PropTypes.any,
+  loadingStack: PropTypes.bool,
   selectedWebentity: PropTypes.any,
   webentities: PropTypes.array,
 
@@ -83,4 +84,8 @@ BrowserStackWesList.propTypes = {
   selectWebentity: PropTypes.func
 }
 
-export default BrowserStackWesList
+const mapStateToProps = ({ stacks, intl: {locale} }) => ({
+  loadingStack: stacks.loading,
+})
+
+export default connect(mapStateToProps)(BrowserStackWesList)

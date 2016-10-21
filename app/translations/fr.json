@@ -65,7 +65,7 @@
   "linked": "Citée ",
   "linkedtimes": "{count, plural, \n=1 {une fois}\nother {# fois}}",
   "loading-corpora": "Chargement des corpus…",
-  "loading-contextual-links": "Chargement…",
+  "loading": "Chargement…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
   "menu.close-tab": "Fermer l'onglet",

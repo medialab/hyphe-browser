@@ -135,7 +135,7 @@ class SideBarContextualLists extends React.Component {
             </button>
           ) }
           { loading
-            ? <T id="loading-contextual-links" />
+            ? <T id="loading" />
             : <List links={ this.props[selected] } name={ selected } />
           }
         </nav>
