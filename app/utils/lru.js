@@ -174,14 +174,17 @@ export function hasExactMatching (lrus, url, tldTree) {
 
 // Returns the URL (string) with injected '<em>' tags around parts matched by longest LRU (string or object)
 export function highlightUrlHTML (lrus, url, tldTree) {
-  const matched = longestMatching(lrus, url, tldTree)
+  const urlLru = urlToLru(url, tldTree)
+  if (!urlLru) {
+    return url
+  }
 
+  const matched = longestMatching(lrus, url, tldTree)
   if (!matched) {
     return url
   }
 
   const lruLru = matched.lru
-  const urlLru = urlToLru(url, tldTree)
 
   // General case: {scheme}://subhost.{host}:{port}/{path}/subpath?{query}#{fragment}
   // All {token}s will be surrounded by a '<em>' tag
