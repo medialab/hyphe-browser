@@ -47,6 +47,8 @@ class BrowserTabUrlField extends React.Component {
   componentDidUpdate () {
     if (this.state.editing && this.state.focusInput) {
       findDOMNode(this).querySelector('input').select()
+    } else if (this.props.prefixSelector) {
+      findDOMNode(this).querySelector('div').focus()
     }
   }
 
@@ -139,7 +141,7 @@ class BrowserTabUrlField extends React.Component {
       .concat([ [ 'fragment', url.fragment && ('#' + url.fragment), url.fragment === lru.fragment ] ])
 
     return (
-      <div className="form-control btn browser-tab-prefix-selector">
+      <div tabIndex="0" className="form-control btn browser-tab-prefix-selector">
         <div className="btn-group" onMouseOut={ () => this.setState({ overPrefixUntil: -1 }) }>
           { parts.map((p, i, a) => this.renderPrefixSelectorButton(p, i, a, lruToUrl(lru))) }
         </div>

@@ -19,7 +19,6 @@ class BrowserTabWebentityNameField extends React.Component {
 
   onKeyUp (e) {
     if (~[13, 27].indexOf(e.keyCode)) {
-      e.stopPropagation()
       this.setState({ dirty: false, editing: false })
       e.target.blur()
       if (e.keyCode === 13) { // ENTER
