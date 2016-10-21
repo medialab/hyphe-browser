@@ -385,8 +385,8 @@ class TabContent extends React.Component {
   }
 
   onKeyUp (e) {
-    const { webentity, adjusting, hideAdjustWebentity } = this.props
-    if (adjusting && e.keyCode === 27) { // ESCAPE
+    const { active, webentity, adjusting, hideAdjustWebentity } = this.props
+    if (active && adjusting && e.keyCode === 27) { // ESCAPE
       e.stopPropagation()
       hideAdjustWebentity(webentity.id)
     }

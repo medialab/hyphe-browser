@@ -5,11 +5,11 @@ import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
-import { hideError } from '../../actions/browser'
+import { hideNotif } from '../../actions/browser'
 
 class Notification extends React.Component {
   render () {
-    const { messageId, messageValues, type = 'error', hideError } = this.props
+    const { messageId, messageValues, type = 'error', hideNotif } = this.props
 
     if (!messageId) {
       return null
@@ -20,7 +20,7 @@ class Notification extends React.Component {
     return (
       <div className="notification-container">
         <div className={ `animated bounceInDown notification notification-${type}` }>
-          <a className="error-dialog-close" onClick={ () => hideError() }><span className="icon icon-cancel-circled" /></a>
+          <a className="error-dialog-close" onClick={ () => hideNotif() }><span className="icon icon-cancel-circled" /></a>
           <strong>{ message }</strong>
         </div>
       </div>
@@ -35,7 +35,7 @@ Notification.propTypes = {
   locale: PropTypes.string.isRequired,
 
   // actions
-  hideError: PropTypes.func.isRequired
+  hideNotif: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ intl: { locale }, ui }) => ({
@@ -43,4 +43,4 @@ const mapStateToProps = ({ intl: { locale }, ui }) => ({
   locale
 })
 
-export default connect(mapStateToProps, { hideError })(Notification)
+export default connect(mapStateToProps, { hideNotif })(Notification)

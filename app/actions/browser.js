@@ -27,3 +27,5 @@ export const showError = ({ id, messageId, messageValues, fatal = false, timeout
   showNotification({ id, messageId, messageValues, type: fatal ? 'error' : 'warning', timeout })(dispatch)
 
 export const hideError = id => hideNotification(id, 'error')
+
+export const hideNotif = () => hideNotification()
