@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T } from 'react-intl'
 
+import { selectCorpus } from '../../actions/corpora'
 import jsonrpc from '../../utils/jsonrpc'
 
 class CorpusLoginForm extends React.Component {
@@ -19,12 +20,15 @@ class CorpusLoginForm extends React.Component {
   }
 
   onSubmit (evt) {
+    const { server, corpus, selectCorpus, routerPush } = this.props
     evt.preventDefault()
 
     this.setState({ submitting: true })
-    jsonrpc(this.props.server.url)('start_corpus', [this.props.corpus.corpus_id, this.state.password])
+    jsonrpc(server.url)('start_corpus', [corpus.corpus_id, this.state.password])
       .then(() => {
-        this.props.routerPush('/browser')
+        this.setState({ submitting: false })
+        selectCorpus(server, corpus)
+        routerPush('/browser')
       }, () => {
         this.setState({ submitting: false, errors: ['error.wrong-password'] })
       })
@@ -63,14 +67,17 @@ CorpusLoginForm.propTypes = {
 
   // action
   routerPush: PropTypes.func,
+  selectCorpus: PropTypes.func,
 }
 
 const mapStateToProps = ({ corpora, intl: { locale }, servers }) => ({
   corpus: corpora.selected,
   locale,
   server: servers.selected,
-  routerPush: routerActions.push,
 })
 
-export default connect(mapStateToProps)(CorpusLoginForm)
+export default connect(mapStateToProps, {
+  routerPush: routerActions.push,
+  selectCorpus
+})(CorpusLoginForm)
 

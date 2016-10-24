@@ -139,5 +139,5 @@ const mapStateToProps = ({ corpora, servers, intl: { locale }, ui }) => ({
 
 export default connect(mapStateToProps, {
   routerPush: routerActions.push,
-  selectCorpus,
+  selectCorpus
 })(CorpusList)
