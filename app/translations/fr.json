@@ -77,6 +77,7 @@
   "name": "Nom",
   "new-tab": "Nouvel onglet",
   "none": "Aucune",
+  "open-tab": "Ouvrir un nouvel onglet",
   "password": "Mot de passe",
   "running-corpora": "{count, plural, \n=0 {aucun démarré}\n=1 {1 démarré}\nother {# démarrés}}",
   "save": "Créer la webentité",

@@ -77,6 +77,7 @@
   "name": "Name",
   "new-tab": "New tab",
   "none": "None",
+  "open-tab": "Open new tab",
   "password": "Password",
   "running-corpora": "{count, plural, \n=0 {none running}\n=1 {1 running}\nother {# running}}",
   "save": "Create webentity",

@@ -126,6 +126,7 @@ class BrowserTabs extends React.Component {
   }
 
   render () {
+    const { formatMessage } = this.context.intl
     return (
       <div className="browser-tabs">
         <div className="browser-tab-labels">
@@ -134,7 +135,7 @@ class BrowserTabs extends React.Component {
           </div>
           <div className="browser-tab-labels-main">
             { this.renderTabLabels(false) }
-            <div className="browser-tab-new"
+            <div className="browser-tab-new" title={ formatMessage({ id: 'open-tab' }) }
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
             </div>
           </div>
