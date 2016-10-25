@@ -61,7 +61,7 @@ class Login extends React.Component {
         defaultValue={ selectedServer && selectedServer.url }
         disabled={ location.pathname !== '/login' }
         onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }>
-        { options.map((o) => <option key={ o.key } value={ o.value }>{ o.label }</option>) }
+        { options.map((o) => <option key={ o.key + o.label } value={ o.value }>{ o.label }</option>) }
       </select>
     )
   }
