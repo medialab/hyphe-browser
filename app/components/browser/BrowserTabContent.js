@@ -176,7 +176,10 @@ class TabContent extends React.Component {
         hideAdjustWebentity(webentity.id)
       })
       .catch((err) => {
-        showError({ messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false })
+        showError( !~err.message.indexOf("is already set to an existing WebEntity")
+          ? { messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false }
+          : { messageId: 'error.existing-prefix', fatal: false}
+        )
       })
   }
 

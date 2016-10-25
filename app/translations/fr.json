@@ -44,6 +44,7 @@
   "error.corpus-not-started-no-resource": "Corpus non démarré. Le serveur est surchargé, merci de réessayer plus tard.",
   "error.corpus-not-started-starting": "Corpus non démarré. Démarrage en cours…",
   "error.dns-error-search": "Domaine non trouvable, recherche en cours…",
+  "error.existing-prefix": "Attention : ce préfixe est déjà rattaché à une autre webentité (cf. Contexte)",
   "error.loading-corpora": "Erreur de chargement des corpus",
   "error.network-error": "Erreur réseau ({error})",
   "error.password-mismatch": "Attention, les mots de passe diffèrent.",
