@@ -142,7 +142,7 @@ class ServerForm extends React.Component {
 
         <div className="form-actions">
           <button className="btn btn-primary" disabled={ this.state.submitting }>
-            <T id="save" />
+            <T id="save-server" />
           </button>
           <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
             <T id="cancel" />

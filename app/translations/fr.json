@@ -82,6 +82,7 @@
   "password": "Mot de passe",
   "running-corpora": "{count, plural, \n=0 {aucun démarré}\n=1 {1 démarré}\nother {# démarrés}}",
   "save": "Créer la webentité",
+  "save-server": "Enregistrer le serveur",
   "save-and-crawl": "Créer et crawler",
   "select-server": "Sélectionner un serveur",
   "select-stack": "Explorer le corpus >",

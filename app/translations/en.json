@@ -82,6 +82,7 @@
   "password": "Password",
   "running-corpora": "{count, plural, \n=0 {none running}\n=1 {1 running}\nother {# running}}",
   "save": "Create webentity",
+  "save-server": "Save the server",
   "save-and-crawl": "Create and crawl",
   "select-server": "Select a server",
   "select-stack": "Browse corpus >",
