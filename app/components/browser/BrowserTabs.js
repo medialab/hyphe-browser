@@ -28,6 +28,8 @@ class BrowserTabs extends React.Component {
     // Event emitter for each tab, not a state or prop as it's not supposed
     // to trigger rerender
     this.tabEventBus = {}
+
+    this._selectTab = this.selectTab.bind(this)
   }
 
   componentDidMount () {
@@ -101,6 +103,13 @@ class BrowserTabs extends React.Component {
     ))
   }
 
+  selectTab (id) {
+    if (id === HYPHE_TAB_ID) {
+      this.reloadTab(id, true)
+    }
+    this.props.selectTab(id)
+  }
+
   renderTabLabels (fixed) {
     const { formatMessage } = this.context.intl
     const tabs = this.props.tabs.filter((tab) => !!tab.fixed === fixed)
@@ -117,7 +126,7 @@ class BrowserTabs extends React.Component {
           webentity={ this.getWebentity(tab.id) }
           newTab={ isNewTab }
           active={ this.props.activeTabId === tab.id }
-          selectTab={ this.props.selectTab }
+          selectTab={ this._selectTab }
           openTab={ this.props.openTab }
           closeTab={ this.props.closeTab }
         />

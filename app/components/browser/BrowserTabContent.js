@@ -2,6 +2,7 @@ import '../../css/browser/browser-tab-content'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 import networkErrors from '@naholyr/chromium-net-errors'
@@ -63,6 +64,12 @@ class TabContent extends React.Component {
     eventBus.on('close', this.navCloseHandler)
     this.navOpenHandler = (url) => openTab(url)
     eventBus.on('open', this.navOpenHandler)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.active !== this.props.active && this.props.active) {
+      findDOMNode(this.webviewComponent).focus()
+    }
   }
 
   componentWillReceiveProps (props) {
@@ -313,8 +320,8 @@ class TabContent extends React.Component {
     const { id, url, setTabUrl, eventBus, closable } = this.props
 
     return (url === PAGE_HYPHE_HOME)
-      ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } />
-      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } />
+      ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
+      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
 
   // google form for example

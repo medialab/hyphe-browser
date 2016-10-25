@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 import { intlShape } from 'react-intl'
 import { eventBusShape } from '../../types'
+import { HYPHE_TAB_ID } from '../../constants'
 
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
 
@@ -151,6 +153,10 @@ class WebView extends React.Component {
     webview.addEventListener('did-stop-loading', () => {
       this.isLoading = false
       update('stop', webview.src)
+      // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
+      if (this.props.tabId === HYPHE_TAB_ID) {
+        webview.executeJavaScript("window.onblur = function() { if ($('#stopFA2 span.glyphicon-pause:visible').length) $('#stopFA2').click() }")
+      }
     })
 
     // In case of error, notify owner
@@ -217,6 +223,7 @@ class WebView extends React.Component {
     // the preload script below is used to handle right click context menu
     return (
       <webview
+        tabIndex="0"
         src={ this.props.url }
         preload="./utils/webview-preload-script.js"
       />
@@ -233,6 +240,7 @@ WebView.propTypes = {
   visible: PropTypes.bool,
   closable: PropTypes.bool,
   url: PropTypes.string.isRequired,
+  tabId: PropTypes.string,
   eventBus: eventBusShape.isRequired
 }
 
@@ -241,4 +249,8 @@ WebView.defaultProps = {
   visible: true
 }
 
-export default WebView
+const mapStateToProps = ({ tabs }) => ({
+  tabId: tabs.activeTab && tabs.activeTab.id
+})
+
+export default connect(mapStateToProps)(WebView)
