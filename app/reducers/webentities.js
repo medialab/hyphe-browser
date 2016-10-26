@@ -146,6 +146,7 @@ export default createReducer(initialState, {
     ...state,
     selected: webentity
   })
+
 })
 
 

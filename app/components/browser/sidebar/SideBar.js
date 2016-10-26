@@ -11,7 +11,7 @@ import HypheFooter from './../../HypheFooter'
 import SideBarContextualLists from './SideBarContextualLists'
 import SideBarTags from './SideBarTags'
 
-import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage } from '../../../actions/webentities'
+import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage, cancelWebentityCrawls } from '../../../actions/webentities'
 import { setTabUrl } from '../../../actions/tabs'
 import { getWebEntityActivityStatus } from '../../../utils/status'
 import { compareUrls } from '../../../utils/lru'
@@ -26,18 +26,23 @@ class SideBar extends React.Component {
   }
 
   setStatus (status) {
-    const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId } = this.props
+    const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId, cancelWebentityCrawls } = this.props
+    const crawling = !!~["PENDING", "RUNNING"].indexOf(getWebEntityActivityStatus(webentity))
 
     if (status !== 'DISCOVERED' && status === webentity.status) {
       // Click on current status = set to discovered
       status = 'DISCOVERED'
     }
 
-    if (status === 'IN') {
+    if (status === 'IN' && !crawling) {
       // Set to IN = go to "adjust" mode and validation triggers crawling
       showAdjustWebentity(webentity.id, true)
     } else {
       setWebentityStatus(serverUrl, corpusId, status, webentity.id)
+    }
+
+    if (status === 'OUT' && crawling) {
+      cancelWebentityCrawls(serverUrl, corpusId, webentity.id)
     }
   }
 
@@ -184,6 +189,7 @@ SideBar.propTypes = {
   setTabUrl: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
+  cancelWebentityCrawls: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired
 }
 
@@ -195,5 +201,6 @@ export default connect(mapStateToProps, {
   setTabUrl,
   setWebentityHomepage,
   setWebentityStatus,
+  cancelWebentityCrawls,
   showAdjustWebentity
 })(SideBar)

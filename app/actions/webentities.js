@@ -8,7 +8,15 @@
 
 import jsonrpc from '../utils/jsonrpc'
 
-import { CRAWL_DEPTH, NOTICE_WEBENTITY_CREATED, NOTICE_WEBENTITY_CREATED_TIMEOUT } from '../constants'
+import {
+  CRAWL_DEPTH,
+  NOTICE_WEBENTITY_CREATED,
+  NOTICE_WEBENTITY_CREATED_TIMEOUT,
+  NOTICE_WEBENTITY_CRAWL_STARTED,
+  NOTICE_WEBENTITY_CRAWL_STARTED_TIMEOUT,
+  NOTICE_WEBENTITY_CRAWL_CANCELED,
+  NOTICE_WEBENTITY_CRAWL_CANCELED_TIMEOUT
+} from '../constants'
 import { createAction } from 'redux-actions'
 
 import { showNotification } from './browser'
@@ -55,6 +63,10 @@ export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUE
 export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
 export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
 
+// canceling a webentity's crawls
+export const CANCEL_WEBENTITY_CRAWLS_REQUEST = '§_CANCEL_WEBENTITY_CRAWLS_REQUEST'
+export const CANCEL_WEBENTITY_CRAWLS_SUCCESS = '§_CANCEL_WEBENTITY_CRAWLS_SUCCESS'
+export const CANCEL_WEBENTITY_CRAWLS_FAILURE = '§_CANCEL_WEBENTITY_CRAWLS_FAILURE'
 
 export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
@@ -192,13 +204,29 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
           .then(() => {
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
-            dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'RUNNING', webentityId: id } })
+            dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'PENDING', webentityId: id } })
+            dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_STARTED, messageId: 'webentity-info-crawl-started-notification', timeout: NOTICE_WEBENTITY_CRAWL_STARTED_TIMEOUT }))
           })
       }
     })
     .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))
     .catch((error) => {
       dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity, error } })
+      throw error
+    })
+}
+
+export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (dispatch) => {
+  dispatch({ type: CANCEL_WEBENTITY_CRAWLS_REQUEST, payload: { serverUrl, corpusId, webentityId } })
+
+  return jsonrpc(serverUrl)('cancel_webentity_jobs', [webentityId, corpusId])
+    .then(() => {
+      dispatch({ type: CANCEL_WEBENTITY_CRAWLS_SUCCESS, payload: { serverUrl, corpusId, webentityId} })
+      dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'CANCELED', webentityId: webentityId } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_CANCELED, messageId: 'webentity-info-crawl-canceled-notification', timeout: NOTICE_WEBENTITY_CRAWL_CANCELED_TIMEOUT }))
+    })
+    .catch((error) => {
+      dispatch({ type: CANCEL_WEBENTITY_CRAWLS_FAILURE, payload: { serverUrl, corpusId, webentityId, error } })
       throw error
     })
 }
