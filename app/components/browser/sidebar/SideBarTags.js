@@ -85,7 +85,7 @@ class SideBarTags extends React.Component {
     const key = `values/${category}`
 
     const previousTags = this.state[key] || []
-    const nextTags = options.map(o => o.value)
+    const nextTags = options.filter(o => o).map(o => o.value)
     const addedTags = difference(nextTags, previousTags)
     const removedTags = difference(previousTags, nextTags)
 
@@ -128,7 +128,6 @@ class SideBarTags extends React.Component {
         <h4 className="category-name">{ category }</h4>
         <div className="category-tag">
           <Creatable
-            clearable={ false }
             multi={ false }
             newOptionCreator={ ({ label }) => toOption(label) }
             options={ suggestions.map(toOption) }
