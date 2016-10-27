@@ -68,6 +68,10 @@
     }
 
     &.is-focused {
+      &.Select--single .Select-value {
+        display: none;
+      }
+
       .Select-control {
         border: 1px solid var(--color-black);
       }
@@ -113,7 +117,7 @@
         }
       }
       .Select-input, .Select-value {
-        max-width: 361px;
+        max-width: 346px;
         @media (max-width: 1024px) {
           max-width: 256px;
         }

@@ -100,6 +100,7 @@
   "sidebar.contextual.subs": "Sub entities",
   "starting-corpus": "Starting corpus…",
   "status": "Status",
+  "tags-clear-category-value": "Delete tag",
   "tooltip.corpus-close": "Exit corpus",
   "tooltip.stack-prev": "Previous webentity",
   "tooltip.stack-next": "Next webentity",

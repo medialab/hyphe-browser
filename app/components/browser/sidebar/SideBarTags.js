@@ -112,10 +112,10 @@ class SideBarTags extends React.Component {
       <div className="browser-side-bar-tags-free-tags" key={ category } onKeyUp={ this._onKeyUp } >
         <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
         <Creatable
+          autoBlur ignoreCase multi
           clearable={ false }
-          ignoreCase={ true }
-          multi={ true }
           newOptionCreator={ ({ label }) => toOption(label) }
+          noResultsText=''
           options={ suggestions.map(toOption) }
           onChange={ (options) => this.onChangeCreatable(options, category) }
           placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
@@ -136,13 +136,15 @@ class SideBarTags extends React.Component {
         <h4 className="category-name">{ category }</h4>
         <div className="category-tag" onKeyUp={ this._onKeyUp } >
           <Creatable
-            ignoreCase={ true }
+            autoBlur ignoreCase
             multi={ false }
+            clearValueText={ formatMessage({ id: 'tags-clear-category-value' }) }
             newOptionCreator={ ({ label }) => toOption(label) }
+            noResultsText=''
             options={ suggestions.map(toOption) }
             onChange={ (option) => this.onChangeCreatable([option], category) }
-            placeholder={ '' }
-            promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
+            placeholder=''
+            promptTextCreator={ (tag) => tag+' '  }
             value={ values.map(toOption)[0] || '' } />
         </div>
       </div>
