@@ -113,6 +113,7 @@ class SideBarTags extends React.Component {
         <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
         <Creatable
           clearable={ false }
+          ignoreCase={ true }
           multi={ true }
           newOptionCreator={ ({ label }) => toOption(label) }
           options={ suggestions.map(toOption) }
@@ -135,6 +136,7 @@ class SideBarTags extends React.Component {
         <h4 className="category-name">{ category }</h4>
         <div className="category-tag" onKeyUp={ this._onKeyUp } >
           <Creatable
+            ignoreCase={ true }
             multi={ false }
             newOptionCreator={ ({ label }) => toOption(label) }
             options={ suggestions.map(toOption) }
@@ -189,7 +191,7 @@ function  isFreeTags (category) {
 
 function toOption (tag) {
   return tag
-    ? { label: tag.toLowerCase(), value: tag.toLowerCase() }
+    ? { label: tag, value: tag }
     : { label: '', value: '' }
 }
 
