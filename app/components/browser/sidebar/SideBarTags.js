@@ -39,6 +39,13 @@ class SideBarTags extends React.Component {
     this.addCategory = this.addCategory.bind(this)
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
     this.renderTagsCategory = this.renderTagsCategory.bind(this)
+    this._onKeyUp = this.onKeyUp.bind(this)
+  }
+
+  onKeyUp (e) {
+    if (e.keyCode === 27) { // ESCAPE
+      e.target.blur()
+    }
   }
 
   toggleCategories () {
@@ -102,7 +109,7 @@ class SideBarTags extends React.Component {
     const values = this.state[`values/${category}`] || []
 
     return (
-      <div className="browser-side-bar-tags-free-tags" key={ category }>
+      <div className="browser-side-bar-tags-free-tags" key={ category } onKeyUp={ this._onKeyUp } >
         <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
         <Creatable
           clearable={ false }
@@ -126,7 +133,7 @@ class SideBarTags extends React.Component {
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
         <h4 className="category-name">{ category }</h4>
-        <div className="category-tag">
+        <div className="category-tag" onKeyUp={ this._onKeyUp } >
           <Creatable
             multi={ false }
             newOptionCreator={ ({ label }) => toOption(label) }
@@ -165,6 +172,7 @@ class SideBarTags extends React.Component {
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
               <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
                 value={ this.state.newCategory }
+                onKeyUp={ this._onKeyUp }
                 onInput={ this.onChangeNewCategory } />
               <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
             </form>
