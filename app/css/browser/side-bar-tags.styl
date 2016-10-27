@@ -70,19 +70,14 @@
       }
     }
 
-    .Select-input {
-      div {
-        white-space: pre-wrap;
-        text-overflow: ellipsis;
-      }
-    }
-
     .Select-value {
       color: var(--color-black);
       font-family: var(--font-pt);
       font-size: 12px;
       text-align: left;
       cursor: text;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .Select-clear {
@@ -97,45 +92,43 @@
           width: 185px;
         }
       }
-      .Select-value {
+      .Select-input, .Select-value {
         max-width: 231px;
         @media (max-width: 1024px) {
           max-width: 170px;
-        }
-      }
-      .Select-input {
-        width: 163px;
-        @media (max-width: 1024px) {
-          width: 170px;
         }
       }
     }
     // tag with the small cross before
     &.Select--multi {
       .Select-control {
-        width: 376px;
+        min-width: 361px;
+        max-width: 376px;
         @media (max-width: 1024px) {
-          width: 266px;
+          min-width: 251px;
+          max-width: 266px;
         }
       }
-      .Select-input {
-        width: 293px;
+      .Select-input, .Select-value {
+        max-width: 361px;
         @media (max-width: 1024px) {
-          width: 300px;
+          max-width: 236px;
         }
       }
       .Select-value {
-        max-width: 361px;
-        @media (max-width: 1024px) {
-          max-width: 300px;
-        }
         background: var(--color-grey-light);
         border: 0;
         margin: 7px 0px 0px 7px;
         font-weight: bold;
 
+        .Select-value-label {
+          padding-left: 15px;
+        }
         .Select-value-icon {
           border: 0;
+          position: absolute;
+          padding-left: 3px;
+          padding-top: 3px;
 
           &:hover {
             background: var(--color-grey);
