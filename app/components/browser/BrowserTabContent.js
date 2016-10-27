@@ -92,7 +92,7 @@ class TabContent extends React.Component {
 
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
-      showError, hideError, declarePage, setTabWebentity, serverUrl,
+      showError, hideError, declarePage, setTabWebentity, server,
       corpusId, disableWebentity } = this.props
 
     // In Hyphe special tab, when link with target=_blank
@@ -104,6 +104,12 @@ class TabContent extends React.Component {
       // otherwise open new tab
       else {
         this.props.eventBus.emit('open', info)
+      }
+    }
+    // Redirect Hyphe special tab to network when userclosed or misstarted
+    if (event === 'stop' && disableWebentity) {
+      if (info === server.home + '/#/login') {
+        info = server.home + '/#/project/' + corpusId + '/network'
       }
     }
 
@@ -124,7 +130,7 @@ class TabContent extends React.Component {
           setTabUrl(info, id)
           // do not declare pages with only change in anchor
           if (!this.samePage(info)) {
-            declarePage(serverUrl, corpusId, info, id)
+            declarePage(server.url, corpusId, info, id)
           }
         } else {
           this.doNotDeclarePageOnStop = false
@@ -167,7 +173,7 @@ class TabContent extends React.Component {
   }
 
   saveAdjustChanges (props) {
-    const { saveAdjustedWebentity, hideAdjustWebentity, serverUrl, corpusId,
+    const { saveAdjustedWebentity, hideAdjustWebentity, server, corpusId,
       webentity, adjusting, hideError, showError, id, disableWebentity } = props
 
     // no change by default
@@ -177,7 +183,7 @@ class TabContent extends React.Component {
       return
     }
 
-    saveAdjustedWebentity(serverUrl, corpusId, webentity, adjusting, id)
+    saveAdjustedWebentity(server.url, corpusId, webentity, adjusting, id)
       .then(() => {
         hideError()
         hideAdjustWebentity(webentity.id)
@@ -217,7 +223,7 @@ class TabContent extends React.Component {
   }
 
   renderWebentityToolbar () {
-    const { setWebentityName, serverUrl, corpusId, url, webentity, adjusting, disableWebentity } = this.props
+    const { setWebentityName, corpusId, url, webentity, adjusting, disableWebentity } = this.props
 
     if (disableWebentity) {
       return null
@@ -239,10 +245,10 @@ class TabContent extends React.Component {
   }
 
   updateName (name) {
-    const { setWebentityName, serverUrl, corpusId, webentity } = this.props
+    const { setWebentityName, server, corpusId, webentity } = this.props
 
     this.setState({ webentityName: name })
-    setWebentityName(serverUrl, corpusId, name, webentity.id)
+    setWebentityName(server.url, corpusId, name, webentity.id)
   }
 
   renderNavigationToolbar () {
@@ -335,12 +341,12 @@ class TabContent extends React.Component {
   }
 
   renderSplitPane () {
-    const { webentity, serverUrl, corpusId, adjusting, status, id, url } = this.props
+    const { webentity, server, corpusId, adjusting, status, id, url } = this.props
 
     return (
       <div className="browser-tab-content-cols">
         <SideBar status={ status } webentity={ webentity } tabId={ id } url={ url }
-          serverUrl={ serverUrl } corpusId={ corpusId } disabled={ !!adjusting } />
+          serverUrl={ server.url } corpusId={ corpusId } disabled={ !!adjusting } />
         { this.renderContent() }
       </div>
     )
@@ -433,7 +439,7 @@ TabContent.propTypes = {
   active: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
   noCrawlPopup: PropTypes.bool.isRequired,
-  serverUrl: PropTypes.string.isRequired,
+  server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
   adjusting: PropTypes.object,
@@ -473,7 +479,7 @@ const mapStateToProps = (
   disableNavigation,
   eventBus,
   active: tabs.activeTab && tabs.activeTab.id === id,
-  serverUrl: servers.selected.url,
+  server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
   adjusting: webentity && webentities.adjustments[webentity.id],
