@@ -20,6 +20,15 @@ class BrowserTabUrlField extends React.Component {
       overPrefixUntil: -1,
       userPrefixUntil: -1
     }
+
+    this._onKeyUp = this.onKeyUp.bind(this)
+  }
+
+  onKeyUp (e) {
+    if (e.keyCode === 27) { // ESCAPE
+      e.target.blur()
+      this.setState({ url: this.props.initialUrl })
+    }
   }
 
   componentWillReceiveProps ({ initialUrl, prefixSelector }) {
@@ -99,6 +108,7 @@ class BrowserTabUrlField extends React.Component {
       type="text"
       value={ this.state.url }
       onBlur={ () => this.setState({ editing: false }) }
+      onKeyUp={ this._onKeyUp }
       onChange={ (e) => this.onChange(e) } />
   }
 
