@@ -30,7 +30,7 @@ import {
 } from '../../actions/webentities'
 
 import { getSearchUrl } from '../../utils/search-web'
-import { urlToName, hasExactMatching, compareUrls } from '../../utils/lru'
+import { urlToName, hasExactMatching, compareUrls, longestMatching } from '../../utils/lru'
 
 class TabContent extends React.Component {
 
@@ -93,36 +93,33 @@ class TabContent extends React.Component {
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, hideError, declarePage, setTabWebentity, server,
-      corpusId, disableWebentity } = this.props
+      corpusId, disableWebentity, webentity, tlds } = this.props
 
-    // In Hyphe special tab, when link with target=_blank
-    if (event === 'open' && disableWebentity) {
-      // if link points to a Hyphe page, load within special tab
-      if (this.samePage(info)) {
-        event = 'start'
-      }
-      // otherwise open new tab
-      else {
-        this.props.eventBus.emit('open', info)
-      }
-    }
-    // Redirect Hyphe special tab to network when userclosed or misstarted
-    if (event === 'stop' && disableWebentity) {
-      if (info === server.home + '/#/login') {
-        info = server.home + '/#/project/' + corpusId + '/network'
-      }
+    // In Hyphe special tab, if tagrte=_blank link points to a Hyphe page, load within special tab
+    if (event === 'open' && disableWebentity && this.samePage(info)) {
+      event = 'start'
     }
 
     switch (event) {
+    case 'open':
+      this.props.eventBus.emit('open', info)
+      break
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
-      // avoid refreshing webentity when only changing url's anchor
-      if (!this.samePage(info) && !disableWebentity) {
+      if (!disableWebentity &&
+        // avoid refreshing webentity when only changing url's anchor
+        !this.samePage(info) &&
+        // or when probably remaining within the same webentity
+        !(webentity && longestMatching(webentity.lru_prefixes, info, tlds))) {
         setTabWebentity(server.url, corpusId, id, null)
       }
       break
     case 'stop':
+      // Redirect Hyphe special tab to network when userclosed or misstarted
+      if (disableWebentity && info === server.home + '/#/login') {
+        info = server.home + '/#/project/' + corpusId + '/network'
+      }
       setTabStatus({ loading: false, url: info }, id)
       this.doNotRedirectToSearchOnNextDNSError = false
       if (!disableWebentity) {
@@ -136,7 +133,7 @@ class TabContent extends React.Component {
           this.doNotDeclarePageOnStop = false
         }
       }
-      this.state.previousUrl = info
+      this.setState({ previousUrl: info })
       break
     case 'title':
       setTabTitle(info, id)
@@ -296,10 +293,10 @@ class TabContent extends React.Component {
   }
 
   onSelectPrefix (url, modified) {
-    const { webentity, setAdjustWebentity, adjusting } = this.props
+    const { webentity, setAdjustWebentity, adjusting, tlds } = this.props
 
     this.setState({
-      disableApplyButton: !adjusting.crawl && hasExactMatching(webentity.lru_prefixes, url, this.props.tlds),
+      disableApplyButton: !adjusting.crawl && hasExactMatching(webentity.lru_prefixes, url, tlds),
       webentityName: urlToName(url)
     })
 
