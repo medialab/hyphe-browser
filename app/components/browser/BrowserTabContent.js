@@ -19,7 +19,7 @@ import { FormattedMessage as T } from 'react-intl'
 import { eventBusShape } from '../../types'
 import { PAGE_HYPHE_HOME } from '../../constants'
 
-import { showError, hideError, toggleDoNotShowAgain } from '../../actions/browser'
+import { showError, showNotification, hideError, toggleDoNotShowAgain } from '../../actions/browser'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
   openTab, closeTab
@@ -45,8 +45,7 @@ class TabContent extends React.Component {
       setDoNotShowAgainAfterSubmit: null
     }
 
-    this.doNotRedirectToSearchOnNextDNSError = false // internal property, should never trigger update
-    this.doNotDeclarePageOnStop = false // idem
+    this.doNotDeclarePageOnStop = false
 
     this._onKeyUp = this.onKeyUp.bind(this)
   }
@@ -92,8 +91,8 @@ class TabContent extends React.Component {
 
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
-      showError, hideError, declarePage, setTabWebentity, server,
-      corpusId, disableWebentity, webentity, tlds } = this.props
+      showError, showNotification, hideError, declarePage, setTabWebentity,
+      server, corpusId, disableWebentity, webentity, tlds } = this.props
 
     // In Hyphe special tab, if tagrte=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
@@ -121,7 +120,6 @@ class TabContent extends React.Component {
         info = server.home + '/#/project/' + corpusId + '/network'
       }
       setTabStatus({ loading: false, url: info }, id)
-      this.doNotRedirectToSearchOnNextDNSError = false
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
@@ -143,28 +141,29 @@ class TabContent extends React.Component {
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
-      if (err.name === 'NameNotResolvedError' && !this.doNotRedirectToSearchOnNextDNSError) {
-        // DNS error: let's search instead
-        this.doNotDeclarePageOnStop = false
-        this.doNotRedirectToSearchOnNextDNSError = true
-        const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
-        setTabUrl(getSearchUrl(term), id)
-        // Still show a dedicated error messag
-        showError({ messageId: 'error.dns-error-search' })
-      } else if (info.pageURL === info.validatedURL) {
-        // Main page triggered the error, it's important
-        this.doNotDeclarePageOnStop = true
-        showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
-        setTabStatus({ loading: false, url: info.pageURL, error: info }, id)
-      }
-      // Anyway, log to console
+      // In all cases, log to console
       if (process.env.NODE_ENV === 'development') {
         console.debug(info) // eslint-disable-line no-console
         console.error(err) // eslint-disable-line no-console
       }
+      setTabStatus({ loading: false, error: info }, id)
+      // Main page triggered the error, it's important
+      if (info.pageURL === info.validatedURL) {
+        // DNS error: let's search instead
+        if (err.name === 'NameNotResolvedError') {
+          this.doNotDeclarePageOnStop = true
+          showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
+          const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
+          setTabUrl(getSearchUrl(term), id)
+        } else {
+          showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
+          setTabUrl(info.pageURL, id)
+        }
+      }
       break
     }
     default:
+      console.log("Unhandled event:", event, info)
       break
     }
   }
@@ -270,7 +269,7 @@ class TabContent extends React.Component {
 
   renderUrlField () {
     const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds } = this.props
-    const ready = (url === PAGE_HYPHE_HOME) || (!loading && (disableWebentity || !!webentity))
+    const ready = (url === PAGE_HYPHE_HOME) || !loading
 
     if (disableNavigation) {
       return null
@@ -444,6 +443,7 @@ TabContent.propTypes = {
   tlds: PropTypes.object,
 
   showError: PropTypes.func.isRequired,
+  showNotification: PropTypes.func.isRequired,
   hideError: PropTypes.func.isRequired,
 
   setTabUrl: PropTypes.func.isRequired,
@@ -487,7 +487,7 @@ const mapStateToProps = (
 })
 
 const mapDispatchToProps = {
-  showError, hideError, toggleDoNotShowAgain,
+  showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
   declarePage, setTabWebentity, setWebentityName, createWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity,
