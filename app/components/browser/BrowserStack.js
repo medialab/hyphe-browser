@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
+import { emptyStack, fetchStack, viewWebentity, loadingWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { HYPHE_TAB_ID } from '../../constants'
 import BrowserStackWesList from './BrowserStackWesList'
@@ -26,6 +26,7 @@ class BrowserStack extends React.Component {
   }
 
   selectWebentity (webentity) {
+    this.props.loadingWebentity()
     this.props.viewWebentity(webentity)
     if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
       this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
@@ -160,7 +161,8 @@ BrowserStack.propTypes = {
   fetchStack: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
-  viewWebentity: PropTypes.func.isRequired
+  viewWebentity: PropTypes.func.isRequired,
+  loadingWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { locale } }) => ({
@@ -182,5 +184,6 @@ export default connect(mapStateToProps, {
   fetchStack,
   openTab,
   setTabUrl,
-  viewWebentity
+  viewWebentity,
+  loadingWebentity
 })(BrowserStack)

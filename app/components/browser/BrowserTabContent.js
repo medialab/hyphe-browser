@@ -20,6 +20,7 @@ import { eventBusShape } from '../../types'
 import { PAGE_HYPHE_HOME } from '../../constants'
 
 import { showError, showNotification, hideError, toggleDoNotShowAgain } from '../../actions/browser'
+import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
   openTab, closeTab
@@ -73,7 +74,8 @@ class TabContent extends React.Component {
 
   componentWillReceiveProps (props) {
     // Handle the case when user clicked "IN" button and does *not* want to show a popup
-    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup && (!this.props.adjusting || !this.props.adjusting.crawl)) {
+    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
+      (!this.props.adjusting || !this.props.adjusting.crawl)) {
       this.saveAdjustChanges(props)
     }
   }
@@ -92,22 +94,23 @@ class TabContent extends React.Component {
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
-      server, corpusId, disableWebentity, webentity, tlds } = this.props
+      eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
+      webentity, selectedWebentity, loadingWebentityStack, tlds } = this.props
 
-    // In Hyphe special tab, if tagrte=_blank link points to a Hyphe page, load within special tab
+    // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
     }
 
     switch (event) {
     case 'open':
-      this.props.eventBus.emit('open', info)
+      eventBus.emit('open', info)
       break
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
-        // avoid refreshing webentity when only changing url's anchor
+        // avoid emptying sidebar when only changing url's anchor
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.lru_prefixes, info, tlds))) {
@@ -120,6 +123,7 @@ class TabContent extends React.Component {
         info = server.home + '/#/project/' + corpusId + '/network'
       }
       setTabStatus({ loading: false, url: info }, id)
+      stoppedLoadingWebentity()
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
@@ -132,6 +136,12 @@ class TabContent extends React.Component {
         }
       }
       this.setState({ previousUrl: info })
+      break
+    case 'redirect':
+      if (loadingWebentityStack && selectedWebentity &&
+        !longestMatching(selectedWebentity.lru_prefixes, info.newURL, tlds)) {
+        console.log("OUT!")
+      }
       break
     case 'title':
       setTabTitle(info, id)
@@ -163,7 +173,9 @@ class TabContent extends React.Component {
       break
     }
     default:
-      console.log("Unhandled event:", event, info)
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Unhandled event:", event, info)
+      }
       break
     }
   }
@@ -438,6 +450,8 @@ TabContent.propTypes = {
   server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
+  selectedWebentity: PropTypes.object,
+  loadingWebentityStack: PropTypes.bool,
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
@@ -457,6 +471,7 @@ TabContent.propTypes = {
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
   createWebentity: PropTypes.func.isRequired,
+  stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
@@ -465,7 +480,7 @@ TabContent.propTypes = {
 }
 
 const mapStateToProps = (
-  { corpora, intl: { locale }, servers, tabs, webentities, ui: { loaders, doNotShow } }, // store
+  { corpora, intl: { locale }, servers, stacks, tabs, webentities, ui: { loaders, doNotShow } }, // store
   { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
 ) => ({
   id,
@@ -479,6 +494,8 @@ const mapStateToProps = (
   server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
+  selectedWebentity: webentities.selected,
+  loadingWebentityStack: stacks.loadingWebentity,
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
   tlds: webentities.tlds,
@@ -488,9 +505,9 @@ const mapStateToProps = (
 
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
-  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
-  declarePage, setTabWebentity, setWebentityName, createWebentity,
-  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity,
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
+  declarePage, setTabWebentity, setWebentityName, createWebentity, stoppedLoadingWebentity,
+  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

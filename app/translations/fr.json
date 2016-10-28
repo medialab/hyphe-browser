@@ -112,7 +112,7 @@
   "webentity-info-crawl-canceled-notification": "Le crawl de cette webentité a été annulé",
   "webentity-info-created-sidebar": "Nouvelle webentité",
   "webentity-info-created-notification": "Nouvelle webentité créée avec succès",
-  "webentity-crawl-popup-title": "ATTENTION !",
+  "webentity-crawl-popup-title": "CRAWLER CETTE WEBENTITÉ ?",
   "webentity-crawl-popup-message": "En déclarant le statut de cette webentité \"IN\", vous allez la crawler. Vérifiez avant tout que son périmètre défini en bleu ci-dessus vous convient.",
   "webentity-crawl-popup-message-2": "Autrement, veuillez annuler et définir une nouvelle webentité en cliquant sur \"+\" puis déclarez là \"IN\".",
   "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la Homepage de la webentité si nécessaire !"

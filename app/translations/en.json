@@ -112,7 +112,7 @@
   "webentity-info-crawl-canceled-notification": "Crawling this webentity has been canceled",
   "webentity-info-created-sidebar": "New webentity",
   "webentity-info-created-notification": "New webentity created successfully",
-  "webentity-crawl-popup-title": "WARNING!",
+  "webentity-crawl-popup-title": "CRAWL THIS WEBENTITY?",
   "webentity-crawl-popup-message": "Setting this webentity's status as \"IN\" will start crawling it. Please check before that its perimeter defined in blue above suits you.",
   "webentity-crawl-popup-message-2": "Otherwise, cancel and click on \"+\" to define a new webentity, then set it as \"IN\".",
   "webentity-crawl-popup-message-3": "Also remember to adjust the name and the Homepage of the webentity if necessary!"
