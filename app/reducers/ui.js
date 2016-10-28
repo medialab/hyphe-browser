@@ -12,6 +12,7 @@ import {
 import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
+  SELECT_CONTEXTUAL_LIST,
   TOGGLE_DO_NOT_SHOW_AGAIN,
   TOGGLE_CONTEXT,
   TOGGLE_CATEGORIES
@@ -46,6 +47,7 @@ const initialState = {
   // current notification
   notification: emptyNotification,
   // to display loaders in different places
+  selectedContext: 'mostLinked',
   showContext: false,
   showCategories: true,
   loaders: {
@@ -111,6 +113,11 @@ export default createReducer(initialState, {
   [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({
     ...state,
     notification: { id: ERROR_SERVER_NO_RESOURCE }
+  }),
+
+  [SELECT_CONTEXTUAL_LIST]: (state, { selectedContext }) => ({
+    ...state,
+    selectedContext
   }),
 
   [TOGGLE_DO_NOT_SHOW_AGAIN]: (state, { key, hide = null }) => ({

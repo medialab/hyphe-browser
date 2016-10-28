@@ -97,7 +97,7 @@
   "sidebar.create-tag": "Créer le tag: ",
   "sidebar.contextual.mostLinked": "Pages citées",
   "sidebar.contextual.parents": "Entités parentes",
-  "sidebar.contextual.subs": "Entités inclues",
+  "sidebar.contextual.children": "Entités inclues",
   "starting-corpus": "Démarrage du corpus…",
   "status": "Statut",
   "tags-clear-category-value": "Supprimer le tag",

@@ -119,7 +119,7 @@ class TabContent extends React.Component {
       setTabStatus({ loading: true, url: info }, id)
       // avoid refreshing webentity when only changing url's anchor
       if (!this.samePage(info) && !disableWebentity) {
-        setTabWebentity(id, null)
+        setTabWebentity(server.url, corpusId, id, null)
       }
       break
     case 'stop':

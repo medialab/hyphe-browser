@@ -4,6 +4,9 @@
 // - store.rename_webentity
 // - store.declare_webentity_by_lruprefix_as_url
 // - store.set_webentity_status
+// - store.get_webentity_mostlinked_pages
+// - store.get_webentity_parentwebentities
+// - store.get_webentity_subwebentities
 // - crawl_webentity (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', phantom_timeouts = {}, corpus = '--hyphe--')
 
 import jsonrpc from '../utils/jsonrpc'
@@ -49,6 +52,19 @@ export const CREATE_WEBENTITY_REQUEST = '§_CREATE_WEBENTITY_REQUEST'
 export const CREATE_WEBENTITY_SUCCESS = '§_CREATE_WEBENTITY_SUCCESS'
 export const CREATE_WEBENTITY_FAILURE = '§_CREATE_WEBENTITY_FAILURE'
 
+// fetching webentity's context
+export const FETCH_MOST_LINKED_REQUEST = '§_FETCH_MOST_LINKED_REQUEST'
+export const FETCH_MOST_LINKED_SUCCESS = '§_FETCH_MOST_LINKED_SUCCESS'
+export const FETCH_MOST_LINKED_FAILURE = '§_FETCH_MOST_LINKED_FAILURE'
+
+export const FETCH_PARENTS_REQUEST = '§_FETCH_PARENTS_REQUEST'
+export const FETCH_PARENTS_SUCCESS = '§_FETCH_PARENTS_SUCCESS'
+export const FETCH_PARENTS_FAILURE = '§_FETCH_PARENTS_FAILURE'
+
+export const FETCH_SUBS_REQUEST = '§_FETCH_SUBS_REQUEST'
+export const FETCH_SUBS_SUCCESS = '§_FETCH_SUBS_SUCCESS'
+export const FETCH_SUBS_FAILURE = '§_FETCH_SUBS_FAILURE'
+
 // fetching TLDs
 export const FETCH_TLDS_REQUEST = '§_FETCH_TLDS_REQUEST'
 export const FETCH_TLDS_SUCCESS = '§_FETCH_TLDS_SUCCESS'
@@ -73,30 +89,25 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
 
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
-    /* webentity's homepage must be set manually by user
-    .then((webentity) => {
-      if (!webentity.homepage) {
-        // Set homepage to requested URL if not defined yet
-        return setWebentityHomepage(serverUrl, corpusId, url, webentity.id).then(() => {
-          webentity.homepage = url
-          return webentity
-        })
-      } else {
-        return webentity
-      }
-    })
-    */
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(tabId, webentity.id))
+        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
       }
       return webentity
     })
     .catch((error) => dispatch({ type: DECLARE_PAGE_FAILURE, payload: { serverUrl, corpusId, url, error } }))
 }
 
-export const setTabWebentity = createAction(SET_TAB_WEBENTITY, (tabId, webentityId) => ({ tabId, webentityId }))
+export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispatch) => {
+  // Populate webentity's context
+  if (webentity) {
+    dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
+    dispatch(fetchParents(serverUrl, corpusId, webentity))
+    dispatch(fetchChildren(serverUrl, corpusId, webentity))
+  }
+  dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
+}
 
 export const setWebentityHomepage = (serverUrl, corpusId, homepage, webentityId) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_HOMEPAGE_REQUEST, payload: { serverUrl, corpusId, homepage, webentityId } })
@@ -138,7 +149,7 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(tabId, webentity.id))
+        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
       }
       return webentity
     })
@@ -151,6 +162,39 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
     })
     .catch((error) => {
       dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error } })
+      throw error
+    })
+}
+
+export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({ type: FETCH_MOST_LINKED_REQUEST, payload: { serverUrl, corpusId, webentity } })
+
+  return jsonrpc(serverUrl)('store.get_webentity_mostlinked_pages', [webentity.id, 20, corpusId])
+    .then(mostLinked => dispatch({ type: FETCH_MOST_LINKED_SUCCESS, payload: { serverUrl, corpusId, webentity, mostLinked } }))
+    .catch(error => {
+      dispatch({ type: FETCH_MOST_LINKED_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchParents = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({ type: FETCH_PARENTS_REQUEST, payload: { serverUrl, corpusId, webentity } })
+
+  return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', [webentity.id, corpusId])
+    .then(parents => dispatch({ type: FETCH_PARENTS_SUCCESS, payload: { serverUrl, corpusId, webentity, parents } }))
+    .catch(error => {
+      dispatch({ type: FETCH_PARENTS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchChildren = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({ type: FETCH_SUBS_REQUEST, payload: { serverUrl, corpusId, webentity } })
+
+  return jsonrpc(serverUrl)('store.get_webentity_subwebentities', [webentity.id, corpusId])
+    .then(children => dispatch({ type: FETCH_SUBS_SUCCESS, payload: { serverUrl, corpusId, webentity, children } }))
+    .catch(error => {
+      dispatch({ type: FETCH_SUBS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
       throw error
     })
 }

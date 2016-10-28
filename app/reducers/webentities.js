@@ -21,6 +21,9 @@ import {
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
   ADJUST_WEBENTITY,
+  FETCH_MOST_LINKED_SUCCESS,
+  FETCH_PARENTS_SUCCESS,
+  FETCH_SUBS_SUCCESS,
   FETCH_TLDS_SUCCESS
   // Note we don't subscribe to SAVE_ADJUSTED_WEBENTITY_* because we're already plugged to its sub-actions
 } from '../actions/webentities'
@@ -83,6 +86,39 @@ export default createReducer(initialState, {
 
   [SET_WEBENTITY_CRAWLING_STATUS]: updateWebentity((webentity, { crawling_status }) => ({ crawling_status })),
 
+  [FETCH_MOST_LINKED_SUCCESS]: (state, { webentity, mostLinked }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        mostLinked: mostLinked
+      }
+    }
+  }),
+
+  [FETCH_PARENTS_SUCCESS]: (state, { webentity, parents }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        parents: parents
+      }
+    }
+  }),
+
+  [FETCH_SUBS_SUCCESS]: (state, { webentity, children }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        children: children
+      }
+    }
+  }),
+
   // (Optimistically) add tag
   [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {
     const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
@@ -112,11 +148,11 @@ export default createReducer(initialState, {
     `tags.${TAGS_NS}.${category}`, webentity[`tags_${category}_prev`]
   )),
 
-  [SET_TAB_WEBENTITY]: (state, { tabId, webentityId }) => ({
+  [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
     ...state,
     tabs: {
       ...state.tabs,
-      [tabId]: webentityId
+      [tabId]: webentity ? webentity.id : null
     }
   }),
 

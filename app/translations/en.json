@@ -97,7 +97,7 @@
   "sidebar.create-tag": "Create new tag: ",
   "sidebar.contextual.mostLinked": "Linked pages",
   "sidebar.contextual.parents": "Parent entities",
-  "sidebar.contextual.subs": "Sub entities",
+  "sidebar.contextual.children": "Sub entities",
   "starting-corpus": "Starting corpus…",
   "status": "Status",
   "tags-clear-category-value": "Delete tag",
