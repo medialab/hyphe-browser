@@ -13,6 +13,7 @@ import { TAGS_NS } from '../../../constants'
 import Button from '../../Button'
 
 import { addTagsCategory, addTag, removeTag, fetchTags } from '../../../actions/tags'
+import { toggleCategories } from '../../../actions/browser'
 
 
 class SideBarTags extends React.Component {
@@ -24,7 +25,6 @@ class SideBarTags extends React.Component {
       newCategory: '',
       // to avoid disappearing categories if new categories come from corpus-watcher just after creation
       categories: [],
-      hideCategories: false
     }
 
     // prepopulate inputs
@@ -46,10 +46,6 @@ class SideBarTags extends React.Component {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
     }
-  }
-
-  toggleCategories () {
-    this.setState({ hideCategories : !this.state.hideCategories })
   }
 
   componentWillMount () {
@@ -154,6 +150,7 @@ class SideBarTags extends React.Component {
   // free tags should be first, then other categories, then add category field
   render () {
     const { formatMessage } = this.context.intl
+    const { showCategories, toggleCategories } = this.props
     const [freeTags, cats] = partition(this.props.categories, isFreeTags)
     const categories = uniq((cats || []).concat(this.state.categories).filter(x => x))
 
@@ -162,15 +159,15 @@ class SideBarTags extends React.Component {
         { this.renderFreeTagsCategory(freeTags[0]) }
 
         <div>
-          <h3 onClick={ () => this.toggleCategories() }>
+          <h3 onClick={ () => toggleCategories() }>
             <T id="sidebar.categories" />
             <span className={ cx({
-              'ti-angle-up': !this.state.hideCategories,
-              'ti-angle-down': this.state.hideCategories
+              'ti-angle-up': showCategories,
+              'ti-angle-down': !showCategories
             }) }></span>
           </h3>
 
-          { !this.state.hideCategories && <div>
+          { showCategories && <div>
             { categories.map(this.renderTagsCategory) }
 
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
@@ -208,17 +205,20 @@ SideBarTags.propTypes = {
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   locale: PropTypes.string.isRequired,
+  showCategories: PropTypes.bool.isRequired,
 
   // actions
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
   addTagsCategory: PropTypes.func.isRequired,
-  fetchTags: PropTypes.func.isRequired
+  fetchTags: PropTypes.func.isRequired,
+  toggleCategories: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, intl: { locale } }, props) => ({
+const mapStateToProps = ({ corpora, intl: { locale }, ui }, props) => ({
   ...props,
   categories: corpora.list[props.corpusId].tagsCategories || [],
+  showCategories: ui.showCategories,
   locale
 })
 
@@ -226,5 +226,6 @@ export default connect(mapStateToProps, {
   addTag,
   removeTag,
   addTagsCategory,
-  fetchTags
+  fetchTags,
+  toggleCategories
 })(SideBarTags)

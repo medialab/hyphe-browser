@@ -13,16 +13,13 @@ import SideBarTags from './SideBarTags'
 
 import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage, cancelWebentityCrawls } from '../../../actions/webentities'
 import { setTabUrl } from '../../../actions/tabs'
+import { toggleContext } from '../../../actions/browser'
 import { getWebEntityActivityStatus } from '../../../utils/status'
 import { compareUrls } from '../../../utils/lru'
 
 class SideBar extends React.Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      section: 'tags'
-    }
   }
 
   setStatus (status) {
@@ -44,10 +41,6 @@ class SideBar extends React.Component {
     if (status === 'OUT' && crawling) {
       cancelWebentityCrawls(serverUrl, corpusId, webentity.id)
     }
-  }
-
-  toggleSection () {
-    this.setState({ section: this.state.section === 'tags' ? 'context' : 'tags' })
   }
 
   renderInfo () {
@@ -95,17 +88,18 @@ class SideBar extends React.Component {
   }
 
   renderTabs () {
+    const { showContext, toggleContext } = this.props
     const { formatMessage } = this.context.intl
     return (
       <div className="browser-side-bar-sections">
-        <h3 onClick={ () => this.toggleSection() }>
+        <h3 onClick={ () => toggleContext() }>
           <span>{ formatMessage({ id: 'context'}) }</span>
           <span className={ cx({
-            'ti-angle-up': this.state.section === 'context',
-            'ti-angle-down': this.state.section === 'tags'
+            'ti-angle-up': showContext,
+            'ti-angle-down': !showContext
           }) }></span>
         </h3>
-        { this.state.section === 'context' && this.renderTabContext() }
+        { showContext && this.renderTabContext() }
         { this.renderTabTags() }
       </div>
     )
@@ -184,16 +178,19 @@ SideBar.propTypes = {
   url: PropTypes.string.isRequired,
   locale: PropTypes.string.isRequired,
   status: PropTypes.object,
+  showContext: PropTypes.bool.isRequired,
 
   // actions
   setTabUrl: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
   setWebentityStatus: PropTypes.func.isRequired,
   cancelWebentityCrawls: PropTypes.func.isRequired,
-  showAdjustWebentity: PropTypes.func.isRequired
+  showAdjustWebentity: PropTypes.func.isRequired,
+  toggleContext: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ intl: { locale } }) => ({
+const mapStateToProps = ({ ui, intl: { locale } }) => ({
+  showContext: ui.showContext,
   locale
 })
 
@@ -202,5 +199,6 @@ export default connect(mapStateToProps, {
   setWebentityHomepage,
   setWebentityStatus,
   cancelWebentityCrawls,
-  showAdjustWebentity
+  showAdjustWebentity,
+  toggleContext
 })(SideBar)

@@ -5,6 +5,9 @@ export const HIDE_NOTIFICATION = '§_HIDE_NOTIFICATION'
 
 export const TOGGLE_DO_NOT_SHOW_AGAIN = '§_TOGGLE_DO_NOT_SHOW_AGAIN'
 
+export const TOGGLE_CONTEXT = '§_TOGGLE_CONTEXT'
+export const TOGGLE_CATEGORIES = '§_TOGGLE_CATEGORIES'
+
 export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
     type: SHOW_NOTIFICATION,
@@ -20,6 +23,8 @@ export const hideNotification = createAction(HIDE_NOTIFICATION, (id, type) => ({
 
 export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key, hide = null) => ({ key, hide }))
 
+export const toggleContext = createAction(TOGGLE_CONTEXT)
+export const toggleCategories = createAction(TOGGLE_CATEGORIES)
 
 // shortcut for back compat
 

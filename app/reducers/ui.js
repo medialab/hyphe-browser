@@ -12,7 +12,9 @@ import {
 import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
-  TOGGLE_DO_NOT_SHOW_AGAIN
+  TOGGLE_DO_NOT_SHOW_AGAIN,
+  TOGGLE_CONTEXT,
+  TOGGLE_CATEGORIES
 } from '../actions/browser'
 import {
   DECLARE_PAGE_REQUEST,
@@ -44,6 +46,8 @@ const initialState = {
   // current notification
   notification: emptyNotification,
   // to display loaders in different places
+  showContext: false,
+  showCategories: true,
   loaders: {
     corpora: false,
     corpus_status: false,
@@ -116,4 +120,15 @@ export default createReducer(initialState, {
       [key]: hide !== null ? hide : !state.doNotShow[key]
     }
   }),
+
+  [TOGGLE_CONTEXT]: (state) => ({
+    ...state,
+    showContext: !state.showContext
+  }),
+
+  [TOGGLE_CATEGORIES]: (state) => ({
+    ...state,
+    showCategories: !state.showCategories
+  })
+
 })
