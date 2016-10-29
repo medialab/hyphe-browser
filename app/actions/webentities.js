@@ -14,11 +14,12 @@ import jsonrpc from '../utils/jsonrpc'
 import {
   CRAWL_DEPTH,
   NOTICE_WEBENTITY_CREATED,
-  NOTICE_WEBENTITY_CREATED_TIMEOUT,
+  NOTICE_WEBENTITY_ADJUST_FAILURE,
   NOTICE_WEBENTITY_CRAWL_STARTED,
-  NOTICE_WEBENTITY_CRAWL_STARTED_TIMEOUT,
   NOTICE_WEBENTITY_CRAWL_CANCELED,
-  NOTICE_WEBENTITY_CRAWL_CANCELED_TIMEOUT
+  NOTICE_WEBENTITY_MERGE_SUCCESSFUL,
+  NOTICE_WEBENTITY_MERGE_FAILURE,
+  NOTICE_WEBENTITY_INFO_TIMEOUT
 } from '../constants'
 import { createAction } from 'redux-actions'
 
@@ -78,6 +79,12 @@ export const ADJUST_WEBENTITY = '§_ADJUST_WEBENTITY' // false => close, true =>
 export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUEST'
 export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
 export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
+
+export const MERGE_WEBENTITY = '§_MERGE_WEBENTITY'
+export const STOP_MERGE_WEBENTITY = '§_STOP_MERGE_WEBENTITY'
+export const MERGE_WEBENTITY_REQUEST = '§_MERGE_WEBENTITY_REQUEST'
+export const MERGE_WEBENTITY_SUCCESS = '§_MERGE_WEBENTITY_SUCCESS'
+export const MERGE_WEBENTITY_FAILURE = '§_MERGE_WEBENTITY_FAILURE'
 
 // canceling a webentity's crawls
 export const CANCEL_WEBENTITY_CRAWLS_REQUEST = '§_CANCEL_WEBENTITY_CRAWLS_REQUEST'
@@ -238,7 +245,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
   return Promise.all(operations)
     .then(([head]) => {
       if (prefix && head.created) {
-        dispatch(showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_CREATED_TIMEOUT }))
+        dispatch(showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       }
       if (crawl) {
         // if prefix, then webentity just been created, and we want this id, not the old one
@@ -249,13 +256,33 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
             dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'PENDING', webentityId: id } })
-            dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_STARTED, messageId: 'webentity-info-crawl-started-notification', timeout: NOTICE_WEBENTITY_CRAWL_STARTED_TIMEOUT }))
+            dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_STARTED, messageId: 'webentity-info-crawl-started-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
           })
       }
     })
     .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))
     .catch((error) => {
-      dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity, error } })
+      dispatch({ type: SAVE_ADJUSTED_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, adjust, webentity, error } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_ADJUST_FAILURE, messageId: 'webentity-info-adjust-failure-notification', type: 'warning'}))
+      throw error
+    })
+}
+
+export const setMergeWebentity = (tabId, mergeable, host) => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host } })
+export const unsetMergeWebentity = (tabId) => ({ type: STOP_MERGE_WEBENTITY, payload: { tabId } })
+
+export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, hostId) => (dispatch) => {
+  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, mergeableId, hostId } })
+  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [mergeableId, hostId, true, false, false, corpusId])
+    .then(() => {
+      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, mergeableId, hostId } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
+      dispatch(unsetMergeWebentity(tabId))
+      //TODO : apply to stack merged webentity the attributes of the host
+    })
+    .catch((error) => {
+      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, mergeableId, hostId, error } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning'}))
       throw error
     })
 }
@@ -267,7 +294,7 @@ export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (disp
     .then(() => {
       dispatch({ type: CANCEL_WEBENTITY_CRAWLS_SUCCESS, payload: { serverUrl, corpusId, webentityId} })
       dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'CANCELED', webentityId: webentityId } })
-      dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_CANCELED, messageId: 'webentity-info-crawl-canceled-notification', timeout: NOTICE_WEBENTITY_CRAWL_CANCELED_TIMEOUT }))
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_CRAWL_CANCELED, messageId: 'webentity-info-crawl-canceled-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
     })
     .catch((error) => {
       dispatch({ type: CANCEL_WEBENTITY_CRAWLS_FAILURE, payload: { serverUrl, corpusId, webentityId, error } })

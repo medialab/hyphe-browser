@@ -27,7 +27,8 @@ import {
 } from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityName, createWebentity,
-  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
+  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
+  hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
 import { getSearchUrl } from '../../utils/search-web'
@@ -67,7 +68,9 @@ class TabContent extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.active !== this.props.active && this.props.active) {
+    if (this.props.active &&
+      (prevProps.active !== this.props.active ||
+       prevProps.webentity !== this.props.webentity)) {
       findDOMNode(this.webviewComponent).focus()
     }
   }
@@ -95,7 +98,8 @@ class TabContent extends React.Component {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
-      webentity, selectedWebentity, loadingWebentityStack, tlds } = this.props
+      webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
+      tlds } = this.props
 
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
@@ -123,24 +127,25 @@ class TabContent extends React.Component {
         info = server.home + '/#/project/' + corpusId + '/network'
       }
       setTabStatus({ loading: false, url: info }, id)
-      stoppedLoadingWebentity()
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
           // do not declare pages with only change in anchor
-          if (!this.samePage(info)) {
+          if (!this.samePage(info) || loadingWebentityStack) {
+            this.setState({ webentityName: null })
             declarePage(server.url, corpusId, info, id)
           }
         } else {
           this.doNotDeclarePageOnStop = false
         }
       }
+      stoppedLoadingWebentity()
       this.setState({ previousUrl: info })
       break
     case 'redirect':
       if (loadingWebentityStack && selectedWebentity &&
         !longestMatching(selectedWebentity.lru_prefixes, info.newURL, tlds)) {
-        console.log("OUT!")
+        setMergeWebentity(id, selectedWebentity, webentity)
       }
       break
     case 'title':
@@ -361,9 +366,37 @@ class TabContent extends React.Component {
   }
 
   renderOverlay () {
-    const { webentity, hideAdjustWebentity } = this.props
+    const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
 
-    return <div className="global-overlay" onClick={ () => hideAdjustWebentity(webentity.id) } />
+    return <div className="global-overlay" onClick={ () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id) } />
+  }
+
+  renderMergePopup () {
+    const { id, server, corpusId, webentity, mergeRequired, merging,
+     unsetMergeWebentity, mergeWebentities } = this.props
+
+    const merge = e => {
+      e.preventDefault()
+      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity.id)
+    }
+
+    const cancel = e => {
+      e.preventDefault()
+      unsetMergeWebentity(id)
+    }
+
+    return (
+      <div className="we-popup">
+        <strong><T id="webentity-merge-popup-title" /></strong>
+        <p><T id="webentity-merge-popup-message" /></p>
+        <p><T id="webentity-merge-popup-message-2" /></p>
+        <p><T id="webentity-merge-popup-message-3" /></p>
+        <div className="we-popup-footer">
+          <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
+          <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
+        </div>
+      </div>
+    )
   }
 
   renderCrawlPopup () {
@@ -391,40 +424,45 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="crawl-popup">
+      <div className="we-popup">
         <strong><T id="webentity-crawl-popup-title" /></strong>
         <p><T id="webentity-crawl-popup-message" /></p>
         <p><T id="webentity-crawl-popup-message-2" /></p>
         <p><T id="webentity-crawl-popup-message-3" /></p>
-        <div className="crawl-popup-footer">
+        <div className="we-popup-footer">
           <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
           <label>
             <T id="do-not-show-again" />
           </label>
-          <button disabled={ saving } className="apply-crawl" onClick={ apply }><T id="launch" /></button>
-          <button disabled={ saving } className="cancel-crawl" onClick={ cancel }><T id="cancel" /></button>
+          <button disabled={ saving } className="apply-we-popup" onClick={ apply }><T id="launch" /></button>
+          <button disabled={ saving } className="cancel-we-popup" onClick={ cancel }><T id="cancel" /></button>
         </div>
       </div>
     )
   }
 
   onKeyUp (e) {
-    const { active, webentity, adjusting, hideAdjustWebentity } = this.props
-    if (active && adjusting && e.keyCode === 27) { // ESCAPE
+    const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
+    if (e.keyCode === 27 && active) { // ESCAPE
       e.stopPropagation()
-      hideAdjustWebentity(webentity.id)
+      if (adjusting) {
+        hideAdjustWebentity(webentity.id)
+      } else if (mergeRequired && webentity) {
+        unsetMergeWebentity(id)
+      }
     }
   }
 
   render () {
-    const { active, id, disableWebentity, adjusting, noCrawlPopup } = this.props
+    const { active, id, webentity, disableWebentity, adjusting, noCrawlPopup, mergeRequired } = this.props
 
     return (
-      <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
+      <div key={ id } tabIndex="1" className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
-        { adjusting && (!noCrawlPopup || !adjusting.crawl) && this.renderOverlay() }
+        { webentity && mergeRequired && this.renderMergePopup() }
+        { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
       </div>
     )
   }
@@ -446,12 +484,14 @@ TabContent.propTypes = {
 
   active: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
+  merging: PropTypes.bool.isRequired,
   noCrawlPopup: PropTypes.bool.isRequired,
   server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
   selectedWebentity: PropTypes.object,
   loadingWebentityStack: PropTypes.bool,
+  mergeRequired: PropTypes.object,
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
@@ -477,6 +517,9 @@ TabContent.propTypes = {
   showAdjustWebentity: PropTypes.func.isRequired,
   hideAdjustWebentity: PropTypes.func.isRequired,
   toggleDoNotShowAgain: PropTypes.func.isRequired,
+  setMergeWebentity: PropTypes.func.isRequired,
+  unsetMergeWebentity: PropTypes.func.isRequired,
+  mergeWebentities: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (
@@ -496,10 +539,12 @@ const mapStateToProps = (
   webentity,
   selectedWebentity: webentities.selected,
   loadingWebentityStack: stacks.loadingWebentity,
+  mergeRequired: webentities.merges[id],
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
   tlds: webentities.tlds,
   saving: loaders.webentity_adjust,
+  merging: loaders.webentity_merge,
   noCrawlPopup: doNotShow.crawlPopup
 })
 
@@ -507,7 +552,8 @@ const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
   declarePage, setTabWebentity, setWebentityName, createWebentity, stoppedLoadingWebentity,
-  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity
+  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
+  saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)
