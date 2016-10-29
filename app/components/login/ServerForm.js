@@ -39,12 +39,13 @@ class ServerForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup (name, label = name, type = 'text') {
+  renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
         <input disabled={ this.state.submitting }
                name={ name }
+               autoFocus={ autoFocus }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                type={ type }
                value={ this.state.data[name] } />
@@ -134,7 +135,7 @@ class ServerForm extends React.Component {
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
 
-        { this.renderFormGroup('url', 'api-url') }
+        { this.renderFormGroup('url', 'api-url', 'text', true) }
         { this.renderFormGroup('name', 'server-name') }
 
         { false && this.renderFormGroup('login') }

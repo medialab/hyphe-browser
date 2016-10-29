@@ -34,11 +34,12 @@ class CorpusForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup (name, label = name, type = 'text') {
+  renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
         <input disabled={ this.state.submitting }
+               autoFocus={ autoFocus }
                name={ name }
                onChange={ ({ target }) => this.setDataState(name, target.value) }
                type={ type }
@@ -109,7 +110,7 @@ class CorpusForm extends React.Component {
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
 
-        { this.renderFormGroup('name', 'corpus-name') }
+        { this.renderFormGroup('name', 'corpus-name', 'text', true) }
         { this.renderFormGroup('password', 'password', 'password') }
         { this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
 
