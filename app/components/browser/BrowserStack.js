@@ -53,7 +53,7 @@ class BrowserStack extends React.Component {
   // right side, colored buttons to fill stack
   renderStackFillers () {
     const { formatMessage } = this.context.intl
-    const { status, stacks, selectedStack } = this.props
+    const { status, stacks, selectedStack, loadingWebentityStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
@@ -68,9 +68,9 @@ class BrowserStack extends React.Component {
           <button key={ stack.name }
             className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
               {'selected': stack.name === (selectedStack && selectedStack.name) }) }
-            disabled={ !counters[stack.name] }
+            disabled={ !counters[stack.name] || loadingWebentityStack }
             onClick={ () => { this.fill(stack) } }>
-            <div className="filler-name hint--bottom" aria-label={ !!counters[stack.name] ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
+            <div className="filler-name hint--bottom" aria-label={ !!counters[stack.name] && |loadingWebentityStack ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
               { formatMessage({ id: 'corpus-status.' + stack.name }) }
             </div>
             <div className="filler-counter">
@@ -92,7 +92,7 @@ class BrowserStack extends React.Component {
   // left side
   renderWesSelector () {
     const { formatMessage } = this.context.intl
-    const { selectedStack, selectedWebentity, webentities, loading } = this.props
+    const { selectedStack, selectedWebentity, webentities, loading, loadingWebentityStack } = this.props
 
     // disable next / prev
     const isFirst = webentities.length && selectedWebentity &&
@@ -105,7 +105,7 @@ class BrowserStack extends React.Component {
 
         <button className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
-          disabled={ !selectedStack || loading || isFirst }
+          disabled={ !selectedStack || loading || isFirst || loadingWebentityStack }
           onClick={ () => this.rotateWebentity(-1) }>
           <span className="ti-angle-left"></span>
         </button>
@@ -120,7 +120,7 @@ class BrowserStack extends React.Component {
 
         <button className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
-          disabled={ !selectedStack || loading || isLast }
+          disabled={ !selectedStack || loading || isLast || loadingWebentityStack }
           onClick={ () => this.rotateWebentity(1) }>
           <span className="ti-angle-right"></span>
         </button>
@@ -149,6 +149,7 @@ BrowserStack.propTypes = {
   status: PropTypes.object.isRequired,
   lastRefresh: PropTypes.number,
   loading: PropTypes.bool,
+  loadingWebentityStack: PropTypes.bool,
   locale: PropTypes.string.isRequired,
   server: PropTypes.object.isRequired,
   selectedStack: PropTypes.any,
@@ -171,6 +172,7 @@ const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { 
   status: corpora.status,
   lastRefresh: stacks.lastRefresh,
   loading: stacks.loading,
+  loadingWebentityStack: stacks.loadingWebentity,
   locale,
   server: servers.selected,
   selectedStack: stacks.selected,

@@ -48,13 +48,13 @@ class BrowserStackWesList extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { webentities, selectedWebentity, selectWebentity, loadingStack } = this.props
+    const { webentities, selectedWebentity, selectWebentity, loadingStack, loadingWE } = this.props
 
     return (
         <Select className={ cx("browser-stack-wes-list", {loading: loadingStack}) }
           arrowRenderer={ () => this.renderArrow() }
           clearable={ false }
-          disabled={ loadingStack || !webentities.length }
+          disabled={ loadingStack || loadingWE || !webentities.length }
           labelKey={ 'name' }
           // keep in sync with .Select-menu-outer, .Select-menu max-height
           maxHeight={ 490 }
@@ -77,6 +77,7 @@ BrowserStackWesList.contextTypes = {
 
 BrowserStackWesList.propTypes = {
   loadingStack: PropTypes.bool,
+  loadingWE: PropTypes.bool,
   selectedWebentity: PropTypes.any,
   webentities: PropTypes.array,
 
@@ -86,6 +87,7 @@ BrowserStackWesList.propTypes = {
 
 const mapStateToProps = ({ stacks, intl: {locale} }) => ({
   loadingStack: stacks.loading,
+  loadingWE: stacks.loadingWebentity,
 })
 
 export default connect(mapStateToProps)(BrowserStackWesList)

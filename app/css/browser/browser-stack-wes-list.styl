@@ -66,15 +66,6 @@
     }
   }
 
-  &.is-disabled {
-    cursor: default;
-
-    .Select-control {
-      background: var(--color-grey);
-      cursor: default;
-    }
-  }
-
   // upper label
   .browser-stack-wes-value {
     display: flex;
@@ -187,5 +178,21 @@
       background: var(--color-grey-light);
     }
   }
+
+  &.is-disabled {
+    cursor: default;
+
+    .Select-control {
+      background: var(--color-grey);
+      cursor: default;
+      .Select-arrow-zone {
+        cursor: default;
+      }
+    }
+    .Select-value, .ti-exchange-vertical, .browser-stack-wes-value,  .we-name, .we-indegree {
+      cursor: default !important;
+    }
+  }
+
 }
 
