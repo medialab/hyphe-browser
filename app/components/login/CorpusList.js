@@ -68,8 +68,6 @@ class CorpusList extends React.Component {
       .sort()
       .map((k) => this.props.corpora[k])
 
-    if (!corpora.length) return null
-
     corpora = corpora.filter(it => it.name.includes(this.state.filter))
 
     // only display corpora already started
