@@ -31,7 +31,7 @@ class SideBarTags extends React.Component {
     const userTags = props.webentity.tags[TAGS_NS]
     if (userTags) {
       Object.keys(userTags).forEach(k => {
-        this.state[`values/${k}`] = userTags[k]
+        this.state[`values/${k}`] = userTags[k].map(toOption)
       })
     }
 
@@ -40,6 +40,20 @@ class SideBarTags extends React.Component {
     this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
     this.renderTagsCategory = this.renderTagsCategory.bind(this)
     this._onKeyUp = this.onKeyUp.bind(this)
+  }
+
+  repopulate (webentity) {
+    Object.keys(this.state).filter(k => ~k.indexOf('values/'))
+      .forEach(k => {
+        console.log(k)
+        delete this.state[k]
+      })
+    const userTags = webentity.tags[TAGS_NS]
+    if (userTags) {
+      Object.keys(userTags).forEach(k => {
+        this.state[`values/${k}`] = userTags[k].map(toOption)
+      })
+    }
   }
 
   onKeyUp (e) {
@@ -52,7 +66,10 @@ class SideBarTags extends React.Component {
     this.updateFullSuggestions(this.props.categories)
   }
 
-  componentWillReceiveProps ({ categories }) {
+  componentWillReceiveProps ({ categories, webentity }) {
+    if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
+      this.repopulate(webentity)
+    }
     if (JSON.stringify(categories) !== JSON.stringify(this.props.categories)) {
       this.updateFullSuggestions(categories)
     }
@@ -75,8 +92,8 @@ class SideBarTags extends React.Component {
   addCategory (e) {
     e.preventDefault()
 
-    const { newCategory } = this.state
-    if (newCategory) {
+    const { newCategory, categories } = this.state
+    if (newCategory && !~this.props.categories.concat(categories).indexOf(newCategory)) {
       const { serverUrl, corpusId, webentity, addTagsCategory } = this.props
       addTagsCategory(serverUrl, corpusId, webentity.id, newCategory)
       this.setState({ newCategory: '', categories: this.state.categories.concat(newCategory) })
@@ -87,7 +104,7 @@ class SideBarTags extends React.Component {
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
     const key = `values/${category}`
 
-    const previousTags = this.state[key] || []
+    const previousTags = (this.state[key] || []).map(o => o.value)
     const nextTags = options.filter(o => o).map(o => o.value)
     const addedTags = difference(nextTags, previousTags)
     const removedTags = difference(previousTags, nextTags)
@@ -95,7 +112,7 @@ class SideBarTags extends React.Component {
     addedTags.map(tag => addTag(serverUrl, corpusId, category, webentity.id, tag, tag))
     removedTags.map(tag => removeTag(serverUrl, corpusId, category, webentity.id, tag))
 
-    this.setState({ [key]: nextTags })
+    this.setState({ [key]: options })
   }
 
   // big textarea-like with many tags
@@ -116,7 +133,7 @@ class SideBarTags extends React.Component {
           onChange={ (options) => this.onChangeCreatable(options, category) }
           placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
           promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
-          value={ values.map(toOption) } />
+          value={ values } />
       </div>
     )
   }
@@ -141,7 +158,7 @@ class SideBarTags extends React.Component {
             onChange={ (option) => this.onChangeCreatable([option], category) }
             placeholder=''
             promptTextCreator={ (tag) => tag+' '  }
-            value={ values.map(toOption)[0] || '' } />
+            value={ values[0] || '' } />
         </div>
       </div>
     )

@@ -26,7 +26,7 @@ import {
   openTab, closeTab
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName, createWebentity,
+  declarePage, setTabWebentity, setWebentityName,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
   hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
@@ -510,7 +510,6 @@ TabContent.propTypes = {
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
-  createWebentity: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
@@ -551,7 +550,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
-  declarePage, setTabWebentity, setWebentityName, createWebentity, stoppedLoadingWebentity,
+  declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
