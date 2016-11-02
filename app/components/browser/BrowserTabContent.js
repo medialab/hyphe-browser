@@ -430,8 +430,8 @@ class TabContent extends React.Component {
         <p><T id="webentity-crawl-popup-message-2" /></p>
         <p><T id="webentity-crawl-popup-message-3" /></p>
         <div className="we-popup-footer">
-          <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
-          <label>
+          <input ref={component => this.inputComponent = component } type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
+          <label onClick={ () => findDOMNode(this.inputComponent).click() }>
             <T id="do-not-show-again" />
           </label>
           <button disabled={ saving } className="apply-we-popup" onClick={ apply }><T id="launch" /></button>
