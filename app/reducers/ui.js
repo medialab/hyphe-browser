@@ -27,6 +27,9 @@ import {
   SAVE_ADJUSTED_WEBENTITY_REQUEST,
   SAVE_ADJUSTED_WEBENTITY_SUCCESS,
   SAVE_ADJUSTED_WEBENTITY_FAILURE,
+  MERGE_WEBENTITY_REQUEST,
+  MERGE_WEBENTITY_SUCCESS,
+  MERGE_WEBENTITY_FAILURE,
   FETCH_TLDS_REQUEST,
   FETCH_TLDS_SUCCESS,
   FETCH_TLDS_FAILURE
@@ -56,6 +59,7 @@ const initialState = {
     webentity: false,
     webentity_status: false,
     webentity_adjust: false,
+    webentity_merge: false,
     tlds: false
   },
   // for messages having a "do not show again" options
@@ -108,6 +112,12 @@ export default createReducer(initialState, {
   [SAVE_ADJUSTED_WEBENTITY_SUCCESS]: toggleLoader('webentity_adjust', false),
   [SAVE_ADJUSTED_WEBENTITY_FAILURE]: toggleLoader('webentity_adjust', false, {
     messageId: 'error.save-webentity'
+  }),
+
+  [MERGE_WEBENTITY_REQUEST]: toggleLoader('webentity_merge', true),
+  [MERGE_WEBENTITY_SUCCESS]: toggleLoader('webentity_merge', false),
+  [MERGE_WEBENTITY_FAILURE]: toggleLoader('webentity_merge', false, {
+    messageId: 'error.merge-webentity'
   }),
 
   [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({

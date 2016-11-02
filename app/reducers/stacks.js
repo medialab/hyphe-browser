@@ -5,7 +5,9 @@ import {
   FETCH_STACK_REQUEST,
   FETCH_STACK_SUCCESS,
   FETCH_STACK_ERROR,
-  VIEW_WEBENTITY
+  VIEW_WEBENTITY,
+  LOADING_WEBENTITY,
+  STOPPED_LOADING_WEBENTITY
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
 
@@ -14,6 +16,7 @@ const initialState = {
   selected: null,
   lastRefresh: null,
   webentities: [],
+  loadingWebentity: false,
   list: [
     {
       name: 'DISCOVERED',
@@ -94,5 +97,16 @@ export default createReducer(initialState, {
       }
       return w
     })
+  }),
+
+  [LOADING_WEBENTITY]: (state) => ({
+    ...state,
+    loadingWebentity: true
+  }),
+
+  [STOPPED_LOADING_WEBENTITY]: (state) => ({
+    ...state,
+    loadingWebentity: false
   })
+
 })

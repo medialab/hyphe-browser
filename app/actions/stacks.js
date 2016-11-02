@@ -8,6 +8,8 @@ export const FETCH_STACK_SUCCESS = '§_FETCH_STACK_SUCCESS'
 export const FETCH_STACK_FAILURE = '§_FETCH_STACK_FAILURE'
 
 export const VIEW_WEBENTITY = '§_VIEW_WEBENTITY'
+export const LOADING_WEBENTITY = '§_LOADING_WEBENTITY'
+export const STOPPED_LOADING_WEBENTITY = '§_STOPPED_LOADING_WEBENTITY'
 
 
 export const emptyStack = createAction(EMPTY_STACK, (stack) => ({ stack }))
@@ -28,4 +30,8 @@ export const fetchStack = (serverUrl, corpus, stack) => (dispatch) => {
 }
 
 export const viewWebentity = createAction(VIEW_WEBENTITY, (webentity) => ({ webentity }))
+
+export const loadingWebentity = createAction(LOADING_WEBENTITY)
+
+export const stoppedLoadingWebentity = createAction(STOPPED_LOADING_WEBENTITY)
 

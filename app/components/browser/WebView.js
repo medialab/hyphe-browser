@@ -19,6 +19,7 @@ const { Menu, MenuItem } = remote
  *   - 'did-start-loading' => 'start' + url
  *   - 'did-stop-loading' => 'stop' + url
  *   - 'did-fail-load' => 'error' + { errorCode, errorDescription, validatedURL, pageURL }
+ *   - 'did-get-redirect-request' => 'redirect' + { oldURL, newURL }
  *   - 'page-title-updated' => 'title' + title
  *   - 'page-favicon-updated' => 'favicon' + faviconUrl
  *   - 'new-window' (ctrl+click & co) => 'open' + url
@@ -143,6 +144,7 @@ class WebView extends React.Component {
       webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame)) // eslint-disable-line no-console
       webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url)) // eslint-disable-line no-console
       webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url)) // eslint-disable-line no-console
+      webview.addEventListener('did-get-redirect-request', (e) => console.debug('did-get-redirect-request', e)) // eslint-disable-line no-console
     }
 
     // Loading status notifications
@@ -166,6 +168,13 @@ class WebView extends React.Component {
         return
       }
       update('error', { errorCode, errorDescription, validatedURL, pageURL: webview.getURL() })
+    })
+
+    // Handle redirects
+    webview.addEventListener('did-get-redirect-request', ({ oldURL, newURL, isMainFrame }) => {
+      if (isMainFrame) {
+        update('redirect', { oldURL, newURL })
+      }
     })
 
     // Guest page metadata: title, favicon

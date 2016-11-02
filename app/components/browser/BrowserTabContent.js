@@ -20,13 +20,15 @@ import { eventBusShape } from '../../types'
 import { PAGE_HYPHE_HOME } from '../../constants'
 
 import { showError, showNotification, hideError, toggleDoNotShowAgain } from '../../actions/browser'
+import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
   openTab, closeTab
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName, createWebentity,
-  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, hideAdjustWebentity
+  declarePage, setTabWebentity, setWebentityName,
+  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
+  hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
 import { getSearchUrl } from '../../utils/search-web'
@@ -66,14 +68,17 @@ class TabContent extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.active !== this.props.active && this.props.active) {
+    if (this.props.active &&
+      (prevProps.active !== this.props.active ||
+       prevProps.webentity !== this.props.webentity)) {
       findDOMNode(this.webviewComponent).focus()
     }
   }
 
   componentWillReceiveProps (props) {
     // Handle the case when user clicked "IN" button and does *not* want to show a popup
-    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup && (!this.props.adjusting || !this.props.adjusting.crawl)) {
+    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
+      (!this.props.adjusting || !this.props.adjusting.crawl)) {
       this.saveAdjustChanges(props)
     }
   }
@@ -92,22 +97,24 @@ class TabContent extends React.Component {
   updateTabStatus (event, info) {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
-      server, corpusId, disableWebentity, webentity, tlds } = this.props
+      eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
+      webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
+      tlds } = this.props
 
-    // In Hyphe special tab, if tagrte=_blank link points to a Hyphe page, load within special tab
+    // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
     }
 
     switch (event) {
     case 'open':
-      this.props.eventBus.emit('open', info)
+      eventBus.emit('open', info)
       break
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
-        // avoid refreshing webentity when only changing url's anchor
+        // avoid emptying sidebar when only changing url's anchor
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.lru_prefixes, info, tlds))) {
@@ -124,14 +131,22 @@ class TabContent extends React.Component {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
           // do not declare pages with only change in anchor
-          if (!this.samePage(info)) {
+          if (!this.samePage(info) || loadingWebentityStack) {
+            this.setState({ webentityName: null })
             declarePage(server.url, corpusId, info, id)
           }
         } else {
           this.doNotDeclarePageOnStop = false
         }
       }
+      stoppedLoadingWebentity()
       this.setState({ previousUrl: info })
+      break
+    case 'redirect':
+      if (loadingWebentityStack && selectedWebentity &&
+        !longestMatching(selectedWebentity.lru_prefixes, info.newURL, tlds)) {
+        setMergeWebentity(id, selectedWebentity, webentity)
+      }
       break
     case 'title':
       setTabTitle(info, id)
@@ -163,7 +178,9 @@ class TabContent extends React.Component {
       break
     }
     default:
-      console.log("Unhandled event:", event, info)
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Unhandled event:", event, info)
+      }
       break
     }
   }
@@ -349,9 +366,37 @@ class TabContent extends React.Component {
   }
 
   renderOverlay () {
-    const { webentity, hideAdjustWebentity } = this.props
+    const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
 
-    return <div className="global-overlay" onClick={ () => hideAdjustWebentity(webentity.id) } />
+    return <div className="global-overlay" onClick={ () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id) } />
+  }
+
+  renderMergePopup () {
+    const { id, server, corpusId, webentity, mergeRequired, merging,
+     unsetMergeWebentity, mergeWebentities } = this.props
+
+    const merge = e => {
+      e.preventDefault()
+      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity.id)
+    }
+
+    const cancel = e => {
+      e.preventDefault()
+      unsetMergeWebentity(id)
+    }
+
+    return (
+      <div className="we-popup">
+        <strong><T id="webentity-merge-popup-title" /></strong>
+        <p><T id="webentity-merge-popup-message" /></p>
+        <p><T id="webentity-merge-popup-message-2" /></p>
+        <p><T id="webentity-merge-popup-message-3" /></p>
+        <div className="we-popup-footer">
+          <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
+          <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
+        </div>
+      </div>
+    )
   }
 
   renderCrawlPopup () {
@@ -379,40 +424,45 @@ class TabContent extends React.Component {
     }
 
     return (
-      <div className="crawl-popup">
+      <div className="we-popup">
         <strong><T id="webentity-crawl-popup-title" /></strong>
         <p><T id="webentity-crawl-popup-message" /></p>
         <p><T id="webentity-crawl-popup-message-2" /></p>
         <p><T id="webentity-crawl-popup-message-3" /></p>
-        <div className="crawl-popup-footer">
+        <div className="we-popup-footer">
           <input type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
           <label>
             <T id="do-not-show-again" />
           </label>
-          <button disabled={ saving } className="apply-crawl" onClick={ apply }><T id="launch" /></button>
-          <button disabled={ saving } className="cancel-crawl" onClick={ cancel }><T id="cancel" /></button>
+          <button disabled={ saving } className="apply-we-popup" onClick={ apply }><T id="launch" /></button>
+          <button disabled={ saving } className="cancel-we-popup" onClick={ cancel }><T id="cancel" /></button>
         </div>
       </div>
     )
   }
 
   onKeyUp (e) {
-    const { active, webentity, adjusting, hideAdjustWebentity } = this.props
-    if (active && adjusting && e.keyCode === 27) { // ESCAPE
+    const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
+    if (e.keyCode === 27 && active) { // ESCAPE
       e.stopPropagation()
-      hideAdjustWebentity(webentity.id)
+      if (adjusting) {
+        hideAdjustWebentity(webentity.id)
+      } else if (mergeRequired && webentity) {
+        unsetMergeWebentity(id)
+      }
     }
   }
 
   render () {
-    const { active, id, disableWebentity, adjusting, noCrawlPopup } = this.props
+    const { active, id, webentity, disableWebentity, adjusting, noCrawlPopup, mergeRequired } = this.props
 
     return (
-      <div key={ id } className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
+      <div key={ id } tabIndex="1" className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
-        { adjusting && (!noCrawlPopup || !adjusting.crawl) && this.renderOverlay() }
+        { webentity && mergeRequired && this.renderMergePopup() }
+        { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
       </div>
     )
   }
@@ -434,10 +484,14 @@ TabContent.propTypes = {
 
   active: PropTypes.bool.isRequired,
   saving: PropTypes.bool.isRequired,
+  merging: PropTypes.bool.isRequired,
   noCrawlPopup: PropTypes.bool.isRequired,
   server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object,
+  selectedWebentity: PropTypes.object,
+  loadingWebentityStack: PropTypes.bool,
+  mergeRequired: PropTypes.object,
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
@@ -456,16 +510,19 @@ TabContent.propTypes = {
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
-  createWebentity: PropTypes.func.isRequired,
+  stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
   hideAdjustWebentity: PropTypes.func.isRequired,
   toggleDoNotShowAgain: PropTypes.func.isRequired,
+  setMergeWebentity: PropTypes.func.isRequired,
+  unsetMergeWebentity: PropTypes.func.isRequired,
+  mergeWebentities: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (
-  { corpora, intl: { locale }, servers, tabs, webentities, ui: { loaders, doNotShow } }, // store
+  { corpora, intl: { locale }, servers, stacks, tabs, webentities, ui: { loaders, doNotShow } }, // store
   { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
 ) => ({
   id,
@@ -479,18 +536,23 @@ const mapStateToProps = (
   server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
+  selectedWebentity: webentities.selected,
+  loadingWebentityStack: stacks.loadingWebentity,
+  mergeRequired: webentities.merges[id],
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
   tlds: webentities.tlds,
   saving: loaders.webentity_adjust,
+  merging: loaders.webentity_merge,
   noCrawlPopup: doNotShow.crawlPopup
 })
 
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
-  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab , closeTab,
-  declarePage, setTabWebentity, setWebentityName, createWebentity,
-  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity, saveAdjustedWebentity,
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
+  declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
+  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
+  saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TabContent)

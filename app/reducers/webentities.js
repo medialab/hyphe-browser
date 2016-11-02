@@ -21,6 +21,8 @@ import {
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
   ADJUST_WEBENTITY,
+  MERGE_WEBENTITY,
+  STOP_MERGE_WEBENTITY,
   FETCH_MOST_LINKED_SUCCESS,
   FETCH_PARENTS_SUCCESS,
   FETCH_SUBS_SUCCESS,
@@ -44,6 +46,7 @@ const initialState = {
   webentities: {}, // id → WebEntity
   tabs: {}, // tabId → webEntityId
   adjustments: {}, // webEntityId → adjustment { name, homepage, prefix, crawl }
+  merges: {}, // tabId →  merge { mergeable, host }
   selected: null
 }
 
@@ -175,6 +178,23 @@ export default createReducer(initialState, {
       [id]: (info && state.adjustments[id])
         ? {...state.adjustments[id], ...info}
         : info
+    }
+  }),
+
+  // Keep track of current WE merges
+  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host }) => ({
+    ...state,
+    merges: {
+      ...state.merges,
+      [tabId]: ({ mergeable: mergeable, host: host })
+    }
+  }),
+
+  [STOP_MERGE_WEBENTITY]: (state, { tabId }) => ({
+    ...state,
+    merges: {
+      ...state.merges,
+      [tabId]: null
     }
   }),
 
