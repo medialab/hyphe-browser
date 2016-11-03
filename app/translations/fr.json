@@ -119,11 +119,11 @@
   "webentity-info-created-sidebar": "Nouvelle webentité",
   "webentity-info-created-notification": "Nouvelle webentité créée avec succès",
   "webentity-crawl-popup-title": "CRAWLER CETTE WEBENTITÉ ?",
-  "webentity-crawl-popup-message": "En déclarant le statut de cette webentité \"IN\", vous allez la crawler. Vérifiez avant tout que son périmètre défini en bleu ci-dessus vous convient.",
+  "webentity-crawl-popup-message": "ATTENTION : En déclarant le statut de cette webentité \"IN\", vous allez la crawler. Vérifiez avant tout que son périmètre défini en bleu ci-dessus vous convient.",
   "webentity-crawl-popup-message-2": "Autrement, veuillez annuler et définir une nouvelle webentité en cliquant sur \"+\" puis déclarez là \"IN\".",
   "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la Homepage de la webentité si nécessaire !",
   "webentity-merge-popup-title": "FUSIONNER CES 2 WEBENTITÉS ?",
-  "webentity-merge-popup-message": "Lorem",
-  "webentity-merge-popup-message-2": "Ipsum",
-  "webentity-merge-popup-message-3": "Dolor"
+  "webentity-merge-popup-message": "ATTENTION : La webentité \"{old}\" à laquelle vous avez essayé d'accéder vous a redirigé automatiquement vers une page appartenant à une autre webentité \"{new}\".",
+  "webentity-merge-popup-message-2": "Vous pouvez soit fusionner ces deux webentités, soit ignorer ce message.",
+  "webentity-merge-popup-message-3": "Si vous ne les fusionnez pas, vous ne pourrez pas éditer le statut, le nom ou les tags de la webentité d'origine depuis Hyphe-Browser, vous pouvez à la place utiliser l'onglet spécial Hyphe et chercher la webentité pour l'éditer depuis l'interface web classique de Hyphe."
 }

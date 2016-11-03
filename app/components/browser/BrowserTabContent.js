@@ -388,7 +388,7 @@ class TabContent extends React.Component {
     return (
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
-        <p><T id="webentity-merge-popup-message" /></p>
+        <p><T id="webentity-merge-popup-message" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
         <p><T id="webentity-merge-popup-message-2" /></p>
         <p><T id="webentity-merge-popup-message-3" /></p>
         <div className="we-popup-footer">
