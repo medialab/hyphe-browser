@@ -126,12 +126,12 @@ class SideBar extends React.Component {
           title={ formatMessage({ id: 'set-homepage' }) }
           disabled={ onHomepage }
           onClick={ () => setWebentityHomepage(serverUrl, corpusId, url, webentity.id) } />
-        <button className={ cx("btn btn-default browser-side-bar-homepage-url", {"hint--bottom": !onHomepage && webentity.homepage}, {inactive: onHomepage || !webentity.homepage}) }
+        <button className={ cx("btn btn-default browser-side-bar-homepage-url hint--medium", {"hint--bottom": !onHomepage && webentity.homepage}, {inactive: onHomepage || !webentity.homepage}) }
           aria-label={ !onHomepage && webentity.homepage && formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
           onClick={ !onHomepage && webentity.homepage ? () => setTabUrl(webentity.homepage, tabId) : undefined }>
-          <span disabled={onHomepage || !webentity.homepage}>
+          <div disabled={onHomepage || !webentity.homepage}>
             { onHomepage ? formatMessage({ id: 'here-homepage' }) : webentity.homepage || formatMessage({ id: 'missing-homepage' }) }
-          </span>
+          </div>
         </button>
       </div>
     )
