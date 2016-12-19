@@ -88,7 +88,7 @@ class CorpusList extends React.Component {
           { hypheStatus }
         </h3>
         { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
-        { !!corpora.length && <div className="form-group corpus-list-filter">
+        { !!Object.keys(this.props.corpora).length && <div className="form-group corpus-list-filter">
           <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
             onChange={ ({ target }) => this.setState({ filter: target.value }) } />
           <span className="ti-search"></span>
