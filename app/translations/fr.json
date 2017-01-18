@@ -24,7 +24,7 @@
   "corpus-status.DISCOVERED": "Prospection",
   "corpus-status.IN": "IN",
   "corpus-status.IN_UNCRAWLED": "IN à crawler",
-  "corpus-status.IN_UNTAGGED": "IN à tagger",
+  "corpus-status.IN_UNTAGGED": "IN à taguer",
   "corpus-status.OUT": "OUT",
   "corpus-status.UNDECIDED": "UNDECIDED",
   "crawling-status": "Crawlée |",
