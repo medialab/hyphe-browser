@@ -110,16 +110,17 @@
 
 .browser-tab-toolbar {
   input, .browser-tab-url, .browser-tab-prefix-selector, .browser-tab-toolbar-url {
-    height: 36px;
+    min-height: 36px;
   }
   .browser-tab-prefix-selector {
-    padding: 5px;
+    padding: 5px 5px 1px 5px;
     .btn-group {
       .btn {
         padding: 5px;
       }
       .btn+.btn {
         border: none; // disable stupid photon rule
+        margin-bottom: 4px;
       }
     }
   }
