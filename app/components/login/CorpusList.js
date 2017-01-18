@@ -68,7 +68,7 @@ class CorpusList extends React.Component {
       .sort()
       .map((k) => this.props.corpora[k])
 
-    corpora = corpora.filter(it => it.name.includes(this.state.filter))
+    corpora = corpora.filter(it => it.name.toLowerCase().includes(this.state.filter.toLowerCase()))
 
     // only display corpora already started
     if (hypheFull) corpora = corpora.filter(it => it.status === 'ready')
