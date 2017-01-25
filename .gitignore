@@ -1,4 +1,5 @@
 node_modules
-release
+release*
 dist
-npm-debug.log
+npm-debug.log*
+app/reducers/servers*.js
