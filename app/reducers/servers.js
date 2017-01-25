@@ -12,7 +12,7 @@ const initialState = {
   list: [
     {
       id: 'http://hyphe.medialab.sciences-po.fr/demo-api',
-      name: 'Serveur de démonstration - limité',
+      name: 'Hyphe demo server (limited use)',
       url: 'http://hyphe.medialab.sciences-po.fr/demo-api',
       home: 'http://hyphe.medialab.sciences-po.fr/demo'
     }
