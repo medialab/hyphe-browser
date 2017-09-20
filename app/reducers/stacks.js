@@ -20,8 +20,8 @@ const initialState = {
   list: [
     {
       name: 'DISCOVERED',
-      method: 'store.advanced_search_webentities',
-      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false, true],
+      method: 'store.wordsearch_webentities',
+      args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false],
       condition: 'DISCOVERED'
     },
     {
