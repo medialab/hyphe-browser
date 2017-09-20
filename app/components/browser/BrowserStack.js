@@ -57,7 +57,7 @@ class BrowserStack extends React.Component {
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
-    const counters = status.corpus.memory_structure.webentities
+    const counters = status.corpus.traph.webentities
 
     // do not display this stack button if empty
     const usefulStacks = stacks.filter(s => s.name !== 'IN_UNCRAWLED' || counters[s.name])
