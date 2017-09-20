@@ -80,7 +80,7 @@ class SideBarTags extends React.Component {
     const { serverUrl, corpusId, fetchTags } = this.props
     fetchTags(serverUrl, corpusId).then((tags) => {
       categories.forEach((category) => {
-        this.setState({ ['suggestions/' + category]: tags[category] })
+        this.setState({ ['suggestions/' + category]: Object.keys(tags[category]) })
       })
     })
   }
