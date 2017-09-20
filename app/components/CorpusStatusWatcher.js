@@ -44,7 +44,8 @@ class CorpusStatusWatcher extends React.Component {
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
-        if (status.hyphe.ram_left > 0 && status.hyphe.ports_left > 0) {
+        // TODO: test number of corpus started ?
+        if (true) {
           // Resources available: start corpus
           showError({ id: ERROR_CORPUS_NOT_STARTED, messageId: 'error.corpus-not-started-starting', fatal: true })
           return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {

@@ -59,7 +59,7 @@ class CorpusList extends React.Component {
   render () {
     const { formatMessage } = this.context.intl
     const { server, status, ui, selectCorpus, routerPush } = this.props
-    const hypheFull = status && (!status.ports_left || !status.ram_left)
+    const hypheFull = false
 
     if (ui.loaders.corpora) return <Spinner textId="loading-corpora" />
     if (!server) return null
