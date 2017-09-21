@@ -117,7 +117,7 @@ class TabContent extends React.Component {
         // avoid emptying sidebar when only changing url's anchor
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
-        !(webentity && longestMatching(webentity.lru_prefixes, info, tlds))) {
+        !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
         setTabWebentity(server.url, corpusId, id, null)
       }
       break
@@ -144,7 +144,7 @@ class TabContent extends React.Component {
       break
     case 'redirect':
       if (loadingWebentityStack && selectedWebentity &&
-        !longestMatching(selectedWebentity.lru_prefixes, info.newURL, tlds)) {
+        !longestMatching(selectedWebentity.prefixes, info.newURL, tlds)) {
         setMergeWebentity(id, selectedWebentity, webentity)
       }
       break
@@ -297,7 +297,7 @@ class TabContent extends React.Component {
         <BrowserTabUrlField
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
-          lruPrefixes={ webentity && webentity.lru_prefixes }
+          lruPrefixes={ webentity && webentity.prefixes }
           onSubmit={ (url) => setTabUrl(url, id) }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
@@ -312,7 +312,7 @@ class TabContent extends React.Component {
     const { webentity, setAdjustWebentity, adjusting, tlds } = this.props
 
     this.setState({
-      disableApplyButton: !adjusting.crawl && hasExactMatching(webentity.lru_prefixes, url, tlds),
+      disableApplyButton: !adjusting.crawl && hasExactMatching(webentity.prefixes, url, tlds),
       webentityName: urlToName(url)
     })
 
