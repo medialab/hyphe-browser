@@ -187,7 +187,7 @@ export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
 export const fetchParents = (serverUrl, corpusId, webentity) => dispatch => {
   dispatch({ type: FETCH_PARENTS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', [webentity.id, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', [webentity.id, true, corpusId])
     .then(parents => dispatch({ type: FETCH_PARENTS_SUCCESS, payload: { serverUrl, corpusId, webentity, parents } }))
     .catch(error => {
       dispatch({ type: FETCH_PARENTS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
@@ -198,7 +198,7 @@ export const fetchParents = (serverUrl, corpusId, webentity) => dispatch => {
 export const fetchChildren = (serverUrl, corpusId, webentity) => dispatch => {
   dispatch({ type: FETCH_SUBS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_subwebentities', [webentity.id, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_subwebentities', [webentity.id, true, corpusId])
     .then(children => dispatch({ type: FETCH_SUBS_SUCCESS, payload: { serverUrl, corpusId, webentity, children } }))
     .catch(error => {
       dispatch({ type: FETCH_SUBS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
