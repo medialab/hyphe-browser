@@ -45,7 +45,6 @@ class SideBarTags extends React.Component {
   repopulate (webentity) {
     Object.keys(this.state).filter(k => ~k.indexOf('values/'))
       .forEach(k => {
-        console.log(k)
         delete this.state[k]
       })
     const userTags = webentity.tags[TAGS_NS]
