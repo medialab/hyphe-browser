@@ -27,31 +27,31 @@ const initialState = {
     {
       name: 'IN',
       method: 'store.get_webentities_by_status',
-      args: ['IN', 'name', -1, 0],
+      args: ['IN', 'name', -1, 0, false, false],
       condition: 'IN'
     },
     {
       name: 'IN_UNTAGGED',
       method: 'store.get_webentities_mistagged',
-      args: ['IN', true, false, 'name', -1, 0],
+      args: ['IN', true, false, 'name', -1, 0, false, false],
       condition: 'IN'
     },
     {
       name: 'IN_UNCRAWLED',
       method: 'store.get_webentities_uncrawled',
-      args: ['name', -1, 0],
+      args: ['name', -1, 0, false, false],
       condition: 'IN'
     },
     {
       name: 'UNDECIDED',
       method: 'store.get_webentities_by_status',
-      args: ['UNDECIDED', 'name', -1, 0],
+      args: ['UNDECIDED', 'name', -1, 0, false, false],
       condition: 'UNDECIDED'
     },
     {
       name: 'OUT',
       method: 'store.get_webentities_by_status',
-      args: ['OUT', 'name', -1, 0],
+      args: ['OUT', 'name', -1, 0, false, false],
       condition: 'OUT'
     }
   ]
