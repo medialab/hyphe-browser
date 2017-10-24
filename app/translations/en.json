@@ -101,6 +101,8 @@
   "sidebar.contextual.mostLinked": "Linked pages",
   "sidebar.contextual.parents": "Parent entities",
   "sidebar.contextual.children": "Sub entities",
+  "sidebar.contextual.referrers": "Referrers entities",
+  "sidebar.contextual.referrals": "Referrals entities",
   "starting-corpus": "Starting corpus…",
   "status": "Status",
   "tags-clear-category-value": "Delete tag",

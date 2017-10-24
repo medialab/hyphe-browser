@@ -58,6 +58,15 @@ export const FETCH_MOST_LINKED_REQUEST = '§_FETCH_MOST_LINKED_REQUEST'
 export const FETCH_MOST_LINKED_SUCCESS = '§_FETCH_MOST_LINKED_SUCCESS'
 export const FETCH_MOST_LINKED_FAILURE = '§_FETCH_MOST_LINKED_FAILURE'
 
+export const FETCH_REFERRERS_REQUEST = '§_FETCH_REFERRERS_REQUEST'
+export const FETCH_REFERRERS_SUCCESS = '§_FETCH_REFERRERS_SUCCESS'
+export const FETCH_REFERRERS_FAILURE = '§_FETCH_REFERRERS_FAILURE'
+
+
+export const FETCH_REFERRALS_REQUEST = '§_FETCH_REFERRALS_REQUEST'
+export const FETCH_REFERRALS_SUCCESS = '§_FETCH_REFERRALS_SUCCESS'
+export const FETCH_REFERRALS_FAILURE = '§_FETCH_REFERRALS_FAILURE'
+
 export const FETCH_PARENTS_REQUEST = '§_FETCH_PARENTS_REQUEST'
 export const FETCH_PARENTS_SUCCESS = '§_FETCH_PARENTS_SUCCESS'
 export const FETCH_PARENTS_FAILURE = '§_FETCH_PARENTS_FAILURE'
@@ -110,6 +119,8 @@ export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispa
   // Populate webentity's context
   if (webentity) {
     dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
+    dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+    dispatch(fetchReferrals(serverUrl, corpusId, webentity))
     dispatch(fetchParents(serverUrl, corpusId, webentity))
     dispatch(fetchChildren(serverUrl, corpusId, webentity))
   }
@@ -180,6 +191,28 @@ export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
     .then(mostLinked => dispatch({ type: FETCH_MOST_LINKED_SUCCESS, payload: { serverUrl, corpusId, webentity, mostLinked } }))
     .catch(error => {
       dispatch({ type: FETCH_MOST_LINKED_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchReferrers = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({type: FETCH_REFERRERS_REQUEST, payload: { serverUrl, corpusId, webentity }})
+
+  return jsonrpc(serverUrl)('store.get_webentity_referrers', [webentity.id, -1, 0, false, false, corpusId])
+    .then(referrers => dispatch({ type: FETCH_REFERRERS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrers } }))
+    .catch(error => {
+      dispatch({ type: FETCH_REFERRERS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchReferrals = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({type: FETCH_REFERRALS_REQUEST, payload: { serverUrl, corpusId, webentity }})
+
+  return jsonrpc(serverUrl)('store.get_webentity_referrals', [webentity.id, -1, 0, false, false, corpusId])
+    .then(referrals => dispatch({ type: FETCH_REFERRALS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrals } }))
+    .catch(error => {
+      dispatch({ type: FETCH_REFERRALS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
       throw error
     })
 }

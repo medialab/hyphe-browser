@@ -24,6 +24,8 @@ import {
   MERGE_WEBENTITY,
   STOP_MERGE_WEBENTITY,
   FETCH_MOST_LINKED_SUCCESS,
+  FETCH_REFERRERS_SUCCESS,
+  FETCH_REFERRALS_SUCCESS,
   FETCH_PARENTS_SUCCESS,
   FETCH_SUBS_SUCCESS,
   FETCH_TLDS_SUCCESS
@@ -100,16 +102,42 @@ export default createReducer(initialState, {
     }
   }),
 
-  [FETCH_PARENTS_SUCCESS]: (state, { webentity, parents }) => ({
+  [FETCH_REFERRERS_SUCCESS]: (state, { webentity, referrers }) => ({
     ...state,
     webentities: {
       ...state.webentities,
       [webentity.id]: {
         ...state.webentities[webentity.id],
-        parents: parents
+        referrers: referrers
       }
     }
   }),
+
+  [FETCH_REFERRALS_SUCCESS]: (state, { webentity, referrals }) => {
+    return ({
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          referrals: referrals
+        }
+      }
+    })
+  },
+
+  [FETCH_PARENTS_SUCCESS]: (state, { webentity, parents }) => {
+    return ({
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          parents: parents
+        }
+      }
+    })
+  },
 
   [FETCH_SUBS_SUCCESS]: (state, { webentity, children }) => ({
     ...state,

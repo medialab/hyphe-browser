@@ -10,6 +10,8 @@ import cx from 'classnames'
 import { setTabUrl, openTab } from '../../../actions/tabs'
 import {
   fetchMostLinked,
+  fetchReferrers,
+  fetchReferrals,
   fetchParents,
   fetchChildren
 } from '../../../actions/webentities'
@@ -34,7 +36,7 @@ class _List extends React.Component {
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.length ? links.map(link =>
-            ( name === 'mostLinked' ? 
+            ( name === 'mostLinked' ?
               <li key={ link.url } title={ link.url }>
                 { !compareUrls(link.url, activeTabUrl) ?
                   <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
@@ -88,10 +90,16 @@ class SideBarContextualLists extends React.Component {
 
   updateCurrentList (selected) {
     const { serverUrl, corpusId, webentity, selectContextualList,
-      fetchMostLinked, fetchParents, fetchChildren } = this.props
+      fetchMostLinked, fetchReferrers, fetchReferrals, fetchParents, fetchChildren } = this.props
     selectContextualList(selected)
 
     switch (selected) {
+    case 'referrers':
+      fetchReferrers(serverUrl, corpusId, webentity)
+      break
+    case 'referrals':
+      fetchReferrals(serverUrl, corpusId, webentity)
+      break
     case 'parents':
       fetchParents(serverUrl, corpusId, webentity)
       break
@@ -106,11 +114,12 @@ class SideBarContextualLists extends React.Component {
 
   render () {
     const { selectContextualList, selected, webentity } = this.props
-
     return (
       <div className="browser-side-bar-contextual-lists">
         <nav>
-          { ['mostLinked', 'parents', 'children'].map(l =>
+          {
+            // hide parents and children tabs for now
+            ['mostLinked', 'referrers', 'referrals'].map(l =>
             <button className={ cx('btn', 'btn-default', { selected: l === selected }) }
               key={ l } onClick={ () => this.updateCurrentList(l) }>
               <T id={ `sidebar.contextual.${l}` } />
@@ -138,6 +147,8 @@ SideBarContextualLists.propTypes = {
   selected: PropTypes.string,
 
   fetchMostLinked: PropTypes.func,
+  fetchReferrers: PropTypes.func,
+  fetchReferrals: PropTypes.func,
   fetchParents: PropTypes.func,
   fetchChildren: PropTypes.func,
   selectContextualList: PropTypes.func
@@ -150,7 +161,10 @@ const mapStateToProps = ({ ui, intl: { locale } }, props) => ({
 
 export default connect(mapStateToProps, {
   fetchMostLinked,
+  fetchReferrers,
+  fetchReferrals,
   fetchParents,
   fetchChildren,
   selectContextualList,
 })(SideBarContextualLists)
+

@@ -101,6 +101,8 @@
   "sidebar.contextual.mostLinked": "Pages citées",
   "sidebar.contextual.parents": "Entités parentes",
   "sidebar.contextual.children": "Entités inclues",
+  "sidebar.contextual.referrers": "Entités referrers",
+  "sidebar.contextual.referrals": "Entités referrals",
   "starting-corpus": "Démarrage du corpus…",
   "status": "Statut",
   "tags-clear-category-value": "Supprimer le tag",
