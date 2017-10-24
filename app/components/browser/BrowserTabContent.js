@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
-import networkErrors from '@naholyr/chromium-net-errors'
+import networkErrors from 'chromium-net-errors'
 
 import WebView from './WebView'
 import Button from '../Button'
