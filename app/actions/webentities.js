@@ -121,8 +121,8 @@ export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispa
     dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
     dispatch(fetchReferrers(serverUrl, corpusId, webentity))
     dispatch(fetchReferrals(serverUrl, corpusId, webentity))
-    dispatch(fetchParents(serverUrl, corpusId, webentity))
-    dispatch(fetchChildren(serverUrl, corpusId, webentity))
+    // dispatch(fetchParents(serverUrl, corpusId, webentity))
+    // dispatch(fetchChildren(serverUrl, corpusId, webentity))
   }
   dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 }
