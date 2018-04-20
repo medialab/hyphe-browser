@@ -11,9 +11,9 @@ import {
 const initialState = {
   list: [
     {
-      id: 'http://hyphe.medialab.sciences-po.fr/demo-api',
+      id: 'http://hyphe.medialab.sciences-po.fr/demo/api/',
       name: 'Hyphe demo server (limited use)',
-      url: 'http://hyphe.medialab.sciences-po.fr/demo-api',
+      url: 'http://hyphe.medialab.sciences-po.fr/demo/api/',
       home: 'http://hyphe.medialab.sciences-po.fr/demo'
     }
   ],
