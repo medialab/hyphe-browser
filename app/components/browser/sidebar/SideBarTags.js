@@ -184,7 +184,7 @@ class SideBarTags extends React.Component {
           </h3>
 
           { showCategories && <div>
-            { categories.map(this.renderTagsCategory) }
+            { categories.sort().map(this.renderTagsCategory) }
 
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
               <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
