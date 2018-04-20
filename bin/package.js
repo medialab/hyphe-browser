@@ -28,22 +28,27 @@ const packOptions = {
 
 const targets = [
   {
+    name: 'Linux-32bit',
     platform: 'linux',
     arch: 'ia32'
   },
   {
+    name: 'Linux-64bit',
     platform: 'linux',
     arch: 'x64'
   },
   {
+    name: 'Windows-32bit',
     platform: 'win32',
     arch: 'ia32'
   },
   {
+    name: 'Windows-64bit',
     platform: 'win32',
     arch: 'x64'
   },
   {
+    name: 'MacOSX',
     platform: 'darwin',
     arch: 'x64'
   }
@@ -65,7 +70,7 @@ function packageAll () {
       platform: target.platform,
       arch: target.arch,
       prune: true,
-      out: 'release/' + target.platform + '-' + target.arch
+      out: 'release/' + target.name
     }))
   }))
 }
