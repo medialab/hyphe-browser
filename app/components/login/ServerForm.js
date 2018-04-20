@@ -111,7 +111,7 @@ class ServerForm extends React.Component {
       delete server.password
     }
     if (!server.home) {
-      server.home = server.url.replace(/-api$/, '')
+      server.home = server.url.replace(/[/-]api\/?$/, '')
     }
     return server
   }
