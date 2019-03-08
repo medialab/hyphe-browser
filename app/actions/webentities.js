@@ -10,6 +10,7 @@
 // - crawl_webentity (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', phantom_timeouts = {}, corpus = '--hyphe--')
 
 import jsonrpc from '../utils/jsonrpc'
+import uniq from 'lodash.uniq'
 
 import {
   CRAWL_DEPTH,
@@ -67,6 +68,14 @@ export const FETCH_REFERRALS_REQUEST = '§_FETCH_REFERRALS_REQUEST'
 export const FETCH_REFERRALS_SUCCESS = '§_FETCH_REFERRALS_SUCCESS'
 export const FETCH_REFERRALS_FAILURE = '§_FETCH_REFERRALS_FAILURE'
 
+export const FETCH_EGONETWORK_REQUEST = '§_FETCH_EGONETWORK_REQUEST'
+export const FETCH_EGONETWORK_SUCCESS = '§_FETCH_EGONETWORK_SUCCESS'
+export const FETCH_EGONETWORK_FAILURE = '§_FETCH_EGONETWORK_FAILURE'
+
+export const FETCH_WEBENTITIES_REQUEST = '§_FETCH_WEBENTITIES_REQUEST'
+export const FETCH_WEBENTITIES_SUCCESS = '§_FETCH_WEBENTITIES_SUCCESS'
+export const FETCH_WEBENTITIES_FAILURE = '§_FETCH_WEBENTITIES_FAILURE'
+
 export const FETCH_PARENTS_REQUEST = '§_FETCH_PARENTS_REQUEST'
 export const FETCH_PARENTS_SUCCESS = '§_FETCH_PARENTS_SUCCESS'
 export const FETCH_PARENTS_FAILURE = '§_FETCH_PARENTS_FAILURE'
@@ -121,6 +130,7 @@ export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispa
     dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
     dispatch(fetchReferrers(serverUrl, corpusId, webentity))
     dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+    dispatch(fetchEgoNetwork(serverUrl, corpusId, webentity))
     // dispatch(fetchParents(serverUrl, corpusId, webentity))
     // dispatch(fetchChildren(serverUrl, corpusId, webentity))
   }
@@ -213,6 +223,51 @@ export const fetchReferrals = (serverUrl, corpusId, webentity) => dispatch => {
     .then(referrals => dispatch({ type: FETCH_REFERRALS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrals } }))
     .catch(error => {
       dispatch({ type: FETCH_REFERRALS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchEgoNetwork = (serverUrl, corpusId, webentity) => dispatch => {
+  dispatch({type: FETCH_EGONETWORK_REQUEST, payload: { serverUrl, corpusId, webentity }})
+  
+  return jsonrpc(serverUrl)('store.get_webentity_ego_network', [webentity.id, corpusId])
+    .then((links) => {
+      if (links.length === 0) {
+        dispatch({ type: FETCH_EGONETWORK_SUCCESS, payload: { serverUrl, corpusId, webentity, egonetwork: [] } })
+        return
+      }
+      const listIds = uniq(links.reduce((init, link) => {
+        return init.concat(link[0]).concat(link[1])
+      }, []))
+      return Promise.all([
+        Promise.resolve(links),
+        dispatch(fetchWebentities(serverUrl, corpusId, listIds))
+      ])
+      .then(([links, action]) => {
+        const egonetwork = links.map((link) => {
+          return {
+            source: action.payload.webentities.find(item => item.id === link[0]),
+            target: action.payload.webentities.find(item => item.id === link[1]),
+            weight: link[2]
+          }
+        })
+        dispatch({ type: FETCH_EGONETWORK_SUCCESS, payload: { serverUrl, corpusId, webentity, egonetwork } })
+      })
+    })
+    .catch(error => {
+      dispatch({ type: FETCH_EGONETWORK_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      throw error
+    })
+}
+
+export const fetchWebentities = (serverUrl, corpusId, listIds) => dispatch => {
+  if (listIds.length === 0) return
+  dispatch({type: FETCH_WEBENTITIES_REQUEST, payload: { serverUrl, corpusId, listIds }})
+
+  return jsonrpc(serverUrl)('store.get_webentities', [listIds, 'name', -1, 0, false, false, false, corpusId])
+    .then(webentities => dispatch({ type: FETCH_WEBENTITIES_SUCCESS, payload: { serverUrl, corpusId, listIds, webentities } }))
+    .catch(error => {
+      dispatch({ type: FETCH_WEBENTITIES_FAILURE, payload: { serverUrl, corpusId, listIds, error } })
       throw error
     })
 }

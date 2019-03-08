@@ -28,7 +28,8 @@ import {
   FETCH_REFERRALS_SUCCESS,
   FETCH_PARENTS_SUCCESS,
   FETCH_SUBS_SUCCESS,
-  FETCH_TLDS_SUCCESS
+  FETCH_TLDS_SUCCESS,
+  FETCH_EGONETWORK_SUCCESS
   // Note we don't subscribe to SAVE_ADJUSTED_WEBENTITY_* because we're already plugged to its sub-actions
 } from '../actions/webentities'
 import { SELECT_CORPUS } from '../actions/corpora'
@@ -121,6 +122,19 @@ export default createReducer(initialState, {
         [webentity.id]: {
           ...state.webentities[webentity.id],
           referrals: referrals
+        }
+      }
+    })
+  },
+
+  [FETCH_EGONETWORK_SUCCESS]: (state, {webentity, egonetwork}) => {
+    return ({
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          egonetwork: egonetwork
         }
       }
     })
