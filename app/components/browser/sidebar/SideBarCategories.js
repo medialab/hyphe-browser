@@ -12,11 +12,11 @@ import difference from 'lodash.difference'
 import { TAGS_NS } from '../../../constants'
 import Button from '../../Button'
 
-import { addTagsCategory, addTag, removeTag, fetchTags } from '../../../actions/tags'
+import { addTagsCategory, addTag, removeTag } from '../../../actions/tags'
 import { toggleCategories } from '../../../actions/browser'
 
 
-class SideBarTags extends React.Component {
+class SideBarCategories extends React.Component {
 
   constructor (props) {
     super(props)
@@ -61,27 +61,10 @@ class SideBarTags extends React.Component {
     }
   }
 
-  componentWillMount () {
-    this.updateFullSuggestions(this.props.categories)
-  }
-
-  componentWillReceiveProps ({ categories, webentity }) {
+  componentWillReceiveProps ({ webentity }) {
     if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
       this.repopulate(webentity)
     }
-    if (JSON.stringify(categories) !== JSON.stringify(this.props.categories)) {
-      this.updateFullSuggestions(categories)
-    }
-  }
-
-  updateFullSuggestions (categories) {
-    // Updated categories, fetch suggestions
-    const { serverUrl, corpusId, fetchTags } = this.props
-    fetchTags(serverUrl, corpusId).then((tags) => {
-      categories.forEach((category) => {
-        this.setState({ ['suggestions/' + category]: Object.keys(tags[category] || {}) })
-      })
-    })
   }
 
   onChangeNewCategory ({ target }) {
@@ -114,33 +97,11 @@ class SideBarTags extends React.Component {
     this.setState({ [key]: options })
   }
 
-  // big textarea-like with many tags
-  renderFreeTagsCategory (category) {
-    const { formatMessage } = this.context.intl
-    const suggestions = this.state[`suggestions/${category}`] || []
-    const values = this.state[`values/${category}`] || []
-
-    return (
-      <div className="browser-side-bar-tags-free-tags" key={ category } onKeyUp={ this._onKeyUp } >
-        <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
-        <Creatable
-          autoBlur ignoreCase multi
-          clearable={ false }
-          newOptionCreator={ ({ label }) => toOption(label) }
-          noResultsText=''
-          options={ suggestions.map(toOption) }
-          onChange={ (options) => this.onChangeCreatable(options, category) }
-          placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
-          promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
-          value={ values } />
-      </div>
-    )
-  }
-
   // simpler input with only one tag to fill
   renderTagsCategory (category) {
     const { formatMessage } = this.context.intl
-    const suggestions = this.state[`suggestions/${category}`] || []
+    const { tagsSuggestions } = this.props
+    const suggestions = (tagsSuggestions[category] && Object.keys(tagsSuggestions[category])) || []
     const values = this.state[`values/${category}`] || []
 
     return (
@@ -167,13 +128,11 @@ class SideBarTags extends React.Component {
   render () {
     const { formatMessage } = this.context.intl
     const { showCategories, toggleCategories } = this.props
-    const [freeTags, cats] = partition(this.props.categories, isFreeTags)
+    const cats = partition(this.props.categories, isFreeTags)[1]
     const categories = uniq((cats || []).concat(this.state.categories).filter(x => x))
 
     return (
       <div className="browser-side-bar-tags">
-        { this.renderFreeTagsCategory(freeTags[0]) }
-
         <div>
           <h3 onClick={ () => toggleCategories() }>
             <T id="sidebar.categories" />
@@ -210,16 +169,17 @@ function toOption (tag) {
     : { label: '', value: '' }
 }
 
-SideBarTags.contextTypes = {
+SideBarCategories.contextTypes = {
   intl: intlShape
 }
 
-SideBarTags.propTypes = {
+SideBarCategories.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
 
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  tagsSuggestions: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
   showCategories: PropTypes.bool.isRequired,
 
@@ -227,13 +187,13 @@ SideBarTags.propTypes = {
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
   addTagsCategory: PropTypes.func.isRequired,
-  fetchTags: PropTypes.func.isRequired,
   toggleCategories: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, intl: { locale }, ui }, props) => ({
   ...props,
   categories: corpora.list[props.corpusId].tagsCategories || [],
+  tagsSuggestions: corpora.tagsSuggestions[props.corpusId] || {},
   showCategories: ui.showCategories,
   locale
 })
@@ -242,6 +202,5 @@ export default connect(mapStateToProps, {
   addTag,
   removeTag,
   addTagsCategory,
-  fetchTags,
   toggleCategories
-})(SideBarTags)
+})(SideBarCategories)
