@@ -9,7 +9,8 @@ import cx from 'classnames'
 import Button from '../../Button'
 import HypheFooter from './../../HypheFooter'
 import SideBarContextualLists from './SideBarContextualLists'
-import SideBarTags from './SideBarTags'
+import SideBarCategories from './SideBarCategories'
+import SideBarFreetags from './SideBarFreetags'
 
 import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage, cancelWebentityCrawls } from '../../../actions/webentities'
 import { setTabUrl } from '../../../actions/tabs'
@@ -92,6 +93,7 @@ class SideBar extends React.Component {
     const { formatMessage } = this.context.intl
     return (
       <div className="browser-side-bar-sections">
+        { this.renderTabTags() }
         <h3 onClick={ () => toggleContext() }>
           <span>{ formatMessage({ id: 'context'}) }</span>
           <span className={ cx({
@@ -100,7 +102,7 @@ class SideBar extends React.Component {
           }) }></span>
         </h3>
         { showContext && this.renderTabContext() }
-        { this.renderTabTags() }
+        { this.renderFreetags() }
       </div>
     )
   }
@@ -111,7 +113,12 @@ class SideBar extends React.Component {
   }
 
   renderTabTags () {
-    return <SideBarTags serverUrl={ this.props.serverUrl }
+    return <SideBarCategories serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+  }
+
+  renderFreetags () {
+    return <SideBarFreetags serverUrl={ this.props.serverUrl }
       corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
