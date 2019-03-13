@@ -5,7 +5,7 @@ import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
 import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB, SELECT_NEXT_TAB, SELECT_PREV_TAB,
   SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS,
-  ADD_HYPHE_TAB
+  ADD_HYPHE_TAB, SET_SEARCH_ENGINE
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
@@ -34,7 +34,8 @@ const hypheTab = {
 
 const initialState = {
   tabs: [pageHypheHome], // tab: { url, id, title, icon, loading, error }
-  activeTab: pageHypheHome // reference to active tab
+  activeTab: pageHypheHome, // reference to active tab
+  searchEngine: 'google'
 }
 
 export default createReducer(initialState, {
@@ -98,6 +99,10 @@ export default createReducer(initialState, {
   [SET_TAB_ICON]: (state, { id, icon }) => updateTab(state, id, () => ({ icon })),
   [SET_TAB_STATUS]: (state, { id, loading, error, url }) => updateTab(state, id, (tab) => ({ loading, error, url: url || tab.url })),
 
+  [SET_SEARCH_ENGINE]: (state, {value}) => ({
+    ...state,
+    searchEngine: value
+  }),
   // Reset state when selecting corpus
   [SELECT_CORPUS]: () => ({ ...initialState })
 })
