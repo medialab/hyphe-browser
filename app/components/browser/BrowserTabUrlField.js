@@ -63,7 +63,7 @@ class BrowserTabUrlField extends React.Component {
 
   onSubmit (e) {
     e.preventDefault()
-
+    const { selectedEngine } = this.props
     this.setState({ editing: false })
 
     const url = ((u) => {
@@ -73,7 +73,7 @@ class BrowserTabUrlField extends React.Component {
           this.setState({ url: httpu })
           return httpu
         } else {
-          const searchu = getSearchUrl(u)
+          const searchu = getSearchUrl(selectedEngine, u)
           this.setState({ url: searchu })
           return searchu
         }
@@ -214,6 +214,7 @@ class BrowserTabUrlField extends React.Component {
 BrowserTabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
+  selectedEngine: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   crawlquery: PropTypes.bool.isRequired,
   prefixSelector: PropTypes.bool.isRequired,

@@ -100,7 +100,7 @@ class TabContent extends React.Component {
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
-      tlds } = this.props
+      tlds, searchEngine } = this.props
 
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
@@ -170,7 +170,7 @@ class TabContent extends React.Component {
           this.doNotDeclarePageOnStop = true
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
-          setTabUrl(getSearchUrl(term), id)
+          setTabUrl(getSearchUrl(searchEngine, term), id)
         } else {
           showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
           setTabUrl(info.pageURL, id)
@@ -286,7 +286,7 @@ class TabContent extends React.Component {
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds } = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngine} = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
 
     if (disableNavigation) {
@@ -299,6 +299,7 @@ class TabContent extends React.Component {
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
+          selectedEngine = { searchEngine }
           onSubmit={ (url) => setTabUrl(url, id) }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
@@ -338,7 +339,7 @@ class TabContent extends React.Component {
 
   renderContent () {
     const { id, url, setTabUrl, eventBus, closable, searchEngine, setSearchEngine } = this.props
-
+    
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome 
         selectedEngine = { searchEngine }
