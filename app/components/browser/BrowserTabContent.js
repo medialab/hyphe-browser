@@ -23,7 +23,8 @@ import { showError, showNotification, hideError, toggleDoNotShowAgain } from '..
 import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
-  openTab, closeTab
+  openTab, closeTab,
+  setSearchEngine
 } from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityName,
@@ -336,10 +337,13 @@ class TabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, setTabUrl, eventBus, closable } = this.props
+    const { id, url, setTabUrl, eventBus, closable, searchEngine, setSearchEngine } = this.props
 
     return (url === PAGE_HYPHE_HOME)
-      ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
+      ? <PageHypheHome 
+        selectedEngine = { searchEngine }
+        updateSearchEngine = { setSearchEngine }
+        onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
       : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
 
@@ -495,6 +499,7 @@ TabContent.propTypes = {
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
+  searchEngine: PropTypes.string.isRequired,
 
   showError: PropTypes.func.isRequired,
   showNotification: PropTypes.func.isRequired,
@@ -506,6 +511,7 @@ TabContent.propTypes = {
   setTabIcon: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
+  setSearchEngine: PropTypes.func.isRequired,
 
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
@@ -533,6 +539,7 @@ const mapStateToProps = (
   disableNavigation,
   eventBus,
   active: tabs.activeTab && tabs.activeTab.id === id,
+  searchEngine: tabs.searchEngine,
   server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
@@ -550,7 +557,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
-  declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
+  setSearchEngine, declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
