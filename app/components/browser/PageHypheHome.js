@@ -38,8 +38,13 @@ class PageHypheHome extends React.Component {
     this.props.onSubmit(getSearchUrl(selectedEngine, this.state.q))
   }
 
+  onChangeEngine (option) {
+    const { updateSearchEngine } = this.props
+    updateSearchEngine(option.value)
+  }
+
   render () {
-    const { selectedEngine, updateSearchEngine } = this.props
+    const { selectedEngine } = this.props
     const formatMessage = this.context.intl.formatMessage
 
     return (
@@ -54,7 +59,7 @@ class PageHypheHome extends React.Component {
               options={ this.state.engines }
               clearable={ false }
               value={ selectedEngine || 'google' }
-              onChange={ updateSearchEngine }
+              onChange={ (option) => { this.onChangeEngine(option) } }
             />
           </div>
           <div>
