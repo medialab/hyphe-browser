@@ -30,7 +30,9 @@ export default createReducer(initialState, {
   [FETCH_CORPORA_REQUEST]: (state) => ({
     ...state,
     list: {},
-    selected: null
+    selected: null,
+    tagsSuggestions: {},
+    navigationHistory: {}
   }),
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,
