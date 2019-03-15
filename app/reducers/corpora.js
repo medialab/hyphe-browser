@@ -10,15 +10,20 @@ import {
 import {
   FETCH_TAGS_CATEGORIES_SUCCESS,
   FETCH_TAGS_SUCCESS,
-  ADD_TAGS_CATEGORY
+  ADD_TAGS_CATEGORY,
 } from '../actions/tags'
+
+import {
+  ADD_NAVIGATION_HISTORY
+} from '../actions/tabs'
 
 const initialState = {
   // TODO: transform it in a array here?
   list: {}, // [corpusId]: corpus
   selected: null,
   status: null, // status of selected corpus
-  tagsSuggestions: {}
+  tagsSuggestions: {},
+  navigationHistory: {}
 }
 
 export default createReducer(initialState, {
@@ -68,6 +73,21 @@ export default createReducer(initialState, {
     }
   }),
 
+  [ADD_NAVIGATION_HISTORY]: (state, { url, corpusId }) => {
+    let history = state.navigationHistory[corpusId] || []
+    history.push({
+      url,
+      visitedAt: new Date().getTime()
+    })
+    return {
+      ...state,
+      navigationHistory: {
+        ...state.navigationHistory,
+        [corpusId]: history
+      }
+    }
+  },
+ 
   [ADD_TAGS_CATEGORY]: updateTagsCategories((state, { corpusId, category }) => {
     const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
     if (originalCategories.includes(category)) {

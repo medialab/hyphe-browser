@@ -24,7 +24,8 @@ import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
   openTab, closeTab,
-  setSearchEngine
+  setSearchEngine,
+  addNavigationHistory,
 } from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityName,
@@ -100,7 +101,7 @@ class TabContent extends React.Component {
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
-      tlds, searchEngine } = this.props
+      tlds, searchEngine, addNavigationHistory } = this.props
 
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
@@ -128,6 +129,7 @@ class TabContent extends React.Component {
         info = server.home + '/#/project/' + corpusId + '/network'
       }
       setTabStatus({ loading: false, url: info }, id)
+      addNavigationHistory(info, corpusId)
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
@@ -513,6 +515,7 @@ TabContent.propTypes = {
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   setSearchEngine: PropTypes.func.isRequired,
+  addNavigationHistory: PropTypes.func.isRequired,
 
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
@@ -558,7 +561,8 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
-  setSearchEngine, declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
+  setSearchEngine, addNavigationHistory,
+  declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
