@@ -186,8 +186,11 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
 
 export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
   dispatch({ type: FETCH_MOST_LINKED_REQUEST, payload: { serverUrl, corpusId, webentity } })
-
-  return jsonrpc(serverUrl)('store.get_webentity_mostlinked_pages', [webentity.id, 20, corpusId])
+  const params = {
+    webentity_id: webentity.id,
+    corpus: corpusId
+  }
+  return jsonrpc(serverUrl)('store.get_webentity_mostlinked_pages', params)
     .then(mostLinked => dispatch({ type: FETCH_MOST_LINKED_SUCCESS, payload: { serverUrl, corpusId, webentity, mostLinked } }))
     .catch(error => {
       dispatch({ type: FETCH_MOST_LINKED_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
