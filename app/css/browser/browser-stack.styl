@@ -125,6 +125,13 @@
       padding-top: 2px;
     }
 
+    &:hover {
+      .filler-name {
+        background: var(--color-black);
+        color: var(--color-white);
+      }
+    }
+
     // selected
 
     &.selected {
@@ -145,6 +152,11 @@
 
       .filler-name, .filler-counter {
         cursor: default;
+      }
+
+      .filler-name {
+        background: var(--color-grey);
+        color: var(--color-black);
       }
     }
   }
