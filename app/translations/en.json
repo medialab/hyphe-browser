@@ -103,6 +103,7 @@
   "sidebar.contextual.children": "Sub entities",
   "sidebar.contextual.referrers": "Source entities",
   "sidebar.contextual.referrals": "Linked entities",
+  "sidebar.contextual.downloadToCSV": "Export list to a CSV file",
   "starting-corpus": "Starting corpus…",
   "status": "Status",
   "tags-clear-category-value": "Delete tag",

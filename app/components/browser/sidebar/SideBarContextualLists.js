@@ -17,6 +17,8 @@ import {
 } from '../../../actions/webentities'
 import { selectContextualList } from '../../../actions/browser'
 import { compareUrls } from '../../../utils/lru'
+import downloadCSV from '../../../utils/file-downloader'
+
 
 class _List extends React.Component {
   onClick (url) {
@@ -112,6 +114,11 @@ class SideBarContextualLists extends React.Component {
     }
   }
 
+  downloadFile () {
+    const { corpusId, webentity, selected} = this.props
+    downloadCSV(webentity[selected], selected, webentity.name, corpusId)
+  }
+
   render () {
     const { selectContextualList, selected, webentity } = this.props
     return (
@@ -120,7 +127,7 @@ class SideBarContextualLists extends React.Component {
           {
             // hide parents and children tabs for now
             ['mostLinked', 'referrers', 'referrals'].map(l =>
-            <button className={ cx('btn', 'btn-default', { selected: l === selected }) }
+            <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
               key={ l } onClick={ () => this.updateCurrentList(l) }>
               <T id={ `sidebar.contextual.${l}` } />
             </button>
@@ -128,6 +135,17 @@ class SideBarContextualLists extends React.Component {
           { !webentity[selected]
             ? <T id="loading" />
             : <List links={ webentity[selected] } name={ selected } />
+          }
+          { webentity[selected] && webentity[selected].length > 0 &&
+            <div className="download">
+              <button className='btn btn-default' onClick={ () => {this.downloadFile()} }>
+                <strong>
+                  <T id="sidebar.contextual.downloadToCSV" />
+                  <span>&nbsp;</span>
+                  <span className="ti-download"></span>
+                </strong>
+              </button>
+            </div>
           }
         </nav>
       </div>

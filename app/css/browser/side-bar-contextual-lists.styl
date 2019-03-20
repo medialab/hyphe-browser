@@ -1,8 +1,8 @@
 // plural
 .browser-side-bar-contextual-lists {
 
-  // nav
-  button {
+  // nav button
+  .navigation {
     font-family: var(--font-mont);
     width: 33%;
 
@@ -17,6 +17,15 @@
 
     &:active {
       background: none;
+    }
+  }
+
+  // download button
+  .download {
+    width: 100%;
+    text-align: right;
+    button:hover {
+      color: var(--color-blue);
     }
   }
 }
@@ -57,6 +66,14 @@
     .link-name {
       font-weight: bold;
       cursor: pointer;
+    }
+
+    .link-merge {
+      float: right;
+      cursor: pointer;
+      &:hover {
+        color: var(--color-blue)
+      }
     }
 
     .link-linked {

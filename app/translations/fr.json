@@ -103,6 +103,7 @@
   "sidebar.contextual.children": "Entités inclues",
   "sidebar.contextual.referrers": "Entités citantes",
   "sidebar.contextual.referrals": "Entités citées",
+  "sidebar.contextual.downloadToCSV": "Export list to a CSV file",
   "starting-corpus": "Démarrage du corpus…",
   "status": "Statut",
   "tags-clear-category-value": "Supprimer le tag",
