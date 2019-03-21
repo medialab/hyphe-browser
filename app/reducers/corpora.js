@@ -8,9 +8,9 @@ import {
   FETCH_CORPUS_STATUS_SUCCESS
 } from '../actions/corpora'
 import {
-  FETCH_TAGS_CATEGORIES_SUCCESS,
   FETCH_TAGS_SUCCESS,
-  ADD_TAGS_CATEGORY,
+  FETCH_TAGS_CATEGORIES_SUCCESS,
+  ADD_TAGS_CATEGORY
 } from '../actions/tags'
 
 import {
@@ -58,23 +58,6 @@ export default createReducer(initialState, {
     selected: corpus
   }),
 
-  [FETCH_TAGS_CATEGORIES_SUCCESS]: updateTagsCategories((state, { corpusId, categories }) => {
-    const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
-    if (categories.join(',') === originalCategories.join(',')) {
-      return false
-    }
-
-    return ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
-  }),
-
-  [FETCH_TAGS_SUCCESS]: (state, { corpusId, values }) => ({
-    ...state,
-    tagsSuggestions: {
-      ...state.tagsSuggestions,
-      [corpusId]: values
-    }
-  }),
-
   [ADD_NAVIGATION_HISTORY]: (state, { url, corpusId }) => {
     let history = state.navigationHistory[corpusId] || []
     history.push({
@@ -90,6 +73,23 @@ export default createReducer(initialState, {
     }
   },
  
+  [FETCH_TAGS_SUCCESS]: (state, { corpusId, values }) => ({
+    ...state,
+    tagsSuggestions: {
+      ...state.tagsSuggestions,
+      [corpusId]: values
+    }
+  }),
+
+  [FETCH_TAGS_CATEGORIES_SUCCESS]: updateTagsCategories((state, { corpusId, categories }) => {
+    const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
+    if (categories.join(',') === originalCategories.join(',')) {
+      return false
+    }
+
+    return ['FREETAGS'].concat(categories.filter((c) => c !== 'FREETAGS'))
+  }),
+
   [ADD_TAGS_CATEGORY]: updateTagsCategories((state, { corpusId, category }) => {
     const originalCategories = (state.list[corpusId] || {}).tagsCategories || []
     if (originalCategories.includes(category)) {
