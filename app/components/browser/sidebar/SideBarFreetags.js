@@ -57,12 +57,10 @@ class SideBarFreetags extends React.Component {
     this.setState({ [key]: options })
   }
 
-  // free tags should be first, then other categories, then add category field
-  render () { 
+  render () {
     const { formatMessage } = this.context.intl
     const { tagsSuggestions } = this.props
     const suggestions = (tagsSuggestions['FREETAGS'] && Object.keys(tagsSuggestions['FREETAGS'])) || []
-
     const values = this.state['values/FREETAGS'] || []
 
     return (
@@ -81,7 +79,7 @@ class SideBarFreetags extends React.Component {
             value={ values } />
         </div>
       </div>
-    )   
+    )
   }
 }
 
@@ -99,8 +97,8 @@ SideBarFreetags.propTypes = {
   serverUrl: PropTypes.string.isRequired,
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
-  tagsSuggestions: PropTypes.object.isRequired,
 
+  tagsSuggestions: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
 
   // actions

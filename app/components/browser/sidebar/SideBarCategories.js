@@ -97,7 +97,6 @@ class SideBarCategories extends React.Component {
     this.setState({ [key]: options })
   }
 
-  // simpler input with only one tag to fill
   renderTagsCategory (category) {
     const { formatMessage } = this.context.intl
     const { tagsSuggestions } = this.props
@@ -124,7 +123,7 @@ class SideBarCategories extends React.Component {
     )
   }
 
-  // free tags should be first, then other categories, then add category field
+  // Categories first, then add category field
   render () {
     const { formatMessage } = this.context.intl
     const { showCategories, toggleCategories } = this.props
