@@ -116,7 +116,41 @@ class SideBarContextualLists extends React.Component {
 
   downloadFile () {
     const { corpusId, webentity, selected} = this.props
-    downloadCSV(webentity[selected], selected, webentity.name, corpusId)
+    let listName, fileName, listObjects
+    switch (selected) {
+    case 'mostLinked':
+      listName = 'mostLinkedPages'
+      break
+    case 'referrers':
+      listName = 'citingWebEntities'
+      break
+    case 'referrals':
+      listName = 'citedWebEntities'
+      break
+    case 'parents':
+      listName = 'parentWebEntities'
+      break
+    case 'children':
+      listName = 'childrenWebEntities'
+      break
+    default:
+      listName = selected
+      break
+    }
+    fileName = webentity.name.replace(/[\s\/]/g, '_')
+    listObjects = webentity[selected].map( el => {
+      if (el.tags && el.tags.USER) {
+        let WE = Object.assign({}, el)
+        Object.keys(el.tags.USER).forEach(tag => {
+          WE[tag + " (TAGS)"] = el.tags.USER[tag]
+        })
+        delete(WE.tags)
+        delete(WE._id)
+        return WE
+      }
+      return el
+    })
+    downloadCSV(listObjects, listName, fileName, corpusId)
   }
 
   render () {
