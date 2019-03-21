@@ -58,6 +58,7 @@ class PageHypheHome extends React.Component {
               name="engine-select"
               options={ this.state.engines }
               clearable={ false }
+              searchable={ false }
               value={ selectedEngine || 'google' }
               onChange={ (option) => { this.onChangeEngine(option) } }
             />
