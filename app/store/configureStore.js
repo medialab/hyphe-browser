@@ -13,6 +13,10 @@ const slicer = () => (state) =>
     options: state.options,
     servers: {
       list: state.servers.list
+    },
+    corpora: {
+      navigationHistory: state.corpora.navigationHistory,
+      searchEngines: state.corpora.searchEngines
     }
   })
 

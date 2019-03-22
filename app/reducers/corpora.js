@@ -14,7 +14,8 @@ import {
 } from '../actions/tags'
 
 import {
-  ADD_NAVIGATION_HISTORY
+  ADD_NAVIGATION_HISTORY,
+  SET_SEARCH_ENGINE
 } from '../actions/tabs'
 
 const initialState = {
@@ -23,7 +24,8 @@ const initialState = {
   selected: null,
   status: null, // status of selected corpus
   tagsSuggestions: {},
-  navigationHistory: {}
+  navigationHistory: {},
+  searchEngines: {}
 }
 
 export default createReducer(initialState, {
@@ -31,8 +33,7 @@ export default createReducer(initialState, {
     ...state,
     list: {},
     selected: null,
-    tagsSuggestions: {},
-    navigationHistory: {}
+    tagsSuggestions: {}
   }),
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,
@@ -56,6 +57,14 @@ export default createReducer(initialState, {
   [SELECT_CORPUS]: (state, { corpus }) => ({
     ...state,
     selected: corpus
+  }),
+
+  [SET_SEARCH_ENGINE]: (state, { corpusId, searchEngine  }) => ({
+    ...state,
+    searchEngines: {
+      ...state.searchEngines,
+      [corpusId]: searchEngine
+    }
   }),
 
   [ADD_NAVIGATION_HISTORY]: (state, { url, corpusId }) => {
