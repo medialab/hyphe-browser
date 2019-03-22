@@ -38,13 +38,8 @@ class PageHypheHome extends React.Component {
     this.props.onSubmit(getSearchUrl(selectedEngine, this.state.q))
   }
 
-  onChangeEngine (option) {
-    const { updateSearchEngine } = this.props
-    updateSearchEngine(option.value)
-  }
-
   render () {
-    const { selectedEngine } = this.props
+    const { selectedEngine, onChangeEngine } = this.props
     const formatMessage = this.context.intl.formatMessage
 
     return (
@@ -60,7 +55,7 @@ class PageHypheHome extends React.Component {
               clearable={ false }
               searchable={ false }
               value={ selectedEngine || 'google' }
-              onChange={ (option) => { this.onChangeEngine(option) } }
+              onChange={ ({ value }) => { onChangeEngine(value) } }
             />
           </div>
           <div>
@@ -84,7 +79,7 @@ PageHypheHome.contextTypes = {
 PageHypheHome.propTypes = {
   selectedEngine: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  updateSearchEngine: PropTypes.func.isRequired,
+  onChangeEngine: PropTypes.func.isRequired,
 }
 
 export default PageHypheHome

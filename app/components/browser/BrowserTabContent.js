@@ -101,8 +101,8 @@ class TabContent extends React.Component {
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
-      tlds, searchEngine, addNavigationHistory } = this.props
-
+      tlds, searchEngines, addNavigationHistory } = this.props
+      
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
@@ -159,6 +159,8 @@ class TabContent extends React.Component {
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
+      const selectedEngine = searchEngines[corpusId] || 'google'
+      
       // In all cases, log to console
       if (process.env.NODE_ENV === 'development') {
         console.debug(info) // eslint-disable-line no-console
@@ -172,7 +174,7 @@ class TabContent extends React.Component {
           this.doNotDeclarePageOnStop = true
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
-          setTabUrl(getSearchUrl(searchEngine, term), id)
+          setTabUrl(getSearchUrl(selectedEngine, term), id)
         } else {
           showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
           setTabUrl(info.pageURL, id)
@@ -288,7 +290,7 @@ class TabContent extends React.Component {
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngine} = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngines, corpusId } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
 
     if (disableNavigation) {
@@ -301,7 +303,7 @@ class TabContent extends React.Component {
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
-          selectedEngine = { searchEngine }
+          selectedEngine = { searchEngines[corpusId] || 'google' }
           onSubmit={ (url) => setTabUrl(url, id) }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
@@ -340,12 +342,12 @@ class TabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, setTabUrl, eventBus, closable, searchEngine, setSearchEngine } = this.props
-    
+    const { id, url, setTabUrl, eventBus, closable, corpusId, searchEngines, setSearchEngine } = this.props
+
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome 
-        selectedEngine = { searchEngine }
-        updateSearchEngine = { setSearchEngine }
+        selectedEngine = { searchEngines[corpusId] || 'google'}
+        onChangeEngine = { (value) => setSearchEngine(value, corpusId) }
         onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
       : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
@@ -502,7 +504,7 @@ TabContent.propTypes = {
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
-  searchEngine: PropTypes.string.isRequired,
+  searchEngines: PropTypes.object.isRequired,
 
   showError: PropTypes.func.isRequired,
   showNotification: PropTypes.func.isRequired,
@@ -543,7 +545,7 @@ const mapStateToProps = (
   disableNavigation,
   eventBus,
   active: tabs.activeTab && tabs.activeTab.id === id,
-  searchEngine: tabs.searchEngine,
+  searchEngines: corpora.searchEngines,
   server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
