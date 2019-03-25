@@ -17,7 +17,7 @@ import {
 } from '../../../actions/webentities'
 import { selectContextualList } from '../../../actions/browser'
 import { compareUrls } from '../../../utils/lru'
-import downloadCSV from '../../../utils/file-downloader'
+import { fieldParser, downloadCSV } from '../../../utils/file-downloader'
 
 
 class _List extends React.Component {
@@ -138,18 +138,20 @@ class SideBarContextualLists extends React.Component {
       break
     }
     fileName = webentity.name.replace(/[\s\/]/g, '_')
-    listObjects = webentity[selected].map( el => {
-      if (el.tags && el.tags.USER) {
-        let WE = Object.assign({}, el)
-        Object.keys(el.tags.USER).forEach(tag => {
-          WE[tag + " (TAGS)"] = el.tags.USER[tag]
+    const parsedWebentity = webentity[selected].map((we) => fieldParser(we))
+
+    listObjects = parsedWebentity.map( el => {
+      let WE = Object.assign({}, el)
+      if (el.TAGS) {
+        Object.keys(el.TAGS).forEach(tag => {
+          WE[tag + " (TAGS)"] = el.TAGS[tag]
         })
-        delete(WE.tags)
-        delete(WE._id)
-        return WE
       }
-      return el
+      delete(WE.TAGS)
+      delete(WE._id)
+      return WE
     })
+    
     downloadCSV(listObjects, listName, fileName, corpusId)
   }
 
