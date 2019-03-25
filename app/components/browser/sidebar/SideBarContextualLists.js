@@ -115,8 +115,8 @@ class SideBarContextualLists extends React.Component {
   }
 
   downloadFile () {
-    const { corpusId, webentity, selected} = this.props
-    let listName, fileName, listObjects
+    const { corpusId, webentity, selected, tlds } = this.props
+    let listName, fileName
     switch (selected) {
     case 'mostLinked':
       listName = 'mostLinkedPages'
@@ -138,21 +138,22 @@ class SideBarContextualLists extends React.Component {
       break
     }
     fileName = webentity.name.replace(/[\s\/]/g, '_')
-    const parsedWebentity = webentity[selected].map((we) => fieldParser(we))
-
-    listObjects = parsedWebentity.map( el => {
+    const parsedWebentity = webentity[selected].map((we) => fieldParser(we, tlds))
+    const flatList = parsedWebentity.map( (el) => {
       let WE = Object.assign({}, el)
-      if (el.TAGS) {
-        Object.keys(el.TAGS).forEach(tag => {
-          WE[tag + " (TAGS)"] = el.TAGS[tag]
-        })
-      }
-      delete(WE.TAGS)
+      const fields = ['TECHNICAL INFO', 'TAGS']
+      fields.forEach((field) => {
+        if (el[field]) {
+          Object.keys(el[field]).forEach(tag => {
+            WE[`${tag} (${field})`] = el[field][tag]
+          })
+          delete(WE[field])
+        }
+      })
       delete(WE._id)
       return WE
     })
-    
-    downloadCSV(listObjects, listName, fileName, corpusId)
+    downloadCSV(flatList, listName, fileName, corpusId)
   }
 
   render () {
@@ -199,6 +200,7 @@ SideBarContextualLists.propTypes = {
   webentity: PropTypes.object.isRequired,
 
   selected: PropTypes.string,
+  tlds: PropTypes.object.isRequired,
 
   fetchMostLinked: PropTypes.func,
   fetchReferrers: PropTypes.func,
@@ -208,8 +210,9 @@ SideBarContextualLists.propTypes = {
   selectContextualList: PropTypes.func
 }
 
-const mapStateToProps = ({ ui, intl: { locale } }, props) => ({
+const mapStateToProps = ({ ui, webentities, intl: { locale } }, props) => ({
   selected: ui.selectedContext,
+  tlds: webentities.tlds,
   locale
 })
 
