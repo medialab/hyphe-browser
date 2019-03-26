@@ -304,7 +304,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
 }
 
-export const setMergeWebentity = (tabId, mergeable, host) => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host } })
+export const setMergeWebentity = (tabId, mergeable, host, type = 'redirect') => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host, type } })
 export const unsetMergeWebentity = (tabId) => ({ type: STOP_MERGE_WEBENTITY, payload: { tabId } })
 
 export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, hostId) => (dispatch) => {
