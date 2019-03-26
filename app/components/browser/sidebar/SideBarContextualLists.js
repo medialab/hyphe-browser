@@ -13,7 +13,8 @@ import {
   fetchReferrers,
   fetchReferrals,
   fetchParents,
-  fetchChildren
+  fetchChildren,
+  setMergeWebentity
 } from '../../../actions/webentities'
 import { selectContextualList } from '../../../actions/browser'
 import { compareUrls } from '../../../utils/lru'
@@ -32,13 +33,19 @@ class _List extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { name, links, activeTabUrl } = this.props
+    const { name, links, activeTabUrl, activeTabId, webentity, setMergeWebentity } = this.props
 
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
-          { links.length ? links.map(link =>
-            ( name === 'mostLinked' ?
+          { links.length ? links.map(link => {
+            const mergeLink = (e) => {
+              e.stopPropagation()
+              if(webentity && webentity.id && link && link.id) {
+                setMergeWebentity(activeTabId, link, webentity, 'mergeLink')
+              }
+            }
+            return ( name === 'mostLinked' ?
               <li key={ link.url } title={ link.url }>
                 { !compareUrls(link.url, activeTabUrl) ?
                   <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
@@ -51,11 +58,16 @@ class _List extends React.Component {
                 <br/> }
               </li> :
               <li key={ link.id } title={ link.name + "\n" + link.homepage }>
-                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>{ link.name }</div>
+                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>
+                  <span>{ link.name }</span>
+                  { name === 'referrers' && 
+                    <span className="link-merge" onClick={ mergeLink } >merge</span>
+                  }
+                </div>
                 <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
               </li>
-            )
-          ) : formatMessage({ id: 'none' }) }
+            )}
+        ) : formatMessage({ id: 'none' }) }
         </ul>
       </div>
     )
@@ -71,7 +83,9 @@ _List.propTypes = {
   activeTabUrl: PropTypes.string,
   links: PropTypes.array,
   name: PropTypes.string,
+  webentity: PropTypes.object,
 
+  setMergeWebentity: PropTypes.func,
   setTabUrl: PropTypes.func,
   openTab: PropTypes.func
 }
@@ -85,6 +99,7 @@ const _mapStateToProps = ({ tabs, intl: { locale } }) => ({
 const List = connect(_mapStateToProps, {
   setTabUrl,
   openTab,
+  setMergeWebentity
 })(_List)
 
 
@@ -171,7 +186,7 @@ class SideBarContextualLists extends React.Component {
           ) }
           { !webentity[selected]
             ? <T id="loading" />
-            : <List links={ webentity[selected] } name={ selected } />
+            : <List links={ webentity[selected] } name={ selected } webentity={ webentity } />
           }
           { webentity[selected] && webentity[selected].length > 0 &&
             <div className="download">
@@ -207,6 +222,7 @@ SideBarContextualLists.propTypes = {
   fetchReferrals: PropTypes.func,
   fetchParents: PropTypes.func,
   fetchChildren: PropTypes.func,
+  setMergeWebentity: PropTypes.func,
   selectContextualList: PropTypes.func
 }
 
@@ -222,6 +238,7 @@ export default connect(mapStateToProps, {
   fetchReferrals,
   fetchParents,
   fetchChildren,
+  setMergeWebentity,
   selectContextualList,
 })(SideBarContextualLists)
 

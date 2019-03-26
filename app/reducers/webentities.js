@@ -210,11 +210,11 @@ export default createReducer(initialState, {
   }),
 
   // Keep track of current WE merges
-  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host }) => ({
+  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host, type }) => ({
     ...state,
     merges: {
       ...state.merges,
-      [tabId]: ({ mergeable: mergeable, host: host })
+      [tabId]: ({ mergeable, host, type })
     }
   }),
 

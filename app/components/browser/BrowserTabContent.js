@@ -397,9 +397,14 @@ class TabContent extends React.Component {
     return (
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
-        <p><T id="webentity-merge-popup-message" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
-        <p><T id="webentity-merge-popup-message-2" /></p>
-        <p><T id="webentity-merge-popup-message-3" /></p>
+        {
+          mergeRequired.mergeable.type === 'redirect' &&
+          <div>
+            <p><T id="webentity-merge-popup-message" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
+            <p><T id="webentity-merge-popup-message-2" /></p>
+            <p><T id="webentity-merge-popup-message-3" /></p>
+          </div>
+        }
         <div className="we-popup-footer">
           <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
           <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
