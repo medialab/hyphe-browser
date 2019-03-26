@@ -31,7 +31,10 @@ class SideBarCategories extends React.Component {
     const userTags = props.webentity.tags[TAGS_NS]
     if (userTags) {
       Object.keys(userTags).forEach(k => {
-        this.state[`values/${k}`] = userTags[k].map(toOption)
+        // value of the tag is store in array of length 1
+        if (userTags[k][0]) {
+          this.state[`values/${k}`] = toOption(userTags[k][0])
+        }
       })
     }
 
@@ -50,7 +53,10 @@ class SideBarCategories extends React.Component {
     const userTags = webentity.tags[TAGS_NS]
     if (userTags) {
       Object.keys(userTags).forEach(k => {
-        this.state[`values/${k}`] = userTags[k].map(toOption)
+        // value of the tag is store in array of length 1
+        if (userTags[k][0]) {
+          this.state[`values/${k}`] = toOption(userTags[k][0])
+        }
       })
     }
   }
@@ -82,27 +88,26 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onChangeCreatable (options, category) {
+  onChangeCreatable (option, category) {
+    if (option && option.value && option.value.trim().length === 0)
+      return    
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
     const key = `values/${category}`
-
-    const previousTags = (this.state[key] || []).map(o => o.value)
-    const nextTags = options.filter(o => o).map(o => o.value)
-    const addedTags = difference(nextTags, previousTags)
-    const removedTags = difference(previousTags, nextTags)
-
-    addedTags.map(tag => addTag(serverUrl, corpusId, category, webentity.id, tag, tag))
-    removedTags.map(tag => removeTag(serverUrl, corpusId, category, webentity.id, tag))
-
-    this.setState({ [key]: options })
+    if (this.state[key] && this.state[key].value) {
+      removeTag(serverUrl, corpusId, category, webentity.id, this.state[key].value)
+    }
+    if (option) {
+      addTag(serverUrl, corpusId, category, webentity.id, option.value, option.value)
+    }
+    this.setState({ [key]: option })
   }
 
   renderTagsCategory (category) {
     const { formatMessage } = this.context.intl
     const { tagsSuggestions } = this.props
     const suggestions = (tagsSuggestions[category] && Object.keys(tagsSuggestions[category])) || []
-    const values = this.state[`values/${category}`] || []
-
+    const value = this.state[`values/${category}`] || ''
+    
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
         <h4 className="category-name">{ category }</h4>
@@ -114,10 +119,10 @@ class SideBarCategories extends React.Component {
             newOptionCreator={ ({ label }) => toOption(label) }
             noResultsText=''
             options={ suggestions.map(toOption) }
-            onChange={ (option) => this.onChangeCreatable([option], category) }
+            onChange={ (option) => this.onChangeCreatable(option, category) }
             placeholder=''
             promptTextCreator={ (tag) => tag+' '  }
-            value={ values[0] || '' } />
+            value={ value } />
         </div>
       </div>
     )
