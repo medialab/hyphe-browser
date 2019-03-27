@@ -307,12 +307,19 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 export const setMergeWebentity = (tabId, mergeable, host, type = 'redirect') => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host, type } })
 export const unsetMergeWebentity = (tabId) => ({ type: STOP_MERGE_WEBENTITY, payload: { tabId } })
 
-export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, hostId) => (dispatch) => {
+export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, webentity, type) => (dispatch) => {
+  const {id: hostId} = webentity
   dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, mergeableId, hostId } })
   return jsonrpc(serverUrl)('store.merge_webentity_into_another', [mergeableId, hostId, true, false, false, corpusId])
     .then(() => {
       dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, mergeableId, hostId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
+      if (type === 'referrers') {
+        dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+      }
+      if (type === 'referrals') {
+        dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+      }
       dispatch(unsetMergeWebentity(tabId))
       //TODO : apply to stack merged webentity the attributes of the host
     })
