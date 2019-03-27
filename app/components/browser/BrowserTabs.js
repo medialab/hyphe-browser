@@ -104,9 +104,6 @@ class BrowserTabs extends React.Component {
   }
 
   selectTab (id) {
-    if (id === HYPHE_TAB_ID) {
-      this.reloadTab(id, true)
-    }
     this.props.selectTab(id)
   }
 
