@@ -5,7 +5,7 @@ const promisify = require('tiny-promisify')
 const webpack = require('webpack')
 const cfg = require('../webpack.config.production.js')
 const pkg = require('../package.json')
-const electronPkg = require('../node_modules/electron-prebuilt/package.json')
+const electronPkg = require('../node_modules/electron/package.json')
 
 const packageP = promisify(packager)
 const webpackP = promisify(webpack)
