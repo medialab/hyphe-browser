@@ -77,7 +77,7 @@ class CorpusForm extends React.Component {
     this.setState(newState)
 
     const corpus = this.cleanData()
-    this.props.createCorpus(this.props.server.url, corpus)
+    this.props.createCorpus(this.props.server, corpus)
   }
 
   cleanData () {

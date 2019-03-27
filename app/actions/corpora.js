@@ -38,6 +38,7 @@ export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 
 const _selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
 export const selectCorpus = (server, corpus) => (dispatch) => {
+  console.log(server)
   dispatch(_selectCorpus(corpus))
   dispatch(addHypheTab(server.home, corpus.corpus_id))
 }
@@ -93,7 +94,8 @@ export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
 }
 
 export const receiveCorpus = createAction(CREATE_CORPUS_SUCCESS, (serverUrl, corpus) => ({ serverUrl, corpus }))
-export const createCorpus = (serverUrl, corpus) => (dispatch) => {
+export const createCorpus = (server, corpus) => (dispatch) => {
+  const serverUrl = server.url
   dispatch({
     type: CREATE_CORPUS_REQUEST,
     payload: {
@@ -112,7 +114,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
         dispatch(fetchCorpora(serverUrl))
       ])
       .then(([corpus, action]) => {
-        return dispatch(selectCorpus(serverUrl, action.payload.corpora[corpus.corpus_id]))
+        return dispatch(selectCorpus(server, action.payload.corpora[corpus.corpus_id]))
       })
       .then(() => {
         dispatch(routerActions.push('/browser'))
