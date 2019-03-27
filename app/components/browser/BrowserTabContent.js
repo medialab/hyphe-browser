@@ -386,7 +386,7 @@ class TabContent extends React.Component {
 
     const merge = e => {
       e.preventDefault()
-      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity.id)
+      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity, mergeRequired.type)
     }
 
     const cancel = e => {

@@ -39,10 +39,10 @@ class _List extends React.Component {
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.length ? links.map(link => {
-            const mergeLink = (e) => {
+            const mergeLink = (e, name) => {
               e.stopPropagation()
               if(webentity && webentity.id && link && link.id) {
-                setMergeWebentity(activeTabId, link, webentity, 'manual')
+                setMergeWebentity(activeTabId, link, webentity, name)
               }
             }
             return ( name === 'mostLinked' ?
@@ -61,7 +61,7 @@ class _List extends React.Component {
                 <div className="link-name" onClick={ () => this.onClick(link.homepage) }>
                   <span>{ link.name }</span>
                   { (name === 'referrers' || name === 'referrals') && 
-                    <span className="link-merge" onClick={ mergeLink } >merge</span>
+                    <span className="link-merge" onClick={ (e) => mergeLink(e, name) } >merge</span>
                   }
                 </div>
                 <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
