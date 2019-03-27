@@ -42,7 +42,7 @@ class _List extends React.Component {
             const mergeLink = (e) => {
               e.stopPropagation()
               if(webentity && webentity.id && link && link.id) {
-                setMergeWebentity(activeTabId, link, webentity, 'mergeLink')
+                setMergeWebentity(activeTabId, link, webentity, 'manual')
               }
             }
             return ( name === 'mostLinked' ?
@@ -60,7 +60,7 @@ class _List extends React.Component {
               <li key={ link.id } title={ link.name + "\n" + link.homepage }>
                 <div className="link-name" onClick={ () => this.onClick(link.homepage) }>
                   <span>{ link.name }</span>
-                  { name === 'referrers' && 
+                  { (name === 'referrers' || name === 'referrals') && 
                     <span className="link-merge" onClick={ mergeLink } >merge</span>
                   }
                 </div>
