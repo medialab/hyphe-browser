@@ -167,6 +167,11 @@ class TabContent extends React.Component {
         console.error(err) // eslint-disable-line no-console
       }
       setTabStatus({ loading: false, error: info }, id)
+      if (!disableWebentity) {
+        this.setState({ webentityName: null })
+        declarePage(server.url, corpusId, info.pageURL, id)
+      }
+      stoppedLoadingWebentity()
       // Main page triggered the error, it's important
       if (info.pageURL === info.validatedURL) {
         // DNS error: let's search instead
