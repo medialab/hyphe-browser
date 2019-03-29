@@ -153,7 +153,9 @@ class SideBarContextualLists extends React.Component {
       break
     }
     fileName = webentity.name.replace(/[\s\/]/g, '_')
-    const parsedWebentity = webentity[selected].map((we) => fieldParser(we, tlds))
+    const parsedWebentity = webentity[selected].map(
+      (we) => we.tags ? fieldParser(we, tlds) : we
+    )
     const flatList = parsedWebentity.map( (el) => {
       let WE = Object.assign({}, el)
       const fields = ['TECHNICAL INFO', 'TAGS']
