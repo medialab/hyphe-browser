@@ -59,7 +59,7 @@ class Login extends React.Component {
     return (
       <select
         autoFocus
-        defaultValue={ selectedServer && selectedServer.url }
+        value = { selectedServer && selectedServer.url }
         disabled={ location.pathname !== '/login' }
         onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }>
         { options.map((o) => <option key={ o.key + o.label } value={ o.value }>{ o.label }</option>) }
