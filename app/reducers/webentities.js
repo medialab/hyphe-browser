@@ -64,7 +64,10 @@ export default createReducer(initialState, {
     ...state,
     webentities: {
       ...state.webentities,
-      [webentity.id]: webentity
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        ...webentity
+      }
     }
   }),
 
