@@ -105,11 +105,20 @@ const List = connect(_mapStateToProps, {
 
 class SideBarContextualLists extends React.Component {
 
-  updateCurrentList (selected) {
-    const { serverUrl, corpusId, webentity, selectContextualList,
-      fetchMostLinked, fetchReferrers, fetchReferrals, fetchParents, fetchChildren } = this.props
-    selectContextualList(selected)
+  componentDidMount () {
+    const { selected } = this.props
+    this.updateCurrentList(selected)
+  }
 
+  componentWillReceiveProps ({ selected, webentity }) {
+    if ((webentity && this.props.webentity && webentity.id !== this.props.webentity.id) || selected !== this.props.selected) {
+      this.updateCurrentList(selected)
+    }
+  }
+
+  updateCurrentList (selected) {
+    const { serverUrl, corpusId, webentity,
+      fetchMostLinked, fetchReferrers, fetchReferrals, fetchParents, fetchChildren } = this.props
     switch (selected) {
     case 'referrers':
       fetchReferrers(serverUrl, corpusId, webentity)
@@ -175,6 +184,7 @@ class SideBarContextualLists extends React.Component {
 
   render () {
     const { selectContextualList, selected, webentity } = this.props
+    console.log(webentity)
     return (
       <div className="browser-side-bar-contextual-lists">
         <nav>
@@ -182,7 +192,7 @@ class SideBarContextualLists extends React.Component {
             // hide parents and children tabs for now
             ['mostLinked', 'referrers', 'referrals'].map(l =>
             <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
-              key={ l } onClick={ () => this.updateCurrentList(l) }>
+              key={ l } onClick={ () => selectContextualList(l) }>
               <T id={ `sidebar.contextual.${l}` } />
             </button>
           ) }
