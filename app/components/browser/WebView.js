@@ -57,7 +57,7 @@ class WebView extends React.Component {
       refresh = true
     }
 
-    if (url !== this.props.url || url !== this.node.src) {
+    if (url !== this.props.url && url !== this.node.src) {
       if (this.isLoading) {
         // Ignore the next "Error -3 Aborted" if current page is still loading
         this.ignoreNextAbortedError = true

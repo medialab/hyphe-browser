@@ -1,6 +1,8 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
+import Spinner from './Spinner'
+
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
 import { fetchTagsCategories, fetchTags } from '../actions/tags'
@@ -86,13 +88,20 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   render () {
-    return <div className={ this.props.className }>{ this.props.children }</div>
+    const { status } = this.props
+    const ready = status && status.corpus && status.corpus.ready
+    return (
+      <div className={ this.props.className }>
+      { ready ? this.props.children : <Spinner /> }
+      </div>
+    )
   }
 }
 
 CorpusStatusWatcher.propTypes = {
   corpus: React.PropTypes.object.isRequired,
   corpusPassword: React.PropTypes.string,
+  status: React.PropTypes.object.isRequired,
   serverUrl: React.PropTypes.string.isRequired,
   children: React.PropTypes.node,
   className: React.PropTypes.string,
@@ -109,6 +118,7 @@ CorpusStatusWatcher.propTypes = {
 
 const mapStateToProps = ({ corpora, servers }) => ({
   corpus: corpora.selected,
+  status: corpora.status,
   corpusPassword: null, // TODO
   serverUrl: servers.selected.url
 })
