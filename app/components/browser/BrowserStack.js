@@ -53,7 +53,7 @@ class BrowserStack extends React.Component {
   // right side, colored buttons to fill stack
   renderStackFillers () {
     const { formatMessage } = this.context.intl
-    const { status, stacks, selectedStack, loadingWebentityStack } = this.props
+    const { status, stacks, selectedStack, loadingWebentityStack, loading } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
@@ -64,19 +64,22 @@ class BrowserStack extends React.Component {
 
     return (
       <span className="fillers">
-        { usefulStacks.map((stack) =>
-          <button key={ stack.name }
-            className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
-              {'selected': stack.name === (selectedStack && selectedStack.name) }) }
-            disabled={ !counters[stack.name] || loadingWebentityStack }
-            onClick={ () => { this.fill(stack) } }>
-            <div className="filler-name hint--bottom" aria-label={ !!counters[stack.name] && !loadingWebentityStack ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
-              { formatMessage({ id: 'corpus-status.' + stack.name }) }
-            </div>
-            <div className="filler-counter">
-              { counters[stack.name] || 0 }
-            </div>
-          </button>
+        { usefulStacks.map((stack) => { 
+          const disabled = !counters[stack.name] || loadingWebentityStack || loading
+          return (
+            <button key={ stack.name }
+              className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
+                {'selected': stack.name === (selectedStack && selectedStack.name) }) }
+              disabled={ disabled }
+              onClick={ () => { this.fill(stack) } }>
+              <div className="filler-name hint--bottom" aria-label={ !disabled ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
+                { formatMessage({ id: 'corpus-status.' + stack.name }) }
+              </div>
+              <div className="filler-counter">
+                { counters[stack.name] || 0 }
+              </div>
+            </button>
+          )}
         ) }
       </span>
     )
