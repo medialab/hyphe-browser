@@ -35,10 +35,8 @@ const translateValue =(value, type, mode) => {
         return value.sort()
           .join(array_separator)
       }
-    } else {
-      console.log(value,'is not an array')
-    }
-
+    } 
+    return ''
   } else if(type == 'json'){
 
     if(mode == 'JSON'){
@@ -96,7 +94,7 @@ export function fieldParser ( we, tlds) {
       ,description: 'A URL used as hyperlink when you click on the web entity, for convenience.'
       ,accessor: 'homepage'
     },
-    start_pages: { //???
+    start_pages: {
       name: 'START PAGES'
       ,type: 'array of string'
       ,description: 'The list of start pages used the last time it was crawled.'
@@ -138,7 +136,7 @@ export function fieldParser ( we, tlds) {
       ,description: 'When it was created, as a text date.'
       ,accessor: 'creation_date'
       ,preprocess: (d) => {
-        return (new Date(+d)).toLocaleString()
+        return (new Date(+d)).toISOString()
       }
     }
     ,last_modification_date_timestamp: {
@@ -153,7 +151,7 @@ export function fieldParser ( we, tlds) {
       ,description: 'Last time its metadata were modified, as a text date.'
       ,accessor: 'last_modification_date'
       ,preprocess: ( d ) =>  {
-        return (new Date(+d)).toLocaleString()
+        return (new Date(+d)).toISOString()
       }
     }
     ,user_tags: {
@@ -186,17 +184,10 @@ export function fieldParser ( we, tlds) {
     if (field.preprocess) {
       value = field.preprocess(value)
     }
-
-    let tv
-    if(value === undefined){
-      tv = ''
+    if (value) {
+      result[field.name] = translateValue(value, field.type, 'JSON')
     } else {
-      tv = translateValue(value, field.type, 'JSON')
-    }
-    if(tv === undefined){
-      console.error('A value could not be translated',value,we,field)
-    } else {
-      result[field.name] = tv
+      result[field.name] = ''
     }
   })
   return result
