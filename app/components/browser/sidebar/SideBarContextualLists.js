@@ -184,7 +184,6 @@ class SideBarContextualLists extends React.Component {
 
   render () {
     const { selectContextualList, selected, webentity } = this.props
-    console.log(webentity)
     return (
       <div className="browser-side-bar-contextual-lists">
         <nav>
