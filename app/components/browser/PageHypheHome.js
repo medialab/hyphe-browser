@@ -1,6 +1,7 @@
 import '../../css/browser/page-hyphe-home'
 import React, { PropTypes } from 'react'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import Select from 'react-select'
 
 import { getSearchUrl } from '../../utils/search-web'
 
@@ -8,23 +9,57 @@ class PageHypheHome extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = { q: '' }
+    this.state = { 
+      q: '',
+      engines: [
+        {
+          value: 'google',
+          label: 'Google'
+        },
+        {
+          value: 'duckduckgo',
+          label: 'DuckDuckGo'
+        },
+        {
+          value: 'qwant',
+          label: 'Qwant'
+        },
+        {
+          value: 'lilo',
+          label: 'lilo'
+        },
+      ]
+    }
   }
 
   onSubmit (evt) {
+    const { selectedEngine } = this.props
     evt.preventDefault()
-    this.props.onSubmit(getSearchUrl(this.state.q))
+    this.props.onSubmit(getSearchUrl(selectedEngine, this.state.q))
   }
 
   render () {
+    const { selectedEngine, onChangeEngine } = this.props
     const formatMessage = this.context.intl.formatMessage
 
     return (
       <div className="page-hyphe-home">
         <form className="google-form" onSubmit={ (e) => { this.onSubmit(e) } }>
-          <h2><T id="google.search" /> <strong>Google</strong></h2>
+          <div className="select-container">
+            <div className="search-text" >
+              <T id="google.search" />
+            </div>
+            <Select
+              name="engine-select"
+              options={ this.state.engines }
+              clearable={ false }
+              searchable={ false }
+              value={ selectedEngine || 'google' }
+              onChange={ ({ value }) => { onChangeEngine(value) } }
+            />
+          </div>
           <div>
-            <input type="search" value={ this.state.value }
+            <input className="input-query" type="search" value={ this.state.value }
               placeholder={ formatMessage({ id: 'google.placeholder' }) }
               onChange={ ({ target }) => { this.setState({ q: target.value }) } } />
             <button>
@@ -42,7 +77,9 @@ PageHypheHome.contextTypes = {
 }
 
 PageHypheHome.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  selectedEngine: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChangeEngine: PropTypes.func.isRequired,
 }
 
 export default PageHypheHome

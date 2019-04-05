@@ -108,6 +108,9 @@
       margin-top: 0 12px;
       text-transform: uppercase;
 
+      background: var(--color-grey);
+      border-radius: var(--radius);
+
       @media (max-width: 1124px) {
         font-size: 12px;
       }
@@ -122,13 +125,19 @@
       padding-top: 2px;
     }
 
+    &:hover {
+      .filler-name {
+        background: var(--color-black);
+        color: var(--color-white);
+      }
+    }
+
     // selected
 
     &.selected {
       .filler-name {
-        background: var(--color-black);
-        border-radius: var(--radius);
-        color: var(--color-white);
+        background: var(--color-black) !important;
+        color: var(--color-white) !important;
       }
 
       .filler-counter {
@@ -143,6 +152,11 @@
 
       .filler-name, .filler-counter {
         cursor: default;
+      }
+
+      .filler-name {
+        background: var(--color-grey);
+        color: var(--color-black);
       }
     }
   }

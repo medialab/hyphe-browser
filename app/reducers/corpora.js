@@ -8,22 +8,32 @@ import {
   FETCH_CORPUS_STATUS_SUCCESS
 } from '../actions/corpora'
 import {
+  FETCH_TAGS_SUCCESS,
   FETCH_TAGS_CATEGORIES_SUCCESS,
   ADD_TAGS_CATEGORY
 } from '../actions/tags'
+
+import {
+  ADD_NAVIGATION_HISTORY,
+  SET_SEARCH_ENGINE
+} from '../actions/tabs'
 
 const initialState = {
   // TODO: transform it in a array here?
   list: {}, // [corpusId]: corpus
   selected: null,
-  status: null // status of selected corpus
+  status: null, // status of selected corpus
+  tagsSuggestions: {},
+  navigationHistory: {},
+  searchEngines: {}
 }
 
 export default createReducer(initialState, {
   [FETCH_CORPORA_REQUEST]: (state) => ({
     ...state,
     list: {},
-    selected: null
+    selected: null,
+    tagsSuggestions: {}
   }),
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,
@@ -47,6 +57,37 @@ export default createReducer(initialState, {
   [SELECT_CORPUS]: (state, { corpus }) => ({
     ...state,
     selected: corpus
+  }),
+
+  [SET_SEARCH_ENGINE]: (state, { corpusId, searchEngine  }) => ({
+    ...state,
+    searchEngines: {
+      ...state.searchEngines,
+      [corpusId]: searchEngine
+    }
+  }),
+
+  [ADD_NAVIGATION_HISTORY]: (state, { url, corpusId }) => {
+    let history = state.navigationHistory[corpusId] || []
+    history.push({
+      url,
+      visitedAt: new Date().getTime()
+    })
+    return {
+      ...state,
+      navigationHistory: {
+        ...state.navigationHistory,
+        [corpusId]: history
+      }
+    }
+  },
+ 
+  [FETCH_TAGS_SUCCESS]: (state, { corpusId, values }) => ({
+    ...state,
+    tagsSuggestions: {
+      ...state.tagsSuggestions,
+      [corpusId]: values
+    }
   }),
 
   [FETCH_TAGS_CATEGORIES_SUCCESS]: updateTagsCategories((state, { corpusId, categories }) => {

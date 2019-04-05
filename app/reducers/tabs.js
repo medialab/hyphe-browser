@@ -34,7 +34,7 @@ const hypheTab = {
 
 const initialState = {
   tabs: [pageHypheHome], // tab: { url, id, title, icon, loading, error }
-  activeTab: pageHypheHome // reference to active tab
+  activeTab: pageHypheHome, // reference to active tab
 }
 
 export default createReducer(initialState, {

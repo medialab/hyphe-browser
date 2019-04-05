@@ -103,6 +103,7 @@
   "sidebar.contextual.children": "Entités inclues",
   "sidebar.contextual.referrers": "Entités citantes",
   "sidebar.contextual.referrals": "Entités citées",
+  "sidebar.contextual.downloadToCSV": "Télécharger la liste en CSV",
   "starting-corpus": "Démarrage du corpus…",
   "status": "Statut",
   "tags-clear-category-value": "Supprimer le tag",
@@ -125,7 +126,8 @@
   "webentity-crawl-popup-message-2": "Autrement, veuillez annuler et définir une nouvelle webentité en cliquant sur \"+\" puis déclarez là \"IN\".",
   "webentity-crawl-popup-message-3": "Pensez à ajuster ensuite le nom et la Homepage de la webentité si nécessaire !",
   "webentity-merge-popup-title": "FUSIONNER CES 2 WEBENTITÉS ?",
-  "webentity-merge-popup-message": "ATTENTION : La webentité \"{old}\" à laquelle vous avez essayé d'accéder vous a redirigé automatiquement vers une page appartenant à une autre webentité \"{new}\".",
+  "webentity-merge-popup-message-redirect": "ATTENTION : La webentité \"{old}\" à laquelle vous avez essayé d'accéder vous a redirigé automatiquement vers une page appartenant à une autre webentité \"{new}\".",
+  "webentity-merge-popup-message-manual": "ATTENTION : Do you want to merge \"{old}\" to another webentity \"{new}\".",
   "webentity-merge-popup-message-2": "Vous pouvez soit fusionner ces deux webentités, soit ignorer ce message.",
   "webentity-merge-popup-message-3": "Si vous ne les fusionnez pas, vous ne pourrez pas éditer le statut, le nom ou les tags de la webentité d'origine depuis Hyphe-Browser, vous pouvez à la place utiliser l'onglet spécial Hyphe et chercher la webentité pour l'éditer depuis l'interface web classique de Hyphe."
 }

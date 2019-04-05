@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
+import Spinner from './Spinner'
+
 import { showError, hideError } from '../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
-import { fetchTagsCategories } from '../actions/tags'
+import { fetchTagsCategories, fetchTags } from '../actions/tags'
 import { fetchTLDs } from '../actions/webentities'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
@@ -33,7 +35,7 @@ class CorpusStatusWatcher extends React.Component {
 
   // Data that should be fetched frequently to keep an eye on their evolution (status)
   watchStatus () {
-    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories } = this.props
+    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories, fetchTags } = this.props
 
     const repeat = (immediate = false) => {
       this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)
@@ -41,6 +43,8 @@ class CorpusStatusWatcher extends React.Component {
 
     // Asynchronously fetch tags categories
     fetchTagsCategories(serverUrl, corpus.corpus_id)
+
+    fetchTags(serverUrl, corpus.corpus_id)
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
@@ -84,13 +88,24 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   render () {
-    return <div className={ this.props.className }>{ this.props.children }</div>
+    const { status } = this.props
+    const ready = status && status.corpus && status.corpus.ready
+    return (
+      <div className={ this.props.className }>
+      { ready ? this.props.children :
+        <div className="spinner-container">
+          <Spinner /> 
+        </div>
+      }
+      </div>
+    )
   }
 }
 
 CorpusStatusWatcher.propTypes = {
   corpus: React.PropTypes.object.isRequired,
   corpusPassword: React.PropTypes.string,
+  status: React.PropTypes.object.isRequired,
   serverUrl: React.PropTypes.string.isRequired,
   children: React.PropTypes.node,
   className: React.PropTypes.string,
@@ -101,11 +116,13 @@ CorpusStatusWatcher.propTypes = {
   showError: React.PropTypes.func,
   startCorpus: React.PropTypes.func,
   fetchTagsCategories: React.PropTypes.func,
+  fetchTags: React.PropTypes.func,
   fetchTLDs: React.PropTypes.func
 }
 
 const mapStateToProps = ({ corpora, servers }) => ({
   corpus: corpora.selected,
+  status: corpora.status,
   corpusPassword: null, // TODO
   serverUrl: servers.selected.url
 })
@@ -116,5 +133,6 @@ export default connect(mapStateToProps, {
   fetchCorpusStatus,
   startCorpus,
   fetchTagsCategories,
+  fetchTags,
   fetchTLDs
 })(CorpusStatusWatcher)

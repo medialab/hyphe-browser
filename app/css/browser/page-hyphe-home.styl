@@ -1,3 +1,5 @@
+// see https://github.com/JedWatson/react-select/blob/master/scss/control.scss
+
 .page-hyphe-home {
   width: 100%;
   text-align: center;
@@ -6,11 +8,76 @@
 .google-form {
   margin-top: 20vh;
 
-  h2 {
+  .search-text {
     font-family: var(--font-mont);
+    font-size: 1.5em;
   }
 
-  input {
+  .select-container {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .Select {
+    .Select-control {
+      background: var(--color-white) !important;
+      border: 0;
+      border-radius: var(--radius);
+      box-shadow: none !important;
+      text-align: left;
+    }
+
+    .Select-input {
+      display: none !important;
+    }
+
+    .Select-value {
+      color: var(--color-black);
+      font-family: var(--font-mont);
+      font-size: 1.5em;
+      font-weight: bold;
+      text-align: left;
+      cursor: text;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &.Select--single {
+      width: 15em;
+    }
+
+    .Select-menu-outer {
+      background: var(--color-white);
+      border-radius: var(--radius);
+      border: 1px solid var(--color-grey-light);
+      box-shadow: none;
+      margin-top: 1px;
+      z-index: 2;
+      font-family: var(--font-pt);
+    }
+
+    .Select-menu {
+      border-radius: var(--radius);
+    }
+
+    .Select-option {
+      background: var(--color-white);
+      padding-left: 12px;
+      text-align: left;
+      cursor: pointer;
+
+      &.is-selected, &.is-focused, &:hover {
+        background: var(--color-white);
+        color: var(--color-blue);
+      }
+    }
+
+    input:focus {
+      border: none !important;
+    }
+  }
+  .input-query {
     background: var(--color-grey);
     padding: 1em;
     padding-right: 3em;

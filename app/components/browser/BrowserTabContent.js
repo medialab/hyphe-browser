@@ -23,7 +23,9 @@ import { showError, showNotification, hideError, toggleDoNotShowAgain } from '..
 import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
   setTabUrl, setTabStatus, setTabTitle, setTabIcon,
-  openTab, closeTab
+  openTab, closeTab,
+  setSearchEngine,
+  addNavigationHistory,
 } from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityName,
@@ -99,8 +101,8 @@ class TabContent extends React.Component {
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
-      tlds } = this.props
-
+      tlds, searchEngines, addNavigationHistory } = this.props
+      
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
@@ -127,6 +129,7 @@ class TabContent extends React.Component {
         info = server.home + '/#/project/' + corpusId + '/network'
       }
       setTabStatus({ loading: false, url: info }, id)
+      addNavigationHistory(info, corpusId)
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
@@ -156,12 +159,19 @@ class TabContent extends React.Component {
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
+      const selectedEngine = searchEngines[corpusId] || 'google'
+      
       // In all cases, log to console
       if (process.env.NODE_ENV === 'development') {
         console.debug(info) // eslint-disable-line no-console
         console.error(err) // eslint-disable-line no-console
       }
       setTabStatus({ loading: false, error: info }, id)
+      if (!disableWebentity) {
+        this.setState({ webentityName: null })
+        declarePage(server.url, corpusId, info.pageURL, id)
+      }
+      stoppedLoadingWebentity()
       // Main page triggered the error, it's important
       if (info.pageURL === info.validatedURL) {
         // DNS error: let's search instead
@@ -169,7 +179,7 @@ class TabContent extends React.Component {
           this.doNotDeclarePageOnStop = true
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
-          setTabUrl(getSearchUrl(term), id)
+          setTabUrl(getSearchUrl(selectedEngine, term), id)
         } else {
           showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
           setTabUrl(info.pageURL, id)
@@ -285,7 +295,7 @@ class TabContent extends React.Component {
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds } = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngines, corpusId } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
 
     if (disableNavigation) {
@@ -298,6 +308,7 @@ class TabContent extends React.Component {
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
+          selectedEngine = { searchEngines[corpusId] || 'google' }
           onSubmit={ (url) => setTabUrl(url, id) }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
@@ -336,10 +347,13 @@ class TabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, setTabUrl, eventBus, closable } = this.props
+    const { id, url, setTabUrl, eventBus, closable, corpusId, searchEngines, setSearchEngine } = this.props
 
     return (url === PAGE_HYPHE_HOME)
-      ? <PageHypheHome onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
+      ? <PageHypheHome 
+        selectedEngine = { searchEngines[corpusId] || 'google'}
+        onChangeEngine = { (value) => setSearchEngine(value, corpusId) }
+        onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
       : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
 
@@ -377,7 +391,7 @@ class TabContent extends React.Component {
 
     const merge = e => {
       e.preventDefault()
-      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity.id)
+      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity, mergeRequired.type)
     }
 
     const cancel = e => {
@@ -388,9 +402,14 @@ class TabContent extends React.Component {
     return (
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
-        <p><T id="webentity-merge-popup-message" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
-        <p><T id="webentity-merge-popup-message-2" /></p>
-        <p><T id="webentity-merge-popup-message-3" /></p>
+          {
+            mergeRequired.mergeable.type === 'redirect'?
+            <p><T id="webentity-merge-popup-message-redirect" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
+            :
+            <p><T id="webentity-merge-popup-message-manual" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
+          }
+            <p><T id="webentity-merge-popup-message-2" /></p>
+            <p><T id="webentity-merge-popup-message-3" /></p>
         <div className="we-popup-footer">
           <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
           <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
@@ -495,6 +514,7 @@ TabContent.propTypes = {
   adjusting: PropTypes.object,
   status: PropTypes.object,
   tlds: PropTypes.object,
+  searchEngines: PropTypes.object.isRequired,
 
   showError: PropTypes.func.isRequired,
   showNotification: PropTypes.func.isRequired,
@@ -506,6 +526,8 @@ TabContent.propTypes = {
   setTabIcon: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
+  setSearchEngine: PropTypes.func.isRequired,
+  addNavigationHistory: PropTypes.func.isRequired,
 
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
@@ -533,6 +555,7 @@ const mapStateToProps = (
   disableNavigation,
   eventBus,
   active: tabs.activeTab && tabs.activeTab.id === id,
+  searchEngines: corpora.searchEngines,
   server: servers.selected,
   corpusId: corpora.selected.corpus_id,
   webentity,
@@ -550,6 +573,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab,
+  setSearchEngine, addNavigationHistory,
   declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
   setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities

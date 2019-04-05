@@ -65,7 +65,10 @@ export default createReducer(initialState, {
     ...state,
     webentities: {
       ...state.webentities,
-      [webentity.id]: webentity
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        ...webentity
+      }
     }
   }),
 
@@ -224,11 +227,11 @@ export default createReducer(initialState, {
   }),
 
   // Keep track of current WE merges
-  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host }) => ({
+  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host, type }) => ({
     ...state,
     merges: {
       ...state.merges,
-      [tabId]: ({ mergeable: mergeable, host: host })
+      [tabId]: ({ mergeable, host, type })
     }
   }),
 

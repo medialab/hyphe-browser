@@ -13,10 +13,13 @@ import {
   fetchReferrers,
   fetchReferrals,
   fetchParents,
-  fetchChildren
+  fetchChildren,
+  setMergeWebentity
 } from '../../../actions/webentities'
 import { selectContextualList } from '../../../actions/browser'
 import { compareUrls } from '../../../utils/lru'
+import { fieldParser, downloadCSV } from '../../../utils/file-downloader'
+
 
 class _List extends React.Component {
   onClick (url) {
@@ -30,13 +33,19 @@ class _List extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { name, links, activeTabUrl } = this.props
+    const { name, links, activeTabUrl, activeTabId, webentity, setMergeWebentity } = this.props
 
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
-          { links.length ? links.map(link =>
-            ( name === 'mostLinked' ?
+          { links.length ? links.map(link => {
+            const mergeLink = (e, name) => {
+              e.stopPropagation()
+              if(webentity && webentity.id && link && link.id) {
+                setMergeWebentity(activeTabId, link, webentity, name)
+              }
+            }
+            return ( name === 'mostLinked' ?
               <li key={ link.url } title={ link.url }>
                 { !compareUrls(link.url, activeTabUrl) ?
                   <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
@@ -49,11 +58,16 @@ class _List extends React.Component {
                 <br/> }
               </li> :
               <li key={ link.id } title={ link.name + "\n" + link.homepage }>
-                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>{ link.name }</div>
+                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>
+                  <span>{ link.name }</span>
+                  { (name === 'referrers' || name === 'referrals') && 
+                    <span className="link-merge" onClick={ (e) => mergeLink(e, name) } >merge</span>
+                  }
+                </div>
                 <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
               </li>
-            )
-          ) : formatMessage({ id: 'none' }) }
+            )}
+        ) : formatMessage({ id: 'none' }) }
         </ul>
       </div>
     )
@@ -69,7 +83,9 @@ _List.propTypes = {
   activeTabUrl: PropTypes.string,
   links: PropTypes.array,
   name: PropTypes.string,
+  webentity: PropTypes.object,
 
+  setMergeWebentity: PropTypes.func,
   setTabUrl: PropTypes.func,
   openTab: PropTypes.func
 }
@@ -83,16 +99,26 @@ const _mapStateToProps = ({ tabs, intl: { locale } }) => ({
 const List = connect(_mapStateToProps, {
   setTabUrl,
   openTab,
+  setMergeWebentity
 })(_List)
 
 
 class SideBarContextualLists extends React.Component {
 
-  updateCurrentList (selected) {
-    const { serverUrl, corpusId, webentity, selectContextualList,
-      fetchMostLinked, fetchReferrers, fetchReferrals, fetchParents, fetchChildren } = this.props
-    selectContextualList(selected)
+  componentDidMount () {
+    const { selected } = this.props
+    this.updateCurrentList(selected)
+  }
 
+  componentWillReceiveProps ({ selected, webentity }) {
+    if ((webentity && this.props.webentity && webentity.id !== this.props.webentity.id) || selected !== this.props.selected) {
+      this.updateCurrentList(selected)
+    }
+  }
+
+  updateCurrentList (selected) {
+    const { serverUrl, corpusId, webentity,
+      fetchMostLinked, fetchReferrers, fetchReferrals, fetchParents, fetchChildren } = this.props
     switch (selected) {
     case 'referrers':
       fetchReferrers(serverUrl, corpusId, webentity)
@@ -112,6 +138,50 @@ class SideBarContextualLists extends React.Component {
     }
   }
 
+  downloadFile () {
+    const { corpusId, webentity, selected, tlds } = this.props
+    let listName, fileName
+    switch (selected) {
+    case 'mostLinked':
+      listName = 'mostLinkedPages'
+      break
+    case 'referrers':
+      listName = 'citingWebEntities'
+      break
+    case 'referrals':
+      listName = 'citedWebEntities'
+      break
+    case 'parents':
+      listName = 'parentWebEntities'
+      break
+    case 'children':
+      listName = 'childrenWebEntities'
+      break
+    default:
+      listName = selected
+      break
+    }
+    fileName = webentity.name.replace(/[\s\/]/g, '_')
+    const parsedWebentity = webentity[selected].map(
+      (we) => we.tags ? fieldParser(we, tlds) : we
+    )
+    const flatList = parsedWebentity.map( (el) => {
+      let WE = Object.assign({}, el)
+      const fields = ['TECHNICAL INFO', 'TAGS']
+      fields.forEach((field) => {
+        if (el[field]) {
+          Object.keys(el[field]).forEach(tag => {
+            WE[`${tag} (${field})`] = el[field][tag]
+          })
+          delete(WE[field])
+        }
+      })
+      delete(WE._id)
+      return WE
+    })
+    downloadCSV(flatList, listName, fileName, corpusId)
+  }
+
   render () {
     const { selectContextualList, selected, webentity } = this.props
     return (
@@ -120,14 +190,25 @@ class SideBarContextualLists extends React.Component {
           {
             // hide parents and children tabs for now
             ['mostLinked', 'referrers', 'referrals'].map(l =>
-            <button className={ cx('btn', 'btn-default', { selected: l === selected }) }
-              key={ l } onClick={ () => this.updateCurrentList(l) }>
+            <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
+              key={ l } onClick={ () => selectContextualList(l) }>
               <T id={ `sidebar.contextual.${l}` } />
             </button>
           ) }
           { !webentity[selected]
             ? <T id="loading" />
-            : <List links={ webentity[selected] } name={ selected } />
+            : <List links={ webentity[selected] } name={ selected } webentity={ webentity } />
+          }
+          { webentity[selected] && webentity[selected].length > 0 &&
+            <div className="download">
+              <button className='btn btn-default' onClick={ () => {this.downloadFile()} }>
+                <strong>
+                  <T id="sidebar.contextual.downloadToCSV" />
+                  <span>&nbsp;</span>
+                  <span className="ti-download"></span>
+                </strong>
+              </button>
+            </div>
           }
         </nav>
       </div>
@@ -145,17 +226,20 @@ SideBarContextualLists.propTypes = {
   webentity: PropTypes.object.isRequired,
 
   selected: PropTypes.string,
+  tlds: PropTypes.object.isRequired,
 
   fetchMostLinked: PropTypes.func,
   fetchReferrers: PropTypes.func,
   fetchReferrals: PropTypes.func,
   fetchParents: PropTypes.func,
   fetchChildren: PropTypes.func,
+  setMergeWebentity: PropTypes.func,
   selectContextualList: PropTypes.func
 }
 
-const mapStateToProps = ({ ui, intl: { locale } }, props) => ({
+const mapStateToProps = ({ ui, webentities, intl: { locale } }, props) => ({
   selected: ui.selectedContext,
+  tlds: webentities.tlds,
   locale
 })
 
@@ -165,6 +249,7 @@ export default connect(mapStateToProps, {
   fetchReferrals,
   fetchParents,
   fetchChildren,
+  setMergeWebentity,
   selectContextualList,
 })(SideBarContextualLists)
 

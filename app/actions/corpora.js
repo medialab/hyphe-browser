@@ -93,7 +93,8 @@ export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
 }
 
 export const receiveCorpus = createAction(CREATE_CORPUS_SUCCESS, (serverUrl, corpus) => ({ serverUrl, corpus }))
-export const createCorpus = (serverUrl, corpus) => (dispatch) => {
+export const createCorpus = (server, corpus) => (dispatch) => {
+  const serverUrl = server.url
   dispatch({
     type: CREATE_CORPUS_REQUEST,
     payload: {
@@ -112,7 +113,7 @@ export const createCorpus = (serverUrl, corpus) => (dispatch) => {
         dispatch(fetchCorpora(serverUrl))
       ])
       .then(([corpus, action]) => {
-        return dispatch(selectCorpus(serverUrl, action.payload.corpora[corpus.corpus_id]))
+        return dispatch(selectCorpus(server, action.payload.corpora[corpus.corpus_id]))
       })
       .then(() => {
         dispatch(routerActions.push('/browser'))

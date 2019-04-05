@@ -103,6 +103,7 @@
   "sidebar.contextual.children": "Sub entities",
   "sidebar.contextual.referrers": "Source entities",
   "sidebar.contextual.referrals": "Linked entities",
+  "sidebar.contextual.downloadToCSV": "Download list as CSV",
   "starting-corpus": "Starting corpus…",
   "status": "Status",
   "tags-clear-category-value": "Delete tag",
@@ -125,7 +126,8 @@
   "webentity-crawl-popup-message-2": "Otherwise, cancel and click on \"+\" to define a new webentity, then set it as \"IN\".",
   "webentity-crawl-popup-message-3": "Also remember to adjust the name and the Homepage of the webentity if necessary!",
   "webentity-merge-popup-title": "MERGE THESE 2 WEBENTITIES?",
-  "webentity-merge-popup-message": "WARNING: The webentity \"{old}\" which you tried to access automatically redirected you to a webpage that belongs to another webentity \"{new}\".",
+  "webentity-merge-popup-message-redirect": "WARNING: The webentity \"{old}\" which you tried to access automatically redirected you to a webpage that belongs to another webentity \"{new}\".",
+  "webentity-merge-popup-message-manual": "WARNING: Do you want to merge \"{old}\" to another webentity \"{new}\".",
   "webentity-merge-popup-message-2": "You can either merge these two webentities together, or ignore this message.",
   "webentity-merge-popup-message-3": "If you don't merge the webentities, you won't be able to edit the status, name or tags or the intended webentity from Hyphe-Browser, you should instead use Hyphe's special tab and look for the webentity to edit it from within Hyphe's classical web interface."
 }
