@@ -7,6 +7,7 @@ import {
   fetchEgoNetwork,
 } from '../../../actions/webentities'
 import { toggleNetwork} from '../../../actions/browser'
+import Network from "./Network"
 
 class SideBarEgoNetwork extends React.Component {
 
@@ -36,12 +37,10 @@ class SideBarEgoNetwork extends React.Component {
         </h3>
         {
           showNetwork &&
-          <div>
-            { egonetwork ? 
-              <span>{egonetwork.length}</span>
-              : <T id="loading" />
-            }
-          </div>
+          ( egonetwork ? 
+            <Network data={ egonetwork } />
+            : <T id="loading" />
+          )
         }
       </div>
     )
