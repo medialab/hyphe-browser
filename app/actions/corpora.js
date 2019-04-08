@@ -107,17 +107,22 @@ export const createCorpus = (server, corpus) => (dispatch) => {
   // so we must trigger a full fetch of all corpora
   return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
     .then((miniCorpus) => {
-      dispatch(receiveCorpus(serverUrl, miniCorpus))
-      return Promise.all([
-        Promise.resolve(miniCorpus),
-        dispatch(fetchCorpora(serverUrl))
-      ])
-      .then(([corpus, action]) => {
-        return dispatch(selectCorpus(server, action.payload.corpora[corpus.corpus_id]))
-      })
-      .then(() => {
-        dispatch(routerActions.push('/browser'))
-      }, (err) => console.error('→ browser', err)) // eslint-disable-line
+      if (miniCorpus.status === 'error') {
+        return Promise.reject({ error: miniCorpus })
+      }
+      else {
+        dispatch(receiveCorpus(serverUrl, miniCorpus))
+        return Promise.all([
+          Promise.resolve(miniCorpus),
+          dispatch(fetchCorpora(serverUrl))
+        ])
+        .then(([corpus, action]) => {
+          return dispatch(selectCorpus(server, action.payload.corpora[corpus.corpus_id]))
+        })
+        .then(() => {
+          dispatch(routerActions.push('/browser'))
+        }, (err) => console.error('→ browser', err)) // eslint-disable-line
+      }
     })
     .catch((error) => dispatch({
       type: CREATE_CORPUS_FAILURE,
