@@ -17,6 +17,7 @@ import { setTabUrl } from '../../../actions/tabs'
 import { toggleContext } from '../../../actions/browser'
 import { getWebEntityActivityStatus } from '../../../utils/status'
 import { compareUrls } from '../../../utils/lru'
+import SideBarEgonetwork from './SideBarEgonetwork';
 
 class SideBar extends React.Component {
   constructor (props) {
@@ -122,6 +123,11 @@ class SideBar extends React.Component {
       corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
   }
 
+  renderNetwork () {
+    return <SideBarEgonetwork serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+  }
+
   renderHomepage () {
     const { webentity, setTabUrl, url, tabId, serverUrl, corpusId, setWebentityHomepage } = this.props
     const { formatMessage } = this.context.intl
@@ -164,6 +170,7 @@ class SideBar extends React.Component {
             { this.renderStatus() }
           </div>
           { this.renderTabs() }
+          { this.renderNetwork() }
           { disabled && <div className="browser-sidebar-disabled-layer" /> }
         </div>
         <HypheFooter status={ status } />

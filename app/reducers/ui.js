@@ -15,6 +15,7 @@ import {
   SELECT_CONTEXTUAL_LIST,
   TOGGLE_DO_NOT_SHOW_AGAIN,
   TOGGLE_CONTEXT,
+  TOGGLE_NETWORK,
   TOGGLE_CATEGORIES
 } from '../actions/browser'
 import {
@@ -52,6 +53,7 @@ const initialState = {
   // to display loaders in different places
   selectedContext: 'mostLinked',
   showContext: false,
+  showNetwork: false,
   showCategories: true,
   loaders: {
     corpora: false,
@@ -141,6 +143,11 @@ export default createReducer(initialState, {
   [TOGGLE_CONTEXT]: (state) => ({
     ...state,
     showContext: !state.showContext
+  }),
+
+  [TOGGLE_NETWORK]: (state) => ({
+    ...state,
+    showNetwork: !state.showNetwork
   }),
 
   [TOGGLE_CATEGORIES]: (state) => ({

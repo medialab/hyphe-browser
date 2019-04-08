@@ -11,6 +11,9 @@ export const TOGGLE_CONTEXT = '§_TOGGLE_CONTEXT'
 
 export const TOGGLE_CATEGORIES = '§_TOGGLE_CATEGORIES'
 
+export const TOGGLE_NETWORK = '§_TOGGLE_NETWORK'
+
+
 export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
     type: SHOW_NOTIFICATION,
@@ -31,6 +34,9 @@ export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key,
 export const toggleContext = createAction(TOGGLE_CONTEXT)
 
 export const toggleCategories = createAction(TOGGLE_CATEGORIES)
+
+export const toggleNetwork = createAction(TOGGLE_NETWORK)
+
 
 // shortcut for back compat
 
