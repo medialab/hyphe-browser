@@ -142,7 +142,7 @@ CorpusForm.propTypes = {
 const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({
   locale,
   server: servers.selected,
-  serverError: ui.error
+  serverError: ui.notification
 })
 
 const ConnectedCorpusForm = connect(mapStateToProps, {
