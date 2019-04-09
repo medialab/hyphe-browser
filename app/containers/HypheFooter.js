@@ -7,7 +7,7 @@ import { intlShape } from 'react-intl'
 
 import { setLocale } from '../actions/intl'
 import { LOCALES } from '../constants'
-import CorpusLoadIndicators from './CorpusLoadIndicators'
+import CorpusLoadIndicators from '../components/CorpusLoadIndicators'
 
 class HypheFooter extends React.Component {
   render () {

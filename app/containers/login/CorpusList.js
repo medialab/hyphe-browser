@@ -8,7 +8,7 @@ import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
 import { selectCorpus } from '../../actions/corpora'
-import Spinner from '../Spinner'
+import Spinner from '../../components/Spinner'
 
 class CorpusListItem extends React.Component {
 

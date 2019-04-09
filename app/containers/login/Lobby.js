@@ -9,8 +9,8 @@ import {
   ERROR_CORPUS_NOT_STARTED,
   ERROR_SERVER_NO_RESOURCE
 } from '../../constants'
-import Spinner from '../Spinner'
 import CorpusStatusWatcher from '../CorpusStatusWatcher'
+import Spinner from '../../components/Spinner'
 
 class Lobby extends React.Component {
   render () {

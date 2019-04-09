@@ -1,16 +1,16 @@
 import React from 'react'
 import { Route, IndexRoute, IndexRedirect } from 'react-router'
 
-import App from './components/App'
-import Browser from './components/browser/Browser'
+import App from './containers/App'
+import Browser from './containers/browser/Browser'
 
 // login components
-import Login from './components/login/Login'
-import CorpusForm from './components/login/CorpusForm'
-import CorpusList from './components/login/CorpusList'
-import CorpusLoginForm from './components/login/CorpusLoginForm'
-import ServerForm from './components/login/ServerForm'
-import Lobby from './components/login/Lobby'
+import Login from './containers/login/Login'
+import CorpusForm from './containers/login/CorpusForm'
+import CorpusList from './containers/login/CorpusList'
+import CorpusLoginForm from './containers/login/CorpusLoginForm'
+import ServerForm from './containers/login/ServerForm'
+import Lobby from './containers/login/Lobby'
 
 export default (
   <Route path="/" component={ App }>

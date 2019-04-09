@@ -8,7 +8,7 @@ import { ipcRenderer as ipc } from 'electron'
 import { intlShape } from 'react-intl'
 import EventBus from 'jvent'
 
-import TabLabel from './BrowserTabLabel'
+import TabLabel from '../../components/BrowserTabLabel'
 import TabContent from './BrowserTabContent'
 import { tabShape } from '../../types'
 

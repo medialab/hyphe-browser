@@ -1,13 +1,13 @@
 // small upper part of tabs (favicon, close button…)
 
-import '../../css/browser/browser-tab-label'
+import '../css/browser/browser-tab-label'
 
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
 import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
-import { HYPHE_TAB_ID } from '../../constants'
+import { HYPHE_TAB_ID } from '../constants'
 
 const { Menu, MenuItem } = remote
 

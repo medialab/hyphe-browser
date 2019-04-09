@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import Button from '../../Button'
-import HypheFooter from './../../HypheFooter'
+import Button from '../../../components/Button'
+import HypheFooter from '../../HypheFooter'
 import SideBarContextualLists from './SideBarContextualLists'
 import SideBarCategories from './SideBarCategories'
 import SideBarFreetags from './SideBarFreetags'
@@ -47,7 +47,7 @@ class SideBar extends React.Component {
   renderInfo () {
     const { webentity } = this.props
     if (!webentity) return null
-
+    console.log(webentity)
     return (
       <div className="browser-side-bar-info">
         <h3><span><T id="info" /></span></h3>

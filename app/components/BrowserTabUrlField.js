@@ -1,4 +1,4 @@
-import '../../css/browser/browser-tab-url-field'
+import '../css/browser/browser-tab-url-field'
 
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
@@ -6,8 +6,8 @@ import cx from 'classnames'
 import { isWebUri } from 'valid-url'
 import { FormattedMessage as T } from 'react-intl'
 
-import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../../utils/lru'
-import { getSearchUrl } from '../../utils/search-web'
+import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../utils/lru'
+import { getSearchUrl } from '../utils/search-web'
 
 class BrowserTabUrlField extends React.Component {
 
