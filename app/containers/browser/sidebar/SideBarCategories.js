@@ -10,7 +10,7 @@ import uniq from 'lodash.uniq'
 import difference from 'lodash.difference'
 
 import { TAGS_NS } from '../../../constants'
-import Button from '../../Button'
+import Button from '../../../components/Button'
 
 import { addTagsCategory, addTag, removeTag } from '../../../actions/tags'
 import { toggleCategories } from '../../../actions/browser'

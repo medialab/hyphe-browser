@@ -10,7 +10,7 @@ import { FormattedMessage as T } from 'react-intl'
 
 import { createCorpus } from '../../actions/corpora'
 import { ERROR_SERVER_NO_RESOURCE } from '../../constants'
-import Spinner from '../Spinner'
+import Spinner from '../../components/Spinner'
 
 class CorpusForm extends React.Component {
 

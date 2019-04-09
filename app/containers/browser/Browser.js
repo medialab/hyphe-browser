@@ -8,7 +8,7 @@ import Notification from './Notification'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
 import CorpusStatusWatcher from '../CorpusStatusWatcher'
-import Spinner from '../Spinner'
+import Spinner from '../../components/Spinner'
 
 class Browser extends React.Component {
   render () {
