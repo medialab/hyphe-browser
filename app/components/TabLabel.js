@@ -11,23 +11,31 @@ import { HYPHE_TAB_ID } from '../constants'
 
 const { Menu, MenuItem } = remote
 
-class BrowserTabLabel extends React.Component {
+class TabLabel extends React.Component {
   constructor (props) {
     super(props)
-
-    this.close = this.close.bind(this)
-    this.closeHandler = this.closeHandler.bind(this)
-    this.selectHandler = this.selectHandler.bind(this)
-    this.openInBrowser = this.openInBrowser.bind(this)
-    this.duplicate = this.duplicate.bind(this)
-  }
-
-  translate (id) {
-    return this.context.intl.formatMessage({ id })
   }
 
   componentDidMount () {
+    const { formatMessage } = this.context.intl
     const el = findDOMNode(this)
+
+    const translate = (id) => {
+      return formatMessage({ id })
+    }
+    
+    const openInBrowser = () => {
+      ipc.send('openExternal', this.props.url)
+    }
+  
+    const duplicate = () => {
+      this.props.openTab(this.props.url)
+    }
+  
+    const close = () => {
+      this.props.closeTab(this.props.id)
+    }
+
     el.addEventListener('contextmenu', (e) => {
       e.preventDefault()
 
@@ -35,43 +43,19 @@ class BrowserTabLabel extends React.Component {
       const menu = new Menu()
       if (!newTab && !loading && url && navigable) {
         if (openTab) {
-          menu.append(new MenuItem({ label: this.translate('menu.duplicate-tab'), click: this.duplicate }))
+          menu.append(new MenuItem({ label: translate('menu.duplicate-tab'), click: duplicate }))
         }
-        menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: this.openInBrowser }))
+        menu.append(new MenuItem({ label: translate('menu.open-in-browser'), click: openInBrowser }))
       }
       if (closable && closeTab && !fixed) {
         if (menu.getItemCount() >= 1) menu.append(new MenuItem({ type: 'separator' }))
-        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: this.close }))
+        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: close }))
       }
       // Do not show empty menu
       if (menu.getItemCount() >= 1) {
         menu.popup(remote.getCurrentWindow())
       }
     })
-  }
-
-  openInBrowser () {
-    ipc.send('openExternal', this.props.url)
-  }
-
-  duplicate () {
-    this.props.openTab(this.props.url)
-  }
-
-  close () {
-    this.props.closeTab(this.props.id)
-  }
-
-  closeHandler (e) {
-    e.preventDefault()
-    // do not trigger a selectTab just after
-    e.stopPropagation()
-    this.close()
-  }
-
-  selectHandler (e) {
-    e.preventDefault()
-    this.props.selectTab(this.props.id)
   }
 
   render () {
@@ -88,23 +72,34 @@ class BrowserTabLabel extends React.Component {
         : webentity && webentity.name
           ? webentity.name
           : title
-
+  
+    const closeHandler = (e) => {
+      e.preventDefault()
+      // do not trigger a selectTab just after
+      e.stopPropagation()
+      this.props.closeTab(this.props.id)
+    }
+  
+    const selectHandler = (e) => {
+      e.preventDefault()
+      this.props.selectTab(this.props.id)
+    }
     // use of <object> explained here: http://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js
     // because medialab return a 200 with no favicon :s
     return (
-      <div key={ id } className={ cls } onClick={ this.selectHandler } title={ title }>
+      <div key={ id } className={ cls } onClick={ selectHandler } title={ title }>
         { loading
           ? <span className="loading" />
           : (icon && <object data={ icon } width="16" height="16" className="browser-tab-favicon"></object>)
         }
         <span className="browser-tab-title">{ label }</span>
-        { !fixed && closable && <span className="ti-close" onClick={ this.closeHandler }></span> }
+        { !fixed && closable && <span className="ti-close" onClick={ closeHandler }></span> }
       </div>
     )
   }
 }
 
-BrowserTabLabel.propTypes = {
+TabLabel.propTypes = {
   id: PropTypes.string.isRequired,
   active: PropTypes.bool,
   title: PropTypes.string,
@@ -124,8 +119,8 @@ BrowserTabLabel.propTypes = {
   closeTab: PropTypes.func.isRequired,
 }
 
-BrowserTabLabel.contextTypes = {
+TabLabel.contextTypes = {
   intl: intlShape
 }
 
-export default BrowserTabLabel
+export default TabLabel

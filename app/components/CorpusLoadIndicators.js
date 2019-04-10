@@ -6,33 +6,30 @@ import { intlShape } from 'react-intl'
 
 import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../utils/status'
 
-class CorpusLoadIndicators extends React.Component {
-  render () {
-    const { status } = this.props
-    const { intl: { formatMessage } } = this.context
+const CorpusLoadIndicators = ({ status }, { intl }) => {
+  const { formatMessage } = intl
+  
+  const corpusCrawlingStatus = getCorpusCrawlingStatus(status.corpus.crawler)
+  // TODO max_crawls configurable
+  const hypheCrawlingStatus = getHypheCrawlingStatus({ max_crawls: 12, ...status.hyphe })
 
-    const corpusCrawlingStatus = getCorpusCrawlingStatus(status.corpus.crawler)
-    // TODO max_crawls configurable
-    const hypheCrawlingStatus = getHypheCrawlingStatus({ max_crawls: 12, ...status.hyphe })
-
-    return (
-      <span className="corpus-load-indicators">
-        <span className="corpus-load-title">Hyphe</span>
-        <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
-          <span className={ 'corpus-load corpus-load-status-' + corpusCrawlingStatus } />
-        </span>
-        <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-pending' }) }>
-          { status.corpus.crawler.jobs_pending }
-        </span>
-        <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-running' }) }>
-          { status.corpus.crawler.jobs_running }
-        </span>
-        <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
-          <span className={ 'corpus-load corpus-load-health-' + hypheCrawlingStatus } />
-        </span>
+  return (
+    <span className="corpus-load-indicators">
+      <span className="corpus-load-title">Hyphe</span>
+      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
+        <span className={ 'corpus-load corpus-load-status-' + corpusCrawlingStatus } />
       </span>
-    )
-  }
+      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-pending' }) }>
+        { status.corpus.crawler.jobs_pending }
+      </span>
+      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-running' }) }>
+        { status.corpus.crawler.jobs_running }
+      </span>
+      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
+        <span className={ 'corpus-load corpus-load-health-' + hypheCrawlingStatus } />
+      </span>
+    </span>
+  )
 }
 
 CorpusLoadIndicators.propTypes = {

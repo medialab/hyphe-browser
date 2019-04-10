@@ -32,9 +32,9 @@ class PageHypheHome extends React.Component {
     }
   }
 
-  onSubmit (evt) {
+  onSubmit = (e) => {
     const { selectedEngine } = this.props
-    evt.preventDefault()
+    e.preventDefault()
     this.props.onSubmit(getSearchUrl(selectedEngine, this.state.q))
   }
 
@@ -44,7 +44,7 @@ class PageHypheHome extends React.Component {
 
     return (
       <div className="page-hyphe-home">
-        <form className="google-form" onSubmit={ (e) => { this.onSubmit(e) } }>
+        <form className="google-form" onSubmit={ this.onSubmit }>
           <div className="select-container">
             <div className="search-text" >
               <T id="google.search" />

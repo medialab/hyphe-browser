@@ -9,7 +9,7 @@ import { FormattedMessage as T } from 'react-intl'
 import { highlightUrlHTML, urlToLru, lruToUrl, longestMatching, parseLru } from '../utils/lru'
 import { getSearchUrl } from '../utils/search-web'
 
-class BrowserTabUrlField extends React.Component {
+class TabUrlField extends React.Component {
 
   constructor (props) {
     super(props)
@@ -19,15 +19,6 @@ class BrowserTabUrlField extends React.Component {
       focusInput: false,
       overPrefixUntil: -1,
       userPrefixUntil: -1
-    }
-
-    this._onKeyUp = this.onKeyUp.bind(this)
-  }
-
-  onKeyUp (e) {
-    if (e.keyCode === 27) { // ESCAPE
-      e.target.blur()
-      this.setState({ url: this.props.initialUrl })
     }
   }
 
@@ -61,7 +52,18 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  onSubmit (e) {
+  onKeyUp = (e) => {
+    if (e.keyCode === 27) { // ESCAPE
+      e.target.blur()
+      this.setState({ url: this.props.initialUrl })
+    }
+  }
+
+  onBlur = () => {
+    this.setState({ editing: false })
+  }
+  
+  onSubmit = (e) => {
     e.preventDefault()
     const { selectedEngine } = this.props
     this.setState({ editing: false })
@@ -85,9 +87,8 @@ class BrowserTabUrlField extends React.Component {
     this.props.onSubmit(url)
   }
 
-  onChange (e) {
+  onChange = (e) => {
     e.stopPropagation()
-
     this.setState({ url: e.target.value, focusInput: false })
   }
 
@@ -107,9 +108,9 @@ class BrowserTabUrlField extends React.Component {
       className={ cx('btn browser-tab-url', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
-      onBlur={ () => this.setState({ editing: false }) }
-      onKeyUp={ this._onKeyUp }
-      onChange={ (e) => this.onChange(e) } />
+      onBlur={ this.onBlur }
+      onKeyUp={ this.onKeyUp }
+      onChange={ this.onChange } />
   }
 
   // Read-only field with highlights: click to edit
@@ -160,7 +161,28 @@ class BrowserTabUrlField extends React.Component {
   }
 
   // One part of the prefix selector: hover to overview, click to choose
-  renderPrefixSelectorButton ([ prop, label, selected ], index, allParts, originalLruUrl) {
+  renderPrefixSelectorButton ([ prop, label, selected ], index, allParts, originalLruUrl) { 
+    const selectPrefix = () => {
+      const selected = allParts.slice(0, index + 1)
+  
+      // Build URL prefix from this
+      const lru = selected.reduce((o, [prop, value]) => {
+        o[prop] = {
+          scheme: () => value.substring(0, value.length - 3), // remove '://'
+          tld: () => value,
+          host: () => (o.host || []).concat([ value.substring(1) ]), // remove '.' and concat
+          port: () => value.substring(1), // remove ':'
+          path: () => (o.path || []).concat([ value.substring(1) ]), // remove '.' and concat
+          query: () => value.substring(1), // remove '?'
+          fragment: () => value.substring(1) // remove '#'
+        }[prop]()
+        return o
+      }, {})
+      const lruUrl = lruToUrl(lru, this.props.tlds)
+  
+      this.props.onSelectPrefix(lruUrl, lruUrl !== originalLruUrl)
+      this.setState({ userPrefixUntil: index })
+    }
     if (label) {
       const classes = [
         'btn btn-default prefix',
@@ -171,7 +193,7 @@ class BrowserTabUrlField extends React.Component {
         <button key={ 'prefix-selector-' + index } className={ cx(classes) }
           disabled={ index <= 1 } // can't be limited to protocol and tld
           onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
-          onClick={ () => this.selectPrefix(allParts, index, originalLruUrl) }>
+          onClick={ selectPrefix }>
           { label }
         </button>
       )
@@ -180,38 +202,16 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  selectPrefix (parts, index, originalLruUrl) {
-    const selected = parts.slice(0, index + 1)
-
-    // Build URL prefix from this
-    const lru = selected.reduce((o, [prop, value]) => {
-      o[prop] = {
-        scheme: () => value.substring(0, value.length - 3), // remove '://'
-        tld: () => value,
-        host: () => (o.host || []).concat([ value.substring(1) ]), // remove '.' and concat
-        port: () => value.substring(1), // remove ':'
-        path: () => (o.path || []).concat([ value.substring(1) ]), // remove '.' and concat
-        query: () => value.substring(1), // remove '?'
-        fragment: () => value.substring(1) // remove '#'
-      }[prop]()
-      return o
-    }, {})
-    const lruUrl = lruToUrl(lru, this.props.tlds)
-
-    this.props.onSelectPrefix(lruUrl, lruUrl !== originalLruUrl)
-    this.setState({ userPrefixUntil: index })
-  }
-
   render () {
     return (
-      <form onSubmit={ (e) => this.onSubmit(e) } className={ cx(this.props.className, { adjusting: this.props.prefixSelector }) }>
+      <form onSubmit={ this.onSubmit } className={ cx(this.props.className, { adjusting: this.props.prefixSelector }) }>
         { this.renderField() }
       </form>
     )
   }
 }
 
-BrowserTabUrlField.propTypes = {
+TabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
   selectedEngine: PropTypes.string.isRequired,
@@ -224,8 +224,8 @@ BrowserTabUrlField.propTypes = {
   className: PropTypes.string
 }
 
-BrowserTabUrlField.defaultProps = {
+TabUrlField.defaultProps = {
   className: ''
 }
 
-export default BrowserTabUrlField
+export default TabUrlField
