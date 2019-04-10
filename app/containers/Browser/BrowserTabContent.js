@@ -7,13 +7,13 @@ import { intlShape } from 'react-intl'
 import cx from 'classnames'
 import networkErrors from 'chromium-net-errors'
 
-import WebView from './WebView'
 import Button from '../../components/Button'
-import BrowserTabUrlField from '../../components/BrowserTabUrlField'
-import SideBar from '../Sidebar/SideBar'
-import BrowserTabWebentityNameField from '../../components/BrowserTabWebentityNameField'
+import TabUrlField from '../../components/TabUrlField'
+import TabWebentityNameField from '../../components/TabWebentityNameField'
 import PageHypheHome from '../../components/PageHypheHome'
 import HypheFooter from '../HypheFooter'
+import WebView from './WebView'
+import SideBar from '../Sidebar/SideBar'
 import { FormattedMessage as T } from 'react-intl'
 
 import { eventBusShape } from '../../types'
@@ -257,7 +257,7 @@ class TabContent extends React.Component {
     // directly update name on user's validation
     return (
       <div className={ cx('browser-tab-toolbar-webentity', { 'over-overlay': adjusting && !adjusting.crawl, adjusting }) }>
-        <BrowserTabWebentityNameField
+        <TabWebentityNameField
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
@@ -304,7 +304,7 @@ class TabContent extends React.Component {
 
     return (
       <div className="browser-tab-toolbar-url">
-        <BrowserTabUrlField
+        <TabUrlField
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }

@@ -4,20 +4,14 @@ import cx from 'classnames'
 
 import '../css/browser/browser-tab-webentity-name-field'
 
-class BrowserTabWebentityNameField extends React.Component {
+class TabWebentityNameField extends React.Component {
 
   constructor (props) {
     super(props)
-
     this.state = { dirty: false, editing: false }
-
-    this._onKeyUp = this.onKeyUp.bind(this)
-    this._onChange = this.onChange.bind(this)
-    this._onFocus = this.onFocus.bind(this)
-    this._onBlur = this.onBlur.bind(this)
   }
 
-  onKeyUp (e) {
+  onKeyUp = (e) => {
     if (~[13, 27].indexOf(e.keyCode)) {
       this.setState({ dirty: false, editing: false })
       e.target.blur()
@@ -29,15 +23,15 @@ class BrowserTabWebentityNameField extends React.Component {
     }
   }
 
-  onChange (e) {
+  onChange = () => {
     this.setState({ dirty: true, editing: true })
   }
 
-  onFocus () {
+  onFocus = () => {
     this.setState({ editing: true })
   }
 
-  onBlur () {
+  onBlur = () => {
     this.setState({ editing: false })
   }
 
@@ -68,22 +62,22 @@ class BrowserTabWebentityNameField extends React.Component {
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       defaultValue={ this.props.initialValue }
       readOnly={ !this.props.editable || !this.props.initialValue }
-      onKeyUp={ this._onKeyUp }
-      onFocus={ this._onFocus }
-      onBlur={ this._onBlur }
-      onChange={ this._onChange } />
+      onKeyUp={ this.onKeyUp }
+      onFocus={ this.onFocus }
+      onBlur={ this.onBlur }
+      onChange={ this.onChange } />
   }
 }
 
-BrowserTabWebentityNameField.propTypes = {
+TabWebentityNameField.propTypes = {
   initialValue: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   editable: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 }
 
-BrowserTabWebentityNameField.defaultProps = {
+TabWebentityNameField.defaultProps = {
   initialValue: ''
 }
 
-export default BrowserTabWebentityNameField
+export default TabWebentityNameField
