@@ -1,13 +1,13 @@
 // lists of links at the bottom of the sidebar
 
-import '../../../css/browser/side-bar-contextual-lists'
+import '../../css/browser/side-bar-contextual-lists'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import { setTabUrl, openTab } from '../../../actions/tabs'
+import { setTabUrl, openTab } from '../../actions/tabs'
 import {
   fetchMostLinked,
   fetchReferrers,
@@ -15,10 +15,10 @@ import {
   fetchParents,
   fetchChildren,
   setMergeWebentity
-} from '../../../actions/webentities'
-import { selectContextualList } from '../../../actions/browser'
-import { compareUrls } from '../../../utils/lru'
-import { fieldParser, downloadCSV } from '../../../utils/file-downloader'
+} from '../../actions/webentities'
+import { selectContextualList } from '../../actions/browser'
+import { compareUrls } from '../../utils/lru'
+import { fieldParser, downloadCSV } from '../../utils/file-downloader'
 
 
 class _List extends React.Component {

@@ -1,4 +1,4 @@
-import '../../../css/browser/side-bar-tags'
+import '../../css/browser/side-bar-tags'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
@@ -9,11 +9,11 @@ import partition from 'lodash.partition'
 import uniq from 'lodash.uniq'
 import difference from 'lodash.difference'
 
-import { TAGS_NS } from '../../../constants'
-import Button from '../../../components/Button'
+import { TAGS_NS } from '../../constants'
+import Button from '../../components/Button'
 
-import { addTagsCategory, addTag, removeTag } from '../../../actions/tags'
-import { toggleCategories } from '../../../actions/browser'
+import { addTagsCategory, addTag, removeTag } from '../../actions/tags'
+import { toggleCategories } from '../../actions/browser'
 
 
 class SideBarCategories extends React.Component {
