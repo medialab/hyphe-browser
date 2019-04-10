@@ -1,4 +1,4 @@
-import '../../../css/browser/side-bar'
+import '../../css/browser/side-bar'
 
 import React, { PropTypes } from 'react'
 
@@ -6,17 +6,17 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import Button from '../../../components/Button'
-import HypheFooter from '../../HypheFooter'
+import Button from '../../components/Button'
+import HypheFooter from '../HypheFooter'
 import SideBarContextualLists from './SideBarContextualLists'
 import SideBarCategories from './SideBarCategories'
 import SideBarFreetags from './SideBarFreetags'
 
-import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage, cancelWebentityCrawls } from '../../../actions/webentities'
-import { setTabUrl } from '../../../actions/tabs'
-import { toggleContext } from '../../../actions/browser'
-import { getWebEntityActivityStatus } from '../../../utils/status'
-import { compareUrls } from '../../../utils/lru'
+import { setWebentityStatus, showAdjustWebentity, setWebentityHomepage, cancelWebentityCrawls } from '../../actions/webentities'
+import { setTabUrl } from '../../actions/tabs'
+import { toggleContext } from '../../actions/browser'
+import { getWebEntityActivityStatus } from '../../utils/status'
+import { compareUrls } from '../../utils/lru'
 
 class SideBar extends React.Component {
   constructor (props) {
@@ -47,7 +47,7 @@ class SideBar extends React.Component {
   renderInfo () {
     const { webentity } = this.props
     if (!webentity) return null
-    console.log(webentity)
+
     return (
       <div className="browser-side-bar-info">
         <h3><span><T id="info" /></span></h3>

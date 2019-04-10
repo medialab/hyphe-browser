@@ -1,4 +1,4 @@
-import '../../../css/browser/side-bar-tags'
+import '../../css/browser/side-bar-tags'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
@@ -6,9 +6,9 @@ import { intlShape } from 'react-intl'
 import { Creatable } from 'react-select'
 import difference from 'lodash.difference'
 
-import { TAGS_NS } from '../../../constants'
+import { TAGS_NS } from '../../constants'
 
-import { addTag, removeTag } from '../../../actions/tags'
+import { addTag, removeTag } from '../../actions/tags'
 
 class SideBarFreetags extends React.Component {
 

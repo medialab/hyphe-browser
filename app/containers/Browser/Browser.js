@@ -3,7 +3,7 @@ import '../../css/browser/browser'
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import HypheHeader from '../HypheHeader'
+import Header from '../../components/Header'
 import Notification from './Notification'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
@@ -20,7 +20,7 @@ class Browser extends React.Component {
 
     return (
       <CorpusStatusWatcher className="window browser-window">
-        <HypheHeader />
+        <Header corpus={ corpus } />
         <BrowserStack />
         <BrowserTabs />
         <Notification />
