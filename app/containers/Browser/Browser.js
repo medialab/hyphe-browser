@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import Header from '../../components/Header'
 import Spinner from '../../components/Spinner'
 import Notification from '../../components/Notification'
-import BrowserStack from './BrowserStack'
-import BrowserTabs from './BrowserTabs'
+import BrowserStack from '../BrowserStack'
+import BrowserTabs from '../BrowserTabs'
 import CorpusStatusWatcher from './CorpusStatusWatcher'
 
 class Browser extends React.Component {

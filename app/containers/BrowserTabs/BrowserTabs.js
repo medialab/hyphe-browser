@@ -8,8 +8,8 @@ import { ipcRenderer as ipc } from 'electron'
 import { intlShape } from 'react-intl'
 import EventBus from 'jvent'
 
-import TabLabel from '../../components/TabLabel'
-import TabContent from './BrowserTabContent'
+import BrowserTabLabel from './BrowserTabLabel'
+import BrowserTabContent from './BrowserTabContent'
 import { tabShape } from '../../types'
 
 import { openTab, closeTab, selectTab, selectHypheTab, selectNextTab, selectPrevTab } from '../../actions/tabs'
@@ -88,7 +88,7 @@ class BrowserTabs extends React.Component {
 
   renderTabContents () {
     return this.props.tabs.map((tab) => (
-      <TabContent key={ tab.id }
+      <BrowserTabContent key={ tab.id }
         eventBus={ this.getEventBus(tab.id) }
         id={ tab.id }
         webentity={ this.getWebentity(tab.id) }
@@ -101,7 +101,7 @@ class BrowserTabs extends React.Component {
     ))
   }
 
-  renderTabLabels (fixed) {
+  renderBrowserTabLabels (fixed) {
     const { formatMessage } = this.context.intl
     const { instanceUrl, corpusId } = this.props
     const tabs = this.props.tabs.filter((tab) => !!tab.fixed === fixed)
@@ -118,7 +118,7 @@ class BrowserTabs extends React.Component {
         this.props.selectTab(tab.id)
       }
       return (
-        <TabLabel key={ tab.id }
+        <BrowserTabLabel key={ tab.id }
           { ...tab }
           closable={ tabs.length !== 1 }
           title={ title }
@@ -139,10 +139,10 @@ class BrowserTabs extends React.Component {
       <div className="browser-tabs">
         <div className="browser-tab-labels">
           <div className="browser-tab-labels-edge">
-            { this.renderTabLabels(true) }
+            { this.renderBrowserTabLabels(true) }
           </div>
           <div className="browser-tab-labels-main">
-            { this.renderTabLabels(false) }
+            { this.renderBrowserTabLabels(false) }
             <div className="browser-tab-new" title={ formatMessage({ id: 'open-tab' }) }
               onClick={ () => this.props.openTab(PAGE_HYPHE_HOME) }>
             </div>

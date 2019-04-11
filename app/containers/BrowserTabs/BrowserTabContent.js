@@ -8,12 +8,12 @@ import cx from 'classnames'
 import networkErrors from 'chromium-net-errors'
 
 import Button from '../../components/Button'
-import TabUrlField from '../../components/TabUrlField'
-import TabWebentityNameField from '../../components/TabWebentityNameField'
 import PageHypheHome from '../../components/PageHypheHome'
 import Footer from '../../components/Footer'
+import BrowserTabUrlField from './BrowserTabUrlField'
+import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import WebView from './WebView'
-import SideBar from '../Sidebar/SideBar'
+import SideBar from '../Sidebar'
 import { FormattedMessage as T } from 'react-intl'
 
 import { eventBusShape } from '../../types'
@@ -257,7 +257,7 @@ class TabContent extends React.Component {
     // directly update name on user's validation
     return (
       <div className={ cx('browser-tab-toolbar-webentity', { 'over-overlay': adjusting && !adjusting.crawl, adjusting }) }>
-        <TabWebentityNameField
+        <BrowserTabWebentityNameField
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
@@ -304,7 +304,7 @@ class TabContent extends React.Component {
 
     return (
       <div className="browser-tab-toolbar-url">
-        <TabUrlField
+        <BrowserTabUrlField
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
