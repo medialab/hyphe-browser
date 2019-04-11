@@ -1,4 +1,4 @@
-import '../../css/browser/browser'
+import './browser'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'

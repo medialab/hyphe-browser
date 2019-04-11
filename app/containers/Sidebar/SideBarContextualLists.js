@@ -1,6 +1,6 @@
 // lists of links at the bottom of the sidebar
 
-import '../../css/browser/side-bar-contextual-lists'
+import './side-bar-contextual-lists'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'

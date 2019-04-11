@@ -1,4 +1,4 @@
-import '../../css/login/login'
+import './login'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'

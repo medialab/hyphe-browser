@@ -1,6 +1,6 @@
 // browser-tab-labels, browser-contents
 
-import '../../css/browser/browser-tabs'
+import './browser-tabs'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'

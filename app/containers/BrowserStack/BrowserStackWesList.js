@@ -1,6 +1,6 @@
 // infinite webentities list
 import 'react-select/dist/react-select.css'
-import '../../css/browser/browser-stack-wes-list'
+import './browser-stack-wes-list'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
