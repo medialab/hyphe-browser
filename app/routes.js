@@ -10,7 +10,6 @@ import CorpusForm from './containers/Login/CorpusForm'
 import CorpusList from './containers/Login/CorpusList'
 import CorpusLoginForm from './containers/Login/CorpusLoginForm'
 import ServerForm from './containers/Login/ServerForm'
-import Lobby from './containers/Login/Lobby'
 
 export default (
   <Route path="/" component={ App }>
@@ -23,8 +22,6 @@ export default (
       <Route path="corpus-login-form" component={ CorpusLoginForm } />
       // create / edit a Hyphe server
       <Route path="server-form" component={ ServerForm } />
-      // waiting room while corpus's starting
-      <Route path="lobby" component={ Lobby } />
       // select a server, a corpus and login to the later
       <IndexRoute component={ CorpusList } />
     </Route>
