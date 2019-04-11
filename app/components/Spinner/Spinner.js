@@ -1,4 +1,4 @@
-import '../css/spinner'
+import './spinner.css'
 
 import React, { PropTypes } from 'react'
 import { FormattedMessage as T } from 'react-intl'

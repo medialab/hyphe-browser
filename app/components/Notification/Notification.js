@@ -1,11 +1,11 @@
-import '../css/browser/notification'
+import './notification.styl'
 import 'animate.css'
 
 import React, { PropTypes } from 'react'
 
 import { connect } from 'react-redux'
 import { FormattedMessage as T } from 'react-intl'
-import { hideNotif } from '../actions/browser'
+import { hideNotif } from '../../actions/browser'
 
 const Notification = ( {
   messageId, 

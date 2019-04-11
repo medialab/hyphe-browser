@@ -7,8 +7,8 @@ import { FormattedMessage as T } from 'react-intl'
 import {
   ERROR_CORPUS_NOT_STARTED,
   ERROR_SERVER_NO_RESOURCE
-} from '../constants'
-import Spinner from './Spinner'
+} from '../../constants'
+import Spinner from '../Spinner'
 
 const Lobby = ( {corpus, error} ) => {
   return (

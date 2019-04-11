@@ -1,9 +1,9 @@
-import '../css/browser/page-hyphe-home'
+import './page-hyphe-home.styl'
 import React, { PropTypes } from 'react'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import Select from 'react-select'
 
-import { getSearchUrl } from '../utils/search-web'
+import { getSearchUrl } from '../../utils/search-web'
 
 class PageHypheHome extends React.Component {
 
