@@ -3,18 +3,17 @@ import 'react-select/dist/react-select.css'
 import './browser-stack-wes-list'
 
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
 import Select from 'react-virtualized-select'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 
 class BrowserStackWesList extends React.Component {
 
-  renderArrow () {
+  renderArrow = () => {
     return <span className="ti-exchange-vertical"></span>
   }
 
-  renderOption ({ focusedOption, focusOption, key, option, selectValue, style }) {
+  renderOption = ({ focusedOption, focusOption, key, option, selectValue, style }) => {
     const w = option
     const className = cx('browser-stack-wes-item', {
       focused: option === focusedOption,
@@ -37,7 +36,7 @@ class BrowserStackWesList extends React.Component {
     )
   }
 
-  renderValue (w) {
+  renderValue = (w) => {
     return (
       <div className="browser-stack-wes-value">
         <span className="we-name">{ w.name }</span>
@@ -49,10 +48,10 @@ class BrowserStackWesList extends React.Component {
   render () {
     const { formatMessage } = this.context.intl
     const { webentities, selectedWebentity, selectWebentity, loadingStack, loadingWE } = this.props
-
+    const { renderArrow, renderOption, renderValue } = this
     return (
         <Select className={ cx("browser-stack-wes-list", {loading: loadingStack}) }
-          arrowRenderer={ () => this.renderArrow() }
+          arrowRenderer={ renderArrow }
           clearable={ false }
           disabled={ loadingStack || loadingWE || !webentities.length }
           labelKey={ 'name' }
@@ -60,12 +59,12 @@ class BrowserStackWesList extends React.Component {
           maxHeight={ 490 }
           onChange={ (v) => selectWebentity(v) }
           options={ !loadingStack && webentities ? webentities : [] }
-          optionRenderer={ (o) => this.renderOption(o) }
+          optionRenderer={ (o) => renderOption(o) }
           placeholder={ formatMessage({id : loadingStack ? 'loading' : 'select-stack' }) }
           searchable={ false }
           value={ selectedWebentity && selectedWebentity.id }
           valueKey={ 'id' }
-          valueRenderer={ (v) => this.renderValue(v) }
+          valueRenderer={ (v) => renderValue(v) }
         />
     )
   }
@@ -85,9 +84,4 @@ BrowserStackWesList.propTypes = {
   selectWebentity: PropTypes.func
 }
 
-const mapStateToProps = ({ stacks, intl: {locale} }) => ({
-  loadingStack: stacks.loading,
-  loadingWE: stacks.loadingWebentity,
-})
-
-export default connect(mapStateToProps)(BrowserStackWesList)
+export default BrowserStackWesList

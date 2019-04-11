@@ -10,34 +10,28 @@ import BrowserStack from '../BrowserStack'
 import BrowserTabs from '../BrowserTabs'
 import CorpusStatusWatcher from './CorpusStatusWatcher'
 
-class Browser extends React.Component {
-  render () {
-    const { corpus, isAdjusting } = this.props
-    if (!corpus) {
-      // Corpus not yet selected
-      return <Spinner />
-    }
-
-    return (
-      <CorpusStatusWatcher className="window browser-window">
-        <Header corpus={ corpus } />
-        <BrowserStack />
-        <BrowserTabs />
-        <Notification />
-      </CorpusStatusWatcher>
-    )
+const Browser = ({ corpus }) => {
+  if (!corpus) {
+    // Corpus not yet selected
+    return <Spinner />
   }
+
+  return (
+    <CorpusStatusWatcher className="window browser-window">
+      <Header corpus={ corpus } />
+      <BrowserStack />
+      <BrowserTabs />
+      <Notification />
+    </CorpusStatusWatcher>
+  )
 }
 
 Browser.propTypes = {
   corpus: PropTypes.object,
-  locale: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = ({ corpora, intl: { locale } }) => ({
+const mapStateToProps = ({ corpora }) => ({
   corpus: corpora.selected,
-  // hack needed to propagate locale change
-  locale
 })
 
 export default connect(mapStateToProps)(Browser)
