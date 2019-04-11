@@ -1,13 +1,13 @@
 // bottom left with i18n switcher and corpus indicators if connected
-import '../css/hyphe-footer'
+import './footer.styl'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
 
-import { setLocale } from '../actions/intl'
-import { LOCALES } from '../constants'
-import CorpusLoadIndicators from './CorpusLoadIndicators'
+import { setLocale } from '../../actions/intl'
+import { LOCALES } from '../../constants'
+import CorpusLoadIndicators from '../CorpusLoadIndicators'
 
 const Footer = ( {
   locale, 

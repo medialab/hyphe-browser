@@ -1,5 +1,5 @@
 // black stripe at the top of the app
-import '../css/hyphe-header'
+import './header.styl'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'

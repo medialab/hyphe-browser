@@ -1,10 +1,10 @@
 
-import './../css/corpus-load-indicators'
+import './corpus-load-indicators.styl'
 
 import React, { PropTypes } from 'react'
 import { intlShape } from 'react-intl'
 
-import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../utils/status'
+import { getCorpusCrawlingStatus, getHypheCrawlingStatus } from '../../utils/status'
 
 const CorpusLoadIndicators = ({ status }, { intl }) => {
   const { formatMessage } = intl
