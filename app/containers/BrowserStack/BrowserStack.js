@@ -114,7 +114,10 @@ class BrowserStack extends React.Component {
         </button>
 
         <div className="browser-stack-wes-selector">
-          <BrowserStackWesList selectedStack={ selectedStack }
+          <BrowserStackWesList 
+            loadingStack = { loading }
+            loadingWE = { loadingWebentityStack }
+            selectedStack={ selectedStack }
             webentities={ webentities }
             selectedWebentity={ selectedWebentity }
             selectWebentity={ (w) => this.selectWebentity(w) }/>
