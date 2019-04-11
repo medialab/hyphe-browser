@@ -7,7 +7,7 @@ import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
 import Button from '../../components/Button'
-import HypheFooter from '../HypheFooter'
+import Footer from '../../components/Footer'
 import SideBarContextualLists from './SideBarContextualLists'
 import SideBarCategories from './SideBarCategories'
 import SideBarFreetags from './SideBarFreetags'
@@ -150,7 +150,7 @@ class SideBar extends React.Component {
     if (!webentity) {
       return (
         <aside className="browser-side-bar">
-          <HypheFooter status={ status } />
+          <Footer status={ status } />
         </aside>
       )
     }
@@ -166,7 +166,7 @@ class SideBar extends React.Component {
           { this.renderTabs() }
           { disabled && <div className="browser-sidebar-disabled-layer" /> }
         </div>
-        <HypheFooter status={ status } />
+        <Footer status={ status } />
       </aside>
     )
   }

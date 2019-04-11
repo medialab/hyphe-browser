@@ -1,17 +1,17 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import Spinner from '../components/Spinner'
+import Spinner from '../../components/Spinner'
 
-import { showError, hideError } from '../actions/browser'
-import { fetchCorpusStatus, startCorpus } from '../actions/corpora'
-import { fetchTagsCategories, fetchTags } from '../actions/tags'
-import { fetchTLDs } from '../actions/webentities'
+import { showError, hideError } from '../../actions/browser'
+import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
+import { fetchTagsCategories, fetchTags } from '../../actions/tags'
+import { fetchTLDs } from '../../actions/webentities'
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
   ERROR_CORPUS_NOT_STARTED,
   ERROR_SERVER_NO_RESOURCE
-} from '../constants'
+} from '../../constants'
 
 class CorpusStatusWatcher extends React.Component {
 

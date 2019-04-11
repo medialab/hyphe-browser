@@ -11,7 +11,7 @@ import Button from '../../components/Button'
 import TabUrlField from '../../components/TabUrlField'
 import TabWebentityNameField from '../../components/TabWebentityNameField'
 import PageHypheHome from '../../components/PageHypheHome'
-import HypheFooter from '../HypheFooter'
+import Footer from '../../components/Footer'
 import WebView from './WebView'
 import SideBar from '../Sidebar/SideBar'
 import { FormattedMessage as T } from 'react-intl'
@@ -362,7 +362,7 @@ class TabContent extends React.Component {
     return (
       <div className="browser-tab-content-full">
         { this.renderContent() }
-        <HypheFooter status={ this.props.status } />
+        <Footer status={ this.props.status } />
       </div>
     )
   }

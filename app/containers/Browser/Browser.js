@@ -4,11 +4,11 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import Header from '../../components/Header'
-import Notification from './Notification'
+import Spinner from '../../components/Spinner'
+import Notification from '../../components/Notification'
 import BrowserStack from './BrowserStack'
 import BrowserTabs from './BrowserTabs'
-import CorpusStatusWatcher from '../CorpusStatusWatcher'
-import Spinner from '../../components/Spinner'
+import CorpusStatusWatcher from './CorpusStatusWatcher'
 
 class Browser extends React.Component {
   render () {
