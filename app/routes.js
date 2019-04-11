@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, IndexRoute, IndexRedirect } from 'react-router'
 
 import App from './containers/App'
-import Browser from './containers/Browser/Browser'
+import Browser from './containers/Browser'
 
 // login components
 import Login from './containers/Login/Login'
