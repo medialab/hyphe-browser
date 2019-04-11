@@ -1,4 +1,4 @@
-import '../../css/browser/side-bar-tags'
+import './side-bar-tags'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'

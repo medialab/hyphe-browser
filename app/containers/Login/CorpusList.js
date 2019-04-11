@@ -1,5 +1,5 @@
 // displayed when a server is selected
-import '../../css/login/corpus-list'
+import './corpus-list'
 
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'

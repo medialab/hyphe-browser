@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 import cx from 'classnames'
 
-import '../../css/browser/browser-tab-webentity-name-field'
+import './browser-tab-webentity-name-field'
 
 class BrowserTabWebentityNameField extends React.Component {
 

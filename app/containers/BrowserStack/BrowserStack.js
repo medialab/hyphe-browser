@@ -1,6 +1,6 @@
 // upper part with stack list on the left and stack fillers on the right
 
-import '../../css/browser/browser-stack'
+import './browser-stack'
 
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'

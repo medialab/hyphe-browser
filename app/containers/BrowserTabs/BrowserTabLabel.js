@@ -1,6 +1,6 @@
 // small upper part of tabs (favicon, close button…)
 
-import '../../css/browser/browser-tab-label'
+import './browser-tab-label'
 
 import React, { PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'

@@ -1,4 +1,4 @@
-import '../../css/browser/side-bar'
+import './side-bar'
 
 import React, { PropTypes } from 'react'
 
