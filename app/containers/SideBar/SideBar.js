@@ -23,7 +23,7 @@ class SideBar extends React.Component {
     super(props)
   }
 
-  setStatus (status) {
+  setStatus = (status) => {
     const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId, cancelWebentityCrawls } = this.props
     const crawling = !!~["PENDING", "RUNNING"].indexOf(getWebEntityActivityStatus(webentity))
 
@@ -77,12 +77,14 @@ class SideBar extends React.Component {
   renderStatusButton (status) {
     const { formatMessage } = this.context.intl
     const { webentity } = this.props
-
+    
+    const handleSetStatus = () => this.setStatus(status)
+   
     return (
       <button
         className={ cx('btn btn-default hint--bottom', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
         aria-label={ formatMessage({ id: 'corpus-status.' + status }) }
-        onClick={ () => this.setStatus(status) }>
+        onClick={ handleSetStatus }>
         <span>{ status === 'UNDECIDED' ? '?' : formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>
       </button>
     )
@@ -91,10 +93,11 @@ class SideBar extends React.Component {
   renderTabs () {
     const { showContext, toggleContext } = this.props
     const { formatMessage } = this.context.intl
+    
     return (
       <div className="browser-side-bar-sections">
         { this.renderTabTags() }
-        <h3 onClick={ () => toggleContext() }>
+        <h3 onClick={ toggleContext }>
           <span>{ formatMessage({ id: 'context'}) }</span>
           <span className={ cx({
             'ti-angle-up': showContext,
@@ -126,17 +129,21 @@ class SideBar extends React.Component {
     const { webentity, setTabUrl, url, tabId, serverUrl, corpusId, setWebentityHomepage } = this.props
     const { formatMessage } = this.context.intl
     const onHomepage = compareUrls(webentity.homepage, url)
+    
+    const handleSetWebentityHomepage = () => setWebentityHomepage(serverUrl, corpusId, url, webentity.id)
 
+    const handleSetTabUrl = () => setTabUrl(webentity.homepage, tabId)
+    
     return (
       <div className="browser-side-bar-homepage">
         <Button className="hint--bottom-right" icon="home"
           title={ formatMessage({ id: 'set-homepage' }) }
           disabled={ onHomepage }
-          onClick={ () => setWebentityHomepage(serverUrl, corpusId, url, webentity.id) } />
+          onClick={ handleSetWebentityHomepage } />
         <button className={ cx("btn btn-default browser-side-bar-homepage-url hint--medium", {"hint--bottom": !onHomepage && webentity.homepage}, {inactive: onHomepage || !webentity.homepage}) }
           aria-label={ !onHomepage && webentity.homepage && formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
-          onClick={ !onHomepage && webentity.homepage ? () => setTabUrl(webentity.homepage, tabId) : undefined }>
-          <div disabled={onHomepage || !webentity.homepage}>
+          onClick={ !onHomepage && webentity.homepage ? handleSetTabUrl : undefined }>
+          <div disabled={ onHomepage || !webentity.homepage }>
             { onHomepage ? formatMessage({ id: 'here-homepage' }) : webentity.homepage || formatMessage({ id: 'missing-homepage' }) }
           </div>
         </button>
