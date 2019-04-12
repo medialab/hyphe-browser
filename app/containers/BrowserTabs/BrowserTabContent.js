@@ -13,7 +13,7 @@ import Footer from '../../components/Footer'
 import BrowserTabUrlField from './BrowserTabUrlField'
 import BrowserTabWebentityNameField from './BrowserTabWebentityNameField'
 import WebView from './WebView'
-import SideBar from '../Sidebar'
+import SideBar from '../SideBar'
 import { FormattedMessage as T } from 'react-intl'
 
 import { eventBusShape } from '../../types'
