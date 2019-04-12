@@ -49,23 +49,25 @@ class BrowserStackWesList extends React.Component {
     const { formatMessage } = this.context.intl
     const { webentities, selectedWebentity, selectWebentity, loadingStack, loadingWE } = this.props
     const { renderArrow, renderOption, renderValue } = this
+    const handleSelectWebentity = (v) => selectWebentity(v) 
+    
     return (
-        <Select className={ cx("browser-stack-wes-list", {loading: loadingStack}) }
-          arrowRenderer={ renderArrow }
-          clearable={ false }
-          disabled={ loadingStack || loadingWE || !webentities.length }
-          labelKey={ 'name' }
-          // keep in sync with .Select-menu-outer, .Select-menu max-height
-          maxHeight={ 490 }
-          onChange={ (v) => selectWebentity(v) }
-          options={ !loadingStack && webentities ? webentities : [] }
-          optionRenderer={ (o) => renderOption(o) }
-          placeholder={ formatMessage({id : loadingStack ? 'loading' : 'select-stack' }) }
-          searchable={ false }
-          value={ selectedWebentity && selectedWebentity.id }
-          valueKey={ 'id' }
-          valueRenderer={ (v) => renderValue(v) }
-        />
+      <Select className={ cx("browser-stack-wes-list", {loading: loadingStack}) }
+        arrowRenderer={ renderArrow }
+        clearable={ false }
+        disabled={ loadingStack || loadingWE || !webentities.length }
+        labelKey={ 'name' }
+        // keep in sync with .Select-menu-outer, .Select-menu max-height
+        maxHeight={ 490 }
+        onChange={ handleSelectWebentity }
+        options={ !loadingStack && webentities ? webentities : [] }
+        optionRenderer={ renderOption }
+        placeholder={ formatMessage({id : loadingStack ? 'loading' : 'select-stack' }) }
+        searchable={ false }
+        value={ selectedWebentity && selectedWebentity.id }
+        valueKey={ 'id' }
+        valueRenderer={ renderValue }
+      />
     )
   }
 }

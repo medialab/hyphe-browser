@@ -21,11 +21,7 @@ class BrowserStack extends React.Component {
     }
   }
 
-  fill (stack) {
-    this.props.fetchStack(this.props.server.url, this.props.corpus, stack)
-  }
-
-  selectWebentity (webentity) {
+  selectWebentity = (webentity) => {
     this.props.loadingWebentity()
     this.props.viewWebentity(webentity)
     if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
@@ -36,7 +32,7 @@ class BrowserStack extends React.Component {
   }
 
   // used by Prev (-1) / Next (+1) buttons
-  rotateWebentity (offset) {
+  rotateWebentity = (offset) => {
     const { webentities } = this.props
     const idx = webentities.findIndex(x => x.id === this.props.selectedWebentity.id)
     let webentity
@@ -53,7 +49,7 @@ class BrowserStack extends React.Component {
   // right side, colored buttons to fill stack
   renderStackFillers () {
     const { formatMessage } = this.context.intl
-    const { status, stacks, selectedStack, loadingWebentityStack, loading } = this.props
+    const { server, corpus, status, stacks, selectedStack, loadingWebentityStack, loading, fetchStack } = this.props
     const ready = status && status.corpus && status.corpus.ready
     if (!ready) return null
 
@@ -61,17 +57,19 @@ class BrowserStack extends React.Component {
 
     // do not display this stack button if empty
     const usefulStacks = stacks.filter(s => s.name !== 'IN_UNCRAWLED' || counters[s.name])
-
+    
     return (
       <span className="fillers">
         { usefulStacks.map((stack) => { 
           const disabled = !counters[stack.name] || loadingWebentityStack || loading
+          const fillStack = () => fetchStack(server.url, corpus, stack)
+  
           return (
             <button key={ stack.name }
               className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
                 {'selected': stack.name === (selectedStack && selectedStack.name) }) }
               disabled={ disabled }
-              onClick={ () => { this.fill(stack) } }>
+              onClick={ fillStack }>
               <div className="filler-name hint--bottom" aria-label={ !disabled ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
                 { formatMessage({ id: 'corpus-status.' + stack.name }) }
               </div>
@@ -120,7 +118,7 @@ class BrowserStack extends React.Component {
             selectedStack={ selectedStack }
             webentities={ webentities }
             selectedWebentity={ selectedWebentity }
-            selectWebentity={ (w) => this.selectWebentity(w) }/>
+            selectWebentity={ this.selectWebentity }/>
           { this.renderProgress() }
         </div>
 
