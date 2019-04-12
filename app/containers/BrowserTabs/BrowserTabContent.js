@@ -50,8 +50,6 @@ class TabContent extends React.Component {
     }
 
     this.doNotDeclarePageOnStop = false
-
-    this._onKeyUp = this.onKeyUp.bind(this)
   }
 
   componentDidMount () {
@@ -81,7 +79,7 @@ class TabContent extends React.Component {
     // Handle the case when user clicked "IN" button and does *not* want to show a popup
     if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
       (!this.props.adjusting || !this.props.adjusting.crawl)) {
-      this.saveAdjustChanges(props)
+      this.saveAdjustChanges()
     }
   }
 
@@ -195,9 +193,9 @@ class TabContent extends React.Component {
     }
   }
 
-  saveAdjustChanges (props) {
+  saveAdjustChanges = () => {
     const { saveAdjustedWebentity, hideAdjustWebentity, server, corpusId,
-      webentity, adjusting, hideError, showError, id, disableWebentity } = props
+      webentity, adjusting, hideError, showError, id, disableWebentity } = this.props
 
     // no change by default
     this.setState({ setDoNotShowAgainAfterSubmit: null })
@@ -222,7 +220,9 @@ class TabContent extends React.Component {
   renderAdjustButton () {
     const { adjusting, showAdjustWebentity, hideAdjustWebentity, webentity, saving } = this.props
     const { formatMessage } = this.context.intl
-
+    const handleShowAdjustWebEntity = () => showAdjustWebentity(webentity.id)
+    const handleHideAdjustWebentity = () => hideAdjustWebentity(webentity.id)
+    
     if (adjusting && !adjusting.crawl) {
       return [
         // Note this button is hidden and replaced with a click on overlay
@@ -230,18 +230,18 @@ class TabContent extends React.Component {
         <Button key="cancel-adjust" icon="close"
           disabled={ saving }
           title={ formatMessage({ id: 'cancel' }) }
-          onClick={ () => hideAdjustWebentity(webentity.id) } />,
+          onClick={ handleHideAdjustWebentity } />,
         <Button key="apply-adjust" icon="check"
           disabled={ saving || this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
-          onClick={ () => { this.saveAdjustChanges(this.props) } } />
+          onClick={ this.saveAdjustChanges } />
       ]
     } else {
       return <Button
-        disabled={ saving }
+        disabled={ saving || !webentity }
         className='btn-adjust'
-        icon="plus" title={ formatMessage({ id: 'adjust' }) } disabled={ !this.props.webentity }
-        onClick={ () => showAdjustWebentity(webentity.id) } />
+        icon="plus" title={ formatMessage({ id: 'adjust' }) } 
+        onClick={ handleShowAdjustWebEntity } />
     }
   }
 
@@ -261,13 +261,13 @@ class TabContent extends React.Component {
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
-          onChange={ name => this.updateName(name) } />
+          onChange={ this.updateName } />
         { this.renderAdjustButton() }
       </div>
     )
   }
 
-  updateName (name) {
+  updateName = (name) => {
     const { setWebentityName, server, corpusId, webentity } = this.props
 
     this.setState({ webentityName: name })
@@ -297,7 +297,7 @@ class TabContent extends React.Component {
   renderUrlField () {
     const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngines, corpusId } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
-
+    const handleSetTabUrl = () => setTabUrl(url, id)
     if (disableNavigation) {
       return null
     }
@@ -309,17 +309,17 @@ class TabContent extends React.Component {
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
           selectedEngine = { searchEngines[corpusId] || 'google' }
-          onSubmit={ (url) => setTabUrl(url, id) }
+          onSubmit={ handleSetTabUrl }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
           className={ cx({ 'over-overlay': adjusting, adjusting}) }
           tlds={ tlds }
-          onSelectPrefix={ (url, modified) => this.onSelectPrefix(url, modified) } />
+          onSelectPrefix={ this.onSelectPrefix } />
       </div>
     )
   }
 
-  onSelectPrefix (url, modified) {
+  onSelectPrefix = (url, modified) => {
     const { webentity, setAdjustWebentity, adjusting, tlds } = this.props
 
     this.setState({
@@ -348,12 +348,14 @@ class TabContent extends React.Component {
 
   renderContent () {
     const { id, url, setTabUrl, eventBus, closable, corpusId, searchEngines, setSearchEngine } = this.props
+    const handleSetTabUrl = (value) => setTabUrl(value, id)
+    const handleChangeEngine = (value) => setSearchEngine(value, corpusId)
 
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome 
         selectedEngine = { searchEngines[corpusId] || 'google'}
-        onChangeEngine = { (value) => setSearchEngine(value, corpusId) }
-        onSubmit={ (url) => setTabUrl(url, id) } ref={ component => this.webviewComponent = component } />
+        onChangeEngine = { handleChangeEngine }
+        onSubmit={ handleSetTabUrl } ref={ component => this.webviewComponent = component } />
       : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
 
@@ -381,8 +383,9 @@ class TabContent extends React.Component {
 
   renderOverlay () {
     const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
+    const handleClick = () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id) 
 
-    return <div className="global-overlay" onClick={ () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id) } />
+    return <div className="global-overlay" onClick={ handleClick } />
   }
 
   renderMergePopup () {
@@ -434,7 +437,7 @@ class TabContent extends React.Component {
     const apply = e => {
       e.preventDefault()
       doToggle()
-      this.saveAdjustChanges(this.props)
+      this.saveAdjustChanges()
     }
 
     const cancel = e => {
@@ -460,7 +463,7 @@ class TabContent extends React.Component {
     )
   }
 
-  onKeyUp (e) {
+  onKeyUp = (e) => {
     const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
     if (e.keyCode === 27 && active) { // ESCAPE
       e.stopPropagation()
@@ -476,7 +479,9 @@ class TabContent extends React.Component {
     const { active, id, webentity, disableWebentity, adjusting, noCrawlPopup, mergeRequired } = this.props
 
     return (
-      <div key={ id } tabIndex="1" className="browser-tab-content" style={ active ? {} : { position: 'absolute', left: '-10000px' } } onKeyUp={ this._onKeyUp } >
+      <div key={ id } tabIndex="1" className="browser-tab-content" 
+        style={ active ? {} : { position: 'absolute', left: '-10000px' } }
+        onKeyUp={ this.onKeyUp } >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
