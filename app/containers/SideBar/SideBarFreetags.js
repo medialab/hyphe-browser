@@ -20,7 +20,6 @@ class SideBarFreetags extends React.Component {
     if (userTags && userTags['FREETAGS']) {
       this.state['values/FREETAGS'] = userTags['FREETAGS'].map(toOption)
     }
-    this._onKeyUp = this.onKeyUp.bind(this)
   }
 
   repopulate (webentity) {
@@ -30,7 +29,7 @@ class SideBarFreetags extends React.Component {
     }
   }
 
-  onKeyUp (e) {
+  onKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
     }
@@ -42,7 +41,7 @@ class SideBarFreetags extends React.Component {
     }
   }
 
-  onChangeCreatable (options, category) {
+  onChangeCreatable = (options, category) => {
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
     const key = `values/${category}`
 
@@ -63,9 +62,11 @@ class SideBarFreetags extends React.Component {
     const suggestions = (tagsSuggestions['FREETAGS'] && Object.keys(tagsSuggestions['FREETAGS'])) || []
     const values = this.state['values/FREETAGS'] || []
 
+    const handleChangeCreatable = (options) => this.onChangeCreatable(options, 'FREETAGS')
+
     return (
       <div className="browser-side-bar-tags">
-        <div className="browser-side-bar-tags-free-tags" key={ 'FREETAGS' } onKeyUp={ this._onKeyUp } >
+        <div className="browser-side-bar-tags-free-tags" key={ 'FREETAGS' } onKeyUp={ this.onKeyUp } >
           <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
           <Creatable
             autoBlur ignoreCase multi
@@ -73,7 +74,7 @@ class SideBarFreetags extends React.Component {
             newOptionCreator={ ({ label }) => toOption(label) }
             noResultsText=''
             options={ suggestions.map(toOption) }
-            onChange={ (options) => this.onChangeCreatable(options, 'FREETAGS') }
+            onChange={ handleChangeCreatable }
             placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
             promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
             value={ values } />

@@ -22,33 +22,33 @@ import { fieldParser, downloadCSV } from '../../utils/file-downloader'
 
 
 class _List extends React.Component {
-  onClick (url) {
-    const { activeTabId, name, setTabUrl, openTab } = this.props
-    if (name === 'mostLinked') {
-      setTabUrl(url, activeTabId)
-    } else {
-      openTab(url)
-    }
-  }
-
+  
   render () {
     const { formatMessage } = this.context.intl
-    const { name, links, activeTabUrl, activeTabId, webentity, setMergeWebentity } = this.props
+    const { name, links, activeTabUrl, activeTabId, webentity, setMergeWebentity, setTabUrl, openTab } = this.props
 
     return (
       <div className="browser-side-bar-contextual-list">
         <ul>
           { links.length ? links.map(link => {
-            const mergeLink = (e, name) => {
+            const handleMergeLink = (e) => {
               e.stopPropagation()
               if(webentity && webentity.id && link && link.id) {
                 setMergeWebentity(activeTabId, link, webentity, name)
               }
             }
+            const handleClick = () => {
+              
+              if (name === 'mostLinked') {
+                setTabUrl(link.url, activeTabId)
+              } else {
+                openTab(link.homepage)
+              }
+            }
             return ( name === 'mostLinked' ?
               <li key={ link.url } title={ link.url }>
                 { !compareUrls(link.url, activeTabUrl) ?
-                  <div className="link-url" onClick={ () => this.onClick(link.url) }>{ link.url }</div> :
+                  <div className="link-url" onClick={ handleClick }>{ link.url }</div> :
                   <div className="link-url inactive" >{ link.url }</div>
                 }
                 { link.linked ? <div className="link-linked">
@@ -58,13 +58,13 @@ class _List extends React.Component {
                 <br/> }
               </li> :
               <li key={ link.id } title={ link.name + "\n" + link.homepage }>
-                <div className="link-name" onClick={ () => this.onClick(link.homepage) }>
+                <div className="link-name" onClick={ handleClick }>
                   <span>{ link.name }</span>
                   { (name === 'referrers' || name === 'referrals') && 
-                    <span className="link-merge" onClick={ (e) => mergeLink(e, name) } >merge</span>
+                    <span className="link-merge" onClick={ handleMergeLink } >merge</span>
                   }
                 </div>
-                <div className="link-url" onClick={ () => this.onClick(link.homepage) }>{ link.homepage }</div>
+                <div className="link-url" onClick={ handleClick }>{ link.homepage }</div>
               </li>
             )}
         ) : formatMessage({ id: 'none' }) }
@@ -138,7 +138,7 @@ class SideBarContextualLists extends React.Component {
     }
   }
 
-  downloadFile () {
+  downloadFile = () => {
     const { corpusId, webentity, selected, tlds } = this.props
     let listName, fileName
     switch (selected) {
@@ -189,11 +189,15 @@ class SideBarContextualLists extends React.Component {
         <nav>
           {
             // hide parents and children tabs for now
-            ['mostLinked', 'referrers', 'referrals'].map(l =>
-            <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
-              key={ l } onClick={ () => selectContextualList(l) }>
-              <T id={ `sidebar.contextual.${l}` } />
-            </button>
+            ['mostLinked', 'referrers', 'referrals'].map(l => {
+              const handleSelectContextualList = () => selectContextualList(l)
+              return (
+                <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
+                  key={ l } onClick={ handleSelectContextualList }>
+                  <T id={ `sidebar.contextual.${l}` } />
+                </button>
+              )
+            }
           ) }
           { !webentity[selected]
             ? <T id="loading" />
@@ -201,7 +205,7 @@ class SideBarContextualLists extends React.Component {
           }
           { webentity[selected] && webentity[selected].length > 0 &&
             <div className="download">
-              <button className='btn btn-default' onClick={ () => {this.downloadFile()} }>
+              <button className='btn btn-default' onClick={ this.downloadFile }>
                 <strong>
                   <T id="sidebar.contextual.downloadToCSV" />
                   <span>&nbsp;</span>

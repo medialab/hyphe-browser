@@ -37,12 +37,6 @@ class SideBarCategories extends React.Component {
         }
       })
     }
-
-    // Force-bind methods used like `onEvent={ this.method }`
-    this.addCategory = this.addCategory.bind(this)
-    this.onChangeNewCategory = this.onChangeNewCategory.bind(this)
-    this.renderTagsCategory = this.renderTagsCategory.bind(this)
-    this._onKeyUp = this.onKeyUp.bind(this)
   }
 
   repopulate (webentity) {
@@ -61,7 +55,7 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onKeyUp (e) {
+  onKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
     }
@@ -73,11 +67,11 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onChangeNewCategory ({ target }) {
+  onChangeNewCategory = ({ target }) => {
     this.setState({ newCategory: target.value })
   }
 
-  addCategory (e) {
+  addCategory = (e) => {
     e.preventDefault()
 
     const { newCategory, categories } = this.state
@@ -88,7 +82,7 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onChangeCreatable (option, category) {
+  onChangeCreatable = (option, category) => {
     if (option && option.value && option.value.trim().length === 0)
       return    
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
@@ -102,11 +96,13 @@ class SideBarCategories extends React.Component {
     this.setState({ [key]: option })
   }
 
-  renderTagsCategory (category) {
+  renderTagsCategory = (category) => {
     const { formatMessage } = this.context.intl
     const { tagsSuggestions } = this.props
     const suggestions = (tagsSuggestions[category] && Object.keys(tagsSuggestions[category])) || []
     const value = this.state[`values/${category}`] || ''
+    
+    const handleChangeCreatable = (option) => this.onChangeCreatable(option, category)
     
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
@@ -119,7 +115,7 @@ class SideBarCategories extends React.Component {
             newOptionCreator={ ({ label }) => toOption(label) }
             noResultsText=''
             options={ suggestions.map(toOption) }
-            onChange={ (option) => this.onChangeCreatable(option, category) }
+            onChange={ handleChangeCreatable }
             placeholder=''
             promptTextCreator={ (tag) => tag+' '  }
             value={ value } />
@@ -138,7 +134,7 @@ class SideBarCategories extends React.Component {
     return (
       <div className="browser-side-bar-tags">
         <div>
-          <h3 onClick={ () => toggleCategories() }>
+          <h3 onClick={ toggleCategories }>
             <T id="sidebar.categories" />
             <span className={ cx({
               'ti-angle-up': showCategories,
@@ -152,7 +148,7 @@ class SideBarCategories extends React.Component {
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
               <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
                 value={ this.state.newCategory }
-                onKeyUp={ this._onKeyUp }
+                onKeyUp={ this.onKeyUp }
                 onInput={ this.onChangeNewCategory } />
               <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
             </form>
