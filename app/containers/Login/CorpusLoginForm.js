@@ -19,7 +19,7 @@ class CorpusLoginForm extends React.Component {
     }
   }
 
-  onSubmit (evt) {
+  onSubmit = (evt) => {
     const { server, corpus, selectCorpus, routerPush } = this.props
     evt.preventDefault()
 
@@ -36,7 +36,7 @@ class CorpusLoginForm extends React.Component {
 
   render () {
     return (
-      <form className="server-form" onSubmit={ (evt) => { this.onSubmit(evt) } }>
+      <form className="server-form" onSubmit={ this.onSubmit }>
         <h3 className="pane-centered-title">
           <T id="login-corpus" values={ { name: this.props.corpus.name } } />
         </h3>

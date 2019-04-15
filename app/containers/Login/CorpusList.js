@@ -12,18 +12,17 @@ import Spinner from '../../components/Spinner'
 
 class CorpusListItem extends React.Component {
 
-  selectCorpus () {
-    const { server, corpus, selectCorpus, routerPush } = this.props
-    const path = corpus.password ? '/login/corpus-login-form' : 'browser'
-    selectCorpus(server, corpus)
-    routerPush(path)
-  }
-
   render () {
-    const { password, name, status, webentities_in, created_at, last_activity } = this.props.corpus
-
+    const { server, corpus, selectCorpus, routerPush } = this.props
+    const { password, name, status, webentities_in, created_at, last_activity } = corpus
+    
+    const handleSelectCorpus = () => {
+      const path = corpus.password ? '/login/corpus-login-form' : 'browser'
+      selectCorpus(server, corpus)
+      routerPush(path)
+    }
     return (
-      <div onClick={ () => this.selectCorpus() }>
+      <div onClick={ handleSelectCorpus }>
         <h5 className="corpus-list-item-name">
           { password && <span className="icon icon-lock"></span> }
           { name }
