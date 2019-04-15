@@ -64,7 +64,7 @@ class ServerForm extends React.Component {
     }
   }
 
-  onSubmit (evt) {
+  onSubmit = (evt) => {
     // no real submit to the server
     evt.preventDefault()
 
@@ -121,7 +121,7 @@ class ServerForm extends React.Component {
     return this.state.data.url && this.state.data.name
   }
 
-  delete (evt) {
+  delete = (evt) => {
     evt.preventDefault()
     this.props.deleteServer(this.props.server)
     this.props.routerPush('/login')
@@ -130,7 +130,7 @@ class ServerForm extends React.Component {
   render () {
 
     return (
-      <form className="server-form" onSubmit={ (evt) => this.onSubmit(evt) }>
+      <form className="server-form" onSubmit={ this.onSubmit }>
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
@@ -151,7 +151,7 @@ class ServerForm extends React.Component {
           { this.props.editMode &&
             (
               <button className="btn btn-negative" disabled={ this.state.submitting }
-                  onClick={ (evt) => this.delete(evt) }>
+                  onClick={ this.delete }>
                  <T id="delete" />
               </button>
             )

@@ -56,7 +56,7 @@ class CorpusForm extends React.Component {
     }
   }
 
-  onSubmit (evt) {
+  onSubmit = (evt) => {
     // no real submit to the server
     evt.preventDefault()
     const newState = {
@@ -105,7 +105,7 @@ class CorpusForm extends React.Component {
 
   render () {
     return (
-      <form className="corpus-form" onSubmit={ (evt) => this.onSubmit(evt) }>
+      <form className="corpus-form" onSubmit={ this.onSubmit }>
         { this.state.errors.map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
