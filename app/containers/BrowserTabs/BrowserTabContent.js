@@ -297,7 +297,7 @@ class TabContent extends React.Component {
   renderUrlField () {
     const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngines, corpusId } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
-    const handleSetTabUrl = () => setTabUrl(url, id)
+    const handleSetTabUrl = (value) => setTabUrl(value, id)
     if (disableNavigation) {
       return null
     }
