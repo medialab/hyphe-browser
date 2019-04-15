@@ -49,7 +49,7 @@ class BrowserTabLabel extends React.Component {
       }
       if (closable && closeTab && !fixed) {
         if (menu.getItemCount() >= 1) menu.append(new MenuItem({ type: 'separator' }))
-        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: close }))
+        menu.append(new MenuItem({ label: translate('menu.close-tab'), click: close }))
       }
       // Do not show empty menu
       if (menu.getItemCount() >= 1) {
