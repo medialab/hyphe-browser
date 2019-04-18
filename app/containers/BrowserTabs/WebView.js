@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
 import { intlShape } from 'react-intl'
@@ -156,7 +155,7 @@ class WebView extends React.Component {
       this.isLoading = false
       update('stop', webview.src)
       // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
-      if (this.props.tabId === HYPHE_TAB_ID) {
+      if (this.props.id === HYPHE_TAB_ID) {
         webview.executeJavaScript("window.onblur = function() { if ($('#stopFA2 span.glyphicon-pause:visible').length) $('#stopFA2').click() }")
       }
     })
@@ -245,11 +244,11 @@ WebView.contextTypes = {
 }
 
 WebView.propTypes = {
+  id: PropTypes.string,
   ua: PropTypes.string,
   visible: PropTypes.bool,
   closable: PropTypes.bool,
   url: PropTypes.string.isRequired,
-  tabId: PropTypes.string,
   eventBus: eventBusShape.isRequired
 }
 
@@ -258,8 +257,4 @@ WebView.defaultProps = {
   visible: true
 }
 
-const mapStateToProps = ({ tabs }) => ({
-  tabId: tabs.activeTab && tabs.activeTab.id
-})
-
-export default connect(mapStateToProps)(WebView)
+export default WebView
