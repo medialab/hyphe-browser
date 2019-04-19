@@ -115,7 +115,7 @@ CorpusList.contextTypes = {
 }
 
 CorpusList.propTypes = {
-  corpora: PropTypes.object.isRequired,
+  corpora: PropTypes.object,
   locale: PropTypes.string.isRequired,
   server: PropTypes.object,
   status: PropTypes.object,
