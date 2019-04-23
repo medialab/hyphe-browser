@@ -24,4 +24,4 @@ export const setTabTitle = createAction(SET_TAB_TITLE, (title, id) => ({ id, tit
 export const setTabStatus = createAction(SET_TAB_STATUS, ({ loading, error, url }, id) => ({ id, loading, error, url }))
 export const addHypheTab = createAction(ADD_HYPHE_TAB, (instanceUrl, corpusId) => ({ instanceUrl, corpusId }))
 export const setSearchEngine = createAction(SET_SEARCH_ENGINE, (searchEngine, corpusId) => ({ searchEngine, corpusId }))
-export const addNavigationHistory = createAction(ADD_NAVIGATION_HISTORY, (url, corpusId) => ({url, corpusId}))
+export const addNavigationHistory = createAction(ADD_NAVIGATION_HISTORY, (url, corpusId) => ({ url, corpusId }))
