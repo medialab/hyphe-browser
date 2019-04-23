@@ -100,7 +100,7 @@ export default createReducer(initialState, {
       ...state.webentities,
       [webentity.id]: {
         ...state.webentities[webentity.id],
-        mostLinked: mostLinked
+        mostLinked
       }
     }
   }),
@@ -111,7 +111,7 @@ export default createReducer(initialState, {
       ...state.webentities,
       [webentity.id]: {
         ...state.webentities[webentity.id],
-        referrers: referrers
+        referrers
       }
     }
   }),
@@ -123,7 +123,7 @@ export default createReducer(initialState, {
         ...state.webentities,
         [webentity.id]: {
           ...state.webentities[webentity.id],
-          referrals: referrals
+          referrals
         }
       }
     })
@@ -136,7 +136,7 @@ export default createReducer(initialState, {
         ...state.webentities,
         [webentity.id]: {
           ...state.webentities[webentity.id],
-          parents: parents
+          parents
         }
       }
     })
@@ -148,7 +148,7 @@ export default createReducer(initialState, {
       ...state.webentities,
       [webentity.id]: {
         ...state.webentities[webentity.id],
-        children: children
+        children
       }
     }
   }),
@@ -207,7 +207,7 @@ export default createReducer(initialState, {
     adjustments: {
       ...state.adjustments,
       [id]: (info && state.adjustments[id])
-        ? {...state.adjustments[id], ...info}
+        ? { ...state.adjustments[id], ...info }
         : info
     }
   }),
@@ -264,6 +264,6 @@ function updateWebentity (updator) {
         return next // override arrays instead of merging them
       }
     })
-    return {...state, webentities: {...state.webentities, [id]: updated}}
+    return { ...state, webentities: { ...state.webentities, [id]: updated } }
   }
 }
