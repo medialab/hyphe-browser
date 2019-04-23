@@ -10,11 +10,11 @@ import {
 } from '../../constants'
 import Spinner from '../Spinner'
 
-const Lobby = ( {corpus, error} ) => {
+const Lobby = ( { corpus, error } ) => {
   return (
     <div>
       <h2 className="pane-centered-title">
-      { corpus.name }
+        { corpus.name }
       </h2>
       <div><T id="webentities" values={ { count: corpus.webentities_in } } /></div>
       { error && error.message === ERROR_CORPUS_NOT_STARTED
