@@ -65,9 +65,10 @@ class PageHypheHome extends React.Component {
           <div>
             <input className="input-query" type="search" value={ this.state.value }
               placeholder={ formatMessage({ id: 'google.placeholder' }) }
-              onChange={ this.handleChangeInput } />
+              onChange={ this.handleChangeInput }
+            />
             <button>
-              <span className="ti-search"></span>
+              <span className="ti-search" />
             </button>
           </div>
         </form>

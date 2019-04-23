@@ -5,14 +5,14 @@ import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import { intlShape } from 'react-intl'
 
-const Header = ({corpus}, {intl})  => {
+const Header = ({ corpus }, { intl })  => {
   if (!corpus) return null
   const { formatMessage } = intl
 
   return (
     <header className="hyphe-header">
       <Link className="disconnection hint--bottom-left" to="login" aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }>
-        <span className="ti-close"></span>
+        <span className="ti-close" />
       </Link>
       { corpus.name }
     </header>

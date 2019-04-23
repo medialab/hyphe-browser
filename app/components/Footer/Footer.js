@@ -19,15 +19,16 @@ const Footer = ( {
   return (
     <footer className="hyphe-footer">
       <span className="locales">
-      { locales.map((l, i) => {
-        const handleSetLocale = () => setLocale(l)
-        return (
-          <span key={ l }>
-            <button className={ l === locale ? 'selected' : '' }
-              onClick={ handleSetLocale }>{ l.substr(0, 2) }</button>
-            { i < locales.length - 1 ? '|' : '' }
-          </span> )
-      }) }
+        { locales.map((l, i) => {
+          const handleSetLocale = () => setLocale(l)
+          return (
+            <span key={ l }>
+              <button className={ l === locale ? 'selected' : '' }
+                onClick={ handleSetLocale }
+              >{ l.substr(0, 2) }</button>
+              { i < locales.length - 1 ? '|' : '' }
+            </span> )
+        }) }
       </span>
       { ready && <CorpusLoadIndicators status={ status } /> }
     </footer>

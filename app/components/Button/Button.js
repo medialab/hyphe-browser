@@ -8,15 +8,16 @@ const Button = ({
   className = '', 
   onClick
 }) => {
-  const classes = className + (!~className.indexOf("hint--") && title ? " hint--left" : "")
+  const classes = className + (!~className.indexOf('hint--') && title ? ' hint--left' : '')
 
   return (
     <button 
-      className={ cx("btn btn-default", classes) } 
+      className={ cx('btn btn-default', classes) } 
       aria-label={ title }
       disabled={ disabled }
-      onClick= { onClick }>
-      <span className={ 'ti-' + icon }></span>
+      onClick= { onClick }
+    >
+      <span className={ 'ti-' + icon } />
     </button>
   )
 }
