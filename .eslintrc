@@ -1,5 +1,7 @@
 {
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended"
+  ],
   "parser": "babel-eslint",
   "plugins": [
     "react"
@@ -26,6 +28,23 @@
     "quotes": [1, "single", "avoid-escape"],
     "semi": [1, "never"],
     "space-before-function-paren": [1, "always"],
+    "constructor-super": 0,
+    "generator-star-spacing": 0,
+    "no-class-assign": 0,
+    "no-confusing-arrow": 2,
+    "no-const-assign": 2,
+    "no-this-before-super": 0,
+    "no-var": 2,
+    "object-shorthand": [
+        2,
+        "always"
+    ],
+    "prefer-arrow-callback": 0,
+    "prefer-const": 2,
+    "prefer-spread": 0,
+    "prefer-reflect": 0,
+    "require-yield": 0,
+    "react/jsx-no-bind": 0,
     "react/jsx-curly-spacing": [1, "always"],
     "react/jsx-max-props-per-line": [1, { "maximum": 4 }],
     "react/jsx-no-duplicate-props": 1,
@@ -34,7 +53,48 @@
     "react/jsx-sort-props": 0,
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
+    "react/jsx-wrap-multilines": 2,
+    "react/no-set-state": 0,
+    "react/sort-comp": 2,
+    "react/no-find-dom-node": 0,
     "react/prop-types": 1,
-    "react/react-in-jsx-scope": 2
+    "react/react-in-jsx-scope": 2,
+    "react/no-multi-comp": 0,
+    "react/display-name": 0,
+    "react/self-closing-comp": 2,
+    "react/no-danger": 0,
+    "react/no-is-mounted": 2,
+    "react/no-deprecated": 2,
+    "react/no-did-mount-set-state": 2,
+    "react/no-did-update-set-state": 2,
+    "react/no-render-return-value": 2,
+    "react/jsx-pascal-case": 2,
+    "react/no-unknown-property": 2,
+    "react/sort-prop-types": 0,
+    "react/jsx-boolean-value": 2,
+    "react/jsx-no-literals": 0,
+    "react/jsx-indent-props": [2, 2],
+    "react/jsx-indent": [2, 2],
+    "react/jsx-closing-bracket-location": [
+        2,
+        "tag-aligned"
+    ],
+    "react/jsx-tag-spacing": 2,
+    "react/no-direct-mutation-state": 2,
+    "react/forbid-prop-types": 0,
+    "react/prefer-es6-class": 2,
+    "react/jsx-key": 2,
+    "react/no-string-refs": 2,
+    "react/prefer-stateless-function": 2,
+    "react/require-render-return": 2,
+    "react/jsx-first-prop-new-line": 2,
+    "react/jsx-no-target-blank": 2,
+    "react/require-optimization": 2,
+    "react/no-unescaped-entities": 2,
+    "react/void-dom-elements-no-children": 2,
+    "object-curly-spacing": [
+      2,
+      "always"
+    ]
   }
 }

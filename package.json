@@ -7,6 +7,7 @@
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register --require ./test/tools/setup.js test",
     "watch:test": "npm test -- --watch --growl",
     "lint": "eslint main.js app bin test",
+    "lint:fix": "eslint --fix main.js app bin test",
     "watch:lint": "watch-exec -c 'npm run lint' -w . -n -e node_modules,release,dist",
     "watch-all": "npm-run-all --parallel watch:*",
     "dev": "npm-run-all --parallel watch:electron watch:dev-server",
