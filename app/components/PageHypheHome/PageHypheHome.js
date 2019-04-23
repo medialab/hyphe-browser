@@ -32,19 +32,23 @@ class PageHypheHome extends React.Component {
     }
   }
 
-  onSubmit = (e) => {
+  handleSubmit = (e) => {
     const { selectedEngine } = this.props
     e.preventDefault()
-    this.props.onSubmit(getSearchUrl(selectedEngine, this.state.q))
+    this.props.onSetTabUrl(getSearchUrl(selectedEngine, this.state.q))
   }
 
-  render () {
-    const { selectedEngine, onChangeEngine } = this.props
-    const formatMessage = this.context.intl.formatMessage
+  handleChangeInput = (e) =>  this.setState({ q: e.target.value })
+  
+  handleChangeEngine = (e) => this.props.onChangeEngine(e.value)
 
+  render () {
+    const { selectedEngine } = this.props
+    const formatMessage = this.context.intl.formatMessage
+    
     return (
       <div className="page-hyphe-home">
-        <form className="google-form" onSubmit={ this.onSubmit }>
+        <form className="google-form" onSubmit={ this.handleSubmit }>
           <div className="select-container">
             <div className="search-text" >
               <T id="google.search" />
@@ -55,13 +59,13 @@ class PageHypheHome extends React.Component {
               clearable={ false }
               searchable={ false }
               value={ selectedEngine || 'google' }
-              onChange={ ({ value }) => { onChangeEngine(value) } }
+              onChange={ this.handleChangeEngine }
             />
           </div>
           <div>
             <input className="input-query" type="search" value={ this.state.value }
               placeholder={ formatMessage({ id: 'google.placeholder' }) }
-              onChange={ ({ target }) => { this.setState({ q: target.value }) } } />
+              onChange={ this.handleChangeInput } />
             <button>
               <span className="ti-search"></span>
             </button>
@@ -78,7 +82,7 @@ PageHypheHome.contextTypes = {
 
 PageHypheHome.propTypes = {
   selectedEngine: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  onSetTabUrl: PropTypes.func.isRequired,
   onChangeEngine: PropTypes.func.isRequired,
 }
 

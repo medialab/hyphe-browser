@@ -52,18 +52,18 @@ class BrowserTabUrlField extends React.Component {
     }
   }
 
-  onKeyUp = (e) => {
+  handleKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
       this.setState({ url: this.props.initialUrl })
     }
   }
 
-  onBlur = () => {
+  handleBlur = () => {
     this.setState({ editing: false })
   }
   
-  onSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
     const { selectedEngine } = this.props
     this.setState({ editing: false })
@@ -84,10 +84,10 @@ class BrowserTabUrlField extends React.Component {
       }
     })(this.state.url.trim())
 
-    this.props.onSubmit(url)
+    this.props.onSetTabUrl(url)
   }
 
-  onChange = (e) => {
+  handleChange = (e) => {
     e.stopPropagation()
     this.setState({ url: e.target.value, focusInput: false })
   }
@@ -108,9 +108,9 @@ class BrowserTabUrlField extends React.Component {
       className={ cx('btn browser-tab-url', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
-      onBlur={ this.onBlur }
-      onKeyUp={ this.onKeyUp }
-      onChange={ this.onChange } />
+      onBlur={ this.handleBlur }
+      onKeyUp={ this.handleKeyUp }
+      onChange={ this.handleChange } />
   }
 
   // Read-only field with highlights: click to edit
@@ -204,7 +204,7 @@ class BrowserTabUrlField extends React.Component {
 
   render () {
     return (
-      <form onSubmit={ this.onSubmit } className={ cx(this.props.className, { adjusting: this.props.prefixSelector }) }>
+      <form onSubmit={ this.handleSubmit } className={ cx(this.props.className, { adjusting: this.props.prefixSelector }) }>
         { this.renderField() }
       </form>
     )
@@ -215,7 +215,7 @@ BrowserTabUrlField.propTypes = {
   initialUrl: PropTypes.string.isRequired,
   lruPrefixes: PropTypes.arrayOf(PropTypes.string),
   selectedEngine: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  onSetTabUrl: PropTypes.func.isRequired,
   crawlquery: PropTypes.bool.isRequired,
   prefixSelector: PropTypes.bool.isRequired,
   onSelectPrefix: PropTypes.func.isRequired,

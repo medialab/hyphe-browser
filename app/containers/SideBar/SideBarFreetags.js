@@ -29,7 +29,7 @@ class SideBarFreetags extends React.Component {
     }
   }
 
-  onKeyUp = (e) => {
+  handleKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
     }
@@ -63,20 +63,22 @@ class SideBarFreetags extends React.Component {
     const values = this.state['values/FREETAGS'] || []
 
     const handleChangeCreatable = (options) => this.onChangeCreatable(options, 'FREETAGS')
+    const handleToOption = ({ label }) => toOption(label)
+    const handlePromptText = (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"`
 
     return (
       <div className="browser-side-bar-tags">
-        <div className="browser-side-bar-tags-free-tags" key={ 'FREETAGS' } onKeyUp={ this.onKeyUp } >
+        <div className="browser-side-bar-tags-free-tags" key={ 'FREETAGS' } onKeyUp={ this.handleKeyUp } >
           <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
           <Creatable
             autoBlur ignoreCase multi
             clearable={ false }
-            newOptionCreator={ ({ label }) => toOption(label) }
+            newOptionCreator={ handleToOption  }
             noResultsText=''
             options={ suggestions.map(toOption) }
             onChange={ handleChangeCreatable }
             placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
-            promptTextCreator={ (tag) => `${formatMessage({ id: 'sidebar.create-tag' })}"${tag}"` }
+            promptTextCreator={ handlePromptText }
             value={ values } />
         </div>
       </div>

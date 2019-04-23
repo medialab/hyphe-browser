@@ -7,7 +7,6 @@ import cx from 'classnames'
 import { Creatable } from 'react-select'
 import partition from 'lodash.partition'
 import uniq from 'lodash.uniq'
-import difference from 'lodash.difference'
 
 import { TAGS_NS } from '../../constants'
 import Button from '../../components/Button'
@@ -49,13 +48,13 @@ class SideBarCategories extends React.Component {
       Object.keys(userTags).forEach(k => {
         // value of the tag is store in array of length 1
         if (userTags[k][0]) {
-          this.state[`values/${k}`] = toOption(userTags[k][0])
+          this.setState({ [`values/${k}`]: toOption(userTags[k][0]) })
         }
       })
     }
   }
 
-  onKeyUp = (e) => {
+  handleKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
     }
@@ -67,7 +66,7 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onChangeNewCategory = ({ target }) => {
+  handleChangeNewCategory = ({ target }) => {
     this.setState({ newCategory: target.value })
   }
 
@@ -82,7 +81,7 @@ class SideBarCategories extends React.Component {
     }
   }
 
-  onChangeCreatable = (option, category) => {
+  changeCreatable = (option, category) => {
     if (option && option.value && option.value.trim().length === 0)
       return    
     const { serverUrl, corpusId, webentity, addTag, removeTag } = this.props
@@ -102,12 +101,12 @@ class SideBarCategories extends React.Component {
     const suggestions = (tagsSuggestions[category] && Object.keys(tagsSuggestions[category])) || []
     const value = this.state[`values/${category}`] || ''
     
-    const handleChangeCreatable = (option) => this.onChangeCreatable(option, category)
+    const handleChangeCreatable = (option) => this.changeCreatable(option, category)
     
     return (
       <div className="browser-side-bar-tags-category" key={ category }>
         <h4 className="category-name">{ category }</h4>
-        <div className="category-tag" onKeyUp={ this._onKeyUp } >
+        <div className="category-tag">
           <Creatable
             autoBlur ignoreCase
             multi={ false }
@@ -148,8 +147,8 @@ class SideBarCategories extends React.Component {
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
               <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
                 value={ this.state.newCategory }
-                onKeyUp={ this.onKeyUp }
-                onInput={ this.onChangeNewCategory } />
+                onKeyUp={ this.handleKeyUp }
+                onInput={ this.handleChangeNewCategory } />
               <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
             </form>
           </div> }

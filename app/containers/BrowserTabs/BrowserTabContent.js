@@ -212,7 +212,7 @@ class TabContent extends React.Component {
       .catch((err) => {
         showError( !~err.message.indexOf("is already set to an existing WebEntity")
           ? { messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false }
-          : { messageId: 'error.existing-prefix', fatal: false}
+          : { messageId: 'error.existing-prefix', fatal: false }
         )
       })
   }
@@ -237,11 +237,13 @@ class TabContent extends React.Component {
           onClick={ this.saveAdjustChanges } />
       ]
     } else {
-      return <Button
-        disabled={ saving || !webentity }
-        className='btn-adjust'
-        icon="plus" title={ formatMessage({ id: 'adjust' }) } 
-        onClick={ handleShowAdjustWebEntity } />
+      return (
+        <Button
+          disabled={ saving || !webentity }
+          className='btn-adjust'
+          icon="plus" title={ formatMessage({ id: 'adjust' }) } 
+          onClick={ handleShowAdjustWebEntity } />
+      )
     }
   }
 
@@ -308,18 +310,18 @@ class TabContent extends React.Component {
           loading={ !ready }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           lruPrefixes={ webentity && webentity.prefixes }
-          selectedEngine = { searchEngines[corpusId] || 'google' }
-          onSubmit={ handleSetTabUrl }
+          selectedEngine={ searchEngines[corpusId] || 'google' }
+          onSetTabUrl={ handleSetTabUrl }
           crawlquery={ !!adjusting && !!adjusting.crawl }
           prefixSelector={ !!adjusting && !adjusting.crawl }
-          className={ cx({ 'over-overlay': adjusting, adjusting}) }
+          className={ cx({ 'over-overlay': adjusting, adjusting }) }
           tlds={ tlds }
-          onSelectPrefix={ this.onSelectPrefix } />
+          onSelectPrefix={ this.handleSelectPrefix } />
       </div>
     )
   }
 
-  onSelectPrefix = (url, modified) => {
+  handleSelectPrefix = (url, modified) => {
     const { webentity, setAdjustWebentity, adjusting, tlds } = this.props
 
     this.setState({
@@ -353,9 +355,10 @@ class TabContent extends React.Component {
 
     return (url === PAGE_HYPHE_HOME)
       ? <PageHypheHome 
-        selectedEngine = { searchEngines[corpusId] || 'google'}
+        selectedEngine = { searchEngines[corpusId] || 'google' }
         onChangeEngine = { handleChangeEngine }
-        onSubmit={ handleSetTabUrl } ref={ component => this.webviewComponent = component } />
+        onSetTabUrl={ handleSetTabUrl } 
+        ref={ component => this.webviewComponent = component } />
       : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
   }
 
@@ -445,6 +448,8 @@ class TabContent extends React.Component {
       hideAdjustWebentity(webentity.id)
     }
 
+    const handleClick = () => findDOMNode(this.inputComponent).click()
+
     return (
       <div className="we-popup">
         <strong><T id="webentity-crawl-popup-title" /></strong>
@@ -452,8 +457,8 @@ class TabContent extends React.Component {
         <p><T id="webentity-crawl-popup-message-2" /></p>
         <p><T id="webentity-crawl-popup-message-3" /></p>
         <div className="we-popup-footer">
-          <input ref={component => this.inputComponent = component } type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
-          <label onClick={ () => findDOMNode(this.inputComponent).click() }>
+          <input ref={ component => this.inputComponent = component } type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
+          <label onClick={ handleClick }>
             <T id="do-not-show-again" />
           </label>
           <button disabled={ saving } className="apply-we-popup" onClick={ apply }><T id="launch" /></button>
@@ -463,7 +468,7 @@ class TabContent extends React.Component {
     )
   }
 
-  onKeyUp = (e) => {
+  handleKeyUp = (e) => {
     const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
     if (e.keyCode === 27 && active) { // ESCAPE
       e.stopPropagation()
@@ -481,7 +486,7 @@ class TabContent extends React.Component {
     return (
       <div key={ id } tabIndex="1" className="browser-tab-content" 
         style={ active ? {} : { position: 'absolute', left: '-10000px' } }
-        onKeyUp={ this.onKeyUp } >
+        onKeyUp={ this.handleKeyUp } >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
