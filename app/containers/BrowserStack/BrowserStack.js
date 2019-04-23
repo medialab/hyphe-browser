@@ -100,6 +100,8 @@ class BrowserStack extends React.Component {
       selectedWebentity.id === webentities[0].id
     const isLast = webentities.length && selectedWebentity &&
       selectedWebentity.id === webentities[webentities.length - 1].id
+    const goNextWebentity = () => this.rotateWebentity(1)
+    const goPrevWebentity = () => this.rotateWebentity(-1)
 
     return (
       <div className="browser-stack-wes">
@@ -107,7 +109,7 @@ class BrowserStack extends React.Component {
         <button className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
           disabled={ !selectedStack || loading || isFirst || loadingWebentityStack }
-          onClick={ () => this.rotateWebentity(-1) }>
+          onClick={ goPrevWebentity }>
           <span className="ti-angle-left"></span>
         </button>
 
@@ -125,7 +127,7 @@ class BrowserStack extends React.Component {
         <button className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
           disabled={ !selectedStack || loading || isLast || loadingWebentityStack }
-          onClick={ () => this.rotateWebentity(1) }>
+          onClick={ goNextWebentity }>
           <span className="ti-angle-right"></span>
         </button>
 

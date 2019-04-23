@@ -11,7 +11,7 @@ class BrowserTabWebentityNameField extends React.Component {
     this.state = { dirty: false, editing: false }
   }
 
-  onKeyUp = (e) => {
+  handleKeyUp = (e) => {
     if (~[13, 27].indexOf(e.keyCode)) {
       this.setState({ dirty: false, editing: false })
       e.target.blur()
@@ -23,15 +23,15 @@ class BrowserTabWebentityNameField extends React.Component {
     }
   }
 
-  onChange = () => {
+  handleChange = () => {
     this.setState({ dirty: true, editing: true })
   }
 
-  onFocus = () => {
+  handleFocus = () => {
     this.setState({ editing: true })
   }
 
-  onBlur = () => {
+  handleBlur = () => {
     this.setState({ editing: false })
   }
 
@@ -62,10 +62,10 @@ class BrowserTabWebentityNameField extends React.Component {
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       defaultValue={ this.props.initialValue }
       readOnly={ !this.props.editable || !this.props.initialValue }
-      onKeyUp={ this.onKeyUp }
-      onFocus={ this.onFocus }
-      onBlur={ this.onBlur }
-      onChange={ this.onChange } />
+      onKeyUp={ this.handleKeyUp }
+      onFocus={ this.handleFocus }
+      onBlur={ this.handleBlur }
+      onChange={ this.handleChange } />
   }
 }
 
