@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 // Utilities to be injected into EVERY guest page
 // Beware: no Babel here, this code is executed in the webview's guest context
 // Note: this is a module and local variables defined here won't pollute guest's global environment

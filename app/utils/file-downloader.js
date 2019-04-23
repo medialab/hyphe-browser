@@ -199,7 +199,7 @@ export function downloadCSV ( list, listName, webentityName, corpusId ) {
   const file = new File(
     [csvString],
     `${corpusId}_${webentityName}_${listName}.csv`,
-    {type: 'text/csv;charset=utf-8'}
+    { type: 'text/csv;charset=utf-8' }
   )
   
   FileSaver.saveAs(file)
