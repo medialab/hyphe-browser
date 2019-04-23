@@ -5,7 +5,7 @@ const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*
 // Convert a LRU (string or object) to fully qualified LRU object
 // full host: right to left (i.e: [com, faceboook, fr-fr, wwww])
 export function parseLru (input, tldTree) {
-  var result = {
+  let result = {
     scheme: null,
     host: [],
     tld: '',
@@ -270,11 +270,11 @@ function toDomainCase (s) {
   return s.replace(/\w[^ -]*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 }
 
-function simplierUrl(url) {
+function simplierUrl (url) {
   return url.replace(/#[^#]*$/, '').replace(/\/$/, '')
 }
 
-export function compareUrls(url1, url2) {
+export function compareUrls (url1, url2) {
   if (!url1 || !url2) return false
   return simplierUrl(url1) === simplierUrl(url2)
 }

@@ -10,7 +10,7 @@ export default (uri) => (method, params = []) => {
 
   return fetch(uri, {
     method: 'POST',
-    body: JSON.stringify({method, params})
+    body: JSON.stringify({ method, params })
   })
   .catch(() => { throw new Error(ERROR_JSONRPC_FETCH) })
   .then((response) => response.json())
