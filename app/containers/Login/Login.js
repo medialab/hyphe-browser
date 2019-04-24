@@ -16,14 +16,19 @@ class Login extends React.Component {
     this.refreshStatusAndCorpora()
   }
 
+  componentWillReceiveProps ({ selectedServer }) {
+    if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
+      this.refreshStatusAndCorpora(selectedServer.url)
+    }
+  }
+
   refreshStatusAndCorpora (url) {
-    const { selectedServer, fetchCorpora, fetchServerStatus, deselectServer, routerPush } = this.props
+    const { fetchCorpora, fetchServerStatus, deselectServer, routerPush } = this.props
     if (url === 'add') {
       deselectServer()
       routerPush('/login/server-form')
       return
     }
-    url = url || selectedServer && selectedServer.url
 
     if (url) {
       fetchCorpora(url)
