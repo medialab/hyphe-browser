@@ -67,9 +67,10 @@ class BrowserStack extends React.Component {
           return (
             <button key={ stack.name }
               className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
-                {'selected': stack.name === (selectedStack && selectedStack.name) }) }
+                { 'selected': stack.name === (selectedStack && selectedStack.name) }) }
               disabled={ disabled }
-              onClick={ fillStack }>
+              onClick={ fillStack }
+            >
               <div className="filler-name hint--bottom" aria-label={ !disabled ? ( stack.name === 'DISCOVERED' ? formatMessage({ id: 'fill-discovered' }) : formatMessage({ id: 'fill' }) + formatMessage({ id: 'corpus-status.' + stack.name })) : '' }>
                 { formatMessage({ id: 'corpus-status.' + stack.name }) }
               </div>
@@ -87,7 +88,7 @@ class BrowserStack extends React.Component {
     const { webentities, selectedStack, loading } = this.props
     const viewCount = webentities.filter(x => x.viewed).length
 
-    return <progress className="hint--right" aria-label={ loading || !selectedStack ? "" : `${viewCount} / ${webentities.length}` } value={ loading ? 0 : viewCount } max={ webentities.length } />
+    return <progress className="hint--right" aria-label={ loading || !selectedStack ? '' : `${viewCount} / ${webentities.length}` } value={ loading ? 0 : viewCount } max={ webentities.length } />
   }
 
   // left side
@@ -109,8 +110,9 @@ class BrowserStack extends React.Component {
         <button className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
           disabled={ !selectedStack || loading || isFirst || loadingWebentityStack }
-          onClick={ goPrevWebentity }>
-          <span className="ti-angle-left"></span>
+          onClick={ goPrevWebentity }
+        >
+          <span className="ti-angle-left" />
         </button>
 
         <div className="browser-stack-wes-selector">
@@ -120,15 +122,17 @@ class BrowserStack extends React.Component {
             selectedStack={ selectedStack }
             webentities={ webentities }
             selectedWebentity={ selectedWebentity }
-            selectWebentity={ this.selectWebentity }/>
+            selectWebentity={ this.selectWebentity }
+          />
           { this.renderProgress() }
         </div>
 
         <button className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
           disabled={ !selectedStack || loading || isLast || loadingWebentityStack }
-          onClick={ goNextWebentity }>
-          <span className="ti-angle-right"></span>
+          onClick={ goNextWebentity }
+        >
+          <span className="ti-angle-right" />
         </button>
 
       </div>

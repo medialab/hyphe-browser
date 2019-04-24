@@ -61,7 +61,8 @@ class Login extends React.Component {
         autoFocus
         value = { selectedServer && selectedServer.url }
         disabled={ location.pathname !== '/login' }
-        onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }>
+        onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
+      >
         { options.map((o) => <option key={ o.key + o.label } value={ o.value }>{ o.label }</option>) }
       </select>
     )
@@ -77,12 +78,12 @@ class Login extends React.Component {
         <div className="pane-centered">
           <h2 className="pane-centered-title"><T id="welcome" /></h2>
           <main className={ cx('pane-centered-main', { naked }) }>
-          <div className="form-group server-list">
-            { this.renderServerSelect() }
-            { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">
-                <span className="ti-pencil"></span></Link> }
-          </div>
-          { this.props.children }
+            <div className="form-group server-list">
+              { this.renderServerSelect() }
+              { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">
+                <span className="ti-pencil" /></Link> }
+            </div>
+            { this.props.children }
           </main>
         </div>
         <Footer />

@@ -146,8 +146,8 @@ class BrowserTabs extends React.Component {
           <div className="browser-tab-labels-main">
             { this.renderBrowserTabLabels(false) }
             <div className="browser-tab-new" title={ formatMessage({ id: 'open-tab' }) }
-              onClick={ handleOpenTab }>
-            </div>
+              onClick={ handleOpenTab }
+            />
           </div>
         </div>
         { this.renderTabContents() }
@@ -182,7 +182,7 @@ const mapStateToProps = ({ tabs, corpora, intl: { locale }, servers, webentities
   corpusId: corpora.selected && corpora.selected.corpus_id,
   instanceUrl: servers.selected && servers.selected.home,
   locale,
-  webentities: webentities,
+  webentities,
 })
 
 export default connect(mapStateToProps, {

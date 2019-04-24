@@ -38,6 +38,12 @@ class SideBarCategories extends React.Component {
     }
   }
 
+  componentWillReceiveProps ({ webentity }) {
+    if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
+      this.repopulate(webentity)
+    }
+  }
+
   repopulate (webentity) {
     Object.keys(this.state).filter(k => ~k.indexOf('values/'))
       .forEach(k => {
@@ -57,12 +63,6 @@ class SideBarCategories extends React.Component {
   handleKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
-    }
-  }
-
-  componentWillReceiveProps ({ webentity }) {
-    if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
-      this.repopulate(webentity)
     }
   }
 
@@ -117,7 +117,8 @@ class SideBarCategories extends React.Component {
             onChange={ handleChangeCreatable }
             placeholder=''
             promptTextCreator={ (tag) => tag+' '  }
-            value={ value } />
+            value={ value }
+          />
         </div>
       </div>
     )
@@ -138,7 +139,8 @@ class SideBarCategories extends React.Component {
             <span className={ cx({
               'ti-angle-up': showCategories,
               'ti-angle-down': !showCategories
-            }) }></span>
+            }) }
+            />
           </h3>
 
           { showCategories && <div>
@@ -148,7 +150,8 @@ class SideBarCategories extends React.Component {
               <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
                 value={ this.state.newCategory }
                 onKeyUp={ this.handleKeyUp }
-                onInput={ this.handleChangeNewCategory } />
+                onInput={ this.handleChangeNewCategory }
+              />
               <Button icon="plus" title={ formatMessage({ id: 'sidebar.add-tags-category' }) } />
             </form>
           </div> }

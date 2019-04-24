@@ -24,9 +24,9 @@ class CorpusListItem extends React.Component {
     return (
       <div onClick={ handleSelectCorpus }>
         <h5 className="corpus-list-item-name">
-          { password && <span className="icon icon-lock"></span> }
+          { password && <span className="icon icon-lock" /> }
           { name }
-          { status === 'ready' && <span className="icon icon-play"></span> }
+          { status === 'ready' && <span className="icon icon-play" /> }
         </h5>
         <div className="corpus-list-item-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
         <div className="corpus-list-item-dates">
@@ -89,15 +89,17 @@ class CorpusList extends React.Component {
         { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
         { !!Object.keys(this.props.corpora).length && <div className="form-group corpus-list-filter">
           <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
-            onChange={ ({ target }) => this.setState({ filter: target.value }) } />
-          <span className="ti-search"></span>
+            onChange={ ({ target }) => this.setState({ filter: target.value }) }
+          />
+          <span className="ti-search" />
         </div> }
         <div className="corpus-list-slider">
           <ul className="list-group corpus-list">
             { corpora.map((corpus) =>
               <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
                 <CorpusListItem corpus={ corpus } server={ server }
-                  selectCorpus={ selectCorpus } routerPush={ routerPush } />
+                  selectCorpus={ selectCorpus } routerPush={ routerPush }
+                />
               </li>
             ) }
           </ul>

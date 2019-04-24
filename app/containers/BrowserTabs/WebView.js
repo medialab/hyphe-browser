@@ -43,50 +43,6 @@ class WebView extends React.Component {
     this.ignoreNextAbortedError = false
   }
 
-  shouldComponentUpdate () {
-    // Should never re-render, only use methods of webview tag
-    return false
-  }
-
-  componentWillReceiveProps ({ url, ua }) {
-    let refresh = false // Use this flag in case 'url' AND 'ua' are modified
-
-    if (ua && ua !== this.props.ua) {
-      this.node.setUserAgent(ua)
-      refresh = true
-    }
-
-    if (url !== this.props.url && url !== this.node.src) {
-      if (this.isLoading) {
-        // Ignore the next "Error -3 Aborted" if current page is still loading
-        this.ignoreNextAbortedError = true
-        setTimeout(() => this.ignoreNextAbortedError = false, 50)
-      }
-      // Set webview's URL
-      this.isLoading = true
-      this.props.eventBus.emit('status', 'start', url)
-      this.node.src = url // This triggers refresh
-      refresh = false // So we don't have to trigger it ourselves
-    }
-
-    if (refresh) {
-      this.node.reload()
-    }
-  }
-
-  translate (id) {
-    return this.context.intl.formatMessage({ id })
-  }
-
-  componentWillUnmount () {
-    const { eventBus } = this.props
-
-    eventBus.off('reload', this.reloadHandler)
-    eventBus.off('goBack', this.goBackHandler)
-    eventBus.off('goForward', this.goForwardHandler)
-    eventBus.off('toggleDevTools', this.toggleDevToolsHandler)
-  }
-
   componentDidMount () {
     const { eventBus, ua } = this.props
 
@@ -227,6 +183,51 @@ class WebView extends React.Component {
     })
   }
 
+  componentWillReceiveProps ({ url, ua }) {
+    let refresh = false // Use this flag in case 'url' AND 'ua' are modified
+
+    if (ua && ua !== this.props.ua) {
+      this.node.setUserAgent(ua)
+      refresh = true
+    }
+
+    if (url !== this.props.url && url !== this.node.src) {
+      if (this.isLoading) {
+        // Ignore the next "Error -3 Aborted" if current page is still loading
+        this.ignoreNextAbortedError = true
+        setTimeout(() => this.ignoreNextAbortedError = false, 50)
+      }
+      // Set webview's URL
+      this.isLoading = true
+      this.props.eventBus.emit('status', 'start', url)
+      this.node.src = url // This triggers refresh
+      refresh = false // So we don't have to trigger it ourselves
+    }
+
+    if (refresh) {
+      this.node.reload()
+    }
+  }
+
+  shouldComponentUpdate () {
+    // Should never re-render, only use methods of webview tag
+    return false
+  }
+
+  
+
+  componentWillUnmount () {
+    const { eventBus } = this.props
+
+    eventBus.off('reload', this.reloadHandler)
+    eventBus.off('goBack', this.goBackHandler)
+    eventBus.off('goForward', this.goForwardHandler)
+    eventBus.off('toggleDevTools', this.toggleDevToolsHandler)
+  }
+
+  translate (id) {
+    return this.context.intl.formatMessage({ id })
+  }
   render () {
     // the preload script below is used to handle right click context menu
     return (
