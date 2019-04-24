@@ -55,10 +55,10 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
     }))
 }
 
-export const requestServerStatus = createAction(FETCH_SERVER_STATUS_REQUEST, () => {})
+export const requestServerStatus = createAction(FETCH_SERVER_STATUS_REQUEST, (serverUrl) => ({ serverUrl }))
 export const receiveServerStatus = createAction(FETCH_SERVER_STATUS_SUCCESS, (status) => ({ status }))
 export const fetchServerStatus = (serverUrl) => (dispatch) => {
-  dispatch(requestServerStatus())
+  dispatch(requestServerStatus(serverUrl))
 
   return jsonrpc(serverUrl)('get_status')
     .then((status) => dispatch(receiveServerStatus(status)))

@@ -58,10 +58,12 @@ class CorpusList extends React.Component {
   render () {
     const { formatMessage } = this.context.intl
     const { server, status, ui, selectCorpus, routerPush } = this.props
+    const { notification } = ui
+
     const hypheFull = false
 
-    if (ui.loaders.corpora) return <Spinner textId="loading-corpora" />
-    if (!server || !this.props.corpora) return null
+    if (ui.loaders && ui.loaders.corpora) return <Spinner textId="loading-corpora" />
+    if (!server) return null
 
     let corpora = Object.keys(this.props.corpora)
       .sort()
@@ -86,7 +88,11 @@ class CorpusList extends React.Component {
           <T id="available-corpora" values={ { count: corpora.length } } />
           { hypheStatus }
         </h3>
-        { ui.error === true && <div className="form-error"><T id="error.loading-corpora" /></div> }
+        { notification && 
+          (notification.messageId === 'error.loading-server' || notification.messageId === 'error.loading-corpora') &&
+          notification.messageValues.error &&
+          <div className="form-error"><T id={ notification.messageId } values={ notification.messageValues.error } /></div> 
+        }
         { !!Object.keys(this.props.corpora).length && <div className="form-group corpus-list-filter">
           <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
             onChange={ ({ target }) => this.setState({ filter: target.value }) }

@@ -47,6 +47,7 @@
   "error.dns-error-search": "Domaine non trouvable, recherche en cours…",
   "error.existing-prefix": "Attention : ce préfixe est déjà rattaché à une autre webentité (cf. Contexte)",
   "error.loading-corpora": "Erreur de chargement des corpus",
+  "error.loading-server": "This server seems unavailable: {status} ({statusText}), please select another one",
   "error.network-error": "Erreur réseau ({error})",
   "error.password-mismatch": "Attention, les mots de passe diffèrent.",
   "error.save-webentity": "Échec lors de la création de la webentité ({error})",

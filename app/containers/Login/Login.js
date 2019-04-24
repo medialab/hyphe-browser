@@ -31,8 +31,10 @@ class Login extends React.Component {
     }
 
     if (url) {
-      fetchCorpora(url)
       fetchServerStatus(url)
+      .then(({ payload }) => {
+        if (!payload.error) return fetchCorpora(url)
+      })
     }
   }
 
