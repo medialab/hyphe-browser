@@ -1,5 +1,8 @@
 import createReducer from '../utils/create-reducer'
 import {
+  FETCH_SERVER_STATUS_REQUEST,
+  FETCH_SERVER_STATUS_SUCCESS,
+  FETCH_SERVER_STATUS_FAILURE,
   FETCH_CORPORA_REQUEST,
   FETCH_CORPORA_SUCCESS,
   FETCH_CORPORA_FAILURE,
@@ -69,11 +72,21 @@ const initialState = {
   }
 }
 
-const toggleLoader = (loader, enabled, err) => (state, { error }) => ({
-  ...state,
-  notification: err ? {...err, type: 'error', messageValues: { error } } : state.notification,
-  loaders: { ...state.loaders, [loader]: enabled }
-})
+const toggleLoader = (loader, enabled, err) => (state, payload) => {
+  let notification = { ... state.notification }
+  if (enabled) {
+    notification = emptyNotification
+  } 
+  if (err) {
+    const messageValues = payload && payload.error ? { error: payload.error } : null
+    notification =  { ...err, type: 'error', messageValues }
+  }
+  return {
+    ...state,
+    loaders: { ...state.loaders, [loader]: enabled },
+    notification
+  }
+}
 
 export default createReducer(initialState, {
   [SHOW_NOTIFICATION]: (state, notification) => ({ ...state, notification }),
@@ -85,9 +98,17 @@ export default createReducer(initialState, {
   }),
   [SELECT_CORPUS]: (state) => ({ ...state, notification: emptyNotification }),
 
+  [FETCH_SERVER_STATUS_REQUEST]: toggleLoader('corpora', true),
+  [FETCH_SERVER_STATUS_SUCCESS]: toggleLoader('corpora', false),
+  [FETCH_SERVER_STATUS_FAILURE]: toggleLoader('corpora', false, {
+    messageId: 'error.loading-server'
+  }),
+
   [FETCH_CORPORA_REQUEST]: toggleLoader('corpora', true),
   [FETCH_CORPORA_SUCCESS]: toggleLoader('corpora', false),
-  [FETCH_CORPORA_FAILURE]: toggleLoader('corpora', true),
+  [FETCH_CORPORA_FAILURE]: toggleLoader('corpora', false, {
+    messageId: 'error.loading-corpora'
+  }),
 
   [FETCH_CORPUS_STATUS_REQUEST]: toggleLoader('corporus_status', true),
   [FETCH_CORPUS_STATUS_SUCCESS]: toggleLoader('corporus_status', false),

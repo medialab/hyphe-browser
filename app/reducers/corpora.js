@@ -4,6 +4,7 @@ import {
   SELECT_CORPUS,
   FETCH_CORPORA_REQUEST,
   FETCH_CORPORA_SUCCESS,
+  FETCH_SERVER_STATUS_REQUEST,
   FETCH_SERVER_STATUS_SUCCESS,
   FETCH_CORPUS_STATUS_SUCCESS
 } from '../actions/corpora'
@@ -34,6 +35,12 @@ export default createReducer(initialState, {
     list: {},
     selected: null,
     tagsSuggestions: {}
+  }),
+  [FETCH_SERVER_STATUS_REQUEST]: (state) => ({
+    ...state,
+    list: {},
+    status: null,
+    selected: null
   }),
   [FETCH_CORPORA_SUCCESS]: (state, { corpora }) => ({
     ...state,

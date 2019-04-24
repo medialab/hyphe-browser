@@ -47,6 +47,7 @@
   "error.dns-error-search": "Domain not found, searching instead…",
   "error.existing-prefix": "Warning: this prefix is already bound to another webentity (see Context)",
   "error.loading-corpora": "Error loading corpora",
+  "error.loading-server": "This server seems unavailable: {status} ({statusText}), please select another one",
   "error.network-error": "Network error ({error})",
   "error.password-mismatch": "Warning, password values must match.",
   "error.save-webentity": "Error creating webentity ({error})",

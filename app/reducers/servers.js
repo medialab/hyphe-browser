@@ -1,5 +1,5 @@
 import createReducer from '../utils/create-reducer'
-import { FETCH_CORPORA_REQUEST } from '../actions/corpora'
+import { FETCH_SERVER_STATUS_REQUEST } from '../actions/corpora'
 import {
   CREATE_SERVER,
   UPDATE_SERVER,
@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'development') {
 
 export default createReducer(initialState, {
   // a server has been selected in the startup dropdown
-  [FETCH_CORPORA_REQUEST]: (state, { serverUrl }) => ({
+  [FETCH_SERVER_STATUS_REQUEST]: (state, { serverUrl }) => ({
     ...state,
     selected: state.list.find(s => s.url === serverUrl)
   }),
