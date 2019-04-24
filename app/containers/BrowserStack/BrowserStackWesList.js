@@ -10,7 +10,7 @@ import cx from 'classnames'
 class BrowserStackWesList extends React.Component {
 
   renderArrow = () => {
-    return <span className="ti-exchange-vertical"></span>
+    return <span className="ti-exchange-vertical" />
   }
 
   renderOption = ({ focusedOption, focusOption, key, option, selectValue, style }) => {
@@ -52,7 +52,7 @@ class BrowserStackWesList extends React.Component {
     const handleSelectWebentity = (v) => selectWebentity(v) 
     
     return (
-      <Select className={ cx("browser-stack-wes-list", {loading: loadingStack}) }
+      <Select className={ cx('browser-stack-wes-list', { loading: loadingStack }) }
         arrowRenderer={ renderArrow }
         clearable={ false }
         disabled={ loadingStack || loadingWE || !webentities.length }
@@ -62,7 +62,7 @@ class BrowserStackWesList extends React.Component {
         onChange={ handleSelectWebentity }
         options={ !loadingStack && webentities ? webentities : [] }
         optionRenderer={ renderOption }
-        placeholder={ formatMessage({id : loadingStack ? 'loading' : 'select-stack' }) }
+        placeholder={ formatMessage({ id : loadingStack ? 'loading' : 'select-stack' }) }
         searchable={ false }
         value={ selectedWebentity && selectedWebentity.id }
         valueKey={ 'id' }

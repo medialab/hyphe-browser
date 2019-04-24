@@ -25,7 +25,7 @@ class SideBar extends React.Component {
 
   setStatus = (status) => {
     const { webentity, setWebentityStatus, showAdjustWebentity, serverUrl, corpusId, cancelWebentityCrawls } = this.props
-    const crawling = !!~["PENDING", "RUNNING"].indexOf(getWebEntityActivityStatus(webentity))
+    const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(webentity))
 
     if (status !== 'DISCOVERED' && status === webentity.status) {
       // Click on current status = set to discovered
@@ -84,7 +84,8 @@ class SideBar extends React.Component {
       <button
         className={ cx('btn btn-default hint--bottom', 'status-' + status.toLowerCase(), { 'active-status': status === webentity.status }) }
         aria-label={ formatMessage({ id: 'corpus-status.' + status }) }
-        onClick={ handleSetStatus }>
+        onClick={ handleSetStatus }
+      >
         <span>{ status === 'UNDECIDED' ? '?' : formatMessage({ id: 'corpus-status.' + status })[0].toUpperCase() }</span>
       </button>
     )
@@ -98,11 +99,12 @@ class SideBar extends React.Component {
       <div className="browser-side-bar-sections">
         { this.renderTabTags() }
         <h3 onClick={ toggleContext }>
-          <span>{ formatMessage({ id: 'context'}) }</span>
+          <span>{ formatMessage({ id: 'context' }) }</span>
           <span className={ cx({
             'ti-angle-up': showContext,
             'ti-angle-down': !showContext
-          }) }></span>
+          }) }
+          />
         </h3>
         { showContext && this.renderTabContext() }
         { this.renderFreetags() }
@@ -111,18 +113,21 @@ class SideBar extends React.Component {
   }
 
   renderTabContext () {
-    return <SideBarContextualLists serverUrl={ this.props.serverUrl }
-      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return (<SideBarContextualLists serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity }
+            />)
   }
 
   renderTabTags () {
-    return <SideBarCategories serverUrl={ this.props.serverUrl }
-      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return (<SideBarCategories serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity }
+            />)
   }
 
   renderFreetags () {
-    return <SideBarFreetags serverUrl={ this.props.serverUrl }
-      corpusId={ this.props.corpusId } webentity={ this.props.webentity } />
+    return (<SideBarFreetags serverUrl={ this.props.serverUrl }
+      corpusId={ this.props.corpusId } webentity={ this.props.webentity }
+            />)
   }
 
   renderHomepage () {
@@ -139,10 +144,12 @@ class SideBar extends React.Component {
         <Button className="hint--bottom-right" icon="home"
           title={ formatMessage({ id: 'set-homepage' }) }
           disabled={ onHomepage }
-          onClick={ handleSetWebentityHomepage } />
-        <button className={ cx("btn btn-default browser-side-bar-homepage-url hint--medium", {"hint--bottom": !onHomepage && webentity.homepage}, {inactive: onHomepage || !webentity.homepage}) }
+          onClick={ handleSetWebentityHomepage }
+        />
+        <button className={ cx('btn btn-default browser-side-bar-homepage-url hint--medium', { 'hint--bottom': !onHomepage && webentity.homepage }, { inactive: onHomepage || !webentity.homepage }) }
           aria-label={ !onHomepage && webentity.homepage && formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
-          onClick={ !onHomepage && webentity.homepage ? handleSetTabUrl : undefined }>
+          onClick={ !onHomepage && webentity.homepage ? handleSetTabUrl : undefined }
+        >
           <div disabled={ onHomepage || !webentity.homepage }>
             { onHomepage ? formatMessage({ id: 'here-homepage' }) : webentity.homepage || formatMessage({ id: 'missing-homepage' }) }
           </div>

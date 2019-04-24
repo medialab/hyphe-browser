@@ -25,6 +25,15 @@ class CorpusForm extends React.Component {
     }
   }
 
+  componentWillReceiveProps ({ serverError }) {
+    if (serverError && serverError.id === ERROR_SERVER_NO_RESOURCE) {
+      this.setState({
+        submitting: false,
+        errors: ['error.corpus-not-created-no-resource']
+      })
+    }
+  }
+
   // deal with fields values
   setDataState (key, value) {
     const data = {
@@ -39,11 +48,12 @@ class CorpusForm extends React.Component {
       <div className="form-group">
         <label><T id={ label } /></label>
         <input disabled={ this.state.submitting }
-               autoFocus={ autoFocus }
-               name={ name }
-               onChange={ ({ target }) => this.setDataState(name, target.value) }
-               type={ type }
-               value={ this.state.data[name] || '' } />
+          autoFocus={ autoFocus }
+          name={ name }
+          onChange={ ({ target }) => this.setDataState(name, target.value) }
+          type={ type }
+          value={ this.state.data[name] || '' }
+        />
       </div>
     )
   }
@@ -92,15 +102,6 @@ class CorpusForm extends React.Component {
 
   isValid () {
     return this.state.data.password === this.state.data.passwordConfirm
-  }
-
-  componentWillReceiveProps ({ serverError }) {
-    if (serverError && serverError.id === ERROR_SERVER_NO_RESOURCE) {
-      this.setState({
-        submitting: false,
-        errors: ['error.corpus-not-created-no-resource']
-      })
-    }
   }
 
   render () {

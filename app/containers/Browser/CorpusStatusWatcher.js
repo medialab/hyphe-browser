@@ -92,7 +92,7 @@ class CorpusStatusWatcher extends React.Component {
     const ready = status && status.corpus && status.corpus.ready
     return (
       <div className={ this.props.className }>
-      { ready ? this.props.children :
+        { ready ? this.props.children :
         <div className="spinner-container">
           <Spinner /> 
         </div>

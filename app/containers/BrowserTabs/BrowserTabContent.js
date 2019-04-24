@@ -67,6 +67,14 @@ class TabContent extends React.Component {
     eventBus.on('open', this.navOpenHandler)
   }
 
+  componentWillReceiveProps (props) {
+    // Handle the case when user clicked "IN" button and does *not* want to show a popup
+    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
+      (!this.props.adjusting || !this.props.adjusting.crawl)) {
+      this.saveAdjustChanges()
+    }
+  }
+
   componentDidUpdate (prevProps) {
     if (this.props.active &&
       (prevProps.active !== this.props.active ||
@@ -75,13 +83,6 @@ class TabContent extends React.Component {
     }
   }
 
-  componentWillReceiveProps (props) {
-    // Handle the case when user clicked "IN" button and does *not* want to show a popup
-    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
-      (!this.props.adjusting || !this.props.adjusting.crawl)) {
-      this.saveAdjustChanges()
-    }
-  }
 
   componentWillUnmount () {
     const { eventBus } = this.props
@@ -187,7 +188,7 @@ class TabContent extends React.Component {
     }
     default:
       if (process.env.NODE_ENV === 'development') {
-        console.log("Unhandled event:", event, info)
+        console.log('Unhandled event:', event, info)
       }
       break
     }
@@ -210,7 +211,7 @@ class TabContent extends React.Component {
         hideAdjustWebentity(webentity.id)
       })
       .catch((err) => {
-        showError( !~err.message.indexOf("is already set to an existing WebEntity")
+        showError( !~err.message.indexOf('is already set to an existing WebEntity')
           ? { messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false }
           : { messageId: 'error.existing-prefix', fatal: false }
         )
@@ -230,11 +231,13 @@ class TabContent extends React.Component {
         <Button key="cancel-adjust" icon="close"
           disabled={ saving }
           title={ formatMessage({ id: 'cancel' }) }
-          onClick={ handleHideAdjustWebentity } />,
+          onClick={ handleHideAdjustWebentity }
+        />,
         <Button key="apply-adjust" icon="check"
           disabled={ saving || this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
-          onClick={ this.saveAdjustChanges } />
+          onClick={ this.saveAdjustChanges }
+        />
       ]
     } else {
       return (
@@ -242,13 +245,14 @@ class TabContent extends React.Component {
           disabled={ saving || !webentity }
           className='btn-adjust'
           icon="plus" title={ formatMessage({ id: 'adjust' }) } 
-          onClick={ handleShowAdjustWebEntity } />
+          onClick={ handleShowAdjustWebEntity }
+        />
       )
     }
   }
 
   renderWebentityToolbar () {
-    const { setWebentityName, corpusId, url, webentity, adjusting, disableWebentity } = this.props
+    const { url, webentity, adjusting, disableWebentity } = this.props
 
     if (disableWebentity) {
       return null
@@ -263,7 +267,8 @@ class TabContent extends React.Component {
           initialValue={ this.state.webentityName || webentity && webentity.name }
           disabled={ url === PAGE_HYPHE_HOME }
           editable={ !adjusting }
-          onChange={ this.updateName } />
+          onChange={ this.updateName }
+        />
         { this.renderAdjustButton() }
       </div>
     )
@@ -287,17 +292,20 @@ class TabContent extends React.Component {
     return (
       <div className="browser-tab-toolbar-navigation">
         <Button title={ formatMessage({ id: 'browse-reload' }) } icon="reload" disabled={ !!adjusting }
-          onClick={ (e) => eventBus.emit('reload', e.ctrlKey || e.shiftKey) } />
+          onClick={ (e) => eventBus.emit('reload', e.ctrlKey || e.shiftKey) }
+        />
         <Button title={ formatMessage({ id: 'browse-back' }) } icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
-          onClick={ () => eventBus.emit('goBack') } />
+          onClick={ () => eventBus.emit('goBack') }
+        />
         <Button title={ formatMessage({ id: 'browse-forward' }) } icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
-          onClick={ () => eventBus.emit('goForward') } />
+          onClick={ () => eventBus.emit('goForward') }
+        />
       </div>
     )
   }
 
   renderUrlField () {
-    const { id, url, loading, webentity, setTabUrl, adjusting, disableWebentity, disableNavigation, tlds, searchEngines, corpusId } = this.props
+    const { id, url, loading, webentity, setTabUrl, adjusting, disableNavigation, tlds, searchEngines, corpusId } = this.props
     const ready = (url === PAGE_HYPHE_HOME) || !loading
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     if (disableNavigation) {
@@ -316,7 +324,8 @@ class TabContent extends React.Component {
           prefixSelector={ !!adjusting && !adjusting.crawl }
           className={ cx({ 'over-overlay': adjusting, adjusting }) }
           tlds={ tlds }
-          onSelectPrefix={ this.handleSelectPrefix } />
+          onSelectPrefix={ this.handleSelectPrefix }
+        />
       </div>
     )
   }
@@ -340,11 +349,11 @@ class TabContent extends React.Component {
     }
 
     return (
-        <div className="browser-tab-toolbar">
-          { this.renderWebentityToolbar() }
-          { this.renderUrlField() }
-          { this.renderNavigationToolbar() }
-        </div>
+      <div className="browser-tab-toolbar">
+        { this.renderWebentityToolbar() }
+        { this.renderUrlField() }
+        { this.renderNavigationToolbar() }
+      </div>
     )
   }
 
@@ -358,8 +367,11 @@ class TabContent extends React.Component {
         selectedEngine = { searchEngines[corpusId] || 'google' }
         onChangeEngine = { handleChangeEngine }
         onSetTabUrl={ handleSetTabUrl } 
-        ref={ component => this.webviewComponent = component } />
-      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } ref={ component => this.webviewComponent = component } />
+        ref={ component => this.webviewComponent = component }
+        />
+      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } 
+        ref={ component => this.webviewComponent = component }
+        />
   }
 
   // google form for example
@@ -378,7 +390,8 @@ class TabContent extends React.Component {
     return (
       <div className="browser-tab-content-cols">
         <SideBar status={ status } webentity={ webentity } tabId={ id } url={ url }
-          serverUrl={ server.url } corpusId={ corpusId } disabled={ !!adjusting && !noCrawlPopup } />
+          serverUrl={ server.url } corpusId={ corpusId } disabled={ !!adjusting && !noCrawlPopup }
+        />
         { this.renderContent() }
       </div>
     )
@@ -408,14 +421,14 @@ class TabContent extends React.Component {
     return (
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
-          {
+        {
             mergeRequired.mergeable.type === 'redirect'?
-            <p><T id="webentity-merge-popup-message-redirect" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
+              <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
             :
-            <p><T id="webentity-merge-popup-message-manual" values={ {new: webentity.name, old: mergeRequired.mergeable.name} }/></p>
+              <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
           }
-            <p><T id="webentity-merge-popup-message-2" /></p>
-            <p><T id="webentity-merge-popup-message-3" /></p>
+        <p><T id="webentity-merge-popup-message-2" /></p>
+        <p><T id="webentity-merge-popup-message-3" /></p>
         <div className="we-popup-footer">
           <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
           <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
@@ -486,7 +499,8 @@ class TabContent extends React.Component {
     return (
       <div key={ id } tabIndex="1" className="browser-tab-content" 
         style={ active ? {} : { position: 'absolute', left: '-10000px' } }
-        onKeyUp={ this.handleKeyUp } >
+        onKeyUp={ this.handleKeyUp }
+      >
         { this.renderToolbar() }
         { disableWebentity ? this.renderSinglePane() : this.renderSplitPane() }
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }

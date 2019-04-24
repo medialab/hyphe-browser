@@ -22,22 +22,22 @@ class SideBarFreetags extends React.Component {
     }
   }
 
+  componentWillReceiveProps ({ webentity }) {
+    if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
+      this.repopulate(webentity)
+    }
+  }
+
   repopulate (webentity) {
     const userTags = webentity.tags[TAGS_NS]
     if (userTags && userTags['FREETAGS']) {
-      this.state['values/FREETAGS'] = userTags['FREETAGS'].map(toOption)
+      this.setState({ ['values/FREETAGS']: userTags['FREETAGS'].map(toOption) })
     }
   }
 
   handleKeyUp = (e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
-    }
-  }
-
-  componentWillReceiveProps ({ webentity }) {
-    if (webentity && this.props.webentity && webentity.id !== this.props.webentity.id) {
-      this.repopulate(webentity)
     }
   }
 
@@ -79,7 +79,8 @@ class SideBarFreetags extends React.Component {
             onChange={ handleChangeCreatable }
             placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
             promptTextCreator={ handlePromptText }
-            value={ values } />
+            value={ values }
+          />
         </div>
       </div>
     )

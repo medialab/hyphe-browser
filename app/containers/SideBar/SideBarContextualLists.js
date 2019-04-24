@@ -55,9 +55,9 @@ class _List extends React.Component {
                   { formatMessage({ id: 'linked' }) }
                   <T className="link-linked" id="linkedtimes" values={ { count: link.linked } } />
                 </div> :
-                <br/> }
+                <br /> }
               </li> :
-              <li key={ link.id } title={ link.name + "\n" + link.homepage }>
+              <li key={ link.id } title={ link.name + '\n' + link.homepage }>
                 <div className="link-name" onClick={ handleClick }>
                   <span>{ link.name }</span>
                   { (name === 'referrers' || name === 'referrals') && 
@@ -193,7 +193,8 @@ class SideBarContextualLists extends React.Component {
               const handleSelectContextualList = () => selectContextualList(l)
               return (
                 <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
-                  key={ l } onClick={ handleSelectContextualList }>
+                  key={ l } onClick={ handleSelectContextualList }
+                >
                   <T id={ `sidebar.contextual.${l}` } />
                 </button>
               )
@@ -209,7 +210,7 @@ class SideBarContextualLists extends React.Component {
                 <strong>
                   <T id="sidebar.contextual.downloadToCSV" />
                   <span>&nbsp;</span>
-                  <span className="ti-download"></span>
+                  <span className="ti-download" />
                 </strong>
               </button>
             </div>
@@ -241,7 +242,7 @@ SideBarContextualLists.propTypes = {
   selectContextualList: PropTypes.func
 }
 
-const mapStateToProps = ({ ui, webentities, intl: { locale } }, props) => ({
+const mapStateToProps = ({ ui, webentities, intl: { locale } } ) => ({
   selected: ui.selectedContext,
   tlds: webentities.tlds,
   locale

@@ -66,7 +66,7 @@ class BrowserTabLabel extends React.Component {
       'browser-tab-label-hyphe': id === HYPHE_TAB_ID,
     })
     const label = newTab
-      ? formatMessage({ id: 'new-tab'})
+      ? formatMessage({ id: 'new-tab' })
       : id === HYPHE_TAB_ID 
         ? 'H'
         : webentity && webentity.name
@@ -90,10 +90,10 @@ class BrowserTabLabel extends React.Component {
       <div key={ id } className={ cls } onClick={ selectHandler } title={ title }>
         { loading
           ? <span className="loading" />
-          : (icon && <object data={ icon } width="16" height="16" className="browser-tab-favicon"></object>)
+          : (icon && <object data={ icon } width="16" height="16" className="browser-tab-favicon" />)
         }
         <span className="browser-tab-title">{ label }</span>
-        { !fixed && closable && <span className="ti-close" onClick={ closeHandler }></span> }
+        { !fixed && closable && <span className="ti-close" onClick={ closeHandler } /> }
       </div>
     )
   }

@@ -104,13 +104,14 @@ class BrowserTabUrlField extends React.Component {
 
   // Read-write field: standard input
   renderFieldInput () {
-    return <input
+    return (<input
       className={ cx('btn browser-tab-url', { loading: this.props.loading }) }
       type="text"
       value={ this.state.url }
       onBlur={ this.handleBlur }
       onKeyUp={ this.handleKeyUp }
-      onChange={ this.handleChange } />
+      onChange={ this.handleChange }
+            />)
   }
 
   // Read-only field with highlights: click to edit
@@ -129,10 +130,11 @@ class BrowserTabUrlField extends React.Component {
       )
     }
 
-    return <span className={ className } onClick={ this.props.crawlquery ? null : onClick }
+    return (<span className={ className } onClick={ this.props.crawlquery ? null : onClick }
       dangerouslySetInnerHTML={ {
         __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url, this.props.tlds)
-      } } />
+      } }
+            />)
   }
 
   // LRU selector by prefix: click to select
@@ -193,7 +195,8 @@ class BrowserTabUrlField extends React.Component {
         <button key={ 'prefix-selector-' + index } className={ cx(classes) }
           disabled={ index <= 1 } // can't be limited to protocol and tld
           onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
-          onClick={ selectPrefix }>
+          onClick={ selectPrefix }
+        >
           { label }
         </button>
       )

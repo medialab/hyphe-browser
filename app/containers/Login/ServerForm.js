@@ -44,11 +44,12 @@ class ServerForm extends React.Component {
       <div className="form-group">
         <label><T id={ label } /></label>
         <input disabled={ this.state.submitting }
-               name={ name }
-               autoFocus={ autoFocus }
-               onChange={ ({ target }) => this.setDataState(name, target.value) }
-               type={ type }
-               value={ this.state.data[name] } />
+          name={ name }
+          autoFocus={ autoFocus }
+          onChange={ ({ target }) => this.setDataState(name, target.value) }
+          type={ type }
+          value={ this.state.data[name] }
+        />
       </div>
     )
   }
@@ -151,8 +152,9 @@ class ServerForm extends React.Component {
           { this.props.editMode &&
             (
               <button className="btn btn-negative" disabled={ this.state.submitting }
-                  onClick={ this.delete }>
-                 <T id="delete" />
+                onClick={ this.delete }
+              >
+                <T id="delete" />
               </button>
             )
           }
