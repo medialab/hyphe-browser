@@ -61,7 +61,7 @@ class CorpusList extends React.Component {
     const hypheFull = false
 
     if (ui.loaders.corpora) return <Spinner textId="loading-corpora" />
-    if (!server) return null
+    if (!server || !this.props.corpora) return null
 
     let corpora = Object.keys(this.props.corpora)
       .sort()
