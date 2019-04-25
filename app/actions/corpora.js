@@ -108,7 +108,7 @@ export const createCorpus = (server, corpus) => (dispatch) => {
   return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
     .then((miniCorpus) => {
       if (miniCorpus.status === 'error') {
-        return Promise.reject({ error: miniCorpus })
+        return Promise.reject(miniCorpus)
       }
       else {
         dispatch(receiveCorpus(serverUrl, miniCorpus))

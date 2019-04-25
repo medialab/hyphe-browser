@@ -9,7 +9,6 @@ import { Link } from 'react-router'
 import { FormattedMessage as T } from 'react-intl'
 
 import { createCorpus } from '../../actions/corpora'
-import { ERROR_SERVER_NO_RESOURCE } from '../../constants'
 import Spinner from '../../components/Spinner'
 
 class CorpusForm extends React.Component {
@@ -20,16 +19,16 @@ class CorpusForm extends React.Component {
     super(props)
     this.state = {
       submitting: false,
-      errors: [],
+      error: null,
       data: this.getInitData()
     }
   }
 
   componentWillReceiveProps ({ serverError }) {
-    if (serverError && serverError.id === ERROR_SERVER_NO_RESOURCE) {
+    if (serverError) {
       this.setState({
         submitting: false,
-        errors: ['error.corpus-not-created-no-resource']
+        error: serverError
       })
     }
   }
@@ -71,12 +70,12 @@ class CorpusForm extends React.Component {
     evt.preventDefault()
     const newState = {
       submitting: true,
-      errors: []
+      error: null
     }
 
     if (!this.isValid()) {
       newState.submitting = false
-      newState.errors = ['error.password-mismatch']
+      newState.error = { messageId:'error.password-mismatch' }
       newState.data = {
         ...this.state.data,
         password: '',
@@ -105,11 +104,12 @@ class CorpusForm extends React.Component {
   }
 
   render () {
+    const { error } = this.state
     return (
       <form className="corpus-form" onSubmit={ this.onSubmit }>
-        { this.state.errors.map((error) =>
-          <div className="form-error" key={ error }><T id={ error } /></div>
-        ) }
+        { error && 
+          <div className="form-error"><T id={ error.messageId } values={ error.messageValues || {} } /></div>
+        }
 
         { this.renderFormGroup('name', 'corpus-name', 'text', true) }
         { this.renderFormGroup('password', 'password', 'password') }

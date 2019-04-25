@@ -41,6 +41,7 @@
   "empty-url": "Search or enter address",
   "error.corpus-failed-starting": "Failed starting corpus ({error})",
   "error.corpus-failed-fetching-tlds": "Failed fetching TLDs ({error})",
+  "error.corpus-not-created": "Corpus not created. ({message})",
   "error.corpus-not-created-no-resource": "Corpus not created. Hyphe's server is overloaded, please retry later.",
   "error.corpus-not-started-no-resource": "Corpus not started. Hyphe's server is overloaded, please retry later.",
   "error.corpus-not-started-starting": "Corpus not started. Starting corpus now…",
