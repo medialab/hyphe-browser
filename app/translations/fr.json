@@ -41,6 +41,7 @@
   "empty-url": "Saisir un terme à rechercher ou une adresse web",
   "error.corpus-failed-starting": "Échec du démarrage du corpus ({error})",
   "error.corpus-failed-fetching-tlds": "Échec de la récupération des données TLD ({error})",
+  "error.corpus-not-created": "Corpus non créé. ({message})",
   "error.corpus-not-created-no-resource": "Corpus non créé. Le serveur est surchargé, merci de réessayer plus tard.",
   "error.corpus-not-started-no-resource": "Corpus non démarré. Le serveur est surchargé, merci de réessayer plus tard.",
   "error.corpus-not-started-starting": "Corpus non démarré. Démarrage en cours…",

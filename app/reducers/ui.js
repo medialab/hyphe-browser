@@ -38,7 +38,6 @@ import {
   FETCH_TLDS_FAILURE
 } from '../actions/webentities'
 import {
-  ERROR_SERVER_NO_RESOURCE,
   ERROR_SET_WEBENTITY_STATUS
 } from '../constants'
 
@@ -141,11 +140,24 @@ export default createReducer(initialState, {
     messageId: 'error.merge-webentity'
   }),
 
-  [CREATE_CORPUS_FAILURE]: (state /*, error */) => ({
-    ...state,
-    notification: { id: ERROR_SERVER_NO_RESOURCE }
-  }),
-
+  [CREATE_CORPUS_FAILURE]: (state, { error }) => {
+    if (error.message) {
+      return {
+        ...state,
+        notification: {
+          messageId: 'error.corpus-not-created',
+          messageValues: error
+        }
+      }
+    }
+    return {
+      ...state,
+      notification: {
+        messageId: 'error.corpus-not-created-no-resource',
+      }
+    }
+  },
+  
   [SELECT_CONTEXTUAL_LIST]: (state, { selectedContext }) => ({
     ...state,
     selectedContext
