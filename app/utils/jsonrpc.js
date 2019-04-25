@@ -14,35 +14,10 @@ export default (uri) => (method, params = []) => {
   })
   .catch(() => { throw new Error(ERROR_JSONRPC_FETCH) })
   .then((response) => {
-    const contentType = response.headers.get('content-type')
-    if (contentType.includes('application/json')) {
-      return response.json()
-      .then((json) => {
-        if (response.ok) {
-          return json
-        } else {
-          return Promise.reject({
-            ...json,
-            message: ERROR_JSONRPC_FETCH
-          }) 
-        }
-      })
-    }
-
-    else if (contentType.includes('text/html')) {
-      return response.text()
-      .then((text) => {
-        if (response.ok) {
-          return text
-        } else {
-          return Promise.reject({
-            err: text,
-            status: response.status,
-            statusText: response.statusText,
-            message: ERROR_JSONRPC_FETCH
-          }) 
-        }
-      })
+    if (response.ok) return response.json()
+    else if (response.status && response.statusText) {
+      const { status, statusText } = response
+      throw new Error(`${status} (${statusText})`)
     }
     throw new Error(ERROR_JSONRPC_PARSE)
   })
