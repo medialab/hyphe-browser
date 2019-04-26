@@ -25,7 +25,7 @@ class CorpusForm extends React.Component {
   }
 
   componentWillReceiveProps ({ serverError }) {
-    if (serverError) {
+    if (serverError && serverError.messageId && serverError.messageId.includes('error.corpus-not-created')) {
       this.setState({
         submitting: false,
         error: serverError
