@@ -7,15 +7,13 @@ import { intlShape } from 'react-intl'
 
 import { setLocale } from '../../actions/intl'
 import { LOCALES } from '../../constants'
-import CorpusLoadIndicators from '../CorpusLoadIndicators'
 
 const Footer = ( {
   locale, 
   locales, 
-  status, 
   setLocale
 } ) => {
-  const ready = status && status.corpus && status.corpus.ready
+
   return (
     <footer className="hyphe-footer">
       <span className="locales">
@@ -30,7 +28,6 @@ const Footer = ( {
             </span> )
         }) }
       </span>
-      { ready && <CorpusLoadIndicators status={ status } /> }
     </footer>
   )
 }
@@ -42,16 +39,14 @@ Footer.contextTypes = {
 Footer.propTypes = {
   locale: PropTypes.string.isRequired,
   locales: PropTypes.array,
-  status: PropTypes.object,
 
   // actions
   setLocale: PropTypes.func,
 }
 
-const mapStateToProps = ({ corpora, intl: { locale } }) => ({
+const mapStateToProps = ({ intl: { locale } }) => ({
   locale,
   locales: LOCALES,
-  status: corpora.status,
 })
 
 export default connect(mapStateToProps, { setLocale })(Footer)
