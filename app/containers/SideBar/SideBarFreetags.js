@@ -58,8 +58,6 @@ class SideBarFreetags extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { tagsSuggestions } = this.props
-    const suggestions = (tagsSuggestions['FREETAGS'] && Object.keys(tagsSuggestions['FREETAGS'])) || []
     const values = this.state['values/FREETAGS'] || []
 
     const handleChangeCreatable = (options) => this.onChangeCreatable(options, 'FREETAGS')
@@ -75,7 +73,6 @@ class SideBarFreetags extends React.Component {
             clearable={ false }
             newOptionCreator={ handleToOption  }
             noResultsText=''
-            options={ suggestions.map(toOption) }
             onChange={ handleChangeCreatable }
             placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
             promptTextCreator={ handlePromptText }
@@ -102,7 +99,6 @@ SideBarFreetags.propTypes = {
   corpusId: PropTypes.string.isRequired,
   webentity: PropTypes.object.isRequired,
 
-  tagsSuggestions: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
 
   // actions
@@ -112,7 +108,6 @@ SideBarFreetags.propTypes = {
 
 const mapStateToProps = ({ corpora, intl: { locale } }, props) => ({
   ...props,
-  tagsSuggestions: corpora.tagsSuggestions[props.corpusId] || {},
   locale
 })
 
