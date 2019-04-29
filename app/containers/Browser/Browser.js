@@ -28,12 +28,15 @@ const Browser = ({ corpus, status }) => {
 
 Browser.propTypes = {
   corpus: PropTypes.object,
-  status: PropTypes.object
+  status: PropTypes.object,
+  locale: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = ({ corpora }) => ({
+const mapStateToProps = ({ corpora, intl: { locale } }) => ({
   corpus: corpora.selected,
-  status: corpora.status
+  status: corpora.status,
+  // hack needed to propagate locale change
+  locale
 })
 
 export default connect(mapStateToProps)(Browser)
