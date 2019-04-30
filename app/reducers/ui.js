@@ -18,7 +18,8 @@ import {
   SELECT_CONTEXTUAL_LIST,
   TOGGLE_DO_NOT_SHOW_AGAIN,
   TOGGLE_CONTEXT,
-  TOGGLE_CATEGORIES
+  TOGGLE_CATEGORIES,
+  TOGGLE_FREETAGS
 } from '../actions/browser'
 import {
   DECLARE_PAGE_REQUEST,
@@ -55,6 +56,7 @@ const initialState = {
   selectedContext: 'mostLinked',
   showContext: false,
   showCategories: true,
+  showFreetags: true,
   loaders: {
     corpora: false,
     corpus_status: false,
@@ -179,6 +181,11 @@ export default createReducer(initialState, {
   [TOGGLE_CATEGORIES]: (state) => ({
     ...state,
     showCategories: !state.showCategories
+  }),
+
+  [TOGGLE_FREETAGS]: (state) => ({
+    ...state,
+    showFreetags: !state.showFreetags
   })
 
 })
