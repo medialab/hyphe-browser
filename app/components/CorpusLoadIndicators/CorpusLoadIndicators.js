@@ -15,17 +15,17 @@ const CorpusLoadIndicators = ({ status }, { intl }) => {
 
   return (
     <span className="corpus-load-indicators">
-      <span className="corpus-load-title">Hyphe</span>
-      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
+      <span className="corpus-load-title">Hyphe Server</span>
+      <span className="hint--bottom" aria-label={ formatMessage({ id: 'corpus-load-status' }, { status: formatMessage({ id: 'corpus-load-status.' + corpusCrawlingStatus }) }) }>
         <span className={ 'corpus-load corpus-load-status-' + corpusCrawlingStatus } />
       </span>
-      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-pending' }) }>
+      <span className="hint--bottom" aria-label={ formatMessage({ id: 'corpus-load-pending' }) }>
         { status.corpus.crawler.jobs_pending }
       </span>
-      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-running' }) }>
+      <span className="hint--bottom" aria-label={ formatMessage({ id: 'corpus-load-running' }) }>
         { status.corpus.crawler.jobs_running }
       </span>
-      <span className="hint--top" aria-label={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
+      <span className="hint--bottom" aria-label={ formatMessage({ id: 'corpus-load-health' }, { status: formatMessage({ id: 'corpus-load-health.' + hypheCrawlingStatus }) }) }>
         <span className={ 'corpus-load corpus-load-health-' + hypheCrawlingStatus } />
       </span>
     </span>
