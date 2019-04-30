@@ -8,8 +8,8 @@ export const SELECT_CONTEXTUAL_LIST = '§_SELECT_CONTEXTUAL_LIST'
 export const TOGGLE_DO_NOT_SHOW_AGAIN = '§_TOGGLE_DO_NOT_SHOW_AGAIN'
 
 export const TOGGLE_CONTEXT = '§_TOGGLE_CONTEXT'
-
 export const TOGGLE_CATEGORIES = '§_TOGGLE_CATEGORIES'
+export const TOGGLE_FREETAGS = '§_TOGGLE_FREETAGS'
 
 export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
@@ -31,6 +31,8 @@ export const toggleDoNotShowAgain = createAction(TOGGLE_DO_NOT_SHOW_AGAIN, (key,
 export const toggleContext = createAction(TOGGLE_CONTEXT)
 
 export const toggleCategories = createAction(TOGGLE_CATEGORIES)
+
+export const toggleFreetags = createAction(TOGGLE_FREETAGS)
 
 // shortcut for back compat
 

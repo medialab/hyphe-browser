@@ -5,10 +5,13 @@ import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
 import { Creatable } from 'react-select'
 import difference from 'lodash.difference'
+import cx from 'classnames'
 
 import { TAGS_NS } from '../../constants'
 
+
 import { addTag, removeTag } from '../../actions/tags'
+import { toggleFreetags } from '../../actions/browser'
 
 class SideBarFreetags extends React.Component {
 
@@ -58,7 +61,9 @@ class SideBarFreetags extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
+    const { webentity, showFreetags, toggleFreetags } = this.props
     const values = this.state['values/FREETAGS'] || []
+    const disabled = webentity.status === 'DISCOVERED'
 
     const handleChangeCreatable = (options) => this.onChangeCreatable(options, 'FREETAGS')
     const handleToOption = ({ label }) => toOption(label)
@@ -67,17 +72,26 @@ class SideBarFreetags extends React.Component {
     return (
       <div className="browser-side-bar-tags">
         <div className="browser-side-bar-tags-free-tags" key={ 'FREETAGS' } onKeyUp={ this.handleKeyUp } >
-          <h3><span>{ formatMessage({ id: 'sidebar.freetags' }) }</span></h3>
-          <Creatable
+          <h3 onClick={ toggleFreetags }>
+            <span>{ formatMessage({ id: 'sidebar.freetags' }) }</span>
+            <span className={ cx({
+              'ti-angle-up': showFreetags,
+              'ti-angle-down': !showFreetags
+            }) }
+            />
+          </h3>
+          
+          { showFreetags && <Creatable
             autoBlur ignoreCase multi
             clearable={ false }
+            disabled={ disabled }
             newOptionCreator={ handleToOption  }
             noResultsText=''
             onChange={ handleChangeCreatable }
             placeholder={ formatMessage({ id: 'sidebar.select-tags' }) }
             promptTextCreator={ handlePromptText }
             value={ values }
-          />
+                            /> }
         </div>
       </div>
     )
@@ -100,18 +114,22 @@ SideBarFreetags.propTypes = {
   webentity: PropTypes.object.isRequired,
 
   locale: PropTypes.string.isRequired,
+  showFreetags: PropTypes.bool.isRequired,
 
   // actions
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
+  toggleFreetags: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ corpora, intl: { locale } }, props) => ({
+const mapStateToProps = ({ corpora, intl: { locale }, ui }, props) => ({
   ...props,
-  locale
+  locale,
+  showFreetags: ui.showFreetags
 })
 
 export default connect(mapStateToProps, {
   addTag,
   removeTag,
+  toggleFreetags
 })(SideBarFreetags)

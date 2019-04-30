@@ -97,9 +97,10 @@ class SideBarCategories extends React.Component {
 
   renderTagsCategory = (category) => {
     const { formatMessage } = this.context.intl
-    const { tagsSuggestions } = this.props
+    const { tagsSuggestions, webentity } = this.props
     const suggestions = (tagsSuggestions[category] && Object.keys(tagsSuggestions[category])) || []
     const value = this.state[`values/${category}`] || ''
+    const disabled = webentity.status === 'DISCOVERED'
     
     const handleChangeCreatable = (option) => this.changeCreatable(option, category)
     
@@ -110,6 +111,7 @@ class SideBarCategories extends React.Component {
           <Creatable
             autoBlur ignoreCase
             multi={ false }
+            disabled={ disabled }
             clearValueText={ formatMessage({ id: 'tags-clear-category-value' }) }
             newOptionCreator={ ({ label }) => toOption(label) }
             noResultsText=''
@@ -127,9 +129,10 @@ class SideBarCategories extends React.Component {
   // Categories first, then add category field
   render () {
     const { formatMessage } = this.context.intl
-    const { showCategories, toggleCategories } = this.props
+    const { showCategories, toggleCategories, webentity } = this.props
     const cats = partition(this.props.categories, isFreeTags)[1]
     const categories = uniq((cats || []).concat(this.state.categories).filter(x => x))
+    const disabled = webentity.status === 'DISCOVERED'
 
     return (
       <div className="browser-side-bar-tags">
@@ -147,7 +150,9 @@ class SideBarCategories extends React.Component {
             { categories.sort().map(this.renderTagsCategory) }
 
             <form className="browser-side-bar-tags-new-category" onSubmit={ this.addCategory }>
-              <input placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+              <input 
+                placeholder={ formatMessage({ id: 'sidebar.add-tags-category' }) }
+                disabled={ disabled }
                 value={ this.state.newCategory }
                 onKeyUp={ this.handleKeyUp }
                 onInput={ this.handleChangeNewCategory }
