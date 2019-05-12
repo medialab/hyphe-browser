@@ -115,11 +115,12 @@ class TabContent extends React.Component {
       hideError()
       setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
-        // avoid emptying sidebar when only changing url's anchor
+        // do not declare pages(show sidebar) when only changing url's anchor
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-        setTabWebentity(server.url, corpusId, id, null)
+        this.setState({ webentityName: null })
+        declarePage(server.url, corpusId, info, id)
       }
       break
     case 'stop':
@@ -132,12 +133,9 @@ class TabContent extends React.Component {
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
-          // do not declare pages with only change in anchor
-          if (!this.samePage(info) || loadingWebentityStack) {
-            this.setState({ webentityName: null })
-            declarePage(server.url, corpusId, info, id)
-          }
         } else {
+          // not show sidebar if this.doNotDeclarePageOnStop
+          setTabWebentity(server.url, corpusId, id, null)
           this.doNotDeclarePageOnStop = false
         }
       }
