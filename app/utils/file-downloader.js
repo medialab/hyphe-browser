@@ -184,23 +184,60 @@ export function fieldParser ( we, tlds) {
     if (field.preprocess) {
       value = field.preprocess(value)
     }
-    if (value) {
-      result[field.name] = translateValue(value, field.type, 'JSON')
+    let tv
+    if(value === undefined){
+      tv = ''
     } else {
-      result[field.name] = ''
+      tv = translateValue(value, field.type, 'JSON')
+    }
+    if(tv === undefined){
+      console.error('A value could not be translated',value,we,field)
+    } else {
+      result[field.name] = tv
     }
   })
   return result
 }
 
-export function downloadCSV ( list, listName, webentityName, corpusId ) {
-  const csvString = CSV.unparse(list)
+export function flatTag ( we ) {
+  return we.map( (el) => {
+    let WE = Object.assign({}, el)
+    const fields = ['TECHNICAL INFO', 'TAGS']
+    fields.forEach((field) => {
+      if (el[field]) {
+        Object.keys(el[field]).forEach(tag => {
+          WE[`${tag} (${field})`] = el[field][tag]
+        })
+        delete(WE[field])
+      }
+    })
+    delete(WE._id)
+    return WE
+  })
+} 
 
-  const file = new File(
-    [csvString],
-    `${corpusId}_${webentityName}_${listName}.csv`,
-    { type: 'text/csv;charset=utf-8' }
-  )
-  
+export function downloadFile ( list, fileName, ext) {
+  let file 
+  switch(ext) {
+  case 'csv': {
+    const csvString = CSV.unparse(list)
+    file = new File(
+      [csvString],
+      `${fileName}.csv`,
+      { type: 'text/csv;charset=utf-8' }
+    )
+    break
+  }
+  case 'json':
+  default: {
+    const json = JSON.stringify(list)
+    file = new File(
+      [json],
+      `${fileName}.json`,
+      { type: 'text/plain;charset=utf-8' }
+    )
+    break       
+  }
+  }
   FileSaver.saveAs(file)
 }
