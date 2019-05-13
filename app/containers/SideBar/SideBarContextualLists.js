@@ -18,7 +18,7 @@ import {
 } from '../../actions/webentities'
 import { selectContextualList } from '../../actions/browser'
 import { compareUrls } from '../../utils/lru'
-import { fieldParser, downloadCSV } from '../../utils/file-downloader'
+import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
 
 class _List extends React.Component {
@@ -138,9 +138,9 @@ class SideBarContextualLists extends React.Component {
     }
   }
 
-  downloadFile = () => {
+  downloadWebentity = () => {
     const { corpusId, webentity, selected, tlds } = this.props
-    let listName, fileName
+    let listName
     switch (selected) {
     case 'mostLinked':
       listName = 'mostLinkedPages'
@@ -161,25 +161,14 @@ class SideBarContextualLists extends React.Component {
       listName = selected
       break
     }
-    fileName = webentity.name.replace(/[\s\/]/g, '_')
+    const webentityName = webentity.name.replace(/[\s\/]/g, '_')
     const parsedWebentity = webentity[selected].map(
       (we) => we.tags ? fieldParser(we, tlds) : we
     )
-    const flatList = parsedWebentity.map( (el) => {
-      let WE = Object.assign({}, el)
-      const fields = ['TECHNICAL INFO', 'TAGS']
-      fields.forEach((field) => {
-        if (el[field]) {
-          Object.keys(el[field]).forEach(tag => {
-            WE[`${tag} (${field})`] = el[field][tag]
-          })
-          delete(WE[field])
-        }
-      })
-      delete(WE._id)
-      return WE
-    })
-    downloadCSV(flatList, listName, fileName, corpusId)
+
+    const flatList = flatTag(parsedWebentity)
+    const fileName = `${corpusId}_${webentityName}_${listName}`
+    downloadFile(flatList, fileName, 'csv')
   }
 
   render () {
@@ -206,7 +195,7 @@ class SideBarContextualLists extends React.Component {
           }
           { webentity[selected] && webentity[selected].length > 0 &&
             <div className="download">
-              <button className='btn btn-default' onClick={ this.downloadFile }>
+              <button className='btn btn-default' onClick={ this.downloadWebentity }>
                 <strong>
                   <T id="sidebar.contextual.downloadToCSV" />
                   <span>&nbsp;</span>
