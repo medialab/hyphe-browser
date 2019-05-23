@@ -114,19 +114,22 @@ class SideBar extends React.Component {
   }
 
   renderTabContext () {
-    return (<SideBarContextualLists serverUrl={ this.props.serverUrl }
+    return (<SideBarContextualLists
+      serverUrl={ this.props.serverUrl }
       corpusId={ this.props.corpusId } webentity={ this.props.webentity }
             />)
   }
 
   renderTabTags () {
-    return (<SideBarCategories serverUrl={ this.props.serverUrl }
+    return (<SideBarCategories
+      serverUrl={ this.props.serverUrl }
       corpusId={ this.props.corpusId } webentity={ this.props.webentity }
             />)
   }
 
   renderFreetags () {
-    return (<SideBarFreetags serverUrl={ this.props.serverUrl }
+    return (<SideBarFreetags
+      serverUrl={ this.props.serverUrl }
       corpusId={ this.props.corpusId } webentity={ this.props.webentity }
             />)
   }
@@ -142,12 +145,14 @@ class SideBar extends React.Component {
     
     return (
       <div className="browser-side-bar-homepage">
-        <Button className="hint--bottom-right" icon="home"
+        <Button
+          className="hint--bottom-right" icon="home"
           title={ formatMessage({ id: 'set-homepage' }) }
           disabled={ onHomepage }
           onClick={ handleSetWebentityHomepage }
         />
-        <button className={ cx('btn btn-default browser-side-bar-homepage-url hint--medium', { 'hint--bottom': !onHomepage && webentity.homepage }, { inactive: onHomepage || !webentity.homepage }) }
+        <button
+          className={ cx('btn btn-default browser-side-bar-homepage-url hint--medium', { 'hint--bottom': !onHomepage && webentity.homepage }, { inactive: onHomepage || !webentity.homepage }) }
           aria-label={ !onHomepage && webentity.homepage && formatMessage({ id: 'goto-homepage' }, { url: webentity.homepage }) }
           onClick={ !onHomepage && webentity.homepage ? handleSetTabUrl : undefined }
         >

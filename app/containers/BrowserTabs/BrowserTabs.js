@@ -89,7 +89,8 @@ class BrowserTabs extends React.Component {
 
   renderTabContents () {
     return this.props.tabs.map((tab) => (
-      <BrowserTabContent key={ tab.id }
+      <BrowserTabContent
+        key={ tab.id }
         eventBus={ this.getEventBus(tab.id) }
         id={ tab.id }
         webentity={ this.getWebentity(tab.id) }
@@ -119,7 +120,8 @@ class BrowserTabs extends React.Component {
         this.props.selectTab(tab.id)
       }
       return (
-        <BrowserTabLabel key={ tab.id }
+        <BrowserTabLabel
+          key={ tab.id }
           { ...tab }
           closable={ tabs.length !== 1 }
           title={ title }
@@ -146,7 +148,8 @@ class BrowserTabs extends React.Component {
           </div>
           <div className="browser-tab-labels-main">
             { this.renderBrowserTabLabels(false) }
-            <div className="browser-tab-new" title={ formatMessage({ id: 'open-tab' }) }
+            <div
+              className="browser-tab-new" title={ formatMessage({ id: 'open-tab' }) }
               onClick={ handleOpenTab }
             />
           </div>

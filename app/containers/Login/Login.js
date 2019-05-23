@@ -34,9 +34,9 @@ class Login extends React.Component {
 
     if (url) {
       fetchServerStatus(url)
-      .then(({ payload }) => {
-        if (!payload.error) return fetchCorpora(url)
-      })
+        .then(({ payload }) => {
+          if (!payload.error) return fetchCorpora(url)
+        })
     }
   }
 
@@ -44,7 +44,7 @@ class Login extends React.Component {
     const { selectedServer, servers, location } = this.props
     const { formatMessage } = this.context.intl
 
-    let options = servers.map((s) => ({
+    const options = servers.map((s) => ({
       label: `${s.name} (${s.url})`,
       value: s.url,
       key: s.url

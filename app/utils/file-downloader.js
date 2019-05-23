@@ -173,7 +173,7 @@ export function fieldParser ( we, tlds) {
       }
     }
   }
-  let result = {}
+  const result = {}
   Object.keys(parserMap).forEach(( f ) =>{
     const field = parserMap[f]
     if (field === undefined) {
@@ -201,7 +201,7 @@ export function fieldParser ( we, tlds) {
 
 export function flatTag ( we ) {
   return we.map( (el) => {
-    let WE = Object.assign({}, el)
+    const WE = Object.assign({}, el)
     const fields = ['TECHNICAL INFO', 'TAGS']
     fields.forEach((field) => {
       if (el[field]) {

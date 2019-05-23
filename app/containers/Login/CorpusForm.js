@@ -47,7 +47,8 @@ class CorpusForm extends React.Component {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
-        <input disabled={ this.state.submitting }
+        <input
+          disabled={ this.state.submitting }
           autoFocus={ autoFocus }
           name={ name }
           onChange={ ({ target }) => this.setDataState(name, target.value) }
@@ -91,7 +92,7 @@ class CorpusForm extends React.Component {
   }
 
   cleanData () {
-    let corpus = {
+    const corpus = {
       ...this.state.data
     }
     delete corpus.passwordConfirm

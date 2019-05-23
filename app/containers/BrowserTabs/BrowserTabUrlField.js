@@ -131,7 +131,8 @@ class BrowserTabUrlField extends React.Component {
       )
     }
 
-    return (<span className={ className } onClick={ this.props.crawlquery ? null : onClick }
+    return (<span
+      className={ className } onClick={ this.props.crawlquery ? null : onClick }
       dangerouslySetInnerHTML={ {
         __html: highlightUrlHTML(this.props.lruPrefixes, this.state.url, this.props.tlds)
       } }
@@ -193,7 +194,8 @@ class BrowserTabUrlField extends React.Component {
         { 'prefix-over': index <= this.state.overPrefixUntil }
       ]
       return (
-        <button key={ 'prefix-selector-' + index } className={ cx(classes) }
+        <button
+          key={ 'prefix-selector-' + index } className={ cx(classes) }
           disabled={ index <= 1 } // can't be limited to protocol and tld
           onMouseOver={ () => this.setState({ overPrefixUntil: index }) }
           onClick={ selectPrefix }

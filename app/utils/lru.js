@@ -5,7 +5,7 @@ const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*
 // Convert a LRU (string or object) to fully qualified LRU object
 // full host: right to left (i.e: [com, faceboook, fr-fr, wwww])
 export function parseLru (input, tldTree) {
-  let result = {
+  const result = {
     scheme: null,
     host: [],
     tld: '',

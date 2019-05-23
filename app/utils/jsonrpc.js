@@ -12,39 +12,39 @@ export default (uri) => (method, params = []) => {
     method: 'POST',
     body: JSON.stringify({ method, params })
   })
-  .catch(() => { throw new Error(ERROR_JSONRPC_FETCH) })
-  .then((response) => {
-    if (response.ok) return response.json()
-    else if (response.status && response.statusText) {
-      const { status, statusText } = response
-      throw new Error(`${status} (${statusText})`)
-    }
-    throw new Error(ERROR_JSONRPC_PARSE)
-  })
-  .then((result) => {
-    if (result && result.fault) {
-      throw result
-    }
+    .catch(() => { throw new Error(ERROR_JSONRPC_FETCH) })
+    .then((response) => {
+      if (response.ok) return response.json()
+      else if (response.status && response.statusText) {
+        const { status, statusText } = response
+        throw new Error(`${status} (${statusText})`)
+      }
+      throw new Error(ERROR_JSONRPC_PARSE)
+    })
+    .then((result) => {
+      if (result && result.fault) {
+        throw result
+      }
 
-    const row = result[0]
+      const row = result[0]
 
-    if (DEBUG_JSONRPC) {
-      let m = row.code === 'fail' ? 'error' : 'debug'
-      console[m]('JSONRPC ←', method, row.code, row.result, row.message) // eslint-disable-line no-console
-    }
+      if (DEBUG_JSONRPC) {
+        const m = row.code === 'fail' ? 'error' : 'debug'
+        console[m]('JSONRPC ←', method, row.code, row.result, row.message) // eslint-disable-line no-console
+      }
 
-    if (row.code === 'success') {
-      return row.result
-    } else if (row.code === 'fail') {
-      throw new Error(row.message)
-    } else {
-      throw new Error('Unrecognized response')
-    }
-  })
-  .catch((err) => {
-    if (DEBUG_JSONRPC) {
-      console.error('JSONRPC ←', method, err) // eslint-disable-line no-console
-    }
-    throw err
-  })
+      if (row.code === 'success') {
+        return row.result
+      } else if (row.code === 'fail') {
+        throw new Error(row.message)
+      } else {
+        throw new Error('Unrecognized response')
+      }
+    })
+    .catch((err) => {
+      if (DEBUG_JSONRPC) {
+        console.error('JSONRPC ←', method, err) // eslint-disable-line no-console
+      }
+      throw err
+    })
 }
