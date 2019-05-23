@@ -20,7 +20,8 @@ class CorpusLoginForm extends React.Component {
   }
 
   onSubmit = (evt) => {
-    const { server, corpus, selectCorpus, routerPush } = this.props
+    const { server, corpus, selectCorpus, history } = this.props
+    const { push: routerPush } = history
     evt.preventDefault()
 
     this.setState({ submitting: true })
@@ -66,7 +67,7 @@ CorpusLoginForm.propTypes = {
   server: PropTypes.object,
 
   // action
-  routerPush: PropTypes.func,
+  // routerPush: PropTypes.func,
   selectCorpus: PropTypes.func,
 }
 
@@ -77,7 +78,7 @@ const mapStateToProps = ({ corpora, intl: { locale }, servers }) => ({
 })
 
 export default connect(mapStateToProps, {
-  routerPush: routerActions.push,
+  // routerPush: routerActions.push,
   selectCorpus
 })(CorpusLoginForm)
 

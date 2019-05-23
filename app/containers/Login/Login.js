@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { routerActions } from 'react-router-redux'
+// import { routerActions } from 'react-router-redux'
 import cx from 'classnames'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
@@ -24,7 +24,8 @@ class Login extends React.Component {
   }
 
   refreshStatusAndCorpora (url) {
-    const { fetchCorpora, fetchServerStatus, deselectServer, routerPush } = this.props
+    const { fetchCorpora, fetchServerStatus, deselectServer, history } = this.props
+    const { push: routerPush } = history
     if (url === 'add') {
       deselectServer()
       routerPush('/login/server-form')
@@ -116,7 +117,6 @@ Login.propTypes = {
   deselectServer: PropTypes.func,
   fetchCorpora: PropTypes.func,
   fetchServerStatus: PropTypes.func,
-  routerPush: PropTypes.func
 }
 
 // router infos are given in ownProps
@@ -130,7 +130,6 @@ const mapDispatchToProps = {
   deselectServer,
   fetchCorpora,
   fetchServerStatus,
-  routerPush: routerActions.push
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

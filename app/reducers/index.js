@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 // let redux store the current location object
-import { routerReducer as routing } from 'react-router-redux'
+import { connectRouter } from 'connected-react-router'
 
 // sub reducers
 import corpora from './corpora'
@@ -13,7 +13,7 @@ import ui from './ui'
 import webentities from './webentities'
 
 // returns the rootReducer
-export default combineReducers({
+const createRootReducer = ( history ) => combineReducers({
   corpora,
   intl,
   options,
@@ -22,5 +22,8 @@ export default combineReducers({
   tabs,
   ui,
   webentities,
-  routing
+  router: connectRouter(history),
 })
+
+
+export default createRootReducer
