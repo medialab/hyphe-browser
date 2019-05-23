@@ -1,5 +1,6 @@
 import './page-hyphe-home.styl'
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import Select from 'react-select'
 
@@ -63,7 +64,8 @@ class PageHypheHome extends React.Component {
             />
           </div>
           <div>
-            <input className="input-query" type="search" value={ this.state.value }
+            <input
+              className="input-query" type="search" value={ this.state.value }
               placeholder={ formatMessage({ id: 'google.placeholder' }) }
               onChange={ this.handleChangeInput }
             />

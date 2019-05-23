@@ -1,7 +1,8 @@
 // this is the wainting page while the corpus is starting
 // then it auto redirects to the browser
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { FormattedMessage as T } from 'react-intl'
 
 import {

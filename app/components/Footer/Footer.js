@@ -1,7 +1,8 @@
 // bottom left with i18n switcher and corpus indicators if connected
 import './footer.styl'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
 
@@ -21,7 +22,8 @@ const Footer = ( {
           const handleSetLocale = () => setLocale(l)
           return (
             <span key={ l }>
-              <button className={ l === locale ? 'selected' : '' }
+              <button
+                className={ l === locale ? 'selected' : '' }
                 onClick={ handleSetLocale }
               >{ l.substr(0, 2) }</button>
               { i < locales.length - 1 ? '|' : '' }

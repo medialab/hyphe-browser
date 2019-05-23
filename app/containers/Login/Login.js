@@ -1,7 +1,8 @@
-import './login'
+import './login.styl'
 
-import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import { routerActions } from 'react-router-redux'

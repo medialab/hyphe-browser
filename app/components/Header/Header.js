@@ -1,8 +1,9 @@
 // black stripe at the top of the app
 import './header.styl'
 
-import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { intlShape } from 'react-intl'
 import CorpusLoadIndicators from '../CorpusLoadIndicators'
 
