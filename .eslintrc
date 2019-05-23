@@ -96,5 +96,12 @@
       2,
       "always"
     ]
+  },
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect"
+    },
   }
 }
