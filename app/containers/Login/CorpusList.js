@@ -5,7 +5,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
 
 import { selectCorpus } from '../../actions/corpora'
@@ -16,7 +15,6 @@ class CorpusListItem extends React.Component {
   render () {
     const { server, corpus, selectCorpus, routerPush } = this.props
     const { password, name, status, webentities_in, created_at, last_activity } = corpus
-    
     const handleSelectCorpus = () => {
       const path = corpus.password ? '/login/corpus-login-form' : 'browser'
       selectCorpus(server, corpus)
@@ -45,7 +43,6 @@ CorpusListItem.propTypes = {
   server: PropTypes.object.isRequired,
 
   // actions
-  routerPush: PropTypes.func,
   selectCorpus: PropTypes.func,
 }
 
@@ -58,7 +55,8 @@ class CorpusList extends React.Component {
 
   render () {
     const { formatMessage } = this.context.intl
-    const { server, status, ui, selectCorpus, routerPush } = this.props
+    const { server, status, ui, selectCorpus, history } = this.props
+    const { push: routerPush } = history
     const { notification } = ui
 
     const hypheFull = false
@@ -131,7 +129,6 @@ CorpusList.propTypes = {
   ui: PropTypes.object.isRequired,
 
   // actions
-  routerPush: PropTypes.func,
   selectCorpus: PropTypes.func,
 }
 
@@ -144,6 +141,5 @@ const mapStateToProps = ({ corpora, servers, intl: { locale }, ui }) => ({
 })
 
 export default connect(mapStateToProps, {
-  routerPush: routerActions.push,
   selectCorpus
 })(CorpusList)

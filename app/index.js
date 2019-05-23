@@ -7,11 +7,11 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 // in this electron app it's easier to reason with hashHistory
-import { Router, hashHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
+import { ConnectedRouter } from 'connected-react-router'
+import configureStore, { history } from './store/configureStore'
+// import { syncHistoryWithStore } from 'react-router-redux'
 
-import routes from './routes'
-import configureStore from './store/configureStore'
+import Routes from './routes'
 import { setLocale } from './actions/intl'
 import { DEFAULT_LOCALE } from './constants'
 
@@ -22,10 +22,10 @@ import Container from './Container'
 
 const store = configureStore()
 
-// Initialize i18n
+// // Initialize i18n
 store.dispatch(setLocale(getOption('locale', DEFAULT_LOCALE)))
 
-const history = syncHistoryWithStore(hashHistory, store)
+// const history = syncHistoryWithStore(browserHistory, store)
 // Reset URI
 location.hash = 'login'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, IndexRoute, IndexRedirect } from 'react-router'
+import { Route, Redirect, Switch } from 'react-router'
 
 import App from './containers/App'
 import Browser from './containers/Browser'
@@ -11,23 +11,51 @@ import CorpusList from './containers/Login/CorpusList'
 import CorpusLoginForm from './containers/Login/CorpusLoginForm'
 import ServerForm from './containers/Login/ServerForm'
 
-export default (
-  <Route path="/" component={ App }>
+export default () => (
+  <Switch>
+    <Route
+      path="/login" component={ (props) => (
+        <Login { ...props }>
+          <Switch>
+            <Route exact path="/login/corpus-form" component={ CorpusForm } />
 
-    // only display the servers dropdown
-    <Route path="login" component={ Login }>
-      // create a new corpus
-      <Route path="corpus-form" component={ CorpusForm } />
-      // connect to a password protected corpus
-      <Route path="corpus-login-form" component={ CorpusLoginForm } />
-      // create / edit a Hyphe server
-      <Route path="server-form" component={ ServerForm } />
-      // select a server, a corpus and login to the later
-      <IndexRoute component={ CorpusList } />
-    </Route>
+            <Route exact path="/login/corpus-login-form" component={ CorpusLoginForm } />
 
-    <Route path="browser" component={ Browser } />
+            <Route exact path="/login/server-form" component={ ServerForm } />
 
-    <IndexRedirect to="/login" />
-  </Route>
+            <Route path="/" component={ CorpusList } />
+          </Switch>
+        </Login>
+      ) }
+    />
+
+    <Route exact path="/browser" component={ Browser } />
+
+    <Redirect from="*" to="/login" />
+
+  </Switch>
 )
+
+if (module.hot) {
+  module.hot.accept()
+}
+
+// export default () => (
+//   <Route path="/" component={ App }>
+//     {/*// only display the servers dropdowns
+//     <Route path="login" component={ Login }>
+//       // create a new corpus
+//       <Route path="corpus-form" component={ CorpusForm } />
+//       // connect to a password protected corpus
+//       <Route path="corpus-login-form" component={ CorpusLoginForm } />
+//       // create / edit a Hyphe server
+//       <Route path="server-form" component={ ServerForm } />
+//       // select a server, a corpus and login to the later
+//       <Route path="/" component={ CorpusList } />
+//     </Route>
+
+//     <Route path="browser" component={ Browser } />
+
+//     <Redirect to="/login" />*/}
+//   </Route>
+// )

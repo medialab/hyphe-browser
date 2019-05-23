@@ -1,10 +1,16 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import { hashHistory } from 'react-router'
-import { routerMiddleware } from 'react-router-redux'
+
+import { createHashHistory } from 'history'
+import { routerMiddleware } from 'connected-react-router'
+
+// import { routerMiddleware } from 'connected-react-router'
+
+// import { browserHistory } from 'react-router'
+// import { routerMiddleware } from 'react-router-redux'
 import persistState from 'redux-localstorage'
 
-import rootReducer from '../reducers'
+import createRouteReducer from '../reducers'
 
 // slicer's goal is to select subkeys of the state to be local-stored
 // for ex., we are only interested in saving servers.list, not servers.selected
@@ -20,15 +26,26 @@ const slicer = () => (state) =>
     }
   })
 
+export const history = createHashHistory()
+
 // configureStore
 export default (initialState) => {
-  const middlewares = applyMiddleware(thunk, routerMiddleware(hashHistory))
+  const middlewares = applyMiddleware(thunk, routerMiddleware(history))
 
   const storage = persistState(null, { slicer, key: 'hyphe' })
 
   const enhancers = process.env.NODE_ENV === 'development'
-    ? compose(middlewares, storage, window.devToolsExtension ? window.devToolsExtension() : f => f)
-    : compose(middlewares, storage)
+    ? compose(storage, window.__REDUX_DEVTOOLS_EXTENSION__loc ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
+    : compose(storage)
 
-  return createStore(rootReducer, initialState, enhancers)
+  return createStore(
+    createRouteReducer(history),
+    initialState,
+    compose(
+      middlewares,
+      enhancers
+    )
+  )
+
+  // return createStore(middlewares, initialState, enhancers)
 }
