@@ -1,6 +1,7 @@
-import './browser'
+import './browser.styl'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ipcRenderer as ipc } from 'electron'
 
@@ -55,15 +56,15 @@ class Browser extends React.Component {
     case 'IN':
       stacksExport = stacks.find((s) => s.name === status)
       jsonrpc(serverUrl)(stacksExport.method, stacksExport.args.concat(corpus.corpus_id))
-      .then((webentities) => this.downloadWebentities(webentities, status, fileFormat))
+        .then((webentities) => this.downloadWebentities(webentities, status, fileFormat))
       break
     case 'IN_UNDECIDED':
       stacksExport = stacks.filter((s) => s.name === 'IN' || s.name === 'UNDECIDED')
       Promise.all(stacksExport.map((stack) => jsonrpc(serverUrl)(stack.method, stack.args.concat(corpus.corpus_id))))
-      .then((list) => {
-        const webentities = list[0].concat(list[1])
-        this.downloadWebentities(webentities, status, fileFormat)
-      })
+        .then((list) => {
+          const webentities = list[0].concat(list[1])
+          this.downloadWebentities(webentities, status, fileFormat)
+        })
       break
     default: break
     }
@@ -74,7 +75,7 @@ class Browser extends React.Component {
     const corpusId = corpus.corpus_id
     const fileName = `${corpusId}_tags`
     jsonrpc(serverUrl)('store.get_tags', ['USER', corpusId])
-    .then((tags) => downloadFile(tags, fileName, fileFormat))
+      .then((tags) => downloadFile(tags, fileName, fileFormat))
   }
 
   render () {

@@ -2,7 +2,8 @@
 
 import './browser-tabs'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ipcRenderer as ipc } from 'electron'
 import { intlShape } from 'react-intl'

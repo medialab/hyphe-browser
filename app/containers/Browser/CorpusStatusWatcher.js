@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
 import Spinner from '../../components/Spinner'
@@ -84,7 +85,7 @@ class CorpusStatusWatcher extends React.Component {
   initDataOnceStarted () {
     const { fetchTLDs, showError, serverUrl, corpus } = this.props
     fetchTLDs(serverUrl, corpus.corpus_id)
-    .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
+      .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
   }
 
   render () {
@@ -94,30 +95,30 @@ class CorpusStatusWatcher extends React.Component {
       <div className={ this.props.className }>
         { ready ? this.props.children :
         <div className="spinner-container">
-          <Spinner /> 
-        </div>
-      }
+            <Spinner /> 
+          </div>
+        }
       </div>
     )
   }
 }
 
 CorpusStatusWatcher.propTypes = {
-  corpus: React.PropTypes.object.isRequired,
-  corpusPassword: React.PropTypes.string,
-  status: React.PropTypes.object.isRequired,
-  serverUrl: React.PropTypes.string.isRequired,
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
+  corpus: PropTypes.object.isRequired,
+  corpusPassword: PropTypes.string,
+  status: PropTypes.object.isRequired,
+  serverUrl: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  className: PropTypes.string,
 
   // actions
-  fetchCorpusStatus: React.PropTypes.func,
-  hideError: React.PropTypes.func,
-  showError: React.PropTypes.func,
-  startCorpus: React.PropTypes.func,
-  fetchTagsCategories: React.PropTypes.func,
-  fetchTags: React.PropTypes.func,
-  fetchTLDs: React.PropTypes.func
+  fetchCorpusStatus: PropTypes.func,
+  hideError: PropTypes.func,
+  showError: PropTypes.func,
+  startCorpus: PropTypes.func,
+  fetchTagsCategories: PropTypes.func,
+  fetchTags: PropTypes.func,
+  fetchTLDs: PropTypes.func
 }
 
 const mapStateToProps = ({ corpora, servers }) => ({

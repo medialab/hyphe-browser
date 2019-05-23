@@ -2,7 +2,8 @@
 import 'react-select/dist/react-select.css'
 import './browser-stack-wes-list'
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-virtualized-select'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'

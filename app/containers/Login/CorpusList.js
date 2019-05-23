@@ -1,8 +1,9 @@
 // displayed when a server is selected
 import './corpus-list'
 
-import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { routerActions } from 'react-router-redux'
 import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
