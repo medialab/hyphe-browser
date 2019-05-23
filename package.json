@@ -15,7 +15,9 @@
     "release": "cross-env NODE_ENV=production node bin/package.js && cd release/ && ls | while read d; do cd $d; rm -f *.zip; zip -r HyBro-$d.zip *; cd ..; done && mv */*.zip .",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.production.js --progress --profile --colors",
     "watch:electron": "cross-env NODE_ENV=development electron .",
-    "watch:dev-server": "cross-env NODE_ENV=development webpack-dashboard"
+    "watch:dev-server": "cross-env NODE_ENV=development webpack-dashboard",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -80,7 +82,10 @@
     "webpack-dashboard": "^3.0.7",
     "webpack-dev-middleware": "^3.7.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-target-electron-renderer": "^0.4.0"
+    "webpack-target-electron-renderer": "^0.4.0",
+    "@storybook/react": "^5.0.11",
+    "@storybook/addon-actions": "^5.0.11",
+    "@storybook/addon-links": "^5.0.11"
   },
   "dependencies": {
     "animate.css": "^3.5.2",
