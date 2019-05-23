@@ -4,27 +4,32 @@ var path = require('path')
 
 module.exports = {
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loaders: ['babel'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+              babelrc: true
+          },
+        },
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css']
+        loaders: ['style-loader', 'css-loader']
       },
-      {
-        test: /\.json$/,
-        loaders: ['json']
-      },
+      // {
+      //   test: /\.json$/,
+      //   loaders: ['json']
+      // },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
         loader: 'url-loader?limit=100000'
       },
       {
         test: /\.styl$/,
-        loaders: ['style', 'css', 'stylus']
+        loaders: ['style-loader', 'css-loader', 'stylus-loader']
       }
     ]
   },
@@ -34,8 +39,8 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.css', '.styl'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
+    extensions: [ '.js', '.jsx', '.json', '.css', '.styl'],
+    // packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
   },
   plugins: [
 

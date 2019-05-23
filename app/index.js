@@ -1,6 +1,8 @@
 import './css/style'
 import './css/themify-icons'
 
+import { hot } from 'react-hot-loader'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
@@ -16,6 +18,8 @@ import { DEFAULT_LOCALE } from './constants'
 import getOption from './utils/get-option'
 import jsonrpc from './utils/jsonrpc'
 
+import Container from './Container'
+
 const store = configureStore()
 
 // Initialize i18n
@@ -27,13 +31,7 @@ location.hash = 'login'
 
 const domRoot = document.getElementById('root')
 
-const rootElement = (
-  <Provider store={ store }>
-    <Router history={ history } routes={ routes } />
-  </Provider>
-)
-
-render(rootElement, domRoot)
+render(<Container />, domRoot)
 
 // Debugging utilities
 if (process.env.NODE_ENV === 'development') {
