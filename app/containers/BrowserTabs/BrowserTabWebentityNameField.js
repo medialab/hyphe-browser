@@ -60,7 +60,8 @@ class BrowserTabWebentityNameField extends React.Component {
 
 
   render () {
-    return (<input className={ cx('browser-tab-webentity-name over-overlay', { loading: !this.props.initialValue }) }
+    return (<input
+      className={ cx('browser-tab-webentity-name over-overlay', { loading: !this.props.initialValue }) }
       disabled={ this.props.disabled } // PAGE_HYPHE_HOME
       defaultValue={ this.props.initialValue }
       readOnly={ !this.props.editable || !this.props.initialValue }

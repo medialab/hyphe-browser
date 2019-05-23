@@ -93,7 +93,8 @@ class CorpusList extends React.Component {
           <div className="form-error"><T id={ notification.messageId } values={ notification.messageValues.error } /></div> 
         }
         { !!Object.keys(this.props.corpora).length && <div className="form-group corpus-list-filter">
-          <input  value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
+          <input
+            value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
             onChange={ ({ target }) => this.setState({ filter: target.value }) }
           />
           <span className="ti-search" />
@@ -101,11 +102,12 @@ class CorpusList extends React.Component {
         <div className="corpus-list-slider">
           <ul className="list-group corpus-list">
             { corpora.map((corpus) =>
-              <li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-                <CorpusListItem corpus={ corpus } server={ server }
+              (<li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
+                <CorpusListItem
+                  corpus={ corpus } server={ server }
                   selectCorpus={ selectCorpus } routerPush={ routerPush }
                 />
-              </li>
+              </li>)
             ) }
           </ul>
         </div>

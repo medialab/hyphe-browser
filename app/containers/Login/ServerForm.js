@@ -43,7 +43,8 @@ class ServerForm extends React.Component {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
-        <input disabled={ this.state.submitting }
+        <input
+          disabled={ this.state.submitting }
           name={ name }
           autoFocus={ autoFocus }
           onChange={ ({ target }) => this.setDataState(name, target.value) }
@@ -101,11 +102,11 @@ class ServerForm extends React.Component {
       : this.props.updateServer(server)
 
     // sync redirect
-    this.props.routerPush('/login')
+    this.props.history.push('/login')
   }
 
   cleanData () {
-    let server = {
+    const server = {
       ...this.state.data
     }
     if (!server.password) {
@@ -151,7 +152,8 @@ class ServerForm extends React.Component {
           </Link>
           { this.props.editMode &&
             (
-              <button className="btn btn-negative" disabled={ this.state.submitting }
+              <button
+                className="btn btn-negative" disabled={ this.state.submitting }
                 onClick={ this.delete }
               >
                 <T id="delete" />

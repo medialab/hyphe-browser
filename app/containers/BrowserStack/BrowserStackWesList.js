@@ -53,7 +53,8 @@ class BrowserStackWesList extends React.Component {
     const handleSelectWebentity = (v) => selectWebentity(v) 
     
     return (
-      <Select className={ cx('browser-stack-wes-list', { loading: loadingStack }) }
+      <Select
+        className={ cx('browser-stack-wes-list', { loading: loadingStack }) }
         arrowRenderer={ renderArrow }
         clearable={ false }
         disabled={ loadingStack || loadingWE || !webentities.length }

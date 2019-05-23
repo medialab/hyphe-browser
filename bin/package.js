@@ -56,13 +56,13 @@ const targets = [
 
 console.log('Building packages…')
 webpackP(cfg)
-.then(() => del('release'))
-.then(() => packageAll())
-.then(() => console.log('Packages built successfully!'))
-.catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+  .then(() => del('release'))
+  .then(() => packageAll())
+  .then(() => console.log('Packages built successfully!'))
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
 
 function packageAll () {
   return Promise.all(targets.map((target) => {

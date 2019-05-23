@@ -66,7 +66,8 @@ class BrowserStack extends React.Component {
           const fillStack = () => fetchStack(server.url, corpus, stack)
   
           return (
-            <button key={ stack.name }
+            <button
+              key={ stack.name }
               className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
                 { 'selected': stack.name === (selectedStack && selectedStack.name) }) }
               disabled={ disabled }
@@ -108,7 +109,8 @@ class BrowserStack extends React.Component {
     return (
       <div className="browser-stack-wes">
 
-        <button className="btn btn-default hint--bottom-right"
+        <button
+          className="btn btn-default hint--bottom-right"
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }) }
           disabled={ !selectedStack || loading || isFirst || loadingWebentityStack }
           onClick={ goPrevWebentity }
@@ -128,7 +130,8 @@ class BrowserStack extends React.Component {
           { this.renderProgress() }
         </div>
 
-        <button className="btn btn-default hint--bottom-left"
+        <button
+          className="btn btn-default hint--bottom-left"
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }) }
           disabled={ !selectedStack || loading || isLast || loadingWebentityStack }
           onClick={ goNextWebentity }

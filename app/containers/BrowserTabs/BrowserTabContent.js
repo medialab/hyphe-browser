@@ -227,12 +227,14 @@ class TabContent extends React.Component {
       return [
         // Note this button is hidden and replaced with a click on overlay
         // we keep it for back compat with nth-child rules and simplier rollback
-        <Button key="cancel-adjust" icon="close"
+        <Button
+          key="cancel-adjust" icon="close"
           disabled={ saving }
           title={ formatMessage({ id: 'cancel' }) }
           onClick={ handleHideAdjustWebentity }
         />,
-        <Button key="apply-adjust" icon="check"
+        <Button
+          key="apply-adjust" icon="check"
           disabled={ saving || this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
           onClick={ this.saveAdjustChanges }
@@ -290,13 +292,16 @@ class TabContent extends React.Component {
 
     return (
       <div className="browser-tab-toolbar-navigation">
-        <Button title={ formatMessage({ id: 'browse-reload' }) } icon="reload" disabled={ !!adjusting }
+        <Button
+          title={ formatMessage({ id: 'browse-reload' }) } icon="reload" disabled={ !!adjusting }
           onClick={ (e) => eventBus.emit('reload', e.ctrlKey || e.shiftKey) }
         />
-        <Button title={ formatMessage({ id: 'browse-back' }) } icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
+        <Button
+          title={ formatMessage({ id: 'browse-back' }) } icon="angle-left" disabled={ !!adjusting || this.state.disableBack }
           onClick={ () => eventBus.emit('goBack') }
         />
-        <Button title={ formatMessage({ id: 'browse-forward' }) } icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
+        <Button
+          title={ formatMessage({ id: 'browse-forward' }) } icon="angle-right" disabled={ !!adjusting || this.state.disableForward }
           onClick={ () => eventBus.emit('goForward') }
         />
       </div>
@@ -368,7 +373,8 @@ class TabContent extends React.Component {
         onSetTabUrl={ handleSetTabUrl } 
         ref={ component => this.webviewComponent = component }
         />
-      : <WebView id={ id } url={ url } closable={ closable } eventBus={ eventBus } 
+      : <WebView
+        id={ id } url={ url } closable={ closable } eventBus={ eventBus } 
         ref={ component => this.webviewComponent = component }
         />
   }
@@ -388,7 +394,8 @@ class TabContent extends React.Component {
 
     return (
       <div className="browser-tab-content-cols">
-        <SideBar status={ status } webentity={ webentity } tabId={ id } url={ url }
+        <SideBar
+          status={ status } webentity={ webentity } tabId={ id } url={ url }
           serverUrl={ server.url } corpusId={ corpusId } disabled={ !!adjusting && !noCrawlPopup }
         />
         { this.renderContent() }
@@ -405,7 +412,7 @@ class TabContent extends React.Component {
 
   renderMergePopup () {
     const { id, server, corpusId, webentity, mergeRequired, merging,
-     unsetMergeWebentity, mergeWebentities } = this.props
+      unsetMergeWebentity, mergeWebentities } = this.props
 
     const merge = e => {
       e.preventDefault()
@@ -421,11 +428,11 @@ class TabContent extends React.Component {
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
         {
-            mergeRequired.mergeable.type === 'redirect'?
-              <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
+          mergeRequired.mergeable.type === 'redirect'?
+            <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
             :
-              <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
-          }
+            <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
+        }
         <p><T id="webentity-merge-popup-message-2" /></p>
         <p><T id="webentity-merge-popup-message-3" /></p>
         <div className="we-popup-footer">
@@ -496,7 +503,8 @@ class TabContent extends React.Component {
     const { active, id, webentity, disableWebentity, adjusting, noCrawlPopup, mergeRequired } = this.props
 
     return (
-      <div key={ id } tabIndex="1" className="browser-tab-content" 
+      <div
+        key={ id } tabIndex="1" className="browser-tab-content" 
         style={ active ? {} : { position: 'absolute', left: '-10000px' } }
         onKeyUp={ this.handleKeyUp }
       >

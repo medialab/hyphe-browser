@@ -68,7 +68,7 @@ class _List extends React.Component {
                 <div className="link-url" onClick={ handleClick }>{ link.homepage }</div>
               </li>
             )}
-        ) : formatMessage({ id: 'none' }) }
+          ) : formatMessage({ id: 'none' }) }
         </ul>
       </div>
     )
@@ -182,14 +182,15 @@ class SideBarContextualLists extends React.Component {
             ['mostLinked', 'referrers', 'referrals'].map(l => {
               const handleSelectContextualList = () => selectContextualList(l)
               return (
-                <button className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
+                <button
+                  className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
                   key={ l } onClick={ handleSelectContextualList }
                 >
                   <T id={ `sidebar.contextual.${l}` } />
                 </button>
               )
             }
-          ) }
+            ) }
           { !webentity[selected]
             ? <T id="loading" />
             : <List links={ webentity[selected] } name={ selected } webentity={ webentity } />

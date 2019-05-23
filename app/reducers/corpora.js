@@ -75,7 +75,7 @@ export default createReducer(initialState, {
   }),
 
   [ADD_NAVIGATION_HISTORY]: (state, { url, corpusId }) => {
-    let history = state.navigationHistory[corpusId] || []
+    const history = state.navigationHistory[corpusId] || []
     history.push({
       url,
       visitedAt: new Date().getTime()
