@@ -33,9 +33,15 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', () => {
-  let window = new BrowserWindow({ center: true, width: 1024, height: 728, resizable: true })
+  let window = new BrowserWindow({ 
+    center: true, 
+    width: 1024, 
+    height: 728, 
+    resizable: true
+  })
 
   if (process.env.NODE_ENV === 'development') {
+    require('./dev-server')
     window.loadURL('file://' + __dirname + '/app/index-dev.html')
   } else {
     window.loadURL('file://' + __dirname + '/app/index.html')
@@ -119,7 +125,7 @@ function getMenuBar () {
     {
       label: '&Edit',
       submenu: [
-     /* {
+        /* {
           role: 'undo',
           accelerator: 'Cmd+Z'
         },

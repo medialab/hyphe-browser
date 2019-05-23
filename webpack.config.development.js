@@ -5,9 +5,9 @@ var webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
 var baseConfig = require('./webpack.config.base')
 
 
-var config = Object.create(baseConfig)
+var config = Object.assign({}, baseConfig)
 
-config.debug = true
+config.mode = 'development'
 
 config.devtool = 'cheap-module-eval-source-map'
 
@@ -18,25 +18,9 @@ config.entry = [
 
 config.output.publicPath = 'http://localhost:3000/dist/'
 
-/*
-config.module.loaders.push({
-  test: /^((?!\.module).)*\.css$/,
-  loaders: [
-    'style-loader',
-    'css-loader'
-  ]
-}, {
-  test: /\.module\.css$/,
-  loaders: [
-    'style-loader',
-    'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!'
-  ]
-});
-*/
-
 config.plugins.push(
+  new webpack.NamedModulesPlugin(),
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin(),
   new webpack.DefinePlugin({
     '__DEV__': true,
     'process.env': {
@@ -46,6 +30,6 @@ config.plugins.push(
   })
 )
 
-config.target = webpackTargetElectronRenderer(config)
+config.target = 'electron-renderer'
 
 module.exports = config

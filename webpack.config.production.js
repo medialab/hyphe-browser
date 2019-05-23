@@ -1,11 +1,12 @@
 'use strict'
 
 var webpack = require('webpack')
-var webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
+// var webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
 var baseConfig = require('./webpack.config.base')
 
+var config = Object.assign({}, baseConfig)
 
-var config = Object.create(baseConfig)
+config.mode = 'production';
 
 config.devtool = 'source-map'
 
@@ -30,21 +31,15 @@ config.module.loaders.push({
 */
 
 config.plugins.push(
-  new webpack.optimize.OccurenceOrderPlugin(),
+  // new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.DefinePlugin({
     '__DEV__': false,
     'process.env': {
       'NODE_ENV': JSON.stringify('production')
     }
-  }),
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      screw_ie8: true,
-      warnings: false
-    }
   })
 )
 
-config.target = webpackTargetElectronRenderer(config)
+config.target = 'electron-renderer'
 
 module.exports = config
