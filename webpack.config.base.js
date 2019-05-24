@@ -39,6 +39,9 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   resolve: {
+    alias: { 
+      'react-dom': '@hot-loader/react-dom'  
+    }, 
     extensions: [ '.js', '.jsx', '.json', '.css', '.styl'],
     // packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
   },
@@ -47,5 +50,5 @@ module.exports = {
   ],
   externals: [
     // put your node 3rd party libraries which can't be built with webpack here (mysql, mongodb, and so on..)
-  ]
+  ],
 }
