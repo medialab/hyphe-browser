@@ -1,17 +1,14 @@
 import './css/style'
 import './css/themify-icons'
 
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader'/* eslint no-unused-vars : 0 */
 
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 // in this electron app it's easier to reason with hashHistory
-import { ConnectedRouter } from 'connected-react-router'
-import configureStore, { history } from './store/configureStore'
-// import { syncHistoryWithStore } from 'react-router-redux'
+import configureStore from './store/configureStore'
 
-import Routes from './routes'
 import { setLocale } from './actions/intl'
 import { DEFAULT_LOCALE } from './constants'
 

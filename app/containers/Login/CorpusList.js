@@ -41,6 +41,9 @@ class CorpusListItem extends React.Component {
 CorpusListItem.propTypes = {
   corpus: PropTypes.object.isRequired,
   server: PropTypes.object.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }),
 
   // actions
   selectCorpus: PropTypes.func,

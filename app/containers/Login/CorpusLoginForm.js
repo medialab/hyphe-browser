@@ -65,6 +65,7 @@ CorpusLoginForm.propTypes = {
   corpus: PropTypes.object,
   locale: PropTypes.string.isRequired,
   server: PropTypes.object,
+  history: PropTypes.object,
 
   // action
   // routerPush: PropTypes.func,

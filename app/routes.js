@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router'
 
-import App from './containers/App'
 import Browser from './containers/Browser'
 
 // login components
