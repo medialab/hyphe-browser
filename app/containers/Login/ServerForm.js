@@ -167,6 +167,11 @@ class ServerForm extends React.Component {
 }
 
 ServerForm.propTypes = {
+  // router
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+
   editMode: PropTypes.bool,
   locale: PropTypes.string.isRequired,
   server: PropTypes.object,
@@ -175,7 +180,6 @@ ServerForm.propTypes = {
   createServer: PropTypes.func,
   updateServer: PropTypes.func,
   deleteServer: PropTypes.func,
-  // routerPush: PropTypes.func,
 }
 
 const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({

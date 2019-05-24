@@ -112,6 +112,7 @@ Login.propTypes = {
 
   // router
   location: PropTypes.object,
+  history: PropTypes.object,
 
   // actions
   deselectServer: PropTypes.func,
