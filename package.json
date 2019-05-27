@@ -88,6 +88,9 @@
     "@storybook/addon-links": "^5.0.11"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@hot-loader/react-dom": "^16.8.6",
     "animate.css": "^3.5.2",
     "chromium-net-errors": "^1.0.3",

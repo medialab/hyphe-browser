@@ -13,6 +13,22 @@ module.exports = {
   module: {
     rules: [
       // add your custom rules.
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
+      },
+      // {
+      //   test: /\.json$/,
+      //   loaders: ['json']
+      // },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
+        loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.styl$/,
+        loaders: ['style-loader', 'css-loader', 'stylus-loader']
+      }
     ],
   },
 };
