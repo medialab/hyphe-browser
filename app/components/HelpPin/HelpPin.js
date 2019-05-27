@@ -3,9 +3,6 @@ import './HelpPin.styl'
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle'
-
 
 const HelpPin = ({
   children,
@@ -18,7 +15,7 @@ const HelpPin = ({
       style={ { position: 'relative' } }
       aria-label={ children }
     >
-      <FontAwesomeIcon icon={ faQuestionCircle } />
+      <span className="ti-help-alt" />
     </span>
   )
 
