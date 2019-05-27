@@ -22,6 +22,8 @@
         font-size: 12px
     textarea:focus
         border: 1px solid black
+    textarea::placeholder
+        color: var(--color-grey-light)
     .research-note
         margin-bottom: 10px
         font-size: 12px
@@ -37,8 +39,11 @@
             padding-top: 10px
     .add-button
         position: relative!important
+        right: unset!important
         width: 100%
         margin: 10px
+        margin-left: 0
+        margin-right: 0
         border: none
         background: white
         line-height: 34px;

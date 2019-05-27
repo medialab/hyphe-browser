@@ -11,6 +11,8 @@ import '../app/css/hint.base.css'
  */
 import '../app/containers/SideBar/side-bar-tags.styl'
 import '../app/containers/SideBar/side-bar.styl'
+import 'react-select/dist/react-select.css'
+
 
 /**
  * Storybook specific style imports
@@ -40,9 +42,18 @@ import { storiesOf } from '@storybook/react'
 import PinExample from './PinExample';
 storiesOf('Help pin (embedded documentation)', module)
   .add('example', () => <PinExample />)
+
 /**
  * Research notes
  */
 import ResearchNotesMock from './ResearchNotesMock';
 storiesOf('Research notes', module)
   .add('Sketch', () => <ResearchNotesMock />)
+
+/**
+ * Tags cartel
+ */
+import TagsMock from './TagsMock';
+storiesOf('Tags cartel', module)
+  .add('Empty', () => <TagsMock />)
+  .add('With existing categories', () => <TagsMock startingCategories={[{category: 'language', value: 'fr'}, {category: 'type', value: 'media'}]} />)
