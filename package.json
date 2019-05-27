@@ -112,6 +112,7 @@
     "papaparse": "^4.6.3",
     "react": "^16.8.6",
     "react-addons-shallow-compare": "^15.3.2",
+    "react-autosize-textarea": "^7.0.0",
     "react-dom": "^16.8.6",
     "react-infinite": "^0.13.0",
     "react-intl": "^2.1.5",
