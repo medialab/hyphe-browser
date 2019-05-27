@@ -39,21 +39,42 @@ import { storiesOf } from '@storybook/react'
 /**
  * Help pin
  */
-import PinExample from './PinExample';
+import PinExample from './PinExample'
 storiesOf('Help pin (embedded documentation)', module)
   .add('example', () => <PinExample />)
 
 /**
  * Research notes
  */
-import ResearchNotesMock from './ResearchNotesMock';
+import ResearchNotesMock from './ResearchNotesMock'
 storiesOf('Research notes', module)
   .add('Sketch', () => <ResearchNotesMock />)
 
 /**
  * Tags cartel
  */
-import TagsMock from './TagsMock';
+import TagsMock from './TagsMock'
 storiesOf('Tags cartel', module)
   .add('Empty', () => <TagsMock />)
-  .add('With existing categories', () => <TagsMock startingCategories={[{category: 'language', value: 'fr'}, {category: 'type', value: 'media'}]} />)
+  .add('With existing categories', () => <TagsMock startingCategories={ [{ category: 'language', value: 'fr' }, { category: 'type', value: 'media' }] } />)
+
+/**
+ * Cited webentities cartel
+ */import CitedPagesMock from './CitedPagesMock'
+storiesOf('Cited pages', module)
+  .add('Example', () => <CitedPagesMock />)
+
+/**
+ * Linked webentities cartel
+ */
+import LinkedEntitiesMock from './LinkedEntitiesMock'
+storiesOf('Linked webentities', module)
+  .add('Example', () => <LinkedEntitiesMock />)
+
+
+/**
+   * Existing layout
+   */
+import ExistingLayoutMock from './ExistingLayoutMock'
+storiesOf('Existing layout', module)
+  .add('Existing layout', () => <ExistingLayoutMock />)
