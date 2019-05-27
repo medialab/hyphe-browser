@@ -75,8 +75,8 @@ const ResearchNotesMock = function (){
                     return (
                       <div key={ index } className="research-note">
                         <div className="research-note-content">{
-                            note.split('\n').map((i, key) => <div key={key}>{i}</div>)
-                            }</div>
+                          note.split('\n').map((i, key) => <div key={ key }>{i}</div>)
+                        }</div>
                         <Button icon="close" onClick={ onRemove }>x</Button>
                       </div>
                     )

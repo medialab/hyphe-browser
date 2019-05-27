@@ -3,19 +3,19 @@ import './Tags.styl'
 import React, { useState } from 'react'
 
 import cx from 'classnames'
-import {Creatable} from 'react-select'
+import { Creatable } from 'react-select'
 
 import HelpPin from '../../app/components/HelpPin'
 
 const MOCK_OPTIONS = [
   {
-   value: 'test 1',
-   label: 'test 1'
+    value: 'test 1',
+    label: 'test 1'
   },
   {
     value: 'test 2',
     label: 'test 2'
-   },
+  },
 ]
 
 
@@ -63,7 +63,7 @@ const TagsMock = function ({ startingCategories = [] }){
                           {
                             categories.map(({ category, value = '' }, categoryIndex) => {
 
-                              const onChoose = ({label}) => {
+                              const onChoose = ({ label }) => {
                                 setCategories(
                                   categories.map((cat, i) => {
                                     if (i === categoryIndex) {
@@ -86,7 +86,7 @@ const TagsMock = function ({ startingCategories = [] }){
                                     
                                     <Creatable
                                       name="cat-select"
-                                      options={ [...MOCK_OPTIONS, {value: value, label: value}] }
+                                      options={ [...MOCK_OPTIONS, { value, label: value }] }
                                       clearable={ false }
                                       searchable
                                       value={ value }
