@@ -1,0 +1,66 @@
+button()
+    border: none
+    background: white
+    line-height: 34px;
+    font-family: var(--font-pt)
+    text-transform: uppercase
+    cursor: pointer
+
+input()
+    color: #aaa;
+    line-height: 17px;
+    max-width: 100%;
+    overflow: auto;
+    text-overflow: ellipsis;
+    outline: none
+    border: none
+    resize: none
+    border-radius: 5px
+    padding: 5px
+    font-size: 12px
+
+.browser-side-bar-tags
+    .no-categories-text
+        font-style: italic
+        font-size: 14px
+        color: var(--color-grey-dark)
+        text-align: center
+        padding: 10px
+    .cartel-content
+        text-align: left
+        padding: 10px
+        padding-top: 0
+        .categories-container
+            padding-bottom: 10px
+        .add-category-container
+            display: flex
+            flex-flow: row nowrap
+            justify-content: stretch
+            border-top: 1px solid var(--color-grey-dark)
+            padding-top: 10px
+            .add-category-input
+                flex: 1
+                input()
+            .add-category-input::placeholder
+                color: var(--color-grey-light)
+            button
+                flex: 1
+                button()
+                margin-left: 5px
+    .categories-list
+        padding: 0
+        
+        .category-item-container
+            list-style-type: none
+            display: flex
+            flex-flow: row nowrap
+            justify-content: stretch
+            margin-bottom: 5px
+            align-items: center
+            .category-name
+                text-align: right
+                flex: 1
+                padding-right: 10px
+                font-size: 12px
+            .category-input
+                flex: 1

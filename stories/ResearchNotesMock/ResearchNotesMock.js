@@ -3,8 +3,8 @@ import cx from 'classnames'
 
 import Textarea from 'react-autosize-textarea'
 
-import HelpPin from '../app/components/HelpPin'
-import Button from '../app/components/Button'
+import HelpPin from '../../app/components/HelpPin'
+import Button from '../../app/components/Button'
 
 import './ResearchNotes.styl'
 
@@ -45,7 +45,11 @@ const ResearchNotesMock = function (){
               open &&
               <div>
                 <form onSubmit={ onAddNote } className="browser-side-bar-tags-new-category">
-                  <Textarea value={ textAreaText } onChange={ e => setTextAreaText(e.target.value) } />
+                  <Textarea 
+                    value={ textAreaText } 
+                    onChange={ e => setTextAreaText(e.target.value) }
+                    placeholder="Write some comments about the current webentity"
+                  />
                   <button 
                     className={ cx({
                       'add-button': true,
