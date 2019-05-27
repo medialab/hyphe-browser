@@ -3,3 +3,4 @@ release*
 dist
 npm-debug.log*
 app/reducers/servers*.js
+.DS_Store
