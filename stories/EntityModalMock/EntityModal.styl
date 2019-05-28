@@ -1,0 +1,75 @@
+
+
+.new-entity-modal-container
+    display : flex
+    flex-flow: row nowrap
+    max-height: 100%
+    overflow : hidden
+    justify-content: stretch
+    height: 100%
+    input 
+        border: 1px solid  #cccecd
+        border-radius: 5px
+        padding: 5px
+    .pages-list
+        background: var(--color-grey);
+        border-radius: var(--radius);
+        padding: 10px;
+        list-style: none
+        max-height: 20vh
+        overflow-y: auto
+        .page-card
+            background: var(--color-white);
+            font-family: var(--font-pt);
+            font-size: 12px;
+            margin: 6px 10px;
+            padding: 10px 20px;
+            text-align: left;
+    .btn[disabled]
+        opacity: .5
+    .actions-container
+        display: flex
+        flex-flow: row nowrap
+        padding: 0
+        li
+            list-style-type: none
+            margin-right: 10px
+    .actions-container.big
+        justify-content: stretch
+        li
+            flex: 1
+            display: flex
+            justify-content: stretch
+            .btn
+                flex: 1
+    .btn-success
+        background: lightgreen
+        color: white
+    .btn-danger
+        background: red
+        color: white
+    .step-container
+        margin-bottom: 10px
+        border-bottom: 1px solid black
+        padding: 5px
+    .step-container.is-disabled
+        opacity: .5
+        pointer-events: none
+    .column
+        flex: 1
+        width: 50%;
+        max-width: 50%
+    .left-column
+        max-height: 100%
+        overflow-y: auto
+    .right-column
+        display: flex
+        flex-flow: column nowrap
+        max-height: 100%
+        overflow: hidden
+        justify-content : stretch
+        .column-body
+            flex: 1
+            overflow-y: auto
+            overflow-x: hidden
+        // .column-footer
