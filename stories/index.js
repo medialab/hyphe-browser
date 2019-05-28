@@ -71,10 +71,49 @@ import LinkedEntitiesMock from './LinkedEntitiesMock'
 storiesOf('Linked webentities', module)
   .add('Example', () => <LinkedEntitiesMock />)
 
+/**
+   * Prefix setter component
+   */
+const simpleWEParts = [
+  { name: 'https', editable: false }, 
+  { name: '.com', editable: false }, 
+  { name: 'github', editable: true }, 
+  { name: '/denoland', editable: true }, 
+  { name: '/deno', editable: true },
+]
+import PrefixSetter from './PrefixSetter'
+storiesOf('Prefix setter', module)
+  .add('Simple', () => <PrefixSetter parts={ simpleWEParts } />)
+
 
 /**
-   * Existing layout
-   */
+ * Browser toolbar
+ */
+import BrowserBarMock from './BrowserBarMock'
+storiesOf('Browser bar', module)
+  .add('Mockup', () => <BrowserBarMock />)
+
+/**
+ * New entity modal
+ */
+import EntityModalMock from './EntityModalMock'
+storiesOf('New entity modal', module)
+  .add('Mockup', () => <EntityModalMock />)
+
+/**
+ * Entity card
+ */
+import EntityCard from './EntityCard'
+storiesOf('Entity card', module)
+.add('Mockup', () => 
+  <div style={{width: '500px'}}>
+    <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={12} />
+  </div>
+)
+
+/**
+ * Existing layout
+ */
 import ExistingLayoutMock from './ExistingLayoutMock'
 storiesOf('Existing layout', module)
   .add('Existing layout', () => <ExistingLayoutMock />)
