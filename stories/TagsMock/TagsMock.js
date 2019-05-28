@@ -102,7 +102,7 @@ const TagsMock = function ({ startingCategories = [] }){
                         <div className="no-categories-text">The corpus has no tag categories yet</div>
                     }
                   </div>
-                  <form onClick={ onNewCat } className="add-category-container">
+                  <form className="add-category-container">
                     <input 
                       placeholder="New category name" 
                       className="add-category-input" 
@@ -114,7 +114,7 @@ const TagsMock = function ({ startingCategories = [] }){
                       type="submit" 
                       onClick={ onNewCat }
                     >
-                      Add category
+                      Add category <HelpPin>Help about categories</HelpPin>
                     </button>
                   </form>
                 </div>
