@@ -1,7 +1,16 @@
 import './BrowserBar.styl'
-import React from 'react'
+import React, {useState, useRef} from 'react'
+import cx from 'classnames'
 
-const BrowserBar = () => {
+const BrowserBar = function() {
+  const [edited, setEdited] = useState(false)
+  const input = useRef(null)
+  const handleFormClick = () => {
+      if (!edited) {
+          setEdited(true)
+          setTimeout(() => input.current.focus())
+      }
+  }
   return (
     <div className="browser-bar">
       <div className="browser-tab-toolbar-navigation">
@@ -14,11 +23,15 @@ const BrowserBar = () => {
           <span className="ti-reload" />
         </button>
       </div>
-      <div className="browser-tab-toolbar-url">
-        <form className="">
+      <div className={cx("browser-tab-toolbar-url", {'edited': edited})}>
+        <form onClick={handleFormClick} className="">
+          {edited ?
+          <input ref={input} onBlur={() => setEdited(false)} value="https://www.01net.com/tests" />
+          :
           <span className="browser-tab-url">
             <em>https</em>://<em>www.01net</em><em>.com</em>/tests
           </span>
+          }
         </form>
         <div className="page-actions">
           <span className="hint--left" aria-label="Set this page as the homepage of the entity">

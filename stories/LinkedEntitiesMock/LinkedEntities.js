@@ -7,7 +7,7 @@ import cx from 'classnames'
 
 import HelpPin from '../../app/components/HelpPin'
 
-const REFERRERS = [
+let REFERRERS = [
   {
     name: 'gogol',
     homepage: 'https://google.com',
@@ -15,13 +15,18 @@ const REFERRERS = [
   }
 ]
 
-const REFERRALS = [
+let REFERRALS = [
   {
     name: 'faceboc',
     homepage: 'https://facebook.com',
     id: 'facebook'
   }
 ]
+for (let i = 0 ; i < 3 ; i++) {
+  REFERRERS = REFERRERS.concat(REFERRERS)
+  REFERRALS = REFERRALS.concat(REFERRALS)
+}
+
 
 const LinkedEntities = function () {
   const [open, setOpen] = useState(true)
@@ -53,12 +58,12 @@ const LinkedEntities = function () {
                   <nav>
                     {
                       // hide parents and children tabs for now
-                      ['referrers', 'referrals'].map(l => {
+                      ['referrers', 'referrals'].map((l, index) => {
                         const handleSelectContextualList = () => setSelected(l)
                         return (
                           <button
                             className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
-                            key={ l } 
+                            key={ index } 
                             onClick={ handleSelectContextualList }
                           >
                             {l === 'referrers' ? 'Citing webentities' : 'Cited webentities'}
@@ -69,10 +74,10 @@ const LinkedEntities = function () {
 
                     <div className="browser-side-bar-contextual-list">
                       <ul>
-                        { LINKS.length ? LINKS.map(link => {
+                        { LINKS.length ? LINKS.map((link, index) => {
                           
                           return (
-                            <li key={ link.id } title={ link.name + '\n' + link.homepage }>
+                            <li key={ index } title={ link.name + '\n' + link.homepage }>
                               <div className="link-name">
                                 <span>{ link.name }</span>
                                 <span className="link-merge" >merge</span>
