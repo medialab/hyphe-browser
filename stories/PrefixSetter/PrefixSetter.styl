@@ -1,0 +1,39 @@
+
+
+.prefix-setter
+    display: flex
+    flex-flow: row nowrap
+    .parts-container
+        display: flex
+        flex-flow: row nowrap
+        padding: 0
+        position: relative
+        .part
+            list-style-type: none
+            padding: 10px
+            user-select: none
+        .part.active
+            background: rgba(50, 141, 199, 0.9) none repeat scroll 0% 0%
+            color: rgb(230, 241, 248)
+        .part.editable
+            cursor: pointer
+        .part:not(.editable)
+            opacity: .8
+        .slider
+            position: absolute
+            left: 0
+            top: 0
+            height: 100%
+            background: rgb(54, 129, 174) none repeat scroll 0% 0%
+            width: 5px
+        .slider-handle
+            position: absolute
+            top: calc(100% - 30px)
+            left: -7.5px
+            background: rgb(192, 220, 238) none repeat scroll 0% 0%
+            border: 3px solid rgb(54, 129, 174) 
+            box-sizing: border-box
+            width: 20px
+            height: 20px
+            border-radius: 50%
+            cursor: pointer
