@@ -1,0 +1,38 @@
+
+flexStretch()
+    display: flex
+    flex-flow: row nowrap
+    align-items: stretch
+
+.entity-card
+    background: white
+    padding: 10px 20px 10px 20px
+    flexStretch()
+    .card-content
+        flex: 1
+        .name
+            text-decoration: underline
+            font-size: 14px
+            padding: 0
+            margin: 0
+            font-weight: bold
+        .url
+            font-size: 12px
+            margin: 0
+            margin-bottom: 10px
+            text-decoration: underline
+        .statistics
+            font-size: 10px
+    .card-actions
+        flexStretch()
+        padding: 0
+        list-style : none
+        margin: 0
+        align-items: center
+        li
+            flex: 1
+            .btn
+                background: var(--color-grey)
+                border-radius: 5px
+                width: 30px
+                margin-left: 5px
