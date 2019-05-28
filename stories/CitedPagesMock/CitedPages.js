@@ -8,7 +8,7 @@ import cx from 'classnames'
 import HelpPin from '../../app/components/HelpPin'
 
 
-const PAGES = [
+let PAGES = [
   {
     name: 'faceboc',
     homepage: 'https://facebook.com',
@@ -26,6 +26,7 @@ const PAGES = [
   },
 
 ]
+for (let i = 0 ; i < 3 ; i++) PAGES = PAGES.concat(PAGES)
 
 const CitedPages = function () {
   const [open, setOpen] = useState(true)
@@ -60,7 +61,7 @@ const CitedPages = function () {
                           <li key={ link.id } title={ link.name + '\n' + link.homepage }>
                             <div className="link-name">
                               <span>{ link.name }</span>
-                              <span className="link-merge hint--left" aria-label="set as homepage" ><span className="ti-home" /></span>
+                              <span className="link-merge hint--left" aria-label="set as homepage" ><span className="ti-layers-alt" /></span>
                             </div>
                             <div className="link-url" >{ link.homepage }</div>
                           </li>

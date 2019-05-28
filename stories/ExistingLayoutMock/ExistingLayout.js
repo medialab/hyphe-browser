@@ -247,7 +247,8 @@ const DryBrowserTabs = () => {
                                 aria-expanded="false" aria-owns="" aria-activedescendant="react-select-5--value" aria-disabled="true"
                                 className="Select-input" role="combobox" tabIndex="0" style={ { border: 0, width: 1, display: 'inline-block' } }
                               /></div><span className="Select-arrow-zone"><span className="Select-arrow" /></span></div></div></div></div></div></div></aside>
-          <iframe style={{width: '100%', height: '100%', border: 'none'}}
+          <iframe
+            style={ { width: '100%', height: '100%', border: 'none' } }
             tabIndex="0" src="https://www.01net.com/tests/" preload="./utils/webview-preload-script.js" useragent="Mozilla/5.0 (X11; Linux ax86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/1.0.0 Chrome/52.0.2743.82 Safari/537.36"
             autosize="on" guestinstance="5"
           /></div>
