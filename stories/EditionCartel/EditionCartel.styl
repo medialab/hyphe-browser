@@ -1,0 +1,47 @@
+
+
+
+.edition-cartel
+    margin-bottom: 10px
+    position: relative
+    .edition-cartel-header
+        text-align: center
+        h4
+            cursor: pointer
+            background: var(--color-white)
+            padding: 10px 
+            display: inline
+            font-size: 14px
+            font-weight: normal
+            .arrow-container
+                padding-right: 10px
+    .edition-cartel-header:before
+        position: absolute
+        left: 10px
+        top: 10px
+        width: calc(100% - 20px)
+        height: calc(100% - 20px)
+        content:""
+        border: 1px solid var(--color-grey-dark)
+        z-index: -1
+        border-radius: 10px
+    .edition-cartel-content
+        padding: 20px
+        input 
+            width: 100%
+            border: 1px solid var(--color-grey-dark)
+            border-radius: 5px
+            padding: 10px
+            box-sizing: border-box
+
+.edition-cartel:not(.is-open)
+    .edition-cartel-header:before
+        border-bottom: none
+    .edition-cartel-content
+        overflow: hidden
+        max-height: 0
+        padding: 0
+
+.edition-cartel.is-always-open
+    .arrow-container
+        display: none

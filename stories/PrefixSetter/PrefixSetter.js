@@ -26,7 +26,7 @@ const PrefixSetter = function ({
     const anchor = refs && refs[index] && refs[index].current
     if (anchor) {
       const box = anchor.getBoundingClientRect()
-      const x = box.x - container.current.getBoundingClientRect().x;
+      const x = box.x - container.current.getBoundingClientRect().x
       setStartingX(x + box.width )
     }
   }
@@ -54,7 +54,7 @@ const PrefixSetter = function ({
 
   return (
     <div className="prefix-setter">
-      <ul ref={container} className="parts-container">
+      <ul ref={ container } className="parts-container">
         {
           parts.map((part, partIndex) => {
             const handleClick = () => {

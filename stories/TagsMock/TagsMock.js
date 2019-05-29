@@ -18,9 +18,8 @@ const MOCK_OPTIONS = [
   },
 ]
 
+export const Tags = function ({ startingCategories = [] }){
 
-const TagsMock = function ({ startingCategories = [] }){
-  const [open, setOpen] = useState(true)
   const [categories, setCategories] = useState(startingCategories)
   const [newCategoryStr, setNewCategoryStr] = useState('')
 
@@ -33,6 +32,78 @@ const TagsMock = function ({ startingCategories = [] }){
     }
   }
 
+  return (
+    <div className="tags-container">
+      <div className="categories-container">
+        {
+          categories.length ?
+            <ul className="categories-list">
+              {
+                categories.map(({ category, value = '' }, categoryIndex) => {
+
+                  const onChoose = ({ label }) => {
+                    setCategories(
+                      categories.map((cat, i) => {
+                        if (i === categoryIndex) {
+                          return {
+                            ...cat,
+                            value: label,
+                            labe: label
+                          }
+                        }
+                        return cat
+                      })
+                    )
+                  }
+                  return (
+                    <li className="category-item-container" key={ category }>
+                      <span className="category-name">
+                        {category}
+                      </span>
+                      <span className="category-input">
+                        
+                        <Creatable
+                          name="cat-select"
+                          options={ [...MOCK_OPTIONS, { value, label: value }] }
+                          clearable={ false }
+                          searchable
+                          value={ value }
+                          onChange={ onChoose }
+                        />
+                      </span>
+                    </li>
+                  )
+                })
+              }
+            </ul>
+            :
+            <div className="no-categories-text">The corpus has no tag categories yet</div>
+        }
+      </div>
+      <form className="add-category-container">
+        <input 
+          placeholder="New category name" 
+          className="add-category-input" 
+          value={ newCategoryStr } 
+          onChange={ e => setNewCategoryStr(e.target.value) } type="text" 
+        />
+        <button 
+          disabled={ !newCategoryStr.length } 
+          type="submit" 
+          onClick={ onNewCat }
+        >
+          Add category <HelpPin>Help about categories</HelpPin>
+        </button>
+      </form>
+    </div>
+  )
+
+}
+
+
+const TagsMock = function ({ startingCategories = [] }){
+  const [open, setOpen] = useState(true)
+  
 
   return (
     <div className="browser-side-bar">
@@ -55,69 +126,7 @@ const TagsMock = function ({ startingCategories = [] }){
   
             {
               open &&
-                <div className="cartel-content">
-                  <div className="categories-container">
-                    {
-                      categories.length ?
-                        <ul className="categories-list">
-                          {
-                            categories.map(({ category, value = '' }, categoryIndex) => {
-
-                              const onChoose = ({ label }) => {
-                                setCategories(
-                                  categories.map((cat, i) => {
-                                    if (i === categoryIndex) {
-                                      return {
-                                        ...cat,
-                                        value: label,
-                                        labe: label
-                                      }
-                                    }
-                                    return cat
-                                  })
-                                )
-                              }
-                              return (
-                                <li className="category-item-container" key={ category }>
-                                  <span className="category-name">
-                                    {category}
-                                  </span>
-                                  <span className="category-input">
-                                    
-                                    <Creatable
-                                      name="cat-select"
-                                      options={ [...MOCK_OPTIONS, { value, label: value }] }
-                                      clearable={ false }
-                                      searchable
-                                      value={ value }
-                                      onChange={ onChoose }
-                                    />
-                                  </span>
-                                </li>
-                              )
-                            })
-                          }
-                        </ul>
-                        :
-                        <div className="no-categories-text">The corpus has no tag categories yet</div>
-                    }
-                  </div>
-                  <form className="add-category-container">
-                    <input 
-                      placeholder="New category name" 
-                      className="add-category-input" 
-                      value={ newCategoryStr } 
-                      onChange={ e => setNewCategoryStr(e.target.value) } type="text" 
-                    />
-                    <button 
-                      disabled={ !newCategoryStr.length } 
-                      type="submit" 
-                      onClick={ onNewCat }
-                    >
-                      Add category <HelpPin>Help about categories</HelpPin>
-                    </button>
-                  </form>
-                </div>
+                <Tags startingCategories={ startingCategories } />
             }
           </div>
         </div>

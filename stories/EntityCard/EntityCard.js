@@ -31,7 +31,7 @@ const EntityCard = ({
         </li>
         }
         <li className="hint--left" aria-label="put webentity to the 'undecideds' list">
-        <button className="btn btn-default"><i className="ti-help" /></button>
+          <button className="btn btn-default"><i className="ti-help" /></button>
         </li>
       </ul>
     </li>
