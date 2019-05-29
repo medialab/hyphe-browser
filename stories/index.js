@@ -61,7 +61,7 @@ storiesOf('Tags cartel', module)
 /**
  * Cited webentities cartel
  */import CitedPagesMock from './CitedPagesMock'
-storiesOf('Cited pages', module)
+storiesOf('Known pages', module)
   .add('Example', () => <CitedPagesMock />)
 
 /**
@@ -105,11 +105,18 @@ storiesOf('New entity modal', module)
  */
 import EntityCard from './EntityCard'
 storiesOf('Entity card', module)
-.add('Mockup', () => 
-  <div style={{width: '500px'}}>
-    <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={12} />
-  </div>
-)
+  .add('Mockup', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={ 12 } />
+    </div>)
+  )
+
+/**
+ * Layout proposal
+ */
+import BrowserLayoutProposal from './BrowserLayout'
+storiesOf('Global layout proposal', module)
+  .add('Main', () => <BrowserLayoutProposal />)
 
 /**
  * Existing layout

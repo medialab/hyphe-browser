@@ -27,11 +27,66 @@ for (let i = 0 ; i < 3 ; i++) {
   REFERRALS = REFERRALS.concat(REFERRALS)
 }
 
+export const LinkedEntitiesOnly = function (){
+  const [selected, setSelected] = useState('referrers')
+  const LINKS = selected === 'referrers' ? REFERRERS : REFERRALS
+  return (
+    <div>
+      <div className="browser-side-bar-contextual-lists">
+        <nav>
+          {
+            // hide parents and children tabs for now
+            ['referrers', 'referrals'].map((l, index) => {
+              const handleSelectContextualList = () => setSelected(l)
+              return (
+                <button
+                  className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
+                  key={ index } 
+                  onClick={ handleSelectContextualList }
+                >
+                  {l === 'referrers' ? 'Citing webentities' : 'Cited webentities'}
+                </button>
+              )
+            }
+            ) }
+
+          <div className="browser-side-bar-contextual-list">
+            <ul>
+              { LINKS.length ? LINKS.map((link, index) => {
+                          
+                return (
+                  <li key={ index } title={ link.name + '\n' + link.homepage }>
+                    <div className="link-name">
+                      <span>{ link.name }</span>
+                      <span className="link-merge" >merge</span>
+                    </div>
+                    <div className="link-url" >{ link.homepage }</div>
+                  </li>
+                )
+              }) : 'No links to display' }
+            </ul>
+          </div>
+                    
+          <div className="download">
+            <button className='btn btn-default'>
+              <strong>
+                                    Download list as csv
+                <span>&nbsp;</span>
+                <span className="ti-download" />
+              </strong>
+            </button>
+          </div>
+                    
+        </nav>
+      </div>
+    </div>
+  )
+}
+
 
 const LinkedEntities = function () {
   const [open, setOpen] = useState(true)
-  const [selected, setSelected] = useState('referrers')
-  const LINKS = selected === 'referrers' ? REFERRERS : REFERRALS
+  
   return (
     <div className="browser-side-bar">
       <div className="browser-side-bar-sections">
@@ -53,55 +108,7 @@ const LinkedEntities = function () {
           
             {
               open &&
-              <div>
-                <div className="browser-side-bar-contextual-lists">
-                  <nav>
-                    {
-                      // hide parents and children tabs for now
-                      ['referrers', 'referrals'].map((l, index) => {
-                        const handleSelectContextualList = () => setSelected(l)
-                        return (
-                          <button
-                            className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
-                            key={ index } 
-                            onClick={ handleSelectContextualList }
-                          >
-                            {l === 'referrers' ? 'Citing webentities' : 'Cited webentities'}
-                          </button>
-                        )
-                      }
-                      ) }
-
-                    <div className="browser-side-bar-contextual-list">
-                      <ul>
-                        { LINKS.length ? LINKS.map((link, index) => {
-                          
-                          return (
-                            <li key={ index } title={ link.name + '\n' + link.homepage }>
-                              <div className="link-name">
-                                <span>{ link.name }</span>
-                                <span className="link-merge" >merge</span>
-                              </div>
-                              <div className="link-url" >{ link.homepage }</div>
-                            </li>
-                          )
-                        }) : 'No links to display' }
-                      </ul>
-                    </div>
-                    
-                    <div className="download">
-                      <button className='btn btn-default'>
-                        <strong>
-                                    Download list as csv
-                          <span>&nbsp;</span>
-                          <span className="ti-download" />
-                        </strong>
-                      </button>
-                    </div>
-                    
-                  </nav>
-                </div>
-              </div>
+              <LinkedEntitiesOnly />
                         
             }
           </div>

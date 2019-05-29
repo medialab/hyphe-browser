@@ -1,15 +1,15 @@
 import './BrowserBar.styl'
-import React, {useState, useRef} from 'react'
+import React, { useState, useRef } from 'react'
 import cx from 'classnames'
 
-const BrowserBar = function() {
+const BrowserBar = function () {
   const [edited, setEdited] = useState(false)
   const input = useRef(null)
   const handleFormClick = () => {
-      if (!edited) {
-          setEdited(true)
-          setTimeout(() => input.current.focus())
-      }
+    if (!edited) {
+      setEdited(true)
+      setTimeout(() => input.current.focus())
+    }
   }
   return (
     <div className="browser-bar">
@@ -17,20 +17,20 @@ const BrowserBar = function() {
         <button className="btn btn-default  hint--left" aria-label="Previous page">
           <span className="ti-angle-left" />
         </button><button className="btn btn-default  hint--left" aria-label="Next page" disabled="">
-                <span className="ti-angle-right" />
-              </button>
+          <span className="ti-angle-right" />
+        </button>
         <button className="btn btn-default  hint--left" aria-label="Refresh">
           <span className="ti-reload" />
         </button>
       </div>
-      <div className={cx("browser-tab-toolbar-url", {'edited': edited})}>
-        <form onClick={handleFormClick} className="">
+      <div className={ cx('browser-tab-toolbar-url', { edited }) }>
+        <form onClick={ handleFormClick } className="">
           {edited ?
-          <input ref={input} onBlur={() => setEdited(false)} value="https://www.01net.com/tests" />
-          :
-          <span className="browser-tab-url">
-            <em>https</em>://<em>www.01net</em><em>.com</em>/tests
-          </span>
+            <input ref={ input } onBlur={ () => setEdited(false) } value="https://www.01net.com/tests" />
+            :
+            <span className="browser-tab-url">
+              <em>https</em>://<em>www.01net</em><em>.com</em>/tests
+            </span>
           }
         </form>
         <div className="page-actions">

@@ -1,0 +1,240 @@
+
+stretch(mode)
+    display: flex
+    flex-flow: mode nowrap
+    justify-content: stretch
+    
+
+.mode-btn
+    cursor: pointer
+    background: inherit
+    border: none
+    outline: none
+    padding: 5px
+    // padding-top: 0
+    font-size: 14px
+    background: var(--color-grey)
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 5px
+    width: calc(100% - 5px)
+    height: 100%
+.mode-btn.is-active
+    color: var(--color-blue)
+
+.help-pin
+    padding-left: .2em
+
+.set-status-container
+    stretch(row)
+    list-style: none
+    padding: 0
+    justify-content: space-between
+    cursor: pointer
+    li
+        background: var(--color-grey-light)
+        border-radius: 10px
+        display: flex
+        align-items: center
+        justify-content: center
+        height: calc(25vw / 4)
+        width: calc(25vw / 4)
+        font-weight: bold
+
+.webentities-list-of-lists
+    list-style: none
+    padding: 10px
+    padding-top: 0
+    margin: 0
+    li
+        stretch(row)
+        align-items: center
+        .list-btn-container
+            // flex: 1
+            text-align: left
+            padding-bottom: 0
+        .list-btn
+            margin: 5px
+            display: inline-block
+            cursor: pointer;
+            font-family: var(--font-mont);
+            font-size: 13px;
+            font-weight: bold;
+            padding: 10px
+            text-transform: uppercase;
+            background: var(--color-grey);
+            border-radius: var(--radius);
+            border: none
+            transition: all .5s ease
+        .count
+            transition: all .5s ease
+            text-align: right
+    li.is-active
+        .list-btn
+            background: var(--color-black)
+            color: var(--color-white)
+    li:not(.is-active)
+        .list-btn
+            font-size: 8px
+            padding: 5px
+            margin: 5px
+        .count
+            font-size: 8px
+
+.browse-nav
+    stretch(row)
+    align-items: center
+    border-bottom: 1px solid var(--color-grey-dark)
+    padding-bottom: 5px
+    min-height: 45px
+    background: var(--color-grey-light)
+    .current-webentity-name
+        flex: 1
+        font-weight: bold
+        text-align: center
+        font-size: 16px
+    button 
+        background: inherit 
+        border: none 
+        font-size: 20px
+        outline: none
+
+.list-layout
+    stretch(column)
+    overflow: hidden
+    max-height: 100%
+    .status-list
+        background: var(--color-grey-light)
+    .webentities-list-wrapper
+        flex: 1
+        stretch(column)
+        overflow: hidden
+        .webentities-list-header
+            background: var(--color-grey-light)
+            padding: 10px
+            stretch(row)
+            input 
+                flex: 1
+                margin: 5px
+                padding: 5px
+                background: var(--color-white)
+                border-radius: 5px
+                border: none
+
+            .filter
+                padding: 5px
+                margin: 5px
+                border: 1px solid var(--color-grey-dark)
+                border-radius: 5px
+        .webentities-list
+            flex: 1
+            overflow: auto
+            padding: 0
+            .entity-card
+                margin: 10px
+.browse-layout
+    stretch(column)
+    overflow: hidden
+    max-height: 100%
+    .browse-edition-container
+        flex: 1
+        overflow-y: auto
+        overflow-x: hidden
+
+.browser-tabs
+    display: flex
+    position: relative
+    flex-direction: row!important
+    max-height: 30px
+    .browser-tab-label
+        flex: 1;
+        font-family: var(--font-pt);
+        font-size: 11px;
+        margin-right: 0.5em;
+        max-width: 170px;
+        min-width: 40px;
+        padding: 5px;
+        position: relative;
+        text-align: center;
+        white-space: nowrap;
+
+.browser-header
+    stretch(row)
+    justify-content: space-between
+    align-items: center
+    background: var(--color-black);
+    color: var(--color-white);
+    font-family: var(--font-pt);
+    font-weight: bold;
+    padding: 5px
+    height: 40px
+    .header-group.header-group-main
+        h1
+            font-size: 16px
+            margin: 0
+    .header-buttons
+        list-style: none
+        stretch(row)
+        .btn
+            background: inherit 
+            border-radius: 5px
+            color: var(--color-white)
+            border: none
+        .btn.is-active
+            background: var(--color-white)
+            color: var(--color-black)
+    .server-status
+        display: inline-block
+        background: green
+        width: .8em
+        height: .8em
+        border-radius: 50%
+
+.browser-layout
+    position: fixed
+    left: 0
+    top: 0
+    width 100%
+    height 100%
+    stretch(column)
+    // .browser-header
+    .browser-main-container
+        flex: 1
+        stretch(row)
+        overflow: hidden
+        .browser-column.browser-aside-column
+            width: 416px
+            max-height: 100%
+            padding: 5px
+            box-sizing: border-box
+            .aside-header.switch-mode-container
+                max-height: 35px
+                stretch(row)
+                justify-content: space-between
+                list-style: none
+                padding: 0
+                padding-left: 10px
+                padding-right: 10px
+                margin: 0
+                height: 35px
+                background: var(--color-grey-light)
+                li
+                    flex: 1
+            .aside-content
+                flex: 1
+                max-height: calc(100% - 30px)
+                overflow: hidden
+                stretch(column)
+                .edition-cartel:first-of-type
+                    margin-top: 20px
+        .browser-column.browser-main-column
+            flex: 1
+            stretch(column)
+            .webview
+                flex: 1
+                border: none
+            .browser-bar
+                padding: 10px
+                background: var(--color-grey-light)
+

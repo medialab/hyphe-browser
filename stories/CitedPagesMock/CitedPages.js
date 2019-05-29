@@ -28,6 +28,41 @@ let PAGES = [
 ]
 for (let i = 0 ; i < 3 ; i++) PAGES = PAGES.concat(PAGES)
 
+export const KnownPages = () => {
+  return (
+    <div>
+      <div className="browser-side-bar-contextual-lists">
+        <div className="browser-side-bar-contextual-list">
+          <ul>
+            { PAGES.length ? PAGES.map(link => {
+                          
+              return (
+                <li key={ link.id } title={ link.name + '\n' + link.homepage }>
+                  <div className="link-name">
+                    <span>{ link.name }</span>
+                    <span className="link-merge hint--left" aria-label="set as homepage" ><span className="ti-layers-alt" /></span>
+                  </div>
+                  <div className="link-url" >{ link.homepage }</div>
+                </li>
+              )
+            }) : 'No links to display' }
+          </ul>
+        </div>
+                    
+        <div className="download">
+          <button className='btn btn-default'>
+            <strong>
+                                    Download list as csv
+              <span>&nbsp;</span>
+              <span className="ti-download" />
+            </strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const CitedPages = function () {
   const [open, setOpen] = useState(true)
   return (
@@ -51,36 +86,7 @@ const CitedPages = function () {
           
             {
               open &&
-              <div>
-                <div className="browser-side-bar-contextual-lists">
-                  <div className="browser-side-bar-contextual-list">
-                    <ul>
-                      { PAGES.length ? PAGES.map(link => {
-                          
-                        return (
-                          <li key={ link.id } title={ link.name + '\n' + link.homepage }>
-                            <div className="link-name">
-                              <span>{ link.name }</span>
-                              <span className="link-merge hint--left" aria-label="set as homepage" ><span className="ti-layers-alt" /></span>
-                            </div>
-                            <div className="link-url" >{ link.homepage }</div>
-                          </li>
-                        )
-                      }) : 'No links to display' }
-                    </ul>
-                  </div>
-                    
-                  <div className="download">
-                    <button className='btn btn-default'>
-                      <strong>
-                                    Download list as csv
-                        <span>&nbsp;</span>
-                        <span className="ti-download" />
-                      </strong>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <KnownPages />
                         
             }
           </div>
