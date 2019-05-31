@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import cx from 'classnames'
 
 import HelpPin from '../../app/components/HelpPin'
+import DownloadListBtn from '../DownloadListBtn'
 
 
 let PAGES = [
@@ -28,21 +29,27 @@ let PAGES = [
 ]
 for (let i = 0 ; i < 3 ; i++) PAGES = PAGES.concat(PAGES)
 
-export const KnownPages = () => {
+export const KnownPages = ({
+  activeIndex,
+  homepageIndex
+}) => {
   return (
-    <div>
-      <div className="browser-side-bar-contextual-lists">
-        <div className="browser-side-bar-contextual-list">
-          <ul>
-            { PAGES.length ? PAGES.map(link => {
+    <div className="known-pages">
+        <div className="known-pages-wrapper">
+          <ul className="known-pages-list">
+            { PAGES.length ? PAGES.map((link, index) => {
                           
               return (
-                <li key={ link.id } title={ link.name + '\n' + link.homepage }>
-                  <div className="link-name">
-                    <span>{ link.name }</span>
-                    <span className="link-merge hint--left" aria-label="set as homepage" ><span className="ti-layers-alt" /></span>
+                <li className={cx('known-page-card', {'is-active': index === activeIndex})} key={ link.id } title={ link.name + '\n' + link.homepage }>
+                  <div className="card-content">
+                    <div className="known-page-name">
+                      <span>{ link.name }</span>
+                    </div>
+                    <div className="known-page-url" >{ link.homepage }</div>
                   </div>
-                  <div className="link-url" >{ link.homepage }</div>
+                  <div className="card-actions">
+                    <button className={cx('homepage-btn', 'hint--left', {'is-active': homepageIndex === index})} aria-label="set this webpage as the homepage of the webentity" ><span className="ti-layers-alt" /></button>
+                  </div>
                 </li>
               )
             }) : 'No links to display' }
@@ -50,15 +57,8 @@ export const KnownPages = () => {
         </div>
                     
         <div className="download">
-          <button className='btn btn-default'>
-            <strong>
-                                    Download list as csv
-              <span>&nbsp;</span>
-              <span className="ti-download" />
-            </strong>
-          </button>
+          <DownloadListBtn />
         </div>
-      </div>
     </div>
   )
 }

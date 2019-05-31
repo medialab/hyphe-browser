@@ -2,7 +2,9 @@ import './BrowserBar.styl'
 import React, { useState, useRef } from 'react'
 import cx from 'classnames'
 
-const BrowserBar = function () {
+const BrowserBar = function ({
+  displayAddButton = true
+}) {
   const [edited, setEdited] = useState(false)
   const input = useRef(null)
   const handleFormClick = () => {
@@ -37,9 +39,13 @@ const BrowserBar = function () {
           <span className="hint--left" aria-label="Set this page as the homepage of the entity">
             <span className="ti-layers-alt" />
           </span>
-          <span className="hint--left" aria-label="Create a new entity distinct from the current one ...">
-            <span className="ti-plus" />
-          </span>
+          {
+            displayAddButton
+            &&
+            <span className="hint--left" aria-label="Create a new entity distinct from the current one ...">
+              <span className="ti-plus" />
+            </span>
+          }
         </div>
       </div>
     </div>

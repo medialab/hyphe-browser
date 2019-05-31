@@ -11,6 +11,7 @@ import { KnownPages } from '../CitedPagesMock'
 import { LinkedWebentities } from '../LinkedEntitiesMock'
 import EntityCard from '../EntityCard'
 import EntityModal from '../EntityModalMock'
+import DownloadListBtn from '../DownloadListBtn'
 
 import HelpPin from '../../app/components/HelpPin'
 
@@ -22,9 +23,9 @@ const BrowserHeader = () => {
       </div>
       <div className="header-group header-group-aside">
         <ul className="header-buttons">
-          <li><button className="btn is-active">review</button></li>
-          <li><button className="btn">analyze</button></li>
-          <li><button className="btn"><i className="ti-close" /></button></li>
+          <li><button className="btn is-active">browse & review</button></li>
+          <li><button className="btn">visualize in hyphe</button></li>
+          <li><button aria-label="close corpus" className="btn hint--left"><i className="ti-close" /></button></li>
         </ul>
       </div>
     </div>
@@ -54,15 +55,30 @@ for (let i = 0 ; i < 100 ; i++) {
 }
 
 const ListLayout = function () {
-  const [selectedList, setSelectedList] = useState('prospections')
+  const [selectedList, setSelectedListReal] = useState('prospections')
+  const [isOpen, setOpen] = useState(false)
+  const [isFilterOpen, setFilterOpen] = useState(false)
+  const setSelectedList = l => {
+    if (l === selectedList) {
+      setOpen(!isOpen)
+    } else {
+      setSelectedListReal(l)
+      setOpen(false)
+    }
+    
+  }
   return (
     <div className="list-layout">
-      <div className="status-list">
-        <ul className="webentities-list-of-lists">
+      <div className="status-list-container">
+      <div className={cx('status-list', {'is-open': isOpen})}>
+        <h3 className="list-of-lists-title">
+          Current list
+        </h3>
+        <ul className={cx('webentities-list-of-lists')}>
           <li onClick={ () => setSelectedList('prospections') } className={ selectedList === 'prospections' ? 'is-active': '' }>
             <span className="list-btn-container">
               <button className="list-btn">
-                        Prospections <HelpPin>help</HelpPin>
+                        Webentities in prospection
               </button>
             </span>
             <span className="count">
@@ -73,7 +89,7 @@ const ListLayout = function () {
           <li onClick={ () => setSelectedList('in') } className={ selectedList === 'in' ? 'is-active': '' }>
             <span className="list-btn-container">
               <button className="list-btn">
-                        Entities in <HelpPin>help</HelpPin>
+                        Webentities in the corpus
               </button>
             </span>
             <span className="count">
@@ -83,7 +99,7 @@ const ListLayout = function () {
           <li onClick={ () => setSelectedList('out') } className={ selectedList === 'out' ? 'is-active': '' }>
             <span className="list-btn-container">
               <button className="list-btn">
-                        Entities out <HelpPin>help</HelpPin>
+                        Webentities OUT of the corpus
               </button>
             </span>
             <span className="count">
@@ -93,7 +109,7 @@ const ListLayout = function () {
           <li onClick={ () => setSelectedList('undecided') } className={ selectedList === 'undecided' ? 'is-active': '' }>
             <span className="list-btn-container">
               <button className="list-btn">
-                        Entities undecided <HelpPin>help</HelpPin>
+                        Webentities undecided (put aside)
               </button>
             </span>
             <span className="count">
@@ -101,25 +117,39 @@ const ListLayout = function () {
             </span>
           </li>
         </ul>
+        <button onClick={() => setOpen(!isOpen)} className="status-list-toggle">
+          <i className={isOpen ? 'ti-arrow-circle-up' : 'ti-arrow-circle-down'} />
+        </button>
+      </div>
       </div>
       <div className="webentities-list-wrapper">
         <div className="webentities-list-header">
-          <input placeholder="search a webentity" />
-          <span className="filter">
-                filter <i className="ti-angle-down" />
+          <input placeholder="search a webentity in the prospections list" />
+          <span className={cx('filter-container', {'is-active': isFilterOpen})}>
+            <button onClick={() => setFilterOpen(!isFilterOpen)} className="filter">
+                  filter <i className="ti-angle-down" />
+            </button>
+            {/*isFilterOpen &&
+            <span className="filter-options-bg" onClick={() => setFilterOpen(false)}></span>
+            */}
+            {isFilterOpen && 
+            <ul className="filter-options">
+              <li>Show only WE with no tags</li>
+              <li>Show only WE with incomplete tags</li>
+            </ul>
+            }
           </span>
         </div>
         <ul className="webentities-list">
           {
-            mockEntities.map((entity)=> (
-              <EntityCard { ...entity } />
+            mockEntities.map((entity, index)=> (
+              <EntityCard { ...entity } isActive={index === 1} />
             ))
           }
         </ul>
         <div className="webentities-list-footer">
-               Download list (csv)
-          <span>&nbsp;</span>
-          <span className="ti-download" />
+          <DownloadListBtn />
+          
         </div>
       </div>
     </div>
@@ -135,9 +165,9 @@ const BrowseLayout = function () {
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        <button className="hint--right" aria-label="browse previous entity"><i className="ti-angle-left" /></button>
+        <button className="hint--right" aria-label="browse previous entity in the prospections list"><i className="ti-angle-left" /></button>
         <span className="current-webentity-name">101 net</span>
-        <button className="hint--left" aria-label="browse next entity"><i className="ti-angle-right" /></button>
+        <button className="hint--left" aria-label="browse next entity in the prospections list"><i className="ti-angle-right" /></button>
       </nav>
       <div className="browse-edition-container">
         
@@ -145,37 +175,38 @@ const BrowseLayout = function () {
         <EditionCartel
           isOpen
           title={ 'Webentity status' }
-          help={ 'Help about entity status' }
+          help={ 'Decide whether the currently browsed webentity should be included in your corpus, excluded, or put aside as "undecided" for further inquiry' }
+          helpDirection={'right'}
           isAlwaysOpen
         >
           <ul className="set-status-container">
-            <li onClick={ () => setModalIsOpen(true) }>In<HelpPin>put webentity to the IN list</HelpPin></li>
-            <li>U<HelpPin place="bottom">put webentity to the UNDECIDED list</HelpPin></li>
-            <li>Out<HelpPin place="left">put webentity to the OUT list</HelpPin></li>
+            <li onClick={ () => setModalIsOpen(true) }>In<HelpPin>include this webentity in the corpus and move it to the IN list</HelpPin></li>
+            <li>Und.<HelpPin place="bottom">move this webentity to the UNDECIDED list</HelpPin></li>
+            <li>Out<HelpPin place="left">exclude this webentity and move it to the OUT list</HelpPin></li>
           </ul>
         </EditionCartel>
 
         <EditionCartel
           isOpen
           title={ 'Webentity name' }
-          help={ 'Help about entity name' }
+          help={ 'This is the name of the current webentity. It will be displayed in the lists and visualizations' }
           isAlwaysOpen
         >
-          <input value="101net" />
+          <input className="input" value="101net" />
         </EditionCartel>
         <EditionCartel
           isOpen={ knownPagesOpen }
           onToggle={ () => setKnownPagesOpen(!knownPagesOpen) }
-          title={ 'Known pages' }
-          help={ 'Help about known pages' }
+          title={ 'Known webpages' }
+          help={ 'Pages belonging to the currently browsed webentity' }
         >
-          <KnownPages />
+          <KnownPages activeIndex={0} homepageIndex={1} />
         </EditionCartel>
         <EditionCartel
           isOpen={ linkedEntitiesOpen }
           onToggle={ () => setLinkedEntitiesOpen(!linkedEntitiesOpen) }
           title={ 'Linked webentities' }
-          help={ 'Help about linked webentities' }
+          help={ 'Webentities citing or cited by the currently browsed webentity' }
         >
           <LinkedWebentities />
         </EditionCartel>
@@ -183,15 +214,16 @@ const BrowseLayout = function () {
           isOpen={ tagsOpen }
           onToggle={ () => setTagsOpen(!tagsOpen) }
           title={ 'Tags' }
-          help={ 'Help about tags' }
+          help={ 'Categorized tags about the currently browsed webentity' }
         >
           <Tags />
         </EditionCartel>
         <EditionCartel
           isOpen={ notesOpen }
           onToggle={ () => setNotesOpen(!notesOpen) }
-          title={ 'Notes' }
-          help={ 'Help about notes' }
+          title={ 'Field notes' }
+          help={ 'Free notes about the currently browsed webentity' }
+          helpDirection="top"
         >
           <ResearchNotesOnly />
         </EditionCartel>
@@ -211,10 +243,10 @@ const AsideLayout = function () {
     <aside className="browser-column browser-aside-column">
       <ul className="aside-header switch-mode-container">
         <li><button onClick={ () => setAsideMode('list') } className={ cx('mode-btn', { 'is-active': asideMode === 'list' }) }>
-            <span>Webentities list <HelpPin>help</HelpPin></span></button>
+            <span>Edit lists of webentities <HelpPin>review and curate the webentities of your corpus</HelpPin></span></button>
         </li>
         <li><button onClick={ () => setAsideMode('browse') } className={ cx('mode-btn', { 'is-active': asideMode === 'browse' }) }>
-            <span>Browsed webentity <HelpPin>help</HelpPin></span></button>
+            <span>Edit current webentity <HelpPin>edit information about the currently browsed webentity</HelpPin></span></button>
         </li>
       </ul>
       <div className="aside-content">
@@ -237,7 +269,7 @@ const BrowserLayout = () => {
         <AsideLayout />
         <section className="browser-column browser-main-column">
           <BrowserTabs />
-          <BrowserBar />
+          <BrowserBar displayAddButton={false} />
           <iframe className="webview" src="https://www.01net.com/tests/" />
         </section>
       </div>

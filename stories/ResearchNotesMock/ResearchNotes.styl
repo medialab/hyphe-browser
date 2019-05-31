@@ -4,13 +4,13 @@
 .research-notes-container
     text-align: left;
     padding: 10px
-    padding-top: 0
+    // padding-top: 0
     form
         display: flex
         flex-flow: column nowrap
     textarea
         color: #aaa;
-        line-height: 17px;
+        // line-height: 17px;
         max-width: 100%;
         overflow: auto;
         text-overflow: ellipsis;
@@ -18,12 +18,15 @@
         border: none
         resize: none
         border-radius: 5px
-        padding: 5px
+        padding: 10px
+        min-height: 50px
         font-size: 12px
+        font-family: var(--font-mono)
+        border: 1px solid var(--color-grey)
     textarea:focus
-        border: 1px solid black
+        border: 1px solid var(--color-grey-dark)
     textarea::placeholder
-        color: var(--color-grey-light)
+        color: var(--color-grey-dark)
     .research-note
         margin-bottom: 10px
         font-size: 12px
@@ -32,21 +35,44 @@
         justify-content: stretch
         align-items: flex-start
         padding: 10px
-        border: 1px solid var(--color-grey-dark)
+        // border: 1px solid var(--color-grey-dark)
+        background: var(--color-grey)
         border-radius: 5px
         .research-note-content
             flex: 1
             padding-top: 10px
     .add-button
-        position: relative!important
-        right: unset!important
+    .cancel-button
+        // position: relative!important
+        // right: unset!important
         width: 100%
         margin: 10px
         margin-left: 0
         margin-right: 0
         border: none
-        background: white
-        line-height: 34px;
+        // background: white
+        // line-height: 34px;
         font-family: var(--font-pt)
-        text-transform: uppercase
+        // text-transform: uppercase
         cursor: pointer
+        background: var(--color-blue)
+        color: white
+        padding: 10px
+        border-radius: 5px
+    .cancel-button
+        background: var(--color-red)
+        margin-left: 5px
+    .add-button[disabled],
+    .cancel-button[disabled]
+        background: var(--color-blue-light)
+        // color: var(--color-grey-dark)
+        cursor: default
+
+    .actions-container
+        list-style: none
+        padding: 0
+        display: flex
+        flex-flow: row nowrap
+        justify-content: stretch
+        li
+            flex: 1

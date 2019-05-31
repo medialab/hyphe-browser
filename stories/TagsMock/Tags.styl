@@ -1,16 +1,18 @@
 button()
     border: none
     background: white
-    line-height: 34px;
+    // line-height: 34px;
     font-family: var(--font-pt)
-    text-transform: uppercase
+    // text-transform: uppercase
     cursor: pointer
+    padding: 5px
+    border-radius: 5px
 
 input()
     color: #aaa;
-    line-height: 17px;
+    // line-height: 17px;
     max-width: 100%;
-    overflow: auto;
+    // overflow: auto;
     text-overflow: ellipsis;
     outline: none
     border: none
@@ -36,23 +38,35 @@ input()
         display: flex
         flex-flow: row nowrap
         justify-content: stretch
-        border-top: 1px solid #cccecd
-        padding-top: 10px
+        // border-top: 1px solid #cccecd
+        padding-top: 5px
         .add-category-input
             flex: 1
             input()
             max-width: calc(35% - 5px)
             text-align: right
+            border: 1px solid var(--color-grey)
+            padding: 10px
+
         .add-category-input::placeholder
-            color: var(--color-grey-light)
+            color: var(--color-grey-dark)
+        .add-category-input:focus
+            border: 1px solid var(--color-grey-dark)
         button
             flex: 1
             button()
             margin-left: 5px
+            background: var(--color-blue)
+            color: white
             .help-pin::after
                 text-transform: lowercase
+        button[disabled]
+            background: var(--color-blue-light)
+            // color: var(--color-grey-dark)
+            cursor: default
     .categories-list
         padding: 0
+        padding-right: 5px
     .category-item-container
         list-style-type: none
         display: flex
@@ -73,3 +87,5 @@ input()
             flex: 1
             max-width: 65%
             min-width: 65%
+    .Select
+        font-size: 12px
