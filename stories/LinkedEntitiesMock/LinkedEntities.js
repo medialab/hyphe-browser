@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import cx from 'classnames'
 
 import HelpPin from '../../app/components/HelpPin'
+import EntityCard from '../EntityCard'
 
 let REFERRERS = [
   {
@@ -32,36 +33,45 @@ export const LinkedEntitiesOnly = function (){
   const LINKS = selected === 'referrers' ? REFERRERS : REFERRALS
   return (
     <div>
-      <div className="browser-side-bar-contextual-lists">
-        <nav>
+      <div className="linked-entities">
+        <nav className="list-toggle">
           {
             // hide parents and children tabs for now
             ['referrers', 'referrals'].map((l, index) => {
               const handleSelectContextualList = () => setSelected(l)
               return (
                 <button
-                  className={ cx('btn', 'btn-default', 'navigation', { selected: l === selected }) }
+                  className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selected }) }
                   key={ index } 
                   onClick={ handleSelectContextualList }
                 >
                   {l === 'referrers' ? 'Citing webentities' : 'Cited webentities'}
+                  <HelpPin>
+                    {l === 'referrers' ? 
+                      'Webentities containing pages which point to this webentity pages'
+                      :
+                      'Webentities containing pages pointed by this webentity pages'
+                    }
+                  </HelpPin>
                 </button>
               )
             }
             ) }
+          </nav>
 
           <div className="browser-side-bar-contextual-list">
             <ul>
               { LINKS.length ? LINKS.map((link, index) => {
                           
                 return (
-                  <li key={ index } title={ link.name + '\n' + link.homepage }>
-                    <div className="link-name">
-                      <span>{ link.name }</span>
-                      <span className="link-merge" >merge</span>
-                    </div>
-                    <div className="link-url" >{ link.homepage }</div>
-                  </li>
+                  <EntityCard allowMerge={true} type="prospection" name={link.name} url={link.homepage} numberOfCitations={12} />
+                  // <li key={ index } title={ link.name + '\n' + link.homepage }>
+                  //   <div className="link-name">
+                  //     <span>{ link.name }</span>
+                  //     <span className="link-merge" >merge</span>
+                  //   </div>
+                  //   <div className="link-url" >{ link.homepage }</div>
+                  // </li>
                 )
               }) : 'No links to display' }
             </ul>
@@ -75,9 +85,7 @@ export const LinkedEntitiesOnly = function (){
                 <span className="ti-download" />
               </strong>
             </button>
-          </div>
-                    
-        </nav>
+          </div>                    
       </div>
     </div>
   )

@@ -12,8 +12,9 @@
             list-style-type: none
             padding: 10px
             user-select: none
+            background: var(--color-grey)
         .part.active
-            background: rgba(50, 141, 199, 0.9) none repeat scroll 0% 0%
+            background: var(--color-blue)
             color: rgb(230, 241, 248)
         .part.editable
             cursor: pointer
@@ -24,16 +25,17 @@
             left: 0
             top: 0
             height: 100%
-            background: rgb(54, 129, 174) none repeat scroll 0% 0%
+            background: var(--color-blue-light) none repeat scroll 0% 0%
             width: 5px
+            cursor: move
         .slider-handle
+            cursor: move
             position: absolute
             top: calc(100% - 30px)
             left: -7.5px
-            background: rgb(192, 220, 238) none repeat scroll 0% 0%
-            border: 3px solid rgb(54, 129, 174) 
+            background: var(--color-blue) none repeat scroll 0% 0%
+            border: 3px solid var(--color-blue-light)
             box-sizing: border-box
             width: 20px
             height: 20px
             border-radius: 50%
-            cursor: pointer

@@ -1,12 +1,19 @@
 
 
+  
+.ReactModal__Overlay
+    display: flex
+    align-items: center
+    justify-content: center
+
 .new-entity-modal-container
     display : flex
-    flex-flow: row nowrap
+    flex-flow: column nowrap
     max-height: 100%
     overflow : hidden
     justify-content: stretch
     height: 100%
+    position: relative
     input 
         border: 1px solid  #cccecd
         border-radius: 5px
@@ -16,21 +23,34 @@
         border-radius: var(--radius);
         padding: 10px;
         list-style: none
-        max-height: 20vh
-        overflow-y: auto
+        // max-height: 20vh
+        // overflow-y: auto
         .page-card
+            cursor: pointer
             background: var(--color-white);
             font-family: var(--font-pt);
             font-size: 12px;
             margin: 6px 10px;
             padding: 10px 20px;
             text-align: left;
+            display: flex
+            flex-flow: row nowrap
+            justify-content: stretch
+            .card-content
+                flex: 1
+            .card-actions
+                cursor: pointer
+
+        .page-card.is-selected
+            background: var(--color-blue)
+            color: white
     .btn[disabled]
         opacity: .5
     .actions-container
         display: flex
         flex-flow: row nowrap
         padding: 0
+        margin: 0
         li
             list-style-type: none
             margin-right: 10px
@@ -48,28 +68,72 @@
     .btn-danger
         background: red
         color: white
+    .explanation-text
+        margin-top: 10px
+        margin-bottom: 20px
+        padding: 10px
+        background: var(--color-blue)
+        color: white
+        line-height: 1.5
     .step-container
         margin-bottom: 10px
-        border-bottom: 1px solid black
-        padding: 5px
+        margin-top: 10px
+        // border-bottom: 1px solid black
+        padding: 10px
+        background: var(--color-white)
     .step-container.is-disabled
         opacity: .5
         pointer-events: none
-    .column
-        flex: 1
-        width: 50%;
-        max-width: 50%
-    .left-column
-        max-height: 100%
-        overflow-y: auto
-    .right-column
+    .step-marker
+        background: var(--color-blue)
+        border-radius: 50%
+        color:white
+        font-size: .6em
+        padding: .5em
+        position: relative
+        top: -2.5px
+    .name-input-container
         display: flex
-        flex-flow: column nowrap
-        max-height: 100%
-        overflow: hidden
-        justify-content : stretch
-        .column-body
+        flex-flow: row nowrap
+        justify-content: stretch
+        input 
             flex: 1
-            overflow-y: auto
-            overflow-x: hidden
-        // .column-footer
+            outline: none
+            margin-right: 5px
+    .prefix-input-container
+        position: relative
+        display: flex
+        flex-flow: row nowrap
+        justify-content: stretch
+        align-items: center
+        .prefix-setter
+            flex: 1
+            margin-right: 5px
+    .modal-header
+        h2
+            display: flex
+            flex-flow: row nowrap
+            justify-content: stretch
+            margin: 0
+            padding: 10px
+            padding-left: 20px
+            background: var(--color-blue)
+            color: var(--color-white)
+            font-size: 20px
+            span
+                flex: 1
+            .ti-close
+                cursor: pointer
+    .modal-body
+        flex: 1
+        overflow-x: hidden
+        overflow-y: auto
+        background: white
+        padding: 10px
+    .modal-footer
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+        button
+            font-size: 14px
+        // background: var(--color-grey)
