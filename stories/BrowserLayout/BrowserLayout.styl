@@ -14,23 +14,32 @@ ul::-webkit-scrollbar-thumb
     background: var(--color-blue)
 
 ul::-webkit-scrollbar-track
+div::-webkit-scrollbar-track
     background: var(--color-grey-light)
+
+div::-webkit-scrollbar
+    width: 4px
+
+div::-webkit-scrollbar-thumb
+    background: var(--color-grey)
+
+
 .mode-btn
     cursor: pointer
     background: inherit
     border: none
     outline: none
     padding: 5px
-    padding-left: 15px
-    // padding-top: 0
     font-size: 14px
     background: var(--color-grey)
     display: flex
     align-items: center
     justify-content: center
-    border-radius: 5px
+    border-radius: var(--radius)
     width: calc(100% - 5px)
     height: 100%
+.mode-btn:last-of-type
+    margin-right: 0
 .mode-btn.is-active
     color: var(--color-white) // var(--color-blue)
     background: var(--color-blue)
@@ -47,7 +56,7 @@ ul::-webkit-scrollbar-track
     margin: 0
     li
         background: var(--color-grey-light)
-        border-radius: 10px
+        border-radius: var(--radius)
         display: flex
         align-items: center
         justify-content: center
@@ -55,6 +64,15 @@ ul::-webkit-scrollbar-track
         width: 100px
         max-width: calc(30% - 10px)
         font-weight: bold
+        &.in
+            background: var(--color-corpus-in)
+            color: white
+        &.out
+            background: var(--color-corpus-out)
+            color: white
+        &.undecided
+            background: var(--color-corpus-undecided)
+            color: white
 
 .webentities-list-of-lists
     list-style: none
@@ -90,6 +108,7 @@ ul::-webkit-scrollbar-track
         .count
             transition: all .5s ease
             text-align: right
+            font-size: 12px
     li.is-active
         .list-btn
             background: var(--color-blue)
@@ -100,7 +119,7 @@ ul::-webkit-scrollbar-track
             padding: 10px
             margin: 5px
         .count
-            font-size: 10px
+            font-size: 8px
 
 .browse-nav
     stretch(row)
@@ -109,6 +128,10 @@ ul::-webkit-scrollbar-track
     padding-bottom: 10px
     min-height: 35px
     background: var(--color-grey-light)
+    padding: 10px
+    padding-left: 20px
+    padding-right: 20px
+    padding-top: 0
     .current-webentity-name
         flex: 1
         font-weight: bold
@@ -119,6 +142,8 @@ ul::-webkit-scrollbar-track
         border: none 
         font-size: 20px
         outline: none
+        padding: 0
+        cursor: pointer
 
 .list-layout
     stretch(column)
@@ -133,13 +158,16 @@ ul::-webkit-scrollbar-track
         font-size: 14px
     .status-list-container
         background: var(--color-grey-light)
+        padding-left: 10px
+        padding-right: 10px
     .status-list
         // border: 1px solid var(--color-grey-dark)
         background: var(--color-grey)
         margin: 10px
         // margin-top: 0
-        border-radius: 5px
+        border-radius: var(--radius)
         padding: 10px
+        
         // padding-top: 1
         position: relative
         .status-list-toggle
@@ -168,6 +196,9 @@ ul::-webkit-scrollbar-track
         .webentities-list-header
             background: var(--color-grey-light)
             padding: 10px
+            padding-left: 20px
+            padding-right: 10px
+            padding-top: 0
             stretch(row)
             align-items: center
             // border-bottom: 1px solid var(--color-grey-dark)
@@ -176,11 +207,12 @@ ul::-webkit-scrollbar-track
                 margin: 5px
                 padding: 10px
                 background: var(--color-white)
-                border-radius: 5px
+                border-radius: var(--radius)
                 border: 1px solid var(--color-grey)
                 outline: none
                 height: 20px
                 font-family: var(--font-mono)
+                margin-left: 0
             input:focus
                 border: 1px solid var(--color-grey-dark)
 
@@ -190,7 +222,7 @@ ul::-webkit-scrollbar-track
                 padding: 12px
                 margin: 5px
                 // border: 1px solid var(--color-grey-dark)
-                border-radius: 5px
+                border-radius: var(--radius)
                 background: var(--color-grey)
                 cursor: pointer
                 font-size: 12px
@@ -221,15 +253,30 @@ ul::-webkit-scrollbar-track
                     border: 1px solid var(--color-grey)
                     font-size: 12px
                     cursor: pointer
+        .webentities-list-container
+            background: var(--color-grey)
+            margin: 10px
+            margin-top: 0
+            margin-left: 20px
+            margin-right: 15px
+            // margin-right: 20px
+            border-radius: var(--radius)
+            padding: 10px
+            overflow: hidden
+            stretch(column)
         .webentities-list
-            flex: 1
             overflow: auto
+            flex: 1
             padding: 0
+            margin: 0
             .entity-card
                 margin: 10px
         .webentities-list-footer
             padding: 10px
+            padding-left: 20px
+            padding-right: 15px
             padding-top: 0
+            min-height: 50px
 
 .browse-layout
     stretch(column)
@@ -239,6 +286,8 @@ ul::-webkit-scrollbar-track
         flex: 1
         overflow: hidden
         overflow-y: auto
+        padding-left: 10px
+        padding-right: 10px
 
 .browser-tabs
     display: flex
@@ -246,6 +295,7 @@ ul::-webkit-scrollbar-track
     flex-direction: row!important
     max-height: 30px
     padding-left: 10px
+    margin-top: 5px
     .browser-tab-label
         flex: 1;
         font-family: var(--font-pt);
@@ -278,7 +328,7 @@ ul::-webkit-scrollbar-track
         stretch(row)
         .btn
             background: inherit 
-            border-radius: 5px
+            border-radius: var(--radius)
             color: var(--color-white)
             border: none
         .btn.is-active
@@ -306,7 +356,7 @@ ul::-webkit-scrollbar-track
         .browser-column.browser-aside-column
             width: 416px
             max-height: 100%
-            padding: 5px
+            padding: 0
             box-sizing: border-box
             padding-right: 0
             border-right: 1px solid var(--color-grey)
@@ -315,9 +365,10 @@ ul::-webkit-scrollbar-track
                 stretch(row)
                 justify-content: space-between
                 list-style: none
-                padding: 0
-                padding-left: 10px
-                padding-right: 10px
+                padding: 10px
+                padding-left: 20px
+                padding-right: 20px
+                padding-bottom: 0
                 margin: 0
                 height: 35px
                 background: var(--color-grey-light)
@@ -330,6 +381,8 @@ ul::-webkit-scrollbar-track
                 stretch(column)
                 .edition-cartel:first-of-type
                     margin-top: 20px
+                .edition-cartel:last-of-type
+                    margin-bottom: 20px
         .browser-column.browser-main-column
             flex: 1
             stretch(column)

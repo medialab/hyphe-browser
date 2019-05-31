@@ -28,6 +28,9 @@ flexStretch()
             text-decoration: underline
         .statistics
             font-size: 10px
+            flexStretch()
+            .text
+                flex: 1
     .card-actions
         // flexStretch()
         padding: 0
@@ -43,7 +46,7 @@ flexStretch()
             padding: 0
             .btn
                 background: var(--color-grey)
-                border-radius: 5px
+                border-radius: var(--radius)
                 width: 30px
                 margin-left: 5px
 .entity-card:hover

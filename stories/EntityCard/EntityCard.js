@@ -20,7 +20,7 @@ const EntityCard = ({
         <h5 className="url">{url}</h5>
         <div className="statistics">
           <i className="ti-link" />
-          <span>
+          <span className="text">
             {numberOfCitations} citations by other webentities
           </span>
         </div>

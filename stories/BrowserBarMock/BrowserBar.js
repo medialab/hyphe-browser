@@ -1,6 +1,10 @@
 import './BrowserBar.styl'
 import React, { useState, useRef } from 'react'
 import cx from 'classnames'
+import '../../app/containers/BrowserTabs/browser-tab-url-field.styl'
+import '../../app/containers/BrowserTabs/browser-tab-label.styl'
+import '../../app/containers/BrowserTabs/browser-tab-content.styl'
+import '../../app/containers/BrowserTabs/browser-tabs.styl'
 
 const BrowserBar = function ({
   displayAddButton = true

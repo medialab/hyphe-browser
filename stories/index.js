@@ -116,11 +116,7 @@ storiesOf('Entity card', module)
  */
 import BrowserLayoutProposal from './BrowserLayout'
 storiesOf('Global layout proposal', module)
-  .add('Main', () => <BrowserLayoutProposal />)
-
-/**
- * Existing layout
- */
-import ExistingLayoutMock from './ExistingLayoutMock'
-storiesOf('Existing layout', module)
-  .add('Existing layout', () => <ExistingLayoutMock />)
+  .add('Reviewing a PROSPECTION', () => <BrowserLayoutProposal status={'prospection'} />)
+  .add('Reviewing an IN', () => <BrowserLayoutProposal status={'in'} />)
+  .add('Reviewing an OUT', () => <BrowserLayoutProposal status={'out'} />)
+  .add('Reviewing an UNDECIDED', () => <BrowserLayoutProposal status={'undecided'} />)

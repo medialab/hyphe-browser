@@ -94,7 +94,7 @@ const EntityModal = ({
             <div className="explanation-text">
               You are about to define a webentity as belonging the corpus. 
               <br/>
-              Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (they will be added to the PROSPECTIONS list).
+              Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (discovered webentities will be added to the PROSPECTIONS list).
             </div>
             <div className={ cx('step-container') }>
             

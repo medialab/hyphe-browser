@@ -48,7 +48,7 @@ export const KnownPages = ({
                     <div className="known-page-url" >{ link.homepage }</div>
                   </div>
                   <div className="card-actions">
-                    <button className={cx('homepage-btn', 'hint--left', {'is-active': homepageIndex === index})} aria-label="set this webpage as the homepage of the webentity" ><span className="ti-layers-alt" /></button>
+                    <button className={cx('homepage-btn', 'hint--left', {'is-active': homepageIndex === index})} aria-label="set as the homepage of the webentity" ><span className="ti-layers-alt" /></button>
                   </div>
                 </li>
               )

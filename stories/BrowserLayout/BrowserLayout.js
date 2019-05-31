@@ -54,8 +54,10 @@ for (let i = 0 ; i < 100 ; i++) {
   })
 }
 
-const ListLayout = function () {
-  const [selectedList, setSelectedListReal] = useState('prospections')
+const ListLayout = function ({
+  status = 'prospection'
+}) {
+  const [selectedList, setSelectedListReal] = useState(status)
   const [isOpen, setOpen] = useState(false)
   const [isFilterOpen, setFilterOpen] = useState(false)
   const setSelectedList = l => {
@@ -75,14 +77,14 @@ const ListLayout = function () {
           Current list
         </h3>
         <ul className={cx('webentities-list-of-lists')}>
-          <li onClick={ () => setSelectedList('prospections') } className={ selectedList === 'prospections' ? 'is-active': '' }>
+          <li onClick={ () => setSelectedList('prospection') } className={ selectedList === 'prospection' ? 'is-active': '' }>
             <span className="list-btn-container">
               <button className="list-btn">
                         Webentities in prospection
               </button>
             </span>
             <span className="count">
-                        12
+                        12000
             </span>
           </li>
                 
@@ -93,7 +95,7 @@ const ListLayout = function () {
               </button>
             </span>
             <span className="count">
-                        12
+                        12000
             </span>
           </li>
           <li onClick={ () => setSelectedList('out') } className={ selectedList === 'out' ? 'is-active': '' }>
@@ -103,7 +105,7 @@ const ListLayout = function () {
               </button>
             </span>
             <span className="count">
-                        12
+                        12000
             </span>
           </li>
           <li onClick={ () => setSelectedList('undecided') } className={ selectedList === 'undecided' ? 'is-active': '' }>
@@ -113,7 +115,7 @@ const ListLayout = function () {
               </button>
             </span>
             <span className="count">
-                        12
+                        12000
             </span>
           </li>
         </ul>
@@ -140,6 +142,7 @@ const ListLayout = function () {
             }
           </span>
         </div>
+        <div className="webentities-list-container">
         <ul className="webentities-list">
           {
             mockEntities.map((entity, index)=> (
@@ -147,6 +150,7 @@ const ListLayout = function () {
             ))
           }
         </ul>
+        </div>
         <div className="webentities-list-footer">
           <DownloadListBtn />
           
@@ -156,12 +160,17 @@ const ListLayout = function () {
   )
 }
 
-const BrowseLayout = function () {
+const BrowseLayout = function ({
+  status = 'prospection'
+}) {
   const [knownPagesOpen, setKnownPagesOpen] = useState(false)
   const [linkedEntitiesOpen, setLinkedEntitiesOpen] = useState(false)
   const [tagsOpen, setTagsOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
+  const [nameOpen, setNameOpen] = useState(true)
+  const [statusOpen, setStatusOpen] = useState(true)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  console.log('status', status);
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
@@ -173,24 +182,26 @@ const BrowseLayout = function () {
         
 
         <EditionCartel
-          isOpen
+          isOpen={ statusOpen }
+          onToggle={ () => setStatusOpen(!statusOpen) }
           title={ 'Webentity status' }
           help={ 'Decide whether the currently browsed webentity should be included in your corpus, excluded, or put aside as "undecided" for further inquiry' }
           helpDirection={'right'}
-          isAlwaysOpen
+          isAlwaysOpen={status === 'prospection'}
         >
           <ul className="set-status-container">
-            <li onClick={ () => setModalIsOpen(true) }>In<HelpPin>include this webentity in the corpus and move it to the IN list</HelpPin></li>
-            <li>Und.<HelpPin place="bottom">move this webentity to the UNDECIDED list</HelpPin></li>
-            <li>Out<HelpPin place="left">exclude this webentity and move it to the OUT list</HelpPin></li>
+            <li className={status === 'in' ? 'in' : ''} onClick={ () => setModalIsOpen(true) }>In<HelpPin>include this webentity in the corpus and move it to the IN list</HelpPin></li>
+            <li className={status === 'undecided' ? 'undecided' : ''}>Und.<HelpPin place="bottom">move this webentity to the UNDECIDED list</HelpPin></li>
+            <li className={status === 'out' ? 'out' : ''}>Out<HelpPin place="left">exclude this webentity and move it to the OUT list</HelpPin></li>
           </ul>
         </EditionCartel>
 
         <EditionCartel
-          isOpen
+          isOpen={ nameOpen }
+          onToggle={ () => setNameOpen(!nameOpen) }
           title={ 'Webentity name' }
           help={ 'This is the name of the current webentity. It will be displayed in the lists and visualizations' }
-          isAlwaysOpen
+          isAlwaysOpen={status === 'prospection'}
         >
           <input className="input" value="101net" />
         </EditionCartel>
@@ -236,7 +247,9 @@ const BrowseLayout = function () {
   )
 }
 
-const AsideLayout = function () {
+const AsideLayout = function ({
+  status
+}) {
   const [asideMode, setAsideMode] = useState('browse')
     
   return (
@@ -252,24 +265,26 @@ const AsideLayout = function () {
       <div className="aside-content">
         {
           asideMode === 'list' ?
-            <ListLayout />
+            <ListLayout status={status} />
             :
-            <BrowseLayout />
+            <BrowseLayout status={status} />
         }
       </div>
     </aside>
   )
 }
 
-const BrowserLayout = () => {
+const BrowserLayout = ({
+  status
+}) => {
   return (
     <div className="browser-layout">
       <BrowserHeader />
       <div className="browser-main-container">
-        <AsideLayout />
+        <AsideLayout {...{status}} />
         <section className="browser-column browser-main-column">
           <BrowserTabs />
-          <BrowserBar displayAddButton={false} />
+          <BrowserBar displayAddButton={status === 'in'} />
           <iframe className="webview" src="https://www.01net.com/tests/" />
         </section>
       </div>
