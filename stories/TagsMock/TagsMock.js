@@ -2,8 +2,9 @@ import './Tags.styl'
 
 import React, { useState } from 'react'
 
-import cx from 'classnames'
+// import cx from 'classnames'
 import { Creatable } from 'react-select'
+import EditionCartel from '../EditionCartel'
 
 import HelpPin from '../../app/components/HelpPin'
 
@@ -106,31 +107,15 @@ const TagsMock = function ({ startingCategories = [] }){
   
 
   return (
-    <div className="browser-side-bar">
-      <div className="browser-side-bar-sections">
-  
-        <div className="browser-side-bar-tags">
-          <div>
-            <h3
-              onClick={ () => setOpen(!open) }
-            >
-              <span 
-                className={ cx({
-                  'ti-angle-up': open,
-                  'ti-angle-down': !open
-                }) }
-              />
-              <span>Tags <HelpPin>about tags</HelpPin></span>
-                
-            </h3>
-  
-            {
-              open &&
-                <Tags startingCategories={ startingCategories } />
-            }
-          </div>
-        </div>
-      </div>
+    <div style={ { width: 500, background: 'var(--color-grey-light)', padding: 10 } }>
+      <EditionCartel
+        isOpen={ open }
+        onToggle={ () => setOpen(!open) }
+        title={ 'Tags' }
+        help={ 'Annotate the currently browsed webentity with categorized tags (this will be useful to group and visualize webentities)' }
+      >
+        <Tags startingCategories={ startingCategories } />
+      </EditionCartel>
     </div>
   )
 }

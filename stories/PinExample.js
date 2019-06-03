@@ -1,45 +1,15 @@
-import React, { useState } from 'react'
-
-import cx from 'classnames'
+import React from 'react'
 
 import HelpPin from '../app/components/HelpPin'
 
-
 const PinExample = function (){
-  const [open, setOpen] = useState(true)
   return (
-    <div className="browser-side-bar">
-      <div className="browser-side-bar-sections">
-  
-        <div className="browser-side-bar-tags">
-          <div>
-            <h3
-              onClick={ () => setOpen(!open) }
-            >
-              <span 
-                className={ cx({
-                  'ti-angle-up': open,
-                  'ti-angle-down': !open
-                }) }
-              />
-              <span>Tags <HelpPin>about tags</HelpPin></span>
+    <div style={ { position: 'relative' } }>
+      <h3 >
+        <span />
+        <span>Tags <HelpPin>about tags</HelpPin></span>
                 
-            </h3>
-  
-            {
-              open &&
-                <form className="browser-side-bar-tags-new-category">
-                  {/* <input 
-                    placeholder={ 'add category' }
-                    value={ '' }
-                  />
-                  <Button icon="plus" /> */}
-                  tags contents
-                </form>
-            }
-          </div>
-        </div>
-      </div>
+      </h3>
     </div>
   )
 }

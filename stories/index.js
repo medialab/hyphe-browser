@@ -5,12 +5,11 @@
 import '../app/css/style.styl'
 import '../app/css/themify-icons.css'
 import '../app/css/hint.base.css'
+import './helpers.styl'
 
 /**
  * Components specific style imports
  */
-import '../app/containers/SideBar/side-bar-tags.styl'
-import '../app/containers/SideBar/side-bar.styl'
 import 'react-select/dist/react-select.css'
 
 
@@ -28,7 +27,6 @@ import { storiesOf } from '@storybook/react'
 /**
  *  Components import
  */
-// import Button from '../app/components/Button'
 
 /**
  * ================================================
@@ -56,13 +54,19 @@ storiesOf('Research notes', module)
 import TagsMock from './TagsMock'
 storiesOf('Tags cartel', module)
   .add('Empty', () => <TagsMock />)
-  .add('With existing categories', () => <TagsMock startingCategories={ [{ category: 'language', value: 'fr' }, { category: 'type', value: 'media' }] } />)
+  .add('With existing categories', () => 
+    (
+      <TagsMock 
+        startingCategories={ [{ category: 'language', value: 'fr' }, { category: 'type', value: 'media' }] }
+      />
+    )
+  )
 
 /**
  * Cited webentities cartel
- */import CitedPagesMock from './CitedPagesMock'
+ */import KnownPagesMock from './KnownPagesMock'
 storiesOf('Known pages', module)
-  .add('Example', () => <CitedPagesMock />)
+  .add('Example', () => <KnownPagesMock />)
 
 /**
  * Linked webentities cartel
@@ -81,9 +85,18 @@ const simpleWEParts = [
   { name: '/denoland', editable: true }, 
   { name: '/deno', editable: true },
 ]
+const complexWEParts = [
+  { name: 'https', editable: false }, 
+  { name: '.org', editable: false }, 
+  { name: 'wikipedia', editable: true }, 
+  { name: 'fr.', editable: true }, 
+  { name: '/wiki', editable: true }, 
+  { name: '/La_Maison_des_feuilles', editable: true }, 
+]
 import PrefixSetter from './PrefixSetter'
 storiesOf('Prefix setter', module)
   .add('Simple', () => <PrefixSetter parts={ simpleWEParts } />)
+  .add('With sub-url', () => <PrefixSetter parts ={ complexWEParts } />)
 
 
 /**
@@ -91,7 +104,9 @@ storiesOf('Prefix setter', module)
  */
 import BrowserBarMock from './BrowserBarMock'
 storiesOf('Browser bar', module)
-  .add('Mockup', () => <BrowserBarMock />)
+  .add('For a prospection entity', () => <BrowserBarMock displayAddButton={ false } />)
+  .add('For an IN entity', () => <BrowserBarMock displayAddButton />)
+  .add('For a homepage', () => <BrowserBarMock displayAddButton isHomePage />)
 
 /**
  * New entity modal
@@ -112,11 +127,24 @@ storiesOf('Entity card', module)
   )
 
 /**
+ * New tab content
+ */
+import NewTabContent from './NewTabContent'
+storiesOf('New tab content', module)
+  .add('Mockup', () => 
+    (<div style={ { width: '100%' } }>
+      <NewTabContent />
+    </div>)
+  )
+
+/**
  * Layout proposal
  */
 import BrowserLayoutProposal from './BrowserLayout'
 storiesOf('Global layout proposal', module)
-  .add('Reviewing a PROSPECTION', () => <BrowserLayoutProposal status={'prospection'} />)
-  .add('Reviewing an IN', () => <BrowserLayoutProposal status={'in'} />)
-  .add('Reviewing an OUT', () => <BrowserLayoutProposal status={'out'} />)
-  .add('Reviewing an UNDECIDED', () => <BrowserLayoutProposal status={'undecided'} />)
+  .add('Reviewing a PROSPECTION', () => <BrowserLayoutProposal status={ 'prospection' } />)
+  .add('Reviewing an IN', () => <BrowserLayoutProposal status={ 'in' } />)
+  .add('Reviewing an OUT', () => <BrowserLayoutProposal status={ 'out' } />)
+  .add('Reviewing an UNDECIDED', () => <BrowserLayoutProposal status={ 'undecided' } />)
+  .add('Landing in existing corpus', () => <BrowserLayoutProposal status={ 'prospection' } isLanding />)
+  .add('Landing in new corpus', () => <BrowserLayoutProposal status={ 'prospection' } isEmpty isLanding />)

@@ -7,6 +7,10 @@ import cx from 'classnames'
 
 import HelpPin from '../../app/components/HelpPin'
 import EntityCard from '../EntityCard'
+import EditionCartel from '../EditionCartel'
+import CardsList from '../CardsList'
+
+const STATUSES = ['prospection', 'in', 'out', 'undecided']
 
 let REFERRERS = [
   {
@@ -24,13 +28,22 @@ let REFERRALS = [
   }
 ]
 for (let i = 0 ; i < 3 ; i++) {
-  REFERRERS = REFERRERS.concat(REFERRERS)
-  REFERRALS = REFERRALS.concat(REFERRALS)
+  REFERRERS = REFERRERS.concat(REFERRERS.map(r => ({ ...r, status: STATUSES[parseInt(Math.random() * STATUSES.length)] })))
+  REFERRALS = REFERRALS.concat(REFERRALS.map(r => ({ ...r, status: STATUSES[parseInt(Math.random() * STATUSES.length)] })))
 }
 
 export const LinkedEntitiesOnly = function (){
   const [selected, setSelected] = useState('referrers')
   const LINKS = selected === 'referrers' ? REFERRERS : REFERRALS
+  const [mergeActions, setMergeActions] = useState({})
+  const [outActions, setOutActions] = useState({})
+  const [undecidedActions, setUndecidedActions] = useState({})
+  const resetActions = () => {
+    setMergeActions({})
+    setOutActions({})
+    setUndecidedActions({})
+  }
+  const hasPendingActions = [mergeActions, outActions, undecidedActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
   return (
     <div>
       <div className="linked-entities">
@@ -38,7 +51,10 @@ export const LinkedEntitiesOnly = function (){
           {
             // hide parents and children tabs for now
             ['referrers', 'referrals'].map((l, index) => {
-              const handleSelectContextualList = () => setSelected(l)
+              const handleSelectContextualList = () => {
+                setSelected(l)
+                resetActions()
+              }
               return (
                 <button
                   className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selected }) }
@@ -57,35 +73,59 @@ export const LinkedEntitiesOnly = function (){
               )
             }
             ) }
-          </nav>
+        </nav>
 
-          <div className="browser-side-bar-contextual-list">
-            <ul>
-              { LINKS.length ? LINKS.map((link, index) => {
+        <CardsList>
+          { LINKS.length ? LINKS.map((link, index) => {
+
+            const toggleKey = (obj, key) => {
+              return {
+                ...obj,
+                ['' + key]: obj['' + key] ? false : true
+              }
+            }
+
+            const handleClickMerge = () => setMergeActions(toggleKey(mergeActions, index))
+            const handleClickOut = () => setOutActions(toggleKey(outActions, index))
+            const handleClickUndecided = () => setUndecidedActions(toggleKey(undecidedActions, index))
                           
-                return (
-                  <EntityCard allowMerge={true} type="prospection" name={link.name} url={link.homepage} numberOfCitations={12} />
-                  // <li key={ index } title={ link.name + '\n' + link.homepage }>
-                  //   <div className="link-name">
-                  //     <span>{ link.name }</span>
-                  //     <span className="link-merge" >merge</span>
-                  //   </div>
-                  //   <div className="link-url" >{ link.homepage }</div>
-                  // </li>
-                )
-              }) : 'No links to display' }
-            </ul>
-          </div>
+            return (
+              <EntityCard 
+                key={ index }
+                allowMerge 
+                status={ link.status } 
+                name={ link.name } 
+                url={ link.homepage }
+                numberOfCitations={ 12 } 
+                onClickMerge={ handleClickMerge }
+                onClickOut={ handleClickOut }
+                onClickUndecided={ handleClickUndecided }
+                isMergeActive={ mergeActions[index] }
+                isUndecidedActive={ undecidedActions[index] }
+                isOutActive={ outActions[index] }
+              />
+            )
+          }) : 'No links to display' }
+        </CardsList>
+
+        {
+          hasPendingActions
+          &&
+          <ul onClick={ resetActions } className="actions-container">
+            <li><button className="btn confirm-btn">Apply actions on webentities</button></li>
+            <li><button className="btn cancel-btn">Discard actions</button></li>
+          </ul>
+        }
                     
-          <div className="download">
-            <button className='btn btn-default'>
-              <strong>
+        <div className="download">
+          <button className='btn btn-default'>
+            <strong>
                                     Download list as csv
-                <span>&nbsp;</span>
-                <span className="ti-download" />
-              </strong>
-            </button>
-          </div>                    
+              <span>&nbsp;</span>
+              <span className="ti-download" />
+            </strong>
+          </button>
+        </div>                    
       </div>
     </div>
   )
@@ -94,34 +134,17 @@ export const LinkedEntitiesOnly = function (){
 
 const LinkedEntities = function () {
   const [open, setOpen] = useState(true)
-  
+
   return (
-    <div className="browser-side-bar">
-      <div className="browser-side-bar-sections">
-          
-        <div className="browser-side-bar-tags browser-research-notes">
-          <div>
-            <h3
-              onClick={ () => setOpen(!open) }
-            >
-              <span 
-                className={ cx({
-                  'ti-angle-up': open,
-                  'ti-angle-down': !open
-                }) }
-              />
-              <span>Linked webentities <HelpPin>about linked webentities</HelpPin></span>
-                        
-            </h3>
-          
-            {
-              open &&
-              <LinkedEntitiesOnly />
-                        
-            }
-          </div>
-        </div>
-      </div>
+    <div style={ { width: 500, background: 'var(--color-grey-light)', padding: 10 } }>
+      <EditionCartel
+        isOpen={ open }
+        onToggle={ () => setOpen(!open) }
+        title={ 'Linked webentities' }
+        help={ 'Review webentities citing or cited by the currently browsed webentity' }
+      >
+        <LinkedEntitiesOnly />
+      </EditionCartel>
     </div>
   )
 }

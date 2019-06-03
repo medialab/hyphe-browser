@@ -1,9 +1,6 @@
 
-stretch(mode)
-    display: flex
-    flex-flow: mode nowrap
-    justify-content: stretch
-  
+@import '../helpers.styl'
+
 button
     outline: none
 
@@ -23,6 +20,8 @@ div::-webkit-scrollbar
 div::-webkit-scrollbar-thumb
     background: var(--color-grey)
 
+input
+    font-family: var(--font-mono)
 
 .mode-btn
     cursor: pointer
@@ -32,34 +31,33 @@ div::-webkit-scrollbar-thumb
     padding: 5px
     font-size: 14px
     background: var(--color-grey)
-    display: flex
-    align-items: center
-    justify-content: center
+    flexCenter()
     border-radius: var(--radius)
     width: calc(100% - 5px)
     height: 100%
 .mode-btn:last-of-type
     margin-right: 0
 .mode-btn.is-active
-    color: var(--color-white) // var(--color-blue)
+    color: var(--color-white)
     background: var(--color-blue)
+    margin-right: 0
+.mode-btn[disabled]
+    cursor: default
 
 .help-pin
     padding-left: .2em
 
 .set-status-container
     stretch(row)
+    justify-content: space-between
     list-style: none
     padding: 0
-    justify-content: space-between
     cursor: pointer
     margin: 0
     li
-        background: var(--color-grey-light)
+        background: var(--color-grey)
         border-radius: var(--radius)
-        display: flex
-        align-items: center
-        justify-content: center
+        flexCenter()
         height: 100px
         width: 100px
         max-width: calc(30% - 10px)
@@ -67,12 +65,15 @@ div::-webkit-scrollbar-thumb
         &.in
             background: var(--color-corpus-in)
             color: white
+            cursor: default
         &.out
             background: var(--color-corpus-out)
             color: white
+            cursor: default
         &.undecided
             background: var(--color-corpus-undecided)
             color: white
+            cursor: default
 
 .webentities-list-of-lists
     list-style: none
@@ -80,18 +81,18 @@ div::-webkit-scrollbar-thumb
     margin: 0
     display: flex
     flex-direction: column
-    li
+    .list-name-container
         stretch(row)
         align-items: center
         transition: all .5s ease 
         max-height: 30vh
         overflow: hidden
         .list-btn-container
-            // flex: 1
             text-align: left
             padding-bottom: 0
         .list-btn
             margin: 5px
+            margin-right: 2px
             display: inline-block
             cursor: pointer;
             font-family: var(--font-mont);
@@ -105,15 +106,20 @@ div::-webkit-scrollbar-thumb
             border: none
             transition: all .5s ease
             outline: none
+        .list-btn.in
+                background: var(--color-corpus-in)
+        .list-btn.out
+                background: var(--color-corpus-out)
+        .list-btn.undecided
+                background: var(--color-corpus-undecided)
         .count
             transition: all .5s ease
             text-align: right
-            font-size: 12px
-    li.is-active
-        .list-btn
-            background: var(--color-blue)
-            color: var(--color-white)
-    li:not(.is-active)
+            font-size: 10px
+    .list-name-container.is-active
+        opacity: 1
+    .list-name-container:not(.is-active)
+        opacity: .5
         .list-btn
             font-size: 10px
             padding: 10px
@@ -124,7 +130,6 @@ div::-webkit-scrollbar-thumb
 .browse-nav
     stretch(row)
     align-items: flex-end
-    border-bottom: 1px solid var(--color-grey)
     padding-bottom: 10px
     min-height: 35px
     background: var(--color-grey-light)
@@ -161,19 +166,14 @@ div::-webkit-scrollbar-thumb
         padding-left: 10px
         padding-right: 10px
     .status-list
-        // border: 1px solid var(--color-grey-dark)
-        background: var(--color-grey)
-        margin: 10px
-        // margin-top: 0
         border-radius: var(--radius)
         padding: 10px
-        
-        // padding-top: 1
+
         position: relative
         .status-list-toggle
             position: absolute
             right: 10px
-            top: 45px
+            top: 15px
             font-size: 14px
             border: none
             color: white
@@ -181,9 +181,7 @@ div::-webkit-scrollbar-thumb
             border-radius: 50%
             width: 30px
             height: 30px
-            display: flex
-            align-items: center
-            justify-content: center
+            flexCenter()
             cursor: pointer
     .status-list:not(.is-open)
         li:not(.is-active)
@@ -201,7 +199,6 @@ div::-webkit-scrollbar-thumb
             padding-top: 0
             stretch(row)
             align-items: center
-            // border-bottom: 1px solid var(--color-grey-dark)
             input 
                 flex: 1
                 margin: 5px
@@ -221,7 +218,6 @@ div::-webkit-scrollbar-thumb
             .filter
                 padding: 12px
                 margin: 5px
-                // border: 1px solid var(--color-grey-dark)
                 border-radius: var(--radius)
                 background: var(--color-grey)
                 cursor: pointer
@@ -231,14 +227,7 @@ div::-webkit-scrollbar-thumb
             .filter-container.is-active .filter
                 background: var(--color-black)
                 color: white
-            // .filter-options-bg
-            //     background: rgba(255,255,255,0.5)
-            //     position: fixed
-            //     left: 0
-            //     top: 0
-            //     width: 100%
-            //     height: 100%
-            //     cursor: pointer
+
             .filter-options
                 list-style: none
                 padding: 0
@@ -259,13 +248,13 @@ div::-webkit-scrollbar-thumb
             margin-top: 0
             margin-left: 20px
             margin-right: 15px
-            // margin-right: 20px
             border-radius: var(--radius)
             padding: 10px
             overflow: hidden
             stretch(column)
         .webentities-list
             overflow: auto
+            overflow-x: hidden
             flex: 1
             padding: 0
             margin: 0
@@ -277,6 +266,28 @@ div::-webkit-scrollbar-thumb
             padding-right: 15px
             padding-top: 0
             min-height: 50px
+    .actions-container
+        list-style: none
+        padding: 0
+        stretch(row)
+        padding-left: 20px
+        padding-right: 20px
+        li
+            flex: 1
+        .btn
+            width: 100%
+            font-family: var(--font-pt)
+            border: none 
+            padding: 10px
+            color: var(--color-white)
+            height: 40px
+            flexCenter()
+        .confirm-btn
+            background: var(--color-blue)
+        .cancel-btn
+            background: var(--color-red)
+        li:first-of-type
+            padding-right: 5px
 
 .browse-layout
     stretch(column)
@@ -292,7 +303,7 @@ div::-webkit-scrollbar-thumb
 .browser-tabs
     display: flex
     position: relative
-    flex-direction: row!important
+    flex-direction: row
     max-height: 30px
     padding-left: 10px
     margin-top: 5px
@@ -314,41 +325,46 @@ div::-webkit-scrollbar-thumb
     align-items: center
     background: var(--color-black);
     color: var(--color-white);
-    font-family: var(--font-pt);
     font-weight: bold;
-    padding: 5px
     padding-left: 30px
-    height: 40px
+    padding-top: 5px
     .header-group.header-group-main
         h1
-            font-size: 16px
+            font-size: 14px
             margin: 0
+            padding-top: 5px
+            padding-bottom: 10px
+            // font-family: var(--font-pt);
+            display: flex
+            flex-direction: row
+            align-items: center
     .header-buttons
         list-style: none
         stretch(row)
+        margin: 0
         .btn
             background: inherit 
-            border-radius: var(--radius)
+            border-radius: var(--radius) var(--radius) 0 0
             color: var(--color-white)
             border: none
+            padding: 10px 20px
+            font-family: var(--font-mono)
         .btn.is-active
             background: var(--color-white)
             color: var(--color-black)
+            font-family: var(--font-mono)
+
     .server-status
         display: inline-block
         background: green
         width: .8em
         height: .8em
         border-radius: 50%
+        margin-left: 5px
 
 .browser-layout
-    position: fixed
-    left: 0
-    top: 0
-    width 100%
-    height 100%
+    fix()
     stretch(column)
-    // .browser-header
     .browser-main-container
         flex: 1
         stretch(row)
@@ -359,7 +375,7 @@ div::-webkit-scrollbar-thumb
             padding: 0
             box-sizing: border-box
             padding-right: 0
-            border-right: 1px solid var(--color-grey)
+            background: var(--color-grey-light)
             .aside-header.switch-mode-container
                 max-height: 35px
                 stretch(row)
@@ -379,16 +395,22 @@ div::-webkit-scrollbar-thumb
                 max-height: calc(100% - 30px)
                 overflow: hidden
                 stretch(column)
-                .edition-cartel:first-of-type
-                    margin-top: 20px
                 .edition-cartel:last-of-type
-                    margin-bottom: 20px
+                    margin-bottom: 60px
+                .list-layout
+                    .edition-cartel:first-of-type
+                        margin-bottom: 0
+                        margin-top: 20px
+                        .edition-cartel-content
+                            padding-top: 0
         .browser-column.browser-main-column
             flex: 1
             stretch(column)
             .webview
+            .new-tab-content
                 flex: 1
                 border: none
+                background: white
             .browser-bar
                 padding: 10px
                 background: var(--color-grey-light)

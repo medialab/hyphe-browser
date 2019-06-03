@@ -12,7 +12,7 @@ const EditionCartel = ({
   title,
   help,
   isAlwaysOpen,
-  helpDirection = 'bottom'
+  helpPlace = 'bottom'
 }) => {
   return (
     <div className={ cx('edition-cartel', { 'is-always-open': isAlwaysOpen, 'is-open': isAlwaysOpen || isOpen }) }>
@@ -25,7 +25,7 @@ const EditionCartel = ({
               <i className="ti-angle-down" />
           }
           </span>
-          <span className="title">{title} <HelpPin place={helpDirection}>{help}</HelpPin></span>
+          <span className="title">{title} <HelpPin place={ helpPlace }>{help}</HelpPin></span>
         </h4>
       </div>
       <div className="edition-cartel-content">

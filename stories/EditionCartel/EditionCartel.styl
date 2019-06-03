@@ -1,5 +1,6 @@
 
 
+@import '../helpers.styl'
 
 .edition-cartel
     margin-bottom: 10px
@@ -8,30 +9,37 @@
         text-align: center
         h4
             cursor: pointer
-            background: var(--color-white)
+            position: relative
             padding: 10px 
             display: inline
             font-size: 14px
             font-weight: normal
             .arrow-container
                 padding-right: 10px
+                position: relative
             .title
                 min-width: 150px
                 display: inline-block
+                position :relative
+        h4:before
+            background: var(--color-grey-light)
+            content: ''
+            abs()
     .edition-cartel-header:before
         position: absolute
+        pointer-events: none
         left: 10px
         top: 10px
         width: calc(100% - 20px)
         height: calc(100% - 20px)
         content:""
         border: 1px solid var(--color-grey)
-        z-index: -1
         border-radius: calc(var(--radius) * 2)
     .edition-cartel-content
         padding: 20px
         padding-top: 10px
         overflow: hidden
+        overflow-x: visible
         max-height: 100vh
         transition: all .5s ease
         opacity: 1
@@ -42,6 +50,7 @@
             padding: 10px
             box-sizing: border-box
             outline: none
+            font-family: var(--font-mono)
         .input:focus
             border: 1px solid var(--color-grey-dark)
 

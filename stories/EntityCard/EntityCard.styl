@@ -1,43 +1,68 @@
 
-flexStretch()
-    display: flex
-    flex-flow: row nowrap
-    align-items: stretch
+@import '../helpers.styl'
 
 .entity-card
     background: white
-    padding: 10px 20px 10px 20px
+    padding: 10px
+    padding-right: 20px
     box-shadow: 0 0 10px var(--color-grey-light)
     transition: all .2s ease
     cursor: pointer
-    flexStretch()
+    stretch(row)
+
+    .status-marker-container
+        display: flex
+        justify-content: center
+        align-items: center
+        padding-right: 10px
+        .status-marker
+            border-radius: 50%
+            position : relative
+            padding: 10px
+            flexCenter()
+            width: 15px
+            height: 15px
+            text-align: center
+            color: var(--color-white)
+            &.prospection
+                background: var(--color-corpus-discovered)
+            &.in
+                background: var(--color-corpus-in)
+            &.out
+                background: var(--color-corpus-out)
+            &.undecided
+                background: var(--color-corpus-undecided)
 
     
     .card-content
         flex: 1
         .name
-            // text-decoration: underline
             font-size: 14px
             padding: 0
             margin: 0
             font-weight: bold
+            overflow: ellipsis
         .url
             font-size: 11px
             margin: 0
             margin-bottom: 10px
+            margin-top: 5px
             text-decoration: underline
+            max-height: 1.2em;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 200px;
         .statistics
             font-size: 10px
             flexStretch()
             .text
                 flex: 1
     .card-actions
-        // flexStretch()
         padding: 0
         list-style : none
         margin: 0
         overflow: visible
-        // align-items: center
         li
             flex: 1
             background: inherit
@@ -49,10 +74,13 @@ flexStretch()
                 border-radius: var(--radius)
                 width: 30px
                 margin-left: 5px
+            &.is-active
+                .btn
+                    background: var(--color-black)
+                    color: var(--color-white)
 .entity-card:hover
     background: var(--color-blue-light)
     color: white
-    // box-shadow: 0 0 10px var(--color-grey-dark)
 .entity-card.is-active
     background: var(--color-blue)
     color: white
