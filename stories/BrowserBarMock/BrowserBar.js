@@ -7,7 +7,9 @@ import '../../app/containers/BrowserTabs/browser-tab-content.styl'
 import '../../app/containers/BrowserTabs/browser-tabs.styl'
 
 const BrowserBar = function ({
-  displayAddButton = true
+  displayAddButton = true,
+  isHomePage = false,
+  isLanding
 }) {
   const [edited, setEdited] = useState(false)
   const input = useRef(null)
@@ -32,24 +34,36 @@ const BrowserBar = function ({
       <div className={ cx('browser-tab-toolbar-url', { edited }) }>
         <form onClick={ handleFormClick } className="">
           {edited ?
-            <input ref={ input } onBlur={ () => setEdited(false) } value="https://www.01net.com/tests" />
+            <input ref={ input } onBlur={ () => setEdited(false) } value={ isLanding ? '' : 'https://fr.wikipedia.org/wiki/La_Maison_des_feuilles' } />
             :
-            <span className="browser-tab-url">
-              <em>https</em>://<em>www.01net</em><em>.com</em>/tests
-            </span>
+            isLanding ?
+              <span className="toolbar-placeholder">You can directly write a URL address here</span>
+              :
+              <span className="browser-tab-url">
+                <em>https</em>://<em>fr.wikipedia</em><em>.org</em><em>/wiki/La_Maison_des_feuilles</em>
+              </span>
           }
         </form>
         <div className="page-actions">
-          <span className="hint--left" aria-label="Set this page as the homepage of the entity">
-            <span className="ti-layers-alt" />
-          </span>
           {
-            displayAddButton
+            !edited && displayAddButton
             &&
-            <span className="hint--left" aria-label="Create a new entity distinct from the current one ...">
+            <button className="create-btn hint--left" aria-label="Create a new entity distinct from the current one ...">
               <span className="ti-plus" />
-            </span>
+            </button>
           }
+          {
+            !edited && !isLanding &&
+            <button
+              className={ cx('homepage-btn', 'hint--left', {
+                'is-active': isHomePage
+              }) } aria-label="Set this webpage as the homepage of the webentity 'La maison des feuilles'"
+            >
+              <span className="ti-layers-alt" />
+            </button>
+          }
+          
+          
         </div>
       </div>
     </div>

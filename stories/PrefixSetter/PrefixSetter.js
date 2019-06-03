@@ -15,7 +15,7 @@ const PrefixSetter = function ({
     }
   })
   const refs = []
-  parts.forEach(p => {
+  parts.forEach(() => {
     refs.push(useRef(null))
   })
   const container = useRef(null)
@@ -33,6 +33,7 @@ const PrefixSetter = function ({
 
   useEffect(() => {
     setSliderX()
+    setTimeout(() => setSliderX())
   })
 
   const handleDrag = (event) => {

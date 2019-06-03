@@ -1,16 +1,13 @@
 
-
+@import '../helpers.styl'
 
 .research-notes-container
     text-align: left;
     padding: 10px
-    // padding-top: 0
     form
         display: flex
         flex-flow: column nowrap
     textarea
-        color: #aaa;
-        // line-height: 17px;
         max-width: 100%;
         overflow: auto;
         text-overflow: ellipsis;
@@ -23,6 +20,7 @@
         font-size: 12px
         font-family: var(--font-mono)
         border: 1px solid var(--color-grey)
+        color: var(--color-black)
     textarea:focus
         border: 1px solid var(--color-grey-dark)
     textarea::placeholder
@@ -30,32 +28,26 @@
     .research-note
         margin-bottom: 10px
         font-size: 12px
-        display: flex
-        flex-flow: row nowrap
-        justify-content: stretch
+        stretch(row)
         align-items: flex-start
         padding: 10px
-        // border: 1px solid var(--color-grey-dark)
         background: var(--color-grey)
         border-radius: var(--radius)
         .research-note-content
             flex: 1
             padding-top: 10px
+            .note-block
+                margin-bottom: 10px
         &:last-of-type
             margin-bottom: 0
     .add-button
     .cancel-button
-        // position: relative!important
-        // right: unset!important
         width: 100%
         margin-left: 0
         margin-right: 0
         margin-bottom: 10px
         border: none
-        // background: white
-        // line-height: 34px;
         font-family: var(--font-pt)
-        // text-transform: uppercase
         cursor: pointer
         background: var(--color-blue)
         color: white
@@ -63,11 +55,9 @@
         border-radius: var(--radius)
     .cancel-button
         background: var(--color-red)
-        margin-left: 5px
     .add-button[disabled],
     .cancel-button[disabled]
         background: var(--color-blue-light)
-        // color: var(--color-grey-dark)
         cursor: default
 
     .actions-container
@@ -75,8 +65,10 @@
         padding: 0
         margin: 0
         margin-top: 10px
-        display: flex
-        flex-flow: row nowrap
-        justify-content: stretch
+        max-width: 100%
+        stretch(row)
         li
             flex: 1
+        li:not(:first-of-type)
+            margin-left: 5px
+

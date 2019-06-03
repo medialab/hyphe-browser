@@ -1,11 +1,9 @@
-
+@import '../helpers.styl'
 
 .linked-entities
     .list-toggle
-        display: flex
-        flex-flow: row nowrap
+        stretch(row)
         padding: 10px
-        justify-content: stretch
         padding-left: 0
         padding-right: 0
         button 
@@ -24,3 +22,28 @@
             background: var(--color-grey)
             padding: 10px
             width: 100%
+    .entity-card
+        margin-left: 5px
+        margin-bottom: 5px
+    .actions-container
+        list-style: none
+        padding: 0
+        stretch(row)
+        li
+            flex: 1
+        .btn
+            width: 100%
+            font-family: var(--font-pt)
+            border: none 
+            padding: 10px
+            color: var(--color-white)
+            height: 40px
+            display: flex
+            align-items: center
+            justify-content: center
+        .confirm-btn
+            background: var(--color-blue)
+        .cancel-btn
+            background: var(--color-red)
+        li:first-of-type
+            padding-right: 5px

@@ -1,26 +1,4 @@
-button()
-    border: none
-    background: white
-    // line-height: 34px;
-    font-family: var(--font-pt)
-    // text-transform: uppercase
-    cursor: pointer
-    padding: 5px
-    border-radius: var(--radius)
-
-input()
-    color: #aaa;
-    // line-height: 17px;
-    max-width: 100%;
-    // overflow: auto;
-    text-overflow: ellipsis;
-    outline: none
-    border: none
-    resize: none
-    border-radius: var(--radius)
-    padding: 5px
-    font-size: 12px
-    
+@import '../helpers.styl'
 
 .tags-container
     text-align: left
@@ -32,13 +10,13 @@ input()
         color: var(--color-grey-dark)
         text-align: center
         padding: 10px
+        padding-bottom: 0
     .categories-container
         padding-bottom: 10px
     .add-category-container
         display: flex
         flex-flow: row nowrap
         justify-content: stretch
-        // border-top: 1px solid #cccecd
         padding-top: 5px
         .add-category-input
             flex: 1
@@ -62,7 +40,6 @@ input()
                 text-transform: lowercase
         button[disabled]
             background: var(--color-blue-light)
-            // color: var(--color-grey-dark)
             cursor: default
     .categories-list
         padding: 0

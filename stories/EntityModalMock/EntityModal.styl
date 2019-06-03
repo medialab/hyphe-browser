@@ -1,5 +1,6 @@
 
 
+@import '../helpers.styl'
   
 .ReactModal__Overlay
     display: flex
@@ -7,11 +8,9 @@
     justify-content: center
 
 .new-entity-modal-container
-    display : flex
-    flex-flow: column nowrap
+    stretch(column)
     max-height: 100%
     overflow : hidden
-    justify-content: stretch
     height: 100%
     position: relative
     input 
@@ -23,8 +22,6 @@
         border-radius: var(--radius);
         padding: 10px;
         list-style: none
-        // max-height: 20vh
-        // overflow-y: auto
         .page-card
             cursor: pointer
             background: var(--color-white);
@@ -33,9 +30,7 @@
             margin: 6px 10px;
             padding: 10px 20px;
             text-align: left;
-            display: flex
-            flex-flow: row nowrap
-            justify-content: stretch
+            stretch(row)
             .card-content
                 flex: 1
             .card-actions
@@ -78,7 +73,6 @@
     .step-container
         margin-bottom: 10px
         margin-top: 10px
-        // border-bottom: 1px solid black
         padding: 10px
         background: var(--color-white)
     .step-container.is-disabled
@@ -102,18 +96,14 @@
             margin-right: 5px
     .prefix-input-container
         position: relative
-        display: flex
-        flex-flow: row nowrap
-        justify-content: stretch
+        stretch(row)
         align-items: center
         .prefix-setter
             flex: 1
             margin-right: 5px
     .modal-header
         h2
-            display: flex
-            flex-flow: row nowrap
-            justify-content: stretch
+            stretch(row)
             margin: 0
             padding: 10px
             padding-left: 20px
@@ -138,4 +128,3 @@
         padding-right: 20px
         button
             font-size: 14px
-        // background: var(--color-grey)
