@@ -199,6 +199,9 @@ input
             padding-top: 0
             stretch(row)
             align-items: center
+            &.is-disabled
+                opacity: .5
+                pointer-events: none
             input 
                 flex: 1
                 margin: 5px
@@ -252,14 +255,26 @@ input
             padding: 10px
             overflow: hidden
             stretch(column)
+            flex: 1
+            max-height: calc(100% - 130px)
+
         .webentities-list
             overflow: auto
             overflow-x: hidden
             flex: 1
             padding: 0
             margin: 0
+            position: relative
             .entity-card
                 margin: 10px
+            .placeholder-empty
+                font-size: 12px
+                color: var(--color-grey-dark)
+                font-style: italic
+                display: flex
+                align-items: center
+                justify-content: center
+                abs()
         .webentities-list-footer
             padding: 10px
             padding-left: 20px
@@ -392,12 +407,15 @@ input
                     flex: 1
             .aside-content
                 flex: 1
-                max-height: calc(100% - 30px)
+                max-height: calc(100%)
+                height: 100%
                 overflow: hidden
                 stretch(column)
                 .edition-cartel:last-of-type
                     margin-bottom: 60px
                 .list-layout
+                    height: 100%
+                    max-height: calc(100% - 30px)
                     .edition-cartel:first-of-type
                         margin-bottom: 0
                         margin-top: 20px

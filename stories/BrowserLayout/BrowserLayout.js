@@ -60,7 +60,8 @@ for (let i = 0 ; i < 100 ; i++) {
 
 const ListLayout = function ({
   status = 'prospection',
-  isLanding
+  isLanding,
+  isEmpty,
 }) {
   const [selectedList, setSelectedListReal] = useState(status)
   const [isOpen, setOpen] = useState(false)
@@ -101,7 +102,7 @@ const ListLayout = function ({
                   </button>
                 </span>
                 <span className="count">
-                          12000
+                          {isEmpty ? 0 : 12000}
                 </span>
               </li>
                   
@@ -112,7 +113,7 @@ const ListLayout = function ({
                   </button>
                 </span>
                 <span className="count">
-                          12000
+                  {isEmpty ? 0 : 12000}
                 </span>
               </li>
               <li onClick={ () => setSelectedList('out') } className={ 'list-name-container ' + (selectedList === 'out' ? 'is-active': '') }>
@@ -122,7 +123,7 @@ const ListLayout = function ({
                   </button>
                 </span>
                 <span className="count">
-                          12000
+                  {isEmpty ? 0 : 12000}
                 </span>
               </li>
               <li onClick={ () => setSelectedList('undecided') } className={ 'list-name-container ' + (selectedList === 'undecided' ? 'is-active': '') }>
@@ -132,7 +133,7 @@ const ListLayout = function ({
                   </button>
                 </span>
                 <span className="count">
-                          12000
+                  {isEmpty ? 0 : 12000}
                 </span>
               </li>
             </ul>
@@ -144,7 +145,7 @@ const ListLayout = function ({
         
       </div>
       <div className="webentities-list-wrapper">
-        <div className="webentities-list-header">
+        <div className={cx("webentities-list-header", {'is-disabled': isEmpty})}>
           <input placeholder="search a webentity in the prospections list" />
           <span className={ cx('filter-container', { 'is-active': isFilterOpen }) }>
             <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
@@ -161,7 +162,9 @@ const ListLayout = function ({
         </div>
         <div className="webentities-list-container">
           <ul className="webentities-list">
-            {
+            {isEmpty ? 
+            <li className="placeholder-empty">{'No webentities yet in the ' + selectedList + 's list'}</li>
+            :
               mockEntities.map((entity, index)=> {
 
                 const toggleKey = (obj, key) => {
@@ -203,10 +206,11 @@ const ListLayout = function ({
             <li><button className="btn cancel-btn">Discard actions</button></li>
           </ul>
         }
+        {!isEmpty &&
         <div className="webentities-list-footer">
           <DownloadListBtn />
-          
         </div>
+        }
       </div>
     </div>
   )
@@ -302,6 +306,7 @@ const BrowseLayout = function ({
 const AsideLayout = function ({
   status,
   isLanding,
+  isEmpty,
 }) {
   const [asideMode, setAsideMode] = useState(isLanding ? 'list' : 'browse')
     
@@ -318,7 +323,7 @@ const AsideLayout = function ({
       <div className="aside-content">
         {
           asideMode === 'list' ?
-            <ListLayout isLanding status={ status } />
+            <ListLayout isLanding={isLanding} isEmpty={isEmpty} status={ status } />
             :
             <BrowseLayout status={ status } />
         }
@@ -336,7 +341,7 @@ const BrowserLayout = ({
     <div className="browser-layout">
       <BrowserHeader />
       <div className="browser-main-container">
-        {!isEmpty && <AsideLayout { ...{ status, isLanding } } />}
+        <AsideLayout { ...{ status, isLanding, isEmpty } } />
         <section className="browser-column browser-main-column">
           <BrowserTabs isEmpty={ isEmpty } />
           <BrowserBar isLanding={ isLanding } displayAddButton={ status === 'in' } />
