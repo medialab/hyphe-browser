@@ -1,6 +1,6 @@
 import './HelpPin.styl'
 
-import React, {useRef, useEffect, useState} from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -22,7 +22,7 @@ const HelpPin = ({
 
   const updatePos = () => {
     if (container) {
-      const el = container.current;
+      const el = container.current
       const box = el.getBoundingClientRect()
       setPosition({
         left: box.x,
@@ -35,7 +35,7 @@ const HelpPin = ({
     updatePos()
   }) 
   return (
-    <span className="help-pin" ref={container}>
+    <span className="help-pin" ref={ container }>
       <span
         className={ `placeholder hint--${place} help-pin ${className}` }
         style={ { position: 'fixed', ...position } }
