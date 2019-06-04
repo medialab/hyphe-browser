@@ -112,7 +112,7 @@ class WebView extends React.Component {
       update('stop', webview.src)
       // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
       if (this.props.id === HYPHE_TAB_ID) {
-        webview.executeJavaScript("window.onblur = function() { if ($('#stopFA2 span.glyphicon-pause:visible').length) $('#stopFA2').click() }")
+        webview.executeJavaScript("window.onblur = function() { if ($('#stopFA2').length) $('#stopFA2').click() }")
       }
     })
 
