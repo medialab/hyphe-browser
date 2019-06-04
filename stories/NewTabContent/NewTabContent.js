@@ -2,6 +2,11 @@ import './NewTabContent.styl'
 
 import React, { useState } from 'react'
 
+const CORPUS_HELP = 'a corpus is a network of webpages, regrouped as webentities, representing the result of an inquiry into a specific issue on the web'
+const WEBENTITY_HELP = 'a webentity is a group of webpages defined to correspond to the presence of a specific actor on the web'
+const IN_HELP = 'the IN webentities are the webentities defined as relevant to the inquiry'
+const OUT_HELP = 'the IN webentities are the webentities defined as irrelevant to the inquiry'
+const PROSPECTION_HELP = 'the PROSPECTION webentities are the webentities discovered during the inquiry during browsing, or crawling operations by the hyphe server'
 
 const NewTabContent = function ({
   isEmpty
@@ -18,8 +23,8 @@ const NewTabContent = function ({
           <ul className="actions-container">
             <li onClick={ () => setCurrentAction('search') } className={ `action-container ${currentAction === 'search' ? 'is-active': ''}` }>
               <button>
-                <h3>Search</h3>
-                <h4>on the web thanks to a search engine</h4>
+                <h3>Browse</h3>
+                <h4>the web for relevant webpages</h4>
               </button>
             </li>
             <li className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
@@ -47,43 +52,50 @@ const NewTabContent = function ({
                 <option>qwant</option>
               </select>
             </li>
-            <li className="main">
-              <input placeholder="search with google" />
+            <li className="form-container">
+              <form className="form" onSubmit={e => e.preventDefault()}>
+                <input placeholder="search with google" />
+                <button>search</button>
+              </form>
+            </li>
+            <li>
+              ... or directly start with a URL address:
+            </li>
+            <li className="form-container">
+              <form className="form" onSubmit={e => e.preventDefault()}>
+                <input placeholder="enter URL address here" />
+                <button>go</button>
+              </form>
             </li>
           </ul>
         </div>
           }
         </div>
-        <div className="quick-intro">
+        <div className="intro-contents">
           <h2>What is this all about ?</h2>
           <p>
-              Hyphe browser is an inquiry companion which is aimed at building a <em>corpus</em> of webpages relevant to your inquiry and annotate them.
+              Hyphe browser is an inquiry companion for qualitatively mapping a subset of the world wide web concerned with a specific issue. It is aimed at building a <em className="hint--top" aria-label={CORPUS_HELP}>corpus</em> of webpages relevant to your inquiry, annotate them and eventually visualize their relations to grasp how the issue is present on the web.
           </p>
           <p>
-              Hyphe browser allows to regroup webpages as <em>webentities</em> which correspond to specific persons, organizations, etc. relevant to your inquiry.
+              Hyphe browser allows to navigate the web and regroup webpages as <em className="hint--top" aria-label={CORPUS_HELP}>webentities</em> which correspond to the online presence of specific individuals, organizations, etc. relevant to your inquiry.
           </p>
-          <p>Hyphe browser allows to qualitatively review webentities and choose whether they should be included in the corpus. When a webentity is included in the corpus, the Hyphe server automatically navigates to each of its webpages and analyze their content to discover linked webentities that may be related to your inquiry.</p>
+          <p>Hyphe browser allows to qualitatively - and collectively - review and define the <em className="hint--top" aria-label={WEBENTITY_HELP}>webentities</em> of your inquiry and choose whether they should be included <em className="hint--top" aria-label={IN_HELP}>IN</em> the corpus or excluded <em className="hint--top" aria-label={OUT_HELP}>OUT</em> of it. When a <em className="hint--top" aria-label={WEBENTITY_HELP}>webentity</em> is included <em className="hint--top" aria-label={IN_HELP}>IN</em> the <em className="hint--top" aria-label={CORPUS_HELP}>corpus</em>, the Hyphe server automatically navigates to each of its webpages and analyzes their content to discover linked webentities that may be relevant to your inquiry (this is technically called <em className="hint--top" aria-label={CORPUS_HELP}>crawling</em>).</p>
             
           <h2>How should I work ?</h2>
           <p>
                 A typical workflow with hyphe browser could look like that :
           </p>
           <ol>
-            <li>you define a few websites relevant to your inquiry, browse to them with hyphe browser, and INclude them in the corpus</li>
-            <li>each webentity included in the corpus will be automatically analyzed by the hyphe server to discover new webentities and add them to the PROSPECTION list</li>
-            <li>you review webentities proposed by the server, reading them with the browser and making the choice to include some of them in the corpus while excluding the others</li>
+            <li>you define a few websites of individuals, organizations, actors, ... relevant to your inquiry, browse to them with hyphe browser, and include them <em className="hint--top" aria-label={IN_HELP}>IN</em> the corpus</li>
+            <li>each webentity included in the corpus will be automatically analyzed (<em>crawled</em>) by the hyphe server to discover new possibly relevant webentities and add them to the <em className="hint--top" aria-label={PROSPECTION_HELP}>PROSPECTION</em> list</li>
+            <li>you review webentities proposed by the server in the <em className="hint--top" aria-label={PROSPECTION_HELP}>PROSPECTION</em> list, reading them with the browser and making the choice to include them <em className="hint--top" aria-label={CORPUS_HELP}>IN</em> the corpus or exclude them <em className="hint--top" aria-label={OUT_HELP}>OUT</em> of the corpus</li>
             <li>the 2 previous steps repeat as long as you are not satisfied with the web territory covered by your inquiry</li>
-            <li>once your corpus is stabilized, you can tag your webentities according to different categories and then visualize them as a network in hyphe</li>
+            <li>once your corpus is stabilized and your mapping seems comprehensive enough to start analyzing their relations, you can tag your webentities according to different categories and then visualize them as a network in hyphe (top right button)</li>
+            <li>of course, all of this process is iterative and previous steps can repeat as much as necessary</li>
           </ol>
-          <h2>Can you explain the main notions ?</h2>
-          <div className="glossary-item">
-            <h4>Webentity</h4>
-            <p />
-          </div>
-            
-          <div className="glossary-item">
-            <h4>Prospection / In / Out / undecided</h4>
-            <p />
+          <h2>Where can I find more documentation</h2>
+          <div className="more-doc-container">
+            <p>Head to the online documentation of Hyphe browser</p>
           </div>
 
         </div>

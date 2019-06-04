@@ -1,25 +1,45 @@
 
 
 
-button()
-    border: none
+button(active = false)
+    outline: none
     background: white
     font-family: var(--font-pt)
     cursor: pointer
     padding: 5px
     border-radius: var(--radius)
+    color: var(--color-black)
+    border: none
+    // border: 1px solid var(--color-grey)
+    if active is 'active'
+        background: var(--color-blue)
+        color: white
+        border: none
+
+buttonDisabled()
+    cursor: default
+    if active is 'active'
+        background: var(--color-blue-light)
+    else
+        opacity: .4
+
 
 input()
-    color: #aaa;
     max-width: 100%;
     text-overflow: ellipsis;
     outline: none
     border: none
     resize: none
     border-radius: var(--radius)
-    padding: 5px
+    padding: 10px
     font-size: 12px
     font-family: var(--font-mono)
+    border: 1px solid var(--color-grey)
+    color: var(--color-black)
+inputPlaceholder()
+    color: var(--color-grey-dark)
+inputFocus()
+    border: 1px solid var(--color-grey-dark)
 
 fix()
     position: fixed
@@ -40,9 +60,9 @@ stretch(mode)
     flex-flow: mode nowrap
     justify-content: stretch
 
-flexCenter()
+flexCenter(direction = 'row')
     display: flex
-    flex-flow: row nowrap
+    flex-flow: direction nowrap
     justify-content: center
     align-items: center
   

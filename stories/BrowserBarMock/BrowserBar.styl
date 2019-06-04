@@ -12,13 +12,10 @@
             display: flex
             align-items: center
             input 
+                input()
                 width: 100%
                 border: none
-                outline: none
-                padding: 5px
                 padding-left: 9px
-                font-size: 12px
-                font-family: var(--font-mono)
         .browser-tab-url
             background: white
             display: flex
@@ -43,9 +40,8 @@
             background: white
             width: 30px
             height: 30px
-            display: flex
-            align-items: center
-            justify-content: center
+            flexCenter()
+            cursor: pointer
         button:first-of-type
             margin-right: 5px
         button:last-of-type

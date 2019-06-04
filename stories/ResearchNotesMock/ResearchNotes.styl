@@ -8,23 +8,20 @@
         display: flex
         flex-flow: column nowrap
     textarea
+        input()
         max-width: 100%;
         overflow: auto;
         text-overflow: ellipsis;
         outline: none
         border: none
         resize: none
-        border-radius: var(--radius)
-        padding: 10px
         min-height: 50px
-        font-size: 12px
         font-family: var(--font-mono)
         border: 1px solid var(--color-grey)
-        color: var(--color-black)
     textarea:focus
-        border: 1px solid var(--color-grey-dark)
+        inputFocus()
     textarea::placeholder
-        color: var(--color-grey-dark)
+        inputPlaceholder()
     .research-note
         margin-bottom: 10px
         font-size: 12px
@@ -41,20 +38,20 @@
         &:last-of-type
             margin-bottom: 0
     .add-button
+        button('active')
+    .cancel-button
+        button('active')
+        background: var(--color-red)
+    .add-button
     .cancel-button
         width: 100%
         margin-left: 0
         margin-right: 0
         margin-bottom: 10px
         border: none
-        font-family: var(--font-pt)
         cursor: pointer
-        background: var(--color-blue)
-        color: white
         padding: 10px
-        border-radius: var(--radius)
-    .cancel-button
-        background: var(--color-red)
+    
     .add-button[disabled],
     .cancel-button[disabled]
         background: var(--color-blue-light)

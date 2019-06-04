@@ -70,14 +70,14 @@
             margin: 0
             padding: 0
             .btn
+                button()
+                padding: 10px
                 background: var(--color-grey)
-                border-radius: var(--radius)
                 width: 30px
                 margin-left: 5px
             &.is-active
                 .btn
-                    background: var(--color-black)
-                    color: var(--color-white)
+                    button('active')
 .entity-card:hover
     background: var(--color-blue-light)
     color: white

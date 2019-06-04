@@ -90,9 +90,9 @@ const ResearchNotes = function () {
                 <div className="research-note-content">{
                   note.split('\n').map((i, key) => <div className="note-block" key={ key }>{i}</div>)
                 }</div>
-                <Button icon="pencil" onClick={ onEdit } />
+                <Button icon="pencil" onClick={ onEdit } className="hint--left" title="edit note" />
 
-                <Button icon="trash" onClick={ onRemove } />
+                <Button icon="trash" onClick={ onRemove } className="hint--left" title="delete note" />
               </div>
             )
           })
