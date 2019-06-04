@@ -163,7 +163,7 @@ const ListLayout = function ({
         <div className="webentities-list-container">
           <ul className="webentities-list">
             {isEmpty ? 
-            <li className="placeholder-empty">{'No webentities yet in the ' + selectedList + 's list'}</li>
+            <li className="placeholder-empty">{'No webentities yet in the ' + selectedList.toUpperCase() + ' list'}</li>
             :
               mockEntities.map((entity, index)=> {
 
@@ -202,8 +202,8 @@ const ListLayout = function ({
           hasPendingActions
           &&
           <ul onClick={ resetActions } className="actions-container">
-            <li><button className="btn confirm-btn">Apply actions on webentities</button></li>
-            <li><button className="btn cancel-btn">Discard actions</button></li>
+            <li><button className="btn confirm-btn">Apply 12 decisions on webentities</button></li>
+            <li><button className="btn cancel-btn">Discard 12 decisions</button></li>
           </ul>
         }
         {!isEmpty &&

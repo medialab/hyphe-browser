@@ -1,8 +1,6 @@
 
 @import '../helpers.styl'
 
-button
-    outline: none
 
 ul::-webkit-scrollbar
     width: 2px
@@ -24,22 +22,18 @@ input
     font-family: var(--font-mono)
 
 .mode-btn
-    cursor: pointer
-    background: inherit
-    border: none
-    outline: none
-    padding: 5px
-    font-size: 14px
+    button()
+    font-size: 13px
     background: var(--color-grey)
+    font-family: var(--font-mont)
     flexCenter()
-    border-radius: var(--radius)
     width: calc(100% - 5px)
     height: 100%
 .mode-btn:last-of-type
     margin-right: 0
 .mode-btn.is-active
-    color: var(--color-white)
-    background: var(--color-blue)
+    button('active')
+    font-family: var(--font-mont)
     margin-right: 0
 .mode-btn[disabled]
     cursor: default
@@ -91,21 +85,17 @@ input
             text-align: left
             padding-bottom: 0
         .list-btn
+            button('active')
             margin: 5px
             margin-right: 2px
             display: inline-block
-            cursor: pointer;
             font-family: var(--font-mont);
             font-size: 13px;
             font-weight: bold;
             padding: 10px
             text-transform: uppercase;
             background: var(--color-grey-dark);
-            color: white
-            border-radius: var(--radius);
-            border: none
             transition: all .5s ease
-            outline: none
         .list-btn.in
                 background: var(--color-corpus-in)
         .list-btn.out
@@ -204,14 +194,9 @@ input
                 pointer-events: none
             input 
                 flex: 1
+                input()
                 margin: 5px
-                padding: 10px
-                background: var(--color-white)
-                border-radius: var(--radius)
-                border: 1px solid var(--color-grey)
-                outline: none
                 height: 20px
-                font-family: var(--font-mono)
                 margin-left: 0
             input:focus
                 border: 1px solid var(--color-grey-dark)
@@ -349,7 +334,7 @@ input
             margin: 0
             padding-top: 5px
             padding-bottom: 10px
-            // font-family: var(--font-pt);
+            font-family: var(--font-pt);
             display: flex
             flex-direction: row
             align-items: center
@@ -364,10 +349,13 @@ input
             border: none
             padding: 10px 20px
             font-family: var(--font-mono)
+            outline: none 
+            cursor: pointer
         .btn.is-active
             background: var(--color-white)
             color: var(--color-black)
             font-family: var(--font-mono)
+            cursor: default
 
     .server-status
         display: inline-block

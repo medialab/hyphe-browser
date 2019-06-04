@@ -9,6 +9,8 @@ import HelpPin from '../../app/components/HelpPin'
 import EntityCard from '../EntityCard'
 import EditionCartel from '../EditionCartel'
 import CardsList from '../CardsList'
+import DownloadListBtn from '../DownloadListBtn'
+
 
 const STATUSES = ['prospection', 'in', 'out', 'undecided']
 
@@ -112,19 +114,13 @@ export const LinkedEntitiesOnly = function (){
           hasPendingActions
           &&
           <ul onClick={ resetActions } className="actions-container">
-            <li><button className="btn confirm-btn">Apply actions on webentities</button></li>
-            <li><button className="btn cancel-btn">Discard actions</button></li>
+            <li><button className="btn confirm-btn">Apply 13 decisions on webentities</button></li>
+            <li><button className="btn cancel-btn">Discard decisions</button></li>
           </ul>
         }
                     
         <div className="download">
-          <button className='btn btn-default'>
-            <strong>
-                                    Download list as csv
-              <span>&nbsp;</span>
-              <span className="ti-download" />
-            </strong>
-          </button>
+          <DownloadListBtn />
         </div>                    
       </div>
     </div>
