@@ -21,6 +21,12 @@ const BrowserHeader = () => {
     <div className="browser-header">
       <div className="header-group header-group-main">
         <h1>My inquiry <i aria-label="server is ok" className="server-status hint--right" /></h1>
+        <ul className="header-metrics-container">
+          <li className="hint--bottom" aria-label="12 webentities in prospection"><i className="metrics-icon ti-layout-column3-alt prospection"/> <span className="metrics">12k <label>prospects.</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities included in the corpus"><i className="metrics-icon ti-layout-column3-alt in"/> <span className="metrics">12009 <label>IN</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities excluded from the corpus"><i className="metrics-icon ti-layout-column3-alt out"/> <span className="metrics">3092 <label>OUT</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities undecided"><i className="metrics-icon ti-layout-column3-alt undecided"/> <span className="metrics">12 <label>UND.</label></span></li>
+        </ul>
       </div>
       <div className="header-group header-group-aside">
         <ul className="header-buttons">
@@ -29,6 +35,7 @@ const BrowserHeader = () => {
           <li><button aria-label="close corpus" className="btn hint--left"><i className="ti-close" /></button></li>
         </ul>
       </div>
+    
     </div>
   )
 }
@@ -245,9 +252,9 @@ const BrowseLayout = function ({
           isAlwaysOpen={ status === 'prospection' }
         >
           <ul className="set-status-container">
-            <li className={ status === 'in' ? 'in' : '' } onClick={ () => setModalIsOpen(true) }>In<HelpPin>include this webentity in the corpus and move it to the IN list</HelpPin></li>
-            <li className={ status === 'undecided' ? 'undecided' : '' }>Und.<HelpPin place="bottom">move this webentity to the UNDECIDED list</HelpPin></li>
-            <li className={ status === 'out' ? 'out' : '' }>Out<HelpPin place="left">exclude this webentity and move it to the OUT list</HelpPin></li>
+            <li className={ status === 'in' ? 'in' : '' } onClick={ () => setModalIsOpen(true) }>IN<HelpPin>include this webentity in the corpus and move it to the IN list</HelpPin></li>
+            <li className={ status === 'undecided' ? 'undecided' : '' }>UND.<HelpPin place="bottom">move this webentity to the UNDECIDED list</HelpPin></li>
+            <li className={ status === 'out' ? 'out' : '' }>OUT<HelpPin place="left">exclude this webentity and move it to the OUT list</HelpPin></li>
           </ul>
         </EditionCartel>
 

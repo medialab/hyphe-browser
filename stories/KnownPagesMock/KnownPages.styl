@@ -15,12 +15,24 @@
     .card-content
         flex: 1
         cursor: pointer
+        max-width: 100%
+        overflow: hidden
         .known-page-url
             text-decoration: underline
+            overflow: ellipsis
         .known-page-statistics
             padding-top: 10px
             font-style: italic
             font-size: 10px
+    @media (max-width: $tablet-break-point)
+        flex-direction: column
+        align-items: flex-start
+        .card-actions
+            display: flex
+            flex-flow: row nowrap
+            justify-content: flex-end
+            width: 100%
+       
 .known-page-card.is-active
     background: var(--color-blue)
     color: var(--color-white)

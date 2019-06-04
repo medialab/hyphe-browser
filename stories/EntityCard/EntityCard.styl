@@ -78,6 +78,15 @@
             &.is-active
                 .btn
                     button('active')
+                    background: var(--color-black)
+                    padding: 10px
+    @media (max-width: $tablet-break-point)
+        flex-direction: column
+        .card-actions
+            margin-top: 10px
+            text-align: right
+        .status-marker-container
+            display: none
 .entity-card:hover
     background: var(--color-blue-light)
     color: white

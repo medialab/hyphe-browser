@@ -36,7 +36,8 @@ input
     font-family: var(--font-mont)
     margin-right: 0
 .mode-btn[disabled]
-    cursor: default
+    opacity: 0.5
+    pointer-events: none
 
 .help-pin
     padding-left: .2em
@@ -48,6 +49,11 @@ input
     padding: 0
     cursor: pointer
     margin: 0
+    @media (max-width: $tablet-break-point)
+        flex-direction: column
+        justify-content: stretch
+        align-items: stretch
+    
     li
         background: var(--color-grey)
         border-radius: var(--radius)
@@ -56,6 +62,11 @@ input
         width: 100px
         max-width: calc(30% - 10px)
         font-weight: bold
+        @media (max-width: $tablet-break-point)
+            width: 100%
+            margin-bottom: 10px
+            height: 50px
+            max-width: unset
         &.in
             background: var(--color-corpus-in)
             color: white
@@ -81,6 +92,7 @@ input
         transition: all .5s ease 
         max-height: 30vh
         overflow: hidden
+        
         .list-btn-container
             text-align: left
             padding-bottom: 0
@@ -102,10 +114,23 @@ input
                 background: var(--color-corpus-out)
         .list-btn.undecided
                 background: var(--color-corpus-undecided)
+        .list-btn.prospection
+            background: var(--color-corpus-discovered)
+            color: var(--color-grey-light)
         .count
             transition: all .5s ease
             text-align: right
             font-size: 10px
+        @media (max-width: $tablet-break-point)
+            // flex-direction: column
+            text-align: left
+            // align-items: flex-start
+            .list-btn
+                font-size: 11px
+                text-align: left
+            .count
+                padding-left: 10px
+            
     .list-name-container.is-active
         opacity: 1
     .list-name-container:not(.is-active)
@@ -173,6 +198,9 @@ input
             height: 30px
             flexCenter()
             cursor: pointer
+        @media (max-width: $tablet-break-point)
+            .status-list-toggle
+                display: none
     .status-list:not(.is-open)
         li:not(.is-active)
             max-height: 0
@@ -288,6 +316,9 @@ input
             background: var(--color-red)
         li:first-of-type
             padding-right: 5px
+        @media (max-width: $tablet-break-point)
+            .btn
+                height: 60px
 
 .browse-layout
     stretch(column)
@@ -299,6 +330,8 @@ input
         overflow-y: auto
         padding-left: 10px
         padding-right: 10px
+        @media (max-width: $tablet-break-point)
+            padding-bottom: 80px
 
 .browser-tabs
     display: flex
@@ -328,7 +361,10 @@ input
     font-weight: bold;
     padding-left: 30px
     padding-top: 5px
+    position: relative
     .header-group.header-group-main
+        display: flex
+        flex-flow: row nowrap
         h1
             font-size: 14px
             margin: 0
@@ -363,7 +399,38 @@ input
         width: .8em
         height: .8em
         border-radius: 50%
-        margin-left: 5px
+        margin-left: 5px 
+    .header-metrics-container
+        pointer-events: all
+        padding: 0
+        margin: 0
+        list-style: none
+        display: flex
+        flex-flow: row nowrap
+        padding-top: 2px
+        margin-left: 20px
+        li
+            margin: 0
+            margin-right: 10px
+        .metrics-icon
+            font-size: .5em
+        
+            &.prospection
+                color: var(--color-corpus-discovered)
+            &.in
+                color: var(--color-corpus-in)
+            &.out
+                color: var(--color-corpus-out)
+            &.undecided
+                color: var(--color-corpus-undecided)
+        .metrics
+            padding-left: 2px
+            font-size: 10px
+        .ti-layout-column3-alt:before
+            display: inline-block
+            transform: rotate(90deg)
+        @media (max-width: $tablet-break-point)
+            display: none 
 
 .browser-layout
     fix()
@@ -374,6 +441,7 @@ input
         overflow: hidden
         .browser-column.browser-aside-column
             width: 416px
+            max-width: 40%
             max-height: 100%
             padding: 0
             box-sizing: border-box
@@ -391,8 +459,14 @@ input
                 margin: 0
                 height: 35px
                 background: var(--color-grey-light)
+                
                 li
                     flex: 1
+                @media (max-width: $tablet-break-point)
+                    flex-direction: column
+                    min-height: 100px
+                    li
+                        margin-bottom: 5px
             .aside-content
                 flex: 1
                 max-height: calc(100%)
@@ -404,6 +478,8 @@ input
                 .list-layout
                     height: 100%
                     max-height: calc(100% - 30px)
+                    @media (max-width: $tablet-break-point)
+                        max-height: calc(100% - 100px)
                     .edition-cartel:first-of-type
                         margin-bottom: 0
                         margin-top: 20px
