@@ -29,6 +29,8 @@ input
     flexCenter()
     width: calc(100% - 5px)
     height: 100%
+    @media (max-width: $tablet-break-point)
+        height: 30px
 .mode-btn:last-of-type
     margin-right: 0
 .mode-btn.is-active
@@ -407,7 +409,7 @@ input
         list-style: none
         display: flex
         flex-flow: row nowrap
-        padding-top: 2px
+        padding-top: 1px
         margin-left: 20px
         li
             margin: 0
@@ -464,7 +466,7 @@ input
                     flex: 1
                 @media (max-width: $tablet-break-point)
                     flex-direction: column
-                    min-height: 100px
+                    min-height: 70px
                     li
                         margin-bottom: 5px
             .aside-content
@@ -479,7 +481,7 @@ input
                     height: 100%
                     max-height: calc(100% - 30px)
                     @media (max-width: $tablet-break-point)
-                        max-height: calc(100% - 100px)
+                        max-height: calc(100% - 70px)
                     .edition-cartel:first-of-type
                         margin-bottom: 0
                         margin-top: 20px
