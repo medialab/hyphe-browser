@@ -32,31 +32,37 @@ const EntityCard = ({
         <div className="statistics">
           <i className="ti-link" />
           <span className="text">
-            {numberOfCitations} citations by other webentities
+            cited by {numberOfCitations} webentities
           </span>
         </div>
       </div>
-      <ul className="card-actions">
-        {status !== 'out'
-        &&
-        <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label="move to the OUT list">
-          <button className="btn btn-default">O</button>
-        </li>
-        }
+      <div className="card-actions">
         
+        
+        <ul className="card-actions-row">
         {status !== 'undecided'
         &&
         <li onClick={ onClickUndecided } className={ `hint--left ${isUndecidedActive ? 'is-active': ''}` } aria-label="move to the UNDECIDED list">
-          <button className="btn btn-default"><i className="ti-help" /></button>
+          <button className="btn btn-default">{/*<i className="ti-help" />*/}UND.</button>
         </li>}
 
+        {status !== 'out'
+        &&
+        <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label="move to the OUT list">
+          <button className="btn btn-default">OUT</button>
+        </li>
+        }
+        </ul>
+
+        <ul className="card-actions-row">
         {allowMerge
         &&
         <li onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label="merge that webentity with the current one">
-          <button className="btn btn-default">M</button>
+          <button className="btn btn-default"><i className="ti-plus" /></button>
         </li>
         }
-      </ul>
+        </ul>
+      </div>
     </li>
   )
 }
