@@ -5,7 +5,7 @@ import cx from 'classnames'
 
 import BrowserBar from '../BrowserBarMock'
 import EditionCartel from '../EditionCartel'
-import { ResearchNotesOnly } from '../ResearchNotesMock'
+import { FieldNotesOnly } from '../FieldNotesMock'
 import { Tags } from '../TagsMock'
 import { KnownPages } from '../KnownPagesMock'
 import { LinkedWebentities } from '../LinkedEntitiesMock'
@@ -299,7 +299,7 @@ const BrowseLayout = function ({
           help={ 'Write free comments and remarks about the currently browsed webentity' }
           helpPlace="top"
         >
-          <ResearchNotesOnly />
+          <FieldNotesOnly />
         </EditionCartel>
         <EntityModal
           isOpen={ modalIsOpen }

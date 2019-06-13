@@ -42,11 +42,11 @@ storiesOf('Help pin (embedded documentation)', module)
   .add('example', () => <PinExample />)
 
 /**
- * Research notes
+ * Field notes
  */
-import ResearchNotesMock from './ResearchNotesMock'
-storiesOf('Research notes', module)
-  .add('Sketch', () => <ResearchNotesMock />)
+import FieldNotesMock from './FieldNotesMock'
+storiesOf('Field notes', module)
+  .add('Sketch', () => <FieldNotesMock />)
 
 /**
  * Tags cartel
