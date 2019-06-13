@@ -40,27 +40,27 @@ const EntityCard = ({
         
         
         <ul className="card-actions-row">
-        {status !== 'undecided'
+          {status !== 'undecided'
         &&
         <li onClick={ onClickUndecided } className={ `hint--left ${isUndecidedActive ? 'is-active': ''}` } aria-label="move to the UNDECIDED list">
           <button className="btn btn-default">{/*<i className="ti-help" />*/}UND.</button>
         </li>}
 
-        {status !== 'out'
+          {status !== 'out'
         &&
         <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label="move to the OUT list">
           <button className="btn btn-default">OUT</button>
         </li>
-        }
+          }
         </ul>
 
         <ul className="card-actions-row">
-        {allowMerge
+          {allowMerge
         &&
         <li onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label="merge that webentity with the current one">
           <button className="btn btn-default"><i className="ti-plus" /></button>
         </li>
-        }
+          }
         </ul>
       </div>
     </li>
