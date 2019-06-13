@@ -7,9 +7,9 @@ import Button from '../../app/components/Button'
 import EditionCartel from '../EditionCartel'
 
 
-import './ResearchNotes.styl'
+import './FieldNotes.styl'
 
-const ResearchNotes = function () {
+const FieldNotes = function () {
   const [textAreaText, setTextAreaText] = useState('')
   const [notes, setNotes] = useState([])
   const [editedIndex, setEditedIndex] = useState(undefined)
@@ -34,8 +34,35 @@ const ResearchNotes = function () {
   }
 
   return (
-    <div className="research-notes-container">
-      <form onSubmit={ onAddNote } className="research-note-creation-container">
+    <div className="field-notes-container">
+      {
+        notes
+          .reverse()
+          .map((note, index) => {
+            const onRemove = () => {
+              setNotes(notes.filter((n, i) => i !== index))
+            }
+            const onEdit = () => {
+              setEditedIndex(index)
+              setTextAreaText(note)
+              input.current.focus()
+            }
+            if (editedIndex !== undefined && editedIndex === index) {
+              return null
+            }
+            return (
+              <div key={ index } className="field-note">
+                <div className="field-note-content">{
+                  note.split('\n').map((i, key) => <div className="note-block" key={ key }>{i}</div>)
+                }</div>
+                <Button icon="pencil" onClick={ onEdit } className="hint--left" title="edit note" />
+
+                <Button icon="trash" onClick={ onRemove } className="hint--left" title="delete note" />
+              </div>
+            )
+          })
+      }
+      <form onSubmit={ onAddNote } className="field-note-creation-container">
         <Textarea 
           value={ textAreaText } 
           ref={ input }
@@ -71,37 +98,12 @@ const ResearchNotes = function () {
         </ul>
         
       </form>
-      {
-        notes
-          .map((note, index) => {
-            const onRemove = () => {
-              setNotes(notes.filter((n, i) => i !== index))
-            }
-            const onEdit = () => {
-              setEditedIndex(index)
-              setTextAreaText(note)
-              input.current.focus()
-            }
-            if (editedIndex !== undefined && editedIndex === index) {
-              return null
-            }
-            return (
-              <div key={ index } className="research-note">
-                <div className="research-note-content">{
-                  note.split('\n').map((i, key) => <div className="note-block" key={ key }>{i}</div>)
-                }</div>
-                <Button icon="pencil" onClick={ onEdit } className="hint--left" title="edit note" />
-
-                <Button icon="trash" onClick={ onRemove } className="hint--left" title="delete note" />
-              </div>
-            )
-          })
-      }
+      
     </div>
   )
 }
 
-const ResearchNotesMock = function (){
+const FieldNotesMock = function (){
   const [open, setOpen] = useState(true)
   
   return (
@@ -112,12 +114,12 @@ const ResearchNotesMock = function (){
         title={ 'Field notes' }
         help={ 'Write free comments and remarks about the currently browsed webentity' }
       >
-        <ResearchNotes />
+        <FieldNotes />
       </EditionCartel>
     </div>
   )
 }
 
-export const ResearchNotesDry = ResearchNotes
+export const FieldNotesDry = FieldNotes
 
-export default ResearchNotesMock
+export default FieldNotesMock

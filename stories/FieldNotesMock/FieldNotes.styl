@@ -1,7 +1,7 @@
 
 @import '../helpers.styl'
 
-.research-notes-container
+.field-notes-container
     text-align: left;
     padding: 10px
     button
@@ -24,7 +24,7 @@
         inputFocus()
     textarea::placeholder
         inputPlaceholder()
-    .research-note
+    .field-note
         margin-bottom: 10px
         font-size: 12px
         stretch(row)
@@ -32,13 +32,11 @@
         padding: 10px
         background: var(--color-grey)
         border-radius: var(--radius)
-        .research-note-content
+        .field-note-content
             flex: 1
             padding-top: 10px
             .note-block
                 margin-bottom: 10px
-        &:last-of-type
-            margin-bottom: 0
     .add-button
         button('active')
     .cancel-button
