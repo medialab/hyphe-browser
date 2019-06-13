@@ -58,11 +58,13 @@
             flexStretch()
             .text
                 flex: 1
-    .card-actions
+    .card-actions-row
         padding: 0
         list-style : none
         margin: 0
         overflow: visible
+        text-align: right;
+        padding-bottom: 5px;
         li
             flex: 1
             background: inherit
@@ -73,7 +75,8 @@
                 button()
                 padding: 10px
                 background: var(--color-grey)
-                width: 30px
+                width: 40px
+                height: 40px
                 margin-left: 5px
             &.is-active
                 .btn
