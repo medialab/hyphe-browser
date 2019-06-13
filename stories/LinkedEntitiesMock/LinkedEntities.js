@@ -114,8 +114,8 @@ export const LinkedEntitiesOnly = function (){
           hasPendingActions
           &&
           <ul onClick={ resetActions } className="actions-container">
-            <li><button className="btn confirm-btn">Apply 13 decisions on webentities</button></li>
             <li><button className="btn cancel-btn">Discard decisions</button></li>
+            <li><button className="btn confirm-btn">Apply 13 decisions on webentities</button></li>
           </ul>
         }
                     

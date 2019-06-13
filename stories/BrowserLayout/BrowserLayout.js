@@ -209,8 +209,8 @@ const ListLayout = function ({
           hasPendingActions
           &&
           <ul onClick={ resetActions } className="actions-container">
-            <li><button className="btn confirm-btn">Apply 12 decisions on webentities</button></li>
             <li><button className="btn cancel-btn">Discard 12 decisions</button></li>
+            <li><button className="btn confirm-btn">Apply 12 decisions on webentities</button></li>
           </ul>
         }
         {!isEmpty &&
