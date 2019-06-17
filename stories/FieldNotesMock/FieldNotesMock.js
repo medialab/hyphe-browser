@@ -9,30 +9,16 @@ import EditionCartel from '../EditionCartel'
 
 import './FieldNotes.styl'
 
-const FieldNotes = function () {
-  const [textAreaText, setTextAreaText] = useState('')
-  const [notes, setNotes] = useState([])
-  const [editedIndex, setEditedIndex] = useState(undefined)
+const FieldNotes = ({
+  editedIndex, 
+  notes, 
+  onAddNote,
+  setNotes,
+  setEditedIndex,
+  setTextAreaText,
+  textAreaText, 
+}) => {
   const input = useRef(null)
-  const onAddNote = (e) => {
-    if(textAreaText.length) {
-      if (editedIndex !== undefined) {
-        setNotes(notes.map((n, i) => {
-          if (i === editedIndex) {
-            return textAreaText
-          }
-          return n
-        }))
-        setEditedIndex(undefined)
-      } else {
-        setNotes([textAreaText, ...notes])
-      }
-      setTextAreaText('')
-    }
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
   return (
     <div className="field-notes-container">
       {
@@ -103,8 +89,30 @@ const FieldNotes = function () {
   )
 }
 
-const FieldNotesMock = function (){
+const FieldNotesMockupContainer = function (){
   const [open, setOpen] = useState(true)
+
+  const [textAreaText, setTextAreaText] = useState('')
+  const [notes, setNotes] = useState([])
+  const [editedIndex, setEditedIndex] = useState(undefined)
+  const onAddNote = (e) => {
+    if(textAreaText.length) {
+      if (editedIndex !== undefined) {
+        setNotes(notes.map((n, i) => {
+          if (i === editedIndex) {
+            return textAreaText
+          }
+          return n
+        }))
+        setEditedIndex(undefined)
+      } else {
+        setNotes([textAreaText, ...notes])
+      }
+      setTextAreaText('')
+    }
+    e.preventDefault()
+    e.stopPropagation()
+  }
   
   return (
     <div style={ { width: 500, background: 'var(--color-grey-light)', padding: 10 } }>
@@ -114,7 +122,19 @@ const FieldNotesMock = function (){
         title={ 'Field notes' }
         help={ 'Write free comments and remarks about the currently browsed webentity' }
       >
-        <FieldNotes />
+        <FieldNotes 
+          {
+          ...{
+            onAddNote,
+            textAreaText, 
+            setTextAreaText,
+            notes, 
+            setNotes,
+            editedIndex, 
+            setEditedIndex
+          }
+          }
+        />
       </EditionCartel>
     </div>
   )
@@ -122,4 +142,4 @@ const FieldNotesMock = function (){
 
 export const FieldNotesDry = FieldNotes
 
-export default FieldNotesMock
+export default FieldNotesMockupContainer

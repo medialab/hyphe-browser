@@ -8,10 +8,11 @@ const IN_HELP = 'the IN webentities are the webentities defined as relevant to t
 const OUT_HELP = 'the IN webentities are the webentities defined as irrelevant to the inquiry'
 const PROSPECTION_HELP = 'the PROSPECTION webentities are the webentities discovered during the inquiry during browsing, or crawling operations by the hyphe server'
 
-const NewTabContent = function ({
-  isEmpty
-}) {
-  const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
+const NewTabContent = ({
+  isEmpty,
+  currentAction, 
+  setCurrentAction,
+}) => {
   return (
     <div className="entry-tab-content">
       <div className="content-wrapper">
@@ -53,7 +54,7 @@ const NewTabContent = function ({
               </select>
             </li>
             <li className="form-container">
-              <form className="form" onSubmit={e => e.preventDefault()}>
+              <form className="form" onSubmit={ e => e.preventDefault() }>
                 <input placeholder="search with google" />
                 <button>search</button>
               </form>
@@ -62,7 +63,7 @@ const NewTabContent = function ({
               ... or directly start with a URL address:
             </li>
             <li className="form-container">
-              <form className="form" onSubmit={e => e.preventDefault()}>
+              <form className="form" onSubmit={ e => e.preventDefault() }>
                 <input placeholder="enter URL address here" />
                 <button>go</button>
               </form>
@@ -74,21 +75,21 @@ const NewTabContent = function ({
         <div className="intro-contents">
           <h2>What is this all about ?</h2>
           <p>
-              Hyphe browser is an inquiry companion for qualitatively mapping a subset of the world wide web concerned with a specific issue. It is aimed at building a <em className="hint--top" aria-label={CORPUS_HELP}>corpus</em> of webpages relevant to your inquiry, annotate them and eventually visualize their relations to grasp how the issue is present on the web.
+              Hyphe browser is an inquiry companion for qualitatively mapping a subset of the world wide web concerned with a specific issue. It is aimed at building a <em className="hint--top" aria-label={ CORPUS_HELP }>corpus</em> of webpages relevant to your inquiry, annotate them and eventually visualize their relations to grasp how the issue is present on the web.
           </p>
           <p>
-              Hyphe browser allows to navigate the web and regroup webpages as <em className="hint--top" aria-label={CORPUS_HELP}>webentities</em> which correspond to the online presence of specific individuals, organizations, etc. relevant to your inquiry.
+              Hyphe browser allows to navigate the web and regroup webpages as <em className="hint--top" aria-label={ CORPUS_HELP }>webentities</em> which correspond to the online presence of specific individuals, organizations, etc. relevant to your inquiry.
           </p>
-          <p>Hyphe browser allows to qualitatively - and collectively - review and define the <em className="hint--top" aria-label={WEBENTITY_HELP}>webentities</em> of your inquiry and choose whether they should be included <em className="hint--top" aria-label={IN_HELP}>IN</em> the corpus or excluded <em className="hint--top" aria-label={OUT_HELP}>OUT</em> of it. When a <em className="hint--top" aria-label={WEBENTITY_HELP}>webentity</em> is included <em className="hint--top" aria-label={IN_HELP}>IN</em> the <em className="hint--top" aria-label={CORPUS_HELP}>corpus</em>, the Hyphe server automatically navigates to each of its webpages and analyzes their content to discover linked webentities that may be relevant to your inquiry (this is technically called <em className="hint--top" aria-label={CORPUS_HELP}>crawling</em>).</p>
+          <p>Hyphe browser allows to qualitatively - and collectively - review and define the <em className="hint--top" aria-label={ WEBENTITY_HELP }>webentities</em> of your inquiry and choose whether they should be included <em className="hint--top" aria-label={ IN_HELP }>IN</em> the corpus or excluded <em className="hint--top" aria-label={ OUT_HELP }>OUT</em> of it. When a <em className="hint--top" aria-label={ WEBENTITY_HELP }>webentity</em> is included <em className="hint--top" aria-label={ IN_HELP }>IN</em> the <em className="hint--top" aria-label={ CORPUS_HELP }>corpus</em>, the Hyphe server automatically navigates to each of its webpages and analyzes their content to discover linked webentities that may be relevant to your inquiry (this is technically called <em className="hint--top" aria-label={ CORPUS_HELP }>crawling</em>).</p>
             
           <h2>How should I work ?</h2>
           <p>
                 A typical workflow with hyphe browser could look like that :
           </p>
           <ol>
-            <li>you define a few websites of individuals, organizations, actors, ... relevant to your inquiry, browse to them with hyphe browser, and include them <em className="hint--top" aria-label={IN_HELP}>IN</em> the corpus</li>
-            <li>each webentity included in the corpus will be automatically analyzed (<em>crawled</em>) by the hyphe server to discover new possibly relevant webentities and add them to the <em className="hint--top" aria-label={PROSPECTION_HELP}>PROSPECTION</em> list</li>
-            <li>you review webentities proposed by the server in the <em className="hint--top" aria-label={PROSPECTION_HELP}>PROSPECTION</em> list, reading them with the browser and making the choice to include them <em className="hint--top" aria-label={CORPUS_HELP}>IN</em> the corpus or exclude them <em className="hint--top" aria-label={OUT_HELP}>OUT</em> of the corpus</li>
+            <li>you define a few websites of individuals, organizations, actors, ... relevant to your inquiry, browse to them with hyphe browser, and include them <em className="hint--top" aria-label={ IN_HELP }>IN</em> the corpus</li>
+            <li>each webentity included in the corpus will be automatically analyzed (<em>crawled</em>) by the hyphe server to discover new possibly relevant webentities and add them to the <em className="hint--top" aria-label={ PROSPECTION_HELP }>PROSPECTION</em> list</li>
+            <li>you review webentities proposed by the server in the <em className="hint--top" aria-label={ PROSPECTION_HELP }>PROSPECTION</em> list, reading them with the browser and making the choice to include them <em className="hint--top" aria-label={ CORPUS_HELP }>IN</em> the corpus or exclude them <em className="hint--top" aria-label={ OUT_HELP }>OUT</em> of the corpus</li>
             <li>the 2 previous steps repeat as long as you are not satisfied with the web territory covered by your inquiry</li>
             <li>once your corpus is stabilized and your mapping seems comprehensive enough to start analyzing their relations, you can tag your webentities according to different categories and then visualize them as a network in hyphe (top right button)</li>
             <li>of course, all of this process is iterative and previous steps can repeat as much as necessary</li>
@@ -104,4 +105,21 @@ const NewTabContent = function ({
   )
 }
 
-export default NewTabContent
+const NewTabContentContainer = ({
+  isEmpty
+}) => {
+  const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
+  return (
+    <NewTabContent
+      {
+      ...{
+        isEmpty,
+        currentAction,
+        setCurrentAction,
+      }
+      }
+    />
+  )
+}
+
+export default NewTabContentContainer
