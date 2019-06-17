@@ -111,7 +111,6 @@ const TagsMock = function ({ startingCategories = [] }){
     }
   }
   
-
   return (
     <div style={ { width: 500, background: 'var(--color-grey-light)', padding: 10 } }>
       <EditionCartel
