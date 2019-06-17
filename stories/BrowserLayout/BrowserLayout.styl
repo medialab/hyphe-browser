@@ -498,4 +498,62 @@ input
             .browser-bar
                 padding: 10px
                 background: var(--color-grey-light)
+.pending-actions-modal-container
+    stretch(column)
+    max-height: 100%
+    overflow : hidden
+    height: 100%
+    position: relative
+    
+    .actions-container
+        display: flex
+        flex-flow: row nowrap
+        padding: 0
+        margin: 0
+        li
+            list-style-type: none
+            margin-right: 10px
+    .actions-container.big
+        justify-content: stretch
+        li
+            flex: 1
+            display: flex
+            justify-content: stretch
+            .btn
+                flex: 1
+    .btn-success
+        background: var(--color-blue)
+        color: white
+    .btn-danger
+        background: red
+        color: white
+    
+    .modal-header
+        h2
+            stretch(row)
+            margin: 0
+            padding: 10px
+            padding-left: 20px
+            background: var(--color-blue)
+            color: var(--color-white)
+            font-size: 20px
+            span
+                flex: 1
+            .ti-close
+                cursor: pointer
+    .modal-body
+        flex: 1
+        overflow-x: hidden
+        overflow-y: auto
+        background: white
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+    .modal-footer
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+        button
+            font-size: 14px
+            outline: none
 

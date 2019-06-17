@@ -15,6 +15,53 @@
     position: relative
     input 
         input()
+    .step3-title-container
+        stretch(row)
+        width: 100%
+        span
+            flex: 1
+        button
+            margin-right: 10px
+    .standalone-confirm-container
+        padding: 10px 5px
+        text-align: right
+        list-style: none
+    .settings-container
+        padding: 10px 0
+        ul
+            list-style: none
+            padding: 0
+            stretch(row)
+            li
+                flex: 1
+        /* Cachons la case à cocher */
+        [type="checkbox"]:not(:checked),
+        [type="checkbox"]:checked
+            position: absolute;
+            left: -9999px;
+        
+        /* on prépare le label */
+        [type="checkbox"]:not(:checked) + label,
+        [type="checkbox"]:checked + label
+            position: relative; /* permet de positionner les pseudo-éléments */
+            padding-left: 25px; /* fait un peu d'espace pour notre case à venir */
+            cursor: pointer;    /* affiche un curseur adapté */
+        
+        /* Aspect des checkboxes */
+        /* :before sert à créer la case à cocher */
+        [type="checkbox"]:not(:checked) + label:before,
+        [type="checkbox"]:checked + label:before
+            content: '';
+            position: absolute;
+            left:0; top: 2px;
+            width: 17px; height: 17px; /* dim. de la case */
+            border: 1px solid var(--color-blue);
+            background: #f8f8f8;
+            border-radius: 50%;
+        [type="checkbox"]:checked + label:before
+            background: var(--color-blue);
+            
+        
     .pages-list
         background: var(--color-grey);
         border-radius: var(--radius);

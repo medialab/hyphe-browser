@@ -3,11 +3,11 @@ import './KnownPages.styl'
 import '../../app/containers/SideBar/side-bar-contextual-lists.styl'
 
 import React, { useState } from 'react'
-import cx from 'classnames'
 
 import DownloadListBtn from '../DownloadListBtn'
 import EditionCartel from '../EditionCartel'
 import CardsList from '../CardsList'
+import KnownPageCard from './KnownPageCard'
 
 let PAGES = [
   {
@@ -25,39 +25,6 @@ let PAGES = [
 
 ]
 for (let i = 0 ; i < 3 ; i++) PAGES = PAGES.concat(PAGES)
-
-export const KnownPageCard = ({
-  id,
-  homepage,
-  isActive,
-  isHomePage,
-  displayHomePageButton = true,
-
-  onClick,
-}) => {
-  return (
-    <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id } title={ name + '\n' + homepage }>
-      <div className="card-content">
-        <div className="known-page-url" >{ homepage }</div>
-        <div className="known-page-statistics">
-          {`cited ${parseInt(Math.random() * 40 + 1)} times`}
-        </div>
-      </div>
-      <div className="card-actions">
-        {
-          displayHomePageButton
-          &&
-          <button 
-            className={ cx('homepage-btn', 'hint--left', { 'is-active': isHomePage }) } 
-            aria-label="set as the homepage of the webentity" 
-          >
-            <span className="ti-layers-alt" />
-          </button>
-        }
-      </div>
-    </li>
-  )
-}
 
 export const KnownPages = ({
   activeIndex,
