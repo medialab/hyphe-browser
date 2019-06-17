@@ -7,11 +7,12 @@ import '../../app/containers/BrowserTabs/browser-tab-content.styl'
 import '../../app/containers/BrowserTabs/browser-tabs.styl'
 
 const BrowserBar = function ({
-  displayAddButton = true,
-  isHomePage = false,
-  isLanding
+  displayAddButton,
+  isHomePage,
+  isLanding,
+  edited,
+  setEdited
 }) {
-  const [edited, setEdited] = useState(false)
   const input = useRef(null)
   const handleFormClick = () => {
     if (!edited) {
@@ -70,4 +71,25 @@ const BrowserBar = function ({
   )
 }
 
-export default BrowserBar
+const BrowserBarMockupContainer = ({
+  displayAddButton = true,
+  isHomePage = false,
+  isLanding
+}) => {
+  const [edited, setEdited] = useState(false)
+  return (
+    <BrowserBar
+      {
+        ...{
+          displayAddButton,
+          isHomePage,
+          isLanding,
+          edited,
+          setEdited,
+        }
+      }
+    />
+  )
+}
+
+export default BrowserBarMockupContainer

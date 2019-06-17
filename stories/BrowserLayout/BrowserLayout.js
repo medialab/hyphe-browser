@@ -22,10 +22,10 @@ const BrowserHeader = () => {
       <div className="header-group header-group-main">
         <h1>My inquiry <i aria-label="server is ok" className="server-status hint--right" /></h1>
         <ul className="header-metrics-container">
-          <li className="hint--bottom" aria-label="12 webentities in prospection"><i className="metrics-icon ti-layout-column3-alt prospection"/> <span className="metrics">12k <label>prospects.</label></span></li>
-          <li className="hint--bottom" aria-label="12 webentities included in the corpus"><i className="metrics-icon ti-layout-column3-alt in"/> <span className="metrics">12009 <label>IN</label></span></li>
-          <li className="hint--bottom" aria-label="12 webentities excluded from the corpus"><i className="metrics-icon ti-layout-column3-alt out"/> <span className="metrics">3092 <label>OUT</label></span></li>
-          <li className="hint--bottom" aria-label="12 webentities undecided"><i className="metrics-icon ti-layout-column3-alt undecided"/> <span className="metrics">12 <label>UND.</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities included in the corpus"><i className="metrics-icon ti-layout-column3-alt in" /> <span className="metrics">12009 <label>IN</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities in prospection"><i className="metrics-icon ti-layout-column3-alt prospection" /> <span className="metrics">12k <label>prospects.</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities undecided"><i className="metrics-icon ti-layout-column3-alt undecided" /> <span className="metrics">12 <label>UND.</label></span></li>
+          <li className="hint--bottom" aria-label="12 webentities excluded from the corpus"><i className="metrics-icon ti-layout-column3-alt out" /> <span className="metrics">3092 <label>OUT</label></span></li>
         </ul>
       </div>
       <div className="header-group header-group-aside">
@@ -109,7 +109,7 @@ const ListLayout = function ({
                   </button>
                 </span>
                 <span className="count">
-                          {isEmpty ? 0 : 12000}
+                  {isEmpty ? 0 : 12000}
                 </span>
               </li>
                   
@@ -152,7 +152,7 @@ const ListLayout = function ({
         
       </div>
       <div className="webentities-list-wrapper">
-        <div className={cx("webentities-list-header", {'is-disabled': isEmpty})}>
+        <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
           <input placeholder="search a webentity in the prospections list" />
           <span className={ cx('filter-container', { 'is-active': isFilterOpen }) }>
             <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
@@ -170,8 +170,8 @@ const ListLayout = function ({
         <div className="webentities-list-container">
           <ul className="webentities-list">
             {isEmpty ? 
-            <li className="placeholder-empty">{'No webentities yet in the ' + selectedList.toUpperCase() + ' list'}</li>
-            :
+              <li className="placeholder-empty">{'No webentities yet in the ' + selectedList.toUpperCase() + ' list'}</li>
+              :
               mockEntities.map((entity, index)=> {
 
                 const toggleKey = (obj, key) => {
@@ -233,6 +233,44 @@ const BrowseLayout = function ({
   const [nameOpen, setNameOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  /**
+   * Linked entities related
+   */
+  const [selectedLinkedEntities, setSelectedLinkedEntities] = useState('referrers')
+  const [mergeLinkedEntitiesActions, setMergeLinkedEntitiesActions] = useState({})
+  const [outLinkedEntitiesActions, setOutLinkedEntitiesActions] = useState({})
+  const [undecidedLinkedEntitiesActions, setUndecidedLinkedEntitiesActions] = useState({})
+  const resetLinkedEntitiesActions = () => {
+    setMergeLinkedEntitiesActions({})
+    setOutLinkedEntitiesActions({})
+    setUndecidedLinkedEntitiesActions({})
+  }
+  const hasPendingLinkedEntitiesActions = [mergeLinkedEntitiesActions, outLinkedEntitiesActions, undecidedLinkedEntitiesActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
+  /**
+   * field notes related
+   */
+  const [noteTextAreaText, setNoteTextAreaText] = useState('')
+  const [notes, setNotes] = useState([])
+  const [editedNoteIndex, setEditedNoteIndex] = useState(undefined)
+  const onAddNote = (e) => {
+    if(noteTextAreaText.length) {
+      if (editedNoteIndex !== undefined) {
+        setNotes(notes.map((n, i) => {
+          if (i === editedNoteIndex) {
+            return noteTextAreaText
+          }
+          return n
+        }))
+        setEditedNoteIndex(undefined)
+      } else {
+        setNotes([noteTextAreaText, ...notes])
+      }
+      setNoteTextAreaText('')
+    }
+    e.preventDefault()
+    e.stopPropagation()
+  }
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
@@ -281,7 +319,23 @@ const BrowseLayout = function ({
           title={ 'Linked webentities' }
           help={ 'Review webentities citing or cited by the currently browsed webentity' }
         >
-          <LinkedWebentities />
+          <LinkedWebentities 
+            {
+            ...{
+              setSelected: setSelectedLinkedEntities,
+              selected: selectedLinkedEntities,
+              resetActions: resetLinkedEntitiesActions,
+              hasPendingActions: hasPendingLinkedEntitiesActions,
+    
+              mergeActions: mergeLinkedEntitiesActions, 
+              setMergeActions: setMergeLinkedEntitiesActions,
+              outActions: outLinkedEntitiesActions, 
+              setOutActions: setOutLinkedEntitiesActions,
+              undecidedActions: undecidedLinkedEntitiesActions, 
+              setUndecidedActions: setUndecidedLinkedEntitiesActions,
+            }
+            }
+          />
         </EditionCartel>
         <EditionCartel
           isOpen={ tagsOpen }
@@ -299,7 +353,19 @@ const BrowseLayout = function ({
           help={ 'Write free comments and remarks about the currently browsed webentity' }
           helpPlace="top"
         >
-          <FieldNotesOnly />
+          <FieldNotesOnly 
+          {
+            ...{
+              onAddNote,
+              textAreaText: noteTextAreaText, 
+              setTextAreaText: setNoteTextAreaText,
+              notes, 
+              setNotes,
+              editedIndex: editedNoteIndex, 
+              setEditedIndex: setEditedNoteIndex
+            }
+            }
+          />
         </EditionCartel>
         <EntityModal
           isOpen={ modalIsOpen }
@@ -330,7 +396,7 @@ const AsideLayout = function ({
       <div className="aside-content">
         {
           asideMode === 'list' ?
-            <ListLayout isLanding={isLanding} isEmpty={isEmpty} status={ status } />
+            <ListLayout isLanding={ isLanding } isEmpty={ isEmpty } status={ status } />
             :
             <BrowseLayout status={ status } />
         }

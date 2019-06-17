@@ -34,18 +34,20 @@ for (let i = 0 ; i < 3 ; i++) {
   REFERRALS = REFERRALS.concat(REFERRALS.map(r => ({ ...r, status: STATUSES[parseInt(Math.random() * STATUSES.length)] })))
 }
 
-export const LinkedEntitiesOnly = function (){
-  const [selected, setSelected] = useState('referrers')
+export const LinkedEntitiesOnly = ({
+  setSelected,
+  selected,
+  resetActions,
+  hasPendingActions,
+  mergeActions, 
+  setMergeActions,
+  outActions, 
+  setOutActions,
+  undecidedActions, 
+  setUndecidedActions,
+}) => {
   const LINKS = selected === 'referrers' ? REFERRERS : REFERRALS
-  const [mergeActions, setMergeActions] = useState({})
-  const [outActions, setOutActions] = useState({})
-  const [undecidedActions, setUndecidedActions] = useState({})
-  const resetActions = () => {
-    setMergeActions({})
-    setOutActions({})
-    setUndecidedActions({})
-  }
-  const hasPendingActions = [mergeActions, outActions, undecidedActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
+  
   return (
     <div>
       <div className="linked-entities">
@@ -128,8 +130,19 @@ export const LinkedEntitiesOnly = function (){
 }
 
 
-const LinkedEntities = function () {
+const LinkedEntitiesMockup = function () {
   const [open, setOpen] = useState(true)
+
+  const [selected, setSelected] = useState('referrers')
+  const [mergeActions, setMergeActions] = useState({})
+  const [outActions, setOutActions] = useState({})
+  const [undecidedActions, setUndecidedActions] = useState({})
+  const resetActions = () => {
+    setMergeActions({})
+    setOutActions({})
+    setUndecidedActions({})
+  }
+  const hasPendingActions = [mergeActions, outActions, undecidedActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
 
   return (
     <div style={ { width: 500, background: 'var(--color-grey-light)', padding: 10 } }>
@@ -139,10 +152,26 @@ const LinkedEntities = function () {
         title={ 'Linked webentities' }
         help={ 'Review webentities citing or cited by the currently browsed webentity' }
       >
-        <LinkedEntitiesOnly />
+        <LinkedEntitiesOnly
+          {
+          ...{
+            setSelected,
+            selected,
+            resetActions,
+            hasPendingActions,
+
+            mergeActions, 
+            setMergeActions,
+            outActions, 
+            setOutActions,
+            undecidedActions, 
+            setUndecidedActions,
+          }
+          }
+        />
       </EditionCartel>
     </div>
   )
 }
 
-export default LinkedEntities
+export default LinkedEntitiesMockup

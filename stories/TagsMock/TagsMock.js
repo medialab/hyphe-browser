@@ -19,19 +19,13 @@ const MOCK_OPTIONS = [
   },
 ]
 
-export const Tags = function ({ startingCategories = [] }){
-
-  const [categories, setCategories] = useState(startingCategories)
-  const [newCategoryStr, setNewCategoryStr] = useState('')
-
-  const onNewCat = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    if (newCategoryStr.length) {
-      setCategories([...categories, { category: newCategoryStr, value: '' }])
-      setNewCategoryStr('')
-    }
-  }
+export const Tags = ({ 
+  onNewCat,
+  categories,
+  setCategories,
+  newCategoryStr, 
+  setNewCategoryStr,
+}) => {
 
   return (
     <div className="tags-container">
@@ -104,6 +98,18 @@ export const Tags = function ({ startingCategories = [] }){
 
 const TagsMock = function ({ startingCategories = [] }){
   const [open, setOpen] = useState(true)
+
+  const [categories, setCategories] = useState(startingCategories)
+  const [newCategoryStr, setNewCategoryStr] = useState('')
+
+  const onNewCat = e => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (newCategoryStr.length) {
+      setCategories([...categories, { category: newCategoryStr, value: '' }])
+      setNewCategoryStr('')
+    }
+  }
   
 
   return (
@@ -114,7 +120,17 @@ const TagsMock = function ({ startingCategories = [] }){
         title={ 'Tags' }
         help={ 'Annotate the currently browsed webentity with categorized tags (this will be useful to group and visualize webentities)' }
       >
-        <Tags startingCategories={ startingCategories } />
+        <Tags 
+          {
+            ...{
+              onNewCat,
+              categories,
+              setCategories,
+              newCategoryStr, 
+              setNewCategoryStr,
+            }
+          }
+        />
       </EditionCartel>
     </div>
   )

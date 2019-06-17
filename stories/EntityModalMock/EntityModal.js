@@ -50,16 +50,13 @@ const PagesList = ({
 )
 
 const EntityModal = ({
-  isOpen = true,
-  onToggle
+  isOpen,
+  onToggle,
+  onSetSelectedPage,
+  currentStep,
+  selectedPage,
+  setCurrentStep,
 }) => {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [selectedPage, setSelectedPage] = useState(null)
-
-  const onSetSelectedPage = index => {
-    setSelectedPage(index)
-    setCurrentStep(4)
-  }
   return (
     <Modal
       isOpen={ isOpen }
@@ -88,19 +85,9 @@ const EntityModal = ({
             <br />
               Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (discovered webentities will be added to the PROSPECTIONS list).
           </div>
-          <div className={ cx('step-container') }>
-            
-            <h3>Step <span className="step-marker">1/3</span> : check the webentity name <HelpPin  place="top">This is the name that will be displayed in the lists and visualizations related to the corpus</HelpPin></h3>
-            <div className="name-input-container">
-              <input className="input" value="facebook" />
-              <ul className="actions-container">
-                <li><button disabled={ currentStep > 1 }  onClick={ () => setCurrentStep(2) } className="btn btn-success">confirm</button></li>
-              </ul>
-            </div>
-          </div>
 
-          <div className={ cx('step-container', { 'is-disabled': currentStep < 2 }) }>
-            <h3>Step <span className="step-marker">2/3</span> : define the webentity URL scope <HelpPin place="top">This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server</HelpPin></h3>
+          <div className={ cx('step-container', { 'is-disabled': currentStep < 1 }) }>
+            <h3>Step <span className="step-marker">1/3</span> : define the webentity URL scope <HelpPin place="top">This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server</HelpPin></h3>
             <div className="prefix-input-container">
               <PrefixSetter parts={ [
                 { name: 'https', editable: false }, 
@@ -117,15 +104,25 @@ const EntityModal = ({
               
           </div>
 
-          <div className={ cx('step-container', { 'is-disabled': currentStep < 3 }) }>
-            <h3>Step <span className="step-marker">3/3</span> : choose the webentity homepage <HelpPin place="top">This is the page choosen to display a main URL address for the webentity in lists and visualizations</HelpPin></h3>
+          <div className={ cx('step-container', { 'is-disabled': currentStep < 2 }) }>
+            <h3>Step <span className="step-marker">2/3</span> : choose the webentity homepage <HelpPin place="top">This is the page choosen to display a main URL address for the webentity in lists and visualizations</HelpPin></h3>
             <PagesList { ...{ selectedPage, setSelectedPage: onSetSelectedPage } } />
+          </div>
+
+          <div className={ cx('step-container', { 'is-disabled': currentStep < 2 }) }>
+            <h3>Step <span className="step-marker">3/3</span> : check the webentity name <HelpPin  place="top">This is the name that will be displayed in the lists and visualizations related to the corpus</HelpPin></h3>
+            <div className="name-input-container">
+              <input className="input" value="facebook" />
+              <ul className="actions-container">
+                <li><button disabled={ currentStep > 3 }  onClick={ () => setCurrentStep(4) } className="btn btn-success">confirm</button></li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="modal-footer">
           <ul className="actions-container big">
-            <li><button disabled={ currentStep !== 4 } className="btn btn-success">include webentity and analyze it !</button></li>
             <li><button onClick={ onToggle } className="btn btn-danger">cancel</button></li>
+            <li><button disabled={ currentStep !== 4 } className="btn btn-success">include webentity and analyze it !</button></li>
           </ul>
         </div>
       </div>
@@ -133,4 +130,32 @@ const EntityModal = ({
   )
 }
 
-export default EntityModal
+
+const EntityModalMockupContainer = ({
+  isOpen = true,
+  onToggle
+}) => {
+  const [currentStep, setCurrentStep] = useState(1)
+  const [selectedPage, setSelectedPage] = useState(null)
+
+  const onSetSelectedPage = index => {
+    setSelectedPage(index)
+    setCurrentStep(3)
+  }
+  return (
+    <EntityModal
+      {
+      ...{
+        isOpen,
+        onToggle,
+        onSetSelectedPage,
+        currentStep,
+        selectedPage,
+        setCurrentStep,
+      }
+      }
+    />
+  )
+}
+
+export default EntityModalMockupContainer
