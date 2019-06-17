@@ -1,4 +1,5 @@
-import KnownPagesMock, { KnownPages as Known, KnownPageCard as Page } from './KnownPages'
+import KnownPagesMock, { KnownPages as Known } from './KnownPages'
+import Page from './KnownPageCard'
 
 export default KnownPagesMock
 

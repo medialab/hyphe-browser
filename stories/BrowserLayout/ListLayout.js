@@ -6,6 +6,7 @@ import DownloadListBtn from '../DownloadListBtn'
 import EditionCartel from '../EditionCartel'
 import HelpPin from '../../app/components/HelpPin'
 
+
 const mockEntities = []
 const names = ['Groupe Facebook sur les vaccins', 'Wikipedia | article about very long stuff', 'Ministère des affaires étrangères', 'Association contre les vaccins', 'Association pour les vaccins', 'Association pour la vaccination de Robert Hue']
 const urls = ['http://facebook.com', 'https://fr.wikipedia.org/wiki/La_Maison_des_feuilles', 'https://www.diplomatie.gouv.fr/fr/dossiers-pays/ukraine/evenements/article/ukraine-declaration-conjointe-de-m-jean-yves-le-drian-ministre-de-l-europe-et']
@@ -21,29 +22,23 @@ const ListLayout = ({
   status = 'prospection',
   isLanding,
   isEmpty,
+
+  hasPendingActions,
+  setSelectedList,
+  setUndecidedActions,
+  setOutActions,
+  setMergeActions,
+  selectedList,
+  isOpen,
+  setOpen,
+  mergeActions,
+  outActions,
+  undecidedActions,
+  resetActions,
 }) => {
-  const [selectedList, setSelectedListReal] = useState(status)
-  const [isOpen, setOpen] = useState(false)
   const [isFilterOpen, setFilterOpen] = useState(false)
-    
-  const [mergeActions, setMergeActions] = useState({})
-  const [outActions, setOutActions] = useState({})
-  const [undecidedActions, setUndecidedActions] = useState({})
-  const resetActions = () => {
-    setMergeActions({})
-    setOutActions({})
-    setUndecidedActions({})
-  }
-  const setSelectedList = l => {
-    if (l === selectedList) {
-      setOpen(!isOpen)
-    } else {
-      setSelectedListReal(l)
-      setOpen(false)
-    }
-    resetActions()
-  }
-  const hasPendingActions = [mergeActions, outActions, undecidedActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
+
+
   return (
     <div className="list-layout">
       <div className="status-list-container">
@@ -97,7 +92,7 @@ const ListLayout = ({
               </li>
             </ul>
             <button onClick={ () => setOpen(!isOpen) } className="status-list-toggle">
-              <i className={ isOpen ? 'ti-arrow-circle-up' : 'ti-arrow-circle-down' } />
+              <i className={ isOpen ? 'ti-angle-up' : 'ti-angle-down' } />
             </button>
           </div>
         </EditionCartel>
