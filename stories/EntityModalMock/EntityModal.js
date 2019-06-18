@@ -157,7 +157,7 @@ const EntityModal = ({
 
 const EntityModalMockupContainer = ({
   isOpen = true,
-  withPreviousTags = true,
+  withPreviousTags,
   onToggle
 }) => {
   const [currentStep, setCurrentStep] = useState(1)

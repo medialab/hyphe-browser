@@ -56,6 +56,14 @@ const FieldNotes = ({
           placeholder="You can write some free comments and remarks about the current webentity here"
         />
         <ul className="actions-container">
+          {
+            editedIndex !== undefined &&
+            <li>
+              <button className="cancel-button">
+                Cancel changes
+              </button>
+            </li>
+          }
           <li>
             <button 
               className={ cx({
@@ -73,14 +81,7 @@ const FieldNotes = ({
               }
             </button>
           </li>
-          {
-            editedIndex !== undefined &&
-            <li>
-              <button className="cancel-button">
-                Cancel changes
-              </button>
-            </li>
-          }
+          
         </ul>
         
       </form>

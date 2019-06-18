@@ -114,6 +114,7 @@ storiesOf('Browser bar', module)
 import EntityModalMock from './EntityModalMock'
 storiesOf('New entity modal', module)
   .add('Mockup', () => <EntityModalMock />)
+  .add('Creating an entity with previous tags', () => <EntityModalMock withPreviousTags />)
 
 /**
  * Entity card

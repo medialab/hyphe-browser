@@ -112,16 +112,16 @@ const BrowserLayout = ({
       >
          <div className="pending-actions-modal-container">
           <div className="modal-header">
-            <h2><span>Unresolved actions on webentities</span><i onClick={ onCloseActionsPendingModalOpen } className="ti-close" /></h2>
+            <h2><span>Unresolved decisions on webentities</span><i onClick={ onCloseActionsPendingModalOpen } className="ti-close" /></h2>
           </div>
           <div className="modal-body">
-            You have unresolved actions (2 OUT, 3 UNDEFINED) in the webentities list. What do you want to do ?
+            You have unresolved decisions (2 webentities to put to OUT, 3 to UNDECIDED) in the webentities list. What do you want to do ?
           </div>
           <div className="modal-footer">
             <ul className="actions-container big">
               <li><button onClick={ onCloseActionsPendingModalOpen } className="btn btn-danger">cancel</button></li>
-              <li><button onClick={ onCloseActionsPendingModalOpen } className="btn btn-success">apply actions</button></li>
-              <li><button onClick={ onCloseActionsPendingModalOpen } className="btn btn-success">discard actions</button></li>
+              <li><button onClick={ onCloseActionsPendingModalOpen } className="btn btn-success">apply decisions</button></li>
+              <li><button onClick={ onCloseActionsPendingModalOpen } className="btn btn-success">discard decisions</button></li>
             </ul>
           </div>
         </div>
