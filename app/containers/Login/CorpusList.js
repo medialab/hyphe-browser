@@ -86,7 +86,7 @@ class CorpusList extends React.Component {
 
     return (
       <div className="corpus-list">
-        { !(notification && notification.messageValues.error) && <h3>
+        { !(notification && notification.messageValues && notification.messageValues.error) && <h3>
           <T id="available-corpora" values={ { count: corpora.length } } />
           { hypheStatus }
         </h3> }
@@ -114,7 +114,7 @@ class CorpusList extends React.Component {
             ) }
           </ul>
         </div>
-        { !hypheFull && !(notification && notification.messageValues.error) && <div className="form-actions">
+        { !hypheFull && !(notification && notification.messageValues && notification.messageValues.error) && <div className="form-actions">
           <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
         </div> }
       </div>
