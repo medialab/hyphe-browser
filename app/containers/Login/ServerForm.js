@@ -137,8 +137,8 @@ class ServerForm extends React.Component {
           <div className="form-error" key={ error }><T id={ error } /></div>
         ) }
 
-        { this.renderFormGroup('url', 'api-url', 'text', true) }
         { this.renderFormGroup('name', 'server-name') }
+        { this.renderFormGroup('url', 'api-url', 'text', true) }
 
         { false && this.renderFormGroup('login') }
         { false && this.renderFormGroup('password', 'password', 'password') }
@@ -184,7 +184,7 @@ ServerForm.propTypes = {
 
 const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({
   // beware, edit could be set to null
-  editMode: location.query.edit !== undefined,
+  editMode: !!~window.location.href.indexOf("?edit"),
   locale,
   server: servers.selected
 })
