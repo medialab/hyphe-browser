@@ -111,9 +111,13 @@ class WebView extends React.Component {
     webview.addEventListener('did-stop-loading', () => {
       this.isLoading = false
       update('stop', webview.src)
-      // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
       if (this.props.id === HYPHE_TAB_ID) {
-        webview.executeJavaScript("window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }")
+        webview.executeJavaScript(
+          // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
+          "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; " +
+          // Remove leave corpus button from Hyphe tab within HyBro
+          "document.querySelector('.topbar-project button').remove();"
+        )
       }
     })
 
