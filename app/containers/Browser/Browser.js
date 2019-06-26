@@ -38,7 +38,7 @@ class Browser extends React.Component {
     const { tlds, corpus } = this.props
     const corpusId = corpus.corpus_id
     const parsedWebentity = list.map(
-      (we) => we.tags ? fieldParser(we, tlds) : we
+      (we) => we.tags ? fieldParser(we, tlds, fileFormat) : we
     )
     const fileName = `${corpusId}_${listName}`
     if (fileFormat === 'csv') {
