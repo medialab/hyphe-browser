@@ -5,8 +5,8 @@ import FileSaver from 'file-saver'
 import { lruToUrl } from './lru'
 
 
-const translateValue =(value, type, mode) => {   
-  mode = mode || 'TEXT'
+const translateValue = (value, type, mode) => {
+  mode = mode.toUpperCase() || 'TEXT'
   let array_separator = ' '
   if (type === 'array of string with pipe') {
     array_separator = '|'
@@ -50,7 +50,7 @@ const translateValue =(value, type, mode) => {
   }
 }
 
-export function fieldParser ( we, tlds) {  
+export function fieldParser (we, tlds, fileFormat) {
   const parserMap = {
     id: {
       name: 'ID'
@@ -188,7 +188,7 @@ export function fieldParser ( we, tlds) {
     if(value === undefined){
       tv = ''
     } else {
-      tv = translateValue(value, field.type, 'JSON')
+      tv = translateValue(value, field.type, fileFormat)
     }
     if(tv === undefined){
       console.error('A value could not be translated',value,we,field)

@@ -164,7 +164,7 @@ class SideBarContextualLists extends React.Component {
     }
     const webentityName = webentity.name.replace(/[\s\/]/g, '_')
     const parsedWebentity = webentity[selected].map(
-      (we) => we.tags ? fieldParser(we, tlds) : we
+      (we) => we.tags ? fieldParser(we, tlds, 'csv') : we
     )
 
     const flatList = flatTag(parsedWebentity)
