@@ -101,9 +101,6 @@ export const CANCEL_WEBENTITY_CRAWLS_FAILURE = '§_CANCEL_WEBENTITY_CRAWLS_FAILU
 
 export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
-  if (tabId) {
-    dispatch(setTabWebentity(serverUrl, corpusId, tabId, null))
-  }
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
