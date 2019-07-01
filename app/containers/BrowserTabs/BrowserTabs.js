@@ -113,6 +113,7 @@ class BrowserTabs extends React.Component {
       const title = tab.id === HYPHE_TAB_ID ? formatMessage({ id: 'hyphe-tab-title' }) : tab.title
 
       const selectTab = () => {
+        if (this.props.activeTabId === tab.id) return;
         const networkUrl = instanceUrl + '/#/project/' + corpusId + '/network'
         if (tab.id === HYPHE_TAB_ID && tab.url === networkUrl) {
           this.reloadTab(tab.id, true)
