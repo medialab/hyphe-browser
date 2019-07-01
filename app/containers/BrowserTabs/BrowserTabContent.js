@@ -72,7 +72,7 @@ class TabContent extends React.Component {
     // Handle the case when user clicked "IN" button and does *not* want to show a popup
     if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
       (!this.props.adjusting || !this.props.adjusting.crawl)) {
-      this.saveAdjustChanges()
+      this.saveAdjustChanges(props)
     }
   }
 
@@ -194,9 +194,9 @@ class TabContent extends React.Component {
     }
   }
 
-  saveAdjustChanges = () => {
+  saveAdjustChanges = (props) => {
     const { saveAdjustedWebentity, hideAdjustWebentity, server, corpusId,
-      webentity, adjusting, hideError, showError, id, disableWebentity } = this.props
+      webentity, adjusting, hideError, showError, id, disableWebentity } = props
 
     // no change by default
     this.setState({ setDoNotShowAgainAfterSubmit: null })
@@ -238,7 +238,7 @@ class TabContent extends React.Component {
           key="apply-adjust" icon="check"
           disabled={ saving || this.state.disableApplyButton }
           title={ formatMessage({ id: adjusting.crawl ? 'save-and-crawl' : 'save' }) }
-          onClick={ this.saveAdjustChanges }
+          onClick={()=> this.saveAdjustChanges(this.props) }
         />
       ]
     } else {
@@ -460,7 +460,7 @@ class TabContent extends React.Component {
     const apply = e => {
       e.preventDefault()
       doToggle()
-      this.saveAdjustChanges()
+      this.saveAdjustChanges(this.props)
     }
 
     const cancel = e => {
