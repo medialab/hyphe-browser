@@ -102,7 +102,6 @@ class TabContent extends React.Component {
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
       tlds, searchEngines, addNavigationHistory } = this.props
-      
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
@@ -120,8 +119,7 @@ class TabContent extends React.Component {
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-        this.setState({ webentityName: null })
-        declarePage(server.url, corpusId, info, id)
+        setTabWebentity(server.url, corpusId, id, null)
       }
       break
     case 'stop':
@@ -134,9 +132,12 @@ class TabContent extends React.Component {
       if (!disableWebentity) {
         if (!this.doNotDeclarePageOnStop) {
           setTabUrl(info, id)
+          // do not declare pages with only change in anchor	
+          if (!this.samePage(info) || loadingWebentityStack) {	
+            this.setState({ webentityName: null })	
+            declarePage(server.url, corpusId, info, id)	
+          }
         } else {
-          // not show sidebar if this.doNotDeclarePageOnStop
-          setTabWebentity(server.url, corpusId, id, null)
           this.doNotDeclarePageOnStop = false
         }
       }
