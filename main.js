@@ -61,6 +61,8 @@ app.on('ready', () => {
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
   shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
   shortcuts.register('F12', () => window.toggleDevTools())
+  // Force reload
+  shortcuts.register('Ctrl+R', () => window.reload())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut

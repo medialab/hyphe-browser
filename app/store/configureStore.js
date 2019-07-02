@@ -35,7 +35,7 @@ export default (initialState) => {
   const storage = persistState(null, { slicer, key: 'hyphe' })
 
   const enhancers = process.env.NODE_ENV === 'development'
-    ? compose(storage, window.__REDUX_DEVTOOLS_EXTENSION__loc ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
+    ? compose(storage, window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
     : compose(storage)
 
   return createStore(
