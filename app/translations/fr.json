@@ -9,6 +9,8 @@
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",
   "context": "Contexte",
+  "corpus-header.browse-tab": "browse & review",
+  "corpus-header.hyphe-tab": "visualize in hyphe",
   "corpus-list-placeholder": "Rechercher un corpus…",
   "corpus-load-health": "Charge du serveur : {status}",
   "corpus-load-health.ERROR": "Erreur",
