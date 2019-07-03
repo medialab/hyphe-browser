@@ -35,5 +35,30 @@ export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
 
+//
+export const USED_STACKS = [
+  {
+    id: 'IN',
+    label: 'IN',
+    value: 'in'
+  },
+  {
+    id: 'DISCOVERED',
+    label: 'prospects.',
+    value: 'prospection'
+  },
+  {
+    id: 'UNDECIDED',
+    label: 'UND.',
+    value: 'undecided'
+  },
+  {
+    id: 'OUT',
+    label: 'OUT',
+    value: 'out'
+  }
+]
+
+
 // tags categories are contained in namespaces, this is the default one
 export const TAGS_NS = 'USER'
