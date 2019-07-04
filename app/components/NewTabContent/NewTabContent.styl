@@ -1,0 +1,108 @@
+
+@import '../../css/helpers.styl'
+
+.entry-tab-content
+    display: flex
+    justify-content: center
+    overflow-y: auto
+    overflow-x: hidden
+    position: relative
+    background: white
+    .content-wrapper
+        max-width: 600px
+        padding: 20px
+    .starter-container
+        background: var(--color-white)
+        padding: 20px
+        border-radius: var(--radius)
+    .actions-container
+        list-style: none
+        display: flex
+        flex-flow: row nowrap
+        padding: 0
+        justify-content: space-between
+        padding-top: 20px
+        padding-bottom: 20px
+        .action-container
+            flex: 1
+            max-width: 30%
+            min-width: 30%
+            height: 120px
+            button
+                button()
+                background: white
+                font-family: var(--font-mono)
+                width: 100%
+                height: 100%
+                border 1px solid var(--color-grey)
+                flexCenter(column)
+                justify-content: flex-start
+                padding-top: 20px
+                h3
+                    font-weight: bold
+                    font-size: 18px
+                    margin-bottom: 0
+                    padding-bottom: 0
+                h4
+                    margin-top: 0
+        .action-container.is-active
+            button
+                color: var(--color-white)
+                background: var(--color-blue)
+        .action-container.is-disabled
+            opacity: .5
+            pointer-events: none
+    .browser-search
+        list-style: none
+        padding: 0
+        display: flex
+        flex-flow: column nowrap
+        margin-top: 20px
+        margin-bottom: 20px
+        select 
+            font-family: var(--font-pt)
+            border: none 
+            font-size: 16px
+            outline: none
+        
+        .form-container
+            flex: 1
+            margin-top: 10px
+            margin-bottom: 20px
+            .form
+                display: flex
+                flex-flow: row nowrap
+            input
+                flex: 1
+                input()
+                padding: 10px
+                width: 100%
+                font-size: 16px
+                max-width: 100%
+                box-sizing: border-box
+                &:focus
+                    inputFocus()
+            button
+                button('active')
+                padding: 5px 10px
+                font-family: var(--font-mono)
+                margin-left: 5px
+                min-width: 70px
+                cursor: pointer
+        .form-container:last-of-type
+            margin-bottom: 0
+                    
+    ol
+        li
+            margin-bottom: 10px
+    .intro-contents
+        em
+            font-weight: bold
+            color: var(--color-blue)
+    .hint--top:hover:after
+        max-width: 300px
+        min-width: 300px
+        white-space: normal
+        line-height: 1.5
+    .more-doc-container
+        margin-bottom: 100px

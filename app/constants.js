@@ -58,6 +58,25 @@ export const USED_STACKS = [
     value: 'out'
   }
 ]
+// search engines
+export const SEARCH_ENGINES = [
+  {
+    value: 'google',
+    label: 'Google'
+  },
+  {
+    value: 'duckduckgo',
+    label: 'DuckDuckGo'
+  },
+  {
+    value: 'qwant',
+    label: 'Qwant'
+  },
+  {
+    value: 'lilo',
+    label: 'lilo'
+  },
+]
 
 
 // tags categories are contained in namespaces, this is the default one
