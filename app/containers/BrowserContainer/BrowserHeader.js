@@ -1,11 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { intlShape } from 'react-intl'
+import cx from 'classnames'
+
 
 import HeaderMetrics from './HeaderMetrics'
 const BrowserHeader = ({
   corpus,
-  status
+  status,
+  browserMode,
+  onSetBrowserMode
 }, { intl }) => {
   const { formatMessage } = intl
 
@@ -17,8 +21,16 @@ const BrowserHeader = ({
       </div>
       <div className="header-group header-group-aside">
         <ul className="header-buttons">
-          <li><button className="btn is-active">{formatMessage({ id: 'corpus-header.browse-tab' })}</button></li>
-          <li><button className="btn">{formatMessage({ id: 'corpus-header.hyphe-tab' })}</button></li>
+          <li onClick={ () => onSetBrowserMode('browse')}>
+            <button className={ cx('btn', { 'is-active': browserMode === 'browse' }) }>
+              {formatMessage({ id: 'corpus-header.browse-tab' })}
+            </button>
+          </li>
+          <li onClick={ () => onSetBrowserMode('hyphe') }>
+            <button className={ cx('btn', { 'is-active': browserMode === 'hyphe' }) }>
+              {formatMessage({ id: 'corpus-header.hyphe-tab' })}
+            </button>
+          </li>
           <li>
             <Link 
               to="/login"

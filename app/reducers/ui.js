@@ -15,6 +15,7 @@ import {
 import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
+  SET_BROWSER_MODE,
   SELECT_CONTEXTUAL_LIST,
   TOGGLE_DO_NOT_SHOW_AGAIN,
   TOGGLE_CONTEXT,
@@ -57,6 +58,7 @@ const initialState = {
   showContext: false,
   showCategories: true,
   showFreetags: true,
+  browserMode: 'browse',
   loaders: {
     corpora: false,
     corpus_status: false,
@@ -98,7 +100,7 @@ export default createReducer(initialState, {
       : state.notification // no match, keep it
   }),
   [SELECT_CORPUS]: (state) => ({ ...state, notification: emptyNotification }),
-
+  [SET_BROWSER_MODE]: (state, mode) => ({ ...state, browserMode: mode }),
   [FETCH_SERVER_STATUS_REQUEST]: toggleLoader('corpora', true),
   [FETCH_SERVER_STATUS_SUCCESS]: toggleLoader('corpora', false),
   [FETCH_SERVER_STATUS_FAILURE]: toggleLoader('corpora', false, {
