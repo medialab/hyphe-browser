@@ -1,0 +1,54 @@
+@import '../../css/helpers.styl'
+
+.browser-bar
+    stretch(row)
+    .browser-tab-toolbar-url
+        background: white
+        flex: 1
+        position: relative
+        border-radius: var(--radius)
+        form
+            height: 100%
+            display: flex
+            align-items: center
+            input 
+                input()
+                width: 100%
+                border: none
+                padding-left: 9px
+        .browser-tab-url
+            background: white
+            display: flex
+            align-items: center
+            padding-left: 10px
+    .toolbar-placeholder
+        font-size: 12px
+        color: var(--color-grey-dark)
+        padding: 5px
+    .browser-tab-toolbar-url.edited
+        border: 1px solid  #cccecd
+
+    .page-actions
+        position : absolute
+        right: 5px
+        top: 0
+        height: 100%
+        flexCenter()
+        button
+            border: none
+            border-radius: 50%
+            background: white
+            width: 30px
+            height: 30px
+            flexCenter()
+            cursor: pointer
+        button:first-of-type
+            margin-right: 5px
+        button:last-of-type
+            margin-right: 0
+        
+        .homepage-btn
+            font-size: 12px
+            &.is-active
+                background: var(--color-blue)
+                color: white
