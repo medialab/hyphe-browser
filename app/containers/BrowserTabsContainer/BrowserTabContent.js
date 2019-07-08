@@ -9,7 +9,7 @@ import { intlShape } from 'react-intl'
 import networkErrors from 'chromium-net-errors'
 
 import {
-  PAGE_HYPHE_HOME } from '../../constants';
+  PAGE_HYPHE_HOME } from '../../constants'
 
 import BrowserBar from '../../components/BrowserBar'
 import NewTabContent from '../../components/NewTabContent'
@@ -31,6 +31,8 @@ import {
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
   hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
+
+import { fetchStack } from '../../actions/stacks'
 
 import { getSearchUrl } from '../../utils/search-web'
 import { compareUrls, longestMatching } from '../../utils/lru'
@@ -223,13 +225,21 @@ class BrowserTabContent extends React.Component {
   }
 
   renderContent () {
-    const { id, url, eventBus, closable, selectedEngine, onChangeEngine, setTabUrl } = this.props
+    const { 
+      id, url, eventBus, server, closable, isEmpty, 
+      corpusId, stacks, selectedEngine,
+      onChangeEngine, setTabUrl, fetchStack } = this.props
     const handleSetTabUrl = (value) => setTabUrl(value, id)
+    const handleFetchStack = (stackName) => {
+      const selectedStack = stacks.find((stack) => stack.name === stackName)
+      fetchStack(server.url, corpusId, selectedStack)
+    }
 
     return (url === PAGE_HYPHE_HOME) ? 
       <NewTabContent 
-        isEmpty={ url === PAGE_HYPHE_HOME }
+        isEmpty={ isEmpty }
         selectedEngine = { selectedEngine }
+        onFetchStack = { handleFetchStack }
         onChangeEngine = { onChangeEngine }
         onSetTabUrl={ handleSetTabUrl } 
         ref={ component => this.webviewComponent = component }
@@ -402,6 +412,7 @@ BrowserTabContent.propTypes = {
   loading: PropTypes.bool.isRequired,
   locale: PropTypes.string.isRequired,
   closable: PropTypes.bool,
+  isEmpty: PropTypes.bool,
   disableWebentity: PropTypes.bool,
   disableNavigation: PropTypes.bool,
   eventBus: eventBusShape.isRequired,
@@ -412,6 +423,7 @@ BrowserTabContent.propTypes = {
   noCrawlPopup: PropTypes.bool.isRequired,
   server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
+  stacks: PropTypes.array,
   webentity: PropTypes.object,
   selectedWebentity: PropTypes.object,
   loadingWebentityStack: PropTypes.bool,
@@ -432,6 +444,7 @@ BrowserTabContent.propTypes = {
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   addNavigationHistory: PropTypes.func.isRequired,
+  fetchStack: PropTypes.func,
 
   onChangeEngine: PropTypes.func,
 
@@ -468,6 +481,7 @@ const mapStateToProps = (
   webentity,
   selectedWebentity: webentities.selected,
   loadingWebentityStack: stacks.loadingWebentity,
+  stacks: stacks.list,
   mergeRequired: webentities.merges[id],
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
@@ -480,7 +494,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStack,
   stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }

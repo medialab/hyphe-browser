@@ -63,7 +63,7 @@ class BrowserStack extends React.Component {
       <span className="fillers">
         { usefulStacks.map((stack) => { 
           const disabled = !counters[stack.name] || loadingWebentityStack || loading
-          const fillStack = () => fetchStack(server.url, corpus, stack)
+          const fillStack = () => fetchStack(server.url, corpus.corpus_id, stack)
   
           return (
             <button

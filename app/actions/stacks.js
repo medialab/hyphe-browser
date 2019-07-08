@@ -17,10 +17,10 @@ export const emptyStack = createAction(EMPTY_STACK, (stack) => ({ stack }))
 
 export const requestStack = createAction(FETCH_STACK_REQUEST, (serverUrl, stack) => ({ serverUrl, stack }))
 export const receiveStack = createAction(FETCH_STACK_SUCCESS, (serverUrl, stack, webentities) => ({ serverUrl, stack, webentities }))
-export const fetchStack = (serverUrl, corpus, stack) => (dispatch) => {
+export const fetchStack = (serverUrl, corpusId, stack) => (dispatch) => {
   dispatch(requestStack(serverUrl, stack))
 
-  return jsonrpc(serverUrl)(stack.method, stack.args.concat(corpus.corpus_id))
+  return jsonrpc(serverUrl)(stack.method, stack.args.concat(corpusId))
     // when args contains a count, metadata are attached to res,
     // meanwhile webentities are returned directly as an array if count == -1
     .then((res) => dispatch(receiveStack(serverUrl, stack, res.webentities || res)))

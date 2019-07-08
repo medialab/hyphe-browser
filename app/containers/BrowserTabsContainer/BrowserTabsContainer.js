@@ -176,7 +176,7 @@ BrowserTabsContainer.propTypes = {
   tabs: PropTypes.array,
   activeTabId: PropTypes.string,
   corpus: PropTypes.object,
-  webentities: PropTypes.array,
+  webentities: PropTypes.object,
   instanceUrl: PropTypes.string,
   searchEngines: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,

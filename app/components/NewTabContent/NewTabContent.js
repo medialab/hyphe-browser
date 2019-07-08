@@ -17,6 +17,7 @@ const PROSPECTION_HELP = 'the PROSPECTION webentities are the webentities discov
 const NewTabContent = ({
   isEmpty,
   selectedEngine,
+  onFetchStack,
   onSetTabUrl,
   onChangeEngine
 }) => {
@@ -50,7 +51,9 @@ const NewTabContent = ({
                 <h4>the web for relevant webpages</h4>
               </button>
             </li>
-            <li className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
+            <li 
+              onClick = { () => onFetchStack('DISCOVERED') }
+              className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
                 <h3>Review</h3>
                 <h4>webentities in prospection to expand your corpus</h4>
@@ -138,6 +141,7 @@ NewTabContent.contextTypes = {
 NewTabContent.propTypes = {
   isEmpty: PropTypes.bool.isRequired,
   selectedEngine: PropTypes.string.isRequired,
+  onFetchStack: PropTypes.func.isRequired,
   onSetTabUrl: PropTypes.func.isRequired,
   onChangeEngine: PropTypes.func.isRequired,
 }
