@@ -99,7 +99,11 @@ export default createReducer(initialState, {
       ? emptyNotification // id matches, or no id and type matches (general case of hideNotif())
       : state.notification // no match, keep it
   }),
-  [SELECT_CORPUS]: (state) => ({ ...state, notification: emptyNotification }),
+  [SELECT_CORPUS]: (state) => ({
+    ...state,
+    browserMode: 'browse',
+    notification: emptyNotification
+  }),
   [SET_BROWSER_MODE]: (state, mode) => ({ ...state, browserMode: mode }),
   [FETCH_SERVER_STATUS_REQUEST]: toggleLoader('corpora', true),
   [FETCH_SERVER_STATUS_SUCCESS]: toggleLoader('corpora', false),

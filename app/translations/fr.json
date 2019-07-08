@@ -5,6 +5,8 @@
   "browse-back": "Page précédente",
   "browse-forward": "Page suivante",
   "browse-reload": "Rafraîchir",
+  "browse-create": "Create a new entity distinct from the current one ...",
+  "browse-homepage": "Set this webpage as the homepage of the webentity {title}",
   "cancel": "Annuler",
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",

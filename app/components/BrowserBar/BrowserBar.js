@@ -10,6 +10,7 @@ import { getSearchUrl } from '../../utils/search-web'
 
 const BrowserBar = function ({
   initialUrl,
+  tabTitle,
   selectedEngine,
   displayAddButton,
   isHomePage,
@@ -20,7 +21,8 @@ const BrowserBar = function ({
   onReload,
   onGoBack,
   onGoForward,
-  onSetTabUrl
+  onSetTabUrl,
+  onSetHomepage
 }, { intl }) {
   const { formatMessage } = intl
 
@@ -118,7 +120,7 @@ const BrowserBar = function ({
           {
             !edited && displayAddButton
             &&
-            <button className="create-btn hint--left" aria-label="Create a new entity distinct from the current one ...">
+            <button className="create-btn hint--left" aria-label={ formatMessage({ id: 'browse-create' }) }>
               <span className="ti-plus" />
             </button>
           }
@@ -127,8 +129,9 @@ const BrowserBar = function ({
             <button
               className={ cx('homepage-btn', 'hint--left', {
                 'is-active': isHomePage
-              }) } aria-label="Set this webpage as the homepage of the webentity 'La maison des feuilles'"
-            >
+              }) }
+              aria-label={ formatMessage({ id: 'browse-homepage' }, { title: tabTitle }) }
+              onClick={ onSetHomepage }>
               <span className="ti-layers-alt" />
             </button>
           }
@@ -144,6 +147,7 @@ BrowserBar.contextTypes = {
 
 BrowserBar.propTypes = {
   initialUrl: PropTypes.string.isRequired,
+  tabTitle: PropTypes.string,
   selectedEngine: PropTypes.string.isRequired,
   displayAddButton: PropTypes.bool,
   isHomePage: PropTypes.bool,
@@ -154,7 +158,8 @@ BrowserBar.propTypes = {
   onReload: PropTypes.func,
   onGoBack: PropTypes.func,
   onGoForward: PropTypes.func,
-  onSetTabUrl: PropTypes.func
+  onSetTabUrl: PropTypes.func,
+  onSetHomepage: PropTypes.func
 }
 
 

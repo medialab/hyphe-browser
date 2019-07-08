@@ -27,7 +27,7 @@ import {
   addNavigationHistory,
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
   hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
@@ -74,13 +74,13 @@ class BrowserTabContent extends React.Component {
     }
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.props.active &&
-      (prevProps.active !== this.props.active ||
-       prevProps.webentity !== this.props.webentity)) {
-      findDOMNode(this.webviewComponent).focus()
-    }
-  }
+  // componentDidUpdate (prevProps) {
+  //   if (this.props.active &&
+  //     (prevProps.active !== this.props.active ||
+  //      prevProps.webentity !== this.props.webentity)) {
+  //     findDOMNode(this.webviewComponent).focus()
+  //   }
+  // }
 
 
   componentWillUnmount () {
@@ -338,10 +338,15 @@ class BrowserTabContent extends React.Component {
 
   render () {
     const { 
-      active, id, url, webentity, adjusting, disableNavigation,
-      noCrawlPopup, mergeRequired, eventBus, setTabUrl,
+      active, id, url, title, server, corpusId, webentity, adjusting, disableNavigation,
+      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
       selectedEngine } = this.props
     
+    let isHomePage = false
+    if (webentity && webentity.homepage) {
+      isHomePage = compareUrls(webentity.homepage, url)
+    }
+
     const handleReload = (e) => {
       if (!adjusting) {
         eventBus.emit('reload', e.ctrlKey || e.shiftKey)
@@ -355,6 +360,7 @@ class BrowserTabContent extends React.Component {
       eventBus.emit('goForward')
     }
     const handleSetTabUrl = (value) => setTabUrl(value, id)
+    const handleSetWebentityHomepage = () => setWebentityHomepage(server.url, corpusId, url, webentity.id)
 
     return (
       <div
@@ -364,16 +370,19 @@ class BrowserTabContent extends React.Component {
       > 
         <BrowserBar
           isLanding={ url === PAGE_HYPHE_HOME }
+          isHomePage={ isHomePage }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
+          tabTitle= { title }
           selectedEngine = { selectedEngine }
           onReload={ handleReload }
           onGoBack={ handleGoBack }
           onGoForward={ handleGoForward }
           onSetTabUrl={ handleSetTabUrl }
+          onSetHomepage = { handleSetWebentityHomepage }
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ false } />
+          displayAddButton={ webentity && webentity.status === 'IN' } />
         {this.renderContent()}
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
         { webentity && mergeRequired && this.renderMergePopup() }
@@ -429,6 +438,7 @@ BrowserTabContent.propTypes = {
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
+  setWebentityHomepage: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
@@ -470,8 +480,8 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, stoppedLoadingWebentity,
-  setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
+  stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 

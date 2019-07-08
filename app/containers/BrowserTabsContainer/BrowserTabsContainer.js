@@ -153,6 +153,7 @@ class BrowserTabsContainer extends React.Component {
                 id={ tab.id }
                 webentity={ handleGetWebentity(tab.id) }
                 url={ tab.url }
+                title= { tab.title }
                 isEmpty={ total_webentities === 0 }
                 closable={ tabs.length > 1 }
                 loading={ tab.loading || false }
@@ -186,7 +187,6 @@ BrowserTabsContainer.propTypes = {
   selectNextTab: PropTypes.func.isRequired,
   selectPrevTab: PropTypes.func.isRequired,
   selectTab: PropTypes.func.isRequired,
-  setTabUrl: PropTypes.func.isRequired,
   setSearchEngine: PropTypes.func.isRequired
 }
 
