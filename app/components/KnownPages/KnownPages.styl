@@ -19,7 +19,10 @@
         overflow: hidden
         .known-page-url
             text-decoration: underline
-            overflow: ellipsis
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            direction: rtl;
         .known-page-statistics
             padding-top: 10px
             font-style: italic
