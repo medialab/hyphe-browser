@@ -13,7 +13,7 @@ const BrowserBar = function ({
   tabTitle,
   selectedEngine,
   displayAddButton,
-  isHomePage,
+  isHomepage,
   isLanding,
   disableReload,
   disableBack,
@@ -128,9 +128,9 @@ const BrowserBar = function ({
             !edited && !isLanding &&
             <button
               className={ cx('homepage-btn', 'hint--left', {
-                'is-active': isHomePage
+                'is-active': isHomepage
               }) }
-              aria-label={ formatMessage({ id: 'browse-homepage' }, { title: tabTitle }) }
+              aria-label={ formatMessage({ id: 'set-homepage' }) }
               onClick={ onSetHomepage }>
               <span className="ti-layers-alt" />
             </button>
@@ -150,7 +150,7 @@ BrowserBar.propTypes = {
   tabTitle: PropTypes.string,
   selectedEngine: PropTypes.string.isRequired,
   displayAddButton: PropTypes.bool,
-  isHomePage: PropTypes.bool,
+  isHomepage: PropTypes.bool,
   isLanding: PropTypes.bool,
   disableReload: PropTypes.bool,
   disableBack: PropTypes.bool,

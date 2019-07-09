@@ -1,0 +1,66 @@
+
+
+@import '../../css/helpers.styl'
+
+.edition-cartel
+    margin-bottom: 10px
+    position: relative
+    .edition-cartel-header
+        text-align: center
+        h4
+            cursor: pointer
+            position: relative
+            padding: 10px 
+            display: inline
+            font-size: 14px
+            font-weight: normal
+            .arrow-container
+                padding-right: 10px
+                position: relative
+            .title
+                min-width: 150px
+                display: inline-block
+                position :relative
+        h4:before
+            background: var(--color-grey-light)
+            content: ''
+            abs()
+    .edition-cartel-header:before
+        position: absolute
+        pointer-events: none
+        left: 10px
+        top: 10px
+        width: calc(100% - 20px)
+        height: calc(100% - 20px)
+        content:""
+        border: 1px solid var(--color-grey)
+        border-radius: calc(var(--radius) * 2)
+    .edition-cartel-content
+        padding: 20px
+        padding-top: 10px
+        overflow: hidden
+        overflow-x: visible
+        max-height: 100vh
+        transition: all .5s ease
+        opacity: 1
+        .input 
+            width: 100%
+            input()
+            box-sizing: border-box
+        .input:focus
+            inputFocus()
+
+.edition-cartel:not(.is-open)
+    .edition-cartel-header:before
+        border-bottom: none
+    .edition-cartel-content
+        max-height: 0
+        padding-top: 0
+        padding-bottom: 0
+        opacity: 0
+
+.edition-cartel.is-always-open
+    .edition-cartel-header h4
+        cursor: default
+    .arrow-container
+        display: none

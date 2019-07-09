@@ -114,6 +114,11 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
 }
 
 export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispatch) => {
+  if (webentity) {
+    dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
+    dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+    dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+  }
   dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 }
 

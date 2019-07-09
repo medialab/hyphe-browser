@@ -352,9 +352,9 @@ class BrowserTabContent extends React.Component {
       noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
       selectedEngine } = this.props
     
-    let isHomePage = false
+    let isHomepage = false
     if (webentity && webentity.homepage) {
-      isHomePage = compareUrls(webentity.homepage, url)
+      isHomepage = compareUrls(webentity.homepage, url)
     }
 
     const handleReload = (e) => {
@@ -380,7 +380,7 @@ class BrowserTabContent extends React.Component {
       > 
         <BrowserBar
           isLanding={ url === PAGE_HYPHE_HOME }
-          isHomePage={ isHomePage }
+          isHomepage={ isHomepage }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           tabTitle= { title }
           selectedEngine = { selectedEngine }
