@@ -108,6 +108,8 @@
   "sidebar.contextual.children": "Entités inclues",
   "sidebar.contextual.referrers": "Entités citantes",
   "sidebar.contextual.referrals": "Entités citées",
+  "sidebar.contextual.referrers-help": "Webentities containing pages which point to this webentity pages",
+  "sidebar.contextual.referrals-help": "Webentities containing pages pointed by this webentity pages",
   "sidebar.contextual.downloadToCSV": "Télécharger la liste en CSV",
   "sidebar.cartel.webentity-status-title": "Webentity status",
   "sidebar.cartel.webentity-status-help": "Decide whether the currently browsed webentity should be included in your corpus, excluded, or put aside as 'undecided' for further inquiry",

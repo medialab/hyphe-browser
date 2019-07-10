@@ -1,0 +1,44 @@
+@import '../../css/helpers.styl'
+
+.linked-entities
+    .list-toggle
+        stretch(row)
+        padding: 10px
+        padding-left: 0
+        padding-right: 0
+        button 
+            button()
+            padding: 10px
+            background: var(--color-grey)
+            width: 100%
+        button.is-selected
+            button('active')
+        button:first-of-type
+            margin-right: 5px
+    .download
+        padding-top: 10px
+        padding-bottom: 10px
+        
+    .entity-card
+        margin-left: 5px
+        margin-bottom: 5px
+    .actions-container
+        list-style: none
+        padding: 0
+        stretch(row)
+        li
+            flex: 1
+        .btn
+            width: 100%
+            button('active')
+            height: 40px
+            flexCenter()
+        .confirm-btn
+            background: var(--color-blue)
+        .cancel-btn
+            background: var(--color-red)
+        li:first-of-type
+            padding-right: 5px
+        @media (max-width: $tablet-break-point)
+            .btn
+                height: 60px

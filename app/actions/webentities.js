@@ -99,6 +99,11 @@ export const CANCEL_WEBENTITY_CRAWLS_REQUEST = '§_CANCEL_WEBENTITY_CRAWLS_REQUE
 export const CANCEL_WEBENTITY_CRAWLS_SUCCESS = '§_CANCEL_WEBENTITY_CRAWLS_SUCCESS'
 export const CANCEL_WEBENTITY_CRAWLS_FAILURE = '§_CANCEL_WEBENTITY_CRAWLS_FAILURE'
 
+// batch webentities actions
+export const BATCH_WEBENTITY_ACTIONS_REQUEST = '§_BATCH_WEBENTITY_ACTIONS_REQUEST'
+export const BATCH_WEBENTITY_ACTIONS_SUCCESS = '§_BATCH_WEBENTITY_ACTIONS_SUCCESS'
+export const BATCH_WEBENTITY_ACTIONS_FAILURE = '§_BATCH_WEBENTITY_ACTIONS_FAILURE'
+
 export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
@@ -337,5 +342,32 @@ export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (disp
     .catch((error) => {
       dispatch({ type: CANCEL_WEBENTITY_CRAWLS_FAILURE, payload: { serverUrl, corpusId, webentityId, error } })
       throw error
+    })
+}
+
+export const batchWebentityActions = (actions, serverUrl, corpusId, webentity, selectedList) => (dispatch) => {
+  dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity } })
+  const requestActions = actions.map((action) => {
+    const entityId = + Object.keys(action)[0]
+    const actionType = action[entityId]
+    if (actionType === 'merge') {
+      return jsonrpc(serverUrl)('store.merge_webentity_into_another', [entityId, webentity.id, true, false, false, corpusId])
+    } else {
+      // setWebentityStatus action
+      return jsonrpc(serverUrl)('store.set_webentity_status', [entityId, actionType, corpusId])
+    }
+  })
+  return Promise.all(requestActions)
+    .then(() => {
+      dispatch({ type: BATCH_WEBENTITY_ACTIONS_SUCCESS, payload: { actions, serverUrl, corpusId, webentity } })
+      if (selectedList === 'referrers') {
+        dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+      }
+      if (selectedList === 'referrals') {
+        dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+      }
+    })
+    .catch((error) => {
+      dispatch({ type: BATCH_WEBENTITY_ACTIONS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
     })
 }

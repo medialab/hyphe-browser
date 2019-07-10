@@ -29,7 +29,7 @@ const KnownPages = ({
   return (
     <div className="known-pages">
       <CardsList>
-        { list.length ? list.map((link, index) => {
+        { list && list.length ? list.map((link, index) => {
           const isHomepage = compareUrls(homepage, link.url)
           const isActive = compareUrls(tabUrl, link.url)
 
@@ -55,11 +55,13 @@ const KnownPages = ({
             />
           )
         }) : formatMessage({ id: 'none' }) }
-      </CardsList>
-                    
-      <div className="download">
-        <DownloadListBtn onClickDownload={ handleDownloadList } />
-      </div>
+      </CardsList>         
+      {
+        list && list.length > 0 && 
+        <div className="download">
+          <DownloadListBtn onClickDownload={ handleDownloadList } />
+        </div>
+      }
     </div>
   )
 }
