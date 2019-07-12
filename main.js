@@ -17,6 +17,9 @@ if (process.env.NODE_ENV === 'development') {
     showDevTools: true
   })
   const devtools = require('electron-devtools-installer')
+
+  app.disableHardwareAcceleration()
+
   app.on('ready', () => {
     [ 'REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS' ].forEach(t => {
       devtools.default(devtools[t])
