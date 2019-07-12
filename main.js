@@ -212,17 +212,17 @@ function getNewMenuBar (locale, setting) {
     // }
   ]
   const menu = Menu.buildFromTemplate(template)
-  ipc.on('corpusReady', () => {
-    menu.items[1].submenu.items.forEach((item) => {
-      item.enabled = true
-    })
-  })
+  // ipc.on('corpusReady', () => {
+  //   menu.items[1].submenu.items.forEach((item) => {
+  //     item.enabled = true
+  //   })
+  // })
   
-  ipc.on('corpusClosed', () => {
-    menu.items[1].submenu.items.forEach((item) => {
-      item.enabled = false
-    })
-  })
+  // ipc.on('corpusClosed', () => {
+  //   menu.items[1].submenu.items.forEach((item) => {
+  //     item.enabled = false
+  //   })
+  // })
   
   return menu
 }
