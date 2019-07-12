@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router'
 
-import Browser from './containers/Browser'
-
+// import Browser from './containers/Browser'
+import BrowserContainer from './containers/BrowserContainer'
 // login components
 import Login from './containers/Login/Login'
 import CorpusForm from './containers/Login/CorpusForm'
@@ -28,7 +28,7 @@ export default () => (
       ) }
     />
 
-    <Route exact path="/browser" component={ Browser } />
+    <Route exact path="/browser" component={ BrowserContainer } />
 
     <Redirect from="*" to="/login" />
 

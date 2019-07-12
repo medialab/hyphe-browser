@@ -1,6 +1,3 @@
-import './css/style'
-import './css/themify-icons'
-
 import { hot } from 'react-hot-loader'/* eslint no-unused-vars : 0 */
 
 import React from 'react'

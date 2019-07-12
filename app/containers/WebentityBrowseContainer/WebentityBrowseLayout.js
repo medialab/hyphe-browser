@@ -215,7 +215,7 @@ const WebentityBrowseLayout = ({
             {
             ...{
               webentityId: webentity.id,
-              initialNotes: userTags['FREETAGS'] || [], 
+              initialNotes: (userTags && userTags['FREETAGS']) || [], 
               onAddNote,
               onRemoveNote
             }

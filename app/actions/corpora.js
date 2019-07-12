@@ -39,7 +39,7 @@ export const CREATE_CORPUS_FAILURE = '§_CREATE_CORPUS_FAILURE'
 const _selectCorpus = createAction(SELECT_CORPUS, (corpus) => ({ corpus }))
 export const selectCorpus = (server, corpus) => (dispatch) => {
   dispatch(_selectCorpus(corpus))
-  dispatch(addHypheTab(server.home, corpus.corpus_id))
+  // dispatch(addHypheTab(server.home, corpus.corpus_id))
 }
 
 export const requestCorpora = createAction(FETCH_CORPORA_REQUEST, (serverUrl) => ({ serverUrl }))
