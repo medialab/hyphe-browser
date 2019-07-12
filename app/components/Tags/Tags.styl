@@ -1,0 +1,61 @@
+@import '../../css/helpers.styl'
+
+.tags-container
+    text-align: left
+    padding: 10px
+    padding-top: 0
+    .no-categories-text
+        font-style: italic
+        font-size: 14px
+        color: var(--color-grey-dark)
+        text-align: center
+        padding: 10px
+        padding-bottom: 0
+    .categories-container
+        padding-bottom: 10px
+    .add-category-container
+        stretch(row)
+        padding-top: 5px
+        .add-category-input
+            flex: 1
+            input()
+            max-width: calc(35% - 5px)
+            text-align: right
+
+        .add-category-input::placeholder
+            inputPlaceHolder()
+        .add-category-input:focus
+            inputFocus()
+        button
+            flex: 1
+            button('active')
+            margin-left: 7px
+            .help-pin::after
+                text-transform: lowercase
+        button[disabled]
+           buttonDisabled('active')
+    .categories-list
+        padding: 0
+        padding-right: 5px
+    .category-item-container
+        list-style-type: none
+        display: flex
+        flex-flow: row nowrap
+        justify-content: stretch
+        margin-bottom: 5px
+        align-items: center
+        max-width: 100%
+        box-sizing: content-box
+        .category-name
+            text-align: right
+            flex: 1
+            padding-right: 10px
+            font-size: 12px
+            max-width: 40%
+            min-width: 40%
+        .category-input
+            flex: 1
+            max-width: calc(60% - 5px)
+            min-width: calc(60% - 5px)
+    .Select
+        font-size: 12px
