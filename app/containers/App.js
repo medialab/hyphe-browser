@@ -3,12 +3,29 @@ import PropTypes from 'prop-types'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import { connect } from 'react-redux'
 
+import { ipcRenderer as ipc } from 'electron'
+
 import en from 'react-intl/locale-data/en'
 import fr from 'react-intl/locale-data/fr'
 
 addLocaleData([...fr, ...en])
 
+import { setLocale } from '../actions/intl'
+
 class App extends React.Component {
+  componentDidMount () {
+    this.ipcSetLocale = (e, l) => {
+      this.props.setLocale(l)
+      ipc.send('setLocaleMain', l)
+    }
+    ipc.on('setLocale', this.ipcSetLocale)
+    ipc.send('appMount', this.props.locale)
+  } 
+
+  componentWillUnmount () {
+    ipc.send('appUnmount', this.props.locale)
+  }
+
   render () {
     const { locale, messages, children } = this.props
     // key={ locale } could let us refresh i18n strings from the footer but it's too destructive
@@ -26,6 +43,9 @@ App.propTypes = {
 
   // ownProps
   children: PropTypes.node,
+
+  // actions
+  setLocale: PropTypes.func
 }
 
 const mapStateToProps = ({ intl: { locale, messages } }, { children }) => ({
@@ -34,4 +54,4 @@ const mapStateToProps = ({ intl: { locale, messages } }, { children }) => ({
   children
 })
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, { setLocale })(App)

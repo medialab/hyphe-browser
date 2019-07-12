@@ -26,6 +26,12 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
+let window
+const menuSetting = {
+  enableLanguage: false,
+  enableDownload: false
+}
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
@@ -33,11 +39,23 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', () => {
-  let window = new BrowserWindow({ 
+  window = new BrowserWindow({ 
     center: true, 
     width: 1024, 
     height: 728, 
     resizable: true
+  })
+
+  window.webContents.on('did-finish-load', () => {
+    window.webContents.executeJavaScript('localStorage.getItem("hyphe")')
+      .then((value) => {
+        if (!value) return
+        value = JSON.parse(value)
+        if (!value.options) return
+        if (!value.options['locale']) return
+        const menu = getNewMenuBar(value.options['locale'], menuSetting)
+        Menu.setApplicationMenu(menu)
+      })
   })
 
   if (process.env.NODE_ENV === 'development') {
@@ -53,9 +71,26 @@ app.on('ready', () => {
     window = null
   })
 
+  ipc.on('appMount', (e, locale) => {
+    menuSetting.enableLanguage = true
+    const menu = getNewMenuBar(locale, menuSetting)
+    Menu.setApplicationMenu(menu)
+  })
+
+  ipc.on('appUnmount', (e, locale) => {
+    menuSetting.enableLanguage = false
+    const menu = getNewMenuBar(locale, menuSetting)
+    Menu.setApplicationMenu(menu)
+  })
+  
+  ipc.on('setLocaleMain', (e, locale) => {
+    const menu = getNewMenuBar(locale, menuSetting)
+    Menu.setApplicationMenu(menu)
+  })
+
   // Disable menubar
-  const menu = getMenuBar()
-  Menu.setApplicationMenu(menu)
+  // const menu = getMenuBar()
+  // Menu.setApplicationMenu(menu)
 
   // Debug menu, whatever environment
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
@@ -103,88 +138,91 @@ app.on('ready', () => {
 })
 
 
-function getMenuBar () {
-  if (process.platform !== 'darwin') {
-    return null
-  }
-
-  // With Mac OS we have to enable menu bar with standard copy/paste shortcuts to enable them (cf. electron/electron#2308)
-  const menu = Menu.buildFromTemplate([
-    {
-      label: '&Navigation',
+function getNewMenuBar (locale, setting) {
+  const isMac = process.platform === 'darwin'
+  const { enableLanguage, enableDownload } = setting
+  const template = [
+    // { role: 'appMenu' }
+    ...(isMac ? [{
+      label: app.getName(),
       submenu: [
-        {
-          label: '&Close tab',
-          accelerator: 'Cmd+W',
-          disabled: true // enabled on demande
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    }] : []),
+    // { role: 'languageMenu' }
+    {
+      label:  locale === 'en-US' ? 'Language': 'Langue',
+      submenu: [
+        { label: locale === 'en-US' ? 'English': 'Anglais',
+          enabled: enableLanguage,
+          click () { window.webContents.send('setLocale', 'en-US') }
         },
-        {
-          role: 'quit',
-          accelerator: 'Cmd+Q'
+        { label: locale === 'en-US' ? 'French': 'Francais',
+          enabled: enableLanguage,
+          click () { window.webContents.send('setLocale', 'fr-FR') }
         }
       ]
     },
-    {
-      label: '&Edit',
-      submenu: [
-        /* {
-          role: 'undo',
-          accelerator: 'Cmd+Z'
-        },
-        {
-          role: 'redo',
-          accelerator: 'Cmd+Shift+Z'
-        },
-        {
-          type: 'separator'
-        }, */
-        {
-          role: 'selectall',
-          accelerator: 'Cmd+A'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'cut',
-          accelerator: 'Cmd+X'
-        },
-        {
-          role: 'copy',
-          accelerator: 'Cmd+C'
-        },
-        {
-          role: 'paste',
-          accelerator: 'Cmd+V'
-        }
-      ]
-    }
-  ])
-
-  // Handle close tab shortcut
-
-  // Detect when trying to register this shortcut
-  // Note we can't import app/constants.js because of ES6 modules
-  const closeTabBaseShortcut = 'Ctrl+W'
-
-  // Keep a copy of generated MenuItem to disable/enable on demand
-  const closeTabItem = menu.items[0].submenu.items[0]
-  closeTabItem.enabled = false // Initially disabled, wait for shortcut to be registered
-
-  // Wait for request for registering Ctrl+W by guest app, store sender
-  // Send back event to sender when user presses Cmd+W or clicks app menu
-  ipc.on('registerShortcut', (event, accels) => {
-    if (accels.includes(closeTabBaseShortcut)) {
-      closeTabItem.click = () => event.sender.send(`shortcut-${accels}`)
-      closeTabItem.enabled = true
-    }
+    // { role: 'downloadMenu' }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ,
+    // {
+    //   label: locale === 'en-US' ? 'Download': 'Télécharger',
+    //   submenu: [                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    //     { label: 'IN WebEntities as CSV',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'IN', 'csv') }
+    //     },
+    //     { label: 'IN WebEntities as JSON',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'IN', 'json') }
+    //     },
+    //     // { label: 'IN WebEntities as Sitography',
+    //     //   enabled: enableDownload,
+    //     //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
+    //     // },
+    //     { label: 'IN + UNDECIDED WebEntities as CSV',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
+    //     },
+    //     { label: 'IN + UNDECIDED WebEntities as JSON',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
+    //     },
+    //     // { label: 'IN + UNDECIDED WebEntities as Sitography',
+    //     //   enabled: enableDownload,
+    //     //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') } 
+    //     // },
+    //     { type: 'separator' },
+    //     { label: 'Tags as CSV',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'tags', 'csv') }
+    //     },
+    //     { label: 'Tags as JSON',
+    //       enabled: enableDownload,
+    //       click () { window.webContents.send('exportFile', 'tags', 'json') }
+    //     },
+    //   ]
+    // }
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  ipc.on('corpusReady', () => {
+    menu.items[1].submenu.items.forEach((item) => {
+      item.enabled = true
+    })
   })
-  ipc.on('unregisterShortcut', (_, accels) => {
-    if (accels.includes(closeTabBaseShortcut)) {
-      closeTabItem.click = () => { }
-      closeTabItem.enabled = false
-    }
+  
+  ipc.on('corpusClosed', () => {
+    menu.items[1].submenu.items.forEach((item) => {
+      item.enabled = false
+    })
   })
-
+  
   return menu
 }
