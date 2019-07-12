@@ -106,7 +106,7 @@ class BrowserTabsContainer extends React.Component {
     const handleGetWebentity = (tabId) => webentities && webentities.webentities[webentities.tabs[tabId]]
 
     return (
-      <div>
+      <div className="browser-tabs-container">
         <div className="browser-tabs">
           <div className="browser-tab-labels">
             <div className="browser-tab-labels-main">

@@ -354,6 +354,8 @@ input
     padding-left: 30px
     padding-top: 5px
     position: relative
+    .btn
+        font-weight: normal
     .header-group.header-group-main
         display: flex
         flex-flow: row nowrap
@@ -404,9 +406,11 @@ input
         li
             margin: 0
             margin-right: 10px
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
         .metrics-icon
-            font-size: .5em
-        
+            font-size: 10px
             &.prospection
                 color: var(--color-corpus-discovered)
             &.in
@@ -415,9 +419,15 @@ input
                 color: var(--color-corpus-out)
             &.undecided
                 color: var(--color-corpus-undecided)
+            
         .metrics
             padding-left: 2px
             font-size: 10px
+            display: flex
+            flex-flow: row nowrap
+            span,label
+                padding-left: 5px
+                font-size: 10px
         .ti-layout-column3-alt:before
             display: inline-block
             transform: rotate(90deg)
@@ -427,6 +437,7 @@ input
 .browser-wrapper 
     fix()
     stretch(column)
+    height: 100%
 
 .browser-layout
     fix()

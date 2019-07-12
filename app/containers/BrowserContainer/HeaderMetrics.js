@@ -16,7 +16,7 @@ const HeaderMetrics = ({ status }, { intl }) => {
           return (
             <li key={ index } className="hint--bottom" aria-label={`${counters[stack.id]} ${formatMessage({ id: `tooltip.stack-counter.${stack.id}` })}` }>
               <i className={`metrics-icon ti-layout-column3-alt in ${stack.value}`} />
-              <span className="metrics">{counters[stack.id]} <label>{stack.label}</label>
+              <span className="metrics"><span>{counters[stack.id]}</span> <label>{stack.label}</label>
               </span>
             </li>
           )
