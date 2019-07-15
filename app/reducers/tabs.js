@@ -1,5 +1,6 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
+import { findIndex } from 'lodash' 
 
 import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
 import {
@@ -39,17 +40,23 @@ const initialState = {
 
 export default createReducer(initialState, {
 
-  [OPEN_TAB]: (state, { url, title }) => {
+  [OPEN_TAB]: (state, { url, activeTabId, title }) => {
     const tab = {
       ...defaultTab,
       id: uuid(),
       url,
       title
     }
-
+    const activeTabIndex = findIndex(state.tabs, (tab) => tab.id === activeTabId)
+    let tabs
+    if (activeTabIndex !== -1) {
+      tabs = [...state.tabs.slice(0, activeTabIndex + 1), tab, ...state.tabs.slice(activeTabIndex + 1)]
+    }
+    else tabs = state.tabs.concat(tab)
+    
     return {
       ...state,
-      tabs: state.tabs.concat(tab),
+      tabs,
       activeTab: tab
     }
   },

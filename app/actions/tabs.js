@@ -14,7 +14,7 @@ export const SET_SEARCH_ENGINE = '§_SET_SEARCH_ENGINE'
 export const ADD_NAVIGATION_HISTORY = '§_ADD_NAVIGATION_HISTORY'
 export const SELECT_HYPHE_TAB = '§_SELECT_HYPHE_TAB'
 
-export const openTab = createAction(OPEN_TAB, (url = 'about:blank', title = null) => ({ url, title }))
+export const openTab = createAction(OPEN_TAB, (url = 'about:blank', activeTabId, title = null) => ({ url, activeTabId, title }))
 export const closeTab = createAction(CLOSE_TAB, (id) => id)
 export const selectHypheTab = createAction(CLOSE_TAB, (id) => id)
 export const selectNextTab = createAction(SELECT_NEXT_TAB)

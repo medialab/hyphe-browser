@@ -64,7 +64,7 @@ class BrowserTabContent extends React.Component {
     eventBus.on('status', this.navStatusHandler)
     this.navCloseHandler = () => closeTab(id)
     eventBus.on('close', this.navCloseHandler)
-    this.navOpenHandler = (url) => openTab(url)
+    this.navOpenHandler = (url) => openTab(url, id)
     eventBus.on('open', this.navOpenHandler)
   }
 

@@ -96,7 +96,7 @@ const WebentityBrowseContainer = ({
   }
 
   const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
-  const handleOpenTab = (url) => openTab(url)
+  const handleOpenTab = (url) => openTab(url, activeTab.id)
   const handleBatchActions = (actions, selectedList) => batchWebentityActions(actions, serverUrl, corpusId, webentity, selectedList)
   
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
