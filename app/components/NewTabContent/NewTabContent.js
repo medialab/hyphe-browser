@@ -3,6 +3,7 @@ import './NewTabContent.styl'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage as T, intlShape } from 'react-intl'
+import { isWebUri } from 'valid-url'
 
 import { SEARCH_ENGINES } from  '../../constants'
 
@@ -32,7 +33,20 @@ const NewTabContent = ({
 
   const handleSubmitSearchUrl = (e) => {
     e.preventDefault()
-    onSetTabUrl(searchUrl)
+    const url = ((u) => {
+      if (!isWebUri(u)) {
+        const httpu = 'http://' + u
+        if (isWebUri(httpu)) {
+          return httpu
+        } else {
+          const searchu = getSearchUrl(selectedEngine, u)
+          return searchu
+        }
+      } else {
+        return u
+      }
+    })(searchUrl.trim())
+    onSetTabUrl(url)
   }
   
   const handleChangeEngine = (e) => onChangeEngine(e.target.value)
