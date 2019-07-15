@@ -79,21 +79,24 @@ const BrowserLayout = ({
         status={ serverStatus }
         browserMode={ browserMode }
         onSetBrowserMode={ setBrowserMode } />
-      {
-        browserMode === 'browse' ?
-          <div className="browser-main-container">
-            <AsideLayout { ...{ 
-              isLanding,
-              isEmpty,
-              asideMode,
-              onSetAsideMode
-            } } />
-            <section className="browser-column browser-main-column">
-              <BrowserTabsContainer />
-            </section>
-          </div> :
-          <HypheView url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe } />
-      }
+      
+      <div 
+        className="browser-main-container"
+        style={ browserMode === 'browse' ? {}: { display: 'none' } }>
+        <AsideLayout { ...{ 
+          isLanding,
+          isEmpty,
+          asideMode,
+          onSetAsideMode
+        } } />
+        <section className="browser-column browser-main-column">
+          <BrowserTabsContainer />
+        </section>
+      </div>
+      <HypheView 
+        style={ browserMode === 'browse' ? { display: 'none' } : {} }
+        url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe } />
+  
       <Modal
         isOpen={ actionsPendingModalOpen }
         onRequestClose={ onCloseActionsPendingModalOpen }

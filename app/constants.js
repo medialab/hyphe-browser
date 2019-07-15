@@ -44,7 +44,7 @@ export const USED_STACKS = [
   },
   {
     id: 'DISCOVERED',
-    label: 'prospects.',
+    label: 'PROSPECTS.',
     value: 'prospection'
   },
   {

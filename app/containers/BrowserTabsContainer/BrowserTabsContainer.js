@@ -38,7 +38,7 @@ class BrowserTabsContainer extends React.Component {
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
     this.ipcCloseTabHandler = () =>
-      this.props.tabs.length > 2 && this.props.activeTabId && this.props.closeTab(this.props.activeTabId)
+      this.props.tabs.length > 1 && this.props.activeTabId && this.props.closeTab(this.props.activeTabId)
     ipc.on(`shortcut-${SHORTCUT_CLOSE_TAB}`, this.ipcCloseTabHandler)
     ipc.send('registerShortcut', SHORTCUT_CLOSE_TAB)
 

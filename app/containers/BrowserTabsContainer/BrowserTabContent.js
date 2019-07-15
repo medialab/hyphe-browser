@@ -375,7 +375,7 @@ class BrowserTabContent extends React.Component {
     return (
       <div
         key={ id } tabIndex="1" className="browser-tab-content" 
-        style={ active ? {} : { position: 'absolute', left: '-10000px' } }
+        style={ active ? {} : { display:'none' } }
         onKeyUp={ this.handleKeyUp }
       > 
         <BrowserBar

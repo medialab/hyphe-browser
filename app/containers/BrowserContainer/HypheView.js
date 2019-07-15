@@ -37,7 +37,7 @@ class HypheView extends React.Component {
   render () {
     const { isLoading } = this.state
     return (
-      <div className="hyphe-view-container">
+      <div className="hyphe-view-container" style={ this.props.style }>
         {isLoading &&
           <div className="spinner-container">
             <Spinner /> 

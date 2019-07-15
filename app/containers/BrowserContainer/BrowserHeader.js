@@ -35,7 +35,7 @@ const BrowserHeader = ({
             <Link 
               to="/login"
               aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }
-              className="btn hint--left"
+              className="btn hint--bottom"
             >
               <i className="ti-close" />
             </Link>
