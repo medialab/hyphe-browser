@@ -82,7 +82,7 @@ const WebentityBrowseLayout = ({
   const initialTags = categories.map((category) => {
     return {
       category,
-      value: (userTags[category] && userTags[category][0]) || ''
+      value: (userTags && userTags[category] && userTags[category][0]) || ''
     }
   })
                                         
@@ -92,7 +92,10 @@ const WebentityBrowseLayout = ({
   const onAddNote = (note) => onAddTag('FREETAGS', note)
   const onRemoveNote = (note) => onRemoveTag('FREETAGS', note)
 
-  const handleSetTabHomepage = () => onSetTabUrl(webentity.homepage)
+  const handleSetTabHomepage = () => {
+    if (!webentity.homepage) return
+    onSetTabUrl(webentity.homepage)
+  }
 
   return (
     <div className="browse-layout">
