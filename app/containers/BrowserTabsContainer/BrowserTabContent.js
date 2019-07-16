@@ -348,7 +348,7 @@ class BrowserTabContent extends React.Component {
 
   render () {
     const { 
-      active, id, url, title, server, corpusId, webentity, adjusting, disableNavigation,
+      active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
       noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
       selectedEngine } = this.props
     
@@ -381,9 +381,12 @@ class BrowserTabContent extends React.Component {
         <BrowserBar
           isLanding={ url === PAGE_HYPHE_HOME }
           isHomepage={ isHomepage }
+          loading={ loading }
           initialUrl={ url === PAGE_HYPHE_HOME ? '' : url }
           tabTitle= { title }
           selectedEngine = { selectedEngine }
+          lruPrefixes={ webentity && webentity.prefixes }
+          tlds={ tlds }
           onReload={ handleReload }
           onGoBack={ handleGoBack }
           onGoForward={ handleGoForward }

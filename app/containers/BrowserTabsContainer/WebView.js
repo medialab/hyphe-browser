@@ -108,6 +108,12 @@ class WebView extends React.Component {
       this.isLoading = true
       update('start', webview.src)
     })
+
+    webview.addEventListener('did-navigate', ({ url }) => {
+      this.isLoading = true
+      update('start', url)
+    })
+
     webview.addEventListener('did-stop-loading', () => {
       this.isLoading = false
       update('stop', webview.src)
