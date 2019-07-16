@@ -3,8 +3,6 @@ import { createAction } from 'redux-actions'
 export const SHOW_NOTIFICATION = '§_SHOW_NOTIFICATION'
 export const HIDE_NOTIFICATION = '§_HIDE_NOTIFICATION'
 
-export const SET_BROWSER_MODE = '§_SET_BROWSER_MODE'
-
 export const SELECT_CONTEXTUAL_LIST = '§_SELECT_CONTEXTUAL_LIST'
 
 export const TOGGLE_DO_NOT_SHOW_AGAIN = '§_TOGGLE_DO_NOT_SHOW_AGAIN'
@@ -26,8 +24,6 @@ export const showNotification = ({ id, messageId, messageValues = {}, type = 'no
 }
 
 export const hideNotification = createAction(HIDE_NOTIFICATION, (id, type) => ({ id, type }))
-
-export const setBrowserMode = createAction(SET_BROWSER_MODE, (mode) => mode)
 
 export const selectContextualList = (selectedContext) => ({ type: SELECT_CONTEXTUAL_LIST, payload: { selectedContext } })
 

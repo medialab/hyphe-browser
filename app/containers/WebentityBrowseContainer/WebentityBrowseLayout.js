@@ -112,7 +112,6 @@ const WebentityBrowseLayout = ({
           title={ formatMessage({ id: 'sidebar.cartel.webentity-status-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.webentity-status-help' }) }
           helpPlace={ 'right' }
-          isAlwaysOpen={  webentity.status === 'DISCOVERED' }
         >
           <ul className="set-status-container">
             <li className={ webentity.status === 'IN' ? 'in' : '' } onClick={ () => setModalIsOpen(true) }>IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin></li>
@@ -134,7 +133,6 @@ const WebentityBrowseLayout = ({
           onToggle={ () => setNameOpen(!nameOpen) }
           title={ formatMessage({ id: 'sidebar.cartel.webentity-name-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.webentity-name-help' }) }
-          isAlwaysOpen={ webentity.status === 'DISCOVERED' }
         >
           <WebentityNameField 
             initialName={ webentity.name }

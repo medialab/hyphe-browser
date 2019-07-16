@@ -10,7 +10,6 @@ import CorpusStatusWatcher from './CorpusStatusWatcher'
 import BrowserLayout from './BrowserLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import jsonrpc from '../../utils/jsonrpc'
-import { setBrowserMode } from '../../actions/browser'
 import { openTab } from '../../actions/tabs'
 
 import {
@@ -80,7 +79,7 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { corpus, status, instanceUrl, browserMode, activeTab, setBrowserMode, openTab } = this.props
+    const { corpus, status, instanceUrl, activeTab, openTab } = this.props
     if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
@@ -95,9 +94,7 @@ class BroswerContainer extends React.Component {
           isEmpty={ total_webentities === 0 }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
-          browserMode={ browserMode }
-          openTab={ openTab }
-          setBrowserMode={ setBrowserMode } />
+          openTab={ openTab } />
         }
       </CorpusStatusWatcher>
     )
@@ -110,11 +107,9 @@ BroswerContainer.propTypes = {
   stacks: PropTypes.array,
   serverUrl: PropTypes.string,
   instanceUrl: PropTypes.string,
-  browserMode: PropTypes.string,
   tlds: PropTypes.object,
   locale: PropTypes.string.isRequired,
   // actions
-  setBrowserMode: PropTypes.func,
   openTab: PropTypes.func
 }
 
@@ -126,13 +121,11 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
   activeTab: tabs.activeTab,
   serverUrl: servers.selected.url,
   instanceUrl: servers.selected.home,
-  browserMode: ui.browserMode,
 
   // hack needed to propagate locale change
   locale
 })
 
 export default connect(mapStateToProps, { 
-  setBrowserMode,
   openTab
 })(BroswerContainer)

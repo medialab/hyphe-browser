@@ -12,18 +12,17 @@ import HypheView from './HypheView'
 const BrowserLayout = ({
   corpus,
   serverStatus,
-  browserMode,
   instanceUrl,
   isEmpty,
   isLanding,
   // actions
-  setBrowserMode,
   openTab
 }) => {
   /**
    * lists management
    */
   const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
+  const [browserMode, setBrowserMode] = useState('browse')
   
   // const [selectedList, setSelectedListReal] = useState(status)
   // const [isOpen, setOpen] = useState(false)
@@ -38,12 +37,6 @@ const BrowserLayout = ({
   //   }
   //   resetActions()
   // }
-
-  useEffect(() => {
-    if (isLanding) {
-      setAsideMode('stackList')
-    }
-  }, [isLanding])
 
   // TODO: save in redux state
   // const hasPendingActions = [mergeActions, outActions, undecidedActions].find(l => Object.keys(l).find(k => l[k])) !== undefined
@@ -86,7 +79,7 @@ const BrowserLayout = ({
         <AsideLayout { ...{ 
           isLanding,
           isEmpty,
-          asideMode,
+          asideMode: isLanding ? 'stackList' : asideMode,
           onSetAsideMode
         } } />
         <section className="browser-column browser-main-column">
@@ -94,7 +87,7 @@ const BrowserLayout = ({
         </section>
       </div>
       <HypheView 
-        style={ browserMode === 'browse' ? { display: 'none' } : {} }
+        style={ browserMode === 'hyphe' ? {} : { display: 'none' }  }
         url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe } />
   
       <Modal
