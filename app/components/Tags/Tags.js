@@ -3,15 +3,10 @@ import './Tags.styl'
 import React, { useState, useEffect } from 'react'
 // import cx from 'classnames'
 import { Creatable } from 'react-select'
-import { uniq } from 'lodash'
+import { uniqBy } from 'lodash'
 
 import HelpPin from '../HelpPin'
 
-const toOption = (tag) => {
-  return tag
-    ? { label: tag, value: tag }
-    : { label: '', value: '' }
-}
 const Tags = ({ 
   webentityId,
   initialTags,
@@ -59,6 +54,7 @@ const Tags = ({
       })
     )
   }
+
   return (
     <div className="tags-container">
       <div className="categories-container">
@@ -67,33 +63,48 @@ const Tags = ({
             <ul className="categories-list">
               {
                 categories.map(({ category, value }, categoryIndex) => {
-                  let suggestionOptions = []
-                  if (suggestions[category]) {
-                    suggestionOptions = Object.keys(suggestions[category]).map((value) => {
-                      return {
-                        value,
-                        label: value
-                      }
-                    })
+                  
+                  const getSuggestions = () => {
+                    let suggestionOptions = []
+                    if (suggestions[category]) {
+                      suggestionOptions = Object.keys(suggestions[category]).map((value) => {
+                        return {
+                          value,
+                          label: value
+                        }
+                      })
+                    }
+                    return uniqBy([...suggestionOptions, { value, label: value }], 'value')
                   }
 
                   const onChoose = (option) => {
                     if (option && option.value && option.value.trim().length === 0) return    
                     handleUpdateTag(category, option)
                   }
+
+                  const renderArrow = ({ isOpen })  => {
+                    if (value.length>0 && !isOpen) return null
+                    else {
+                      return (isOpen ? <span className="ti-angle-up" /> : <span className="ti-angle-down" />)
+                    }
+                  }
+
                   return (
                     <li className="category-item-container" key={ category }>
                       <span className="category-name">
                         {category}
                       </span>
                       <span className="category-input">
-                        
                         <Creatable
                           name="cat-select"
-                          newOptionCreator={ ({ label }) => toOption(label) }
-                          options={ suggestionOptions }
-                          clearable={ false }
+                          clearable={ value.length > 0 ? true : false }
+                          backspaceRemoves={ false }
                           searchable
+                          autoFocus
+                          autoBlur
+                          ignoreCase
+                          arrowRenderer={ renderArrow }
+                          options={ getSuggestions() }
                           value={ value }
                           onChange={ onChoose }
                         />
