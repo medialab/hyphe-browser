@@ -9,6 +9,7 @@ const BrowserHeader = ({
   corpus,
   status,
   browserMode,
+  onSelectStack,
   onSetBrowserMode
 }, { intl }) => {
   const { formatMessage } = intl
@@ -17,7 +18,7 @@ const BrowserHeader = ({
     <div className="browser-header">
       <div className="header-group header-group-main">
         <h1>{ corpus.name } <i aria-label="server is ok" className="server-status hint--right" /></h1>
-        <HeaderMetrics status={ status } />
+        <HeaderMetrics status={ status } onSelectStack={ onSelectStack } />
       </div>
       <div className="header-group header-group-aside">
         <ul className="header-buttons">

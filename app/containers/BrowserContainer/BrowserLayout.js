@@ -16,6 +16,7 @@ const BrowserLayout = ({
   isEmpty,
   isLanding,
   // actions
+  onSelectStack,
   openTab
 }) => {
   /**
@@ -71,6 +72,7 @@ const BrowserLayout = ({
         corpus={ corpus }
         status={ serverStatus }
         browserMode={ browserMode }
+        onSelectStack={ onSelectStack }
         onSetBrowserMode={ setBrowserMode } />
       
       <div 
@@ -88,6 +90,7 @@ const BrowserLayout = ({
       </div>
       <HypheView 
         style={ browserMode === 'hyphe' ? {} : { display: 'none' }  }
+        isHypheView={ browserMode === 'hyphe' }
         url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe } />
   
       <Modal

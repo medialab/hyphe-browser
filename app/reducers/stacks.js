@@ -6,10 +6,10 @@ import {
   FETCH_STACK_SUCCESS,
   FETCH_STACK_ERROR,
   VIEW_WEBENTITY,
-  LOADING_WEBENTITY,
   STOPPED_LOADING_WEBENTITY
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
+import { stat } from 'fs';
 
 // methods and args → for API calls
 const initialState = {
@@ -73,7 +73,7 @@ export default createReducer(initialState, {
 
   [FETCH_STACK_REQUEST]: (state, { stack }) => ({
     ...state,
-    selected: stack,
+    selected: stack.name,
     loading: true
   }),
 
@@ -81,7 +81,10 @@ export default createReducer(initialState, {
     ...state,
     loading: false,
     lastRefresh: Date.now(),
-    webentities
+    webentities: {
+      ...state.webentities,
+      [stack.name]: webentities
+    }
   }),
 
   [FETCH_STACK_ERROR]: (state) => ({
@@ -91,17 +94,16 @@ export default createReducer(initialState, {
 
   [VIEW_WEBENTITY]: (state, { webentity }) => ({
     ...state,
-    webentities: state.webentities.map((w) => {
-      if (w.id === webentity.id) {
-        w.viewed = true
-      }
-      return w
-    })
-  }),
-
-  [LOADING_WEBENTITY]: (state) => ({
-    ...state,
-    loadingWebentity: true
+    loadingWebentity: true,
+    webentities: {
+      ...state.webentities,
+      [state.selected]: state.webentities[state.selected].map((w) => {
+        if (w.id === webentity.id) {
+          w.viewed = true
+        }
+        return w
+      })
+    }
   }),
 
   [STOPPED_LOADING_WEBENTITY]: (state) => ({

@@ -1,5 +1,7 @@
 import jsonrpc from '../utils/jsonrpc'
 import { createAction } from 'redux-actions'
+import { setTabUrl, openTab } from './tabs'
+
 
 export const EMPTY_STACK = '§_EMPTY_STACK'
 
@@ -9,7 +11,6 @@ export const FETCH_STACK_FAILURE = '§_FETCH_STACK_FAILURE'
 export const FETCH_STACK_ERROR = '§_FETCH_STACK_ERROR'
 
 export const VIEW_WEBENTITY = '§_VIEW_WEBENTITY'
-export const LOADING_WEBENTITY = '§_LOADING_WEBENTITY'
 export const STOPPED_LOADING_WEBENTITY = '§_STOPPED_LOADING_WEBENTITY'
 
 
@@ -30,9 +31,25 @@ export const fetchStack = (serverUrl, corpusId, stack) => (dispatch) => {
     }))
 }
 
+
 export const viewWebentity = createAction(VIEW_WEBENTITY, (webentity) => ({ webentity }))
 
-export const loadingWebentity = createAction(LOADING_WEBENTITY)
-
 export const stoppedLoadingWebentity = createAction(STOPPED_LOADING_WEBENTITY)
+
+
+
+export const fetchStackAndSetTab = (serverUrl, corpusId, stack, tabId) => (dispatch) => {
+  return dispatch(fetchStack(serverUrl, corpusId, stack))
+    .then((action) => {
+      if (action.payload && action.payload.webentities && action.payload.webentities[0]) {
+        const webentity = action.payload.webentities[0] 
+        dispatch(viewWebentity(webentity))
+        if (tabId) {
+          dispatch(setTabUrl(webentity.homepage, tabId))
+        } else {
+          dispatch(openTab(webentity.homepage))
+        }
+      }
+    })
+}
 

@@ -1,7 +1,8 @@
+import './WebentityBrowseLayout.styl'
 
 import React, { useState } from 'react'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { pickBy, values } from 'lodash'
+import { pickBy } from 'lodash'
 
 import { TAGS_NS } from '../../constants'
 
@@ -17,10 +18,15 @@ import WebentityNameField from './WebentityNameField'
 
 const WebentityBrowseLayout = ({
   webentity,
+  stackWebentities,
+  selectedStack,
+  loadingStack,
+  loadingWebentity,
   loadingBatchActions,
   tabUrl,
   categories,
   tagsSuggestions,
+  onSelectWebentity,
   onDownloadList,
   onSetWebentityStatus,
   onSetTabUrl,
@@ -40,6 +46,36 @@ const WebentityBrowseLayout = ({
   const [nameOpen, setNameOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  /**
+   * browse nav related
+   */
+
+  // used by Prev (-1) / Next (+1) buttons
+  const rotateWebentity = (offset) => {
+    const idx = stackWebentities.findIndex(x => x.id === webentity.id)
+    let findWebentity
+    if (idx === -1) {
+      // TODO: case webentity is not found in stack fetched, cause "DISCOVERED" list limit is 200
+      findWebentity = stackWebentities[0]
+    } else if (idx === 0 && offset === -1) {
+      findWebentity = stackWebentities[stackWebentities.length - 1]
+    }else if (idx === stackWebentities.length - 1 && offset === 1) {
+      findWebentity = stackWebentities[0]
+    } else {
+      findWebentity = stackWebentities[idx + offset]
+    }
+    onSelectWebentity(findWebentity)
+  }
+
+  // disable next / prev
+  const isFirst = stackWebentities && stackWebentities.length && webentity &&
+  webentity.id === stackWebentities[0].id
+  const isLast = stackWebentities && stackWebentities.length && webentity &&
+    webentity.id === stackWebentities[stackWebentities.length - 1].id
+  const goNextWebentity = () => rotateWebentity(1)
+  const goPrevWebentity = () => rotateWebentity(-1)
+
 
   /**
    * Linked entities related
@@ -89,9 +125,21 @@ const WebentityBrowseLayout = ({
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        <button className="hint--right" aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: webentity.status }) }><i className="ti-angle-left" /></button>
+        <button 
+          className="hint--right"
+          onClick={ goPrevWebentity }
+          disabled={ !selectedStack ||  isFirst || loadingStack || loadingWebentity }
+          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: selectedStack }) }>
+          <i className="ti-angle-left" />
+        </button>
         <span className="current-webentity-name" onClick={ handleSetTabHomepage }>{webentity.name}</span>
-        <button className="hint--left" aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: webentity.status }) }><i className="ti-angle-right" /></button>
+        <button 
+          className="hint--left" 
+          onClick={ goNextWebentity }
+          disabled={ !selectedStack || isLast || loadingStack || loadingWebentity }
+          aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: selectedStack }) }>
+          <i className="ti-angle-right" />
+        </button>
       </nav>
       <div className="browse-edition-container">
         

@@ -18,7 +18,7 @@ const PROSPECTION_HELP = 'the PROSPECTION webentities are the webentities discov
 const NewTabContent = ({
   isEmpty,
   selectedEngine,
-  onFetchStack,
+  onSelectStack,
   onSetTabUrl,
   onChangeEngine
 }) => {
@@ -66,14 +66,16 @@ const NewTabContent = ({
               </button>
             </li>
             <li 
-              onClick = { () => onFetchStack('DISCOVERED') }
+              onClick = { () => onSelectStack('DISCOVERED') }
               className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
                 <h3>Review</h3>
                 <h4>webentities in prospection to expand your corpus</h4>
               </button>
             </li>
-            <li className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
+            <li 
+              onClick = { () => onSelectStack('IN_UNTAGGED') }
+              className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
                 <h3>Tag</h3>
                 <h4>webentities already included in your corpus</h4>

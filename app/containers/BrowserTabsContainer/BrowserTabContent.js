@@ -32,7 +32,7 @@ import {
   hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
-import { fetchStack } from '../../actions/stacks'
+import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import { getSearchUrl } from '../../utils/search-web'
 import { compareUrls, longestMatching } from '../../utils/lru'
@@ -226,20 +226,21 @@ class BrowserTabContent extends React.Component {
 
   renderContent () {
     const { 
-      id, url, eventBus, server, closable, isEmpty, 
-      corpusId, stacks, selectedEngine,
-      onChangeEngine, setTabUrl, fetchStack } = this.props
+      id, url, eventBus, closable, isEmpty, server, corpusId, stacks,
+      selectedEngine, fetchStackAndSetTab,
+      onChangeEngine, setTabUrl } = this.props
     const handleSetTabUrl = (value) => setTabUrl(value, id)
-    const handleFetchStack = (stackName) => {
+    
+    const handleFetchStackAndSetTab = (stackName) => {
       const selectedStack = stacks.find((stack) => stack.name === stackName)
-      fetchStack(server.url, corpusId, selectedStack)
+      fetchStackAndSetTab(server.url, corpusId, selectedStack, id)
     }
 
     return (url === PAGE_HYPHE_HOME) ? 
       <NewTabContent 
         isEmpty={ isEmpty }
         selectedEngine = { selectedEngine }
-        onFetchStack = { handleFetchStack }
+        onSelectStack = { handleFetchStackAndSetTab }
         onChangeEngine = { onChangeEngine }
         onSetTabUrl={ handleSetTabUrl } 
         ref={ component => this.webviewComponent = component }
@@ -426,7 +427,6 @@ BrowserTabContent.propTypes = {
   noCrawlPopup: PropTypes.bool.isRequired,
   server: PropTypes.object.isRequired,
   corpusId: PropTypes.string.isRequired,
-  stacks: PropTypes.array,
   webentity: PropTypes.object,
   selectedWebentity: PropTypes.object,
   loadingWebentityStack: PropTypes.bool,
@@ -497,7 +497,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStack,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab,
   stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }

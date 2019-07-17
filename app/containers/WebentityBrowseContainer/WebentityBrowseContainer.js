@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -9,6 +9,9 @@ import {
   cancelWebentityCrawls,
   batchWebentityActions,
   setWebentityStatus } from '../../actions/webentities'
+
+import { viewWebentity, fetchStack } from '../../actions/stacks'
+
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { addTag, removeTag } from '../../actions/tags'
 
@@ -23,23 +26,42 @@ const WebentityBrowseContainer = ({
   corpusId,
   serverUrl,
   webentities,
+  stacks,
+  selectedStack,
+  stackWebentities,
+  loadingStack,
+  loadingWebentity,
   loadingBatchActions,
   categories,
   tagsSuggestions,
   tlds,
   // actions
+  fetchStack,
   setTabUrl,
   openTab,
   setWebentityName,
   setWebentityStatus,
   showAdjustWebentity,
   cancelWebentityCrawls,
+  viewWebentity,
   batchWebentityActions,
   setWebentityHomepage,
   addTag,
   removeTag,
 }) => {
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+
+  useEffect(() => {
+    if (webentity && webentity.status !== selectedStack) {
+      const findStack = stacks.find((stack) => stack.name === webentity.status)
+      fetchStack(serverUrl, corpusId, findStack)
+    }
+  }, [webentity])
+
+  const handleSelectWebentity = (webentity) => {
+    viewWebentity(webentity)
+    setTabUrl(webentity.homepage, activeTab.id)
+  }
   
   const handleDownloadList = (list) => {
     let listName
@@ -106,10 +128,15 @@ const WebentityBrowseContainer = ({
   if (!webentity) return null
   return (<WebentityBrowseLayout
     webentity={ webentity }
+    stackWebentities = { stackWebentities[selectedStack] || [] }
+    selectedStack={ selectedStack }
+    loadingStack={ loadingStack }
+    loadingWebentity= { loadingWebentity }
     loadingBatchActions = { loadingBatchActions }
     tabUrl={ activeTab.url }
     categories={ categories.filter(cat => cat !== 'FREETAGS') }
     tagsSuggestions={ tagsSuggestions || {} }
+    onSelectWebentity={ handleSelectWebentity }
     onDownloadList={ handleDownloadList }
     onSetTabUrl={ handleSetTabUrl }
     onOpenTab={ handleOpenTab }
@@ -137,11 +164,16 @@ WebentityBrowseContainer.propTypes = {
   setWebentityHomepage: PropTypes.func
 }
 
-const mapStateToProps = ({ corpora, servers, webentities, tabs, ui: { loaders } }) => ({
+const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { loaders } }) => ({
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,
   webentities,
+  stacks: stacks.list,
+  selectedStack: stacks.selected,
+  stackWebentities: stacks.webentities,
   tlds: webentities.tlds,
+  loadingStack: stacks.loading,
+  loadingWebentity: stacks.loadingWebentity,
   loadingBatchActions: loaders.webentity_batch_actions,
   categories: corpora.list[corpora.selected.corpus_id].tagsCategories || [],
   tagsSuggestions: corpora.tagsSuggestions[corpora.selected.corpus_id] || {},
@@ -156,6 +188,8 @@ export default connect(mapStateToProps, {
   setWebentityStatus,
   showAdjustWebentity,
   cancelWebentityCrawls,
+  viewWebentity,
+  fetchStack,
   batchWebentityActions,
   setWebentityHomepage,
   addTag,

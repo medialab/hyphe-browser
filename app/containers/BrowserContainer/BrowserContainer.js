@@ -10,7 +10,8 @@ import CorpusStatusWatcher from './CorpusStatusWatcher'
 import BrowserLayout from './BrowserLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import jsonrpc from '../../utils/jsonrpc'
-import { openTab } from '../../actions/tabs'
+import { openTab } from '../../actions/tabs'  
+import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import {
   PAGE_HYPHE_HOME } from '../../constants'
@@ -79,11 +80,18 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { corpus, status, instanceUrl, activeTab, openTab } = this.props
+    const { stacks, corpus, status, serverUrl, instanceUrl, activeTab, openTab, fetchStackAndSetTab } = this.props
+    
+    const handleFetchStackAndSetTab = (stackName) => {
+      const selectedStack = stacks.find((stack) => stack.name === stackName)
+      fetchStackAndSetTab(serverUrl, corpus.corpus_id, selectedStack, activeTab.id)
+    }
+    
     if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
     }
+    
     const { total_webentities } = corpus
     return (
       <CorpusStatusWatcher className="browser-wrapper">
@@ -91,9 +99,11 @@ class BroswerContainer extends React.Component {
         <BrowserLayout 
           corpus={ corpus }
           serverStatus={ status }
+          stacks = { stacks }
           isEmpty={ total_webentities === 0 }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
+          onSelectStack = { handleFetchStackAndSetTab }
           openTab={ openTab } />
         }
       </CorpusStatusWatcher>
@@ -127,5 +137,6 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
 })
 
 export default connect(mapStateToProps, { 
+  fetchStackAndSetTab,
   openTab
 })(BroswerContainer)

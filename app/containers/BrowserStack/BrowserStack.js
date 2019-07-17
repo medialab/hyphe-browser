@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 
-import { emptyStack, fetchStack, viewWebentity, loadingWebentity } from '../../actions/stacks'
+import { emptyStack, fetchStack, viewWebentity } from '../../actions/stacks'
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { HYPHE_TAB_ID } from '../../constants'
 import BrowserStackWesList from './BrowserStackWesList'
@@ -23,7 +23,6 @@ class BrowserStack extends React.Component {
   }
 
   selectWebentity = (webentity) => {
-    this.props.loadingWebentity()
     this.props.viewWebentity(webentity)
     if (this.props.activeTabId && this.props.activeTabId !== HYPHE_TAB_ID) {
       this.props.setTabUrl(webentity.homepage, this.props.activeTabId)
@@ -69,7 +68,7 @@ class BrowserStack extends React.Component {
             <button
               key={ stack.name }
               className={ cx('filler', `filler-${stack.name.replace(/\s/g, '_')}`,
-                { 'selected': stack.name === (selectedStack && selectedStack.name) }) }
+                { 'selected': stack.name === selectedStack }) }
               disabled={ disabled }
               onClick={ fillStack }
             >
@@ -177,7 +176,6 @@ BrowserStack.propTypes = {
   openTab: PropTypes.func.isRequired,
   setTabUrl: PropTypes.func.isRequired,
   viewWebentity: PropTypes.func.isRequired,
-  loadingWebentity: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { locale } }) => ({
@@ -192,7 +190,7 @@ const mapStateToProps = ({ corpora, servers, stacks, tabs, webentities, intl: { 
   selectedStack: stacks.selected,
   selectedWebentity: webentities.selected,
   stacks: stacks.list,
-  webentities: stacks.webentities,
+  webentities: stacks.webentities[stacks.selected] || [],
 })
 
 export default connect(mapStateToProps, {
@@ -201,5 +199,4 @@ export default connect(mapStateToProps, {
   openTab,
   setTabUrl,
   viewWebentity,
-  loadingWebentity
 })(BrowserStack)

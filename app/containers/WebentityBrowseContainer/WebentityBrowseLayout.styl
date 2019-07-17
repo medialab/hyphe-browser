@@ -1,0 +1,39 @@
+@import '../../css/helpers.styl'
+
+.browse-layout
+    stretch(column)
+    overflow: hidden
+    max-height: 100%
+    .browse-edition-container
+        flex: 1
+        overflow: hidden
+        overflow-y: auto
+        padding-left: 10px
+        padding-right: 10px
+        @media (max-width: $tablet-break-point)
+            padding-bottom: 80px
+    .browse-nav
+        stretch(row)
+        align-items: flex-end
+        padding-bottom: 10px
+        min-height: 35px
+        background: var(--color-grey-light)
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+        padding-top: 0
+        .current-webentity-name
+            flex: 1
+            font-weight: bold
+            text-align: center
+            font-size: 16px
+            pointer: cursor
+        button 
+            background: inherit 
+            border: none 
+            font-size: 20px
+            outline: none
+            padding: 0
+            cursor: pointer
+        button[disabled]
+            opacity: 0.5
