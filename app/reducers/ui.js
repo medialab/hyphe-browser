@@ -34,6 +34,9 @@ import {
   MERGE_WEBENTITY_REQUEST,
   MERGE_WEBENTITY_SUCCESS,
   MERGE_WEBENTITY_FAILURE,
+  BATCH_WEBENTITY_ACTIONS_REQUEST,
+  BATCH_WEBENTITY_ACTIONS_SUCCESS,
+  BATCH_WEBENTITY_ACTIONS_FAILURE,
   FETCH_TLDS_REQUEST,
   FETCH_TLDS_SUCCESS,
   FETCH_TLDS_FAILURE
@@ -64,6 +67,7 @@ const initialState = {
     webentity_status: false,
     webentity_adjust: false,
     webentity_merge: false,
+    webentity_batch_actions: false,
     tlds: false
   },
   // for messages having a "do not show again" options
@@ -143,6 +147,10 @@ export default createReducer(initialState, {
   [MERGE_WEBENTITY_FAILURE]: toggleLoader('webentity_merge', false, {
     messageId: 'error.merge-webentity'
   }),
+
+  [BATCH_WEBENTITY_ACTIONS_REQUEST]: toggleLoader('webentity_batch_actions', true),
+  [BATCH_WEBENTITY_ACTIONS_SUCCESS]: toggleLoader('webentity_batch_actions', false),
+  [BATCH_WEBENTITY_ACTIONS_FAILURE]: toggleLoader('webentity_batch_actions', false),
 
   [CREATE_CORPUS_FAILURE]: (state, { error }) => {
     if (error.message) {

@@ -348,24 +348,23 @@ export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (disp
 export const batchWebentityActions = (actions, serverUrl, corpusId, webentity, selectedList) => (dispatch) => {
   dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity } })
   const requestActions = actions.map((action) => {
-    const entityId = + Object.keys(action)[0]
-    const actionType = action[entityId]
-    if (actionType === 'merge') {
-      return jsonrpc(serverUrl)('store.merge_webentity_into_another', [entityId, webentity.id, true, false, false, corpusId])
+    if (action.type === 'MERGE') {
+      return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
     } else {
-      // setWebentityStatus action
-      return jsonrpc(serverUrl)('store.set_webentity_status', [entityId, actionType, corpusId])
+      return jsonrpc(serverUrl)('store.set_webentity_status', [action.id, action.type, corpusId])
     }
   })
   return Promise.all(requestActions)
     .then(() => {
-      dispatch({ type: BATCH_WEBENTITY_ACTIONS_SUCCESS, payload: { actions, serverUrl, corpusId, webentity } })
       if (selectedList === 'referrers') {
-        dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+        return dispatch(fetchReferrers(serverUrl, corpusId, webentity))
       }
       if (selectedList === 'referrals') {
-        dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+        return dispatch(fetchReferrals(serverUrl, corpusId, webentity))
       }
+    })
+    .then(() => {
+      dispatch({ type: BATCH_WEBENTITY_ACTIONS_SUCCESS, payload: { actions, serverUrl, corpusId, webentity } })
     })
     .catch((error) => {
       dispatch({ type: BATCH_WEBENTITY_ACTIONS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })

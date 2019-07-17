@@ -2,7 +2,6 @@ import './LinkedWebentities.styl'
 
 import '../../containers/SideBar/side-bar-contextual-lists.styl'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { values } from 'lodash'
 
 import React, { useState } from 'react'
 import cx from 'classnames'
@@ -16,24 +15,22 @@ const LinkedWebentities = ({
   setSelected,
   selected,
   list,
+  loadingBatchActions,
   resetActions,
   submitActions,
   pendingActions,
   statusActions,
   setStatusActions,
-  mergeActions, 
-  setMergeActions,
   onOpenTab,
   onDownloadList
 }, { intl }) => {
-
   const { formatMessage } = intl
   const handleDownloadList = () => {
     onDownloadList(selected)
   }
   return (
     <div>
-      <div className="linked-entities">
+      <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
         <nav className="list-toggle">
           {
             // hide parents and children tabs for now
@@ -61,14 +58,7 @@ const LinkedWebentities = ({
         <CardsList>
           { list.length ? list.map((link, index) => {
 
-            const toggleMerge = (obj, key) => {
-              return {
-                ...obj,
-                [key]: obj[key] ? false : true
-              }
-            }
-
-            const toggleStatus = (obj, key, status) => {
+            const toggleAction = (obj, key, status) => {
               return {
                 ...obj,
                 [key]: obj[key] === status ? null : status
@@ -78,15 +68,15 @@ const LinkedWebentities = ({
             const handleClickLink = () => onOpenTab(link.homepage)
             const handleClickMerge = (e) => {
               e.stopPropagation()
-              setMergeActions(toggleMerge(mergeActions, link.id))
+              setStatusActions(toggleAction(statusActions, link.id, 'MERGE'))
             }
             const handleClickOut = (e) => {
               e.stopPropagation()
-              setStatusActions(toggleStatus(statusActions, link.id, 'OUT'))
+              setStatusActions(toggleAction(statusActions, link.id, 'OUT'))
             }
             const handleClickUndecided = (e) => {
               e.stopPropagation()
-              setStatusActions(toggleStatus(statusActions, link.id, 'UNDECIDED'))
+              setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
             }
                           
             return (
@@ -98,9 +88,9 @@ const LinkedWebentities = ({
                 onClickMerge={ handleClickMerge }
                 onClickOut={ handleClickOut }
                 onClickUndecided={ handleClickUndecided }
-                isMergeActive={ mergeActions[link.id] }
+                isMergeActive={ statusActions[link.id] === 'MERGE' }
                 isUndecidedActive={ statusActions[link.id] === 'UNDECIDED' }
-                isOutActive={ statusActions[link.id] === 'OUT'}
+                isOutActive={ statusActions[link.id] === 'OUT' }
               />
             )
           }) : formatMessage({ id: 'none' }) }
@@ -111,7 +101,7 @@ const LinkedWebentities = ({
           &&
           <ul className="actions-container">
             <li onClick={ resetActions } ><button className="btn cancel-btn">Discard decisions</button></li>
-            <li onClick={ submitActions }><button className="btn confirm-btn">Apply {pendingActions.length} decisions on webentities</button></li>
+            <li onClick={ submitActions }><button className="btn confirm-btn">Apply {pendingActions.length} decisions</button></li>
           </ul>
         }
                     

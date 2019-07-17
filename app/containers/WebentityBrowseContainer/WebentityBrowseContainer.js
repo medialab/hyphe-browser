@@ -23,6 +23,7 @@ const WebentityBrowseContainer = ({
   corpusId,
   serverUrl,
   webentities,
+  loadingBatchActions,
   categories,
   tagsSuggestions,
   tlds,
@@ -105,6 +106,7 @@ const WebentityBrowseContainer = ({
   if (!webentity) return null
   return (<WebentityBrowseLayout
     webentity={ webentity }
+    loadingBatchActions = { loadingBatchActions }
     tabUrl={ activeTab.url }
     categories={ categories.filter(cat => cat !== 'FREETAGS') }
     tagsSuggestions={ tagsSuggestions || {} }
@@ -135,11 +137,12 @@ WebentityBrowseContainer.propTypes = {
   setWebentityHomepage: PropTypes.func
 }
 
-const mapStateToProps = ({ corpora, servers, webentities, tabs }) => ({
+const mapStateToProps = ({ corpora, servers, webentities, tabs, ui: { loaders } }) => ({
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,
   webentities,
   tlds: webentities.tlds,
+  loadingBatchActions: loaders.webentity_batch_actions,
   categories: corpora.list[corpora.selected.corpus_id].tagsCategories || [],
   tagsSuggestions: corpora.tagsSuggestions[corpora.selected.corpus_id] || {},
   serverUrl: servers.selected.url

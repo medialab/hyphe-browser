@@ -28,7 +28,7 @@ const EntityCard = ({
       <div className={ 'status-marker-container' }>
         <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ `this webentity is in the ${formattedStatus} list` }>{formattedStatus.charAt(0).toUpperCase()}</span>
       </div>}
-      <div className="card-content hint--bottom" aria-label={ 'click to browse' }>
+      <div className="card-content">
         <h4 className="name">{name}</h4>
         <h5 className="url">{homepage}</h5>
         {

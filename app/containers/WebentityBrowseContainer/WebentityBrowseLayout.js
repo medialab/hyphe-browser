@@ -17,6 +17,7 @@ import WebentityNameField from './WebentityNameField'
 
 const WebentityBrowseLayout = ({
   webentity,
+  loadingBatchActions,
   tabUrl,
   categories,
   tagsSuggestions,
@@ -44,33 +45,21 @@ const WebentityBrowseLayout = ({
    * Linked entities related
    */
   const [selectedLinkedEntities, setSelectedLinkedEntities] = useState('referrers')
-  const [mergeLinkedEntitiesActions, setMergeLinkedEntitiesActions] = useState({})
   const [statusActions, setStatusActions] = useState({})
   
   const resetLinkedEntitiesActions = () => {
-    setMergeLinkedEntitiesActions({})
     setStatusActions({})
   }
   
-  const pendingActions = {
-    'mergeActions': Object.keys(pickBy(mergeLinkedEntitiesActions, v => v)).map((id) => {
-      return {
-        [id]: 'merge'
-      }
-    }),
-    'statusActions':Object.keys(pickBy(statusActions, v => v)).map((id) => {
-      return {
-        [id]: statusActions[id]
-      }
-    })
-  }
-
-  const pendingLinkedEntitiesActions = values(pendingActions).reduce((res, actions) => {
-    return res.concat(actions)
-  }, [])
+  const pendingActions = Object.keys(pickBy(statusActions, v => v)).map((key) =>  {
+    return {
+      id: +key,
+      type: pickBy(statusActions, v => v)[key]
+    }
+  })
 
   const submitLinkedEntitiesActions = () => {
-    onBatchActions(pendingLinkedEntitiesActions, selectedLinkedEntities)
+    onBatchActions(pendingActions, selectedLinkedEntities)
     resetLinkedEntitiesActions()
   }
 
@@ -172,12 +161,11 @@ const WebentityBrowseLayout = ({
                   list: webentity[selectedLinkedEntities],
                   resetActions: resetLinkedEntitiesActions,
                   submitActions: submitLinkedEntitiesActions,
-                  pendingActions: pendingLinkedEntitiesActions,
+                  pendingActions,
+                  loadingBatchActions,
                   
                   statusActions,
                   setStatusActions,
-                  mergeActions: mergeLinkedEntitiesActions, 
-                  setMergeActions: setMergeLinkedEntitiesActions,
                   onDownloadList,
                   onOpenTab
                 }
