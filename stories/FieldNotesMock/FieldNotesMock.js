@@ -23,7 +23,6 @@ const FieldNotes = ({
     <div className="field-notes-container">
       {
         notes
-          .reverse()
           .map((note, index) => {
             const onRemove = () => {
               setNotes(notes.filter((n, i) => i !== index))
@@ -33,8 +32,43 @@ const FieldNotes = ({
               setTextAreaText(note)
               input.current.focus()
             }
+
+            const onCancelChange = () => {
+              setEditedIndex(undefined)
+              setTextAreaText('')
+            }
             if (editedIndex !== undefined && editedIndex === index) {
-              return null
+              return (
+                <form onSubmit={ onAddNote } className="field-note-creation-container">
+                  <Textarea 
+                    value={ textAreaText } 
+                    ref={ input }
+                    onChange={ e => setTextAreaText(e.target.value) }
+                    placeholder="You can write some free comments and remarks about the current webentity here"
+                  />
+                  <ul className="actions-container">
+                    <li>
+                      <button className="cancel-button" onClick={ onCancelChange }>
+                        Cancel changes
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className={ cx({
+                          'add-button': true,
+                          'is-disabled': !textAreaText.length
+                        }) } 
+                        disabled={ !textAreaText.length }
+                        type="submit" 
+                        onClick={ (e) => {onAddNote(e)} }
+                      >
+                        Update note
+                      </button>
+                    </li>
+                    
+                  </ul>
+                  
+                </form>)
             }
             return (
               <div key={ index } className="field-note">
@@ -48,6 +82,7 @@ const FieldNotes = ({
             )
           })
       }
+      {editedIndex === undefined && 
       <form onSubmit={ onAddNote } className="field-note-creation-container">
         <Textarea 
           value={ textAreaText } 
@@ -56,14 +91,6 @@ const FieldNotes = ({
           placeholder="You can write some free comments and remarks about the current webentity here"
         />
         <ul className="actions-container">
-          {
-            editedIndex !== undefined &&
-            <li>
-              <button className="cancel-button">
-                Cancel changes
-              </button>
-            </li>
-          }
           <li>
             <button 
               className={ cx({
@@ -74,18 +101,13 @@ const FieldNotes = ({
               type="submit" 
               onClick={ (e) => {onAddNote(e)} }
             >
-              {
-                editedIndex !== undefined ?
-                  'Update note':
-                  'Add note'
-              }
+              Add note
             </button>
           </li>
           
         </ul>
         
-      </form>
-      
+      </form>} 
     </div>
   )
 }

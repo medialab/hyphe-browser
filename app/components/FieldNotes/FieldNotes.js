@@ -50,13 +50,19 @@ const FieldNotes = ({
     e.preventDefault()
     e.stopPropagation()
   }
+
+  const handleCancelChange = (e) => {
+    setTextAreaText('')
+    setEditedIndex(undefined)
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   return (
     <div className="field-notes-container">
       {
         notes
-          .reverse()
-          .map((note, index) => {
-            
+          .map((note, index) => { 
             const handleRemoveNote = () => {
               setNotes(notes.filter((n) => n !== note ))
               onRemoveNote(note)
@@ -68,7 +74,35 @@ const FieldNotes = ({
               input.current.focus()
             }
             if (editedIndex !== undefined && editedIndex === index) {
-              return null
+              return (
+                <form onSubmit={ handleAddNote } className="field-note-creation-container">
+                  <Textarea 
+                    value={ textAreaText } 
+                    ref={ input }
+                    onChange={ handleChangeText }
+                    placeholder="You can write some free comments and remarks about the current webentity here"
+                  />
+                  <ul className="actions-container">
+                    <li>
+                      <button className="cancel-button" onClick={ handleCancelChange }>
+                        Cancel changes
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className={ cx({
+                          'add-button': true,
+                          'is-disabled': !textAreaText.length
+                        }) } 
+                        disabled={ !textAreaText.length }
+                        type="submit" 
+                        onClick={ handleAddNote }>
+                          Update note
+                      </button>
+                    </li>         
+                  </ul>
+                </form>
+              )
             }
             return (
               <div key={ index } className="field-note">
@@ -76,13 +110,12 @@ const FieldNotes = ({
                   note.split('\n').map((i, key) => <div className="note-block" key={ key }>{i}</div>)
                 }</div>
                 <Button icon="pencil" onClick={ onEdit } className="hint--left" title="edit note" />
-
                 <Button icon="trash" onClick={ handleRemoveNote } className="hint--left" title="delete note" />
               </div>
             )
           })
       }
-      <form onSubmit={ handleAddNote } className="field-note-creation-container">
+      {editedIndex === undefined && <form onSubmit={ handleAddNote } className="field-note-creation-container">
         <Textarea 
           value={ textAreaText } 
           ref={ input }
@@ -90,14 +123,6 @@ const FieldNotes = ({
           placeholder="You can write some free comments and remarks about the current webentity here"
         />
         <ul className="actions-container">
-          {
-            editedIndex !== undefined &&
-            <li>
-              <button className="cancel-button">
-                Cancel changes
-              </button>
-            </li>
-          }
           <li>
             <button 
               className={ cx({
@@ -106,20 +131,13 @@ const FieldNotes = ({
               }) } 
               disabled={ !textAreaText.length }
               type="submit" 
-              onClick={ (e) => {handleAddNote(e)} }
-            >
-              {
-                editedIndex !== undefined ?
-                  'Update note':
-                  'Add note'
-              }
+              onClick={ handleAddNote }>
+              Add note
             </button>
-          </li>
-          
+          </li>         
         </ul>
-        
       </form>
-      
+      }   
     </div>
   )
 }
