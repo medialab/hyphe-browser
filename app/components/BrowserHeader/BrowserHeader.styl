@@ -1,0 +1,96 @@
+@import '../../css/helpers.styl'
+
+.browser-header
+    stretch(row)
+    justify-content: space-between
+    align-items: center
+    background: var(--color-black);
+    color: var(--color-white);
+    font-weight: bold;
+    padding-left: 30px
+    padding-top: 5px
+    position: relative
+    .btn
+        font-weight: normal
+    .header-group.header-group-main
+        display: flex
+        flex-flow: row nowrap
+        h1
+            font-size: 14px
+            margin: 0
+            padding-top: 5px
+            padding-bottom: 10px
+            font-family: var(--font-pt);
+            display: flex
+            flex-direction: row
+            align-items: center
+    .header-buttons
+        list-style: none
+        stretch(row)
+        margin: 0
+        .btn
+            background: inherit 
+            border-radius: var(--radius) var(--radius) 0 0
+            color: var(--color-white)
+            border: none
+            padding: 10px 20px
+            font-family: var(--font-mono)
+            outline: none 
+            cursor: pointer
+        .btn.is-active
+            background: var(--color-white)
+            color: var(--color-black)
+            font-family: var(--font-mono)
+            cursor: default
+
+    .server-status
+        display: inline-block
+        width: .8em
+        height: .8em
+        border-radius: 50%
+        margin-left: 5px 
+    .server-status.is-ready
+        background: var(--color-green)
+    .server-status.is-pending
+        background: var(--color-orange)
+    .server-status.is-error
+        background: var(--color-red)
+    .header-metrics-container
+        pointer-events: all
+        padding: 0
+        margin: 0
+        list-style: none
+        display: flex
+        flex-flow: row nowrap
+        padding-top: 1px
+        margin-left: 20px
+        li
+            margin: 0
+            margin-right: 10px
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
+        .metrics-icon
+            font-size: 10px
+            &.prospection
+                color: var(--color-corpus-discovered)
+            &.in
+                color: var(--color-corpus-in)
+            &.out
+                color: var(--color-corpus-out)
+            &.undecided
+                color: var(--color-corpus-undecided)
+            
+        .metrics
+            padding-left: 2px
+            font-size: 10px
+            display: flex
+            flex-flow: row nowrap
+            span,label
+                padding-left: 5px
+                font-size: 10px
+        .ti-layout-column3-alt:before
+            display: inline-block
+            transform: rotate(90deg)
+        @media (max-width: $tablet-break-point)
+            display: none 

@@ -94,7 +94,7 @@ class BroswerContainer extends React.Component {
     
     const { total_webentities } = corpus
     return (
-      <CorpusStatusWatcher className="browser-wrapper">
+      <CorpusStatusWatcher>
         {corpus && 
         <BrowserLayout 
           corpus={ corpus }

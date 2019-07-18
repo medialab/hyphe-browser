@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
-import Spinner from '../../components/Spinner'
 
 import { showError, hideError } from '../../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
@@ -89,17 +88,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   render () {
-    const { status, className } = this.props
-    const ready = status && status.corpus && status.corpus.ready
-    return (
-      <div className={ className }>
-        { ready ? this.props.children :
-          <div className="spinner-container">
-            <Spinner /> 
-          </div>
-        }
-      </div>
-    )
+    return this.props.children
   }
 }
 

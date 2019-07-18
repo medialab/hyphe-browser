@@ -1,10 +1,12 @@
+import './BrowserHeader.styl'
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 
-
 import HeaderMetrics from './HeaderMetrics'
+
 const BrowserHeader = ({
   corpus,
   status,
@@ -13,11 +15,15 @@ const BrowserHeader = ({
   onSetBrowserMode
 }, { intl }) => {
   const { formatMessage } = intl
-
+  const { ready_prev, ready } = status && status.corpus
   return (
     <div className="browser-header">
       <div className="header-group header-group-main">
-        <h1>{ corpus.name } <i aria-label="server is ok" className="server-status hint--right" /></h1>
+        <h1>{ corpus.name }
+          {ready && <i aria-label="server ok" className="server-status is-ready hint--right" />}
+          {!ready && ready_prev && <i aria-label="server pending" className="server-status is-pending hint--right" />}
+          {!ready && !ready_prev && <i aria-label="server error" className="server-status is-error hint--right" />} 
+        </h1>
         <HeaderMetrics status={ status } onSelectStack={ onSelectStack } />
       </div>
       <div className="header-group header-group-aside">

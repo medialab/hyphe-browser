@@ -3,7 +3,7 @@ import { intlShape } from 'react-intl'
 import { USED_STACKS } from '../../constants'
 
 const HeaderMetrics = ({ status, onSelectStack }, { intl }) => {
-  const ready = status && status.corpus && status.corpus.ready
+  const { ready } = status && status.corpus
   if (!ready) return null
 
   const counters = status.corpus.traph.webentities
@@ -36,4 +36,4 @@ HeaderMetrics.contextTypes = {
 }
 
 
-export default HeaderMetrics;
+export default HeaderMetrics

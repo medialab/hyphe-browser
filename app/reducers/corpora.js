@@ -58,7 +58,13 @@ export default createReducer(initialState, {
   [FETCH_CORPUS_STATUS_SUCCESS]: (state, { corpus, status }) => ({
     ...state,
     selected: corpus,
-    status
+    status: {
+      ...status,
+      corpus: {
+        ...status.corpus,
+        ready_prev: state.status && state.status.corpus && state.status.corpus.ready || false
+      }
+    }
   }),
 
   [SELECT_CORPUS]: (state, { corpus }) => ({

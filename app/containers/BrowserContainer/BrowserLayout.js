@@ -3,9 +3,10 @@
 import React, { useState } from 'react'
 
 import AsideLayout from './AsideLayout'
-import BrowserHeader from './BrowserHeader'
+import BrowserHeader from '../../components/BrowserHeader'
 import BrowserTabsContainer from '../BrowserTabsContainer'
 import HypheView from './HypheView'
+import Spinner from '../../components/Spinner'
 
 const BrowserLayout = ({
   corpus,
@@ -46,6 +47,8 @@ const BrowserLayout = ({
     openTab(url)
   }
   const hypheUrl = instanceUrl + '/#/project/' + corpus.corpus_id + '/network'
+  
+  const { ready }= status && status.corpus
 
   return (
     <div className="browser-layout">
@@ -55,20 +58,25 @@ const BrowserLayout = ({
         browserMode={ browserMode }
         onSelectStack={ onSelectStack }
         onSetBrowserMode={ setBrowserMode } />
+      { ready ?
+        <div 
+          className="browser-main-container"
+          style={ browserMode === 'browse' ? {}: { display: 'none' } }>
+          <AsideLayout { ...{ 
+            isLanding,
+            isEmpty,
+            asideMode: isLanding ? 'stackList' : asideMode,
+            onSetAsideMode
+          } } />
+          <section className="browser-column browser-main-column">
+            <BrowserTabsContainer />
+          </section>
+        </div>:
+        <div className="spinner-container">
+          <Spinner /> 
+        </div>
+      }
       
-      <div 
-        className="browser-main-container"
-        style={ browserMode === 'browse' ? {}: { display: 'none' } }>
-        <AsideLayout { ...{ 
-          isLanding,
-          isEmpty,
-          asideMode: isLanding ? 'stackList' : asideMode,
-          onSetAsideMode
-        } } />
-        <section className="browser-column browser-main-column">
-          <BrowserTabsContainer />
-        </section>
-      </div>
       <HypheView 
         style={ browserMode === 'hyphe' ? {} : { display: 'none' }  }
         isHypheView={ browserMode === 'hyphe' }
