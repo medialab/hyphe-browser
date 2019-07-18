@@ -98,7 +98,7 @@ class BroswerContainer extends React.Component {
         {corpus && 
         <BrowserLayout 
           corpus={ corpus }
-          serverStatus={ status }
+          status={ status }
           stacks = { stacks }
           isEmpty={ total_webentities === 0 }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
