@@ -33,12 +33,9 @@ import {
 } from '../actions/webentities'
 import { SELECT_CORPUS } from '../actions/corpora'
 import {
-  ADD_TAG_REQUEST,
   ADD_TAG_SUCCESS,
-  ADD_TAG_FAILURE,
-  REMOVE_TAG_REQUEST,
+  UPDATE_TAG_SUCCESS,
   REMOVE_TAG_SUCCESS,
-  REMOVE_TAG_FAILURE
 } from '../actions/tags'
 
 import { TAGS_NS } from '../constants'
@@ -153,34 +150,22 @@ export default createReducer(initialState, {
     }
   }),
 
-  // (Optimistically) add tag
-  [ADD_TAG_REQUEST]: updateWebentity((webentity, { category, value, updatedValue }) => {
-    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
-    const newTags = updatedValue
-      ? oldTags.map((v) => (v === updatedValue) ? value : v)
-      : uniq(oldTags.concat([value]))
-    return set({ [`tags_${category}_prev`]: oldTags }, `tags.${TAGS_NS}.${category}`, newTags)
-  }),
-  [ADD_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
-    [`tags_${category}_prev`]: null
-  })),
-  [ADD_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
-    { [`tags_${category}_prev`]: null },
-    `tags.${TAGS_NS}.${category}`, webentity[`tags_${category}_prev`]
-  )),
 
-  // (Optimistically) remove tag
-  [REMOVE_TAG_REQUEST]: updateWebentity((webentity, { category, value }) => set(
-    { [`tags_${category}_prev`]: webentity.tags[TAGS_NS][category] },
-    `tags.${TAGS_NS}.${category}`, without(webentity.tags[TAGS_NS][category] || [], value)
-  )),
-  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => ({
-    [`tags_${category}_prev`]: null
+  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, oldValue, newValue }) => {
+    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
+    const newTags = oldTags.map((v) => (v === oldValue) ? newValue : v)
+    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+  }),
+
+  [ADD_TAG_SUCCESS]: updateWebentity(( webentity, { category, value }) => {
+    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
+    const newTags = uniq(oldTags.concat([value]))
+    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+  }),
+
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category, value }) => ({
+    [`tags.${TAGS_NS}.${category}`]: without(webentity.tags[TAGS_NS][category] || [], value)
   })),
-  [REMOVE_TAG_FAILURE]: updateWebentity((webentity, { category }) => set(
-    { [`tags_${category}_prev`]: null },
-    `tags.${TAGS_NS}.${category}`, webentity[`tags_${category}_prev`]
-  )),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
     ...state,

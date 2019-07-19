@@ -12,6 +12,7 @@ const Tags = ({
   initialTags,
   suggestions,
   onRemoveTag,
+  onUpdateTag,
   onAddTag,
 }) => {
   const [categories, setCategories] = useState(initialTags)
@@ -33,27 +34,6 @@ const Tags = ({
     }
   }
 
-  const handleUpdateTag = (category, option) => {
-    const prevTag = categories.find( (cat) => cat.category === category).value
-    if (prevTag) {
-      onRemoveTag(category, prevTag)
-    }
-    if (option) {
-      onAddTag(category, option.value)
-    }
-
-    setCategories(
-      categories.map((cat) => {
-        if (cat.category === category) {
-          return {
-            ...cat,
-            value: option ? option.value : ''
-          }
-        }
-        return cat
-      })
-    )
-  }
 
   return (
     <div className="tags-container">
@@ -77,9 +57,28 @@ const Tags = ({
                     return uniqBy([...suggestionOptions, { value, label: value }], 'value')
                   }
 
-                  const onChoose = (option) => {
-                    if (option && option.value && option.value.trim().length === 0) return    
-                    handleUpdateTag(category, option)
+                  const handleUpdateTag = (option) => {
+                    const newTag = option ? option.value.trim() : ''
+                    
+                    const prevTag = categories.find( (cat) => cat.category === category).value
+                    if (prevTag) {
+                      onRemoveTag(category, prevTag)
+                    }
+                    if (option) {
+                      onAddTag(category, newTag)
+                    }
+                
+                    setCategories(
+                      categories.map((cat) => {
+                        if (cat.category === category) {
+                          return {
+                            ...cat,
+                            value: newTag
+                          }
+                        }
+                        return cat
+                      })
+                    )
                   }
 
                   const renderArrow = ({ isOpen })  => {
@@ -106,7 +105,7 @@ const Tags = ({
                           arrowRenderer={ renderArrow }
                           options={ getSuggestions() }
                           value={ value }
-                          onChange={ onChoose }
+                          onChange={ handleUpdateTag }
                         />
                       </span>
                     </li>

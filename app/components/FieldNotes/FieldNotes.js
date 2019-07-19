@@ -11,6 +11,7 @@ const FieldNotes = ({
   webentityId,
   initialNotes, 
   onAddNote,
+  onUpdateNote,
   onRemoveNote,
 }) => {
   const [textAreaText, setTextAreaText] = useState('')
@@ -30,23 +31,12 @@ const FieldNotes = ({
   }
 
   const handleAddNote = (e) => {
-    if(textAreaText.length) {
-      if (editedIndex !== undefined) {
-        const prevNote = notes.find((note, index) => index === editedIndex)
-        onRemoveNote(prevNote)
-        setNotes(notes.map((n, i) => {
-          if (i === editedIndex) {
-            return textAreaText
-          }
-          return n
-        }))
-        setEditedIndex(undefined)
-      } else {
-        setNotes([textAreaText, ...notes])
-      }
-      onAddNote(textAreaText)
-      setTextAreaText('')
+    const newNote = textAreaText.trim()
+    if (newNote.length) {
+      setNotes([newNote, ...notes])
+      onAddNote(newNote)
     }
+    setTextAreaText('')
     e.preventDefault()
     e.stopPropagation()
   }
@@ -56,6 +46,15 @@ const FieldNotes = ({
     setEditedIndex(undefined)
     e.preventDefault()
     e.stopPropagation()
+  }
+
+  const validateNote = (value) => {
+    const newNote = value.trim()
+    if (!newNote.length) return false
+    
+    const noteFoundIndex = notes.findIndex((note) => newNote === note)
+    if (noteFoundIndex !== -1 && editedIndex !== noteFoundIndex) return false
+    return true
   }
 
   return (
@@ -73,9 +72,24 @@ const FieldNotes = ({
               setTextAreaText(note)
               input.current.focus()
             }
+
+            const handleUpdateNote = () => {
+              const newNote = textAreaText.trim()
+              if(newNote.length) {
+                setNotes(notes.map((n) => {
+                  if (n === note) {
+                    return newNote
+                  }
+                  return n
+                }))
+                onUpdateNote(note, newNote)
+              }
+              setEditedIndex(undefined)
+              setTextAreaText('')
+            }
             if (editedIndex !== undefined && editedIndex === index) {
               return (
-                <form onSubmit={ handleAddNote } className="field-note-creation-container">
+                <form onSubmit={ handleUpdateNote } className="field-note-creation-container">
                   <Textarea 
                     value={ textAreaText } 
                     ref={ input }
@@ -92,11 +106,11 @@ const FieldNotes = ({
                       <button 
                         className={ cx({
                           'add-button': true,
-                          'is-disabled': !textAreaText.length
+                          'is-disabled': !validateNote(textAreaText)
                         }) } 
-                        disabled={ !textAreaText.length }
+                        disabled={ !validateNote(textAreaText) }
                         type="submit" 
-                        onClick={ handleAddNote }>
+                        onClick={ handleUpdateNote }>
                           Update note
                       </button>
                     </li>         
@@ -127,9 +141,9 @@ const FieldNotes = ({
             <button 
               className={ cx({
                 'add-button': true,
-                'is-disabled': !textAreaText.length
+                'is-disabled': !validateNote(textAreaText)
               }) } 
-              disabled={ !textAreaText.length }
+              disabled={ !validateNote(textAreaText) }
               type="submit" 
               onClick={ handleAddNote }>
               Add note

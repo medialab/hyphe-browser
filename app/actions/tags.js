@@ -31,6 +31,11 @@ export const REMOVE_TAG_REQUEST = '§_REMOVE_TAG_REQUEST'
 export const REMOVE_TAG_SUCCESS = '§_REMOVE_TAG_SUCCESS'
 export const REMOVE_TAG_FAILURE = '§_REMOVE_TAG_FAILURE'
 
+// update a tag
+export const UPDATE_TAG_REQUEST = '§_UPDATE_TAG_REQUEST'
+export const UPDATE_TAG_SUCCESS = '§_UPDATE_TAG_SUCCESS'
+export const UPDATE_TAG_FAILURE = '§_UPDATE_TAG_FAILURE'
+
 
 export const fetchTagsCategories = (serverUrl, corpusId) => (dispatch) => {
   dispatch({ type: FETCH_TAGS_CATEGORIES_REQUEST, payload: { serverUrl, corpusId } })
@@ -68,4 +73,11 @@ export const removeTag = (serverUrl, corpusId, category, webentityId, value) => 
   return jsonrpc(serverUrl)('store.rm_webentity_tag_value', [webentityId, TAGS_NS, category, value, corpusId])
     .then(() => dispatch({ type: REMOVE_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value } }))
     .catch((error) => dispatch({ type: REMOVE_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, value, error } }))
+}
+
+export const updateTag = (serverUrl, corpusId, category, webentityId, oldValue, newValue) => (dispatch) => {
+  dispatch({ type: UPDATE_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, oldValue, newValue } })
+  return jsonrpc(serverUrl)('store.edit_webentity_tag_value', [webentityId, TAGS_NS, category, oldValue, newValue, corpusId])
+    .then(() => dispatch({ type: UPDATE_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, oldValue, newValue } }))
+    .catch((error) => dispatch({ type: UPDATE_TAG_FAILURE, payload: { serverUrl, corpusId, category, webentityId, oldValue, newValue, error } }))
 }

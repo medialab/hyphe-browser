@@ -13,7 +13,7 @@ import {
 import { viewWebentity, fetchStack } from '../../actions/stacks'
 
 import { setTabUrl, openTab } from '../../actions/tabs'
-import { addTag, removeTag } from '../../actions/tags'
+import { addTag, removeTag, updateTag } from '../../actions/tags'
 
 import { getWebEntityActivityStatus } from '../../utils/status'
 
@@ -47,6 +47,7 @@ const WebentityBrowseContainer = ({
   batchWebentityActions,
   setWebentityHomepage,
   addTag,
+  updateTag,
   removeTag,
 }) => {
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
@@ -123,6 +124,7 @@ const WebentityBrowseContainer = ({
   const handleBatchActions = (actions, selectedList) => batchWebentityActions(actions, serverUrl, corpusId, webentity, selectedList)
   
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
+  const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
 
   if (!webentity) return null
@@ -141,6 +143,7 @@ const WebentityBrowseContainer = ({
     onSetTabUrl={ handleSetTabUrl }
     onOpenTab={ handleOpenTab }
     onAddTag={ handleAddTag }
+    onUpdateTag={ handleUpdateTag }
     onRemoveTag={ handleRemoveTag }
     onBatchActions = { handleBatchActions }
     onSetWebentityStatus={ handleSetWenentityStatus }
@@ -152,7 +155,7 @@ const WebentityBrowseContainer = ({
 WebentityBrowseContainer.propTypes = {
   activeTab: PropTypes.object.isRequired,
   webentities: PropTypes.object.isRequired,
-  tlds: PropTypes.object.isRequired,
+  tlds: PropTypes.object,
   corpusId: PropTypes.string,
   serverUrl: PropTypes.string,
 
@@ -193,6 +196,7 @@ export default connect(mapStateToProps, {
   batchWebentityActions,
   setWebentityHomepage,
   addTag,
+  updateTag,
   removeTag
 })(WebentityBrowseContainer)
 

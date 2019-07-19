@@ -35,6 +35,7 @@ const WebentityBrowseLayout = ({
   onSetWebentityName,
   onSetWebentityHomepage,
   onAddTag,
+  onUpdateTag,
   onRemoveTag
 }, { intl }) => {
   const { formatMessage } = intl
@@ -115,6 +116,7 @@ const WebentityBrowseLayout = ({
    * field notes related
    */
   const onAddNote = (note) => onAddTag('FREETAGS', note)
+  const onUpdateNote = (oldNote, newNote) => onUpdateTag('FREETAGS', oldNote, newNote)
   const onRemoveNote = (note) => onRemoveTag('FREETAGS', note)
 
   const handleSetTabHomepage = () => {
@@ -236,6 +238,7 @@ const WebentityBrowseLayout = ({
               initialTags,
               suggestions: tagsSuggestions,
               onAddTag,
+              onUpdateTag,
               onRemoveTag
             }
             }
@@ -254,6 +257,7 @@ const WebentityBrowseLayout = ({
               webentityId: webentity.id,
               initialNotes: (userTags && userTags['FREETAGS']) || [], 
               onAddNote,
+              onUpdateNote,
               onRemoveNote
             }
             }
