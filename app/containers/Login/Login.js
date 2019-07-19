@@ -10,7 +10,6 @@ import cx from 'classnames'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import { deselectServer } from '../../actions/servers'
-import Footer from '../../components/Footer'
 
 class Login extends React.Component {
   componentDidMount () {
@@ -95,7 +94,6 @@ class Login extends React.Component {
             { this.props.children }
           </main>
         </div>
-        <Footer />
       </div>
     )
   }

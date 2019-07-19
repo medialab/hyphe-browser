@@ -157,7 +157,7 @@ NewTabContent.contextTypes = {
 NewTabContent.propTypes = {
   isEmpty: PropTypes.bool.isRequired,
   selectedEngine: PropTypes.string.isRequired,
-  onFetchStack: PropTypes.func.isRequired,
+  onSelectStack: PropTypes.func.isRequired,
   onSetTabUrl: PropTypes.func.isRequired,
   onChangeEngine: PropTypes.func.isRequired,
 }
