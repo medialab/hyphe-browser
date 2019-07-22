@@ -24,6 +24,17 @@ module.exports = {
       //   loaders: ['json']
       // },
       {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader'
+          },
+          {
+            loader: 'markdown-loader'
+          }
+        ]
+      },
+      {
         test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
         loader: 'url-loader?limit=100000'
       },
