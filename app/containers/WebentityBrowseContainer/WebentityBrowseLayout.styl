@@ -12,6 +12,43 @@
         padding-right: 10px
         @media (max-width: $tablet-break-point)
             padding-bottom: 80px
+        .set-status-container
+            stretch(row)
+            justify-content: space-between
+            list-style: none
+            padding: 0
+            cursor: pointer
+            margin: 0
+            @media (max-width: $tablet-break-point)
+                flex-direction: column
+                justify-content: stretch
+                align-items: stretch
+            
+            li
+                background: var(--color-grey)
+                border-radius: var(--radius)
+                flexCenter()
+                height: 100px
+                width: 100px
+                max-width: calc(30% - 10px)
+                font-weight: bold
+                @media (max-width: $tablet-break-point)
+                    width: 100%
+                    margin-bottom: 10px
+                    height: 50px
+                    max-width: unset
+                &.in
+                    background: var(--color-corpus-in)
+                    color: white
+                    cursor: default
+                &.out
+                    background: var(--color-corpus-out)
+                    color: white
+                    cursor: default
+                &.undecided
+                    background: var(--color-corpus-undecided)
+                    color: white
+                    cursor: default
     .browse-nav
         stretch(row)
         align-items: flex-end
