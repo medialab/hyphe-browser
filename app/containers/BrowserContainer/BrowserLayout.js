@@ -1,6 +1,6 @@
 import './BrowserLayout.styl'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
 
 import StackListContainer from '../StackListContainer'
@@ -27,6 +27,13 @@ const BrowserLayout = ({
    */
   const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
   const [browserMode, setBrowserMode] = useState('browse')
+
+  useEffect(() => {
+    if (isLanding) {
+      setAsideMode('stackList')
+    }
+  }, [isLanding])
+
   
   const onSetAsideMode = mode => setAsideMode(mode)
 

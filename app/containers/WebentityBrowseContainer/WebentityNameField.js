@@ -1,11 +1,15 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const WebentityNameField = ({
   initialName,
   onSubmit
 }) => {
   const [webentityName, setWebentityName] = useState(initialName)
+
+  useEffect(() => {
+    setWebentityName(initialName)
+  }, [initialName])
   
   const handleChange = (e) => setWebentityName(e.target.value)
   const handleKeyUp = (e) => {
