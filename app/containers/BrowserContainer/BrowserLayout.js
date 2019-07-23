@@ -27,13 +27,6 @@ const BrowserLayout = ({
    */
   const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
   const [browserMode, setBrowserMode] = useState('browse')
-
-  useEffect(() => {
-    if (isLanding) {
-      setAsideMode('stackList')
-    }
-  }, [isLanding])
-
   
   const onSetAsideMode = mode => setAsideMode(mode)
 
@@ -59,17 +52,17 @@ const BrowserLayout = ({
           style={ browserMode === 'browse' ? {}: { display: 'none' } }>
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
-              <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': asideMode === 'stackList' }) }>
+              <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
                 <span>Inquiry overview <HelpPin>review and curate the webentities constituting your inquiry</HelpPin></span></button>
               </li>
-              <li><button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': asideMode === 'webentityBrowse' }) }>
+              <li><button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
                 <span>Browsed webentity <HelpPin>edit information about the currently browsed webentity</HelpPin></span></button>
               </li>
             </ul>
-            <div className="aside-content" style={ asideMode === 'webentityBrowse' ? {}: { display: 'none' } }>
+            <div className="aside-content" style={ (asideMode === 'webentityBrowse' && !isLanding) ? {}: { display: 'none' } }>
               <WebentityBrowseContainer />
             </div>
-            <div className="aside-content" style={ asideMode === 'stackList' ? {}: { display: 'none' } }>
+            <div className="aside-content" style={ (asideMode === 'stackList' || isLanding) ? {}: { display: 'none' } }>
               <StackListContainer
                 isLanding={ isLanding } 
                 isEmpty={ isEmpty } 
