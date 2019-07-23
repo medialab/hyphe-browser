@@ -35,7 +35,44 @@ export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
 
-//
+export const STACKS_LIST = [
+  {
+    name: 'DISCOVERED',
+    method: 'store.wordsearch_webentities',
+    args: [[], [['status', 'DISCOVERED']], ['-indegree', 'name'], 200, 0, false, false],
+    condition: 'DISCOVERED'
+  },
+  {
+    name: 'IN',
+    method: 'store.get_webentities_by_status',
+    args: ['IN', 'name', -1, 0, false, false],
+    condition: 'IN'
+  },
+  {
+    name: 'IN_UNTAGGED',
+    method: 'store.get_webentities_mistagged',
+    args: ['IN', true, false, 'name', -1, 0, false, false],
+    condition: 'IN'
+  },
+  {
+    name: 'IN_UNCRAWLED',
+    method: 'store.get_webentities_uncrawled',
+    args: ['name', -1, 0, false, false],
+    condition: 'IN'
+  },
+  {
+    name: 'UNDECIDED',
+    method: 'store.get_webentities_by_status',
+    args: ['UNDECIDED', 'name', -1, 0, false, false],
+    condition: 'UNDECIDED'
+  },
+  {
+    name: 'OUT',
+    method: 'store.get_webentities_by_status',
+    args: ['OUT', 'name', -1, 0, false, false],
+    condition: 'OUT'
+  }
+]
 export const USED_STACKS = [
   {
     id: 'IN',

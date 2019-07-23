@@ -21,12 +21,13 @@ import WebentityBrowseLayout from './WebentityBrowseLayout'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
+import { STACKS_LIST } from '../../constants'
+
 const WebentityBrowseContainer = ({ 
   activeTab, 
   corpusId,
   serverUrl,
   webentities,
-  stacks,
   selectedStack,
   stackWebentities,
   loadingStack,
@@ -54,7 +55,7 @@ const WebentityBrowseContainer = ({
 
   useEffect(() => {
     if (webentity && webentity.status !== selectedStack) {
-      const findStack = stacks.find((stack) => stack.name === webentity.status)
+      const findStack = STACKS_LIST.find((stack) => stack.name === webentity.status)
       fetchStack(serverUrl, corpusId, findStack)
     }
   }, [webentity])
@@ -121,7 +122,7 @@ const WebentityBrowseContainer = ({
 
   const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
   const handleOpenTab = (url) => openTab(url, activeTab.id)
-  const handleBatchActions = (actions, selectedList) => batchWebentityActions(actions, serverUrl, corpusId, webentity, selectedList)
+  const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
   
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
@@ -171,7 +172,6 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,
   webentities,
-  stacks: stacks.list,
   selectedStack: stacks.selected,
   stackWebentities: stacks.webentities,
   tlds: webentities.tlds,

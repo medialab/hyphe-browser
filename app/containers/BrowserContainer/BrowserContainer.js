@@ -5,6 +5,8 @@ import { ipcRenderer as ipc } from 'electron'
 
 import Spinner from '../../components/Spinner'
 import CorpusStatusWatcher from './CorpusStatusWatcher'
+import Notification from '../../components/Notification'
+
 import BrowserLayout from './BrowserLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import jsonrpc from '../../utils/jsonrpc'
@@ -12,6 +14,7 @@ import { openTab } from '../../actions/tabs'
 import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import {
+  STACKS_LIST,
   PAGE_HYPHE_HOME } from '../../constants'
 
 class BroswerContainer extends React.Component {
@@ -49,16 +52,16 @@ class BroswerContainer extends React.Component {
   }
 
   exportWebentity = (status, fileFormat) => {
-    const { corpus, serverUrl, stacks } = this.props
+    const { corpus, serverUrl } = this.props
     let stacksExport
     switch(status) {
     case 'IN':
-      stacksExport = stacks.find((s) => s.name === status)
+      stacksExport = STACKS_LIST.find((s) => s.name === status)
       jsonrpc(serverUrl)(stacksExport.method, stacksExport.args.concat(corpus.corpus_id))
         .then((webentities) => this.downloadWebentities(webentities, status, fileFormat))
       break
     case 'IN_UNDECIDED':
-      stacksExport = stacks.filter((s) => s.name === 'IN' || s.name === 'UNDECIDED')
+      stacksExport = STACKS_LIST.filter((s) => s.name === 'IN' || s.name === 'UNDECIDED')
       Promise.all(stacksExport.map((stack) => jsonrpc(serverUrl)(stack.method, stack.args.concat(corpus.corpus_id))))
         .then((list) => {
           const webentities = list[0].concat(list[1])
@@ -78,11 +81,11 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { stacks, corpus, status, serverUrl, instanceUrl, activeTab, openTab, fetchStackAndSetTab } = this.props
+    const { selectedStack, corpus, status, serverUrl, instanceUrl, activeTab, openTab, fetchStackAndSetTab } = this.props
     
     const handleFetchStackAndSetTab = (stackName) => {
-      const selectedStack = stacks.find((stack) => stack.name === stackName)
-      fetchStackAndSetTab(serverUrl, corpus.corpus_id, selectedStack, activeTab.id)
+      const findStack = STACKS_LIST.find((stack) => stack.name === stackName)
+      fetchStackAndSetTab(serverUrl, corpus.corpus_id, findStack, activeTab.id)
     }
     
     if (!corpus) {
@@ -97,13 +100,14 @@ class BroswerContainer extends React.Component {
         <BrowserLayout 
           corpus={ corpus }
           status={ status }
-          stacks = { stacks }
+          selectedStack={ selectedStack }
           isEmpty={ total_webentities === 0 }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
           onSelectStack = { handleFetchStackAndSetTab }
           openTab={ openTab } />
         }
+        <Notification />
       </CorpusStatusWatcher>
     )
   }
@@ -112,7 +116,6 @@ class BroswerContainer extends React.Component {
 BroswerContainer.propTypes = {
   corpus: PropTypes.object,
   status: PropTypes.object,
-  stacks: PropTypes.array,
   serverUrl: PropTypes.string,
   instanceUrl: PropTypes.string,
   tlds: PropTypes.object,
@@ -124,7 +127,7 @@ BroswerContainer.propTypes = {
 const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }, stacks, ui }) => ({
   corpus: corpora.selected,
   status: corpora.status,
-  stacks: stacks.list,
+  selectedStack: stacks.selected,
   tlds: webentities.tlds,
   activeTab: tabs.activeTab,
   serverUrl: servers.selected.url,

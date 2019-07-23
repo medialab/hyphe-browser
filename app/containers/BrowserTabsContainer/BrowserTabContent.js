@@ -9,6 +9,7 @@ import { intlShape } from 'react-intl'
 import networkErrors from 'chromium-net-errors'
 
 import {
+  STACKS_LIST,
   PAGE_HYPHE_HOME } from '../../constants'
 
 import BrowserBar from '../../components/BrowserBar'
@@ -226,14 +227,14 @@ class BrowserTabContent extends React.Component {
 
   renderContent () {
     const { 
-      id, url, eventBus, closable, isEmpty, server, corpusId, stacks,
+      id, url, eventBus, closable, isEmpty, server, corpusId,
       selectedEngine, fetchStackAndSetTab,
       onChangeEngine, setTabUrl } = this.props
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     
     const handleFetchStackAndSetTab = (stackName) => {
-      const selectedStack = stacks.find((stack) => stack.name === stackName)
-      fetchStackAndSetTab(server.url, corpusId, selectedStack, id)
+      const findStack = STACKS_LIST.find((stack) => stack.name === stackName)
+      fetchStackAndSetTab(server.url, corpusId, findStack, id)
     }
 
     return (url === PAGE_HYPHE_HOME) ? 
@@ -484,7 +485,6 @@ const mapStateToProps = (
   webentity,
   selectedWebentity: webentities.selected,
   loadingWebentityStack: stacks.loadingWebentity,
-  stacks: stacks.list,
   mergeRequired: webentities.merges[id],
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,

@@ -7,6 +7,9 @@ import { showError, hideError } from '../../actions/browser'
 import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
 import { fetchTagsCategories, fetchTags } from '../../actions/tags'
 import { fetchTLDs } from '../../actions/webentities'
+import { fetchStack } from '../../actions/stacks'
+import { STACKS_LIST } from '../../constants'
+
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
   ERROR_CORPUS_NOT_STARTED,
@@ -82,7 +85,11 @@ class CorpusStatusWatcher extends React.Component {
 
   // Data that must be initialized only once
   initDataOnceStarted () {
-    const { fetchTLDs, showError, serverUrl, corpus } = this.props
+    const { fetchTLDs, fetchStack, showError, serverUrl, corpus } = this.props
+    
+    const findStack = STACKS_LIST.find((stack) => stack.name === 'DISCOVERED')
+    fetchStack(serverUrl, corpus.corpus_id, findStack)
+    
     fetchTLDs(serverUrl, corpus.corpus_id)
       .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
   }
@@ -107,6 +114,7 @@ CorpusStatusWatcher.propTypes = {
   startCorpus: PropTypes.func,
   fetchTagsCategories: PropTypes.func,
   fetchTags: PropTypes.func,
+  fetchStack: PropTypes.func,
   fetchTLDs: PropTypes.func
 }
 
@@ -124,5 +132,6 @@ export default connect(mapStateToProps, {
   startCorpus,
   fetchTagsCategories,
   fetchTags,
+  fetchStack,
   fetchTLDs
 })(CorpusStatusWatcher)

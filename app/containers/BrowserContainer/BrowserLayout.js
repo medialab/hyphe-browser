@@ -3,7 +3,7 @@ import './BrowserLayout.styl'
 import React, { useState } from 'react'
 import cx from 'classnames'
 
-// import ListLayout from './ListLayout'
+import StackListContainer from '../StackListContainer'
 import WebentityBrowseContainer from '../WebentityBrowseContainer'
 import HelpPin from '../../components/HelpPin'
 
@@ -28,22 +28,6 @@ const BrowserLayout = ({
   const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
   const [browserMode, setBrowserMode] = useState('browse')
   
-  // const [selectedList, setSelectedListReal] = useState(listStatus)
-  // const [isOpen, setOpen] = useState(false)
-
-  // const setSelectedList = l => {
-  //   if (l === selectedList) {
-  //     setOpen(!isOpen)
-  //   } else {
-  //     setSelectedListReal(l)
-  //     setOpen(false)
-  //   }
-  //   resetActions()
-  // }
-
-  // TODO: save in redux state
-  // const hasPendingActions = false
-
   const onSetAsideMode = mode => setAsideMode(mode)
 
   const handleOpenTabFromHyphe = (url) => {
@@ -78,9 +62,12 @@ const BrowserLayout = ({
             <div className="aside-content" style={ asideMode === 'webentityBrowse' ? {}: { display: 'none' } }>
               <WebentityBrowseContainer />
             </div>
-            {/* <div className="aside-content" style={ asideMode === 'stackList' ? {}: { display: 'none' } }>
-              <ListLayout />
-            </div> */}
+            <div className="aside-content" style={ asideMode === 'stackList' ? {}: { display: 'none' } }>
+              <StackListContainer
+                isLanding={ isLanding } 
+                isEmpty={ isEmpty } 
+              />
+            </div>
           </aside>
           <section className="browser-column browser-main-column">
             <BrowserTabsContainer />

@@ -32,7 +32,7 @@ const EntityCard = ({
         <h4 className="name">{name}</h4>
         <h5 className="url">{homepage}</h5>
         {
-          indegree && 
+          !!indegree && 
           <div className="statistics">
             <i className="ti-link" />
             <span className="text">

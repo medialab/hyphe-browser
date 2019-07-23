@@ -13,6 +13,7 @@ import jsonrpc from '../utils/jsonrpc'
 
 import {
   CRAWL_DEPTH,
+  STACKS_LIST,
   NOTICE_WEBENTITY_CREATED,
   NOTICE_WEBENTITY_ADJUST_FAILURE,
   NOTICE_WEBENTITY_CRAWL_STARTED,
@@ -23,6 +24,7 @@ import {
 } from '../constants'
 
 import { showNotification } from './browser'
+import { fetchStack } from './stacks';
 
 
 // adding a page to corpus
@@ -345,7 +347,7 @@ export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (disp
     })
 }
 
-export const batchWebentityActions = (actions, serverUrl, corpusId, webentity, selectedList) => (dispatch) => {
+export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity, selectedList }) => (dispatch) => {
   dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity } })
   const requestActions = actions.map((action) => {
     if (action.type === 'MERGE') {
@@ -356,6 +358,10 @@ export const batchWebentityActions = (actions, serverUrl, corpusId, webentity, s
   })
   return Promise.all(requestActions)
     .then(() => {
+      const findStack = STACKS_LIST.find((stack) => stack.name === selectedList)
+      if (findStack) {
+        return dispatch(fetchStack(serverUrl, corpusId, findStack))
+      }
       if (selectedList === 'referrers') {
         return dispatch(fetchReferrers(serverUrl, corpusId, webentity))
       }
