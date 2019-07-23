@@ -18,8 +18,6 @@ import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import { STACKS_LIST } from '../../constants'
 
 const StackListContainer = ({ 
-  isLanding,
-  isEmpty,
   activeTab, 
   corpusId,
   status,
@@ -86,18 +84,17 @@ const StackListContainer = ({
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
   
   const counters = status.corpus.traph.webentities
+  const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   if (!selectedStack) return null
   return (<StackListLayout
-    isEmpty={ isEmpty }
-    isLanding={ isLanding }
     counters={ counters }
     stackWebentities = { stackWebentities[selectedStack] || [] }
     selectedStack={ selectedStack }
     loadingStack={ loadingStack }
     loadingWebentity= { loadingWebentity }
     loadingBatchActions = { loadingBatchActions }
-    tabUrl={ activeTab.url }
+    tabWebentity={ tabWebentity }
     onSelectWebentity={ handleSelectWebentity }
     // onDownloadList={ handleDownloadList }
     onSetTabUrl={ handleSetTabUrl }
@@ -119,12 +116,7 @@ StackListContainer.propTypes = {
   setTabUrl: PropTypes.func,
 }
 
-const mapStateToProps = (
-  { corpora, servers, stacks, webentities, tabs, ui: { loaders } }, 
-  { isLanding, isEmpty } // own props
-) => ({
-  isLanding,
-  isEmpty,
+const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { loaders } }) => ({
   status: corpora.status,
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,

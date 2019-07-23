@@ -11,21 +11,19 @@ import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
 
 const StackListLayout = ({
-  isLanding,
-  isEmpty,
   counters,
   selectedStack,
   stackWebentities,
-  tabUrl,
+  tabWebentity,
   loadingBatchActions,
   onSelectStack,
   onBatchActions,
-  onOpenTab
-
+  onSelectWebentity
 }) => {
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [selectedList, setSelectedListReal] = useState(selectedStack)
   const [isOpen, setOpen] = useState(false)
+  const [searchString, setSearchString] = useState('')
 
   useEffect(() => {
     setSelectedListReal(selectedStack)
@@ -47,6 +45,7 @@ const StackListLayout = ({
     onBatchActions(pendingActions, selectedStack)
     resetActions()
   }
+
   const setSelectedList = l => {
     if (l === selectedStack) {
       setOpen(!isOpen)
@@ -57,6 +56,10 @@ const StackListLayout = ({
     }
     resetActions()
   }
+  const handleSearch = (e) => setSearchString(e.target.value)
+
+  const isEmpty = counters[selectedList] === 0
+
   return (
     <div className="list-layout">
       <div className="status-list-container">
@@ -80,7 +83,7 @@ const StackListLayout = ({
                         </button>
                       </span>
                       <span className="count">
-                        {isEmpty ? 0 : counters[stack.id]}
+                        {counters[stack.id]}
                       </span>
                     </li>
                   )
@@ -96,7 +99,10 @@ const StackListLayout = ({
       </div>
       <div className="webentities-list-wrapper">
         <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
-          <input placeholder="search a webentity in the prospections list" />
+          <input 
+            placeholder={`search a webentity in the ${selectedList} list`}
+            value={ searchString }
+            onChange={ handleSearch } />
           <span className={ cx('filter-container', { 'is-active': isFilterOpen }) }>
             <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
                     filter <i className="ti-angle-down" />
@@ -115,43 +121,48 @@ const StackListLayout = ({
             {isEmpty ? 
               <li className="placeholder-empty">{'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}</li>
               :
-              stackWebentities.map((entity, index)=> {
+              stackWebentities
+                .filter((webentity) => {
+                  if (searchString.length) {	
+                    return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
+                  }	
+                  return true
+                })
+                .map((entity, index)=> {
 
-                const toggleAction = (obj, key, status) => {
-                  return {
-                    ...obj,
-                    [key]: obj[key] === status ? null : status
+                  const toggleAction = (obj, key, status) => {
+                    return {
+                      ...obj,
+                      [key]: obj[key] === status ? null : status
+                    }
                   }
-                }
 
-                const handleClickLink = (e) => {
-                  e.stopPropagation()
-                  onOpenTab(entity.homepage)
-                }
+                  const handleClickLink = () => onSelectWebentity(entity)
  
-                const handleClickOut = (e) => {
-                  e.stopPropagation()
-                  setStatusActions(toggleAction(statusActions, entity.id, 'OUT'))
-                }
-                const handleClickUndecided = (e) => {
-                  e.stopPropagation()
-                  setStatusActions(toggleAction(statusActions, entity.id, 'UNDECIDED'))
-                }
-    
-                return (
-                  <EntityCard 
-                    key={ index }
-                    allowMerge={ false }
-                    link={ entity }
-                    isActive={ !isLanding && tabUrl === entity.homepage } 
-                    onClickLink={ handleClickLink } 
-                    onClickOut={ handleClickOut }
-                    onClickUndecided={ handleClickUndecided }
-                    isUndecidedActive={ statusActions[entity.id] === 'UNDECIDED' }
-                    isOutActive={ statusActions[entity.id] === 'OUT' }
-                  />
-                )
-              })
+                  const handleClickOut = (e) => {
+                    e.stopPropagation()
+                    setStatusActions(toggleAction(statusActions, entity.id, 'OUT'))
+                  }
+                  const handleClickUndecided = (e) => {
+                    e.stopPropagation()
+                    setStatusActions(toggleAction(statusActions, entity.id, 'UNDECIDED'))
+                  }
+                  const isActive = tabWebentity && tabWebentity.status === selectedStack && tabWebentity.id === entity.id
+
+                  return (
+                    <EntityCard 
+                      key={ index }
+                      allowMerge={ false }
+                      link={ entity }
+                      isActive={ isActive } 
+                      onClickLink={ handleClickLink } 
+                      onClickOut={ handleClickOut }
+                      onClickUndecided={ handleClickUndecided }
+                      isUndecidedActive={ statusActions[entity.id] === 'UNDECIDED' }
+                      isOutActive={ statusActions[entity.id] === 'OUT' }
+                    />
+                  )
+                })
             }
           </ul>
           {
