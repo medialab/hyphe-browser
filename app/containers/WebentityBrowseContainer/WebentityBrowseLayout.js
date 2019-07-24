@@ -153,7 +153,12 @@ const WebentityBrowseLayout = ({
           helpPlace={ 'right' }
         >
           <ul className="set-status-container">
-            <li className={ webentity.status === 'IN' ? 'in' : '' } onClick={ () => setModalIsOpen(true) }>IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin></li>
+            <li 
+              className={ webentity.status === 'IN' ? 'in' : '' } 
+              // onClick={ () => setModalIsOpen(true)}
+              onClick={ () => onSetWebentityStatus('IN')  }>
+                IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
+            </li>
             <li 
               className={ webentity.status === 'UNDECIDED' ? 'undecided' : '' }
               onClick={ () => onSetWebentityStatus('UNDECIDED') }>
