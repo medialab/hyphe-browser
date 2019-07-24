@@ -16,7 +16,6 @@ const BrowserLayout = ({
   corpus,
   status,
   instanceUrl,
-  isEmpty,
   isLanding,
   // actions
   onSelectStack,
@@ -64,8 +63,7 @@ const BrowserLayout = ({
             </div>
             <div className="aside-content" style={ (asideMode === 'stackList' || isLanding) ? {}: { display: 'none' } }>
               <StackListContainer
-                isLanding={ isLanding } 
-                isEmpty={ isEmpty } 
+                setAsideMode={ onSetAsideMode }
               />
             </div>
           </aside>

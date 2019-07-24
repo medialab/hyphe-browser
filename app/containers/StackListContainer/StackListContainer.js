@@ -29,6 +29,7 @@ const StackListContainer = ({
   loadingBatchActions,
   tlds,
   // actions
+  setAsideMode, // props action
   fetchStack,
   setTabUrl,
   openTab,
@@ -39,6 +40,7 @@ const StackListContainer = ({
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
     setTabUrl(webentity.homepage, activeTab.id)
+    setAsideMode('webentityBrowse')
   }
   
   // const handleDownloadList = (list) => {

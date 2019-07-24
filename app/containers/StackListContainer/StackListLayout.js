@@ -2,6 +2,8 @@ import './StackListLayout.styl'
 
 import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
+import { FormattedMessage as T, intlShape } from 'react-intl'
+
 import { pickBy } from 'lodash'
 
 import EntityCard from '../../components/EntityCard'
@@ -20,7 +22,9 @@ const StackListLayout = ({
   onSelectStack,
   onBatchActions,
   onSelectWebentity
-}) => {
+}, { intl }) => {
+  const { formatMessage } = intl
+
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [filterValue, setFilterValue] = useState(stackFilter)
   const [selectedList, setSelectedListReal] = useState(selectedStack)
@@ -75,6 +79,7 @@ const StackListLayout = ({
   }
 
   const isEmpty = counters[selectedList] === 0
+  const stackInfo = USED_STACKS.find((stack) => stack.id === selectedStack)
 
   return (
     <div className="list-layout">
@@ -95,7 +100,10 @@ const StackListLayout = ({
                     <li key={ index } onClick={ handleSelectList } className={ 'list-name-container ' + (selectedList === stack.id ? 'is-active': '') }>
                       <span className="list-btn-container">
                         <button className={ `list-btn ${stack.value}` }>
-                            Webentities in {stack.value}<HelpPin>webentities discovered through browsing or by analyzing webentities that you included in the corpus</HelpPin>
+                          <T id={ `stack-status.${stack.id}` } />
+                          <HelpPin>
+                            { formatMessage({ id: `stack-status.help.${stack.id}` }) }
+                          </HelpPin>
                         </button>
                       </span>
                       <span className="count">
@@ -116,7 +124,7 @@ const StackListLayout = ({
       <div className="webentities-list-wrapper">
         <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
           <input 
-            placeholder={`search a webentity in the ${selectedList} list`}
+            placeholder={ `search a webentity in the ${stackInfo.value} list` }
             value={ searchString }
             onChange={ handleSearch } />
           <span className={ cx('filter-container', { 'is-active': isFilterOpen }) }>
@@ -198,6 +206,10 @@ const StackListLayout = ({
       </div>
     </div>
   )
+}
+
+StackListLayout.contextTypes = {
+  intl: intlShape
 }
 
 export default StackListLayout

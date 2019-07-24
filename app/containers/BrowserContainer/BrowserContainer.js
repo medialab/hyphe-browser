@@ -98,7 +98,6 @@ class BroswerContainer extends React.Component {
       return <Spinner />
     }
     
-    const { total_webentities } = corpus
     return (
       <CorpusStatusWatcher>
         {corpus && 
@@ -106,7 +105,6 @@ class BroswerContainer extends React.Component {
           corpus={ corpus }
           status={ status }
           selectedStack={ selectedStack }
-          isEmpty={ total_webentities === 0 }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
           onSelectStack = { handleFetchStackAndSetTab }
