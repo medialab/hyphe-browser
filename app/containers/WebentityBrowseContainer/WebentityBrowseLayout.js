@@ -18,7 +18,7 @@ import WebentityNameField from './WebentityNameField'
 
 const WebentityBrowseLayout = ({
   webentity,
-  stackWebentities,
+  webentitiesList,
   selectedStack,
   loadingStack,
   loadingWebentity,
@@ -54,26 +54,26 @@ const WebentityBrowseLayout = ({
 
   // used by Prev (-1) / Next (+1) buttons
   const rotateWebentity = (offset) => {
-    const idx = stackWebentities.findIndex(x => x.id === webentity.id)
+    const idx = webentitiesList.findIndex(x => x.id === webentity.id)
     let findWebentity
     if (idx === -1) {
       // TODO: case webentity is not found in stack fetched, cause "DISCOVERED" list limit is 200
-      findWebentity = stackWebentities[0]
+      findWebentity = webentitiesList[0]
     } else if (idx === 0 && offset === -1) {
-      findWebentity = stackWebentities[stackWebentities.length - 1]
-    }else if (idx === stackWebentities.length - 1 && offset === 1) {
-      findWebentity = stackWebentities[0]
+      findWebentity = webentitiesList[webentitiesList.length - 1]
+    }else if (idx === webentitiesList.length - 1 && offset === 1) {
+      findWebentity = webentitiesList[0]
     } else {
-      findWebentity = stackWebentities[idx + offset]
+      findWebentity = webentitiesList[idx + offset]
     }
     onSelectWebentity(findWebentity)
   }
 
   // disable next / prev
-  const isFirst = stackWebentities && stackWebentities.length && webentity &&
-  webentity.id === stackWebentities[0].id
-  const isLast = stackWebentities && stackWebentities.length && webentity &&
-    webentity.id === stackWebentities[stackWebentities.length - 1].id
+  const isFirst = webentitiesList && webentitiesList.length && webentity &&
+  webentity.id === webentitiesList[0].id
+  const isLast = webentitiesList && webentitiesList.length && webentity &&
+    webentity.id === webentitiesList[webentitiesList.length - 1].id
   const goNextWebentity = () => rotateWebentity(1)
   const goPrevWebentity = () => rotateWebentity(-1)
 

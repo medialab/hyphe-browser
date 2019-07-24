@@ -10,7 +10,7 @@ import {
   batchWebentityActions,
   setWebentityStatus } from '../../actions/webentities'
 
-import { viewWebentity, fetchStack } from '../../actions/stacks'
+import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
 
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { addTag, removeTag, updateTag } from '../../actions/tags'
@@ -36,6 +36,7 @@ const WebentityBrowseContainer = ({
   tlds,
   // actions
   fetchStack,
+  selectStack,
   setTabUrl,
   openTab,
   setWebentityName,
@@ -53,7 +54,11 @@ const WebentityBrowseContainer = ({
 
   useEffect(() => {
     if (webentity && webentity.status !== selectedStack) {
-      fetchStack(serverUrl, corpusId, webentity.status)
+      if (stackWebentities[webentity.status]) {
+        selectStack(webentity.status)
+      } else {
+        fetchStack(serverUrl, corpusId, webentity.status)
+      }
     }
   }, [webentity])
 
@@ -128,7 +133,7 @@ const WebentityBrowseContainer = ({
   if (!webentity) return null
   return (<WebentityBrowseLayout
     webentity={ webentity }
-    stackWebentities = { stackWebentities[selectedStack] || [] }
+    webentitiesList= { stackWebentities[selectedStack].webentities || [] }
     selectedStack={ selectedStack }
     loadingStack={ loadingStack }
     loadingWebentity= { loadingWebentity }
@@ -190,6 +195,7 @@ export default connect(mapStateToProps, {
   cancelWebentityCrawls,
   viewWebentity,
   fetchStack,
+  selectStack,
   batchWebentityActions,
   setWebentityHomepage,
   addTag,

@@ -6,7 +6,7 @@ import {
   batchWebentityActions
 } from '../../actions/webentities'
 
-import { viewWebentity, fetchStack } from '../../actions/stacks'
+import { viewWebentity, selectStack, fetchStack, fetchStackPage } from '../../actions/stacks'
 
 import { setTabUrl, openTab } from '../../actions/tabs'
 import { addTag, removeTag, updateTag } from '../../actions/tags'
@@ -30,7 +30,9 @@ const StackListContainer = ({
   tlds,
   // actions
   setAsideMode, // props action
+  selectStack,
   fetchStack,
+  fetchStackPage,
   setTabUrl,
   openTab,
   viewWebentity,
@@ -75,7 +77,13 @@ const StackListContainer = ({
   //   downloadFile(flatList, fileName, 'csv')
   // }
 
-  const handleFetchStack = (stack, filter) => {
+  const handleSelectStack = (stack, filter) => {
+    // TO BE DISCUSS: at which point should re-fetch the stack list?
+    // if (stackWebentities[stack]) {
+    //   selectStack(stack)
+    // } else {
+    //   fetchStack(serverUrl, corpusId, stack, filter)
+    // }
     fetchStack(serverUrl, corpusId, stack, filter)
   }
 
@@ -83,13 +91,16 @@ const StackListContainer = ({
   const handleOpenTab = (url) => openTab(url, activeTab.id)
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
   
+  const handleFetchStackPage = (stack, token, page) => {
+    fetchStackPage({ serverUrl, corpusId, stack, token, page })
+  }
   const counters = status.corpus.traph.webentities
   const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   if (!selectedStack) return null
   return (<StackListLayout
     counters={ counters }
-    stackWebentities = { stackWebentities[selectedStack] || [] }
+    stackWebentities = { stackWebentities }
     selectedStack={ selectedStack }
     stackFilter={ stackFilter }
     loadingStack={ loadingStack }
@@ -99,7 +110,8 @@ const StackListContainer = ({
     onSelectWebentity={ handleSelectWebentity }
     // onDownloadList={ handleDownloadList }
     onSetTabUrl={ handleSetTabUrl }
-    onSelectStack= { handleFetchStack }
+    onSelectStack= { handleSelectStack }
+    onLoadNextPage={ handleFetchStackPage }
     onOpenTab={ handleOpenTab }
     onBatchActions = { handleBatchActions } />)
 }
@@ -137,7 +149,9 @@ export default connect(mapStateToProps, {
   openTab,
   setTabUrl,
   viewWebentity,
+  selectStack,
   fetchStack,
+  fetchStackPage,
   batchWebentityActions,
   addTag,
   updateTag,

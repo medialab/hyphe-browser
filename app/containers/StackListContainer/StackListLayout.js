@@ -18,9 +18,11 @@ const StackListLayout = ({
   stackFilter,
   stackWebentities,
   tabWebentity,
+  loadingStack,
   loadingBatchActions,
   onSelectStack,
   onBatchActions,
+  onLoadNextPage,
   onSelectWebentity
 }, { intl }) => {
   const { formatMessage } = intl
@@ -77,10 +79,13 @@ const StackListLayout = ({
     setFilterValue(newValue)
     setFilterOpen(false) 
   }
+  const handleLoadNextPage = () => {
+    const { token, next_page } = stackWebentities[selectedStack]
+    onLoadNextPage(selectedStack, token, next_page)
+  }
 
   const isEmpty = counters[selectedList] === 0
   const stackInfo = USED_STACKS.find((stack) => stack.id === selectedStack)
-
   return (
     <div className="list-layout">
       <div className="status-list-container">
@@ -107,7 +112,7 @@ const StackListLayout = ({
                         </button>
                       </span>
                       <span className="count">
-                        {counters[stack.id]}
+                        {stackWebentities[stack.id] && stackWebentities[stack.id].total_results}
                       </span>
                     </li>
                   )
@@ -140,11 +145,12 @@ const StackListLayout = ({
           </span>
         </div>
         <div className="webentities-list-container">
-          <ul className={ cx('webentities-list', { 'is-loading': loadingBatchActions }) }>
+          <ul className={ cx('webentities-list', { 'is-loading': loadingBatchActions || loadingStack }) }>
             {isEmpty ? 
               <li className="placeholder-empty">{'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}</li>
               :
-              stackWebentities
+              stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
+              stackWebentities[selectedStack].webentities
                 .filter((webentity) => {
                   if (searchString.length) {	
                     return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
@@ -161,7 +167,7 @@ const StackListLayout = ({
                   }
 
                   const handleClickLink = () => onSelectWebentity(entity)
- 
+
                   const handleClickOut = (e) => {
                     e.stopPropagation()
                     setStatusActions(toggleAction(statusActions, entity.id, 'OUT'))
@@ -186,6 +192,13 @@ const StackListLayout = ({
                     />
                   )
                 })
+                
+            }
+            {
+              stackWebentities[selectedStack] && 
+              stackWebentities[selectedStack].token &&
+              stackWebentities[selectedStack].next_page && 
+              <li className="entity-card pagination" onClick={ handleLoadNextPage }>load more...</li>
             }
           </ul>
           {
