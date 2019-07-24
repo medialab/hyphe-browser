@@ -8,9 +8,7 @@ import { intlShape } from 'react-intl'
 
 import networkErrors from 'chromium-net-errors'
 
-import {
-  STACKS_LIST,
-  PAGE_HYPHE_HOME } from '../../constants'
+import { PAGE_HYPHE_HOME } from '../../constants'
 
 import BrowserBar from '../../components/BrowserBar'
 import NewTabContent from '../../components/NewTabContent'
@@ -232,9 +230,14 @@ class BrowserTabContent extends React.Component {
       onChangeEngine, setTabUrl } = this.props
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     
-    const handleFetchStackAndSetTab = (stackName) => {
-      const findStack = STACKS_LIST.find((stack) => stack.name === stackName)
-      fetchStackAndSetTab(server.url, corpusId, findStack, id)
+    const handleFetchStackAndSetTab = (stack, filter) => {
+      fetchStackAndSetTab({
+        serverUrl: server.url, 
+        corpusId, 
+        stack, 
+        filter,
+        tabId: id
+      })
     }
 
     return (url === PAGE_HYPHE_HOME) ? 

@@ -13,6 +13,7 @@ import { USED_STACKS } from '../../constants'
 const StackListLayout = ({
   counters,
   selectedStack,
+  stackFilter,
   stackWebentities,
   tabWebentity,
   loadingBatchActions,
@@ -21,6 +22,7 @@ const StackListLayout = ({
   onSelectWebentity
 }) => {
   const [isFilterOpen, setFilterOpen] = useState(false)
+  const [filterValue, setFilterValue] = useState(stackFilter)
   const [selectedList, setSelectedListReal] = useState(selectedStack)
   const [isOpen, setOpen] = useState(false)
   const [searchString, setSearchString] = useState('')
@@ -28,6 +30,10 @@ const StackListLayout = ({
   useEffect(() => {
     setSelectedListReal(selectedStack)
   }, [selectedStack])
+
+  useEffect(() => {
+    setFilterValue(stackFilter)
+  }, [stackFilter])
 
   const [statusActions, setStatusActions] = useState({})
 
@@ -57,6 +63,16 @@ const StackListLayout = ({
     resetActions()
   }
   const handleSearch = (e) => setSearchString(e.target.value)
+
+  const handleSelectFilter = (value) => {
+    let newValue = value
+    if (filterValue === value) {
+      newValue = null
+    }
+    onSelectStack(selectedStack, newValue)
+    setFilterValue(newValue)
+    setFilterOpen(false) 
+  }
 
   const isEmpty = counters[selectedList] === 0
 
@@ -108,10 +124,9 @@ const StackListLayout = ({
                     filter <i className="ti-angle-down" />
             </button>
             {isFilterOpen && 
-              <ul onClick={ () => setFilterOpen(false) } className="filter-options">
-                <li>Show only webentities with no tags</li>
-                <li>Show only webentities with incomplete tags</li>
-                <li>Show only new webentities</li>
+              <ul className="filter-options">
+                <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }>Show only webentities with no tags</li>
+                <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }>Show only webentities with incomplete tags</li>
               </ul>
             }
           </span>

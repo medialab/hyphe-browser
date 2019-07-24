@@ -16,15 +16,29 @@ export const STOPPED_LOADING_WEBENTITY = '§_STOPPED_LOADING_WEBENTITY'
 
 export const emptyStack = createAction(EMPTY_STACK, (stack) => ({ stack }))
 
-export const requestStack = createAction(FETCH_STACK_REQUEST, (serverUrl, stack) => ({ serverUrl, stack }))
-export const receiveStack = createAction(FETCH_STACK_SUCCESS, (serverUrl, stack, webentities) => ({ serverUrl, stack, webentities }))
-export const fetchStack = (serverUrl, corpusId, stack) => (dispatch) => {
-  dispatch(requestStack(serverUrl, stack))
-
-  return jsonrpc(serverUrl)(stack.method, stack.args.concat(corpusId))
+export const requestStack = createAction(FETCH_STACK_REQUEST, (serverUrl, stack, filter) => ({ serverUrl, stack, filter }))
+export const receiveStack = createAction(FETCH_STACK_SUCCESS, (serverUrl, stack, webentities, filter) => ({ serverUrl, stack, filter, webentities }))
+export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) => {
+  dispatch(requestStack(serverUrl, stack, filter))
+  if (filter) {
+    return jsonrpc(serverUrl)(
+      'store.get_webentities_mistagged', 
+      [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
+    ).then((res) => dispatch(receiveStack(serverUrl, stack, res.webentities || res, filter)))
+      .catch((error) => dispatch({
+        type: FETCH_STACK_FAILURE,
+        payload: { error, serverUrl, stack }
+      }))
+  }
+  return jsonrpc(serverUrl)(
+    'store.get_webentities_by_status', 
+    [stack, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
+  )
     // when args contains a count, metadata are attached to res,
     // meanwhile webentities are returned directly as an array if count == -1
-    .then((res) => dispatch(receiveStack(serverUrl, stack, res.webentities || res)))
+    .then((res) => {
+      dispatch(receiveStack(serverUrl, stack, res.webentities || res, filter))
+    })
     .catch((error) => dispatch({
       type: FETCH_STACK_FAILURE,
       payload: { error, serverUrl, stack }
@@ -38,8 +52,8 @@ export const stoppedLoadingWebentity = createAction(STOPPED_LOADING_WEBENTITY)
 
 
 
-export const fetchStackAndSetTab = (serverUrl, corpusId, stack, tabId) => (dispatch) => {
-  return dispatch(fetchStack(serverUrl, corpusId, stack))
+export const fetchStackAndSetTab = ({ serverUrl, corpusId, stack, filter, tabId }) => (dispatch) => {
+  return dispatch(fetchStack(serverUrl, corpusId, stack, filter))
     .then((action) => {
       if (action.payload && action.payload.webentities && action.payload.webentities[0]) {
         const webentity = action.payload.webentities[0] 

@@ -50,6 +50,10 @@ const NewTabContent = ({
   }
   
   const handleChangeEngine = (e) => onChangeEngine(e.target.value)
+  const handleSelectTagStack = () => {
+    const filter = 'no-tag'
+    onSelectStack('IN', filter)
+  } 
   return (
     <div className="entry-tab-content">
       <div className="content-wrapper">
@@ -74,7 +78,7 @@ const NewTabContent = ({
               </button>
             </li>
             <li 
-              onClick = { () => onSelectStack('IN_UNTAGGED') }
+              onClick = { handleSelectTagStack }
               className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
                 <h3>Tag</h3>

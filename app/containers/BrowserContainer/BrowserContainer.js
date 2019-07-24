@@ -83,9 +83,14 @@ class BroswerContainer extends React.Component {
   render () {
     const { selectedStack, corpus, status, serverUrl, instanceUrl, activeTab, openTab, fetchStackAndSetTab } = this.props
     
-    const handleFetchStackAndSetTab = (stackName) => {
-      const findStack = STACKS_LIST.find((stack) => stack.name === stackName)
-      fetchStackAndSetTab(serverUrl, corpus.corpus_id, findStack, activeTab.id)
+    const handleFetchStackAndSetTab = (stack, filter) => {
+      fetchStackAndSetTab({
+        serverUrl, 
+        corpusId: corpus.corpus_id, 
+        stack, 
+        filter,
+        tabId: activeTab.id
+      })
     }
     
     if (!corpus) {

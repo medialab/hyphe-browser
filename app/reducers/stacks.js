@@ -14,6 +14,7 @@ import { SELECT_CORPUS } from '../actions/corpora'
 const initialState = {
   selected: null,
   lastRefresh: null,
+  filter: null,
   webentities: {},
   loadingWebentity: false
 }
@@ -32,14 +33,15 @@ export default createReducer(initialState, {
     loading: true
   }),
 
-  [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
+  [FETCH_STACK_SUCCESS]: (state, { stack, filter, webentities }) => ({
     ...state,
     loading: false,
-    selected: stack.name,
+    selected: stack,
+    filter,
     lastRefresh: Date.now(),
     webentities: {
       ...state.webentities,
-      [stack.name]: webentities
+      [stack]: webentities
     }
   }),
 

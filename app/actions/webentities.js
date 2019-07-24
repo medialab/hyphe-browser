@@ -13,7 +13,7 @@ import jsonrpc from '../utils/jsonrpc'
 
 import {
   CRAWL_DEPTH,
-  STACKS_LIST,
+  USED_STACKS,
   NOTICE_WEBENTITY_CREATED,
   NOTICE_WEBENTITY_ADJUST_FAILURE,
   NOTICE_WEBENTITY_CRAWL_STARTED,
@@ -358,9 +358,9 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
   })
   return Promise.all(requestActions)
     .then(() => {
-      const findStack = STACKS_LIST.find((stack) => stack.name === selectedList)
+      const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
       if (findStack) {
-        return dispatch(fetchStack(serverUrl, corpusId, findStack))
+        return dispatch(fetchStack(serverUrl, corpusId, selectedList))
       }
       if (selectedList === 'referrers') {
         return dispatch(fetchReferrers(serverUrl, corpusId, webentity))

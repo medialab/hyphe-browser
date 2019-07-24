@@ -15,8 +15,6 @@ import StackListLayout from './StackListLayout'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
-import { STACKS_LIST } from '../../constants'
-
 const StackListContainer = ({ 
   activeTab, 
   corpusId,
@@ -24,6 +22,7 @@ const StackListContainer = ({
   serverUrl,
   webentities,
   selectedStack,
+  stackFilter,
   stackWebentities,
   loadingStack,
   loadingWebentity,
@@ -74,9 +73,8 @@ const StackListContainer = ({
   //   downloadFile(flatList, fileName, 'csv')
   // }
 
-  const handleFetchStack = (stackName) => {
-    const findStack = STACKS_LIST.find((stack) => stack.name === stackName)
-    fetchStack(serverUrl, corpusId, findStack)
+  const handleFetchStack = (stack, filter) => {
+    fetchStack(serverUrl, corpusId, stack, filter)
   }
 
   const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
@@ -91,6 +89,7 @@ const StackListContainer = ({
     counters={ counters }
     stackWebentities = { stackWebentities[selectedStack] || [] }
     selectedStack={ selectedStack }
+    stackFilter={ stackFilter }
     loadingStack={ loadingStack }
     loadingWebentity= { loadingWebentity }
     loadingBatchActions = { loadingBatchActions }
@@ -122,6 +121,7 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   activeTab: tabs.activeTab,
   webentities,
   selectedStack: stacks.selected,
+  stackFilter: stacks.filter,
   stackWebentities: stacks.webentities,
   tlds: webentities.tlds,
   loadingStack: stacks.loading,

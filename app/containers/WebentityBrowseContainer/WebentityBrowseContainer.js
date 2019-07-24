@@ -21,8 +21,6 @@ import WebentityBrowseLayout from './WebentityBrowseLayout'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
-import { STACKS_LIST } from '../../constants'
-
 const WebentityBrowseContainer = ({ 
   activeTab, 
   corpusId,
@@ -55,8 +53,7 @@ const WebentityBrowseContainer = ({
 
   useEffect(() => {
     if (webentity && webentity.status !== selectedStack) {
-      const findStack = STACKS_LIST.find((stack) => stack.name === webentity.status)
-      fetchStack(serverUrl, corpusId, findStack)
+      fetchStack(serverUrl, corpusId, webentity.status)
     }
   }, [webentity])
 
