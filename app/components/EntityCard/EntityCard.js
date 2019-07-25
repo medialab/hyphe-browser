@@ -17,11 +17,12 @@ const EntityCard = ({
   onClickOut,
   onClickUndecided,
 }) => {
-  const { status, name, homepage, indegree } = link
+  const { status, name, homepage, indegree, viewed } = link
   const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
   
   return (
-    <li className={ cx('entity-card', status, { 'is-active': isActive }) }
+    <li 
+      className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
       onClick={ onClickLink }>
       {displayStatus
       &&
