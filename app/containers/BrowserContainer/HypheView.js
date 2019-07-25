@@ -13,13 +13,32 @@ class HypheView extends React.Component {
 
   componentDidMount () {
     const webview = document.querySelector('webview')
+    this.node = webview
 
     webview.addEventListener('did-start-loading', this.loadStart)
-    webview.addEventListener('did-stop-loading', this.loadStop)
+    webview.addEventListener('did-stop-loading', () => {
+      this.loadStop()
+      webview.executeJavaScript(
+        // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
+        "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; " +
+        // Remove leave corpus button from Hyphe tab within HyBro
+        "document.querySelector('.topbar-project button').remove(); " +
+        "document.querySelector('#hybro-link').remove();"
+      )
+    })
 
     webview.addEventListener('new-window', ({ url }) => {
       this.props.onOpenTabFromHyphe(url)
     })
+  }
+
+  componentDidUpdate (prevProps) {
+    // reload when is network view
+    if (this.props.isHypheView !== prevProps.isHypheView &&
+        this.props.isHypheView && 
+        this.node.src === this.props.url ) {
+      this.node.reload()
+    }
   }
 
   loadStart = () => {
@@ -53,6 +72,7 @@ class HypheView extends React.Component {
 
 HypheView.propTypes = {
   url: PropTypes.string.isRequired,
+  isHypheView: PropTypes.bool.isRequired,
   onOpenTabFromHyphe: PropTypes.func.isRequired,
 }
 
