@@ -64,7 +64,7 @@ const StackListLayout = ({
       setOpen(!isOpen)
     } else {
       setSelectedListReal(l)
-      onSelectStack(l)
+      onSelectStack(l, filterValue)
       setOpen(false)
     }
     resetActions()
@@ -125,7 +125,7 @@ const StackListLayout = ({
                         </button>
                       </span>
                       <span className="count">
-                        {stackWebentities[stack.id] && stackWebentities[stack.id].total_results}
+                        {counters[stack.id]}
                       </span>
                     </li>
                   )
