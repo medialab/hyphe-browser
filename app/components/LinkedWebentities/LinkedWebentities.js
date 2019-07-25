@@ -1,6 +1,5 @@
 import './LinkedWebentities.styl'
 
-import '../../containers/SideBar/side-bar-contextual-lists.styl'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 
 import React, { useState } from 'react'

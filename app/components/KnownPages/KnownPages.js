@@ -1,7 +1,5 @@
 import './KnownPages.styl'
 
-import '../../containers/SideBar/side-bar-contextual-lists.styl'
-
 import React, { useState } from 'react'
 import { intlShape } from 'react-intl'
 
