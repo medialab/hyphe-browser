@@ -91,16 +91,13 @@ app.on('ready', () => {
     Menu.setApplicationMenu(menu)
   })
 
-  // Disable menubar
-  // const menu = getMenuBar()
-  // Menu.setApplicationMenu(menu)
-
   // Debug menu, whatever environment
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
   shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
   shortcuts.register('F12', () => window.toggleDevTools())
+  
   // Force reload
-  shortcuts.register('Ctrl+R', () => window.reload())
+  shortcuts.register('Shift+Ctrl+R', () => window.reload())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
@@ -175,57 +172,57 @@ function getNewMenuBar (locale, setting) {
       ]
     },
     // { role: 'downloadMenu' }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ,
-    // {
-    //   label: locale === 'en-US' ? 'Download': 'Télécharger',
-    //   submenu: [                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-    //     { label: 'IN WebEntities as CSV',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'IN', 'csv') }
-    //     },
-    //     { label: 'IN WebEntities as JSON',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'IN', 'json') }
-    //     },
-    //     // { label: 'IN WebEntities as Sitography',
-    //     //   enabled: enableDownload,
-    //     //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
-    //     // },
-    //     { label: 'IN + UNDECIDED WebEntities as CSV',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
-    //     },
-    //     { label: 'IN + UNDECIDED WebEntities as JSON',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
-    //     },
-    //     // { label: 'IN + UNDECIDED WebEntities as Sitography',
-    //     //   enabled: enableDownload,
-    //     //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') } 
-    //     // },
-    //     { type: 'separator' },
-    //     { label: 'Tags as CSV',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'tags', 'csv') }
-    //     },
-    //     { label: 'Tags as JSON',
-    //       enabled: enableDownload,
-    //       click () { window.webContents.send('exportFile', 'tags', 'json') }
-    //     },
-    //   ]
-    // }
+    {
+      label: locale === 'en-US' ? 'Download': 'Télécharger',
+      submenu: [                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+        { label: 'IN WebEntities as CSV',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'IN', 'csv') }
+        },
+        { label: 'IN WebEntities as JSON',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'IN', 'json') }
+        },
+        // { label: 'IN WebEntities as Sitography',
+        //   enabled: enableDownload,
+        //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
+        // },
+        { label: 'IN + UNDECIDED WebEntities as CSV',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
+        },
+        { label: 'IN + UNDECIDED WebEntities as JSON',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
+        },
+        // { label: 'IN + UNDECIDED WebEntities as Sitography',
+        //   enabled: enableDownload,
+        //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') } 
+        // },
+        { type: 'separator' },
+        { label: 'Tags as CSV',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'tags', 'csv') }
+        },
+        { label: 'Tags as JSON',
+          enabled: enableDownload,
+          click () { window.webContents.send('exportFile', 'tags', 'json') }
+        },
+      ]
+    }
   ]
   const menu = Menu.buildFromTemplate(template)
-  // ipc.on('corpusReady', () => {
-  //   menu.items[1].submenu.items.forEach((item) => {
-  //     item.enabled = true
-  //   })
-  // })
+  ipc.on('corpusReady', () => {
+    menu.items[1].submenu.items.forEach((item) => {
+      item.enabled = true
+    })
+  })
   
-  // ipc.on('corpusClosed', () => {
-  //   menu.items[1].submenu.items.forEach((item) => {
-  //     item.enabled = false
-  //   })
-  // })
+  ipc.on('corpusClosed', () => {
+    menu.items[1].submenu.items.forEach((item) => {
+      item.enabled = false
+    })
+  })
   
   return menu
 }
