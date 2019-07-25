@@ -45,37 +45,15 @@ const StackListContainer = ({
     setAsideMode('webentityBrowse')
   }
   
-  // const handleDownloadList = (list) => {
-  //   let listName
-  //   switch (list) {
-  //   case 'mostLinked':
-  //     listName = 'mostLinkedPages'
-  //     break
-  //   case 'referrers':
-  //     listName = 'citingWebEntities'
-  //     break
-  //   case 'referrals':
-  //     listName = 'citedWebEntities'
-  //     break
-  //   case 'parents':
-  //     listName = 'parentWebEntities'
-  //     break
-  //   case 'children':
-  //     listName = 'childrenWebEntities'
-  //     break
-  //   default:
-  //     listName = list
-  //     break
-  //   }
-  //   const webentityName = webentity.name.replace(/[\s\/]/g, '_')
-  //   const parsedWebentity = webentity[list].map(
-  //     (we) => we.tags ? fieldParser(we, tlds, 'csv') : we
-  //   )
+  const handleDownloadList = (list) => {
+    const fileName = `${corpusId}_${selectedStack}`
+    const parsedWebentity = list.map(
+      (we) => we.tags ? fieldParser(we, tlds, 'csv') : we
+    )
 
-  //   const flatList = flatTag(parsedWebentity)
-  //   const fileName = `${corpusId}_${webentityName}_${listName}`
-  //   downloadFile(flatList, fileName, 'csv')
-  // }
+    const flatList = flatTag(parsedWebentity)
+    downloadFile(flatList, fileName, 'csv')
+  }
 
   const handleSelectStack = (stack, filter) => {
     // TO BE DISCUSS: at which point should re-fetch the stack list?
@@ -108,7 +86,7 @@ const StackListContainer = ({
     loadingBatchActions = { loadingBatchActions }
     tabWebentity={ tabWebentity }
     onSelectWebentity={ handleSelectWebentity }
-    // onDownloadList={ handleDownloadList }
+    onDownloadList={ handleDownloadList }
     onSetTabUrl={ handleSetTabUrl }
     onSelectStack= { handleSelectStack }
     onLoadNextPage={ handleFetchStackPage }

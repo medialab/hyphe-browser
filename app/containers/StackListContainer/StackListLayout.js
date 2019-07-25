@@ -23,6 +23,7 @@ const StackListLayout = ({
   onSelectStack,
   onBatchActions,
   onLoadNextPage,
+  onDownloadList,
   onSelectWebentity
 }, { intl }) => {
   const { formatMessage } = intl
@@ -82,6 +83,18 @@ const StackListLayout = ({
   const handleLoadNextPage = () => {
     const { token, next_page } = stackWebentities[selectedStack]
     onLoadNextPage(selectedStack, token, next_page)
+  }
+
+  const handleDownloadList = () => {
+    const filteredList = 
+    stackWebentities[selectedStack].webentities
+      .filter((webentity) => {
+        if (searchString.length) {	
+          return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
+        }	
+        return true
+      })
+    onDownloadList(filteredList)
   }
 
   const isEmpty = counters[selectedList] === 0
@@ -213,7 +226,7 @@ const StackListLayout = ({
         {
           !isEmpty &&
             <div className="webentities-list-footer">
-              <DownloadListBtn />
+              <DownloadListBtn onClickDownload={ handleDownloadList } />
             </div>
         }
       </div>
