@@ -30,13 +30,13 @@ export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) =
       [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
     ).then((res) => {
       if(stack === 'DISCOVERED') {
-        dispatch(receiveStack(serverUrl, stack, res, filter))
+        return dispatch(receiveStack(serverUrl, stack, res, filter))
       } else {
         const webentities = {
           webentities: res,
           total_results: res.length
         }
-        dispatch(receiveStack(serverUrl, stack, webentities, filter))
+        return dispatch(receiveStack(serverUrl, stack, webentities, filter))
       }
     }).catch((error) => dispatch({
       type: FETCH_STACK_FAILURE,
@@ -51,13 +51,13 @@ export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) =
     // meanwhile webentities are returned directly as an array if count == -1
     .then((res) => {
       if(stack === 'DISCOVERED') {
-        dispatch(receiveStack(serverUrl, stack, res, filter))
+        return dispatch(receiveStack(serverUrl, stack, res, filter))
       } else {
         const webentities = {
           webentities: res,
           total_results: res.length
         }
-        dispatch(receiveStack(serverUrl, stack, webentities, filter))
+        return dispatch(receiveStack(serverUrl, stack, webentities, filter))
       }
     })
     .catch((error) => dispatch({
@@ -90,8 +90,9 @@ export const stoppedLoadingWebentity = createAction(STOPPED_LOADING_WEBENTITY)
 export const fetchStackAndSetTab = ({ serverUrl, corpusId, stack, filter, tabId }) => (dispatch) => {
   return dispatch(fetchStack(serverUrl, corpusId, stack, filter))
     .then((action) => {
-      if (action.payload && action.payload.webentities && action.payload.webentities[0]) {
-        const webentity = action.payload.webentities[0] 
+      const { payload } = action
+      if (payload && payload.webentities && payload.webentities.webentities[0]) {
+        const webentity = payload.webentities.webentities[0] 
         dispatch(viewWebentity(webentity))
         if (tabId) {
           dispatch(setTabUrl(webentity.homepage, tabId))
