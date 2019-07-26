@@ -28,6 +28,40 @@
     .browser-tab-toolbar-url.edited
         border: 1px solid  #cccecd
 
+    .browser-tab-url {
+        display: flex
+        align-items: center
+        padding-left: 10px
+        font-size: 12px;
+        min-height: 30px;
+        width: 100%;
+        cursor: text;
+
+        text-align: left;
+
+        em {
+            cursor: inherit;
+        }
+
+        /* :first-child = scheme */
+        em:first-child {
+            font-style: normal;
+        }
+
+        em:not(:first-child) {
+            background: var(--color-grey);
+            padding: 2px 0px;
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        em:nth-child(2) {
+            border-radius: 3px 0 0 3px;
+        }
+        em:last-child {
+            border-radius: 0 3px 3px 0;
+        }
+    }
     .page-actions
         position : absolute
         right: 5px

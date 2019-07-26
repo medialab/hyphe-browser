@@ -1,7 +1,5 @@
 import './KnownPages.styl'
 
-import '../../app/containers/SideBar/side-bar-contextual-lists.styl'
-
 import React, { useState } from 'react'
 
 import DownloadListBtn from '../DownloadListBtn'

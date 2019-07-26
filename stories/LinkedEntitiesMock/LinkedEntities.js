@@ -1,7 +1,5 @@
 import './LinkedEntities.styl'
 
-import '../../app/containers/SideBar/side-bar-contextual-lists.styl'
-
 import React, { useState } from 'react'
 import cx from 'classnames'
 
