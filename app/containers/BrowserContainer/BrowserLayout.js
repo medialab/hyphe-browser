@@ -18,7 +18,6 @@ const BrowserLayout = ({
   instanceUrl,
   isLanding,
   // actions
-  onSelectStack,
   openTab
 }) => {
   /**
@@ -43,7 +42,6 @@ const BrowserLayout = ({
         corpus={ corpus }
         status={ status }
         browserMode={ browserMode }
-        onSelectStack={ onSelectStack }
         onSetBrowserMode={ setBrowserMode } />
       { ready ?
         <div 

@@ -11,7 +11,6 @@ import BrowserLayout from './BrowserLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import jsonrpc from '../../utils/jsonrpc'
 import { openTab } from '../../actions/tabs'  
-import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import {
   STACKS_LIST,
@@ -81,18 +80,9 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { selectedStack, corpus, status, serverUrl, instanceUrl, activeTab, openTab, fetchStackAndSetTab } = this.props
+    const { selectedStack, corpus, status, instanceUrl, activeTab, openTab } = this.props
     
-    const handleFetchStackAndSetTab = (stack, filter) => {
-      fetchStackAndSetTab({
-        serverUrl, 
-        corpusId: corpus.corpus_id, 
-        stack, 
-        filter,
-        tabId: activeTab.id
-      })
-    }
-    
+  
     if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
@@ -107,7 +97,6 @@ class BroswerContainer extends React.Component {
           selectedStack={ selectedStack }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
-          onSelectStack = { handleFetchStackAndSetTab }
           openTab={ openTab } />
         }
         <Notification />
@@ -141,6 +130,5 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
 })
 
 export default connect(mapStateToProps, { 
-  fetchStackAndSetTab,
   openTab
 })(BroswerContainer)

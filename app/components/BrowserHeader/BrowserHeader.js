@@ -11,7 +11,6 @@ const BrowserHeader = ({
   corpus,
   status,
   browserMode,
-  onSelectStack,
   onSetBrowserMode
 }, { intl }) => {
   const { formatMessage } = intl
@@ -24,7 +23,7 @@ const BrowserHeader = ({
           {!ready && ready_prev && <i aria-label="server pending" className="server-status is-pending hint--right" />}
           {!ready && !ready_prev && <i aria-label="server error" className="server-status is-error hint--right" />} 
         </h1>
-        <HeaderMetrics status={ status } onSelectStack={ onSelectStack } />
+        <HeaderMetrics status={ status } />
       </div>
       <div className="header-group header-group-aside">
         <ul className="header-buttons">
