@@ -1,4 +1,4 @@
-Quelle is this all about ?
+Qu'est-ce que c'est ?
 ------------------------
 
 Hyphe browser is an inquiry companion for qualitatively mapping a subset of the world wide web concerned with a specific issue. It is aimed at building a _corpus_ of webpages relevant to your inquiry, annotate them and eventually visualize their relations to grasp how the issue is present on the web.
