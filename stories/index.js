@@ -112,9 +112,11 @@ storiesOf('Browser bar', module)
  * New entity modal
  */
 import EntityModalMock from './EntityModalMock'
+import EntityExistsModalMock from './EntityExistsModalMock'
 storiesOf('New entity modal', module)
   .add('Mockup', () => <EntityModalMock />)
   .add('Creating an entity with previous tags', () => <EntityModalMock withPreviousTags />)
+  .add('Attempting to create an entity that create a duplicate with an existing one', () => <EntityExistsModalMock />)
 
 /**
  * Entity card

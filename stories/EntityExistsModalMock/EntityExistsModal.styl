@@ -1,0 +1,81 @@
+
+
+@import '../helpers.styl'
+  
+.ReactModal__Overlay
+    display: flex
+    align-items: center
+    justify-content: center
+
+.entity-exists-modal-container
+    stretch(column)
+    max-height: 100%
+    overflow : hidden
+    height: 100%
+    position: relative
+
+    .explanation-text
+        margin-top: 10px
+        margin-bottom: 20px
+        padding: 10px
+        background: var(--color-blue)
+        color: white
+        line-height: 1.5
+    .step-container
+        margin-bottom: 10px
+        margin-top: 10px
+        padding: 10px
+        background: var(--color-white)
+    .step-container.is-disabled
+        opacity: .5
+        pointer-events: none
+    .step-marker
+        background: var(--color-blue)
+        border-radius: 50%
+        color:white
+        font-size: .6em
+        padding: .5em
+        position: relative
+        top: -2.5px
+    .name-input-container
+        display: flex
+        flex-flow: row nowrap
+        justify-content: stretch
+        input 
+            flex: 1
+            margin-right: 5px
+    .prefix-input-container
+        position: relative
+        stretch(row)
+        align-items: center
+        .prefix-setter
+            flex: 1
+            margin-right: 5px
+    .modal-header
+        h2
+            stretch(row)
+            margin: 0
+            padding: 10px
+            padding-left: 20px
+            background: var(--color-blue)
+            color: var(--color-white)
+            font-size: 20px
+            span
+                flex: 1
+            .ti-close
+                cursor: pointer
+    .modal-body
+        flex: 1
+        overflow-x: hidden
+        overflow-y: auto
+        background: white
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+    .modal-footer
+        padding: 10px
+        padding-left: 20px
+        padding-right: 20px
+        button
+            font-size: 14px
+            outline: none
