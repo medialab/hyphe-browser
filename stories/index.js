@@ -151,3 +151,21 @@ storiesOf('Global layout proposal', module)
   .add('Reviewing an UNDECIDED', () => <BrowserLayoutProposal status={ 'undecided' } />)
   .add('Landing in existing corpus', () => <BrowserLayoutProposal status={ 'prospection' } isLanding />)
   .add('Landing in new corpus', () => <BrowserLayoutProposal status={ 'prospection' } isEmpty isLanding />)
+
+/**
+ * Splash screen / loading
+ */
+import SplashScreen from './SplashScreen'
+storiesOf('Splash screen & loading', module)
+  .add('Mockup', () => <SplashScreen />)
+
+/**
+ * Server choice
+ */
+import ServerChoice from './ServerChoice'
+storiesOf('Server choice', module)
+.add('No server chosen', () => <ServerChoice noServer />)
+.add('Server choice (loading)', () => <ServerChoice loading />)
+.add('Server choice', () => <ServerChoice />)
+.add('Add a new server', () => <ServerChoice newServer />)
+.add('Add a new corpus', () => <ServerChoice newCorpus />)

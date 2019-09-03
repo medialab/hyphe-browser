@@ -1,0 +1,130 @@
+@import '../helpers.styl'
+
+
+.ReactModal__Overlay
+    display: flex
+    align-items: center
+    justify-content: center
+    
+.server-choice
+  flexCenter()
+  abs()  
+  select
+    background: var(--color-black);
+    border-radius: var(--radius)
+    color: var(--color-white)
+    width: 100%;
+    padding: 1em;
+    border: none;
+  .config-container
+    background: var(--color-grey)
+    border-radius: var(--radius)
+    transition: background 0.2s linear
+    padding: 1em
+    max-width: 250px
+    .section-header
+      margin-top: 0
+      margin-bottom: 10px
+  .search-container
+    position: relative
+    input 
+      input()
+      width: calc(100% - 20px);
+    .icon
+      position: absolute
+      top: 10px
+      right: 10px
+  .corpora-list-container
+    padding: 0
+    list-style: none
+    max-height: 30vh
+    overflow-y: auto
+  .corpus-card
+    background: var(--color-white)
+    border-radius: var(--radius)
+    padding: 10px;
+    margin-bottom: 10px
+    margin-right: 10px
+    h2,h3
+      margin: 0
+      margin-bottom: 5px
+      font-family: var(--font-pt)
+    h2
+      font-size: 14px
+    h3
+      font-size: 12px
+    .corpus-dates
+      white-space: nowrap
+      text-overflow: ellipsis
+      font-size: 10px
+      opacity: 0.7;
+  .create-corpus-container
+    button 
+      background: var(--color-black);
+      border-radius: var(--radius)
+      color: var(--color-white)
+      padding: 10px;
+      border: none;
+      width: 100%;
+  .select-container
+    stretch(row)
+    select
+      flex: 1
+    button
+      border: none
+      background: transparent
+      cursor: pointer
+  .loading-container
+    padding: 20px 0 10px 0
+    span
+      animation-name: blink;
+      animation-duration: 1.4s;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
+    span:nth-child(2)
+      animation-delay: .2s
+    span:nth-child(3)
+      animation-delay: .4s
+  .config-form
+    .field
+      stretch(column)
+      margin-bottom: 15px
+      label
+        padding: 5px 0
+        font-size: 12px
+      input 
+        input()
+      &.horizontal
+        stretch(row)
+.buttons-row
+  stretch(row)
+  padding: 0
+  list-style: none
+  width: 100%;
+  margin: 0
+  li
+    flex: 1
+  li:not(:last-of-type)
+    margin-right: 5px
+  .btn
+    font-size: 12px
+    flexCenter()
+    background: red
+    color: #fff;
+    &.btn-success
+      background: var(--color-blue);
+    &.btn-error
+    &.btn-warning
+      background: var(--color-red);
+
+@keyframes blink {
+    0% {
+      opacity: .1;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      opacity: .1;
+    }
+}
