@@ -63,14 +63,14 @@ const CorporaList = ({loading}) => {
         onRequestClose={() => setModalOpen(false)}
         style={{
           content: {
-              width: 700,
-              maxWidth: '90vw',
-              position: 'relative',
-              height: 'unset',
-              top: 0,
-              left: 0,
-              overflow: 'hidden',
-              padding: 0
+            width: 700,
+            maxWidth: '90vw',
+            position: 'relative',
+            height: 'unset',
+            top: 0,
+            left: 0,
+            overflow: 'hidden',
+            padding: 0
           }
         }}
       >

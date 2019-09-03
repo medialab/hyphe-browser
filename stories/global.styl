@@ -1,0 +1,38 @@
+:root {
+  --radius: 6px;
+}
+
+@import './colors.css';
+@import './fonts.css';
+@import './buttons.styl';
+@import './hint.base.css';
+@import './themify-icons.css';
+@import './helpers.styl';
+
+body {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+a {
+  color: var(--color-black)
+}
+
+a.btn {
+  text-decoration: none;
+}
+
+input:disabled, input[disabled] {
+  background: #EEE;
+  color: #999;
+}
+
+// from photon
+.window {
+  background: var(--color-white);
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+

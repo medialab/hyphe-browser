@@ -1,0 +1,33 @@
+.btn
+  box-shadow: none;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: inline-block;
+  font-family: var(--font-pt);
+  padding: 1em;
+
+  span, span::before
+    cursor: pointer;
+
+.btn-primary
+  background: var(--color-black);
+
+.btn-primary:active
+  background: var(--color-blue);
+
+.btn-default
+  background: var(--color-gray);
+
+.btn-negative
+  background: var(--color-red);
+
+
+.btn:disabled,
+.btn[disabled]
+  background: none;
+  color: var(--color-grey);
+  cursor: default;
+
+  span, span::before
+    cursor: default;

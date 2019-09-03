@@ -2,10 +2,7 @@
 /**
  * Global style imports
  */
-import '../app/css/style.styl'
-import '../app/css/themify-icons.css'
-import '../app/css/hint.base.css'
-import './helpers.styl'
+import './global.styl'
 
 /**
  * Components specific style imports
