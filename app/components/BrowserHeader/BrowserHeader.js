@@ -25,6 +25,7 @@ const BrowserHeader = ({
         </h1>
         <HeaderMetrics status={ status } />
       </div>
+      
       <div className="header-group header-group-aside">
         <ul className="header-buttons">
           <li onClick={ () => onSetBrowserMode('browse')}>
@@ -41,7 +42,7 @@ const BrowserHeader = ({
             <Link 
               to="/login"
               aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }
-              className="btn hint--bottom"
+              className="btn hint--left"
             >
               <i className="ti-close" />
             </Link>
