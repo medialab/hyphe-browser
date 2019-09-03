@@ -18,6 +18,8 @@ const EntityCard = ({
   onClickMerge,
   onClickOut,
   onClickUndecided,
+
+  isVisited,
 }) => {
   return (
     <li className={ cx('entity-card', status, { 'is-active': isActive }) }>
@@ -25,6 +27,7 @@ const EntityCard = ({
       &&
       <div className={ 'status-marker-container' }>
         <span className={ `status-marker ${status} hint--right` } aria-label={ `this webentity is in the ${status} list` }>{status.charAt(0).toUpperCase()}</span>
+        {status === 'prospection' && <span className={ `visited-marker ${status} hint--right` } aria-label={ isVisited ? `this webentity has already been visited` : 'this webentity has not been visited yet' }>{isVisited ? '✓' : '?'}</span>}
       </div>}
       <div className="card-content hint--bottom" aria-label={ 'click to browse' }>
         <h4 className="name">{name}</h4>
