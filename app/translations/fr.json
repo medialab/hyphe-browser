@@ -15,6 +15,13 @@
   "create-or-configure-server": "Créer/configurer un serveur", 
   "create-a-corpus": "Créer un corpus",
   "password-protected": "password protected (optional)",
+
+  
+
+  "server-ok": "le serveur est en bonne santé et fonctionnel",
+  "server-pending": "le serveur est en attente",
+  "server-error": "le serveur rencontre des erreurs",
+  
   
   "browse-create": "Create a new entity distinct from the current one ...",
   "cancel": "Annuler",
@@ -22,8 +29,8 @@
   "connect": "Connecter",
   "context": "Contexte",
   "choose-hyphe-server": "Choisir un serveur Hyphe",
-  "corpus-header.browse-tab": "browse & review",
-  "corpus-header.hyphe-tab": "visualize in hyphe",
+  "corpus-header.browse-tab": "naviguer & annoter",
+  "corpus-header.hyphe-tab": "visualiser dans hyphe",
   "corpus-list-placeholder": "Rechercher un corpus…",
   "corpus-load-health": "Charge du serveur : {status}",
   "corpus-load-health.ERROR": "Erreur",
@@ -146,10 +153,10 @@
   "tooltip.corpus-close": "Quitter ce corpus",
   "tooltip.stack-prev": "Webentité précédente in {stack} list",
   "tooltip.stack-next": "Webentité suivante in {stack} list",
-  "tooltip.stack-counter.IN": "webentities included in the corpus",
-  "tooltip.stack-counter.OUT": "webentities excluded from the corpus",
-  "tooltip.stack-counter.UNDECIDED": "webentities undecided",
-  "tooltip.stack-counter.DISCOVERED": "webentities in prospection",
+  "tooltip.stack-counter.IN": "webentités inclues dans le corpus",
+  "tooltip.stack-counter.OUT": "webentités exclues du corpus",
+  "tooltip.stack-counter.UNDECIDED": "webentities non-décidées",
+  "tooltip.stack-counter.DISCOVERED": "webentities en prospection",
   "used-ago": "Utilisé {relative}",
   "waiting-resources": "En attente de ressources…",
   "webentities": "{count, plural, \n=0 {aucune webentité}\n=1 {1 webentité}\nother {# webentités}}",

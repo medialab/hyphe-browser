@@ -19,9 +19,9 @@ const BrowserHeader = ({
     <div className="browser-header">
       <div className="header-group header-group-main">
         <h1>{ corpus.name }
-          {ready && <i aria-label="server ok" className="server-status is-ready hint--right" />}
-          {!ready && ready_prev && <i aria-label="server pending" className="server-status is-pending hint--right" />}
-          {!ready && !ready_prev && <i aria-label="server error" className="server-status is-error hint--right" />} 
+          {ready && <i aria-label={formatMessage({id: 'server-ok'})} className="server-status is-ready hint--right" />}
+          {!ready && ready_prev && <i aria-label={formatMessage({id: 'server-pending'})} className="server-status is-pending hint--right" />}
+          {!ready && !ready_prev && <i aria-label={formatMessage({id: 'server-error'})} className="server-status is-error hint--right" />} 
         </h1>
         <HeaderMetrics status={ status } />
       </div>
@@ -38,7 +38,7 @@ const BrowserHeader = ({
               {formatMessage({ id: 'corpus-header.hyphe-tab' })}
             </button>
           </li>
-          <li>
+          <li className="close-corpus">
             <Link 
               to="/login"
               aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }

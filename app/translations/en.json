@@ -16,6 +16,10 @@
   "create-a-corpus": "Create a corpus",
   "password-protected": "password protected (optional)",
 
+  "server-ok": "the server is healthy and running",
+  "server-pending": "the server is pending",
+  "server-error": "the server encounters errors",
+
 
   "browse-create": "Create a new entity distinct from the current one ...",
   "cancel": "Cancel",
