@@ -29,8 +29,8 @@
     padding-right: 30px;
     max-width: 97%;
     z-index: 80;
+    min-height: 40px
   }
-
 }
 
 // button
@@ -43,12 +43,15 @@
     background: var(--color-grey);
     content: '';
     display: block;
-    height: 60%;
+    height: 40%;
     position: absolute;
-    top: 7px;
+    top: 12px;
     transform: skewX(25deg);
     width: 20px;
     z-index: -1;
+    content: "+"
+    padding: 5px;
+    text-align: center;
   }
 
   &:hover::after {

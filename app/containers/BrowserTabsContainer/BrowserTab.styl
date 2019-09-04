@@ -1,10 +1,11 @@
 // small upper part of tabs (favicon, close button…)
 
-.browser-tab-label {
+.browser-tab-label
   flex: 1;
   font-family: var(--font-pt);
   font-size: 11px;
-  margin-right: .5em;
+  margin-right: 5px;
+  margin-top: 5px
   max-width: 170px;
   min-width: 40px;
   padding: 5px;
@@ -13,7 +14,7 @@
   white-space: nowrap;
   cursor: pointer;
 
-  .loading {
+  .loading
     background-image: url(../../images/loading.svg);
     background-position: center;
     background-repeat: no-repeat;
@@ -23,9 +24,8 @@
     margin: 4px 4px 0 4px;
     vertical-align: middle;
     width: 16px;
-  }
 
-  .browser-tab-title {
+  .browser-tab-title
     display: inline-block;
     overflow: hidden;
     padding-top: 5px;
@@ -35,16 +35,15 @@
     white-space: nowrap;
     width: 70%;
     cursor: pointer;
-  }
 
-  .ti-close {
+  .ti-close
     position: absolute;
-    right: 2px;
+    right: 5px;
     top: 14px;
     cursor: pointer;
-  }
+    font-size: 10px
 
-  &::after {
+  &::after
     background: var(--color-grey);
     content: '';
     display: block;
@@ -54,77 +53,22 @@
     -webkit-transform: perspective(100px) rotateX(30deg);
     width: 100%;
     z-index: -1;
-  }
 
-  &.active {
+
+  &.active
     z-index: 1;
     cursor: initial;
 
-    .browser-tab-title {
+    .browser-tab-title
       cursor: initial;
-    }
 
-    &::after {
+    &::after
       background: var(--color-grey-light);
-    }
-  }
-}
 
-.browser-tab-label-fixed {
+.browser-tab-label-fixed
   flex: none;
   padding: 3px 10px;
-}
 
-.browser-tab-label-hyphe {
-  color: var(--color-blue);
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-
-  .loading {
-    display: none;
-  }
-
-  .browser-tab-title {
-    margin-left: 12px;
-    padding-right: 0;
-    padding-top: 6px;
-    cursor: pointer;
-  }
-
-  &::after {
-    background: var(--color-grey);
-    opacity: 0.7;
-    content: '';
-    display: block;
-    height: 100%;
-    position: absolute;
-    top: 2px;
-    -webkit-transform: perspective(100px) rotateX(30deg);
-    width: 100%;
-    z-index: -1;
-  }
-
-  .browser-tab-favicon {
-    display: none;
-  }
-
-  &.active {
-    cursor: initial;
-
-    .browser-tab-title {
-      display: inline-block;
-      cursor: initial;
-    }
-
-    &::after {
-      background: var(--color-grey-light);
-      display: block;
-    }
-  }
-}
-
-.browser-tab-favicon {
+.browser-tab-favicon
   margin: 4px 4px 0 4px;
   vertical-align: middle;
-}

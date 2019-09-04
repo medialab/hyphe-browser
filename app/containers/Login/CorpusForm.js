@@ -128,7 +128,7 @@ class CorpusForm extends React.Component {
 
         { this.renderFormGroup('name', 'corpus-name', 'text', true) }
         <div onClick={onTogglePasswordProtected} className="form-group horizontal">
-          <input checked={passwordProtected} type="radio"/>
+          <input readOnly checked={passwordProtected} type="radio"/>
           <label><T id="password-protected" /></label>
         </div>
         { passwordProtected && this.renderFormGroup('password', 'password', 'password') }
