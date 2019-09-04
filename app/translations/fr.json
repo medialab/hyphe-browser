@@ -14,6 +14,7 @@
   "corpus-list-search": "Chercher parmi {nbCorpora} corpus",
   "create-or-configure-server": "Créer/configurer un serveur", 
   "create-a-corpus": "Créer un corpus",
+  "password-protected": "password protected (optional)",
   
   "browse-create": "Create a new entity distinct from the current one ...",
   "cancel": "Annuler",

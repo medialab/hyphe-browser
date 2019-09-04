@@ -89,7 +89,7 @@ class Login extends React.Component {
       deleteServer
     } = this.props
     // hide grey background?
-    const naked = !selectedServer && !location.pathname.includes('server-form')
+    // const naked = !selectedServer && !location.pathname.includes('server-form')
 
     const handleEditServer = () => {
       // selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit"
@@ -102,7 +102,6 @@ class Login extends React.Component {
       deleteServer(selectedServer)
       this.props.history.push('/login')
     }
-    console.log(location.pathname)
     return (
       <div className="login">
         <main className="login-container">

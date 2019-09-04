@@ -21,7 +21,8 @@ class CorpusForm extends React.Component {
     this.state = {
       submitting: false,
       error: null,
-      data: this.getInitData()
+      data: this.getInitData(),
+      passwordProtected: false,
     }
   }
 
@@ -108,7 +109,14 @@ class CorpusForm extends React.Component {
   }
 
   render () {
-    const { error } = this.state
+    const { error, passwordProtected } = this.state
+
+    const onTogglePasswordProtected = () => {
+      console.log('on toggle password protected')
+      this.setState({
+        passwordProtected: !passwordProtected
+      })
+    }
     return (
       <form className="corpus-form" onSubmit={ this.onSubmit }>
         <h3 className="section-header">
@@ -119,8 +127,12 @@ class CorpusForm extends React.Component {
         }
 
         { this.renderFormGroup('name', 'corpus-name', 'text', true) }
-        { this.renderFormGroup('password', 'password', 'password') }
-        { this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
+        <div onClick={onTogglePasswordProtected} className="form-group horizontal">
+          <input checked={passwordProtected} type="radio"/>
+          <label><T id="password-protected" /></label>
+        </div>
+        { passwordProtected && this.renderFormGroup('password', 'password', 'password') }
+        { passwordProtected && this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
 
         { this.state.submitting
           ? <Spinner />
