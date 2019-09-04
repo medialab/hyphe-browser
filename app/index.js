@@ -24,7 +24,6 @@ store.dispatch(setLocale(getOption('locale', DEFAULT_LOCALE)))
 location.hash = 'login'
 
 const domRoot = document.getElementById('root')
-
 render(<Container />, domRoot)
 
 // Debugging utilities

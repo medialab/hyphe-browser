@@ -4,11 +4,32 @@
     <meta charset="utf-8">
     <title>Hyphe Browser</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|PT+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="../vendors/photon-0.1.2-dist/css/photon.min.css" />
     <link rel="stylesheet" href="./css/spinner.css" />
+    <link rel="stylesheet" href="./css/landing.css" />
   </head>
   <body>
-    <h1>Hyphe Browser</h1>
+    <div class="splash-screen">
+      <div class="splash-screen-container">
+        <div class="splash-screen-content">
+          <h1 class="logo-title">
+            <img src="./images/logos/hyphe.png" />
+            <span>Hyphe <i>browser</i></span>
+            <div class="spinner">
+              <div class="spinner-anim">
+                <div class="sk-folding-cube">
+                  <div class="sk-cube1 sk-cube"></div>
+                  <div class="sk-cube2 sk-cube"></div>
+                  <div class="sk-cube4 sk-cube"></div>
+                  <div class="sk-cube3 sk-cube"></div>
+                </div>
+              </div>
+          </h1>
+          <div class="loading-container">
+            Loading<span>.</span><span>.</span><span>.</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="root"></div>
     <script src="../dist/bundle.js"></script>
   </body>

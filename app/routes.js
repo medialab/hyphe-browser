@@ -37,23 +37,3 @@ export default () => (
 if (module.hot) {
   module.hot.accept()
 }
-
-// export default () => (
-//   <Route path="/" component={ App }>
-//     {/*// only display the servers dropdowns
-//     <Route path="login" component={ Login }>
-//       // create a new corpus
-//       <Route path="corpus-form" component={ CorpusForm } />
-//       // connect to a password protected corpus
-//       <Route path="corpus-login-form" component={ CorpusLoginForm } />
-//       // create / edit a Hyphe server
-//       <Route path="server-form" component={ ServerForm } />
-//       // select a server, a corpus and login to the later
-//       <Route path="/" component={ CorpusList } />
-//     </Route>
-
-//     <Route path="browser" component={ Browser } />
-
-//     <Redirect to="/login" />*/}
-//   </Route>
-// )
