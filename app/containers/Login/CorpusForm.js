@@ -44,6 +44,7 @@ class CorpusForm extends React.Component {
   }
 
   renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
+    const {intl: {formatMessage}} = this.context
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
@@ -51,6 +52,7 @@ class CorpusForm extends React.Component {
           disabled={ this.state.submitting }
           autoFocus={ autoFocus }
           name={ name }
+          placeholder={formatMessage({id: label})}
           onChange={ ({ target }) => this.setDataState(name, target.value) }
           type={ type }
           value={ this.state.data[name] || '' }
@@ -109,6 +111,9 @@ class CorpusForm extends React.Component {
     const { error } = this.state
     return (
       <form className="corpus-form" onSubmit={ this.onSubmit }>
+        <h3 className="section-header">
+          <T id="create-a-corpus" />
+        </h3>
         { error && 
           <div className="form-error"><T id={ error.messageId } values={ error.messageValues || {} } /></div>
         }
@@ -120,11 +125,15 @@ class CorpusForm extends React.Component {
         { this.state.submitting
           ? <Spinner />
           : (
-            <div className="form-actions">
+            <div className="buttons-row">
+              <li>
+              <Link className="btn btn-error" to="/login"><T id="cancel" /></Link>
+              </li>
+              <li>
               <button className="btn btn-primary" disabled={ this.state.submitting }>
                 <T id="create-corpus" />
               </button>
-              <Link className="btn btn-default" to="/login"><T id="cancel" /></Link>
+              </li>
             </div>
           )
         }
@@ -140,6 +149,10 @@ CorpusForm.propTypes = {
 
   // actions
   createCorpus: PropTypes.func
+}
+
+CorpusForm.contextTypes = {
+  intl: PropTypes.object
 }
 
 const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({

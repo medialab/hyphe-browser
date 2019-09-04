@@ -20,7 +20,7 @@ class ServerForm extends React.Component {
 
   // generic form methods
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -31,7 +31,7 @@ class ServerForm extends React.Component {
   }
 
   // deal with fields values
-  setDataState (key, value) {
+  setDataState(key, value) {
     const data = {
       ...this.state.data,
       [key]: value
@@ -39,23 +39,25 @@ class ServerForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
+  renderFormGroup(name, label = name, type = 'text', autoFocus = false) {
+    const {intl: {formatMessage}} = this.context;
     return (
       <div className="form-group">
-        <label><T id={ label } /></label>
+        <label><T id={label} /></label>
         <input
-          disabled={ this.state.submitting }
-          name={ name }
-          autoFocus={ autoFocus }
-          onChange={ ({ target }) => this.setDataState(name, target.value) }
-          type={ type }
-          value={ this.state.data[name] }
+          disabled={this.state.submitting}
+          name={name}
+          placeholder={formatMessage({id: label})}
+          autoFocus={autoFocus}
+          onChange={({ target }) => this.setDataState(name, target.value)}
+          type={type}
+          value={this.state.data[name]}
         />
       </div>
     )
   }
 
-  getInitData () {
+  getInitData() {
     if (this.props.editMode) {
       return { ...this.props.server }
     }
@@ -95,7 +97,7 @@ class ServerForm extends React.Component {
       })
   }
 
-  saveAndRedirect () {
+  saveAndRedirect() {
     const server = this.cleanData()
     !this.props.editMode
       ? this.props.createServer(server)
@@ -105,7 +107,7 @@ class ServerForm extends React.Component {
     this.props.history.push('/login')
   }
 
-  cleanData () {
+  cleanData() {
     const server = {
       ...this.state.data
     }
@@ -119,7 +121,7 @@ class ServerForm extends React.Component {
   }
 
   // local validation
-  isValid () {
+  isValid() {
     return this.state.data.url && this.state.data.name
   }
 
@@ -129,37 +131,34 @@ class ServerForm extends React.Component {
     this.props.history.push('/login')
   }
 
-  render () {
+  render() {
 
     return (
-      <form className="server-form" onSubmit={ this.onSubmit }>
-        { this.state.errors.map((error) =>
-          <div className="form-error" key={ error }><T id={ error } /></div>
-        ) }
+      <form className="server-form" onSubmit={this.onSubmit}>
+        <h3 className="section-header">
+          <T id="create-or-configure-server" />
+        </h3>
+        {this.state.errors.map((error) =>
+          <div className="form-error" key={error}><T id={error} /></div>
+        )}
 
-        { this.renderFormGroup('name', 'server-name') }
-        { this.renderFormGroup('url', 'api-url', 'text', true) }
+        {this.renderFormGroup('name', 'server-name')}
+        {this.renderFormGroup('url', 'api-url', 'text', true)}
 
-        { false && this.renderFormGroup('login') }
-        { false && this.renderFormGroup('password', 'password', 'password') }
+        {false && this.renderFormGroup('login')}
+        {false && this.renderFormGroup('password', 'password', 'password')}
 
-        <div className="form-actions">
-          <button className="btn btn-primary" disabled={ this.state.submitting }>
-            <T id="save-server" />
-          </button>
-          <Link className="btn btn-default" to="/login" disabled={ this.state.submitting }>
-            <T id="cancel" />
-          </Link>
-          { this.props.editMode &&
-            (
-              <button
-                className="btn btn-negative" disabled={ this.state.submitting }
-                onClick={ this.delete }
-              >
-                <T id="delete" />
-              </button>
-            )
-          }
+        <div className="buttons-row">
+          <li>
+            <Link className="btn btn-error" to="/login" disabled={this.state.submitting}>
+              <T id="cancel" />
+            </Link>
+          </li>
+          <li>
+            <button className="btn btn-primary" disabled={this.state.submitting}>
+              <T id="save-server" />
+            </button>
+          </li>
         </div>
       </form>
     )
@@ -180,6 +179,10 @@ ServerForm.propTypes = {
   createServer: PropTypes.func,
   updateServer: PropTypes.func,
   deleteServer: PropTypes.func,
+}
+
+ServerForm.contextTypes = {
+  intl: PropTypes.object,
 }
 
 const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({

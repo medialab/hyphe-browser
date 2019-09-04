@@ -9,7 +9,11 @@ import { FormattedMessage as T, intlShape } from 'react-intl'
 import cx from 'classnames'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
-import { deselectServer } from '../../actions/servers'
+import { deselectServer, deleteServer } from '../../actions/servers'
+
+import LogoTitle from '../../components/LogoTitle';
+import ServerSelect from '../../components/ServerSelect';
+
 
 class Login extends React.Component {
   componentDidMount () {
@@ -77,23 +81,54 @@ class Login extends React.Component {
   }
 
   render () {
-    const { selectedServer, location } = this.props
+    const { 
+      selectedServer, 
+      location, 
+      servers,
+      history,
+      deleteServer
+    } = this.props
     // hide grey background?
     const naked = !selectedServer && !location.pathname.includes('server-form')
 
+    const handleEditServer = () => {
+      // selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit"
+      if (selectedServer && location.pathname === '/login') {
+        history.push('/login/server-form?edit')
+      }
+    }
+
+    const handleForget = () => {
+      deleteServer(selectedServer)
+      this.props.history.push('/login')
+    }
+    console.log(location.pathname)
     return (
-      <div className="window">
-        <div className="pane-centered">
-          <h2 className="pane-centered-title"><T id="welcome" /></h2>
-          <main className={ cx('pane-centered-main', { naked }) }>
-            <div className="form-group server-list">
-              { this.renderServerSelect() }
-              { selectedServer && location.pathname === '/login' && <Link className="btn" to="/login/server-form?edit">
-                <span className="ti-pencil" /></Link> }
-            </div>
-            { this.props.children }
-          </main>
-        </div>
+      <div className="login">
+        <main className="login-container">
+          <LogoTitle />
+          <div className="config-container">
+            {
+              location.pathname === '/login' &&
+              <div className="server-container">
+                <h3 className="section-header"><T id="choose-hyphe-server" /></h3>
+                <ServerSelect
+                  {...{
+                    selectedServer, 
+                    servers, 
+                    location,
+                  }}
+                  isDisabled={location.pathname !== '/login'}
+                  onChange={url => this.refreshStatusAndCorpora(url)}
+                  onEdit={handleEditServer}
+                  onForget={handleForget}
+                />
+              </div>
+            }
+            
+            { this.props.children}
+          </div>
+        </main>
       </div>
     )
   }
@@ -116,6 +151,7 @@ Login.propTypes = {
   deselectServer: PropTypes.func,
   fetchCorpora: PropTypes.func,
   fetchServerStatus: PropTypes.func,
+  deleteServer: PropTypes.func,
 }
 
 // router infos are given in ownProps
@@ -129,6 +165,7 @@ const mapDispatchToProps = {
   deselectServer,
   fetchCorpora,
   fetchServerStatus,
+  deleteServer,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

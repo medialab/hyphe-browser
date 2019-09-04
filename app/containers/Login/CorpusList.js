@@ -9,56 +9,17 @@ import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-
 
 import { selectCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
-
-class CorpusListItem extends React.Component {
-
-  render () {
-    const { server, corpus, selectCorpus, routerPush } = this.props
-    const { password, name, status, webentities_in, created_at, last_activity } = corpus
-    const handleSelectCorpus = () => {
-      const path = corpus.password ? '/login/corpus-login-form' : 'browser'
-      selectCorpus(server, corpus)
-      routerPush(path)
-    }
-    return (
-      <div onClick={ handleSelectCorpus }>
-        <h5 className="corpus-list-item-name">
-          { password && <span className="icon icon-lock" /> }
-          { name }
-          { status === 'ready' && <span className="icon icon-play" /> }
-        </h5>
-        <div className="corpus-list-item-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
-        <div className="corpus-list-item-dates">
-          <span><T id="created-ago" values={ { relative: <D value={ created_at } /> } } /></span>
-          <span> - </span>
-          <span><T id="used-ago" values={ { relative: <D value={ last_activity } /> } } /></span>
-        </div>
-      </div>
-    )
-  }
-}
-
-CorpusListItem.propTypes = {
-  corpus: PropTypes.object.isRequired,
-  server: PropTypes.object.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func
-  }),
-
-  // actions
-  selectCorpus: PropTypes.func,
-}
-
+import CorpusCard from './CorpusCard'
 
 class CorpusList extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = { filter: '' }
   }
 
-  render () {
+  render() {
     const { formatMessage } = this.context.intl
-    const { server, status, ui, selectCorpus, history } = this.props
+    const { server, /*status,*/ ui, selectCorpus, history } = this.props
     const { push: routerPush } = history
     const { notification } = ui
 
@@ -76,47 +37,47 @@ class CorpusList extends React.Component {
     // only display corpora already started
     if (hypheFull) corpora = corpora.filter(it => it.status === 'ready')
 
-    const hypheStatus = status && Boolean(status.corpus_running) &&
-      (
-        <span>
-          <span>, </span>
-          <T id="running-corpora" values={ { count: status.corpus_running } } />
-        </span>
-      )
-
     return (
-      <div className="corpus-list">
-        { !(notification && notification.messageValues && notification.messageValues.error) && <h3>
-          <T id="available-corpora" values={ { count: corpora.length } } />
-          { hypheStatus }
-        </h3> }
-        { notification && 
+      <div className="corpora-list-container">
+        <h3 className="section-header"><T id="choose-a-corpus" /></h3>
+        {notification &&
           (notification.messageId === 'error.loading-server' || notification.messageId === 'error.loading-corpora') &&
           notification.messageValues.error &&
-          <div className="form-error"><T id={ notification.messageId } values={ notification.messageValues.error } /></div> 
+          <div className="form-error"><T id={notification.messageId} values={notification.messageValues.error} /></div>
         }
-        { !!Object.keys(this.props.corpora).length && <div className="form-group corpus-list-filter">
+        <div className="search-container">
           <input
-            value={ this.state.filter } placeholder={ formatMessage({ id: 'corpus-list-placeholder' }) }
-            onChange={ ({ target }) => this.setState({ filter: target.value }) }
+            value={this.state.filter}
+            placeholder={
+              formatMessage({
+                id: 'corpus-list-search',
+              }, {
+                  nbCorpora: Object.keys(this.props.corpora).length
+                })
+            }
+            onChange={({ target }) => this.setState({ filter: target.value })}
           />
-          <span className="ti-search" />
-        </div> }
-        <div className="corpus-list-slider">
-          <ul className="list-group corpus-list">
-            { corpora.map((corpus) =>
-              (<li className="list-group-item corpus-list-item" key={ corpus.corpus_id }>
-                <CorpusListItem
-                  corpus={ corpus } server={ server }
-                  selectCorpus={ selectCorpus } routerPush={ routerPush }
-                />
-              </li>)
-            ) }
-          </ul>
+          <span className="icon ti-search" />
         </div>
-        { !hypheFull && !(notification && notification.messageValues && notification.messageValues.error) && <div className="form-actions">
-          <Link className="btn btn-primary" to="/login/corpus-form"><T id="create-corpus" /></Link>
-        </div> }
+
+        <ul className="corpora-list">
+          {corpora.map((corpus) =>
+            (
+              <CorpusCard
+                key={corpus.corpus_id}
+                corpus={corpus}
+                server={server}
+                selectCorpus={selectCorpus} routerPush={routerPush}
+              />
+            )
+          )}
+        </ul>
+        {!hypheFull &&
+          !(notification && notification.messageValues && notification.messageValues.error) &&
+          <div className="buttons-row">
+            <Link className="btn btn-primary btn-fullwidth" to="/login/corpus-form"><T id="create-corpus" /></Link>
+          </div>
+        }
       </div>
     )
   }

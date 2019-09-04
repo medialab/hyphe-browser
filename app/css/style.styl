@@ -7,14 +7,20 @@
 @import './buttons.styl';
 @import './hint.base.css';
 @import './themify-icons.css';
-@import './helpers.styl';
 
   
-
+/**
+ * LAYOUT
+ */
 #root
   abs()
   background: var(--color-white);
   color: var(--color-black);
+  font-family: var(--font-mont);
+
+/**
+ * COMPONENTS
+ */
 
 a
   color: var(--color-black)
@@ -27,13 +33,61 @@ input:disabled, input[disabled] {
   color: #999;
 }
 
-// from photon
+.ReactModal__Overlay
+    display: flex
+    align-items: center
+    justify-content: center
 
-.window {
-  background: var(--color-white);
-}
+select
+  max-width: 100%
+  background: var(--color-black)
+  color: var(--color-white)
+  font-family: var(--font-mont)
+  outline: none
 
-.form-group {
-  margin-bottom: 10px;
-}
+select[disabled]
+  background: var(--color-grey);
+  border-color var(--color-grey);
+  color: var(--color-black);
+  -webkit-appearance: none;
 
+
+.buttons-row
+  stretch(row)
+  padding: 0
+  list-style: none
+  width: 100%;
+  margin: 0
+  li
+    flex: 1
+    stretch(row)
+  li:not(:last-of-type)
+    margin-right: 5px
+  .btn
+    font-size: 12px
+    flexCenter()
+    flex: 1
+
+.modal-content-container
+  margin:0
+  padding: 0
+  font-family: var(--font-mont)
+  .modal-content-footer
+    padding: 10px
+    background: var(--color-grey-light)
+  .modal-content-header
+    background: var(--color-black)
+    color: var(--color-white)
+    padding: 10px
+    h1,h2,h3
+      margin: 0
+  .modal-content-body
+    padding: 10px
+  
+.form-error
+  background: var(--color-red)
+  color: var(--color-white)
+  padding: 5px;
+  border-radius: var(--radius)
+  font-size: 12px
+  margin: 10px 0

@@ -1,77 +1,67 @@
-.pane-centered {
-  margin: auto;
-  width: 50vh;
+@import '../../css/helpers.styl';
 
-  input {
-    background: var(--color-white);
-    border-radius: var(--radius);
-    border: 1px solid var(--color-white);
-    font-family: var(--font-pt);
-    font-size: 12px;
-    line-height: 1.6;
+
+.login
+  abs()
+  flexCenter()
+  .config-container
+    background: var(--color-grey)
+    border-radius: var(--radius)
+    transition: background 0.2s linear
+    padding: 1em
+    max-width: 350px
+    min-width: 350px
+    .section-header
+      margin-top: 0
+      margin-bottom: 10px
+  
+  .search-container
+    position: relative
+    input 
+      input()
+      width: calc(100% - 20px);
+    .icon
+      position: absolute
+      top: 10px
+      right: 10px
+    
+  .corpora-list-container
+    margin-top: 20px
+  
+  .corpora-list
+    padding: 0
+    list-style: none
+    max-height: 40vh
+    overflow-y: auto
+
+  .corpus-card
+    background: var(--color-white)
+    border-radius: var(--radius)
     padding: 10px;
-    width: 100%;
-  }
-
-  select:focus,
-  input:focus {
-    outline: none !important;
-    border: 1px solid var(--color-grey-dark) !important;
-    box-shadow: none !important;
-  }
-
-  select[disabled] {
-    background: var(--color-grey);
-    border-color var(--color-grey);
-    color: var(--color-black);
-    -webkit-appearance: none;
-  }
-
-  .btn-default, .btn-negative {
-    background: var(--color-grey-light);
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, .1)
-  }
-
-  .btn-negative {
-    color: var(--color-error);
-  }
-  .btn:disabled,
-  .btn[disabled] {
-    background: var(--color-grey-dark);
-  }
-}
-
-.pane-centered-title {
-  font-family: var(--font-mont);
-  margin-top: 0;
-  text-align: center;
-}
-
-.pane-centered-main {
-  background: var(--color-grey);
-  border-radius: var(--radius);
-  transition: background .2s linear;
-  padding: 1em;
-
-  &.naked {
-    background: var(--color-white);
-  }
-}
-
-// used in login forms
-.form-error {
-  color: var(--color-error);
-}
-
-.server-list {
-  display: flex;
-
-  select {
-    background: var(--color-black);
-    border-radius: var(--radius);
-    color: var(--color-white);
-    padding: 1em;
-    width: 100%;
-  }
-}
-
+    margin-bottom: 10px
+    cursor: pointer
+    .corpus-name
+    .corpus-webentities
+      margin: 0
+      margin-bottom: 5px
+      font-family: var(--font-pt)
+      font-size: 14px
+    .corpus-webentities
+      font-size: 12px
+    .corpus-dates
+      white-space: nowrap
+      text-overflow: ellipsis
+      font-size: 10px
+      opacity: 0.7;
+    &:hover
+      background: var(--color-grey-light)
+.form-group
+  stretch(column)
+  margin-bottom: 15px
+  label
+    padding: 5px 0
+    font-size: 12px
+  input 
+    input()
+  &.horizontal
+    stretch(row)

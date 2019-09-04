@@ -5,11 +5,23 @@
   "browse-back": "Previous page",
   "browse-forward": "Next page",
   "browse-reload": "Refresh",
+
+  "edit-server-tooltip": "edit this server information",
+  "forget-server-tooltip": "forget this server",
+  "confirm-forget-server": "Are you sure you want to forget this server ?",
+  "forget-this-server": "Forget this server",
+  "choose-a-corpus": "Choose a corpus",
+  "corpus-list-search": "Search among {nbCorpora} corpus",
+  "create-or-configure-server": "Create/configure a server", 
+  "create-a-corpus": "Create a corpus",
+
+
   "browse-create": "Create a new entity distinct from the current one ...",
   "cancel": "Cancel",
   "confirm-password": "Confirm password",
   "connect": "Connect",
   "context": "Context",
+  "choose-hyphe-server": "Choose a Hyphe server",
   "corpus-header.browse-tab": "browse & review",
   "corpus-header.hyphe-tab": "visualize in hyphe",
   "corpus-list-placeholder": "Search corpus…",

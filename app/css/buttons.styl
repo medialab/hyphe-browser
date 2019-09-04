@@ -1,4 +1,6 @@
-.btn {
+@import './helpers.styl'
+
+.btn 
   box-shadow: none;
   border: none;
   border-radius: var(--radius);
@@ -6,36 +8,44 @@
   display: inline-block;
   font-family: var(--font-pt);
   padding: 1em;
+  outline: none;
+  box-sizing: border-box
 
-  span, span::before {
+  span, span::before
     cursor: pointer;
-  }
-}
 
-.btn-primary {
+.btn-primary
   background: var(--color-black);
-}
+  color: var(--color-white);
 
-.btn-primary:active {
+.btn-primary:active
   background: var(--color-blue);
-}
+  color: var(--color-white);
 
-.btn-default {
+.btn-success
+  background: var(--color-blue);
+  color: var(--color-white);
+
+.btn-default
   background: var(--color-gray);
-}
 
-.btn-negative {
+.btn-negative
+.btn-error
+.btn-warning
   background: var(--color-red);
-}
+  color: var(--color-white);
 
+.btn-fullwidth
+  width: 100%;
 
 .btn:disabled,
-.btn[disabled] {
+.btn[disabled]
   background: none;
   color: var(--color-grey);
   cursor: default;
 
-  span, span::before {
+  span, span::before
     cursor: default;
-  }
-}
+
+button
+  outline: none

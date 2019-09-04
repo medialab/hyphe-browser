@@ -28,7 +28,7 @@ const CorporaList = ({loading}) => {
               <i className="ti-trash" />
             </button>
           </div>
-      </div>
+        </div>
       <div>
         {!loading && <h3>Choose a corpus</h3>}
         {!loading &&
