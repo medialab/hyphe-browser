@@ -4,7 +4,6 @@
 .entity-card
     background: white
     padding: 10px
-    padding-right: 20px
     box-shadow: 0 0 10px var(--color-grey-light)
     transition: all .2s ease
     cursor: pointer
@@ -50,6 +49,7 @@
     
     .card-content
         flex: 1
+        max-width: 50%
         .name
             font-size: 14px
             padding: 0
@@ -72,6 +72,8 @@
             flexStretch()
             .text
                 flex: 1
+    .card-actions
+        min-width: 30%
     .card-actions-row
         padding: 0
         list-style : none
