@@ -53,7 +53,7 @@ HelpPin.propTypes = {
   type: PropTypes.string,
   effect: PropTypes.string,
   className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.func])
+  // children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.func, PropTypes.number])
 }
 
 export default HelpPin
