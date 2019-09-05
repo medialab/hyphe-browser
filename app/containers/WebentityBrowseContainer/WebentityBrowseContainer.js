@@ -34,6 +34,7 @@ const WebentityBrowseContainer = ({
   categories,
   tagsSuggestions,
   tlds,
+  stacks,
   // actions
   fetchStack,
   selectStack,
@@ -51,6 +52,11 @@ const WebentityBrowseContainer = ({
   removeTag,
 }) => {
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+
+  // storing viewed prospections in an efficient way
+  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
+  && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
+  viewedProspectionIds = new Set(viewedProspectionIds)
 
   useEffect(() => {
     if (webentity && webentity.status !== selectedStack) {
@@ -133,6 +139,7 @@ const WebentityBrowseContainer = ({
   if (!webentity) return null
   return (<WebentityBrowseLayout
     webentity={ webentity }
+    viewedProspectionIds={ viewedProspectionIds }
     webentitiesList= { stackWebentities[selectedStack].webentities || [] }
     selectedStack={ selectedStack }
     loadingStack={ loadingStack }
@@ -174,6 +181,7 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,
   webentities,
+  stacks,
   selectedStack: stacks.selected,
   stackWebentities: stacks.webentities,
   tlds: webentities.tlds,

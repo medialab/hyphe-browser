@@ -13,6 +13,7 @@ import DownloadListBtn from '../DownloadListBtn'
 const LinkedWebentities = ({
   setSelected,
   selected,
+  viewedProspectionIds,
   list,
   loadingBatchActions,
   resetActions,
@@ -77,13 +78,15 @@ const LinkedWebentities = ({
               e.stopPropagation()
               setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
             }
+
+            const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id);
                           
             return (
               <EntityCard 
                 key={ index }
                 allowMerge
                 link={ link }
-                isViewed={ link.isViewed }
+                isViewed={ isViewed }
                 onClickLink={ handleClickLink } 
                 onClickMerge={ handleClickMerge }
                 onClickOut={ handleClickOut }

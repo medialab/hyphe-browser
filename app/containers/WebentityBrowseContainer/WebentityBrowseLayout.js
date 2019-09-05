@@ -19,6 +19,7 @@ import WebentityNameField from './WebentityNameField'
 const WebentityBrowseLayout = ({
   webentity,
   webentitiesList,
+  viewedProspectionIds,
   selectedStack,
   loadingStack,
   loadingWebentity,
@@ -218,6 +219,7 @@ const WebentityBrowseLayout = ({
                   submitActions: submitLinkedEntitiesActions,
                   pendingActions,
                   loadingBatchActions,
+                  viewedProspectionIds,
                   
                   statusActions,
                   setStatusActions,
