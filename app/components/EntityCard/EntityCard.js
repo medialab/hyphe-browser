@@ -31,7 +31,7 @@ const EntityCard = ({
       {displayStatus
       &&
       <div className={ 'status-marker-container' }>
-        <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ `this webentity is in the ${formattedStatus} list` }>{formattedStatus.charAt(0).toUpperCase()}</span>
+        <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ formatMessage({id: 'webentity-is-in-list', values: {list: formattedStatus.toUpperCase()}}) }>{formattedStatus.charAt(0).toUpperCase()}</span>
         {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({id: 'webentity-already-visited'}) : formatMessage({id: 'webentity-never-visited'}) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div className="card-content">
@@ -56,13 +56,13 @@ const EntityCard = ({
         <ul className="card-actions-row">
           {status !== 'UNDECIDED'
         &&
-        <li onClick={ onClickUndecided } className={ `hint--left ${isUndecidedActive ? 'is-active': ''}` } aria-label="move to the UNDECIDED list">
+        <li onClick={ onClickUndecided } className={ `hint--left ${isUndecidedActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-undecided'})}>
           <button className="btn btn-default">{/*<i className="ti-help" />*/}UND.</button>
         </li>}
 
           {status !== 'OUT'
         &&
-        <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label="move to the OUT list">
+        <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-out'})}>
           <button className="btn btn-default">OUT</button>
         </li>
           }
@@ -71,7 +71,7 @@ const EntityCard = ({
         <ul className="card-actions-row">
           {allowMerge
         &&
-        <li onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label="merge that webentity with the current one">
+        <li onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
           <button className="btn btn-default"><i className="ti-plus" /></button>
         </li>
           }

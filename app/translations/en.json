@@ -2,6 +2,7 @@
   "adjust": "Create a new webentity for this url",
   "api-url": "Hyphe server url",
   "available-corpora": "{count, plural, \n=0 {no corpus}\n=1 {1 corpus}\nother {# corpora}}",
+
   "browse-back": "Previous page",
   "browse-forward": "Next page",
   "browse-reload": "Refresh",
@@ -25,6 +26,12 @@
   "sidebar.browsed-webentity-help": "inquire and annotate currently browsed webentity",
 
   "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by one webentity} other {cited by {count} webentities}}",
+
+  "webentity-is-in-list": "this webentity is in the {list} list",
+
+  "sidebar.contextual.apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
+  "sidebar.contextual.discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
+
 
   "sidebar.overview.current-webentities-list": "Current webentities list",
   "sidebar.overview.current-webentities-list-help": "Choose which list of webentities you want to review",
@@ -51,6 +58,10 @@
   "server-ok": "the server is healthy and running",
   "server-pending": "the server is pending",
   "server-error": "the server encounters errors",
+
+  "webentity-card.move-to-undecided": "move this webentity to the UNDECIDED list",
+  "webentity-card.move-to-out": "exclude this webentity and move it to the OUT list",
+  "webentity-card.merge-with-current-entity": "merge with the currently browsed webentity",
 
 
   "browse-create": "Create a new entity distinct from the current one ...",

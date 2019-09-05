@@ -34,6 +34,19 @@
   "fieldnotes.edit-note": "éditer la note",
   "fieldnotes.delete-note": "supprimer la note",
 
+  "webentity-card.move-to-undecided": "déplacer cette webentité dans la liste UNDECIDED",
+  "webentity-card.move-to-out": "exclure cette webentité et la déplacer dans la liste OUT",
+  "webentity-card.merge-with-current-entity": "fusionner cette webentité avec la webentity actuellement visitée",
+
+  "sidebar.contextual.apply-decisions": "{count, plural, one {appliquer une décision} other {appliquer {count} décisions}}",
+  "sidebar.contextual.discard-decisions": "{count, plural, one {annuler la décision} other {annuler les décisions}}",
+
+  "webentity-is-in-list": "cette webentité est dans la liste {list}",
+
+
+
+
+
   "tags.corpus-has-no-categories": "Le corpus n'a pas encore de catégories",
   "tags.new-category": "nom",
   "tags.add-category": "ajouter une categorie",

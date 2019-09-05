@@ -100,8 +100,15 @@ const LinkedWebentities = ({
           pendingActions && pendingActions.length > 0
           &&
           <ul className="actions-container">
-            <li onClick={ resetActions } ><button className="btn cancel-btn">Discard decisions</button></li>
-            <li onClick={ submitActions }><button className="btn confirm-btn">Apply {pendingActions.length} decisions</button></li>
+            <li onClick={ resetActions } >
+              <button className="btn cancel-btn">
+                <T id="sidebar.contextual.discard-decisions" values={{count: pendingActions.length}} />
+              </button>
+            </li>
+            <li onClick={ submitActions }><button className="btn confirm-btn">
+              Apply {pendingActions.length} decisions
+              <T id="sidebar.contextual.apply-decisions" values={{count: pendingActions.length}} />
+            </button></li>
           </ul>
         }
                     
