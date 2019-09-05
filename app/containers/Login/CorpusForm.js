@@ -112,10 +112,18 @@ class CorpusForm extends React.Component {
     const { error, passwordProtected } = this.state
 
     const onTogglePasswordProtected = () => {
-      console.log('on toggle password protected')
-      this.setState({
+      let newState = {
         passwordProtected: !passwordProtected
-      })
+      };
+      // if disabling password protected clear the password
+      if (passwordProtected) {
+        newState = {
+          ...newState,
+          password: '',
+          passwordConfirm: ''
+        }
+      }
+      this.setState(newState)
     }
     return (
       <form className="corpus-form" onSubmit={ this.onSubmit }>
