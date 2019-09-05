@@ -51,8 +51,9 @@
 
 
   "tags.corpus-has-no-categories": "Le corpus n'a pas encore de catégories",
-  "tags.new-category": "nom",
+  "tags.new-category": "nom de la nouvelle catégorie",
   "tags.add-category": "ajouter une categorie",
+  "tags.add": "ajouter",
   "tags.add-category-help": "ajouter une nouvelle catégorie pour le corpus (exemples: langue, type d'acteur,...)",
 
 
@@ -77,7 +78,7 @@
   
   
   "browse-create": "Créer une nouvelle entité distincte de l'actuelle...",
-  "cancel": "Annuler",
+  "cancel": "annuler",
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",
   "context": "Contexte",

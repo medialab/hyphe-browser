@@ -53,8 +53,9 @@
   "fieldnotes.delete-note": "delete note",
 
   "tags.corpus-has-no-categories": "The corpus has no tag categories yet",
-  "tags.new-category": "name",
+  "tags.new-category": "name of the new category",
   "tags.add-category": "add a category",
+  "tags.add": "add",
   "tags.add-category-help": "add a new tag category for the corpus (examples: language, type of actor,...)",
 
   "server-ok": "the server is healthy and running",
@@ -67,7 +68,7 @@
 
 
   "browse-create": "Create a new entity distinct from the current one ...",
-  "cancel": "Cancel",
+  "cancel": "cancel",
   "confirm-password": "Confirm password",
   "connect": "Connect",
   "context": "Context",

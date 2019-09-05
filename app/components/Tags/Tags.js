@@ -1,15 +1,15 @@
 import './Tags.styl'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-// import cx from 'classnames'
+import cx from 'classnames'
 import { Creatable } from 'react-select'
-import {FormattedMessage as T} from 'react-intl'
+import { FormattedMessage as T } from 'react-intl'
 import { uniqBy } from 'lodash'
 
 import HelpPin from '../HelpPin'
 
-const Tags = ({ 
+const Tags = ({
   webentityId,
   initialTags,
   suggestions,
@@ -19,24 +19,45 @@ const Tags = ({
 }, { intl: { formatMessage } }) => {
   const [categories, setCategories] = useState(initialTags)
   const [newCategoryStr, setNewCategoryStr] = useState('')
-  
+  const [newCategoryOpen, setNewCategoryOpen] = useState(false)
+  const inputRef = useRef(null);
+
   useEffect(() => {
     setCategories(initialTags)
   }, [webentityId])
 
+  useEffect(() => {
+    if (newCategoryOpen) {
+      inputRef.current.focus()
+    }
+  }, [newCategoryOpen])
+
   const onNewCat = e => {
-    e.stopPropagation()
-    e.preventDefault()
+    if (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    }
+    
     const newCategory = newCategoryStr.trim()
     const isCatExist = categories.find(({ category }) => category === newCategory)
 
-    if (newCategory.length && !isCatExist)  {
+    if (newCategory.length && !isCatExist) {
       setCategories([...categories, { category: newCategory, value: '' }])
       setNewCategoryStr('')
+      setNewCategoryOpen(false)
     }
   }
 
+  const onDiscardNewCategory = () => {
+    setNewCategoryOpen(false)
+    setNewCategoryStr('')
+  }
 
+  const handleNewCatKeyDown = e => {
+    if (e.key === 'Enter') {
+      onNewCat();
+    }
+  }
   return (
     <div className="tags-container">
       <div className="categories-container">
@@ -45,7 +66,7 @@ const Tags = ({
             <ul className="categories-list">
               {
                 categories.map(({ category, value }, categoryIndex) => {
-                  
+
                   const getSuggestions = () => {
                     let suggestionOptions = []
                     if (suggestions[category]) {
@@ -61,15 +82,15 @@ const Tags = ({
 
                   const handleUpdateTag = (option) => {
                     const newTag = option ? option.value.trim() : ''
-                    
-                    const prevTag = categories.find( (cat) => cat.category === category).value
+
+                    const prevTag = categories.find((cat) => cat.category === category).value
                     if (prevTag) {
                       onRemoveTag(category, prevTag)
                     }
                     if (option) {
                       onAddTag(category, newTag)
                     }
-                
+
                     setCategories(
                       categories.map((cat) => {
                         if (cat.category === category) {
@@ -83,31 +104,31 @@ const Tags = ({
                     )
                   }
 
-                  const renderArrow = ({ isOpen })  => {
-                    if (value.length>0 && !isOpen) return null
+                  const renderArrow = ({ isOpen }) => {
+                    if (value.length > 0 && !isOpen) return null
                     else {
                       return (isOpen ? <span className="ti-angle-up" /> : <span className="ti-angle-down" />)
                     }
                   }
 
                   return (
-                    <li className="category-item-container" key={ category }>
+                    <li className="category-item-container" key={category}>
                       <span className="category-name">
                         {category}
                       </span>
                       <span className="category-input">
                         <Creatable
                           name="cat-select"
-                          clearable={ value.length > 0 ? true : false }
-                          backspaceRemoves={ false }
+                          clearable={value.length > 0 ? true : false}
+                          backspaceRemoves={false}
                           searchable
                           autoFocus
                           autoBlur
                           ignoreCase
-                          arrowRenderer={ renderArrow }
-                          options={ getSuggestions() }
-                          value={ value }
-                          onChange={ handleUpdateTag }
+                          arrowRenderer={renderArrow}
+                          options={getSuggestions()}
+                          value={value}
+                          onChange={handleUpdateTag}
                         />
                       </span>
                     </li>
@@ -121,21 +142,43 @@ const Tags = ({
             </div>
         }
       </div>
-      <form className="add-category-container">
-        <input 
-          placeholder={formatMessage({id: 'tags.new-category'})}
-          className="add-category-input" 
-          value={ newCategoryStr } 
-          onChange={ e => setNewCategoryStr(e.target.value) } type="text" 
-        />
-        <button 
-          disabled={ !newCategoryStr.length } 
-          type="submit" 
-          onClick={ onNewCat }
-        >
-          <T id="tags.add-category" /> <HelpPin><T id="tags.add-category-help" /></HelpPin>
-        </button>
-      </form>
+      <div className="add-category-container">
+        {
+          newCategoryOpen ?
+            <form className="add-category-form">
+              <input
+                placeholder={formatMessage({ id: 'tags.new-category' })}
+                className="add-category-input"
+                value={newCategoryStr}
+                ref={inputRef}
+                onChange={e => setNewCategoryStr(e.target.value)} 
+                onKeyDown={handleNewCatKeyDown}
+                type="text"
+              />
+              <ul className="buttons-row">
+                <li>
+                  <button className="btn btn-error" onClick={onDiscardNewCategory}>
+                    <T id="cancel" />
+                  </button>
+                </li>
+                <li>
+                  <button type="submit" onClick={onNewCat} className="btn btn-success" disabled={!newCategoryStr.length}>
+                    <T id="tags.add" />
+                  </button>
+                </li>
+
+
+              </ul>
+            </form>
+            :
+            <button
+              className={cx("btn btn-success add-category-btn", {'no-categories': !categories.length})}
+              onClick={() => setNewCategoryOpen(true)}
+            >
+              <T id="tags.add-category" /> <HelpPin><T id="tags.add-category-help" /></HelpPin>
+            </button>
+        }
+      </div>
     </div>
   )
 }
