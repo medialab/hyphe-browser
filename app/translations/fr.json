@@ -38,6 +38,9 @@
   "webentity-card.move-to-out": "exclure cette webentité et la déplacer dans la liste OUT",
   "webentity-card.merge-with-current-entity": "fusionner cette webentité avec la webentity actuellement visitée",
 
+  "password-protected": "protégé par un mot de passe",
+  "running": "actif",
+
   "sidebar.contextual.apply-decisions": "{count, plural, one {appliquer une décision} other {appliquer {count} décisions}}",
   "sidebar.contextual.discard-decisions": "{count, plural, one {annuler la décision} other {annuler les décisions}}",
 

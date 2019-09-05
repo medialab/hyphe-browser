@@ -1,5 +1,4 @@
 // displayed when a server is selected
-import './corpus-list'
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -39,13 +38,13 @@ class CorpusList extends React.Component {
 
     return (
       <div className="corpora-list-container">
-        {!notification && <h3 className="section-header"><T id="choose-a-corpus" /></h3>}
+        {!(notification && notification.messageId) && <h3 className="section-header"><T id="choose-a-corpus" /></h3>}
         {notification &&
           (notification.messageId === 'error.loading-server' || notification.messageId === 'error.loading-corpora') &&
           notification.messageValues.error &&
           <div className="form-error"><T id={notification.messageId} values={notification.messageValues.error} /></div>
         }
-        {!notification
+        {!(notification && notification.messageId)
         &&
         <div className="search-container">
           <input

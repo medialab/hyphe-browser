@@ -28,6 +28,8 @@
   "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by one webentity} other {cited by {count} webentities}}",
 
   "webentity-is-in-list": "this webentity is in the {list} list",
+  "password-protected": "password protected",
+  "running": "running",
 
   "sidebar.contextual.apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
   "sidebar.contextual.discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",

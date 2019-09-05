@@ -7,7 +7,7 @@ const CorpusCard = ({
   corpus, 
   selectCorpus, 
   routerPush
-}) => {
+}, {intl: {formatMessage}}) => {
   const { password, name, status, webentities_in, created_at, last_activity } = corpus
   const handleSelectCorpus = () => {
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
@@ -17,9 +17,9 @@ const CorpusCard = ({
   return (
     <li className="corpus-card" onClick={ handleSelectCorpus }>
       <h2 className="corpus-name">
-        { password && <span className="icon icon-lock" /> }
         { name }
-        { status === 'ready' && <span className="icon icon-play" /> }
+        { password && <span className="info-icon hint--right" aria-label={formatMessage({id: 'password-protected'})}><i className="ti-lock"/></span> }
+        { status === 'ready' && <span className="info-icon hint--right" aria-label={formatMessage({id: 'running'})}><i className="ti-play"/></span> }
       </h2>
       <div className="corpus-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
       <div className="corpus-dates">
@@ -40,6 +40,10 @@ CorpusCard.propTypes = {
 
   // actions
   selectCorpus: PropTypes.func,
+}
+
+CorpusCard.contextTypes = {
+  intl: PropTypes.object,
 }
 
 
