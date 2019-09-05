@@ -164,7 +164,6 @@ const StackListLayout = ({
             {isEmpty ? 
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={{list: selectedStack.toUpperCase() }} />
-                {'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}
               </li>
               :
               stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
