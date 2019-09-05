@@ -39,12 +39,14 @@ class CorpusList extends React.Component {
 
     return (
       <div className="corpora-list-container">
-        <h3 className="section-header"><T id="choose-a-corpus" /></h3>
+        {!notification && <h3 className="section-header"><T id="choose-a-corpus" /></h3>}
         {notification &&
           (notification.messageId === 'error.loading-server' || notification.messageId === 'error.loading-corpora') &&
           notification.messageValues.error &&
           <div className="form-error"><T id={notification.messageId} values={notification.messageValues.error} /></div>
         }
+        {!notification
+        &&
         <div className="search-container">
           <input
             value={this.state.filter}
@@ -58,7 +60,7 @@ class CorpusList extends React.Component {
             onChange={({ target }) => this.setState({ filter: target.value })}
           />
           <span className="icon ti-search" />
-        </div>
+        </div>}
 
         <ul className="corpora-list">
           {corpora.map((corpus) =>

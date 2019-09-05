@@ -162,12 +162,12 @@ const WebentityBrowseLayout = ({
             <li 
               className={ webentity.status === 'UNDECIDED' ? 'undecided' : '' }
               onClick={ () => onSetWebentityStatus('UNDECIDED') }>
-                UND.<HelpPin place="bottom">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.UND' })}</HelpPin>
+                UND.<HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.UND' })}</HelpPin>
             </li>
             <li 
               className={ webentity.status === 'OUT' ? 'out' : '' }
               onClick={ () => onSetWebentityStatus('OUT') }>
-                OUT<HelpPin place="left">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
+                OUT<HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.OUT' })}</HelpPin>
             </li>
           </ul>
         </EditionCartel>
