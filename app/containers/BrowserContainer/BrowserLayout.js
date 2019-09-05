@@ -1,6 +1,7 @@
 import './BrowserLayout.styl'
 
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import cx from 'classnames'
 import {FormattedMessage as T} from 'react-intl'
 
@@ -20,7 +21,7 @@ const BrowserLayout = ({
   isLanding,
   // actions
   openTab
-}) => {
+}, {intl: {formatMessage}}) => {
   /**
    * lists management
    */
@@ -51,10 +52,10 @@ const BrowserLayout = ({
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
               <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
-                <span><T id="sidebar.inquiry-overview" /> <HelpPin><T id="sidebar.inquiry-overview-help" /></HelpPin></span></button>
+                <span><T id="sidebar.inquiry-overview" /> <HelpPin>{formatMessage({id:"sidebar.inquiry-overview-help"})}</HelpPin></span></button>
               </li>
               <li><button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
-                <span><T id="sidebar.browsed-webentity" /> <HelpPin><T id="sidebar.browsed-webentity-help" /></HelpPin></span></button>
+                <span><T id="sidebar.browsed-webentity" /> <HelpPin>{formatMessage({id:"sidebar.browsed-webentity-help"})}</HelpPin></span></button>
               </li>
             </ul>
             <div className="aside-content" style={ (asideMode === 'webentityBrowse' && !isLanding) ? {}: { display: 'none' } }>
@@ -81,6 +82,10 @@ const BrowserLayout = ({
         url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe } />
     </div>
   )
+}
+
+BrowserLayout.contextTypes = {
+  intl: PropTypes.object
 }
 
 export default BrowserLayout

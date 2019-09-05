@@ -175,7 +175,7 @@ const Tags = ({
               className={cx("btn btn-success add-category-btn", {'no-categories': !categories.length})}
               onClick={() => setNewCategoryOpen(true)}
             >
-              <T id="tags.add-category" /> <HelpPin><T id="tags.add-category-help" /></HelpPin>
+              <T id="tags.add-category" /> <HelpPin>{formatMessage({id: 'tags.add-category-help'})}</HelpPin>
             </button>
         }
       </div>
