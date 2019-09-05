@@ -1,14 +1,7 @@
 import React from 'react'
 import { intlShape } from 'react-intl'
 import { USED_STACKS } from '../../constants'
-
-const formatCounter = nb => {
-  if (nb < 1000) {
-    return nb;
-  }
-  return parseInt(nb/1000) + '.' + ('' + nb/1000%1000).substr(0, 1) + 'k'
-}
-
+import {formatCounter} from '../../utils/misc'
 const HeaderMetrics = ({ status }, { intl }) => {
   const { ready } = status && status.corpus
   if (!ready) return null

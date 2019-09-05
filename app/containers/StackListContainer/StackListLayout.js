@@ -11,6 +11,7 @@ import DownloadListBtn from '../../components/DownloadListBtn'
 import EditionCartel from '../../components/EditionCartel'
 import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
+import {formatCounter} from '../../utils/misc'
 
 const StackListLayout = ({
   counters,
@@ -125,7 +126,7 @@ const StackListLayout = ({
                         </button>
                       </span>
                       <span className="count">
-                        {counters[stack.id]}
+                        <span>{formatCounter(counters[stack.id])}</span>
                       </span>
                     </li>
                   )
@@ -140,24 +141,25 @@ const StackListLayout = ({
           
       </div>
       <div className="webentities-list-wrapper">
-        <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
-          <input 
-            placeholder={ formatMessage({id: 'sidebar.overview.search-a-webentity'}) }
-            value={ searchString }
-            onChange={ handleSearch } />
-          <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': filterValue !== undefined }) }>
-            <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
-                    <T id="filter" /> <i className="ti-angle-down" />
-            </button>
-            {isFilterOpen && 
-              <ul className="filter-options">
-                <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }><T id="sidebar.overview.show-only-no-tags" /></li>
-                <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }><T id="sidebar.overview.show-only-incomplete-tags" /></li>
-              </ul>
-            }
-          </span>
-        </div>
+        
         <div className="webentities-list-container">
+        <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
+            <input 
+              placeholder={ formatMessage({id: 'sidebar.overview.search-a-webentity'}) }
+              value={ searchString }
+              onChange={ handleSearch } />
+            <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
+              <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
+                      <T id="filter" /> <i className="ti-angle-down" />
+              </button>
+              {isFilterOpen && 
+                <ul className="filter-options">
+                  <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }><T id="sidebar.overview.show-only-no-tags" /></li>
+                  <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }><T id="sidebar.overview.show-only-incomplete-tags" /></li>
+                </ul>
+              }
+            </span>
+          </div>
           <ul className={ cx('webentities-list', { 'is-loading': loadingBatchActions || loadingStack }) }>
             {isEmpty ? 
               <li className="placeholder-empty">{'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}</li>
@@ -218,8 +220,16 @@ const StackListLayout = ({
             pendingActions && pendingActions.length > 0
             &&
             <ul className="actions-container">
-              <li onClick={ resetActions } ><button className="btn cancel-btn">Discard decisions</button></li>
-              <li onClick={ submitActions }><button className="btn confirm-btn">Apply {pendingActions.length} decisions</button></li>
+              <li onClick={ resetActions } >
+                <button className="btn cancel-btn">
+                  <T id="discard-decisions" values={{count: pendingActions.length}} />
+                </button>
+              </li>
+              <li onClick={ submitActions }>
+                <button className="btn confirm-btn">
+                <T id="apply-decisions" values={{count: pendingActions.length}} />
+                </button>
+              </li>
             </ul>
           }
         </div>

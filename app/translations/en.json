@@ -31,8 +31,8 @@
   "password-protected": "password protected",
   "running": "running",
 
-  "sidebar.contextual.apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
-  "sidebar.contextual.discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
+  "apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
+  "discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
 
 
   "sidebar.overview.current-webentities-list": "Current webentities list",

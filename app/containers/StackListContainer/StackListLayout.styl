@@ -22,12 +22,13 @@
             margin-right: 2px
             display: inline-block
             font-family: var(--font-mont);
-            font-size: 13px;
+            // font-size: 13px;
             font-weight: bold;
             padding: 10px
             text-transform: uppercase;
             background: var(--color-grey-dark);
             transition: all .5s ease
+            z-index: 3
         .list-btn.in
                 background: var(--color-corpus-in)
         .list-btn.out
@@ -39,8 +40,19 @@
             color: var(--color-grey-light)
         .count
             transition: all .5s ease
-            text-align: right
-            font-size: 10px
+            // text-align: right
+            font-size: 8px
+            background: var(--color-grey);
+            display: flex
+            flex-flow: row nowrap
+            align-items: center
+            justify-content: flex-end
+            border-radius: 0 var(--radius) var(--radius) 0
+            height: 25px
+            position: relative
+            left: -2px
+            padding-left: 5px
+            padding-right: 10px
         @media (max-width: $tablet-break-point)
             // flex-direction: column
             text-align: left
@@ -61,6 +73,7 @@
             margin: 5px
         .count
             font-size: 8px
+            background: none
 
 .list-layout
     stretch(column)
@@ -80,6 +93,7 @@
     .status-list
         border-radius: var(--radius)
         padding: 10px
+        padding-bottom: 0
 
         position: relative
         .status-list-toggle
@@ -107,10 +121,7 @@
         overflow: hidden
         background: var(--color-grey-light)
         .webentities-list-header
-            background: var(--color-grey-light)
             padding: 10px
-            padding-left: 20px
-            padding-right: 10px
             padding-top: 0
             stretch(row)
             align-items: center
@@ -120,19 +131,16 @@
             input 
                 flex: 1
                 input()
-                margin: 5px
-                height: 20px
-                margin-left: 0
             input:focus
                 border: 1px solid var(--color-grey-dark)
 
             .filter-container
                 position: relative
             .filter
-                padding: 12px
+                padding: 8px
                 margin: 5px
                 border-radius: var(--radius)
-                background: var(--color-grey)
+                background: var(--color-grey-light)
                 cursor: pointer
                 font-size: 12px
                 font-family: var(--font-mono)
@@ -172,7 +180,7 @@
             overflow: hidden
             stretch(column)
             flex: 1
-            max-height: calc(100% - 130px)
+            max-height: calc(100% - 90px)
 
         .webentities-list
             overflow: auto
@@ -208,8 +216,8 @@
         list-style: none
         padding: 0
         stretch(row)
-        padding-left: 20px
-        padding-right: 20px
+        padding-left: 10px
+        // padding-right: 5px
         li
             flex: 1
         .btn

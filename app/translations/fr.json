@@ -16,8 +16,8 @@
   "create-a-corpus": "Créer un corpus",
   "password-protected": "protégé par un mot de passe (optionnel)",
 
-  "webentity-already-visited": "cette webentité n'a jamais été visitée",
-  "webentity-never-visited": "cette webentité a déjà été visitée",
+  "webentity-already-visited": "cette webentité a déjà été visitée",
+  "webentity-never-visited": "cette webentité n'a jamais été visitée",
 
   "filter": "filter",
 
@@ -41,8 +41,8 @@
   "password-protected": "protégé par un mot de passe",
   "running": "actif",
 
-  "sidebar.contextual.apply-decisions": "{count, plural, one {appliquer une décision} other {appliquer {count} décisions}}",
-  "sidebar.contextual.discard-decisions": "{count, plural, one {annuler la décision} other {annuler les décisions}}",
+  "apply-decisions": "{count, plural, one {appliquer une décision} other {appliquer {count} décisions}}",
+  "discard-decisions": "{count, plural, one {annuler la décision} other {annuler les décisions}}",
 
   "webentity-is-in-list": "cette webentité est dans la liste {list}",
 
