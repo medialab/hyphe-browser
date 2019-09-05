@@ -19,11 +19,45 @@
   "webentity-already-visited": "cette webentité n'a jamais été visitée",
   "webentity-never-visited": "cette webentité a déjà été visitée",
 
+  "filter": "filter",
+
+  "sidebar.overview.search-a-webentity": "chercher une webentité dans la liste",
+
+
+  "sidebar.overview.show-only-no-tags": "Montrer seulement les webentités sans aucun tag",
+  "sidebar.overview.show-only-incomplete-tags": "Montrer seulement les webentités avec des tags incomplets",
+
+  "fieldnotes.update-note": "mettre à jour la note",
+  "fieldnotes.add-note": "ajouter une note",
+  "fieldnotes.placeholder": "Vous pouvez écrire des commentaires et remarques à propos de la webentité actuellement visitée ici",
+  "fieldnotes.cancel-changes": "annuler",
+  "fieldnotes.edit-note": "éditer la note",
+  "fieldnotes.delete-note": "supprimer la note",
+
+  "tags.corpus-has-no-categories": "Le corpus n'a pas encore de catégories",
+  "tags.new-category": "nom",
+  "tags.add-category": "ajouter une categorie",
+  "tags.add-category-help": "ajouter une nouvelle catégorie pour le corpus (exemples: langue, type d'acteur,...)",
+
+
+
+  "sidebar.overview.current-webentities-list": "Liste de webentités actuelle",
+  "sidebar.overview.current-webentities-list-help": "Choisir quelle liste de webentités vous souhaitez inspecter",
+
+
   
 
   "server-ok": "le serveur est en bonne santé et fonctionnel",
   "server-pending": "le serveur est en attente",
   "server-error": "le serveur rencontre des erreurs",
+
+  "sidebar.inquiry-overview": "Vue d'ensemble",
+  "sidebar.inquiry-overview-help": "parcourir et gérer les webentités de votre enquête",
+  "sidebar.browsed-webentity": "Webentité visitée",
+  "sidebar.browsed-webentity-help": "enquêter et annoter la webentité actuellement visitée",
+
+  "webentity-card.cited-by-n-webentities": "{count, plural, one {citée par une webentité} other {citée par {count} webentités}}",
+
   
   
   "browse-create": "Créer une nouvelle entité distincte de l'actuelle...",
@@ -128,20 +162,20 @@
   "sidebar.contextual.referrals-help": "Webentités contenant des pages pointées par les pages de cette webentité",
   "sidebar.contextual.downloadToCSV": "Télécharger la liste en CSV",
   "sidebar.cartel.webentity-status-title": "Statut de la webentité",
-  "sidebar.cartel.webentity-status-help": "Décider si la webentité actuellement parcourue devrait être incluse dans le corpus, exclue, ou mise de côté pour enquête ultérieure ('non-décidé')",
+  "sidebar.cartel.webentity-status-help": "Décider si la webentité actuellement visitée devrait être incluse dans le corpus, exclue, ou mise de côté pour enquête ultérieure ('non-décidé')",
   "sidebar.cartel.webentity-status-help.IN": "inclure cette webentité dans le corpus et la mettre dans la liste IN",
   "sidebar.cartel.webentity-status-help.UND": "déplacer cette webentité dans la liste UNDECIDED",
   "sidebar.cartel.webentity-status-help.OUT": "exclure cette webentité du corpus et la déplacer dans la liste OUT",
   "sidebar.cartel.webentity-name-title": "Nom de la webentité",
-  "sidebar.cartel.webentity-name-help": "Éditer le nom de la webentité actuellement parcourue. Ce nom sera affiché dans les listes et les visualisations",
+  "sidebar.cartel.webentity-name-help": "Éditer le nom de la webentité actuellement visitée. Ce nom sera affiché dans les listes et les visualisations",
   "sidebar.cartel.known-webpages-title": "Pages web connues",
-  "sidebar.cartel.known-webpages-help": "Parcourir les pages connues appartenant à la webentité actuellement parcourue",
+  "sidebar.cartel.known-webpages-help": "Parcourir les pages connues appartenant à la webentité actuellement visitée",
   "sidebar.cartel.linked-webentities-title": "Webentités liées",
-  "sidebar.cartel.linked-webentities-help": "Review webentities citing or cited by the currently browsed webentity",
+  "sidebar.cartel.linked-webentities-help": "Parcourir les webentités citantes ou citées par la webentité actuellement visitée",
   "sidebar.cartel.tags-title": "Tags",
-  "sidebar.cartel.tags-help": "Annoter la webentité actuellement parcourue avec des tags catégorisés (cela sera utile pour regrouper et visualiser les webentités)",
+  "sidebar.cartel.tags-help": "Annoter la webentité actuellement visitée avec des tags catégorisés (cela sera utile pour regrouper et visualiser les webentités)",
   "sidebar.cartel.field-notes-title": "Notes de terrain",
-  "sidebar.cartel.field-notes-help": "Écrire des commentaires et remarques à propos de la webentité actuellement parcourue",
+  "sidebar.cartel.field-notes-help": "Écrire des commentaires et remarques à propos de la webentité actuellement visitée",
   "stack-status.DISCOVERED": "Webentités en prospection",
   "stack-status.IN": "Webentités dans le corpus (IN)",
   "stack-status.OUT": "Webentités hors du corpus (OUT)",

@@ -4,6 +4,8 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import cx from 'classnames'
 
+import {FormattedMessage as T} from 'react-intl'
+
 const EntityCard = ({
   link,
   allowMerge = false,
@@ -40,7 +42,10 @@ const EntityCard = ({
           <div className="statistics">
             <i className="ti-link" />
             <span className="text">
-              cited by {indegree} webentities
+              <T
+                id="webentity-card.cited-by-n-webentities" 
+                values={{count: indegree}} 
+              />
             </span>
           </div>
         }

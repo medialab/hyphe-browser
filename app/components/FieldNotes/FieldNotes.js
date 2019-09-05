@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
+import PropTypes from 'prop-types'
+
+import {FormattedMessage as T} from 'react-intl'
 
 import Textarea from 'react-autosize-textarea'
 
@@ -13,7 +16,7 @@ const FieldNotes = ({
   onAddNote,
   onUpdateNote,
   onRemoveNote,
-}) => {
+}, {intl: {formatMessage}}) => {
   const [textAreaText, setTextAreaText] = useState('')
   const [notes, setNotes] = useState(initialNotes)
   const [editedIndex, setEditedIndex] = useState(undefined)
@@ -94,12 +97,12 @@ const FieldNotes = ({
                     value={ textAreaText } 
                     ref={ input }
                     onChange={ handleChangeText }
-                    placeholder="You can write some free comments and remarks about the current webentity here"
+                    placeholder={formatMessage({id: 'fieldnotes.placeholder'})}
                   />
                   <ul className="actions-container">
                     <li>
                       <button className="cancel-button" onClick={ handleCancelChange }>
-                        Cancel changes
+                        <T id="fieldnotes.cancel-changes" />
                       </button>
                     </li>
                     <li>
@@ -111,7 +114,7 @@ const FieldNotes = ({
                         disabled={ !validateNote(textAreaText) }
                         type="submit" 
                         onClick={ handleUpdateNote }>
-                          Update note
+                          <T id="fieldnotes.update-note" />
                       </button>
                     </li>         
                   </ul>
@@ -123,8 +126,8 @@ const FieldNotes = ({
                 <div className="field-note-content">{
                   note.split('\n').map((i, key) => <div className="note-block" key={ key }>{i}</div>)
                 }</div>
-                <Button icon="pencil" onClick={ onEdit } className="hint--left" title="edit note" />
-                <Button icon="trash" onClick={ handleRemoveNote } className="hint--left" title="delete note" />
+                <Button icon="pencil" onClick={ onEdit } className="hint--left" title={formatMessage({id: 'fieldnotes.edit-note'})} />
+                <Button icon="trash" onClick={ handleRemoveNote } className="hint--left" title={formatMessage({id: 'fieldnotes.delete-note'})} />
               </div>
             )
           })
@@ -134,7 +137,7 @@ const FieldNotes = ({
           value={ textAreaText } 
           ref={ input }
           onChange={ handleChangeText }
-          placeholder="You can write some free comments and remarks about the current webentity here"
+          placeholder={formatMessage({id: 'fieldnotes.placeholder'})}
         />
         <ul className="actions-container">
           <li>
@@ -146,7 +149,7 @@ const FieldNotes = ({
               disabled={ !validateNote(textAreaText) }
               type="submit" 
               onClick={ handleAddNote }>
-              Add note
+              <T id="fieldnotes.add-note" />
             </button>
           </li>         
         </ul>
@@ -154,6 +157,10 @@ const FieldNotes = ({
       }   
     </div>
   )
+}
+
+FieldNotes.contextTypes = {
+  intl: PropTypes.object,
 }
 
 export default FieldNotes

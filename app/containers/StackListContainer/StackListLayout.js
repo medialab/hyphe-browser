@@ -104,8 +104,8 @@ const StackListLayout = ({
       <div className="status-list-container">
         <EditionCartel
           isAlwaysOpen
-          title="Current webentities list"
-          help="Choose which types of webentities you want to review"
+          title={formatMessage({id: 'sidebar.overview.current-webentities-list'})}
+          help={formatMessage({id: 'sidebar.overview.current-webentities-list-help'})}
         >
           <div className={ cx('status-list', { 'is-open': isOpen }) }>
             <ul className={ cx('webentities-list-of-lists') }>
@@ -142,17 +142,17 @@ const StackListLayout = ({
       <div className="webentities-list-wrapper">
         <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
           <input 
-            placeholder={ `search a webentity in the ${stackInfo.value} list` }
+            placeholder={ formatMessage({id: 'sidebar.overview.search-a-webentity'}) }
             value={ searchString }
             onChange={ handleSearch } />
-          <span className={ cx('filter-container', { 'is-active': isFilterOpen }) }>
+          <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': filterValue !== undefined }) }>
             <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
-                    filter <i className="ti-angle-down" />
+                    <T id="filter" /> <i className="ti-angle-down" />
             </button>
             {isFilterOpen && 
               <ul className="filter-options">
-                <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }>Show only webentities with no tags</li>
-                <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }>Show only webentities with incomplete tags</li>
+                <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }><T id="sidebar.overview.show-only-no-tags" /></li>
+                <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }><T id="sidebar.overview.show-only-incomplete-tags" /></li>
               </ul>
             }
           </span>

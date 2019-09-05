@@ -2,6 +2,7 @@ import './BrowserLayout.styl'
 
 import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
+import {FormattedMessage as T} from 'react-intl'
 
 import StackListContainer from '../StackListContainer'
 import WebentityBrowseContainer from '../WebentityBrowseContainer'
@@ -50,10 +51,10 @@ const BrowserLayout = ({
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
               <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
-                <span>Inquiry overview <HelpPin>review and curate the webentities constituting your inquiry</HelpPin></span></button>
+                <span><T id="sidebar.inquiry-overview" /> <HelpPin><T id="sidebar.inquiry-overview-help" /></HelpPin></span></button>
               </li>
               <li><button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
-                <span>Browsed webentity <HelpPin>edit information about the currently browsed webentity</HelpPin></span></button>
+                <span><T id="sidebar.browsed-webentity" /> <HelpPin><T id="sidebar.browsed-webentity-help" /></HelpPin></span></button>
               </li>
             </ul>
             <div className="aside-content" style={ (asideMode === 'webentityBrowse' && !isLanding) ? {}: { display: 'none' } }>

@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 const WebentityNameField = ({
   initialName,
   onSubmit
-}) => {
+}, { intl: { formatMessage }}) => {
   const [webentityName, setWebentityName] = useState(initialName)
 
   useEffect(() => {
@@ -29,10 +30,15 @@ const WebentityNameField = ({
       className="input" 
       value={ webentityName }
       onKeyUp={ handleKeyUp }
+      placeholder={formatMessage({ id: 'sidebar.cartel.webentity-name-title' })}
       // onFocus={ handleFocus }
       // onBlur={ handleBlur }
       onChange={ handleChange } />
   )
+}
+
+WebentityNameField.contextTypes = {
+  intl: PropTypes.object,
 }
 
 export default WebentityNameField

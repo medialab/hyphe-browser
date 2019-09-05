@@ -19,6 +19,35 @@
   "webentity-already-visited": "this webentity has already been visited",
   "webentity-never-visited": "this webentity has never been visited",
 
+  "sidebar.inquiry-overview": "Inquiry overview",
+  "sidebar.inquiry-overview-help": "review and curate the webentities of your inquiry",
+  "sidebar.browsed-webentity": "Browsed webentity",
+  "sidebar.browsed-webentity-help": "inquire and annotate currently browsed webentity",
+
+  "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by one webentity} other {cited by {count} webentities}}",
+
+  "sidebar.overview.current-webentities-list": "Current webentities list",
+  "sidebar.overview.current-webentities-list-help": "Choose which list of webentities you want to review",
+
+  "filter": "filter",
+
+  "sidebar.overview.search-a-webentity": "search a webentity in the list",
+
+  "sidebar.overview.show-only-no-tags": "Show only webentities with no tags",
+  "sidebar.overview.show-only-incomplete-tags": "Show only webentities with incomplete tags",
+
+  "fieldnotes.update-note": "update note",
+  "fieldnotes.add-note": "add note",
+  "fieldnotes.placeholder": "You can write comments and remarks about the currently browsed webentity here",
+  "fieldnotes.cancel-changes": "cancel changes",
+  "fieldnotes.edit-note": "edit note",
+  "fieldnotes.delete-note": "delete note",
+
+  "tags.corpus-has-no-categories": "The corpus has no tag categories yet",
+  "tags.new-category": "name",
+  "tags.add-category": "add a category",
+  "tags.add-category-help": "add a new tag category for the corpus (examples: language, type of actor,...)",
+
   "server-ok": "the server is healthy and running",
   "server-pending": "the server is pending",
   "server-error": "the server encounters errors",

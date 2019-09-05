@@ -1,8 +1,10 @@
 import './Tags.styl'
 
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 // import cx from 'classnames'
 import { Creatable } from 'react-select'
+import {FormattedMessage as T} from 'react-intl'
 import { uniqBy } from 'lodash'
 
 import HelpPin from '../HelpPin'
@@ -14,7 +16,7 @@ const Tags = ({
   onRemoveTag,
   onUpdateTag,
   onAddTag,
-}) => {
+}, { intl: { formatMessage } }) => {
   const [categories, setCategories] = useState(initialTags)
   const [newCategoryStr, setNewCategoryStr] = useState('')
   
@@ -114,12 +116,14 @@ const Tags = ({
               }
             </ul>
             :
-            <div className="no-categories-text">The corpus has no tag categories yet</div>
+            <div className="no-categories-text">
+              <T id="tags.corpus-has-no-categories" />
+            </div>
         }
       </div>
       <form className="add-category-container">
         <input 
-          placeholder="New category name" 
+          placeholder={formatMessage({id: 'tags.new-category'})}
           className="add-category-input" 
           value={ newCategoryStr } 
           onChange={ e => setNewCategoryStr(e.target.value) } type="text" 
@@ -129,11 +133,15 @@ const Tags = ({
           type="submit" 
           onClick={ onNewCat }
         >
-          Add category <HelpPin>Help about categories</HelpPin>
+          <T id="tags.add-category" /> <HelpPin><T id="tags.add-category-help" /></HelpPin>
         </button>
       </form>
     </div>
   )
+}
+
+Tags.contextTypes = {
+  intl: PropTypes.object,
 }
 
 export default Tags
