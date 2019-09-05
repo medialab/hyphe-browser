@@ -16,6 +16,9 @@
   "create-a-corpus": "Create a corpus",
   "password-protected": "password protected (optional)",
 
+  "webentity-already-visited": "this webentity has already been visited",
+  "webentity-never-visited": "this webentity has never been visited",
+
   "server-ok": "the server is healthy and running",
   "server-pending": "the server is pending",
   "server-error": "the server encounters errors",

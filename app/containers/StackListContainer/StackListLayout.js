@@ -171,7 +171,6 @@ const StackListLayout = ({
                   return true
                 })
                 .map((entity, index)=> {
-
                   const toggleAction = (obj, key, status) => {
                     return {
                       ...obj,
@@ -196,6 +195,7 @@ const StackListLayout = ({
                       key={ index }
                       allowMerge={ false }
                       link={ entity }
+                      isViewed={ entity.viewed }
                       isActive={ isActive } 
                       onClickLink={ handleClickLink } 
                       onClickOut={ handleClickOut }

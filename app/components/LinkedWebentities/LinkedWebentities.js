@@ -83,6 +83,7 @@ const LinkedWebentities = ({
                 key={ index }
                 allowMerge
                 link={ link }
+                isViewed={ link.isViewed }
                 onClickLink={ handleClickLink } 
                 onClickMerge={ handleClickMerge }
                 onClickOut={ handleClickOut }

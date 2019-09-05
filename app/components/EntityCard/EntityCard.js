@@ -1,6 +1,7 @@
 import './EntityCard.styl'
 
 import React from 'react'
+import PropTypes from 'prop-types';
 import cx from 'classnames'
 
 const EntityCard = ({
@@ -11,12 +12,13 @@ const EntityCard = ({
   isMergeActive,
   isUndecidedActive,
   isOutActive,
+  isViewed,
   
   onClickLink,
   onClickMerge,
   onClickOut,
   onClickUndecided,
-}) => {
+}, {intl: { formatMessage }}) => {
   const { status, name, homepage, indegree, viewed } = link
   const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
   
@@ -28,6 +30,7 @@ const EntityCard = ({
       &&
       <div className={ 'status-marker-container' }>
         <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ `this webentity is in the ${formattedStatus} list` }>{formattedStatus.charAt(0).toUpperCase()}</span>
+        {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({id: 'webentity-already-visited'}) : formatMessage({id: 'webentity-never-visited'}) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div className="card-content">
         <h4 className="name">{name}</h4>
@@ -71,6 +74,10 @@ const EntityCard = ({
       </div>
     </li>
   )
+}
+
+EntityCard.contextTypes = {
+  intl: PropTypes.object
 }
 
 export default EntityCard

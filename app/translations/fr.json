@@ -16,6 +16,9 @@
   "create-a-corpus": "Créer un corpus",
   "password-protected": "protégé par un mot de passe (optionnel)",
 
+  "webentity-already-visited": "cette webentité n'a jamais été visitée",
+  "webentity-never-visited": "cette webentité a déjà été visitée",
+
   
 
   "server-ok": "le serveur est en bonne santé et fonctionnel",
@@ -117,10 +120,10 @@
   "sidebar.select-tags": "Ajouter une note",
   "sidebar.create-tag": "Créer le tag: ",
   "sidebar.contextual.mostLinked": "Pages citées",
-  "sidebar.contextual.parents": "Entités parentes",
-  "sidebar.contextual.children": "Entités inclues",
-  "sidebar.contextual.referrers": "Entités citantes",
-  "sidebar.contextual.referrals": "Entités citées",
+  "sidebar.contextual.parents": "Webentités parentes",
+  "sidebar.contextual.children": "Webentités inclues",
+  "sidebar.contextual.referrers": "Webentités citantes",
+  "sidebar.contextual.referrals": "Webentités citées",
   "sidebar.contextual.referrers-help": "Webentités contenant des pages qui pointent vers les pages de cette webentité",
   "sidebar.contextual.referrals-help": "Webentités contenant des pages pointées par les pages de cette webentité",
   "sidebar.contextual.downloadToCSV": "Télécharger la liste en CSV",
@@ -133,7 +136,7 @@
   "sidebar.cartel.webentity-name-help": "Éditer le nom de la webentité actuellement parcourue. Ce nom sera affiché dans les listes et les visualisations",
   "sidebar.cartel.known-webpages-title": "Pages web connues",
   "sidebar.cartel.known-webpages-help": "Parcourir les pages connues appartenant à la webentité actuellement parcourue",
-  "sidebar.cartel.linked-webentities-title": "Linked webentities",
+  "sidebar.cartel.linked-webentities-title": "Webentités liées",
   "sidebar.cartel.linked-webentities-help": "Review webentities citing or cited by the currently browsed webentity",
   "sidebar.cartel.tags-title": "Tags",
   "sidebar.cartel.tags-help": "Annoter la webentité actuellement parcourue avec des tags catégorisés (cela sera utile pour regrouper et visualiser les webentités)",
