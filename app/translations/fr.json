@@ -12,9 +12,9 @@
   "forget-this-server": "Oublier ce serveur",
   "choose-a-corpus": "Choisir un corpus",
   "corpus-list-search": "Chercher parmi {nbCorpora} corpus",
-  "create-or-configure-server": "Créer/configurer un serveur", 
+  "create-or-configure-server": "Ajouter/configurer un serveur", 
   "create-a-corpus": "Créer un corpus",
-  "password-protected": "password protected (optional)",
+  "password-protected": "protégé par un mot de passe (optionnel)",
 
   
 
@@ -64,7 +64,7 @@
   "error.dns-error-search": "Domaine non trouvable, recherche en cours…",
   "error.existing-prefix": "Attention : ce préfixe est déjà rattaché à une autre webentité (cf. Contexte)",
   "error.loading-corpora": "Erreur de chargement des corpus",
-  "error.loading-server": "Ce serveur ne semble pas disponible: {message}, merci d'en sélectionner un autre",
+  "error.loading-server": "Ce serveur ne semble pas disponible (erreur : {message}), merci d'en sélectionner un autre",
   "error.network-error": "Erreur réseau ({error})",
   "error.password-mismatch": "Attention, les mots de passe diffèrent.",
   "error.save-webentity": "Échec lors de la création de la webentité ({error})",

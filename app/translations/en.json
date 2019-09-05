@@ -12,7 +12,7 @@
   "forget-this-server": "Forget this server",
   "choose-a-corpus": "Choose a corpus",
   "corpus-list-search": "Search among {nbCorpora} corpus",
-  "create-or-configure-server": "Create/configure a server", 
+  "create-or-configure-server": "Add/configure a server", 
   "create-a-corpus": "Create a corpus",
   "password-protected": "password protected (optional)",
 
