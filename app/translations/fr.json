@@ -201,6 +201,7 @@
   "stack-status.help.IN": "webentités pertinentes pour l'enquête, que vous avez inclues dans le corpus",
   "stack-status.help.OUT": "webentités non pertinentes pour l'enquête, que vous avez exclues du corpus",
   "stack-status.help.UNDECIDED": "webentités que vous avez mises de côté pour une décision future de les inclure ou exclure du corpus",
+  "stack-status.no-webentities": "Pas encore de webentités dans la list {list}",
   "starting-corpus": "Démarrage du corpus…",
   "status": "Statut",
   "tags-clear-category-value": "Supprimer le tag",

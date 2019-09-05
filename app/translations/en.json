@@ -191,6 +191,8 @@
   "stack-status.help.IN": "webentities relevant to the inquiry, that you included in the corpus",
   "stack-status.help.OUT": "webentities irrelevant to the inquiry, that you excluded from the corpus",
   "stack-status.help.UNDECIDED": "webentities that you have put aside for further decision to put them in or out of the corpus",
+  "stack-status.no-webentities": "No webentities yet in the {list} list",
+
   "starting-corpus": "Starting corpus…",
   "status": "Status",
   "tags-clear-category-value": "Delete tag",

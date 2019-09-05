@@ -96,7 +96,10 @@ const LinkedWebentities = ({
                 isOutActive={ statusActions[link.id] === 'OUT' }
               />
             )
-          }) : formatMessage({ id: 'none' }) }
+          }) : <div className="empty-indicator">
+                  { formatMessage({ id: 'none' }) }
+                </div>
+        }
         </CardsList>
         
         {

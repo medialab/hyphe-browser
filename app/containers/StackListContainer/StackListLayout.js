@@ -162,7 +162,10 @@ const StackListLayout = ({
           </div>
           <ul className={ cx('webentities-list', { 'is-loading': loadingBatchActions || loadingStack }) }>
             {isEmpty ? 
-              <li className="placeholder-empty">{'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}</li>
+              <li className="placeholder-empty">
+                <T id="stack-status.no-webentities" values={{list: selectedStack.toUpperCase() }} />
+                {'No webentities yet in the ' + selectedStack.toUpperCase() + ' list'}
+              </li>
               :
               stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
               stackWebentities[selectedStack].webentities
