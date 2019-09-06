@@ -62,7 +62,7 @@ const Tooltipable = ({
       {/* <div style={{display: 'inline-block', width: 0, height: 0}} ref={targetRef} /> */}
       <Tag 
         {...props} 
-        className={`${className} ${isHovered ? 'is-active': ''} tooltipable-placeholder hint--always`}
+        className={`${className} ${isHovered ? 'is-visible': ''} tooltipable-placeholder hint--always`}
         style={ { 
           ...style, 
           position: 'fixed', 
