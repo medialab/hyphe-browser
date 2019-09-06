@@ -4,7 +4,7 @@ export const formatCounter = nb => {
   if (nb < 1000) {
     return nb;
   }
-  return parseInt(nb/1000) + '.' + ('' + nb/1000%1000).substr(0, 1) + 'k'
+  return parseInt(nb/1000) + '.' + ('' + nb/1000%1000).split('.')[1].substr(0, 1) + ' k'
 }
 
 export const ellipseStr = (str, limit = 150) => {

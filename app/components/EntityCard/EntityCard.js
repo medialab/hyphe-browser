@@ -74,7 +74,7 @@ const EntityCard = ({
         <ul className="card-actions-row">
           {allowMerge
         &&
-        <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
+        <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--right ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
           <button className="btn btn-default"><i className="ti-plus" /></button>
         </Tooltipable>
           }
