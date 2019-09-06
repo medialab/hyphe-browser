@@ -24,16 +24,36 @@ const WebentityNameField = ({
       }
     }
   }
+  const handleValidate = () => {
+    onSubmit(webentityName)
+  }
+
+  const handleCancel = () => {
+    setWebentityName(initialName)
+  }
 
   return (
-    <input
-      className="input" 
-      value={ webentityName }
-      onKeyUp={ handleKeyUp }
-      placeholder={formatMessage({ id: 'sidebar.cartel.webentity-name-title' })}
-      // onFocus={ handleFocus }
-      // onBlur={ handleBlur }
-      onChange={ handleChange } />
+    <div className="webentity-name-container">
+      <input
+        className="input" 
+        value={ webentityName }
+        onKeyUp={ handleKeyUp }
+        placeholder={formatMessage({ id: 'sidebar.cartel.webentity-name-title' })}
+        // onFocus={ handleFocus }
+        // onBlur={ handleBlur }
+        onChange={ handleChange } />
+        {
+          webentityName !== initialName &&
+          <>
+            <button onClick={handleValidate} className="btn btn-success">
+              <i className="ti-check" />
+            </button>
+            <button onClick={handleCancel} className="btn btn-error">
+              <i className="ti-close" />
+            </button>
+          </>
+        }
+    </div>
   )
 }
 
