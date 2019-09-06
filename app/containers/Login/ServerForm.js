@@ -7,6 +7,7 @@
 
 
 import React from 'react'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -154,8 +155,8 @@ class ServerForm extends React.Component {
               <T id="cancel" />
             </Link>
           </li>
-          <li>
-            <button className="btn btn-primary" disabled={this.state.submitting}>
+          <li className="main-button-container">
+            <button className={cx("btn btn-primary", {'is-disabled': !this.state.data.name || !this.state.data.url})} disabled={this.state.submitting}>
               <T id="save-server" />
             </button>
           </li>

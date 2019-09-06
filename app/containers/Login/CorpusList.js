@@ -8,6 +8,7 @@ import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-
 
 import { selectCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
+import CardsList from '../../components/CardsList'
 import CorpusCard from './CorpusCard'
 
 class CorpusList extends React.Component {
@@ -45,6 +46,7 @@ class CorpusList extends React.Component {
           <div className="form-error"><T id={notification.messageId} values={notification.messageValues.error} /></div>
         }
         {!(notification && notification.messageId)
+        && Object.keys(this.props.corpora).length > 1
         &&
         <div className="search-container">
           <input
@@ -61,7 +63,7 @@ class CorpusList extends React.Component {
           <span className="icon ti-search" />
         </div>}
 
-        <ul className="corpora-list">
+        <CardsList>
           {corpora.map((corpus) =>
             (
               <CorpusCard
@@ -72,7 +74,7 @@ class CorpusList extends React.Component {
               />
             )
           )}
-        </ul>
+        </CardsList>
         {!hypheFull &&
           !(notification && notification.messageValues && notification.messageValues.error) &&
           <div className="buttons-row">
