@@ -14,6 +14,8 @@ import { USED_STACKS } from '../../constants'
 import { formatCounter } from '../../utils/misc'
 import Spinner from '../../components/Spinner'
 
+import WebentitiesContainer from './WebentitiesContainer'
+
 const StackListLayout = ({
   counters,
   selectedStack,
@@ -26,7 +28,7 @@ const StackListLayout = ({
   onBatchActions,
   onLoadNextPage,
   onDownloadList,
-  onSelectWebentity
+  onSelectWebentity,
 }, { intl }) => {
   const { formatMessage } = intl
 
@@ -35,6 +37,7 @@ const StackListLayout = ({
   const [selectedList, setSelectedListReal] = useState(selectedStack)
   const [isOpen, setOpen] = useState(false)
   const [searchString, setSearchString] = useState('')
+  const [isLocating, setIsLocating] = useState(undefined)
 
   useEffect(() => {
     setSelectedListReal(selectedStack)
@@ -102,6 +105,15 @@ const StackListLayout = ({
   const isEmpty = counters[selectedList] === 0
   const isLoading = loadingBatchActions || loadingStack
   const stackInfo = USED_STACKS.find((stack) => stack.id === selectedStack)
+  const handleLocate = () => {
+    if (tabWebentity.status !== selectedStack) {
+      onSelectStack(tabWebentity.status)
+    }
+    setIsLocating(tabWebentity.id)
+  }
+  const handleLocateSuccess = () => {
+    setIsLocating(undefined)
+  }
   return (
     <div className="list-layout">
       <div className="status-list-container">
@@ -154,6 +166,15 @@ const StackListLayout = ({
               <button onClick={() => setFilterOpen(!isFilterOpen)} className="filter">
                 <T id="filter" /> <i className="ti-angle-down" />
               </button>
+              {
+              tabWebentity &&
+              <button onClick={handleLocate} className={cx("btn locate", tabWebentity.status)}>
+                <T id="locate-currently-browsed-webentity" />
+                <HelpPin>
+                  {formatMessage({id: 'locate-currently-browsed-webentity-help'})}
+                </HelpPin>
+              </button>
+              }
               {isFilterOpen &&
                 <ul className="filter-options">
                   <li className={cx('filter-option', { 'is-active': filterValue === 'no-tag' })} onClick={() => handleSelectFilter('no-tag')}><T id="sidebar.overview.show-only-no-tags" /></li>
@@ -162,7 +183,10 @@ const StackListLayout = ({
               }
             </span>
           </div>
-          <ul className={cx('webentities-list', { 'is-loading': isLoading })}>
+          <WebentitiesContainer 
+            scrollTo={isLocating && `entity-card-${isLocating}`}
+            onScrollSuccess={handleLocateSuccess} 
+            isLoading={isLoading}>
             {isEmpty ?
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={{ list: selectedStack.toUpperCase() }} />
@@ -221,7 +245,7 @@ const StackListLayout = ({
                 <T id="load-more-webentities" />
               </li>
             }
-          </ul>
+          </WebentitiesContainer>
           {
             isLoading &&
             <Spinner />

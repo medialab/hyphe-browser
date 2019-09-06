@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -51,6 +51,8 @@ const WebentityBrowseContainer = ({
   updateTag,
   removeTag,
 }) => {
+
+  const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   // storing viewed prospections in an efficient way
@@ -58,15 +60,23 @@ const WebentityBrowseContainer = ({
   && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
   viewedProspectionIds = new Set(viewedProspectionIds)
 
+  // useEffect(() => {
+  //   if (webentity && webentity.status !== selectedStack) {
+  //     if (stackWebentities[webentity.status]) {
+  //       selectStack(webentity.status)
+  //     } else {
+  //       fetchStack(serverUrl, corpusId, webentity.status)
+  //     }
+  //   }
+  // }, [webentity])
+
   useEffect(() => {
-    if (webentity && webentity.status !== selectedStack) {
-      if (stackWebentities[webentity.status]) {
-        selectStack(webentity.status)
-      } else {
-        fetchStack(serverUrl, corpusId, webentity.status)
-      }
+    if (webentity) {
+      setInitialStatus(webentity.status)
     }
-  }, [webentity])
+  }, [webentity && webentity.id])
+
+  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : [];
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
@@ -140,7 +150,9 @@ const WebentityBrowseContainer = ({
   return (<WebentityBrowseLayout
     webentity={ webentity }
     viewedProspectionIds={ viewedProspectionIds }
-    webentitiesList= { stackWebentities[selectedStack].webentities || [] }
+    stackWebentities={ stackWebentities }
+    initialStatus={initialStatus}
+    webentitiesList= { webentitiesList }
     selectedStack={ selectedStack }
     loadingStack={ loadingStack }
     loadingWebentity= { loadingWebentity }

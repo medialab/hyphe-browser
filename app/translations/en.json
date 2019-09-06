@@ -7,6 +7,12 @@
   "browse-forward": "Next page",
   "browse-reload": "Refresh",
 
+  "locate-currently-browsed-webentity": "locate",
+  "locate-currently-browsed-webentity-help": "locate currently browsed webentity",
+
+  "overview-location": "The inquiry view displays the {status} list",
+  "currently-browsed-webentity-location": "The currently browsed webentity is in the {status} list",
+
   "edit-server-tooltip": "edit this server information",
   "forget-server-tooltip": "forget this server",
   "confirm-forget-server": "Are you sure you want to forget this server ?",

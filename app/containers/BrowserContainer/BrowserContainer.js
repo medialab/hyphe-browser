@@ -80,20 +80,29 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { selectedStack, corpus, status, instanceUrl, activeTab, openTab } = this.props
+    const { 
+      selectedStack, 
+      corpus, 
+      status, 
+      instanceUrl, 
+      activeTab, 
+      openTab, 
+      webentities,
+    } = this.props
     
   
     if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
     }
-    
+    const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
     return (
       <CorpusStatusWatcher>
         {corpus && 
         <BrowserLayout 
           corpus={ corpus }
           status={ status }
+          webentity={webentity}
           selectedStack={ selectedStack }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
@@ -120,6 +129,7 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
   corpus: corpora.selected,
   status: corpora.status,
   selectedStack: stacks.selected,
+  webentities,
   tlds: webentities.tlds,
   activeTab: tabs.activeTab,
   serverUrl: servers.selected.url,

@@ -113,3 +113,18 @@ input
         flex: 1
         webview
             height: 100%
+    .current-stack-indicator
+        min-width: 10px
+        min-height: 10px
+        border-radius: 50%
+        margin-right: 5px
+        position: relative
+        display: inline-block
+        &.IN
+            background: var(--color-corpus-in)
+        &.OUT
+            background: var(--color-corpus-out)
+        &.DISCOVERED
+            background: var(--color-corpus-discovered)
+        &.UNDECIDED
+            background: var(--color-corpus-undecided)

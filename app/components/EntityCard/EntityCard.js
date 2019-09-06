@@ -28,6 +28,7 @@ const EntityCard = ({
   return (
     <li 
       className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
+      id={`entity-card-${link.id}`}
       onClick={ onClickLink }>
       {displayStatus
       &&

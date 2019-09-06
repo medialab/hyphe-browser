@@ -1,6 +1,7 @@
 import './WebentityBrowseLayout.styl'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import { pickBy } from 'lodash'
 
@@ -11,6 +12,7 @@ import FieldNotes from '../../components/FieldNotes'
 import LinkedWebentities from '../../components/LinkedWebentities'
 import KnownPages from '../../components/KnownPages'
 import Tags from '../../components/Tags'
+import Tooltipable from '../../components/Tooltipable'
 // import EntityModal from '../../components/EntityModalMock'
 
 import HelpPin from '../../components/HelpPin'
@@ -19,6 +21,7 @@ import WebentityNameField from './WebentityNameField'
 const WebentityBrowseLayout = ({
   webentity,
   webentitiesList,
+  initialStatus,
   viewedProspectionIds,
   selectedStack,
   loadingStack,
@@ -37,7 +40,8 @@ const WebentityBrowseLayout = ({
   onSetWebentityHomepage,
   onAddTag,
   onUpdateTag,
-  onRemoveTag
+  onRemoveTag,
+
 }, { intl }) => {
   const { formatMessage } = intl
 
@@ -135,21 +139,37 @@ const WebentityBrowseLayout = ({
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        <button 
-          className="hint--right"
+        <Tooltipable 
+          Tag="button"
+          className={cx("hint--right", 'stack-nav-btn', formatStackName(selectedStack))}
           onClick={ goPrevWebentity }
           disabled={ !selectedStack ||  isFirst || loadingStack || loadingWebentity }
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) }>
           <i className="ti-angle-left" />
-        </button>
-        <span className="current-webentity-name" onClick={ handleSetTabHomepage }>{webentity.name}</span>
-        <button 
-          className="hint--left" 
+        </Tooltipable>
+        <span className="current-webentity-name" onClick={ handleSetTabHomepage }>
+          {webentity.name}
+          <span className="current-webentity-stack-indicators">{
+            webentity.status !== initialStatus
+            &&
+            <>
+              <span className={cx("current-webentity-stack-indicator", formatStackName(initialStatus))}>{formatStackName(initialStatus)}</span>
+              <span className="arrow ti-arrow-right"/>
+            </>
+          }
+          </span>
+          <span className={cx("current-webentity-stack-indicator", formatStackName(webentity.status))}>{formatStackName(webentity.status)}</span>
+         
+        </span>
+        
+        <Tooltipable 
+          Tag="button"
+          className={cx("hint--right", 'stack-nav-btn', formatStackName(selectedStack))}
           onClick={ goNextWebentity }
           disabled={ !selectedStack || isLast || loadingStack || loadingWebentity }
           aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) }>
           <i className="ti-angle-right" />
-        </button>
+        </Tooltipable>
       </nav>
       <div className="browse-edition-container">
         

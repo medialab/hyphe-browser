@@ -136,6 +136,7 @@
 
             .filter-container
                 position: relative
+                stretch(row)
             .filter
                 padding: 8px
                 margin: 5px
@@ -148,6 +149,27 @@
                 transition: background .2s ease
                 &:hover
                     background: var(--color-grey-darker)
+            .locate
+                padding: 8px
+                margin: 5px
+                border-radius: var(--radius)
+                background: var(--color-grey-light)
+                cursor: pointer
+                font-size: 12px
+                font-family: var(--font-mono)
+                border: none
+                transition: background .2s ease
+                color: var(--color-white)
+                &:hover
+                    background: var(--color-grey-darker)
+                &.IN
+                    background: var(--color-corpus-in)
+                &.OUT
+                        background: var(--color-corpus-out)
+                &.UNDECIDED
+                        background: var(--color-corpus-undecided)
+                &.DISCOVERED
+                    background: var(--color-corpus-discovered)
             .filter-container.is-active .filter
                 background: var(--color-black)
                 color: var(--color-white)
@@ -186,8 +208,7 @@
             max-height: calc(100% - 50px)
 
         .webentities-list
-            overflow: auto
-            overflow-x: hidden
+            overflow: hidden
             flex: 1
             padding: 0
             margin: 0
