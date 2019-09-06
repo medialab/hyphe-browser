@@ -49,19 +49,19 @@
     flexCenter()
     border-radius: 50%
     cursor: pointer
-.homepage-btn.is-active
-    background: var(--color-blue)
-    color: var(--color-white)
-    border: 1px solid white
+    &.is-active
+        background: var(--color-blue)
+        color: var(--color-white)
+        border: 1px solid white
+        cursor: default
 
 .known-pages
-    .download
-        padding-top: 10px
-    .known-pages-wrapper
-        background: var(--color-grey);
-        border-radius: var(--radius);
-        padding: 10px;
-        padding-left: 5px
+    background: var(--color-grey);
+    border-radius: var(--radius);
+    padding-bottom: 10px
+    .download-container
+        margin: 0 15px
+        
     .known-pages-list
         list-style: none
         padding: 0

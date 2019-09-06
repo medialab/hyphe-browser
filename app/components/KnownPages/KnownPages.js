@@ -56,7 +56,7 @@ const KnownPages = ({
       </CardsList>         
       {
         list && list.length > 0 && 
-        <div className="download">
+        <div className="download-container">
           <DownloadListBtn onClickDownload={ handleDownloadList } />
         </div>
       }

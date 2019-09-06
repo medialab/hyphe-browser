@@ -54,7 +54,7 @@ const LinkedWebentities = ({
             }
             ) }
         </nav>
-
+        <div className="main-wrapper">
         <CardsList>
           { list.length ? list.map((link, index) => {
 
@@ -121,7 +121,8 @@ const LinkedWebentities = ({
           <div className="download">
             <DownloadListBtn onClickDownload={ handleDownloadList } />
           </div>
-        }               
+        }
+        </div>               
       </div>
     </div>
   )

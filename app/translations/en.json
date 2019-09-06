@@ -12,7 +12,7 @@
   "confirm-forget-server": "Are you sure you want to forget this server ?",
   "forget-this-server": "Forget this server",
   "choose-a-corpus": "Choose a corpus",
-  "corpus-list-search": "Search among {nbCorpora} corpus",
+  "corpus-list-search": "Search among {nbCorpora} corpora",
   "create-or-configure-server": "Add/configure a server", 
   "create-a-corpus": "Create a corpus",
   "password-protected": "password protected (optional)",
@@ -54,13 +54,15 @@
 
   "tags.corpus-has-no-categories": "The corpus has no tag categories yet",
   "tags.new-category": "name of the new category",
-  "tags.add-category": "add a category",
+  "tags.add-category": "add a tag category",
   "tags.add": "add",
-  "tags.add-category-help": "add a new tag category for the corpus (examples: language, type of actor,...)",
+  "tags.add-category-help": "add a new tag category for the webentities of the corpus (examples: language, type of actor,...)",
 
   "server-ok": "the server is healthy and running",
   "server-pending": "the server is pending",
   "server-error": "the server encounters errors",
+
+  "load-more-webentities": "load more webentities",
 
   "webentity-card.move-to-undecided": "move this webentity to the UNDECIDED list",
   "webentity-card.move-to-out": "exclude this webentity and move it to the OUT list",
@@ -122,7 +124,7 @@
   "google.search": "Search ",
   "google.placeholder": "Search…",
   "goto-homepage": "Open Homepage {url}",
-  "here-homepage": "This is the Homepage",
+  "here-homepage": "This page is the Homepage of the webentity",
   "hyphe-tab-title": "Hyphe tab",
   "ignore": "Ignore",
   "indegree": "Linked by",
@@ -155,6 +157,7 @@
   "server-add": "Add server",
   "server-name": "Name of your choice",
   "set-homepage": "Set this webpage as the homepage of the webentity",
+  "is-homepage": "Tthis webpage is the homepage of the webentity",
   "sidebar.add-tags-category": "Add new category",
   "sidebar.categories": "Categories",
   "sidebar.freetags": "Research notes",

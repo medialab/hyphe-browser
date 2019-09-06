@@ -4,7 +4,12 @@
 .download-list-btn
     width: 100%
     button()
-    background: var(--color-grey)
+    background: var(--color-grey-light)
     border: none
     font-family: var(--font-mono)
     text-align: center
+    padding: 5px
+    transition: background .2s ease 
+    &:hover
+        background: var(--color-black)
+        color: var(--color-white)

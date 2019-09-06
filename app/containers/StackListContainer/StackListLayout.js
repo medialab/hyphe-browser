@@ -11,7 +11,8 @@ import DownloadListBtn from '../../components/DownloadListBtn'
 import EditionCartel from '../../components/EditionCartel'
 import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
-import {formatCounter} from '../../utils/misc'
+import { formatCounter } from '../../utils/misc'
+import Spinner from '../../components/Spinner'
 
 const StackListLayout = ({
   counters,
@@ -45,7 +46,7 @@ const StackListLayout = ({
 
   const [statusActions, setStatusActions] = useState({})
 
-  const pendingActions = Object.keys(pickBy(statusActions, v => v)).map((key) =>  {
+  const pendingActions = Object.keys(pickBy(statusActions, v => v)).map((key) => {
     return {
       id: +key,
       type: pickBy(statusActions, v => v)[key]
@@ -54,7 +55,7 @@ const StackListLayout = ({
   const resetActions = () => {
     setStatusActions({})
   }
-  
+
   const submitActions = () => {
     onBatchActions(pendingActions, selectedStack)
     resetActions()
@@ -79,7 +80,7 @@ const StackListLayout = ({
     }
     onSelectStack(selectedStack, newValue)
     setFilterValue(newValue)
-    setFilterOpen(false) 
+    setFilterOpen(false)
   }
   const handleLoadNextPage = () => {
     const { token, next_page } = stackWebentities[selectedStack]
@@ -87,41 +88,42 @@ const StackListLayout = ({
   }
 
   const handleDownloadList = () => {
-    const filteredList = 
-    stackWebentities[selectedStack].webentities
-      .filter((webentity) => {
-        if (searchString.length) {	
-          return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
-        }	
-        return true
-      })
+    const filteredList =
+      stackWebentities[selectedStack].webentities
+        .filter((webentity) => {
+          if (searchString.length) {
+            return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
+          }
+          return true
+        })
     onDownloadList(filteredList)
   }
 
   const isEmpty = counters[selectedList] === 0
+  const isLoading = loadingBatchActions || loadingStack
   const stackInfo = USED_STACKS.find((stack) => stack.id === selectedStack)
   return (
     <div className="list-layout">
       <div className="status-list-container">
         <EditionCartel
           isAlwaysOpen
-          title={formatMessage({id: 'sidebar.overview.current-webentities-list'})}
-          help={formatMessage({id: 'sidebar.overview.current-webentities-list-help'})}
+          title={formatMessage({ id: 'sidebar.overview.current-webentities-list' })}
+          help={formatMessage({ id: 'sidebar.overview.current-webentities-list-help' })}
         >
-          <div className={ cx('status-list', { 'is-open': isOpen }) }>
-            <ul className={ cx('webentities-list-of-lists') }>
+          <div className={cx('status-list', { 'is-open': isOpen })}>
+            <ul className={cx('webentities-list-of-lists')}>
               {
                 USED_STACKS.map((stack, index) => {
                   const handleSelectList = () => {
                     setSelectedList(stack.id)
                   }
                   return (
-                    <li key={ index } onClick={ handleSelectList } className={ 'list-name-container ' + (selectedList === stack.id ? 'is-active': '') }>
+                    <li key={index} onClick={handleSelectList} className={'list-name-container ' + (selectedList === stack.id ? 'is-active' : '')}>
                       <span className="list-btn-container">
-                        <button className={ `list-btn ${stack.value}` }>
-                          <T id={ `stack-status.${stack.id}` } />
+                        <button className={`list-btn ${stack.value}`}>
+                          <T id={`stack-status.${stack.id}`} />
                           <HelpPin>
-                            { formatMessage({ id: `stack-status.help.${stack.id}` }) }
+                            {formatMessage({ id: `stack-status.help.${stack.id}` })}
                           </HelpPin>
                         </button>
                       </span>
@@ -132,49 +134,49 @@ const StackListLayout = ({
                   )
                 })
               }
-            </ul> 
-            <button onClick={ () => setOpen(!isOpen) } className="status-list-toggle">
-              <i className={ isOpen ? 'ti-angle-up' : 'ti-angle-down' } />
+            </ul>
+            <button onClick={() => setOpen(!isOpen)} className="status-list-toggle">
+              <i className={isOpen ? 'ti-angle-up' : 'ti-angle-down'} />
             </button>
           </div>
         </EditionCartel>
-          
+
       </div>
       <div className="webentities-list-wrapper">
-        
+
         <div className="webentities-list-container">
-        <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
-            <input 
-              placeholder={ formatMessage({id: 'sidebar.overview.search-a-webentity'}) }
-              value={ searchString }
-              onChange={ handleSearch } />
-            <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
-              <button onClick={ () => setFilterOpen(!isFilterOpen) } className="filter">
-                      <T id="filter" /> <i className="ti-angle-down" />
+          <div className={cx('webentities-list-header', { 'is-disabled': isEmpty })}>
+            <input
+              placeholder={formatMessage({ id: 'sidebar.overview.search-a-webentity' })}
+              value={searchString}
+              onChange={handleSearch} />
+            <span className={cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue })}>
+              <button onClick={() => setFilterOpen(!isFilterOpen)} className="filter">
+                <T id="filter" /> <i className="ti-angle-down" />
               </button>
-              {isFilterOpen && 
+              {isFilterOpen &&
                 <ul className="filter-options">
-                  <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }><T id="sidebar.overview.show-only-no-tags" /></li>
-                  <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }><T id="sidebar.overview.show-only-incomplete-tags" /></li>
+                  <li className={cx('filter-option', { 'is-active': filterValue === 'no-tag' })} onClick={() => handleSelectFilter('no-tag')}><T id="sidebar.overview.show-only-no-tags" /></li>
+                  <li className={cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' })} onClick={() => handleSelectFilter('incomplete-tag')}><T id="sidebar.overview.show-only-incomplete-tags" /></li>
                 </ul>
               }
             </span>
           </div>
-          <ul className={ cx('webentities-list', { 'is-loading': loadingBatchActions || loadingStack }) }>
-            {isEmpty ? 
+          <ul className={cx('webentities-list', { 'is-loading': isLoading })}>
+            {isEmpty ?
               <li className="placeholder-empty">
-                <T id="stack-status.no-webentities" values={{list: selectedStack.toUpperCase() }} />
+                <T id="stack-status.no-webentities" values={{ list: selectedStack.toUpperCase() }} />
               </li>
               :
               stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
               stackWebentities[selectedStack].webentities
                 .filter((webentity) => {
-                  if (searchString.length) {	
+                  if (searchString.length) {
                     return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
-                  }	
+                  }
                   return true
                 })
-                .map((entity, index)=> {
+                .map((entity, index) => {
                   const toggleAction = (obj, key, status) => {
                     return {
                       ...obj,
@@ -195,52 +197,59 @@ const StackListLayout = ({
                   const isActive = tabWebentity && tabWebentity.status === selectedStack && tabWebentity.id === entity.id
 
                   return (
-                    <EntityCard 
-                      key={ index }
-                      allowMerge={ false }
-                      link={ entity }
-                      isViewed={ entity.viewed }
-                      isActive={ isActive } 
-                      onClickLink={ handleClickLink } 
-                      onClickOut={ handleClickOut }
-                      onClickUndecided={ handleClickUndecided }
-                      isUndecidedActive={ statusActions[entity.id] === 'UNDECIDED' }
-                      isOutActive={ statusActions[entity.id] === 'OUT' }
+                    <EntityCard
+                      key={index}
+                      allowMerge={false}
+                      link={entity}
+                      isViewed={entity.viewed}
+                      isActive={isActive}
+                      onClickLink={handleClickLink}
+                      onClickOut={handleClickOut}
+                      onClickUndecided={handleClickUndecided}
+                      isUndecidedActive={statusActions[entity.id] === 'UNDECIDED'}
+                      isOutActive={statusActions[entity.id] === 'OUT'}
                     />
                   )
                 })
-                
+
             }
             {
-              stackWebentities[selectedStack] && 
+              stackWebentities[selectedStack] &&
               stackWebentities[selectedStack].token &&
-              stackWebentities[selectedStack].next_page && 
-              <li className="entity-card pagination" onClick={ handleLoadNextPage }>load more...</li>
+              stackWebentities[selectedStack].next_page &&
+              <li className="entity-card pagination" onClick={handleLoadNextPage}>
+                <T id="load-more-webentities" />
+              </li>
             }
           </ul>
+          {
+            isLoading &&
+            <Spinner />
+          }
           {
             pendingActions && pendingActions.length > 0
             &&
             <ul className="actions-container">
-              <li onClick={ resetActions } >
+              <li onClick={resetActions} >
                 <button className="btn cancel-btn">
-                  <T id="discard-decisions" values={{count: pendingActions.length}} />
+                  <T id="discard-decisions" values={{ count: pendingActions.length }} />
                 </button>
               </li>
-              <li onClick={ submitActions }>
+              <li onClick={submitActions}>
                 <button className="btn confirm-btn">
-                <T id="apply-decisions" values={{count: pendingActions.length}} />
+                  <T id="apply-decisions" values={{ count: pendingActions.length }} />
                 </button>
               </li>
             </ul>
           }
-        </div>
-        {
-          !isEmpty &&
+          {
+            !isEmpty &&
             <div className="webentities-list-footer">
-              <DownloadListBtn onClickDownload={ handleDownloadList } />
+              <DownloadListBtn onClickDownload={handleDownloadList} />
             </div>
-        }
+          }
+        </div>
+
       </div>
     </div>
   )

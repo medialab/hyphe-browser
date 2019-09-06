@@ -15,6 +15,7 @@
         .set-status-container
             stretch(row)
             justify-content: space-between
+            align-items: center
             list-style: none
             padding: 0
             cursor: pointer
@@ -32,6 +33,8 @@
                 width: 100px
                 max-width: calc(30% - 10px)
                 font-weight: bold
+                transition: all .2s ease
+                
                 @media (max-width: $tablet-break-point)
                     width: 100%
                     margin-bottom: 10px
@@ -40,15 +43,15 @@
                 &.in
                     background: var(--color-corpus-in)
                     color: white
-                    cursor: default
                 &.out
                     background: var(--color-corpus-out)
                     color: white
-                    cursor: default
                 &.undecided
                     background: var(--color-corpus-undecided)
                     color: white
-                    cursor: default
+                
+            li:hover:not(.in):not(.out):not(.undecided)
+                background: var(--color-grey-darker)
     .browse-nav
         stretch(row)
         align-items: flex-end

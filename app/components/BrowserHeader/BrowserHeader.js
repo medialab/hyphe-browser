@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import { intlShape } from 'react-intl'
 import cx from 'classnames'
 
+import {ellipseStr} from '../../utils/misc'
+
 import HeaderMetrics from './HeaderMetrics'
 
 const BrowserHeader = ({
@@ -18,7 +20,7 @@ const BrowserHeader = ({
   return (
     <div className="browser-header">
       <div className="header-group header-group-main">
-        <h1>{ corpus.name }
+        <h1 title={corpus.name}>{ ellipseStr(corpus.name, 42) }
           {ready && <i aria-label={formatMessage({id: 'server-ok'})} className="server-status is-ready hint--right" />}
           {!ready && ready_prev && <i aria-label={formatMessage({id: 'server-pending'})} className="server-status is-pending hint--right" />}
           {!ready && !ready_prev && <i aria-label={formatMessage({id: 'server-error'})} className="server-status is-error hint--right" />} 

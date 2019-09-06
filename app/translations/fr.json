@@ -11,7 +11,7 @@
   "confirm-forget-server": "Êtes-vous sûr de vouloir oublier ce serveur ?",
   "forget-this-server": "Oublier ce serveur",
   "choose-a-corpus": "Choisir un corpus",
-  "corpus-list-search": "Chercher parmi {nbCorpora} corpus",
+  "corpus-list-search": "Chercher parmi {nbCorpora} corpora",
   "create-or-configure-server": "Ajouter/configurer un serveur", 
   "create-a-corpus": "Créer un corpus",
   "password-protected": "protégé par un mot de passe (optionnel)",
@@ -52,9 +52,10 @@
 
   "tags.corpus-has-no-categories": "Le corpus n'a pas encore de catégories",
   "tags.new-category": "nom de la nouvelle catégorie",
-  "tags.add-category": "ajouter une categorie",
+  "tags.add-category": "ajouter une catégorie de tags",
   "tags.add": "ajouter",
-  "tags.add-category-help": "ajouter une nouvelle catégorie pour le corpus (exemples: langue, type d'acteur,...)",
+  "load-more-webentities": "charger plus de webentités",
+  "tags.add-category-help": "ajouter une nouvelle catégorie de tags pour les webentités du corpus (exemples: langue, type d'acteur,...)",
 
 
 
@@ -132,7 +133,7 @@
   "google.search": "Rechercher sur ",
   "google.placeholder": "Rechercher…",
   "goto-homepage": "Ouvrir la Homepage {url}",
-  "here-homepage": "Vous êtes sur la Homepage",
+  "here-homepage": "Cette page est la Homepage de la webentité",
   "hyphe-tab-title": "Onglet Hyphe",
   "ignore": "Ignorer",
   "indegree": "Citée par",
@@ -164,7 +165,8 @@
   "select-stack": "Explorer le corpus >",
   "server-add": "Ajouter un serveur",
   "server-name": "Choisir un nom au serveur",
-  "set-homepage": "Définir la page courante comme Homepage",
+  "set-homepage": "Définir cette page comme Homepage de la webentité",
+  "is-homepage": "Cette page est la Homepage de la webentité",
   "sidebar.add-tags-category": "Ajouter une catégorie",
   "sidebar.categories": "Catégories",
   "sidebar.freetags": "Notes de recherche",

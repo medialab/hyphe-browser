@@ -144,7 +144,7 @@ const BrowserBar = function ({
                 className={ cx('homepage-btn', 'hint--left', {
                   'is-active': isHomepage
                 }) }
-                aria-label={ formatMessage({ id: 'set-homepage' }) }
+                aria-label={ isHomepage ? formatMessage({ id: 'is-homepage' }) : formatMessage({ id: 'set-homepage' }) }
                 onClick={ onSetHomepage }>
                 <span className="ti-layers-alt" />
               </button>

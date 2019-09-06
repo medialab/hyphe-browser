@@ -53,6 +53,13 @@ const WebentityBrowseLayout = ({
    * browse nav related
    */
 
+  const formatStackName = stackName => {
+    if (stackName === 'DISCOVERED') {
+      return 'PROSPECTION'
+    }
+    return stackName
+  }
+
   // used by Prev (-1) / Next (+1) buttons
   const rotateWebentity = (offset) => {
     const idx = webentitiesList.findIndex(x => x.id === webentity.id)
@@ -132,7 +139,7 @@ const WebentityBrowseLayout = ({
           className="hint--right"
           onClick={ goPrevWebentity }
           disabled={ !selectedStack ||  isFirst || loadingStack || loadingWebentity }
-          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: selectedStack }) }>
+          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) }>
           <i className="ti-angle-left" />
         </button>
         <span className="current-webentity-name" onClick={ handleSetTabHomepage }>{webentity.name}</span>
@@ -140,7 +147,7 @@ const WebentityBrowseLayout = ({
           className="hint--left" 
           onClick={ goNextWebentity }
           disabled={ !selectedStack || isLast || loadingStack || loadingWebentity }
-          aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: selectedStack }) }>
+          aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) }>
           <i className="ti-angle-right" />
         </button>
       </nav>
