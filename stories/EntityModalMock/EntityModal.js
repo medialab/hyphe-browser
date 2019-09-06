@@ -57,6 +57,7 @@ const EntityModal = ({
   selectedPage,
   setCurrentStep,
   withPreviousTags,
+  withExistingPrefix,
 }) => {
   const totalStepsNumber = withPreviousTags ? 4 : 3
   return (
@@ -100,9 +101,16 @@ const EntityModal = ({
               ] }
               />
               <ul className="actions-container">
-                <li><button disabled={ currentStep > 1 } onClick={ () => setCurrentStep(2) } className="btn btn-success">confirm</button></li>
+                <li><button disabled={ currentStep > 1 || withExistingPrefix } onClick={ () => setCurrentStep(2) } className="btn btn-success">confirm</button></li>
               </ul>
             </div>
+
+            {
+              withExistingPrefix &&
+              <div className="form-error">
+                There is already a webentity with this URL scope in your corpus
+              </div>
+            }
               
           </div>
 
@@ -158,6 +166,7 @@ const EntityModal = ({
 const EntityModalMockupContainer = ({
   isOpen = true,
   withPreviousTags,
+  withExistingPrefix,
   onToggle
 }) => {
   const [currentStep, setCurrentStep] = useState(1)
@@ -178,6 +187,7 @@ const EntityModalMockupContainer = ({
         selectedPage,
         setCurrentStep,
         withPreviousTags,
+        withExistingPrefix,
       }
       }
     />
