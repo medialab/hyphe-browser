@@ -112,6 +112,7 @@
     "react": "^16.8.6",
     "react-addons-shallow-compare": "^15.3.2",
     "react-autosize-textarea": "^7.0.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.8.6",
     "react-draggable": "^3.3.0",
     "react-infinite": "^0.13.0",
