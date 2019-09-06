@@ -2,6 +2,8 @@ import React from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 
+import Tooltipable from '../Tooltipable'
+
 export const KnownPageCard = ({
   id,
   url,
@@ -29,13 +31,14 @@ export const KnownPageCard = ({
         {
           displayHomePageButton
           &&
-          <button 
-            className={ cx('homepage-btn', 'hint--left', { 'is-active': isHomepage }) } 
+          <Tooltipable
+            Tag="button" 
+            className={ cx('homepage-btn', 'hint--right', { 'is-active': isHomepage }) } 
             onClick = { onClickHomepage }
             aria-label={ isHomepage ? formatMessage({ id: 'here-homepage' }): formatMessage({ id: 'set-homepage' }) }
           >
             <span className="ti-layers-alt" />
-          </button>
+          </Tooltipable>
         }
       </div>
     </li>

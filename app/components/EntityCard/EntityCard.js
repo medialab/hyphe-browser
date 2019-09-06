@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames'
 
 import {FormattedMessage as T} from 'react-intl'
+import Tooltipable from '../Tooltipable'
 
 const EntityCard = ({
   link,
@@ -54,26 +55,28 @@ const EntityCard = ({
         
         
         <ul className="card-actions-row">
-          {status !== 'UNDECIDED'
-        &&
-        <li onClick={ onClickUndecided } className={ `hint--left ${isUndecidedActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-undecided'})}>
-          <button className="btn btn-default">{/*<i className="ti-help" />*/}UND.</button>
-        </li>}
+          {
+          status !== 'UNDECIDED'
+          &&
+          <Tooltipable Tag="li" onClick={ onClickUndecided } className={ `hint--right ${isUndecidedActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-undecided'})}>
+            <button className="btn btn-default">{/*<i className="ti-help" />*/}UND.</button>
+          </Tooltipable>
+        }
 
           {status !== 'OUT'
         &&
-        <li onClick={ onClickOut } className={ `hint--left ${isOutActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-out'})}>
+        <Tooltipable Tag="li" onClick={ onClickOut } className={ `hint--right ${isOutActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.move-to-out'})}>
           <button className="btn btn-default">OUT</button>
-        </li>
+        </Tooltipable>
           }
         </ul>
 
         <ul className="card-actions-row">
           {allowMerge
         &&
-        <li onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
+        <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
           <button className="btn btn-default"><i className="ti-plus" /></button>
-        </li>
+        </Tooltipable>
           }
         </ul>
       </div>
