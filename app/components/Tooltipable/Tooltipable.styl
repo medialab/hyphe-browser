@@ -2,6 +2,12 @@
 
 .tooltipable-placeholder
     opacity: 0
-    &:hover
+    z-index: -1
+    pointer-events: none
+    &.is-active
       z-index: 1000
       opacity: 1
+
+.tooltipable-anchor.is-hidden
+  opacity: 0
+      

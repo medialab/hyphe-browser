@@ -2,6 +2,7 @@ import './Tooltipable.styl'
 
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+// import { useVisible } from 'react-hooks-visible'
 
 /**
  * Note : in order to overcome a limitation with css-based tooltips when they are
@@ -22,6 +23,7 @@ const Tooltipable = ({
 
   const [position, setPosition] = useState({})
   const [isHovered, setHovered] = useState(false)
+  // const [targetRef, visible] = useVisible()
 
   const updatePos = () => {
     if (container) {
@@ -50,16 +52,17 @@ const Tooltipable = ({
       <Tag 
         {...props} 
         style={style}
-        className={className.replace('hint', '') + ' tooltipable-anchor'}
+        onMouseEnter={handleMouseEnter}  
+        onMouseLeave={handleMouseLeave}  
+        className={`${className.replace('hint', '')} ${isHovered ? 'is-hidden': ''} tooltipable-anchor`}
         ref={container} 
       >
         {children}
       </Tag>
+      {/* <div style={{display: 'inline-block', width: 0, height: 0}} ref={targetRef} /> */}
       <Tag 
         {...props} 
-        onMouseEnter={handleMouseEnter}  
-        onMouseLeave={handleMouseLeave}  
-        className={`${className} tooltipable-placeholder`}
+        className={`${className} ${isHovered ? 'is-active': ''} tooltipable-placeholder hint--always`}
         style={ { 
           ...style, 
           position: 'fixed', 
