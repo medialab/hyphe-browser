@@ -113,13 +113,21 @@ input
         flex: 1
         webview
             height: 100%
+    .switch-mode-title
+        stretch(row)
     .current-stack-indicator
-        min-width: 10px
-        min-height: 10px
+        width: 17px
+        height: 17px
+        font-size: 7px
+        color: var(--color-white)
         border-radius: 50%
         margin-right: 5px
         position: relative
         display: inline-block
+        display: flex
+        align-items: center
+        justify-content: center
+        padding: 0
         &.IN
             background: var(--color-corpus-in)
         &.OUT

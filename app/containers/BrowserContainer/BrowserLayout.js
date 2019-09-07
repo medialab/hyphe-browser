@@ -63,24 +63,28 @@ const BrowserLayout = ({
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
               <li><button onClick={() => onSetAsideMode('stackList')} className={cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) })}>
-                <span>
-                  <span 
-                    className={cx('current-stack-indicator hint--right', selectedStack)} 
-                    aria-label={formatMessage({id: 'overview-location'}, {status: formatStackName(selectedStack)})}
-                  />
+                <span className="switch-mode-title">
+                  <span
+                    className={cx('current-stack-indicator hint--right', selectedStack)}
+                    aria-label={formatMessage({ id: 'overview-location' }, { status: formatStackName(selectedStack) })}
+                  >
+                      <i className="ti-menu" />
+                  </span>
                   <T id="sidebar.inquiry-overview" />
-                  
+
                   <HelpPin>{formatMessage({ id: "sidebar.inquiry-overview-help" })}</HelpPin></span></button>
               </li>
               <li>
                 <button disabled={isLanding} onClick={() => onSetAsideMode('webentityBrowse')} className={cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) })}>
-                  <span>
-                  <span 
-                      className={cx('current-stack-indicator hint--bottom', webentity && webentity.status)} 
-                      aria-label={formatMessage({id: 'currently-browsed-webentity-location'}, {status: formatStackName(webentity && webentity.status)})}
-                    />
+                  <span className="switch-mode-title">
+                    <span
+                      className={cx('current-stack-indicator hint--bottom', webentity && webentity.status)}
+                      aria-label={formatMessage({ id: 'currently-browsed-webentity-location' }, { status: formatStackName(webentity && webentity.status) })}
+                    >
+                      <i className="ti-desktop" />
+                    </span>
                     <T id="sidebar.browsed-webentity" />
-                    
+
                     <HelpPin>{formatMessage({ id: "sidebar.browsed-webentity-help" })}</HelpPin>
                   </span>
                 </button>

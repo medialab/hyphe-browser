@@ -62,7 +62,7 @@
   "sidebar.overview.current-webentities-list": "Liste de webentités actuelle",
   "sidebar.overview.current-webentities-list-help": "Choisir quelle liste de webentités vous souhaitez inspecter",
 
-  "locate-currently-browsed-webentity": "localiser",
+  "locate-currently-browsed-webentity": "où suis-je ?",
   "locate-currently-browsed-webentity-help": "localiser la webentité actuellement visitée",
   "overview-location": "La vue d'ensemble affiche la liste {status}",
   "currently-browsed-webentity-location": "La webentité actuellement visitée est dans la liste {status}",
