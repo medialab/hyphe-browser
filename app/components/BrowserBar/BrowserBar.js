@@ -115,6 +115,7 @@ const BrowserBar = function ({
               onKeyUp={ handleKeyUp }
               onBlur={ () => setEdited(false) } 
               onChange={ e => setTabUrl(e.target.value) }
+              placeholder={formatMessage({id: 'empty-url'})}
               value={ tabUrl }
             />
             :
@@ -124,7 +125,7 @@ const BrowserBar = function ({
                 dangerouslySetInnerHTML={ {
                   __html: highlightUrlHTML(lruPrefixes, tabUrl, tlds)
                 } } />:
-              <span className={ cx('browser-tab-url', { loading }) }>
+              <span className={ cx('browser-tab-url empty', { loading }) }>
                 {tabUrl || <T id="empty-url" />}
               </span>
           }

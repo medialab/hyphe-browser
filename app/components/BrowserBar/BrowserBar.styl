@@ -19,15 +19,18 @@
             overflow: hidden
             position: absolute
             width: 100%
+            border-radius: var(--radius)
             input 
                 input()
+                border: none
                 width: 100%
                 outline: none
+                // border-radius: 0
         &:not(.edited)
             form
                 width: calc(100% - 10px)
     
-    .browser-tab-url {
+    .browser-tab-url
         display: flex
         flex-flow: row nowrap
         align-items: center
@@ -44,37 +47,38 @@
         top: 0
         width: 10000%
 
-        em {
+        em
             cursor: inherit;
-        }
+        
 
         /* :first-child = scheme */
-        em:first-child {
+        em:first-child
             font-style: normal;
-        }
+        
 
-        em:not(:first-child) {
+        em:not(:first-child)
             background: var(--color-grey);
             padding: 2px 0px;
             font-weight: bold;
             font-style: normal;
-        }
+        
 
-        em:nth-child(2) {
+        em:nth-child(2) 
             border-radius: 3px 0 0 3px;
-        }
-        em:last-child {
+        
+        em:last-child 
             border-radius: 0 3px 3px 0;
-        }
+        
 
-        &.loading {
+        &.loading
             background-image: url(../../images/loading.svg);
             background-position: right;
             background-repeat: no-repeat;
             background-size: 30px;
-        }
-    }
-
+        &.empty
+            span 
+                position: relative
+                top: -2px
     .navigate-btn:disabled,
     .navigate-btn[disabled]
         color: var(--color-black)
