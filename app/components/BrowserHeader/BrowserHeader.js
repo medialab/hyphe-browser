@@ -20,10 +20,10 @@ const BrowserHeader = ({
   return (
     <div className="browser-header">
       <div className="header-group header-group-main">
-        <h1 title={corpus.name}>{ ellipseStr(corpus.name, 42) }
-          {ready && <i aria-label={formatMessage({id: 'server-ok'})} className="server-status is-ready hint--right" />}
-          {!ready && ready_prev && <i aria-label={formatMessage({id: 'server-pending'})} className="server-status is-pending hint--right" />}
-          {!ready && !ready_prev && <i aria-label={formatMessage({id: 'server-error'})} className="server-status is-error hint--right" />} 
+        <h1 aria-label={corpus.name}>{ ellipseStr(corpus.name, 42) }
+          {ready && <i aria-label={formatMessage({id: 'server-ok'})} className="server-status is-ready hint--bottom-right" />}
+          {!ready && ready_prev && <i aria-label={formatMessage({id: 'server-pending'})} className="server-status is-pending hint--bottom-right" />}
+          {!ready && !ready_prev && <i aria-label={formatMessage({id: 'server-error'})} className="server-status is-error hint--bottom-right" />} 
         </h1>
         <HeaderMetrics status={ status } />
       </div>
@@ -44,7 +44,7 @@ const BrowserHeader = ({
             <Link 
               to="/login"
               aria-label={ formatMessage({ id: 'tooltip.corpus-close' }) }
-              className="btn hint--left"
+              className="btn hint--bottom-left"
             >
               <i className="ti-close" />
             </Link>
