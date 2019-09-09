@@ -30,8 +30,8 @@ const Tooltipable = ({
       const el = container.current
       const box = el.getBoundingClientRect()
       setPosition({
-        left: parseInt(box.x),
-        top: parseInt(box.y),
+        left: Math.round(box.x),
+        top: Math.round(box.y),
       })
     }
   }

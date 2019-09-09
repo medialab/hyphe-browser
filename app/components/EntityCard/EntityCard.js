@@ -6,6 +6,7 @@ import cx from 'classnames'
 
 import {FormattedMessage as T} from 'react-intl'
 import Tooltipable from '../Tooltipable'
+import {ellipseStr} from '../../utils/misc'
 
 const EntityCard = ({
   link,
@@ -37,7 +38,7 @@ const EntityCard = ({
         {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({id: 'webentity-already-visited'}) : formatMessage({id: 'webentity-never-visited'}) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div className="card-content">
-        <h4 className="name">{name}</h4>
+        <h4 title={name} className="name">{ellipseStr(name, 25)}</h4>
         <h5 className="url">{homepage}</h5>
         {
           !!indegree && 
@@ -75,7 +76,7 @@ const EntityCard = ({
         <ul className="card-actions-row">
           {allowMerge
         &&
-        <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--left ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
+        <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--right ${isMergeActive ? 'is-active': ''}` } aria-label={formatMessage({id: 'webentity-card.merge-with-current-entity'})}>
           <button className="btn btn-default"><i className="ti-plus" /></button>
         </Tooltipable>
           }

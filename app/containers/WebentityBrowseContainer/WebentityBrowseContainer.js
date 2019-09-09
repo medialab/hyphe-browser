@@ -146,7 +146,6 @@ const WebentityBrowseContainer = ({
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
 
-  if (!webentity) return null
   return (<WebentityBrowseLayout
     webentity={ webentity }
     viewedProspectionIds={ viewedProspectionIds }

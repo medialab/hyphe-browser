@@ -21,7 +21,7 @@ const NewTabContent = ({
   onSelectStack,
   onSetTabUrl,
   onChangeEngine
-}) => {
+}, {intl: { formatMessage }}) => {
   const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
   const [query, setQuery] = useState('')
   const [searchUrl, setSearchUrl] = useState('')
@@ -57,32 +57,32 @@ const NewTabContent = ({
   return (
     <div className="entry-tab-content">
       <div className="content-wrapper">
-        <h1>Getting started</h1>
+        <h1><T id="new-tab.getting-started" /></h1>
         <div className="starter-container">
           <div>
-            <p>To begin your inquiry session with Hyphe Browser, you can :</p>
+            <p><T id="new-tab.begin-phrase" /></p>
           </div>
           <ul className="actions-container">
             <li onClick={ () => setCurrentAction('search') } className={ `action-container ${currentAction === 'search' ? 'is-active': ''}` }>
               <button>
-                <h3>Browse</h3>
-                <h4>the web for relevant webpages</h4>
+                <h3><T id="new-tab.browse" /></h3>
+                <h4><T id="new-tab.browse-sentence" /></h4>
               </button>
             </li>
             <li 
               onClick = { () => onSelectStack('DISCOVERED') }
               className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
-                <h3>Review</h3>
-                <h4>webentities in prospection to expand your corpus</h4>
+                <h3><T id="new-tab.review" /></h3>
+                <h4><T id="new-tab.review-sentence" /></h4>
               </button>
             </li>
             <li 
               onClick = { handleSelectTagStack }
               className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
               <button>
-                <h3>Tag</h3>
-                <h4>webentities already included in your corpus</h4>
+                <h3><T id="new-tab.tag" /></h3>
+                <h4><T id="new-tab.tag-sentence" /></h4>
               </button>
             </li>
           </ul>
@@ -90,7 +90,7 @@ const NewTabContent = ({
             <div className="action-details">
               <ul className="browser-search">
                 <li>
-                  Search with 
+                  <T id="new-tab.search-with" />
                   <select value={ selectedEngine || 'google' } onChange={ handleChangeEngine }>
                     {
                       SEARCH_ENGINES.map((engine, index) => {
@@ -103,25 +103,35 @@ const NewTabContent = ({
                   <form className="form" onSubmit={ handleSubmitQuery }>
                     <input 
                       value={ query }
-                      placeholder={ `search with ${selectedEngine}` }
+                      placeholder={ formatMessage({ id: `new-tab.search-placeholder` }, { selectedEngine }) }
                       onChange={ e => setQuery(e.target.value) } />
-                    <button>search</button>
+                    <button>
+                      <T id="search" />
+                    </button>
                   </form>
                 </li>
                 <li>
-                  ... or directly start with a URL address:
+                  <T id="new-tab.url-address-prompt" />
                 </li>
                 <li className="form-container">
                   <form className="form" onSubmit={ handleSubmitSearchUrl }>
-                    <input value={ searchUrl } placeholder="enter URL address here" onChange={ e => setSearchUrl(e.target.value) } />
-                    <button>go</button>
+                    <input 
+                      value={ searchUrl } 
+                      placeholder={ formatMessage({id: 'new-tab.url-placeholder'})}
+                      onChange={ e => setSearchUrl(e.target.value) } 
+                    />
+                    <button>
+                      <T id="new-tab.visit" />
+                    </button>
                   </form>
                 </li>
               </ul>
             </div>
           }
         </div>
-        <FormattedHTMLMessage id="intro_md" />
+        <div className="doc-intro-container">
+          <FormattedHTMLMessage id="intro_md" />
+          </div>
       </div>
     </div>
   )

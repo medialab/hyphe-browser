@@ -9,6 +9,7 @@
     font-weight: bold;
     padding-left: 30px
     padding-top: 5px
+    padding-top: 5px
     position: relative
     .btn
         font-weight: normal
@@ -63,7 +64,7 @@
         display: flex
         flex-flow: row nowrap
         padding-top: 0
-        margin-left: 20px
+        margin-left: 40px
         li
             margin: 0
             margin-right: 10px
@@ -72,6 +73,7 @@
             align-items: center
         .metrics-icon
             font-size: 10px
+            transition: all .2s ease
             &.prospection
                 color: var(--color-corpus-discovered)
             &.in
@@ -80,15 +82,22 @@
                 color: var(--color-corpus-out)
             &.undecided
                 color: var(--color-corpus-undecided)
+            &.changed
+                font-size: 14px
             
         .metrics
             padding-left: 2px
             font-size: 10px
             display: flex
             flex-flow: row nowrap
+            transition: all .2s ease
             span,label
                 padding-left: 5px
                 font-size: 10px
+            &.changed
+                span,label
+                    padding-left: 5px
+                    font-size: 12px
         .ti-layout-column3-alt:before
             display: inline-block
             transform: rotate(90deg)
