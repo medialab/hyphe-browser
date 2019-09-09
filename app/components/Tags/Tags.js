@@ -84,11 +84,15 @@ const Tags = ({
                     const newTag = option ? option.value.trim() : ''
 
                     const prevTag = categories.find((cat) => cat.category === category).value
-                    if (prevTag) {
-                      onRemoveTag(category, prevTag)
-                    }
-                    if (option) {
-                      onAddTag(category, newTag)
+                    if (prevTag && option) {
+                      onUpdateTag(category, prevTag, newTag)
+                    } else {
+                        if (prevTag) {
+                          onRemoveTag(category, prevTag)
+                        }
+                        if (option) {
+                          onAddTag(category, newTag)
+                        }
                     }
 
                     setCategories(
