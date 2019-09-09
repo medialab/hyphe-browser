@@ -1,25 +1,22 @@
-Qu'est-ce que c'est ?
-------------------------
+## De quoi s'agit-il ?
 
-Hyphe browser is an inquiry companion for qualitatively mapping a subset of the world wide web concerned with a specific issue. It is aimed at building a _corpus_ of webpages relevant to your inquiry, annotate them and eventually visualize their relations to grasp how the issue is present on the web.
+Hyphe browser est un compagnon d'enquête pour la cartographie qualitative d'une partie du web concernée par un problème spécifique. Il est voué à la fabrication d'un [corpus](#corpus) de pages web pertinentes pour votre enquête, leur annotation et, enfin, la visualisation de leurs relations permettant de formuler une analyse sur la distribution sociale d'un problème sur le web.
 
-Hyphe browser allows to navigate the web and regroup webpages as _webentities_ which correspond to the online presence of specific individuals, organizations, etc. relevant to your inquiry.
+Hyphe browser permet de naviguer sur le web et de regrouper les pages web en [webentités](#webentity) qui correspondent à la présence en ligne d'individus spécifiques, d'organisations,... pertinents pour votre enquête.
 
-Hyphe browser allows to qualitatively - and collectively - review and define the _webentities_ of your inquiry and choose whether they should be included _IN_ the corpus or excluded _OUT_ of it. When a _webentity_ is included _IN_ the _corpus_, the Hyphe server automatically navigates to each of its webpages and analyzes their content to discover linked webentities that may be relevant to your inquiry (this is technically called _crawling_).
+Hyphe browser permet de définir et de passer en revue qualitativement - et collectivement - les [webentités](#webentity) de votre enquête, et de choisir si elles devraient être inclues dans le [corpus](#corpus) ("[IN](#in)") ou exclues ("[OUT](#out)"). Quand une [webentité](#webentity) est inclue dans le [corpus](#corpus), le serveur Hyphe navigue automatiquement sur chacune de ses pages web et analyse leur contenu pour découvrir des webentités liées qui pourraient être pertinentes pour votre enquête (cette technique est nommée _crawling_).
 
-How should I work ?
--------------------
+## Comment devrais-je travailler ?
 
-A typical workflow with hyphe browser could look like that :
+Une séquence de travail typique avec Hyphe browser pourrait ressembler à ceci :
 
-1.  you define a few websites of individuals, organizations, actors, ... relevant to your inquiry, browse to them with hyphe browser, and include them _IN_ the corpus
-2.  each webentity included in the corpus will be automatically analyzed (_crawled_) by the hyphe server to discover new possibly relevant webentities and add them to the _PROSPECTION_ list
-3.  you review webentities proposed by the server in the _PROSPECTION_ list, reading them with the browser and making the choice to include them _IN_ the corpus or exclude them _OUT_ of the corpus
-4.  the 2 previous steps repeat as long as you are not satisfied with the web territory covered by your inquiry
-5.  once your corpus is stabilized and your mapping seems comprehensive enough to start analyzing their relations, you can tag your webentities according to different categories and then visualize them as a network in hyphe (top right button)
-6.  of course, all of this process is iterative and previous steps can repeat as much as necessary
+1.  vous définissez un petit nombre de sites correspondant à des personnes, organisations, acteurs... pertinents pour votre enquête, naviguez dessus avec Hyphe browser et les incluez dans ("[IN](#in)") le corpus
+2.  chaque webentité inclue dans le corpus est automatiquement analysée (_crawlée_) par le serveur hyphe pour découvrir de nouvelles webentités possiblement pertinentes : elles sont ajoutées dans la liste [PROSPECTION](#prospection)
+3.  vous passez en revue les webentités proposées par le serveur dans la liste [PROSPECTION](#prospection), les lisez avec le navigateur et faites le choix de les inclure dans le corpus ([IN](#in)) ou de les exclure ()[OUT](#out))
+4.  les 2 étapes précédentes se répètent tant que vous n'êtes pas satisfait du territoire du web couvert par votre enquête
+5.  une fois le corpus stabilisé, vous pouvez tagger vos webentités en fonction de catégories pertinentes pour l'enquête et les visualiser sous la forme d'un réseau avec hyphe (onglet en haut à droite)
+6.  ce processus est itératif et peut être répété autant de fois que nécessaire
 
-Where can I find more documentation
------------------------------------
+## Où puis-je trouver davantage de documentation
 
-Head to the online documentation of Hyphe browser
+Rendez-vous sur la documentation en ligne de Hyphe Browser.

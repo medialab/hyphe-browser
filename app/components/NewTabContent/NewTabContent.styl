@@ -9,7 +9,7 @@
     position: relative
     background: white
     .content-wrapper
-        max-width: 600px
+        max-width: 625px
         padding: 20px
     .starter-container
         background: var(--color-white)
@@ -27,7 +27,7 @@
             flex: 1
             max-width: 30%
             min-width: 30%
-            height: 120px
+            height: 110px
             button
                 button()
                 background: white
@@ -44,7 +44,7 @@
                     margin: 0
                     padding: 0
                 h4
-                    margin-top: 0
+                    margin-top: 5px
                     font-size: 12px
                     max-width: 100%
                     white-space: normal
@@ -64,10 +64,11 @@
         margin-top: 20px
         margin-bottom: 20px
         select 
-            font-family: var(--font-pt)
+            // font-family: var(--font-pt)
             border: none 
             font-size: 16px
             outline: none
+            margin-left: 5px
         
         .form-container
             flex: 1
@@ -79,9 +80,9 @@
             input
                 flex: 1
                 input()
-                padding: 10px
+                // padding: 10px
                 width: 100%
-                font-size: 16px
+                // font-size: 16px
                 max-width: 100%
                 box-sizing: border-box
                 &:focus
@@ -91,7 +92,7 @@
                 padding: 5px 10px
                 font-family: var(--font-mont)
                 margin-left: 5px
-                min-width: 70px
+                min-width: 80px
                 cursor: pointer
         .form-container:last-of-type
             margin-bottom: 0
@@ -102,11 +103,12 @@
     .intro-contents
         em
             font-weight: bold
-            color: var(--color-blue)
+    .definition
+        color: var(--color-blue)
     .hint--top:hover:after
         max-width: 300px
         min-width: 300px
         white-space: normal
         line-height: 1.5
-    .more-doc-container
+    .doc-intro-container
         margin-bottom: 100px
