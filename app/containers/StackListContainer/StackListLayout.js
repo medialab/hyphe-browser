@@ -186,7 +186,9 @@ const StackListLayout = ({
           <WebentitiesContainer 
             scrollTo={isLocating && `entity-card-${isLocating}`}
             onScrollSuccess={handleLocateSuccess} 
-            isLoading={isLoading}>
+            isLoading={isLoading}
+            isEmpty={isEmpty}
+            >
             {isEmpty ?
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={{ list: selectedStack.toUpperCase() }} />

@@ -7,6 +7,7 @@ const WebentitiesContainer = ({
   isLoading,
   scrollTo,
   onScrollSuccess,
+  isEmpty,
 }) => {
   const elRef = useRef(null)
   const scrollbar = useRef(null)
@@ -25,12 +26,10 @@ const WebentitiesContainer = ({
   }
   return (
     <Scrollbars 
-      renderTrackHorizontal={() => <div style={{display: 'none'}} />}
-      renderThumbHorizontal={() => <div style={{display: 'none'}} />}
       renderThumbVertical={() => <div style={{marginLeft: '3px', width: '3px', background: 'var(--color-blue)'}} />}
       ref={scrollbar}
     >
-      <ul ref={elRef} className={cx('webentities-list', { 'is-loading': isLoading })}>
+      <ul ref={elRef} className={cx('webentities-list', { 'is-loading': isLoading, 'is-empty': isEmpty })}>
         {children}
       </ul>    
     </Scrollbars>
