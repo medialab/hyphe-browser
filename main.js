@@ -13,20 +13,11 @@ if (isPackaged) {
 }
 
 if (process.env.NODE_ENV === 'development') {
+  require('react-devtools-electron')
   require('electron-debug')({
     showDevTools: true
   })
-  const devtools = require('electron-devtools-installer')
-
   app.disableHardwareAcceleration()
-
-  app.on('ready', () => {
-    [ 'REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS' ].forEach(t => {
-      devtools.default(devtools[t])
-        .then(name => console.log(`Added Extension:  ${name}`)) // eslint-disable-line no-console
-        .catch(err => console.error('An error occurred during redux devtools install: ', err)) // eslint-disable-line no-console
-    })
-  })
 }
 
 let window
