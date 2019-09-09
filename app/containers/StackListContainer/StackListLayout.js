@@ -175,11 +175,8 @@ const StackListLayout = ({
               </button>
               {
                 tabWebentity &&
-                <button onClick={handleLocate} className={cx("btn locate", tabWebentity.status)}>
+                <button onClick={handleLocate} className={cx("btn locate hint--left", tabWebentity.status)} aria-label={formatMessage({ id: 'locate-currently-browsed-webentity-help'})}>
                   <T id="locate-currently-browsed-webentity" />
-                  <HelpPin>
-                    {formatMessage({ id: 'locate-currently-browsed-webentity-help' })}
-                  </HelpPin>
                 </button>
               }
 
