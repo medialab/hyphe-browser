@@ -46,6 +46,8 @@
 
   "filter": "filter",
 
+  "actualize-entities-list": "actualize webentities list",
+
   "new-tab.getting-started": "Getting started",
   "new-tab.begin-phrase": "To begin your inquiry session with Hyphe Browser, you can:",
   "new-tab.browse": "Browse",

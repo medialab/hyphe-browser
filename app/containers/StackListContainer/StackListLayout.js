@@ -39,8 +39,11 @@ const StackListLayout = ({
   const [searchString, setSearchString] = useState('')
   const [isLocating, setIsLocating] = useState(undefined)
 
+  const [numberOfEntities, setNumberOfEntities] = useState(counters[selectedStack])
+
   useEffect(() => {
     setSelectedListReal(selectedStack)
+    setNumberOfEntities(counters[selectedStack])
   }, [selectedStack])
 
   useEffect(() => {
@@ -114,6 +117,10 @@ const StackListLayout = ({
   const handleLocateSuccess = () => {
     setIsLocating(undefined)
   }
+  const handleRefresh = () => {
+    onSelectStack(selectedStack)
+    setNumberOfEntities(counters[selectedStack])
+  }
   return (
     <div className="list-layout">
       <div className="status-list-container">
@@ -167,14 +174,15 @@ const StackListLayout = ({
                 <T id="filter" /> <i className="ti-angle-down" />
               </button>
               {
-              tabWebentity &&
-              <button onClick={handleLocate} className={cx("btn locate", tabWebentity.status)}>
-                <T id="locate-currently-browsed-webentity" />
-                <HelpPin>
-                  {formatMessage({id: 'locate-currently-browsed-webentity-help'})}
-                </HelpPin>
-              </button>
+                tabWebentity &&
+                <button onClick={handleLocate} className={cx("btn locate", tabWebentity.status)}>
+                  <T id="locate-currently-browsed-webentity" />
+                  <HelpPin>
+                    {formatMessage({ id: 'locate-currently-browsed-webentity-help' })}
+                  </HelpPin>
+                </button>
               }
+
               {isFilterOpen &&
                 <ul className="filter-options">
                   <li className={cx('filter-option', { 'is-active': filterValue === 'no-tag' })} onClick={() => handleSelectFilter('no-tag')}><T id="sidebar.overview.show-only-no-tags" /></li>
@@ -183,12 +191,21 @@ const StackListLayout = ({
               }
             </span>
           </div>
-          <WebentitiesContainer 
+          <div className="actualize-container">
+            {
+              counters[selectedStack] !== numberOfEntities &&
+              <button className="btn actualize" onClick={handleRefresh}>
+                {formatMessage({ id: 'actualize-entities-list' })}
+                {` (${counters[selectedStack] > numberOfEntities ? `+${counters[selectedStack] - numberOfEntities}` : `-${numberOfEntities - counters[selectedStack]}`})`}
+              </button>
+            }
+          </div>
+          <WebentitiesContainer
             scrollTo={isLocating && `entity-card-${isLocating}`}
-            onScrollSuccess={handleLocateSuccess} 
+            onScrollSuccess={handleLocateSuccess}
             isLoading={isLoading}
             isEmpty={isEmpty}
-            >
+          >
             {isEmpty ?
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={{ list: selectedStack.toUpperCase() }} />
