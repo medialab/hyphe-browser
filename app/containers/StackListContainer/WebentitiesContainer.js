@@ -1,6 +1,8 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
 import cx from 'classnames'
-import { Scrollbars } from 'react-custom-scrollbars';
+import ScrollContainer from './ScrollContainer'
+
 
 const WebentitiesContainer = ({
   children,
@@ -10,30 +12,21 @@ const WebentitiesContainer = ({
   isEmpty,
 }) => {
   const elRef = useRef(null)
-  const scrollbar = useRef(null)
-  if (scrollTo) {
-    const parent = elRef && elRef.current;
-    const children = parent && elRef.current.childNodes;
-    if (children) {
-      const match = Array.prototype.find.call(children, el => {
-        return el.id === scrollTo;
-      })
-      if (match && scrollbar) {
-        scrollbar.current.scrollTop(match.offsetTop)
-        onScrollSuccess()
-      }
-    }
-  }
   return (
-    <Scrollbars 
-      renderThumbVertical={() => <div style={{marginLeft: '3px', width: '3px', background: 'var(--color-blue)'}} />}
-      ref={scrollbar}
-    >
-      <ul ref={elRef} className={cx('webentities-list', { 'is-loading': isLoading, 'is-empty': isEmpty })}>
+    <ScrollContainer callback={ onScrollSuccess } target={ scrollTo } parent={ elRef }>
+      <ul ref={ elRef } className={cx('webentities-list', { 'is-loading': isLoading, 'is-empty': isEmpty })}>
         {children}
       </ul>    
-    </Scrollbars>
+    </ScrollContainer>
   )
 }
 
-export default WebentitiesContainer;
+WebentitiesContainer.propTypes = {
+  children: PropTypes.node,
+  isLoading: PropTypes.bool,
+  scrollTo: PropTypes.string,
+  onScrollSuccess: PropTypes.func,
+  isEmpty: PropTypes.bool,
+}
+
+export default WebentitiesContainer
