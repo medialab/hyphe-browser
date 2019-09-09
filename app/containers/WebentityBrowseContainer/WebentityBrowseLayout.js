@@ -7,6 +7,8 @@ import { pickBy } from 'lodash'
 
 import { TAGS_NS } from '../../constants'
 
+import {ellipseStr} from '../../utils/misc'
+
 import EditionCartel from '../../components/EditionCartel'
 import FieldNotes from '../../components/FieldNotes'
 import LinkedWebentities from '../../components/LinkedWebentities'
@@ -157,8 +159,8 @@ const WebentityBrowseLayout = ({
           aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) }>
           <i className="ti-angle-left" />
         </Tooltipable>
-        <span className="current-webentity-name" onClick={ handleSetTabHomepage }>
-          {webentity.name}
+        <span title={webentity.name} className="current-webentity-name" onClick={ handleSetTabHomepage }>
+          {ellipseStr(webentity.name, 20)}
           <span className="current-webentity-stack-indicators">{
             webentity.status !== initialStatus
             &&
