@@ -3,27 +3,26 @@
   display: flex
   flex-flow: column nowrap
   justify-content: stretch
-.browser-tabs {
+.browser-tabs
   display: flex;
   flex-direction: column;
 
-  > .browser-tab-labels {
+  > .browser-tab-labels
     overflow: hidden;
-  }
+
 
   .browser-tab-labels,
   .browser-tab-labels-edge,
-  .browser-tab-labels-main {
+  .browser-tab-labels-main
     display: flex;
-  }
 
-  .browser-tab-labels-edge {
+
+  .browser-tab-labels-edge
     flex-shrink: 1;
     flex-grow: 0;
     z-index: 90;
-  }
 
-  .browser-tab-labels-main {
+  .browser-tab-labels-main
     flex: 1;
     // to display the create new tab button
     padding-right: 30px;
@@ -32,16 +31,15 @@
     min-height: 40px
     padding-left: 25px
     overflow-x: auto;
-  }
-}
+  
 
 // button
-.browser-tab-new {
+.browser-tab-new
   margin-left: .5em;
   position: relative;
   cursor: pointer;
 
-  &::after {
+  &::after
     background: var(--color-grey);
     display: block;
     height: 40%;
@@ -50,14 +48,18 @@
     transform: skewX(25deg);
     width: 20px;
     z-index: -1;
-    content: "+"
+    content: ""
     padding: 5px;
     text-align: center;
-  }
 
-  &:hover::after {
+  &:hover::after
     background: var(--color-black);
     color: var(--color-white);
-  }
-}
+
+  span 
+    position: absolute
+    top: 18px;
+    left: 10px
+  &:hover span 
+    color: var(--color-white)
 
