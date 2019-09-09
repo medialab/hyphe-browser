@@ -11,6 +11,7 @@ import FieldNotes from '../../components/FieldNotes'
 import LinkedWebentities from '../../components/LinkedWebentities'
 import KnownPages from '../../components/KnownPages'
 import Tags from '../../components/Tags'
+import Spinner from '../../components/Spinner'
 // import EntityModal from '../../components/EntityModalMock'
 
 import HelpPin from '../../components/HelpPin'
@@ -50,6 +51,20 @@ const WebentityBrowseLayout = ({
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   /**
+   * Linked entities related
+   */
+  const [selectedLinkedEntities, setSelectedLinkedEntities] = useState('referrers')
+  const [statusActions, setStatusActions] = useState({})
+  
+
+  /**
+   * Display loading bar if no we is provided
+   */
+  if (!webentity) {
+    return <div className="loader-container"><Spinner /></div>
+  }
+
+  /**
    * browse nav related
    */
 
@@ -86,11 +101,6 @@ const WebentityBrowseLayout = ({
   const goPrevWebentity = () => rotateWebentity(-1)
 
 
-  /**
-   * Linked entities related
-   */
-  const [selectedLinkedEntities, setSelectedLinkedEntities] = useState('referrers')
-  const [statusActions, setStatusActions] = useState({})
   
   const resetLinkedEntitiesActions = () => {
     setStatusActions({})

@@ -136,29 +136,31 @@ const WebentityBrowseContainer = ({
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
 
-  if (!webentity) return null
-  return (<WebentityBrowseLayout
-    webentity={ webentity }
-    viewedProspectionIds={ viewedProspectionIds }
-    webentitiesList= { stackWebentities[selectedStack].webentities || [] }
-    selectedStack={ selectedStack }
-    loadingStack={ loadingStack }
-    loadingWebentity= { loadingWebentity }
-    loadingBatchActions = { loadingBatchActions }
-    tabUrl={ activeTab.url }
-    categories={ categories.filter(cat => cat !== 'FREETAGS') }
-    tagsSuggestions={ tagsSuggestions || {} }
-    onSelectWebentity={ handleSelectWebentity }
-    onDownloadList={ handleDownloadList }
-    onSetTabUrl={ handleSetTabUrl }
-    onOpenTab={ handleOpenTab }
-    onAddTag={ handleAddTag }
-    onUpdateTag={ handleUpdateTag }
-    onRemoveTag={ handleRemoveTag }
-    onBatchActions = { handleBatchActions }
-    onSetWebentityStatus={ handleSetWenentityStatus }
-    onSetWebentityName={ handleSetWebentityName }
-    onSetWebentityHomepage={ handleSetWebentityHomepage } />)
+  return (
+    <WebentityBrowseLayout
+      webentity={ webentity }
+      viewedProspectionIds={ viewedProspectionIds }
+      webentitiesList= { (stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities) || [] }
+      selectedStack={ selectedStack }
+      loadingStack={ loadingStack }
+      loadingWebentity= { loadingWebentity }
+      loadingBatchActions = { loadingBatchActions }
+      tabUrl={ activeTab.url }
+      categories={ categories.filter(cat => cat !== 'FREETAGS') }
+      tagsSuggestions={ tagsSuggestions || {} }
+      onSelectWebentity={ handleSelectWebentity }
+      onDownloadList={ handleDownloadList }
+      onSetTabUrl={ handleSetTabUrl }
+      onOpenTab={ handleOpenTab }
+      onAddTag={ handleAddTag }
+      onUpdateTag={ handleUpdateTag }
+      onRemoveTag={ handleRemoveTag }
+      onBatchActions = { handleBatchActions }
+      onSetWebentityStatus={ handleSetWenentityStatus }
+      onSetWebentityName={ handleSetWebentityName }
+      onSetWebentityHomepage={ handleSetWebentityHomepage } 
+    />
+  )
 }
 
 
