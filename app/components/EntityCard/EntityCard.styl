@@ -8,6 +8,7 @@
     transition: all .2s ease
     cursor: pointer
     stretch(row)
+    justify-content space-around
 
     .status-marker-container
         display: flex
@@ -112,6 +113,6 @@
 .entity-card.is-active
     background: var(--color-blue)
     color: white
-.entity-card:hover
+.entity-card:hover:not(.is-active)
     background: var(--color-blue-light)
     color: white
