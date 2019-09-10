@@ -126,7 +126,7 @@ const BrowserBar = function ({
                   __html: highlightUrlHTML(lruPrefixes, tabUrl, tlds)
                 } } />:
               <span className={ cx('browser-tab-url empty', { loading }) }>
-                {tabUrl || <T id="empty-url" />}
+                {tabUrl || formatMessage({id: 'empty-url'})}
               </span>
           }
         </form>

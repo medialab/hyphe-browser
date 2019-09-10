@@ -143,7 +143,7 @@ class CorpusForm extends React.Component {
         {
           !this.state.submitting &&
           <div onClick={onTogglePasswordProtected} className="form-group horizontal">
-          <input readOnly checked={passwordProtected} type="radio"/>
+          <input readOnly checked={passwordProtected} type="checkbox"/>
           <label><T id="password-protected" /></label>
         </div>
         }

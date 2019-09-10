@@ -148,20 +148,29 @@ const WebentityBrowseLayout = ({
     onSetTabUrl(webentity.homepage)
   }
 
+  const prevDisabled = !selectedStack ||  isFirst || loadingStack || loadingWebentity;
+  const nextDisabled = !selectedStack || isLast || loadingStack || loadingWebentity;
+  const notOnHomepage = webentity.homepage && webentity.homepage !== tabUrl;
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
         <Tooltipable 
           Tag="button"
-          className={cx("hint--right", 'stack-nav-btn', formatStackName(selectedStack))}
+          className={cx('stack-nav-btn', formatStackName(selectedStack), {"hint--right": !prevDisabled })}
           onClick={ goPrevWebentity }
-          disabled={ !selectedStack ||  isFirst || loadingStack || loadingWebentity }
-          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) }>
+          disabled={ prevDisabled }
+          aria-label={ !prevDisabled ? formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) : null }>
           <i className="ti-angle-left" />
         </Tooltipable>
-        <span title={webentity.name} className="current-webentity-name" onClick={ handleSetTabHomepage }>
+        <span 
+          title={webentity.name} 
+          className={cx("current-webentity-name", {'clickable':  notOnHomepage, 'hint--bottom': notOnHomepage }) }
+          onClick={ handleSetTabHomepage }
+          aria-label={notOnHomepage ? formatMessage({id: 'go-to-homepage'}) : null }
+        >
           {ellipseStr(webentity.name, 20)}
-          <span className="current-webentity-stack-indicators">{
+          <span className="current-webentity-stack-indicators">
+          {
             webentity.status !== initialStatus
             &&
             <>
@@ -176,10 +185,10 @@ const WebentityBrowseLayout = ({
         
         <Tooltipable 
           Tag="button"
-          className={cx("hint--right", 'stack-nav-btn', formatStackName(selectedStack))}
+          className={cx('stack-nav-btn', formatStackName(selectedStack), {"hint--right": !nextDisabled })}
           onClick={ goNextWebentity }
-          disabled={ !selectedStack || isLast || loadingStack || loadingWebentity }
-          aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) }>
+          disabled={ nextDisabled }
+          aria-label={ !nextDisabled ? formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) : null }>
           <i className="ti-angle-right" />
         </Tooltipable>
       </nav>

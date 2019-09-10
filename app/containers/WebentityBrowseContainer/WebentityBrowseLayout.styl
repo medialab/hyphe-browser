@@ -95,7 +95,8 @@
             font-weight: bold
             text-align: center
             font-size: 16px
-            pointer: cursor
+            &.clickable
+                cursor: pointer
         .current-webentity-stack-indicators
             flexStretch(row)
             align-items: center
@@ -128,7 +129,10 @@
             padding: 0
             cursor: pointer
         button[disabled]
-            opacity: 0.5
+            opacity: 0.2
+            cursor: default
+            &:hover
+                opacity: 0.2
     .webentity-name-container
         stretch(row)
         input 

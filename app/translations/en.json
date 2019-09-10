@@ -37,6 +37,8 @@
   "password-protected": "password protected",
   "running": "running",
 
+  "go-to-homepage": "click to browse to webentity's homepage",
+
   "apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
   "discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
 

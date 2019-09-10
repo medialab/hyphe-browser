@@ -102,7 +102,7 @@
 
   "webentity-card.cited-by-n-webentities": "{count, plural, one {citée par 1 webentité} other {citée par {count} webentités}}",
 
-  
+  "go-to-homepage": "cliquer pour naviguer sur la Homepage de la webentité",  
   
   "browse-create": "Créer une nouvelle entité distincte de l'actuelle...",
   "cancel": "annuler",

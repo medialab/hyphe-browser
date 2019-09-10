@@ -51,7 +51,7 @@ const Tooltipable = ({
     <>
       <Tag 
         {...props} 
-        style={style}
+        style={{...style}}
         onMouseEnter={handleMouseEnter}  
         onMouseLeave={handleMouseLeave}  
         className={`${className.replace('hint', '')} ${isHovered ? 'is-hidden': ''} tooltipable-anchor`}
