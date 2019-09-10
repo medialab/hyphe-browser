@@ -23,6 +23,7 @@ class HypheView extends React.Component {
         "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; " +
         // Remove leave corpus button from Hyphe tab within HyBro
         "document.querySelector('.topbar-project button').remove(); " +
+        "document.querySelector('.topbar-project .flex').remove(); " +
         "document.querySelector('#hybro-link').remove();"
       )
     })

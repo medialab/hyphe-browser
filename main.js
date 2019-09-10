@@ -132,22 +132,60 @@ app.on('ready', () => {
 function getNewMenuBar (locale, setting) {
   const isMac = process.platform === 'darwin'
   const { enableLanguage, enableDownload } = setting
+  const langEn = locale === 'en-US';
+  const appName = app.getName();
   const template = [
     // { role: 'appMenu' }
     ...(isMac ? [{
-      label: app.getName(),
+      label: appName,
       submenu: [
-        { role: 'about' },
+        { role: 'about',
+          label: langEn ? 'About' : `À propos de ${appName}` 
+        },
         { type: 'separator' },
-        { role: 'services' },
+        { role: 'hide',
+          label: langEn ? `Hide ${appName}` : `Masquer ${appName}`,
+        },
+        { role: 'hideothers',
+          label: langEn ? 'Hide Others' : 'Masquer les autres'
+        },
+        { role: 'unhide',
+          label: langEn ? 'Show all' : 'Tout afficher'
+        },
         { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' }
+        { role: 'quit',
+          label: langEn ? 'Quit' : 'Quitter'
+        }
       ]
     }] : []),
+    {
+      label: langEn ? '&Edit' : 'Édition',
+      submenu: [
+        {
+          label: langEn ? 'Select all' : 'Tout sélectionner',
+          role: 'selectall',
+          accelerator: 'CmdOrCtrl+A'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: langEn ? 'Cut' : 'Couper',
+          role: 'cut',
+          accelerator: 'CmdOrCtrl+X'
+        },
+        {
+          label: langEn ? 'Copy' : 'Copier',
+          role: 'copy',
+          accelerator: 'CmdOrCtrl+C'
+        },
+        {
+          label: langEn ? 'Paste' : 'Coller',
+          role: 'paste',
+          accelerator: 'CmdOrCtrl+V'
+        }
+      ]
+    },
     // { role: 'languageMenu' }
     {
       label:  locale === 'en-US' ? 'Language': 'Langue',

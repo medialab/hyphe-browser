@@ -18,10 +18,11 @@ const HeaderMetrics = ({ status }, { intl }) => {
         [stack.id]: counters[stack.id] !== statuses[stack.id]
       }), {})
     )
-    setTimeout(() => {
+    const anim = setTimeout(() => {
       setChanged({})
     }, 1000)
     setStatuses(counters)
+    return () => clearTimeout(anim)
   }, [counters])
   return (
     <ul className="header-metrics-container">
