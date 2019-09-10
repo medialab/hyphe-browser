@@ -50,7 +50,7 @@
     
     .card-content
         flex: 1
-        max-width: 50%
+        max-width: 40%
         .name
             font-size: 14px
             padding: 0
@@ -81,13 +81,14 @@
         margin: 0
         overflow: visible
         text-align: right;
-        padding-bottom: 5px;
+        // padding-bottom: 5px;
         li
             flex: 1
             background: inherit
             display: inline-block
             margin: 0
             padding: 0
+            margin-bottom: 5px
             .btn
                 button()
                 padding: 10px
@@ -107,6 +108,8 @@
             text-align: right
         .status-marker-container
             display: none
+        .card-actions-row
+            text-align: left
 
 .entity-card.is-visited
     background: var(--color-grey-light)

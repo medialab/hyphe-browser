@@ -106,6 +106,8 @@
                 position: relative
                 top: -3px
                 margin: 0 3px
+            @media (max-width: $tablet-break-point)
+                display: none
         .current-webentity-stack-indicator
             font-size: 8px
             border-radius: var(--radius)
@@ -121,6 +123,8 @@
                 background: var(--color-corpus-discovered)
             &.UNDECIDED
                 background: var(--color-corpus-undecided)
+            @media (max-width: $tablet-break-point)
+                display: none
         button 
             background: inherit 
             border: none 

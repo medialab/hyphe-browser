@@ -275,7 +275,9 @@ const StackListLayout = ({
           </WebentitiesContainer>
           {
             isLoading &&
-            <Spinner />
+            <div className="loader-container">
+              <Spinner />
+            </div>
           }
           {
             pendingActions && pendingActions.length > 0

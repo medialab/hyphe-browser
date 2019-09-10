@@ -54,14 +54,19 @@
             padding-left: 5px
             padding-right: 10px
         @media (max-width: $tablet-break-point)
-            // flex-direction: column
             text-align: left
-            // align-items: flex-start
+            .list-btn-container
+                stretch(row)
+                flex: 1
+            //     width: 100%
             .list-btn
                 font-size: 11px
                 text-align: left
+                flex: 1
+                // width: 100%
             .count
                 padding-left: 10px
+                display: none
             
     .list-name-container.is-active
         opacity: 1
@@ -283,7 +288,8 @@
         @media (max-width: $tablet-break-point)
             .btn
                 height: 60px
-    .spinner
-        position: absolute
-        top: 50%
-        left: 170px
+    .loader-container
+        abs()
+        stretch(column)
+        align-items: center
+        justify-content: center
