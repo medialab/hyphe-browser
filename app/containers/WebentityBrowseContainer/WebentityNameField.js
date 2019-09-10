@@ -4,12 +4,15 @@ import PropTypes from 'prop-types'
 
 const WebentityNameField = ({
   initialName,
-  onSubmit
+  onSubmit,
+  id
 }, { intl: { formatMessage }}) => {
   const [webentityName, setWebentityName] = useState(initialName)
+  const [webentityId, setWebentityId] = useState(id)
 
   useEffect(() => {
     setWebentityName(initialName)
+    setWebentityId(id)
   }, [initialName])
   
   const handleChange = (e) => setWebentityName(e.target.value)
@@ -43,6 +46,7 @@ const WebentityNameField = ({
         // onBlur={ handleBlur }
         onChange={ handleChange } />
         {
+          id === webentityId &&
           webentityName !== initialName &&
           <>
             <button onClick={handleValidate} className="btn btn-success">

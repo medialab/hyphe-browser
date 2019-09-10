@@ -220,7 +220,9 @@ const WebentityBrowseLayout = ({
         >
           <WebentityNameField 
             initialName={ webentity.name }
-            onSubmit={ onSetWebentityName } />
+            onSubmit={ onSetWebentityName } 
+            id={ webentity.id }
+          />
         </EditionCartel>
         <EditionCartel
           isOpen={ knownPagesOpen }

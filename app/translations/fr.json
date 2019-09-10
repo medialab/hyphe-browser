@@ -100,7 +100,7 @@
   "sidebar.browsed-webentity": "Webentité visitée",
   "sidebar.browsed-webentity-help": "enquêter et annoter la webentité actuellement visitée",
 
-  "webentity-card.cited-by-n-webentities": "{count, plural, one {citée par une webentité} other {citée par {count} webentités}}",
+  "webentity-card.cited-by-n-webentities": "{count, plural, one {citée par 1 webentité} other {citée par {count} webentités}}",
 
   
   

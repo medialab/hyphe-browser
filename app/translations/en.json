@@ -31,7 +31,7 @@
   "sidebar.browsed-webentity": "Browsed webentity",
   "sidebar.browsed-webentity-help": "inquire and annotate currently browsed webentity",
 
-  "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by one webentity} other {cited by {count} webentities}}",
+  "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by 1 webentity} other {cited by {count} webentities}}",
 
   "webentity-is-in-list": "this webentity is in the {list} list",
   "password-protected": "password protected",
