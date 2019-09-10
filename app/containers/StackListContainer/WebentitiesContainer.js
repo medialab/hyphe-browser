@@ -10,10 +10,11 @@ const WebentitiesContainer = ({
   scrollTo,
   onScrollSuccess,
   isEmpty,
+  trigger,
 }) => {
   const elRef = useRef(null)
   return (
-    <ScrollContainer callback={ onScrollSuccess } target={ scrollTo } parent={ elRef }>
+    <ScrollContainer trigger={trigger} callback={ onScrollSuccess } target={ scrollTo } parent={ elRef }>
       <ul ref={ elRef } className={cx('webentities-list', { 'is-loading': isLoading, 'is-empty': isEmpty })}>
         {children}
       </ul>    

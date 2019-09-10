@@ -202,6 +202,7 @@ const StackListLayout = ({
             onScrollSuccess={handleLocateSuccess}
             isLoading={isLoading}
             isEmpty={isEmpty}
+            trigger={stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities}
           >
             {isEmpty ?
               <li className="placeholder-empty">
