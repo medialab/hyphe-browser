@@ -1,16 +1,17 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const ScrollHandler = ({ 
-  target, 
-  parent, 
-  children, 
-  callback, 
+const ScrollHandler = ({
+  target,
+  parent,
+  children,
+  callback,
   transitionDuration = 100,
   trigger,
 }) => {
 
   useEffect(() => {
+
     const test = setTimeout(() => {
       if (parent && parent.current && target) {
         const element = document.getElementById(target);
@@ -26,7 +27,7 @@ const ScrollHandler = ({
         }, transitionDuration);
       }
     }, 500)
-   return () => clearTimeout(test)
+    return () => clearTimeout(test)
   }, [target, trigger]);
 
   return children;

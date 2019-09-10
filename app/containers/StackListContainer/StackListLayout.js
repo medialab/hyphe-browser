@@ -13,6 +13,7 @@ import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
 import { formatCounter } from '../../utils/misc'
 import Spinner from '../../components/Spinner'
+import Tooltipable from '../../components/Tooltipable'
 
 import WebentitiesContainer from './WebentitiesContainer'
 
@@ -170,15 +171,16 @@ const StackListLayout = ({
               value={searchString}
               onChange={handleSearch} />
             <span className={cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue })}>
-              <button onClick={() => setFilterOpen(!isFilterOpen)} className="filter">
-                <T id="filter" /> <i className="ti-angle-down" />
+
+              <button
+                aria-label={formatMessage({ id: 'filter' })}
+                onClick={() => setFilterOpen(!isFilterOpen)}
+                className="filter hint--bottom"
+              >
+                {/* <T id="filter" /> <i className="ti-angle-down" /> */}
+                <i className="ti-filter" />
               </button>
-              {
-                tabWebentity &&
-                <button onClick={handleLocate} className={cx("btn locate hint--left", tabWebentity.status)} aria-label={formatMessage({ id: 'locate-currently-browsed-webentity-help'})}>
-                  <T id="locate-currently-browsed-webentity" />
-                </button>
-              }
+
 
               {isFilterOpen &&
                 <ul className="filter-options">
@@ -188,15 +190,23 @@ const StackListLayout = ({
               }
             </span>
           </div>
-          <div className="actualize-container">
-            {
-              counters[selectedStack] !== numberOfEntities &&
+          {
+            tabWebentity &&
+            <div className="locate-container">
+              <button onClick={handleLocate} className={cx("btn locate hint--bottom", tabWebentity.status)} aria-label={formatMessage({ id: 'locate-currently-browsed-webentity-help' })}>
+                <T id="locate-currently-browsed-webentity" />
+              </button>
+            </div>
+          }
+          {
+            counters[selectedStack] !== numberOfEntities &&
+            <div className="actualize-container">
               <button className="btn actualize" onClick={handleRefresh}>
                 {formatMessage({ id: 'actualize-entities-list' })}
                 {` (${counters[selectedStack] > numberOfEntities ? `+${counters[selectedStack] - numberOfEntities}` : `-${numberOfEntities - counters[selectedStack]}`})`}
               </button>
-            }
-          </div>
+            </div>
+          }
           <WebentitiesContainer
             scrollTo={isLocating && `entity-card-${isLocating}`}
             onScrollSuccess={handleLocateSuccess}
