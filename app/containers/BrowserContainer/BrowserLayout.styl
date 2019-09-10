@@ -66,13 +66,17 @@ input
         stretch(row)
         overflow: hidden
         .browser-column.browser-aside-column
-            width: 416px
-            max-width: 40%
+            // width: 416px
+            min-width: 30%
+            max-width: 30%
             max-height: 100%
             padding: 0
             box-sizing: border-box
             padding-right: 0
             background: var(--color-grey-light)
+            @media (max-width: $tablet-break-point)
+                min-width: 40%
+                max-width: 40%
             .aside-header.switch-mode-container
                 max-height: 35px
                 stretch(row)
@@ -114,6 +118,11 @@ input
         .browser-column.browser-main-column
             flex: 1
             stretch(column)
+            max-width: 70%
+            min-width: 70%
+            @media (max-width: $tablet-break-point)
+                max-width: 60%
+                min-width: 60%
     .hyphe-view-container
         flex: 1
         webview
