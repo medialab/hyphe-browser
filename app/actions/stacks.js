@@ -44,21 +44,19 @@ export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) =
     }))
   }
   return jsonrpc(serverUrl)(
-    'store.get_webentities_by_status', 
-    [stack, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
+    'store.get_webentities_by_status',
+    {
+      status: stack,
+      sort: ['-indegree', 'name'],
+      count: 50,
+      page: 0,
+      light: false,
+      semilight: false,
+      corpus: corpusId,
+    }
   )
-    // when args contains a count, metadata are attached to res,
-    // meanwhile webentities are returned directly as an array if count == -1
     .then((res) => {
-      if(stack === 'DISCOVERED') {
-        return dispatch(receiveStack(serverUrl, stack, res, filter))
-      } else {
-        const webentities = {
-          webentities: res,
-          total_results: res.length
-        }
-        return dispatch(receiveStack(serverUrl, stack, webentities, filter))
-      }
+      return dispatch(receiveStack(serverUrl, stack, res, filter))
     })
     .catch((error) => dispatch({
       type: FETCH_STACK_FAILURE,
