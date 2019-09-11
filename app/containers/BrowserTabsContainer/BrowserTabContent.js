@@ -75,14 +75,6 @@ class BrowserTabContent extends React.Component {
     }
   }
 
-  // componentDidUpdate (prevProps) {
-  //   if (this.props.active &&
-  //     (prevProps.active !== this.props.active ||
-  //      prevProps.webentity !== this.props.webentity)) {
-  //     findDOMNode(this.webviewComponent).focus()
-  //   }
-  // }
-
 
   componentWillUnmount () {
     const { eventBus } = this.props
@@ -239,7 +231,6 @@ class BrowserTabContent extends React.Component {
         tabId: id
       })
     }
-
     return (url === PAGE_HYPHE_HOME) ? 
       <NewTabContent 
         isEmpty={ isEmpty }
@@ -247,17 +238,15 @@ class BrowserTabContent extends React.Component {
         onSelectStack = { handleFetchStackAndSetTab }
         onChangeEngine = { onChangeEngine }
         onSetTabUrl={ handleSetTabUrl } 
-        ref={ component => this.webviewComponent = component }
       />:
       <WebView
-        id={ id } url={ url } closable={ closable } eventBus={ eventBus } 
-        ref={ component => this.webviewComponent = component }
+        id={ id } url={ url } closable={ closable } eventBus={ eventBus }
       />
   }
 
   renderOverlay () {
     const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
-    const handleClick = () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id) 
+    const handleClick = () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
 
     return <div className="global-overlay" onClick={ handleClick } />
   }
