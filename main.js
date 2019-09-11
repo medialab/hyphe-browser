@@ -17,7 +17,10 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({
     showDevTools: true
   })
-  app.disableHardwareAcceleration()
+
+  // this was introduced by @mydu for some reason at one point
+  // but it breaks sigma.js integration, so commenting it for now
+  //app.disableHardwareAcceleration()
 }
 
 let window
