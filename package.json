@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix main.js app bin test stories",
     "watch:lint": "watch-exec -c 'npm run lint' -w . -n -e node_modules,release,dist",
     "watch-all": "npm-run-all --parallel watch:*",
-    "dev": "npm-run-all --parallel watch:electron watch:dev-server",
+    "dev": "cross-env NODE_ENV=development npm-run-all --parallel watch:electron watch:dev-server",
     "start": "cross-env NODE_ENV=production electron .",
     "release": "cross-env NODE_ENV=production node bin/package.js && cd release/ && ls | while read d; do cd $d; rm -f *.zip; zip -r HyBro-$d.zip *; cd ..; done && mv */*.zip .",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.production.js --progress --profile --colors",

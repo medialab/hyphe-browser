@@ -7,8 +7,8 @@ export const DEFAULT_LOCALE = 'fr-FR'
 export const CRAWL_DEPTH = 1
 
 // flag to add/remove verbosity in console
-export const DEBUG_JSONRPC = !!process.env.DEBUG_JSONRPC
-export const DEBUG_WEBVIEW = !!process.env.DEBUG_WEBVIEW
+export const DEBUG_JSONRPC = (process.env.NODE_ENV === 'development')
+export const DEBUG_WEBVIEW = (process.env.NODE_ENV === 'development')
 
 // Notification ids
 export const ERROR_JSONRPC_FETCH = 'ERROR_JSONRPC_FETCH'
