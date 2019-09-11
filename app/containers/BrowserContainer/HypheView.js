@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { DEBUG_WEBVIEW } from '../../constants'
 import Spinner from '../../components/Spinner'
 
 class HypheView extends React.Component {
@@ -31,6 +32,12 @@ class HypheView extends React.Component {
     webview.addEventListener('new-window', ({ url }) => {
       this.props.onOpenTabFromHyphe(url)
     })
+
+    if (DEBUG_WEBVIEW) {
+      webview.addEventListener('console-message', (e) => {
+        console.log('[HypheView console]', e.message)
+      })
+    }
   }
 
   componentDidUpdate (prevProps) {
