@@ -17,7 +17,7 @@ input
     font-size: 13px
     background: var(--color-grey)
     font-family: var(--font-mont)
-    padding: 0
+    padding: 10px
     flexCenter()
     width: calc(100% - 5px)
     height: 100%
@@ -29,6 +29,7 @@ input
     button('active')
     font-family: var(--font-mont)
     margin-right: 0
+    padding: 10px
 .mode-btn[disabled]
     opacity: 0.5
     pointer-events: none
@@ -53,14 +54,14 @@ input
             box-sizing: border-box
             padding-right: 0
             background: var(--color-grey-light)
-            @media (min-width: 1300px)
+            @media (min-width: 1500px)
                 min-width: 20%
                 max-width: 20%
             @media (max-width: $tablet-break-point)
                 min-width: 40%
                 max-width: 40%
             .aside-header.switch-mode-container
-                max-height: 35px
+                // max-height: 35px
                 stretch(row)
                 justify-content: space-between
                 list-style: none
@@ -69,7 +70,7 @@ input
                 padding-right: 20px
                 padding-bottom: 0
                 margin: 0
-                height: 35px
+                // height: 35px
                 background: var(--color-grey-light)
                 
                 li
@@ -105,7 +106,7 @@ input
             stretch(column)
             max-width: 70%
             min-width: 70%
-            @media (min-width: 1300px)
+            @media (min-width: 1500px)
                 max-width: 80%
                 min-width: 80%
             @media (max-width: $tablet-break-point)
@@ -117,6 +118,7 @@ input
             height: 100%
     .switch-mode-title
         stretch(row)
+        align-items: center
     .current-stack-indicator
         width: 16px
         height: 16px
