@@ -53,6 +53,9 @@ input
             box-sizing: border-box
             padding-right: 0
             background: var(--color-grey-light)
+            @media (min-width: 1300px)
+                min-width: 20%
+                max-width: 20%
             @media (max-width: $tablet-break-point)
                 min-width: 40%
                 max-width: 40%
@@ -102,6 +105,9 @@ input
             stretch(column)
             max-width: 70%
             min-width: 70%
+            @media (min-width: 1300px)
+                max-width: 80%
+                min-width: 80%
             @media (max-width: $tablet-break-point)
                 max-width: 60%
                 min-width: 60%
