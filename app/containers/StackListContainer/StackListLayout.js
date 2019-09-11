@@ -75,8 +75,8 @@ const StackListLayout = ({
       setSelectedListReal(l)
       onSelectStack(l, filterValue)
       setOpen(false)
+      resetActions()
     }
-    resetActions()
   }
   const handleSearch = (e) => setSearchString(e.target.value)
 
