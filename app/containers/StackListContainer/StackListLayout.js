@@ -85,7 +85,9 @@ const StackListLayout = ({
     if (filterValue === value) {
       newValue = null
     }
-    onSelectStack(selectedStack, newValue)
+    if (value) {
+      onSelectStack(selectedStack, newValue)
+    }
     setFilterValue(newValue)
     setFilterOpen(false)
   }
@@ -184,6 +186,7 @@ const StackListLayout = ({
 
               {isFilterOpen &&
                 <ul className="filter-options">
+                  <li className={cx('filter-option', { 'is-active': !filterValue })} onClick={() => handleSelectFilter()}><T id="sidebar.overview.show-all-we" /></li>
                   <li className={cx('filter-option', { 'is-active': filterValue === 'no-tag' })} onClick={() => handleSelectFilter('no-tag')}><T id="sidebar.overview.show-only-no-tags" /></li>
                   <li className={cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' })} onClick={() => handleSelectFilter('incomplete-tag')}><T id="sidebar.overview.show-only-incomplete-tags" /></li>
                 </ul>

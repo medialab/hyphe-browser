@@ -74,6 +74,7 @@
 
   "sidebar.overview.show-only-no-tags": "Show only webentities with no tags",
   "sidebar.overview.show-only-incomplete-tags": "Show only webentities with incomplete tags",
+  "sidebar.overview.show-all-we": "Show all webentities of the list",
 
   "fieldnotes.update-note": "update note",
   "fieldnotes.add-note": "add note",
