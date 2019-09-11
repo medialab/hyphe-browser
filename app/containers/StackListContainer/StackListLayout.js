@@ -124,7 +124,7 @@ const StackListLayout = ({
   }
   return (
     <div className="list-layout">
-      <div className="status-list-container">
+      <ul className="status-list-container">
         <EditionCartel
           isAlwaysOpen
           title={formatMessage({ id: 'sidebar.overview.current-webentities-list' })}
@@ -161,7 +161,7 @@ const StackListLayout = ({
           </div>
         </EditionCartel>
 
-      </div>
+      </ul>
       <div className="webentities-list-wrapper">
 
         <div className="webentities-list-container">

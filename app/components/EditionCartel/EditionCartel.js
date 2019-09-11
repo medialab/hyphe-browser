@@ -15,7 +15,7 @@ const EditionCartel = ({
   helpPlace = 'bottom'
 }) => {
   return (
-    <div className={ cx('edition-cartel', { 'is-always-open': isAlwaysOpen, 'is-open': isAlwaysOpen || isOpen }) }>
+    <li className={ cx('edition-cartel', { 'is-always-open': isAlwaysOpen, 'is-open': isAlwaysOpen || isOpen }) }>
       <div className="edition-cartel-header">
         <h4 onClick={ onToggle }>
           <span className="arrow-container">{
@@ -31,7 +31,7 @@ const EditionCartel = ({
       <div className="edition-cartel-content">
         {children}
       </div>
-    </div>
+    </li>
   )
 }
 

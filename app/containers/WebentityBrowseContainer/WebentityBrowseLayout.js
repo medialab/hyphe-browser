@@ -192,7 +192,7 @@ const WebentityBrowseLayout = ({
           <i className="ti-angle-right" />
         </Tooltipable>
       </nav>
-      <div className="browse-edition-container">
+      <ul className="browse-edition-container">
         
         <EditionCartel
           isOpen={ statusOpen }
@@ -324,7 +324,7 @@ const WebentityBrowseLayout = ({
           isOpen={ modalIsOpen }
           onToggle={ () => setModalIsOpen(false) }
         /> */}
-      </div>    
+      </ul>    
     </div>
   )
 }
