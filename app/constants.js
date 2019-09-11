@@ -25,11 +25,11 @@ export const NOTICE_WEBENTITY_ADJUST_FAILURE = 'NOTICE_WEBENTITY_ADJUST_FAILURE'
 export const NOTICE_WEBENTITY_INFO_TIMEOUT = 3500
 
 // Keyboard shortcuts
-export const SHORTCUT_OPEN_TAB = ['Ctrl+N', 'Ctrl+T', 'Cmd+N', 'Cmd+T']
-export const SHORTCUT_CLOSE_TAB = ['Ctrl+W', 'Ctrl+F4', 'Cmd+F4']
+export const SHORTCUT_OPEN_TAB = ['CmdOrCtrl+N', 'CmdOrCtrl+T']
+export const SHORTCUT_CLOSE_TAB = ['CmdOrCtrl+W']
 export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Cmd+PageDown']
-export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'Ctrl+PageUp', 'Cmd+PageUp']
-export const SHORTCUT_RELOAD_TAB = ['Ctrl+R', 'Cmd+R', 'F5']
+export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'CmdOrCtrl+PageUp']
+export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
 export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Cmd+Shift+R', 'Cmd+F5']
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'

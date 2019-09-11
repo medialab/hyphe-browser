@@ -132,8 +132,8 @@ app.on('ready', () => {
 function getNewMenuBar (locale, setting) {
   const isMac = process.platform === 'darwin'
   const { enableLanguage, enableDownload } = setting
-  const langEn = locale === 'en-US';
-  const appName = app.getName();
+  const langEn = locale === 'en-US'
+  const appName = app.getName()
   const template = [
     // { role: 'appMenu' }
     ...(isMac ? [{
