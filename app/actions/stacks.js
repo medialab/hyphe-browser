@@ -47,7 +47,7 @@ export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) =
     'store.get_webentities_by_status',
     {
       status: stack,
-      sort: ['-indegree', 'name'],
+      sort: stack === 'DISCOVERED' ? ['-indegree', 'name'] : 'name',
       count: 50,
       page: 0,
       light: false,
