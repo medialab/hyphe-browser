@@ -143,14 +143,16 @@ const WebentityBrowseLayout = ({
   const onUpdateNote = (oldNote, newNote) => onUpdateTag('FREETAGS', oldNote, newNote)
   const onRemoveNote = (note) => onRemoveTag('FREETAGS', note)
 
+  const notOnHomepage = webentity.homepage && (webentity.homepage !== tabUrl && `${webentity.homepage}/` !== tabUrl ) ;
   const handleSetTabHomepage = () => {
     if (!webentity.homepage) return
-    onSetTabUrl(webentity.homepage)
+    if (notOnHomepage) {
+      onSetTabUrl(webentity.homepage)
+    }
   }
 
   const prevDisabled = !selectedStack ||  isFirst || loadingStack || loadingWebentity;
   const nextDisabled = !selectedStack || isLast || loadingStack || loadingWebentity;
-  const notOnHomepage = webentity.homepage && webentity.homepage !== tabUrl;
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
