@@ -45,6 +45,8 @@ input
         flex: 1
         stretch(row)
         overflow: hidden
+        @media (max-width: $tablet-break-point)
+          flex-direction: column
         .browser-column.browser-aside-column
             // width: 416px
             min-width: 30%
@@ -60,6 +62,14 @@ input
             @media (max-width: $tablet-break-point)
                 min-width: 40%
                 max-width: 40%
+            @media (max-width: $narrow-break-point)
+                min-width: 100%
+                max-width: 100%
+                max-height: 50%
+                min-height: 50%
+                overflow: hidden 
+                stretch(column)  
+                order: 2
             .aside-header.switch-mode-container
                 // max-height: 35px
                 stretch(row)
@@ -83,6 +93,7 @@ input
                     .mode-btn
                         justify-content: flex-start
                         padding-left: 30px
+                        padding-top: 7px;
             .aside-content
                 flex: 1
                 max-height: calc(100%)
@@ -101,6 +112,22 @@ input
                         margin-top: 20px
                         .edition-cartel-content
                             padding-top: 0
+                @media (max-width: $narrow-break-point)
+                  max-height: calc(50vh - 20px)
+                  .list-layout
+                    overflow-y: auto
+                    max-height: 100%
+                    .webentities-list-wrapper
+                      min-height: unset
+                      overflow: visible
+                      .webentities-list
+                        overflow: visible
+                      .webentities-list-header
+                        min-height: 40px
+                      .webentities-list-container
+                        overflow: visible
+                      .actions-container
+                        min-height: 50px
         .browser-column.browser-main-column
             flex: 1
             stretch(column)
@@ -112,6 +139,11 @@ input
             @media (max-width: $tablet-break-point)
                 max-width: 60%
                 min-width: 60%
+            @media (max-width: $narrow-break-point)
+                max-width: 100%
+                min-width: 100%
+                max-height: 50%
+                min-height: 50%
     .hyphe-view-container
         flex: 1
         webview
