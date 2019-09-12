@@ -105,13 +105,14 @@ class BrowserTabContent extends React.Component {
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
-      if (!disableWebentity &&
-        // do not declare pages(show sidebar) when only changing url's anchor
-        !this.samePage(info) &&
-        // or when probably remaining within the same webentity
-        !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-        setTabWebentity(server.url, corpusId, id, null)
-      }
+      // This is a strange old code.
+      // if (!disableWebentity &&
+      //   // do not declare pages(show sidebar) when only changing url's anchor
+      //   !this.samePage(info) &&
+      //   // or when probably remaining within the same webentity
+      //   !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
+      //   setTabWebentity(server.url, corpusId, id, null)
+      // }
       break
     case 'stop':
       // Redirect Hyphe special tab to network when userclosed or misstarted

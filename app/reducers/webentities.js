@@ -1,7 +1,6 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
 import mergeWith from 'lodash.mergewith'
-import set from 'lodash.set'
 import uniq from 'lodash.uniq'
 import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
@@ -169,6 +168,13 @@ export default createReducer(initialState, {
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
     ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        ...webentity
+      }
+    },
     tabs: {
       ...state.tabs,
       [tabId]: webentity ? webentity.id : null

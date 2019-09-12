@@ -2,7 +2,6 @@ import jsonrpc from '../utils/jsonrpc'
 import { createAction } from 'redux-actions'
 import { setTabUrl, openTab } from './tabs'
 
-
 export const EMPTY_STACK = '§_EMPTY_STACK'
 export const SELECT_STACK ='§_SELECT_STACK'
 
@@ -15,7 +14,6 @@ export const FETCH_STACK_PAGE_SUCCESS = '§_FETCH_STACK_PAGE_SUCCESS'
 
 export const VIEW_WEBENTITY = '§_VIEW_WEBENTITY'
 export const STOPPED_LOADING_WEBENTITY = '§_STOPPED_LOADING_WEBENTITY'
-
 
 export const emptyStack = createAction(EMPTY_STACK, (stack) => ({ stack }))
 export const selectStack = createAction(SELECT_STACK, (stack) => ({ stack }))

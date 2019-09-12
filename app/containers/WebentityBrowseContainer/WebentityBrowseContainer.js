@@ -8,6 +8,7 @@ import {
   showAdjustWebentity,
   cancelWebentityCrawls,
   batchWebentityActions,
+  setSimpleTabWebentity,
   setWebentityStatus } from '../../actions/webentities'
 
 import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
@@ -36,8 +37,6 @@ const WebentityBrowseContainer = ({
   tlds,
   stacks,
   // actions
-  fetchStack,
-  selectStack,
   setTabUrl,
   openTab,
   setWebentityName,
@@ -50,10 +49,10 @@ const WebentityBrowseContainer = ({
   addTag,
   updateTag,
   removeTag,
+  setSimpleTabWebentity,
 }) => {
-
-  const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+  const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
 
   // storing viewed prospections in an efficient way
   let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
@@ -80,6 +79,7 @@ const WebentityBrowseContainer = ({
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
+    setSimpleTabWebentity(webentity, activeTab.id)
     setTabUrl(webentity.homepage, activeTab.id)
   }
   
@@ -145,7 +145,6 @@ const WebentityBrowseContainer = ({
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
-
   return (<WebentityBrowseLayout
     webentity={ webentity }
     viewedProspectionIds={ viewedProspectionIds }
@@ -219,6 +218,6 @@ export default connect(mapStateToProps, {
   setWebentityHomepage,
   addTag,
   updateTag,
-  removeTag
-})(WebentityBrowseContainer)
-
+  removeTag,
+  setSimpleTabWebentity,
+})(React.memo(WebentityBrowseContainer))
