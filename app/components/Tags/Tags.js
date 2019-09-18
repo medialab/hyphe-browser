@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-spacing */
 import './Tags.styl'
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -7,24 +8,38 @@ import { Creatable } from 'react-select'
 import { FormattedMessage as T } from 'react-intl'
 import { uniqBy } from 'lodash'
 
+const getSuggestions = (suggestions, category, value) => {
+  let suggestionOptions = []
+  if (suggestions[category]) {
+    suggestionOptions = Object.keys(suggestions[category]).map((value) => {
+      return {
+        value,
+        label: value
+      }
+    })
+  }
+  return uniqBy([...suggestionOptions, { value, label: value }], 'value')
+}
+
 import HelpPin from '../HelpPin'
 
-const Tags = ({
-  webentityId,
-  initialTags,
-  suggestions,
-  onRemoveTag,
-  onUpdateTag,
-  onAddTag,
-}, { intl: { formatMessage } }) => {
+const Tags = (props, { intl: { formatMessage } }) => {
+  const {
+    webentityId,
+    initialTags,
+    suggestions,
+    onRemoveTag,
+    onUpdateTag,
+    onAddTag,
+  } = props
   const [categories, setCategories] = useState(initialTags)
   const [newCategoryStr, setNewCategoryStr] = useState('')
   const [newCategoryOpen, setNewCategoryOpen] = useState(false)
-  const inputRef = useRef(null);
+  const inputRef = useRef(null)
 
   useEffect(() => {
     setCategories(initialTags)
-  }, [webentityId])
+  }, [webentityId, initialTags])
 
   useEffect(() => {
     if (newCategoryOpen) {
@@ -32,32 +47,32 @@ const Tags = ({
     }
   }, [newCategoryOpen])
 
-  const onNewCat = e => {
+  const openCategory = React.useCallback(() => setNewCategoryOpen(true))
+  const setCategory = React.useCallback(e => setNewCategoryStr(e.target.value))
+  const onNewCat = React.useCallback(e => {
     if (e) {
       e.stopPropagation()
       e.preventDefault()
     }
-    
     const newCategory = newCategoryStr.trim()
     const isCatExist = categories.find(({ category }) => category === newCategory)
-
     if (newCategory.length && !isCatExist) {
       setCategories([...categories, { category: newCategory, value: '' }])
       setNewCategoryStr('')
       setNewCategoryOpen(false)
     }
-  }
+  }, [newCategoryStr, categories])
 
-  const onDiscardNewCategory = () => {
+  const onDiscardNewCategory = React.useCallback(() => {
     setNewCategoryOpen(false)
     setNewCategoryStr('')
-  }
+  })
 
-  const handleNewCatKeyDown = e => {
+  const handleNewCatKeyDown = React.useCallback(e => {
     if (e.key === 'Enter') {
-      onNewCat();
+      onNewCat()
     }
-  }
+  })
   return (
     <div className="tags-container">
       <div className="categories-container">
@@ -65,34 +80,20 @@ const Tags = ({
           categories.length ?
             <ul className="categories-list">
               {
-                categories.map(({ category, value }, categoryIndex) => {
-
-                  const getSuggestions = () => {
-                    let suggestionOptions = []
-                    if (suggestions[category]) {
-                      suggestionOptions = Object.keys(suggestions[category]).map((value) => {
-                        return {
-                          value,
-                          label: value
-                        }
-                      })
-                    }
-                    return uniqBy([...suggestionOptions, { value, label: value }], 'value')
-                  }
+                categories.map(({ category, value }) => {
 
                   const handleUpdateTag = (option) => {
                     const newTag = option ? option.value.trim() : ''
-
                     const prevTag = categories.find((cat) => cat.category === category).value
                     if (prevTag && option) {
                       onUpdateTag(category, prevTag, newTag)
                     } else {
-                        if (prevTag) {
-                          onRemoveTag(category, prevTag)
-                        }
-                        if (option) {
-                          onAddTag(category, newTag)
-                        }
+                      if (prevTag) {
+                        onRemoveTag(category, prevTag)
+                      }
+                      if (option) {
+                        onAddTag(category, newTag)
+                      }
                     }
 
                     setCategories(
@@ -108,7 +109,8 @@ const Tags = ({
                     )
                   }
 
-                  const renderArrow = ({ isOpen }) => {
+                  const renderArrow = (props) => {
+                    const { isOpen } = props;
                     if (value.length > 0 && !isOpen) return null
                     else {
                       return (isOpen ? <span className="ti-angle-up" /> : <span className="ti-angle-down" />)
@@ -116,23 +118,23 @@ const Tags = ({
                   }
 
                   return (
-                    <li className="category-item-container" key={category}>
+                    <li className="category-item-container" key={ category }>
                       <span className="category-name">
                         {category}
                       </span>
                       <span className="category-input">
                         <Creatable
                           name="cat-select"
-                          clearable={value.length > 0 ? true : false}
-                          backspaceRemoves={false}
+                          clearable={ value.length > 0 ? true : false }
+                          backspaceRemoves={ false }
                           searchable
                           autoFocus
                           autoBlur
                           ignoreCase
-                          arrowRenderer={renderArrow}
-                          options={getSuggestions()}
-                          value={value}
-                          onChange={handleUpdateTag}
+                          arrowRenderer={ renderArrow }
+                          options={ getSuggestions(suggestions, category, value) }
+                          value={ value }
+                          onChange={ handleUpdateTag }
                         />
                       </span>
                     </li>
@@ -151,33 +153,31 @@ const Tags = ({
           newCategoryOpen ?
             <form className="add-category-form">
               <input
-                placeholder={formatMessage({ id: 'tags.new-category' })}
+                placeholder={ formatMessage({ id: 'tags.new-category' }) }
                 className="add-category-input"
-                value={newCategoryStr}
-                ref={inputRef}
-                onChange={e => setNewCategoryStr(e.target.value)} 
-                onKeyDown={handleNewCatKeyDown}
+                value={ newCategoryStr }
+                ref={ inputRef }
+                onChange={ setCategory } 
+                onKeyDown={ handleNewCatKeyDown }
                 type="text"
               />
               <ul className="buttons-row">
                 <li>
-                  <button className="btn btn-error" onClick={onDiscardNewCategory}>
+                  <button className="btn btn-error" onClick={ onDiscardNewCategory }>
                     <T id="cancel" />
                   </button>
                 </li>
                 <li>
-                  <button type="submit" onClick={onNewCat} className="btn btn-success" disabled={!newCategoryStr.length}>
+                  <button type="submit" onClick={ onNewCat } className="btn btn-success" disabled={ !newCategoryStr.length }>
                     <T id="tags.add" />
                   </button>
                 </li>
-
-
               </ul>
             </form>
             :
             <button
-              className={cx("btn btn-success add-category-btn", {'no-categories': !categories.length})}
-              onClick={() => setNewCategoryOpen(true)}
+              className={ cx('btn btn-success add-category-btn', { 'no-categories': !categories.length }) }
+              onClick={ openCategory }
             >
               <T id="tags.add-category" /> <HelpPin>{formatMessage({id: 'tags.add-category-help'})}</HelpPin>
             </button>
@@ -191,4 +191,4 @@ Tags.contextTypes = {
   intl: PropTypes.object,
 }
 
-export default Tags
+export default React.memo(Tags)

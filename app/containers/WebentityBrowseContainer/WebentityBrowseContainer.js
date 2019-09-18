@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Spinner from '../../components/Spinner'
 
 import { 
   setWebentityName, 
@@ -21,8 +22,9 @@ import { getWebEntityActivityStatus } from '../../utils/status'
 import WebentityBrowseLayout from './WebentityBrowseLayout'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
+const empty = {}
 
-const WebentityBrowseContainer = ({ 
+const WebentityBrowseContainer = ({
   activeTab, 
   corpusId,
   serverUrl,
@@ -58,16 +60,6 @@ const WebentityBrowseContainer = ({
   let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
   && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
   viewedProspectionIds = new Set(viewedProspectionIds)
-
-  // useEffect(() => {
-  //   if (webentity && webentity.status !== selectedStack) {
-  //     if (stackWebentities[webentity.status]) {
-  //       selectStack(webentity.status)
-  //     } else {
-  //       fetchStack(serverUrl, corpusId, webentity.status)
-  //     }
-  //   }
-  // }, [webentity])
 
   useEffect(() => {
     if (webentity) {
@@ -145,19 +137,26 @@ const WebentityBrowseContainer = ({
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
+  const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), categories)
+  /**
+   * Display loading bar if no we is provided
+   */
+  if (!webentity) {
+    return <div className="loader-container"><Spinner /></div>
+  }
   return (<WebentityBrowseLayout
     webentity={ webentity }
     viewedProspectionIds={ viewedProspectionIds }
     stackWebentities={ stackWebentities }
-    initialStatus={initialStatus}
+    initialStatus={ initialStatus }
     webentitiesList= { webentitiesList }
     selectedStack={ selectedStack }
     loadingStack={ loadingStack }
     loadingWebentity= { loadingWebentity }
     loadingBatchActions = { loadingBatchActions }
     tabUrl={ activeTab.url }
-    categories={ categories.filter(cat => cat !== 'FREETAGS') }
-    tagsSuggestions={ tagsSuggestions || {} }
+    categories={ filteredCategories }
+    tagsSuggestions={ tagsSuggestions || empty }
     onSelectWebentity={ handleSelectWebentity }
     onDownloadList={ handleDownloadList }
     onSetTabUrl={ handleSetTabUrl }

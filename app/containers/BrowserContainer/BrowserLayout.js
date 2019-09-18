@@ -90,9 +90,9 @@ const BrowserLayout = ({
                 </button>
               </li>
             </ul>
-            {asideMode === 'webentityBrowse' && <div className="aside-content" style={(asideMode === 'webentityBrowse' && !isLanding) ? {} : { display: 'none' }}>
+            <div className="aside-content" style={(asideMode === 'webentityBrowse' && !isLanding) ? {} : { display: 'none' }}>
               <WebentityBrowseContainer />
-            </div>}
+            </div>
             <div className="aside-content" style={(asideMode === 'stackList' || isLanding) ? {} : { display: 'none' }}>
               <StackListContainer
                 setAsideMode={onSetAsideMode}

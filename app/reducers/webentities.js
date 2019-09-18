@@ -2,7 +2,8 @@
 
 import mergeWith from 'lodash.mergewith'
 import uniq from 'lodash.uniq'
-import without from 'lodash.without'
+import set from 'lodash/fp/set'
+// import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
 import { VIEW_WEBENTITY } from '../actions/stacks'
 import {
@@ -153,18 +154,20 @@ export default createReducer(initialState, {
   [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, oldValue, newValue }) => {
     const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
     const newTags = oldTags.map((v) => (v === oldValue) ? newValue : v)
-    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+    return set(`tags.${TAGS_NS}.${category}`)(newTags)(webentity)
   }),
 
   [ADD_TAG_SUCCESS]: updateWebentity(( webentity, { category, value }) => {
     const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
     const newTags = uniq(oldTags.concat([value]))
-    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+    const res = set(`tags.${TAGS_NS}.${category}`)(newTags)(webentity)
+    return res
   }),
 
-  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category, value }) => ({
-    [`tags.${TAGS_NS}.${category}`]: without(webentity.tags[TAGS_NS][category] || [], value)
-  })),
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => {
+    // Can't use `unset` because of `updateWebentity`'s `mergeWith`
+    return set(`tags.${TAGS_NS}.${category}`)([])(webentity)
+  }),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
     ...state,
