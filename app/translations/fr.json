@@ -26,6 +26,7 @@
 
   "sidebar.overview.show-only-no-tags": "Montrer seulement les webentités sans aucun tag",
   "sidebar.overview.show-only-incomplete-tags": "Montrer seulement les webentités avec des tags incomplets",
+  "sidebar.overview.show-all-we": "Montrer toutes les webentités de la liste",
 
   "fieldnotes.update-note": "mettre à jour la note",
   "fieldnotes.add-note": "ajouter une note",
