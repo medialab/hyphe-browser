@@ -1,4 +1,5 @@
 import createReducer from '../utils/create-reducer'
+import set from 'lodash/fp/set'
 
 import {
   EMPTY_STACK,
@@ -12,6 +13,12 @@ import {
   STOPPED_LOADING_WEBENTITY
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
+
+import {
+  ADD_TAG_SUCCESS,
+  UPDATE_TAG_SUCCESS,
+  REMOVE_TAG_SUCCESS,
+} from '../actions/tags'
 
 // methods and args → for API calls
 const initialState = {
@@ -97,6 +104,57 @@ export default createReducer(initialState, {
   [STOPPED_LOADING_WEBENTITY]: (state) => ({
     ...state,
     loadingWebentity: false
-  })
+  }),
 
+  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [payload.category]: [payload.newValue]
+        }
+      }
+    }
+  }),
+
+  [ADD_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [payload.category]: [payload.value]
+        }
+      }
+    }
+  }),
+
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [payload.category]: []
+        }
+      }
+    }
+  })
 })
+
+function updateWebentity (updator) {
+  return (state, payload) => {
+    const wes = state.webentities[state.selected].webentities.map((webentity) => {
+      if (webentity.id === payload.webentityId) {
+        // Can't use `loadsh#set` because it infer types 🥴
+        return updator(webentity, payload)
+      }
+      return webentity
+    })
+    return set(['webentities', state.selected, 'webentities'])(wes)(state)
+  }
+}

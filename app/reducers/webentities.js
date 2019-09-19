@@ -151,22 +151,44 @@ export default createReducer(initialState, {
   }),
 
 
-  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, oldValue, newValue }) => {
-    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
-    const newTags = oldTags.map((v) => (v === oldValue) ? newValue : v)
-    return set(`tags.${TAGS_NS}.${category}`)(newTags)(webentity)
+  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, newValue }) => {
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: [newValue]
+        }
+      }
+    }
   }),
 
   [ADD_TAG_SUCCESS]: updateWebentity(( webentity, { category, value }) => {
-    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
-    const newTags = uniq(oldTags.concat([value]))
-    const res = set(`tags.${TAGS_NS}.${category}`)(newTags)(webentity)
-    return res
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: [value]
+        }
+      }
+    }
   }),
 
   [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => {
     // Can't use `unset` because of `updateWebentity`'s `mergeWith`
-    return set(`tags.${TAGS_NS}.${category}`)([])(webentity)
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: []
+        }
+      }
+    }
   }),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
