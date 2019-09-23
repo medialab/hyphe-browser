@@ -48,8 +48,6 @@ class BrowserTabContent extends React.Component {
       disableApplyButton: false,
       setDoNotShowAgainAfterSubmit: null
     }
-
-    this.doNotDeclarePageOnStop = false
   }
 
   componentDidMount () {
@@ -84,6 +82,7 @@ class BrowserTabContent extends React.Component {
   }
 
   samePage (info) {
+    console.log(this.state.previousUrl, info)
     return compareUrls(this.state.previousUrl, info)
   }
 
@@ -97,7 +96,6 @@ class BrowserTabContent extends React.Component {
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
     }
-
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
@@ -105,6 +103,24 @@ class BrowserTabContent extends React.Component {
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
+      if (!disableWebentity) {
+        console.log('il set state bien nonnnn ?')
+        this.setState({
+          previousUrl: info,
+          webentityName: null
+        }, () => {
+          // do not declare pages with only change in anchor
+          console.log('start')
+          if (!this.samePage(info) || loadingWebentityStack) {
+            console.log('go declare & fetch data')
+            // if (!(webentity && longestMatching(webentity.prefixes, info, tlds))) {
+            //   setTabWebentity(server.url, corpusId, id, null)
+            // }
+            setTabUrl(info, id)
+            declarePage(server.url, corpusId, info, id)
+          }
+        })
+      }
       // This is a strange old code.
       // if (!disableWebentity &&
       //   // do not declare pages(show sidebar) when only changing url's anchor
@@ -121,19 +137,8 @@ class BrowserTabContent extends React.Component {
       }
       setTabStatus({ loading: false, url: info }, id)
       addNavigationHistory(info, corpusId)
-      if (!disableWebentity) {
-        if (!this.doNotDeclarePageOnStop) {
-          setTabUrl(info, id)
-          // do not declare pages with only change in anchor	
-          if (!this.samePage(info) || loadingWebentityStack) {	
-            this.setState({ webentityName: null })	
-            declarePage(server.url, corpusId, info, id)	
-          }
-        } else {
-          this.doNotDeclarePageOnStop = false
-        }
-      }
       stoppedLoadingWebentity()
+      console.log('stop', info)
       this.setState({ previousUrl: info })
       break
     case 'redirect':
@@ -157,16 +162,11 @@ class BrowserTabContent extends React.Component {
         console.error(err) // eslint-disable-line no-console
       }
       setTabStatus({ loading: false, error: info }, id)
-      if (!disableWebentity) {
-        this.setState({ webentityName: null })
-        declarePage(server.url, corpusId, info.pageURL, id)
-      }
       stoppedLoadingWebentity()
       // Main page triggered the error, it's important
       if (info.pageURL === info.validatedURL) {
         // DNS error: let's search instead
         if (err.name === 'NameNotResolvedError') {
-          this.doNotDeclarePageOnStop = true
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
           setTabUrl(getSearchUrl(selectedEngine, term), id)
