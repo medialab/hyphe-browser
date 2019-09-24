@@ -1,0 +1,40 @@
+
+.prefix-setter
+    display: flex
+    flex-flow: row nowrap
+    .parts-container
+        display: flex
+        flex-flow: row nowrap
+        padding: 0
+        position: relative
+        .part
+            list-style-type: none
+            padding: 10px
+            user-select: none
+            background: var(--color-grey)
+        .part.active
+            background: var(--color-blue)
+            color: rgb(230, 241, 248)
+        .part.editable
+            cursor: pointer
+        .part:not(.editable)
+            opacity: .8
+        .slider
+            position: absolute
+            left: 0
+            top: 0
+            height: 100%
+            background: var(--color-blue-light)
+            width: 5px
+            cursor: move
+        .slider-handle
+            cursor: move
+            position: absolute
+            top: calc(100% - 30px)
+            left: -7.5px
+            background: var(--color-blue)
+            border: 3px solid var(--color-blue-light)
+            box-sizing: border-box
+            width: 20px
+            height: 20px
+            border-radius: 50%
