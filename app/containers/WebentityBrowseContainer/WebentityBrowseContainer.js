@@ -18,11 +18,12 @@ import { addTag, removeTag, updateTag } from '../../actions/tags'
 import { getWebEntityActivityStatus } from '../../utils/status'
 
 import WebentityBrowseLayout from './WebentityBrowseLayout'
+import Spinner from '../../components/Spinner'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
 const WebentityBrowseContainer = ({ 
-  activeTab, 
+  activeTab,
   corpusId,
   serverUrl,
   webentities,
@@ -36,8 +37,6 @@ const WebentityBrowseContainer = ({
   tlds,
   stacks,
   // actions
-  fetchStack,
-  selectStack,
   setTabUrl,
   openTab,
   setWebentityName,
@@ -56,19 +55,8 @@ const WebentityBrowseContainer = ({
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   // storing viewed prospections in an efficient way
-  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
-  && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
-  viewedProspectionIds = new Set(viewedProspectionIds)
-
-  // useEffect(() => {
-  //   if (webentity && webentity.status !== selectedStack) {
-  //     if (stackWebentities[webentity.status]) {
-  //       selectStack(webentity.status)
-  //     } else {
-  //       fetchStack(serverUrl, corpusId, webentity.status)
-  //     }
-  //   }
-  // }, [webentity])
+  const viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
+    && new Set(stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id))
 
   useEffect(() => {
     if (webentity) {
@@ -76,13 +64,13 @@ const WebentityBrowseContainer = ({
     }
   }, [webentity && webentity.id])
 
-  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : [];
+  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
     setTabUrl(webentity.homepage, activeTab.id)
   }
-  
+
   const handleDownloadList = (list) => {
     let listName
     switch (list) {
@@ -105,10 +93,11 @@ const WebentityBrowseContainer = ({
       listName = list
       break
     }
+    // eslint-disable-next-line no-useless-escape
     const webentityName = webentity.name.replace(/[\s\/]/g, '_')
-    const parsedWebentity = webentity[list].map(
-      (we) => we.tags ? fieldParser(we, tlds, 'csv') : we
-    )
+    const parsedWebentity = webentity[list].map((we) => {
+      return we.tags ? fieldParser(we, tlds, 'csv') : we
+    })
 
     const flatList = flatTag(parsedWebentity)
     const fileName = `${corpusId}_${webentityName}_${listName}`
@@ -118,23 +107,23 @@ const WebentityBrowseContainer = ({
   const handleSetWebentityName = (name) => setWebentityName(serverUrl, corpusId, name, webentity.id)
   const handleSetWebentityHomepage = (url) => setWebentityHomepage(serverUrl, corpusId, url, webentity.id)
   
-  const handleSetWenentityStatus = (status) => {
-    const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(webentity))
+  const handleSetWenentityStatus = (status, we = webentity) => {
+    const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(we))
 
-    if (status !== 'DISCOVERED' && status === webentity.status) {
+    if (status !== 'DISCOVERED' && status === we.status) {
       // Click on current status = set to discovered
       status = 'DISCOVERED'
     }
 
     if (status === 'IN' && !crawling) {
       // Set to IN = go to "adjust" mode and validation triggers crawling
-      showAdjustWebentity(webentity.id, true)
+      showAdjustWebentity(we.id, true)
     } else {
-      setWebentityStatus(serverUrl, corpusId, status, webentity.id)
+      setWebentityStatus(serverUrl, corpusId, status, we.id)
     }
 
     if (status === 'OUT' && crawling) {
-      cancelWebentityCrawls(serverUrl, corpusId, webentity.id)
+      cancelWebentityCrawls(serverUrl, corpusId, we.id)
     }
   }
 
@@ -146,30 +135,40 @@ const WebentityBrowseContainer = ({
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
 
-  return (<WebentityBrowseLayout
-    webentity={ webentity }
-    viewedProspectionIds={ viewedProspectionIds }
-    stackWebentities={ stackWebentities }
-    initialStatus={initialStatus}
-    webentitiesList= { webentitiesList }
-    selectedStack={ selectedStack }
-    loadingStack={ loadingStack }
-    loadingWebentity= { loadingWebentity }
-    loadingBatchActions = { loadingBatchActions }
-    tabUrl={ activeTab.url }
-    categories={ categories.filter(cat => cat !== 'FREETAGS') }
-    tagsSuggestions={ tagsSuggestions || {} }
-    onSelectWebentity={ handleSelectWebentity }
-    onDownloadList={ handleDownloadList }
-    onSetTabUrl={ handleSetTabUrl }
-    onOpenTab={ handleOpenTab }
-    onAddTag={ handleAddTag }
-    onUpdateTag={ handleUpdateTag }
-    onRemoveTag={ handleRemoveTag }
-    onBatchActions = { handleBatchActions }
-    onSetWebentityStatus={ handleSetWenentityStatus }
-    onSetWebentityName={ handleSetWebentityName }
-    onSetWebentityHomepage={ handleSetWebentityHomepage } />)
+  /**
+   * Display loading bar if no we is provided
+   */
+  if (!webentity) {
+    return <div className="loader-container"><Spinner /></div>
+  }
+
+  return (
+    <WebentityBrowseLayout
+      webentity={ webentity }
+      viewedProspectionIds={ viewedProspectionIds }
+      stackWebentities={ stackWebentities }
+      initialStatus={ initialStatus }
+      webentitiesList= { webentitiesList }
+      selectedStack={ selectedStack }
+      loadingStack={ loadingStack }
+      loadingWebentity= { loadingWebentity }
+      loadingBatchActions = { loadingBatchActions }
+      tabUrl={ activeTab.url }
+      categories={ categories.filter(cat => cat !== 'FREETAGS') }
+      tagsSuggestions={ tagsSuggestions || {} }
+      onSelectWebentity={ handleSelectWebentity }
+      onDownloadList={ handleDownloadList }
+      onSetTabUrl={ handleSetTabUrl }
+      onOpenTab={ handleOpenTab }
+      onAddTag={ handleAddTag }
+      onUpdateTag={ handleUpdateTag }
+      onRemoveTag={ handleRemoveTag }
+      onBatchActions = { handleBatchActions }
+      onSetWebentityStatus={ handleSetWenentityStatus }
+      onSetWebentityName={ handleSetWebentityName }
+      onSetWebentityHomepage={ handleSetWebentityHomepage }
+    />
+  )
 }
 
 
