@@ -10,7 +10,7 @@ import { remote, ipcRenderer as ipc, clipboard } from 'electron'
 const { Menu, MenuItem } = remote
 
 /**
- * @see https://github.com/atom/electron/blob/master/docs/api/web-view-tag.md
+ * @see https://github.com/electron/electron/blob/v2.0.18/docs/api/web-contents.md
  *
  * eventBus emits navigation events:
  * - status(what: string, info: any)
@@ -54,7 +54,9 @@ class WebView extends React.Component {
     webview.setAttribute('autosize', 'on')
 
     // Store handlers for future cleanup
-    this.reloadHandler = (ignoreCache) => ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
+    this.reloadHandler = (ignoreCache) => {
+      return ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
+    }
     this.goBackHandler = () => webview.goBack()
     this.goForwardHandler = () => webview.goForward()
     this.toggleDevToolsHandler = (doOpen) => {
@@ -177,6 +179,10 @@ class WebView extends React.Component {
       if (menu.getItemCount() >= 1) {
         menu.popup(remote.getCurrentWindow())
       }
+    })
+
+    webview.addEventListener('did-navigate', (event) => {
+      update('navigate', event.url)
     })
   }
 

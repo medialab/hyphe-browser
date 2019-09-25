@@ -1,8 +1,6 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
 import mergeWith from 'lodash.mergewith'
-import uniq from 'lodash.uniq'
-import set from 'lodash/fp/set'
 // import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
 import { VIEW_WEBENTITY } from '../actions/stacks'
@@ -37,8 +35,6 @@ import {
   UPDATE_TAG_SUCCESS,
   REMOVE_TAG_SUCCESS,
 } from '../actions/tags'
-
-import { TAGS_NS } from '../constants'
 
 const initialState = {
   tlds: null,
@@ -191,20 +187,31 @@ export default createReducer(initialState, {
     }
   }),
 
-  [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentity.id]: {
-        ...state.webentities[webentity.id],
-        ...webentity
+  [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => {
+    if (webentity) {
+      return {
+        ...state,
+        webentities: {
+          ...state.webentities,
+          [webentity.id]: {
+            ...state.webentities[webentity.id],
+            ...webentity
+          }
+        },
+        tabs: {
+          ...state.tabs,
+          [tabId]: webentity.id
+        }
       }
-    },
-    tabs: {
-      ...state.tabs,
-      [tabId]: webentity ? webentity.id : null
     }
-  }),
+    return {
+      ...state,
+      tabs: {
+        ...state.tabs,
+        [tabId]: null
+      }
+    }
+  },
 
   [CREATE_WEBENTITY_SUCCESS]: (state, { webentity }) => ({
     ...state,

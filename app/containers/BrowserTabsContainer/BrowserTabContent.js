@@ -82,7 +82,6 @@ class BrowserTabContent extends React.Component {
   }
 
   samePage (info) {
-    console.log(this.state.previousUrl, info)
     return compareUrls(this.state.previousUrl, info)
   }
 
@@ -103,32 +102,14 @@ class BrowserTabContent extends React.Component {
     case 'start':
       hideError()
       setTabStatus({ loading: true, url: info }, id)
-      if (!disableWebentity) {
-        console.log('il set state bien nonnnn ?')
-        this.setState({
-          previousUrl: info,
-          webentityName: null
-        }, () => {
-          // do not declare pages with only change in anchor
-          console.log('start')
-          if (!this.samePage(info) || loadingWebentityStack) {
-            console.log('go declare & fetch data')
-            // if (!(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-            //   setTabWebentity(server.url, corpusId, id, null)
-            // }
-            setTabUrl(info, id)
-            declarePage(server.url, corpusId, info, id)
-          }
-        })
+      if (!disableWebentity &&
+        // do not declare pages(show sidebar) when only changing url's anchor
+        !this.samePage(info) &&
+        // or when probably remaining within the same webentity
+        !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
+        setTabWebentity(server.url, corpusId, id, null)
+        setTabUrl(info, id)
       }
-      // This is a strange old code.
-      // if (!disableWebentity &&
-      //   // do not declare pages(show sidebar) when only changing url's anchor
-      //   !this.samePage(info) &&
-      //   // or when probably remaining within the same webentity
-      //   !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-      //   setTabWebentity(server.url, corpusId, id, null)
-      // }
       break
     case 'stop':
       // Redirect Hyphe special tab to network when userclosed or misstarted
@@ -138,7 +119,6 @@ class BrowserTabContent extends React.Component {
       setTabStatus({ loading: false, url: info }, id)
       addNavigationHistory(info, corpusId)
       stoppedLoadingWebentity()
-      console.log('stop', info)
       this.setState({ previousUrl: info })
       break
     case 'redirect':
@@ -152,6 +132,12 @@ class BrowserTabContent extends React.Component {
       break
     case 'favicon':
       setTabIcon(info, id)
+      break
+    case 'navigate':
+      if (!disableWebentity && !this.samePage(info) && !(webentity && longestMatching(webentity.prefixes, info, tlds))) {	
+        declarePage(server.url, corpusId, info, id)
+        setTabWebentity(server.url, corpusId, id, webentity)
+      }
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -179,6 +165,7 @@ class BrowserTabContent extends React.Component {
     }
     default:
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.log('Unhandled event:', event, info)
       }
       break
@@ -247,7 +234,9 @@ class BrowserTabContent extends React.Component {
 
   renderOverlay () {
     const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
-    const handleClick = () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
+    const handleClick = () => {
+      return mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
+    }
 
     return <div className="global-overlay" onClick={ handleClick } />
   }
@@ -390,7 +379,8 @@ class BrowserTabContent extends React.Component {
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ webentity && webentity.status === 'IN' } />
+          displayAddButton={ webentity && webentity.status === 'IN' }
+        />
         {this.renderContent()}
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
         { webentity && mergeRequired && this.renderMergePopup() }

@@ -113,7 +113,6 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
-        console.log('setTabWebentity ouioui')
         dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
       }
       return webentity
