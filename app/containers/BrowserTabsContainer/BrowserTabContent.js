@@ -134,7 +134,18 @@ class BrowserTabContent extends React.Component {
       setTabIcon(info, id)
       break
     case 'navigate':
-      if (!disableWebentity && !this.samePage(info) && !(webentity && longestMatching(webentity.prefixes, info, tlds))) {	
+      if (
+        !disableWebentity &&
+        !this.samePage(info) && 
+        !(webentity &&
+          // if webentity is loaded from memory the longestMatching used to
+          // avoid too much declaration will prevent all declaration. So we
+          // need to allow declaration at least from homepage because it's
+          // the first page visited when clicking in the sidebar.
+          !compareUrls(webentity.homepage, info) &&
+          longestMatching(webentity.prefixes, info, tlds)
+        )
+      ) {
         declarePage(server.url, corpusId, info, id)
         setTabWebentity(server.url, corpusId, id, webentity)
       }

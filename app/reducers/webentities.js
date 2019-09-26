@@ -238,27 +238,14 @@ export default createReducer(initialState, {
   // Keep track of current WE merges
   [MERGE_WEBENTITY]: (state, { tabId, mergeable, host, type }) => {
     const merge = state.merges[tabId]
-
-    // We want to keep the first redirection as mergeable
-    if (merge && merge.mergeable) {
-      return {
-        ...state,
-        merges: {
-          ...state.merges,
-          [tabId]: {
-            mergeable: merge.mergeable,
-            host,
-            type
-          }
-        }
-      }
-    }
+    // We do not want to re-set `mergeable` because we want to keep the first
+    // redirection as mergeable.
     return {
       ...state,
       merges: {
         ...state.merges,
         [tabId]: {
-          mergeable,
+          mergeable: (merge && merge.mergeable) ? merge.mergeable : mergeable,
           host,
           type
         }
