@@ -1,6 +1,6 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
-import { findIndex } from 'lodash' 
+import findIndex from 'lodash/findIndex' 
 
 import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
 import {

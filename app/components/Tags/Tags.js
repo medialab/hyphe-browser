@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { Creatable } from 'react-select'
 import { FormattedMessage as T } from 'react-intl'
-import { uniqBy } from 'lodash'
+import uniqBy from 'lodash/uniqBy'
 
 const getSuggestions = (suggestions, category, value) => {
   let suggestionOptions = []

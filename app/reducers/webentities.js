@@ -1,7 +1,7 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
-import mergeWith from 'lodash.mergewith'
-// import without from 'lodash.without'
+import mergeWith from 'lodash/mergewith'
+
 import createReducer from '../utils/create-reducer'
 import { VIEW_WEBENTITY } from '../actions/stacks'
 import {

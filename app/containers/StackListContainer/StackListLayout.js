@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 
-import { pickBy } from 'lodash'
+import pickBy from 'lodash/pickBy'
 
 import EntityCard from '../../components/EntityCard'
 import DownloadListBtn from '../../components/DownloadListBtn'
@@ -13,7 +13,6 @@ import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
 import { formatCounter } from '../../utils/misc'
 import Spinner from '../../components/Spinner'
-import Tooltipable from '../../components/Tooltipable'
 
 import WebentitiesContainer from './WebentitiesContainer'
 
@@ -110,7 +109,6 @@ const StackListLayout = ({
 
   const isEmpty = counters[selectedList] === 0
   const isLoading = loadingBatchActions || loadingStack
-  const stackInfo = USED_STACKS.find((stack) => stack.id === selectedStack)
   const handleLocate = () => {
     if (tabWebentity.status !== selectedStack) {
       onSelectStack(tabWebentity.status)
@@ -171,7 +169,8 @@ const StackListLayout = ({
             <input
               placeholder={formatMessage({ id: 'sidebar.overview.search-a-webentity' })}
               value={searchString}
-              onChange={handleSearch} />
+              onChange={handleSearch}
+            />
             <span className={cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue })}>
 
               <button

@@ -3,7 +3,7 @@ import './WebentityBrowseLayout.styl'
 import React, { useState } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { pickBy } from 'lodash'
+import pickBy from 'lodash/pickBy'
 
 import { TAGS_NS } from '../../constants'
 

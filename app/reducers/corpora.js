@@ -1,4 +1,4 @@
-import mapValues from 'lodash.mapvalues'
+import mapValues from 'lodash/mapValues'
 import createReducer from '../utils/create-reducer'
 import {
   SELECT_CORPUS,
