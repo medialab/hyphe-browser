@@ -124,7 +124,7 @@ class BrowserTabContent extends React.Component {
     case 'redirect':
       if (loadingWebentityStack && selectedWebentity &&
         !longestMatching(selectedWebentity.prefixes, info.newURL, tlds)) {
-        setMergeWebentity(id, selectedWebentity, webentity)
+        setMergeWebentity(id, selectedWebentity)
       }
       break
     case 'title':
@@ -383,7 +383,7 @@ class BrowserTabContent extends React.Component {
         />
         {this.renderContent()}
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
-        { webentity && mergeRequired && this.renderMergePopup() }
+        { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }
         { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
       </div>
     )
