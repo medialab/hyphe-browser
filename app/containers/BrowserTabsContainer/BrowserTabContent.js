@@ -108,8 +108,8 @@ class BrowserTabContent extends React.Component {
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
         setTabWebentity(server.url, corpusId, id, null)
-        setTabUrl(info, id)
       }
+      setTabUrl(info, id)
       break
     case 'stop':
       // Redirect Hyphe special tab to network when userclosed or misstarted
@@ -134,6 +134,7 @@ class BrowserTabContent extends React.Component {
       setTabIcon(info, id)
       break
     case 'navigate':
+      setTabUrl(info, id)
       if (
         !disableWebentity &&
         !this.samePage(info) && 
