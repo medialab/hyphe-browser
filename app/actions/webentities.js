@@ -115,7 +115,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
       if (tabId) {
         dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
         const state = getState()
-        if (state.webentities.merges[tabId].mergeable) {
+        if (state.webentities.merges[tabId] && state.webentities.merges[tabId].mergeable) {
           dispatch(setMergeWebentity(tabId, state.webentities.merges[tabId].mergeable, webentity, 'redirect'))
         }
       }

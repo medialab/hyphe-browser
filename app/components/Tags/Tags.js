@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-spacing */
 import './Tags.styl'
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -110,7 +109,7 @@ const Tags = (props, { intl: { formatMessage } }) => {
                   }
 
                   const renderArrow = (props) => {
-                    const { isOpen } = props;
+                    const { isOpen } = props
                     if (value.length > 0 && !isOpen) return null
                     else {
                       return (isOpen ? <span className="ti-angle-up" /> : <span className="ti-angle-down" />)
@@ -179,7 +178,7 @@ const Tags = (props, { intl: { formatMessage } }) => {
               className={ cx('btn btn-success add-category-btn', { 'no-categories': !categories.length }) }
               onClick={ openCategory }
             >
-              <T id="tags.add-category" /> <HelpPin>{formatMessage({id: 'tags.add-category-help'})}</HelpPin>
+              <T id="tags.add-category" /> <HelpPin>{formatMessage({ id: 'tags.add-category-help' })}</HelpPin>
             </button>
         }
       </div>
