@@ -1,7 +1,6 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
 import mergeWith from 'lodash.mergewith'
-import set from 'lodash.set'
 import uniq from 'lodash.uniq'
 import without from 'lodash.without'
 import createReducer from '../utils/create-reducer'
@@ -57,16 +56,19 @@ export default createReducer(initialState, {
     tlds
   }),
 
-  [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentity.id]: {
-        ...state.webentities[webentity.id],
-        ...webentity
+  [DECLARE_PAGE_SUCCESS]: (state, { webentity }) => {
+    return {
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          ...state.selected,
+          ...webentity
+        }
       }
     }
-  }),
+  },
 
   ...optimisticUpdateWebentity(
     'homepage',
@@ -91,16 +93,18 @@ export default createReducer(initialState, {
 
   [SET_WEBENTITY_CRAWLING_STATUS]: updateWebentity((webentity, { crawling_status }) => ({ crawling_status })),
 
-  [FETCH_MOST_LINKED_SUCCESS]: (state, { webentity, mostLinked }) => ({
-    ...state,
-    webentities: {
-      ...state.webentities,
-      [webentity.id]: {
-        ...state.webentities[webentity.id],
-        mostLinked
+  [FETCH_MOST_LINKED_SUCCESS]: (state, { webentity, mostLinked }) => {
+    return {
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          mostLinked
+        }
       }
     }
-  }),
+  },
 
   [FETCH_REFERRERS_SUCCESS]: (state, { webentity, referrers }) => ({
     ...state,
@@ -167,13 +171,15 @@ export default createReducer(initialState, {
     [`tags.${TAGS_NS}.${category}`]: without(webentity.tags[TAGS_NS][category] || [], value)
   })),
 
-  [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => ({
-    ...state,
-    tabs: {
-      ...state.tabs,
-      [tabId]: webentity ? webentity.id : null
+  [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => {
+    return {
+      ...state,
+      tabs: {
+        ...state.tabs,
+        [tabId]: webentity ? webentity.id : null
+      }
     }
-  }),
+  },
 
   [CREATE_WEBENTITY_SUCCESS]: (state, { webentity }) => ({
     ...state,

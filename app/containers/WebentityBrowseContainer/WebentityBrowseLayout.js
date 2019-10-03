@@ -22,7 +22,7 @@ import WebentityNameField from './WebentityNameField'
 import { parseLru } from '../../utils/lru'
 
 const parsePrefixes = array => {
-  const lru = parseLru(first(sortBy(['length'])(array)));
+  const lru = parseLru(first(sortBy(['length'])(array)))
   return [
     { name: lru.scheme, editable: false },
     ...lru.host.map(host => ({ name: host, editable: false })),
@@ -31,14 +31,27 @@ const parsePrefixes = array => {
 }
 
 const FromInModal = props => {
-  const [step, setStep] = useState(0)
-  console.log(props.webentity)
+  const prefixes = parsePrefixes(props.webentity.prefixes)
+  const [step, setStep] = useState(1)
+  const [selectedPage, setSelectedPage] = useState(null)
+  const [selectedPrefix, setPrefix] = useState(() => prefixes.filter(
+    ({ editable }) => !editable)
+  )
+  const [name, setName] = useState(props.webentity.name)
+
+  console.log({ step, selectedPage, selectedPrefix, name })
+
   return (
     <InModal
-      {...props}
-      setCurrentStep={setStep}
-      currentStep={step}
-      prefix={parsePrefixes(props.webentity.prefixes)}
+      { ...props }
+      setCurrentStep={ setStep }
+      currentStep={ step }
+      prefix={ prefixes }
+      selectedPage={ selectedPage }
+      setSelectPage={ setSelectedPage }
+      onSetPrefix={ setPrefix }
+      defaultName={ props.webentity.name }
+      setName={ setName }
     />
   )
 }
@@ -179,12 +192,13 @@ const WebentityBrowseLayout = ({
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        {!!modalIsOpen && <FromInModal
-          isOpen={ modalIsOpen }
-          onRequestClose={ closeModal }
-          onSuccess={ onModalSuccess }
-          webentity={ webentity }
-        />}
+        {!!modalIsOpen &&
+          <FromInModal
+            isOpen={ modalIsOpen }
+            onRequestClose={ closeModal }
+            onSuccess={ onModalSuccess }
+            webentity={ webentity }
+          />}
         <Tooltipable 
           Tag="button"
           className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !prevDisabled }) }

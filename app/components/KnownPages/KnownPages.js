@@ -1,6 +1,6 @@
 import './KnownPages.styl'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { intlShape } from 'react-intl'
 
 import DownloadListBtn from '../DownloadListBtn'

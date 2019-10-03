@@ -111,6 +111,9 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
+      if (webentity.homepage === null) {
+        delete webentity.homepage
+      }
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
         dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))

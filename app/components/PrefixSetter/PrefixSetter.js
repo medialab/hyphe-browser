@@ -5,7 +5,8 @@ import Draggable from 'react-draggable'
 import cx from 'classnames'
 
 const PrefixSetter = function ({
-  parts = []
+  parts = [],
+  setPrefix
 }) {
   let initialIndex = parts.length - 1
   parts.some((p, i) => {
@@ -27,21 +28,19 @@ const PrefixSetter = function ({
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
-      setStartingX(x + box.width)
+      const res = x + box.width
+      setStartingX(res)
     }
   }
 
-  useEffect(() => {
-    setSliderX()
-    setTimeout(() => setSliderX())
-  })
+  useEffect(setSliderX, [])
 
   const handleDrag = (event) => {
     const { clientX } = event
     refs.some((ref, refIndex) => {
       if (ref.current) {
         const box = ref.current.getBoundingClientRect()
-        const THRESHOLD = 10;
+        const THRESHOLD = 10
         if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && parts[refIndex].editable) {
           setIndex(refIndex)
           return true
@@ -51,6 +50,7 @@ const PrefixSetter = function ({
   }
 
   const handleStop = () => {
+    setPrefix(parts.filter((_, i) => i <= index))
     setSliderX()
   }
 
@@ -62,6 +62,7 @@ const PrefixSetter = function ({
             const handleClick = () => {
               if (part.editable) {
                 setIndex(partIndex)
+                setPrefix(parts.filter((_, i) => i <= partIndex))
               }
             }
             return (
@@ -78,7 +79,7 @@ const PrefixSetter = function ({
           })
         }
         <Draggable
-          bounds='parent'
+          bounds="parent"
           axis="x"
           handle=".slider-handle"
           defaultPosition={ { x: startingX, y: 0 } }
