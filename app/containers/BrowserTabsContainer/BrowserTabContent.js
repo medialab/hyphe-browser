@@ -178,6 +178,7 @@ class BrowserTabContent extends React.Component {
     }
     default:
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.log('Unhandled event:', event, info)
       }
       break
@@ -389,7 +390,8 @@ class BrowserTabContent extends React.Component {
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ webentity && webentity.status === 'IN' } />
+          displayAddButton={ webentity && webentity.status === 'IN' }
+        />
         {this.renderContent()}
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
         { webentity && mergeRequired && this.renderMergePopup() }

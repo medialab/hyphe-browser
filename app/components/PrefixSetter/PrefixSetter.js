@@ -23,8 +23,8 @@ const PrefixSetter = function ({
   const [index, setIndex] = useState(initialIndex)
   const [startingX, setStartingX] = useState(0)
 
-  const setSliderX = () => {
-    const anchor = refs && refs[index] && refs[index].current
+  const setSliderX = (i = index) => {
+    const anchor = refs && refs[i] && refs[i].current
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
@@ -41,7 +41,7 @@ const PrefixSetter = function ({
       if (ref.current) {
         const box = ref.current.getBoundingClientRect()
         const THRESHOLD = 10
-        if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && parts[refIndex].editable) {
+        if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && (parts[refIndex + 1] && parts[refIndex + 1].editable || parts[refIndex].editable)) {
           setIndex(refIndex)
           return true
         }
@@ -50,7 +50,9 @@ const PrefixSetter = function ({
   }
 
   const handleStop = () => {
-    setPrefix(parts.filter((_, i) => i <= index))
+    setPrefix(parts
+      .filter((_, i) => i <= index )
+      .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, ''))
     setSliderX()
   }
 
@@ -62,7 +64,11 @@ const PrefixSetter = function ({
             const handleClick = () => {
               if (part.editable) {
                 setIndex(partIndex)
-                setPrefix(parts.filter((_, i) => i <= partIndex))
+                setPrefix(parts
+                  .filter((_, i) => i <= partIndex)
+                  .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, '')
+                )
+                setSliderX(partIndex)
               }
             }
             return (

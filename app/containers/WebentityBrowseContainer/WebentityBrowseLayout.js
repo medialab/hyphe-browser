@@ -3,7 +3,8 @@ import './WebentityBrowseLayout.styl'
 import React, { useState, useCallback } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { pickBy, sortBy, first } from 'lodash/fp'
+import { pickBy } from 'lodash/fp'
+import { connect } from 'react-redux'
 
 import { TAGS_NS } from '../../constants'
 
@@ -19,42 +20,12 @@ import InModal from './InModal'
 
 import HelpPin from '../../components/HelpPin'
 import WebentityNameField from './WebentityNameField'
-import { parseLru } from '../../utils/lru'
 
-const parsePrefixes = array => {
-  const lru = parseLru(first(sortBy(['length'])(array)))
-  return [
-    { name: lru.scheme, editable: false },
-    ...lru.host.map(host => ({ name: host, editable: false })),
-    ...lru.path.map(path => ({ name: path, editable: true }))
-  ]
-}
-
-const FromInModal = props => {
-  const prefixes = parsePrefixes(props.webentity.prefixes)
-  const [step, setStep] = useState(1)
-  const [selectedPage, setSelectedPage] = useState(null)
-  const [selectedPrefix, setPrefix] = useState(() => prefixes.filter(
-    ({ editable }) => !editable)
-  )
-  const [name, setName] = useState(props.webentity.name)
-
-  console.log({ step, selectedPage, selectedPrefix, name })
-
-  return (
-    <InModal
-      { ...props }
-      setCurrentStep={ setStep }
-      currentStep={ step }
-      prefix={ prefixes }
-      selectedPage={ selectedPage }
-      setSelectPage={ setSelectedPage }
-      onSetPrefix={ setPrefix }
-      defaultName={ props.webentity.name }
-      setName={ setName }
-    />
-  )
-}
+const FromInModal = connect(state => ({
+  url: state.servers.selected.url,
+  corpus_id: state.corpora.selected.corpus_id,
+  tlds: state.webentities.tlds,
+}))(InModal)
 
 const WebentityBrowseLayout = ({
   webentity,
@@ -194,6 +165,7 @@ const WebentityBrowseLayout = ({
       <nav className="browse-nav">
         {!!modalIsOpen &&
           <FromInModal
+            tabUrl={ tabUrl }
             isOpen={ modalIsOpen }
             onRequestClose={ closeModal }
             onSuccess={ onModalSuccess }

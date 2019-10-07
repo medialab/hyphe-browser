@@ -228,7 +228,6 @@ highlightUrlHTML([
 → '<em>https</em>://subdomain.<em>com.google.www</em><em>/toto</em>/tata<em>#fragment</em>'
 */
 
-
 export function urlToName (url, tldTree) {
   const lru = urlToLru(url, tldTree)
 
@@ -277,4 +276,28 @@ function simplierUrl (url) {
 export function compareUrls (url1, url2) {
   if (!url1 || !url2) return false
   return simplierUrl(url1) === simplierUrl(url2)
+}
+
+export function lruObjectToString (input) {
+  if (typeof input === 'string') {
+    return input
+  }
+
+  let lru = 's:' + input.scheme + '|'
+
+  if(input.port && input.port !== '80') {
+    lru += 't:' + input.port + '|'
+  }
+  if(input.tld) {
+    lru += 'h:' + input.tld + '|'
+  }
+  input.host.forEach((h) => lru += 'h:' + h + '|')
+  input['path'].forEach((p) => lru += 'p:' + p + '|')
+  if(input.query) {
+    lru += 'q:' + input.query + '|'
+  }
+  if(input.fragment) {
+    lru += 'f:' + input.fragment + '|'
+  }
+  return lru
 }
