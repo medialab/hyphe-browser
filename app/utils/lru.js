@@ -132,22 +132,60 @@ export function lruToUrl (inputLru, tldTree) {
   return scheme + host + tld + port + path + query + fragment
 }
 
-// Check if a LRU (string or object) matches a URL (string) or other LRU (string or object)
-export function match (lru, url, tldTree) {
-  const lruLru = parseLru(lru, tldTree)
-  const urlLru = urlToLru(url, tldTree)
+function httpsVariations (lru) {
+  if (lru.includes('s:http|')) {
+    return lru.replace('s:http|', 's:https|')
+  }
+  if (lru.includes('s:https|')) {
+    return lru.replace('s:https|', 's:http|')
+  }
+}
 
-  // Now we want to check if LRU matches URL, which means:
-  // - url.host starts with lru.host (they're reversed)
-  // - url.path starts with lru.path (they're in original order)
-  // - query, fragment, scheme, port are the same
-  return urlLru.scheme === lruLru.scheme
-      && urlLru.tld === lruLru.tld
-      && urlLru.host.join('.').startsWith(lruLru.host.join('.'))
-      && urlLru.port === lruLru.port
-      && urlLru.path.join('.').startsWith(lruLru.path.join('.'))
-      && (!lruLru.query || (urlLru.query === lruLru.query))
-      && (!lruLru.fragment || (urlLru.fragment === lruLru.fragment))
+function lruVariations (lru) {
+  if (lru.trim() === '') {
+    return ['']
+  }
+  let variations = [lru]
+  const httpVariations = httpsVariations(lru)
+  if (httpVariations) {
+    variations = [...variations, httpVariations]
+  }
+  const hosts = lru.split('|').filter(stem => stem.startsWith('h:'))
+  const hostsStr = `${hosts.join('|')}|`
+  if (hosts.length === 1) {
+    return variations
+  }
+  if (hosts[hosts.length - 1] === 'h:www') {
+    hosts.pop()
+  } else {
+    hosts.push('h:www')
+  }
+  const wwwHostsStr = `${hosts.join('|')}|`
+  variations.push(
+    lru.replace(hostsStr, wwwHostsStr)
+  )
+  if (httpVariations) {
+    variations.push(
+      httpVariations.replace(hostsStr, wwwHostsStr)
+    )
+  }
+  return variations
+}
+
+// Check if a LRU (string or object) matches a URL (string) or other LRU (string or object)
+export function match (lru, url, tldTree, log) {
+  const urlLru = lruVariations(lruObjectToString(urlToLru(url, tldTree)))
+  lru = lruVariations(lruObjectToString(lru))
+  const res = urlLru.some(urlVariation => {
+    return lru.some(lruVariation => {
+      return urlVariation.startsWith(lruVariation)
+    })
+  })
+  if (log) { 
+    console.log({ lru, urlLru, res })
+  }
+  return res
+  // return urlLru.startsWith(lruLru)
 }
 
 // Returns the longest LRU matching given URL (string) or other LRU (string or object)

@@ -101,8 +101,7 @@ const prefixReducer = (state, action) => {
 
 const toTitleCase = (prefix) => {
   return prefix.split('|').reduce((previous, sig) => {
-    console.log(sig)
-    const [_, name] = sig.split(':')
+    const [, name] = sig.split(':')
     if (name) {
       return `${previous}${name.charAt(0).toUpperCase() + name.substr(1).toLowerCase()}`
     }
@@ -121,6 +120,7 @@ const EntityModal = ({
   tlds,
 }) => {
   const longestLru = longestMatching(webentity.prefixes, tabUrl, tlds).lru
+  console.log({ longestLru })
   const prefixes = parsePrefixes(longestLru, urlToLru(tabUrl, tlds))
   const [step, setStep] = useState(1)
   const [selectedPage, setSelectedPage] = useState(null)
@@ -147,15 +147,12 @@ const EntityModal = ({
       }
       dispatch({ type: 'SET', payload: prefix })
       ref.current.value = toTitleCase(prefix)
-      console.log('ici', toTitleCase(prefix))
+      // console.log('ici', toTitleCase(prefix))
       setStep(1)
     })
   }, [])
 
-  let ndLock = true
-  if (step === 2 && isNumber(selectedPage)) {
-    ndLock = false
-  }
+  const ndLock = !(step === 2 && isNumber(selectedPage))
   const ref = React.useRef(null)
   const onNameConfirm = useCallback(() => {
     if (ref.current.value.length) {
@@ -168,7 +165,7 @@ const EntityModal = ({
       setStep(3)
     }
   }, [step])
-
+  console.log(webentity.mostLinked)
   return (
     <Modal
       isOpen={ isOpen }
@@ -202,7 +199,12 @@ const EntityModal = ({
               <button disabled={ ndLock }  onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
             </h3>
             <PagesList
-              pages={ webentity.mostLinked.filter((url) => match(prefixState.selected, url.url, tlds)) }
+              pages={ webentity.mostLinked.filter((url) => {
+                return url.lru.startsWith(prefixState.selected)
+                // return url.lru.startsWith(prefixState.selected)
+                console.log('mais ici ?')
+                return match(prefixState.selected, url.url, tlds, true)
+              }) }
               selectedPage={ selectedPage }
               setSelectedPage={ useCallback((index) => {
                 setSelectedPage(index)
