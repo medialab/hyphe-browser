@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { 
-  batchWebentityActions
+  batchWebentityActions,
+  setSimpleTabWebentity
 } from '../../actions/webentities'
 
 import { viewWebentity, selectStack, fetchStack, fetchStackPage } from '../../actions/stacks'
@@ -30,7 +31,7 @@ const StackListContainer = ({
   tlds,
   // actions
   setAsideMode, // props action
-  selectStack,
+  setSimpleTabWebentity,
   fetchStack,
   fetchStackPage,
   setTabUrl,
@@ -42,6 +43,7 @@ const StackListContainer = ({
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
     setTabUrl(webentity.homepage, activeTab.id)
+    setSimpleTabWebentity(webentity, activeTab.id)
     setAsideMode('webentityBrowse')
   }
   
@@ -133,6 +135,7 @@ export default connect(mapStateToProps, {
   batchWebentityActions,
   addTag,
   updateTag,
-  removeTag
+  removeTag,
+  setSimpleTabWebentity,
 })(StackListContainer)
 

@@ -1,8 +1,7 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
-import mergeWith from 'lodash.mergewith'
-import uniq from 'lodash.uniq'
-import without from 'lodash.without'
+import mergeWith from 'lodash/mergewith'
+
 import createReducer from '../utils/create-reducer'
 import { VIEW_WEBENTITY } from '../actions/stacks'
 import {
@@ -36,8 +35,6 @@ import {
   UPDATE_TAG_SUCCESS,
   REMOVE_TAG_SUCCESS,
 } from '../actions/tags'
-
-import { TAGS_NS } from '../constants'
 
 const initialState = {
   tlds: null,
@@ -155,28 +152,68 @@ export default createReducer(initialState, {
   }),
 
 
-  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, oldValue, newValue }) => {
-    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
-    const newTags = oldTags.map((v) => (v === oldValue) ? newValue : v)
-    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+  [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, { category, newValue }) => {
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: [newValue]
+        }
+      }
+    }
   }),
 
   [ADD_TAG_SUCCESS]: updateWebentity(( webentity, { category, value }) => {
-    const oldTags = ((webentity.tags || {})[TAGS_NS] || {})[category] || []
-    const newTags = uniq(oldTags.concat([value]))
-    return { [`tags.${TAGS_NS}.${category}`]: newTags }
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: [value]
+        }
+      }
+    }
   }),
 
-  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category, value }) => ({
-    [`tags.${TAGS_NS}.${category}`]: without(webentity.tags[TAGS_NS][category] || [], value)
-  })),
+  [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, { category }) => {
+    // Can't use `unset` because of `updateWebentity`'s `mergeWith`
+    return {
+      ...webentity,
+      tags: {
+        ...webentity.tags,
+        USER: {
+          ...webentity.tags.USER,
+          [category]: []
+        }
+      }
+    }
+  }),
 
   [SET_TAB_WEBENTITY]: (state, { tabId, webentity }) => {
+    if (webentity) {
+      return {
+        ...state,
+        webentities: {
+          ...state.webentities,
+          [webentity.id]: {
+            ...state.webentities[webentity.id],
+            ...webentity
+          }
+        },
+        tabs: {
+          ...state.tabs,
+          [tabId]: webentity.id
+        }
+      }
+    }
     return {
       ...state,
       tabs: {
         ...state.tabs,
-        [tabId]: webentity ? webentity.id : null
+        [tabId]: null
       }
     }
   },
@@ -204,13 +241,22 @@ export default createReducer(initialState, {
   }),
 
   // Keep track of current WE merges
-  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host, type }) => ({
-    ...state,
-    merges: {
-      ...state.merges,
-      [tabId]: ({ mergeable, host, type })
+  [MERGE_WEBENTITY]: (state, { tabId, mergeable, host, type }) => {
+    const merge = state.merges[tabId]
+    // We do not want to re-set `mergeable` because we want to keep the first
+    // redirection as mergeable.
+    return {
+      ...state,
+      merges: {
+        ...state.merges,
+        [tabId]: {
+          mergeable: (merge && merge.mergeable) ? merge.mergeable : mergeable,
+          host,
+          type
+        }
+      }
     }
-  }),
+  },
 
   [STOP_MERGE_WEBENTITY]: (state, { tabId }) => ({
     ...state,

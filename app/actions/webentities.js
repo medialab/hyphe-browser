@@ -24,7 +24,7 @@ import {
 } from '../constants'
 
 import { showNotification } from './browser'
-import { fetchStack } from './stacks';
+import { fetchStack } from './stacks'
 
 
 // adding a page to corpus
@@ -106,7 +106,7 @@ export const BATCH_WEBENTITY_ACTIONS_REQUEST = '§_BATCH_WEBENTITY_ACTIONS_REQUE
 export const BATCH_WEBENTITY_ACTIONS_SUCCESS = '§_BATCH_WEBENTITY_ACTIONS_SUCCESS'
 export const BATCH_WEBENTITY_ACTIONS_FAILURE = '§_BATCH_WEBENTITY_ACTIONS_FAILURE'
 
-export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch) => {
+export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch, getState) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
@@ -117,6 +117,10 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
         dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
+        const state = getState()
+        if (state.webentities.merges[tabId] && state.webentities.merges[tabId].mergeable) {
+          dispatch(setMergeWebentity(tabId, state.webentities.merges[tabId].mergeable, webentity, 'redirect'))
+        }
       }
       return webentity
     })
@@ -261,6 +265,7 @@ export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
 export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
 export const showAdjustWebentity = (webentityId, crawl = false) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
+export const setSimpleTabWebentity = (webentity, tabId) => ({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 
 export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })

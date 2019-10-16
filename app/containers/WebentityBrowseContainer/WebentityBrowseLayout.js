@@ -3,7 +3,7 @@ import './WebentityBrowseLayout.styl'
 import React, { useState, useCallback } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
-import { pickBy } from 'lodash/fp'
+import pickBy from 'lodash/fp/pickBy'
 import { connect } from 'react-redux'
 
 import { TAGS_NS } from '../../constants'
@@ -125,13 +125,11 @@ const WebentityBrowseLayout = ({
    */
   
   const userTags = webentity.tags[TAGS_NS]
-  const initialTags = categories.map((category) => {
-    return {
-      category,
-      value: (userTags && userTags[category] && userTags[category][0]) || ''
-    }
-  })
-                                        
+  const initialTags = React.useMemo(() => categories.map((category) => ({
+    category,
+    value: (userTags && userTags[category] && userTags[category][0]) || ''
+  })), [categories, userTags])
+
   /**
    * field notes related
    */

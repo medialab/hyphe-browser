@@ -48,8 +48,6 @@ class BrowserTabContent extends React.Component {
       disableApplyButton: false,
       setDoNotShowAgainAfterSubmit: null
     }
-
-    this.doNotDeclarePageOnStop = false
   }
 
   componentDidMount () {
@@ -97,7 +95,6 @@ class BrowserTabContent extends React.Component {
     if (event === 'open' && disableWebentity && this.samePage(info)) {
       event = 'start'
     }
-
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
@@ -112,6 +109,7 @@ class BrowserTabContent extends React.Component {
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
         setTabWebentity(server.url, corpusId, id, null)
       }
+      setTabUrl(info, id)
       break
     case 'stop':
       // Redirect Hyphe special tab to network when userclosed or misstarted
@@ -120,25 +118,13 @@ class BrowserTabContent extends React.Component {
       }
       setTabStatus({ loading: false, url: info }, id)
       addNavigationHistory(info, corpusId)
-      if (!disableWebentity) {
-        if (!this.doNotDeclarePageOnStop) {
-          setTabUrl(info, id)
-          // do not declare pages with only change in anchor	
-          if (!this.samePage(info) || loadingWebentityStack) {	
-            this.setState({ webentityName: null })	
-            declarePage(server.url, corpusId, info, id)	
-          }
-        } else {
-          this.doNotDeclarePageOnStop = false
-        }
-      }
       stoppedLoadingWebentity()
       this.setState({ previousUrl: info })
       break
     case 'redirect':
       if (loadingWebentityStack && selectedWebentity &&
         !longestMatching(selectedWebentity.prefixes, info.newURL, tlds)) {
-        setMergeWebentity(id, selectedWebentity, webentity)
+        setMergeWebentity(id, selectedWebentity)
       }
       break
     case 'title':
@@ -146,6 +132,24 @@ class BrowserTabContent extends React.Component {
       break
     case 'favicon':
       setTabIcon(info, id)
+      break
+    case 'navigate':
+      setTabUrl(info, id)
+      if (
+        !disableWebentity &&
+        !this.samePage(info) && 
+        !(webentity &&
+          // if webentity is loaded from memory the longestMatching used to
+          // avoid too much declaration will prevent all declaration. So we
+          // need to allow declaration at least from homepage because it's
+          // the first page visited when clicking in the sidebar.
+          !compareUrls(webentity.homepage, info) &&
+          longestMatching(webentity.prefixes, info, tlds)
+        )
+      ) {
+        declarePage(server.url, corpusId, info, id)
+        setTabWebentity(server.url, corpusId, id, webentity)
+      }
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -156,16 +160,11 @@ class BrowserTabContent extends React.Component {
         console.error(err) // eslint-disable-line no-console
       }
       setTabStatus({ loading: false, error: info }, id)
-      if (!disableWebentity) {
-        this.setState({ webentityName: null })
-        declarePage(server.url, corpusId, info.pageURL, id)
-      }
       stoppedLoadingWebentity()
       // Main page triggered the error, it's important
       if (info.pageURL === info.validatedURL) {
         // DNS error: let's search instead
         if (err.name === 'NameNotResolvedError') {
-          this.doNotDeclarePageOnStop = true
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
           setTabUrl(getSearchUrl(selectedEngine, term), id)
@@ -247,7 +246,9 @@ class BrowserTabContent extends React.Component {
 
   renderOverlay () {
     const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
-    const handleClick = () => mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
+    const handleClick = () => {
+      return mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
+    }
 
     return <div className="global-overlay" onClick={ handleClick } />
   }
@@ -394,7 +395,7 @@ class BrowserTabContent extends React.Component {
         />
         {this.renderContent()}
         { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
-        { webentity && mergeRequired && this.renderMergePopup() }
+        { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }
         { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
       </div>
     )

@@ -17,6 +17,15 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({
     showDevTools: true
   })
+  const devtools = require('electron-devtools-installer')
+
+  app.on('ready', () => {
+    [ 'REDUX_DEVTOOLS' ].forEach(t => {
+      devtools.default(devtools[t])
+        .then(name => console.log(`Added Extension:  ${name}`)) // eslint-disable-line no-console
+        .catch(err => console.error('An error occurred during redux devtools install: ', err)) // eslint-disable-line no-console
+    })
+  })
 
   // this was introduced by @mydu for some reason at one point
   // but it breaks sigma.js integration, so commenting it for now

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Spinner from '../../components/Spinner'
 
 import { 
   setWebentityName, 
@@ -8,6 +9,7 @@ import {
   showAdjustWebentity,
   cancelWebentityCrawls,
   batchWebentityActions,
+  setSimpleTabWebentity,
   setWebentityStatus } from '../../actions/webentities'
 
 import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
@@ -18,9 +20,9 @@ import { addTag, removeTag, updateTag } from '../../actions/tags'
 import { getWebEntityActivityStatus } from '../../utils/status'
 
 import WebentityBrowseLayout from './WebentityBrowseLayout'
-import Spinner from '../../components/Spinner'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
+const empty = {}
 
 const WebentityBrowseContainer = ({ 
   activeTab,
@@ -49,14 +51,15 @@ const WebentityBrowseContainer = ({
   addTag,
   updateTag,
   removeTag,
+  setSimpleTabWebentity,
 }) => {
-
-  const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+  const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
 
   // storing viewed prospections in an efficient way
-  const viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
-    && new Set(stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id))
+  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
+  && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
+  viewedProspectionIds = new Set(viewedProspectionIds)
 
   useEffect(() => {
     if (webentity) {
@@ -68,6 +71,7 @@ const WebentityBrowseContainer = ({
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
+    setSimpleTabWebentity(webentity, activeTab.id)
     setTabUrl(webentity.homepage, activeTab.id)
   }
 
@@ -134,14 +138,13 @@ const WebentityBrowseContainer = ({
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
-
+  const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), categories)
   /**
    * Display loading bar if no we is provided
    */
   if (!webentity) {
     return <div className="loader-container"><Spinner /></div>
   }
-
   return (
     <WebentityBrowseLayout
       webentity={ webentity }
@@ -154,8 +157,8 @@ const WebentityBrowseContainer = ({
       loadingWebentity= { loadingWebentity }
       loadingBatchActions = { loadingBatchActions }
       tabUrl={ activeTab.url }
-      categories={ categories.filter(cat => cat !== 'FREETAGS') }
-      tagsSuggestions={ tagsSuggestions || {} }
+      categories={ filteredCategories }
+      tagsSuggestions={ tagsSuggestions || empty }
       onSelectWebentity={ handleSelectWebentity }
       onDownloadList={ handleDownloadList }
       onSetTabUrl={ handleSetTabUrl }
@@ -218,6 +221,6 @@ export default connect(mapStateToProps, {
   setWebentityHomepage,
   addTag,
   updateTag,
-  removeTag
-})(WebentityBrowseContainer)
-
+  removeTag,
+  setSimpleTabWebentity,
+})(React.memo(WebentityBrowseContainer))
