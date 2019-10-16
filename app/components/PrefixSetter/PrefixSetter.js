@@ -11,7 +11,7 @@ const PrefixSetter = function ({
   let initialIndex = parts.length - 1
   parts.some((p, i) => {
     if (p.editable) {
-      initialIndex = i
+      initialIndex = i - 1
       return true
     }
   })
@@ -63,12 +63,13 @@ const PrefixSetter = function ({
           parts.map((part, partIndex) => {
             const handleClick = () => {
               if (part.editable) {
-                setIndex(partIndex)
+                const selectedIndex = partIndex === index ? partIndex - 1 : partIndex
+                setIndex(selectedIndex)
                 setPrefix(parts
-                  .filter((_, i) => i <= partIndex)
+                  .filter((_, i) => i <= selectedIndex)
                   .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, '')
                 )
-                setSliderX(partIndex)
+                setSliderX(selectedIndex)
               }
             }
             return (

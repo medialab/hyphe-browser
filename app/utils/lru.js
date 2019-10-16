@@ -141,7 +141,8 @@ function httpsVariations (lru) {
   }
 }
 
-function lruVariations (lru) {
+export function lruVariations (lru) {
+  lru = lruObjectToString(lru)
   if (lru.trim() === '') {
     return ['']
   }
@@ -173,18 +174,9 @@ function lruVariations (lru) {
 }
 
 // Check if a LRU (string or object) matches a URL (string) or other LRU (string or object)
-export function match (lru, url, tldTree, log) {
-  const urlLru = lruVariations(lruObjectToString(urlToLru(url, tldTree)))
-  lru = lruVariations(lruObjectToString(lru))
-  const res = urlLru.some(urlVariation => {
-    return lru.some(lruVariation => {
-      return urlVariation.startsWith(lruVariation)
-    })
-  })
-  if (log) { 
-    console.log({ lru, urlLru, res })
-  }
-  return res
+export function match (lru, url, tldTree) {
+  const urlLru = lruObjectToString(urlToLru(url, tldTree))
+  return urlLru.startsWith(lruObjectToString(lru))
   // return urlLru.startsWith(lruLru)
 }
 
@@ -277,7 +269,9 @@ export function urlToName (url, tldTree) {
   const tldLength = tld ? tld.split('.').length : 0
 
   let name = lru.host
-    .map((d, i) => (tldLength && i === tldLength) ? toDomainCase(d) : d.replace(/\[]/g, ''))
+    .map((d, i) => {
+      return (tldLength && i === tldLength) ? toDomainCase(d) : d.replace(/\[]/g, '')
+    })
     .filter((d, i) => d !== 'www' && (!tldLength || i > tldLength - 1))
     .reverse()
     .join('.')

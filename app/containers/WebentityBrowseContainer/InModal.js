@@ -9,35 +9,79 @@ import Spinner from '../../components/Spinner'
 import PrefixSetter from '../../components/PrefixSetter'
 import CardsList from '../../components/CardsList'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
-import { lruObjectToString, longestMatching, urlToLru, match } from '../../utils/lru'
+import { longestMatching, urlToLru, lruVariations } from '../../utils/lru'
 import jsonrpc from '../../utils/jsonrpc'
 
 import './InModal.styl'
 
-const parsePrefixes = (lru, url) => {
-  const prefix = lruObjectToString(lru).split('|')
-  const urlPrefix = lruObjectToString(url).split('|')
-  return urlPrefix.reduce((previous, sig, index) => {
-    const [min, name] = sig.split(':')
-    if (name) {
-      return [
-        ...previous,
-        {
-          name,
-          editable: prefix[index] !== sig,
-          min,
-        }
-      ]
-    }
-    return previous
-  }, [])
+// eslint-disable-next-line no-unused-vars
+const compareWithWww = (lru) => {
+  return (url) => {
+    const urlLru = url.lru.split(/\|h:(.+)/)[1] || ''
+    const lruLru = lru.split(/\|h:(.+)/)[1] || ''
+    return urlLru.startsWith(lruLru)
+  }
+}
 
-  // return lruObjectToString(lru).split('|').map(sig => ({ name: sig.split(':')[1], editable: true }))
-  // return [
-  //   { name: lru.scheme, editable: false },
-  //   ...lru.host.map(host => ({ name: host, editable: false })),
-  //   ...lru.path.map(path => ({ name: path, editable: true }))
-  // ]
+const compareWithoutWww = (lru) => {
+  const lrus = lruVariations(lru)
+  return (url) => {
+    const urlLrus = lruVariations(url.lru)
+    return urlLrus.some(urlVariation => {
+      return lrus.some(lruVariation => {
+        return urlVariation.startsWith(lruVariation)
+      })
+    })
+  }
+}
+
+const parsePrefixes = (lruLru, url, tldTree) => {
+  const urlLru = urlToLru(url, tldTree)
+  if (!urlLru) {
+    return url
+  }
+
+  if (!lruLru) {
+    return url
+  }
+
+  let prefixes = [{ name: urlLru.scheme, editable: false, min: 's' }]
+
+  if (urlLru.port && urlLru.port !== '80') {
+    prefixes.push({
+      name: urlLru.port,
+      editable: false,
+      min: 't'
+    })
+  }
+
+  if (urlLru.tld) {
+    prefixes.push({
+      name: urlLru.tld,
+      editable: false,
+      min: 'h'
+    })
+  }
+
+  prefixes = prefixes.concat(urlLru.host.map((host, index) => ({ name: host, editable: index !== 0, min: 'h' })))
+  prefixes = prefixes.concat(urlLru.path.map(path => ({ name: path, editable: true, min: 'p' })))
+
+  if (urlLru.query) {
+    prefixes.push({
+      name: urlLru.query,
+      editable: true,
+      min: 'q',
+    })
+  }
+  if (urlLru.fragment) {
+    prefixes.push({
+      name: urlLru.fragment,
+      editable: true,
+      min: 'f',
+    })
+  }
+
+  return prefixes
 }
 
 const PagesList = ({
@@ -99,16 +143,6 @@ const prefixReducer = (state, action) => {
   }
 }
 
-const toTitleCase = (prefix) => {
-  return prefix.split('|').reduce((previous, sig) => {
-    const [, name] = sig.split(':')
-    if (name) {
-      return `${previous}${name.charAt(0).toUpperCase() + name.substr(1).toLowerCase()}`
-    }
-    return previous
-  }, '')
-}
-
 const EntityModal = ({
   isOpen,
   onRequestClose,
@@ -120,13 +154,14 @@ const EntityModal = ({
   tlds,
 }) => {
   const longestLru = longestMatching(webentity.prefixes, tabUrl, tlds).lru
-  console.log({ longestLru })
-  const prefixes = parsePrefixes(longestLru, urlToLru(tabUrl, tlds))
+  const prefixes = parsePrefixes(longestLru, tabUrl, tlds)
   const [step, setStep] = useState(1)
   const [selectedPage, setSelectedPage] = useState(null)
   const [name, setName] = useState(webentity.name)
   const withPreviousTags = false
   const totalStepsNumber = withPreviousTags ? 4 : 3
+
+  const onSubmit = useCallback(() => onSuccess(webentity), [])
 
   const [prefixState, dispatch] = useReducer(prefixReducer, {
     selected: React.useMemo(() => prefixes
@@ -137,6 +172,9 @@ const EntityModal = ({
   })
 
   const onSetPrefixes = useCallback((prefix) => {
+    if (prefix === prefixState.selected) {
+      return
+    }
     dispatch({ type: 'LOADING' })
     jsonrpc(url)('store.get_lru_definedprefixes', {
       lru: prefix,
@@ -146,11 +184,9 @@ const EntityModal = ({
         return dispatch({ type: 'ERROR' })
       }
       dispatch({ type: 'SET', payload: prefix })
-      ref.current.value = toTitleCase(prefix)
-      // console.log('ici', toTitleCase(prefix))
       setStep(1)
     })
-  }, [])
+  }, [prefixState])
 
   const ndLock = !(step === 2 && isNumber(selectedPage))
   const ref = React.useRef(null)
@@ -165,7 +201,6 @@ const EntityModal = ({
       setStep(3)
     }
   }, [step])
-  console.log(webentity.mostLinked)
   return (
     <Modal
       isOpen={ isOpen }
@@ -199,12 +234,7 @@ const EntityModal = ({
               <button disabled={ ndLock }  onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
             </h3>
             <PagesList
-              pages={ webentity.mostLinked.filter((url) => {
-                return url.lru.startsWith(prefixState.selected)
-                // return url.lru.startsWith(prefixState.selected)
-                console.log('mais ici ?')
-                return match(prefixState.selected, url.url, tlds, true)
-              }) }
+              pages={ webentity.mostLinked.filter(compareWithoutWww(prefixState.selected)) }
               selectedPage={ selectedPage }
               setSelectedPage={ useCallback((index) => {
                 setSelectedPage(index)
@@ -251,7 +281,7 @@ const EntityModal = ({
         <div className="modal-footer">
           <ul className="actions-container big">
             <li><button onClick={ onRequestClose } className="btn btn-danger">cancel</button></li>
-            <li><button onClick={ () => onSuccess(webentity) } disabled={ step !== 4 } className="btn btn-success">include webentity and analyze it !</button></li>
+            <li><button onClick={ onSubmit } disabled={ step !== 4 } className="btn btn-success">include webentity and analyze it !</button></li>
           </ul>
         </div>
       </div>
