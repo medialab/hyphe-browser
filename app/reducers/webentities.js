@@ -1,6 +1,6 @@
 // This reducer should handle web entities status transitions, not implemented yet
 
-import mergeWith from 'lodash/mergewith'
+import mergeWith from 'lodash/mergeWith'
 
 import createReducer from '../utils/create-reducer'
 import { VIEW_WEBENTITY } from '../actions/stacks'
@@ -44,7 +44,6 @@ const initialState = {
   merges: {}, // tabId →  merge { mergeable, host }
   selected: null
 }
-
 
 export default createReducer(initialState, {
 
