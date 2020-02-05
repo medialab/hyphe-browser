@@ -35,6 +35,7 @@ import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import { getSearchUrl } from '../../utils/search-web'
 import { compareUrls, longestMatching } from '../../utils/lru'
+import InModal from './InModal'
 
 class BrowserTabContent extends React.Component {
 
@@ -289,44 +290,32 @@ class BrowserTabContent extends React.Component {
   renderCrawlPopup () {
     const { webentity, hideAdjustWebentity, saving, noCrawlPopup, toggleDoNotShowAgain } = this.props
 
-    const markToggleOnSubmit = e => {
-      this.setState({ setDoNotShowAgainAfterSubmit: e.target.checked })
-    }
-
     const doToggle = () => {
       if (this.state.setDoNotShowAgainAfterSubmit !== null) {
         toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
       }
     }
 
-    const apply = e => {
-      e.preventDefault()
+    const apply = () => {
       doToggle()
       this.saveAdjustChanges(this.props)
     }
 
-    const cancel = e => {
-      e.preventDefault()
+    const cancel = () => {
       hideAdjustWebentity(webentity.id)
     }
 
-    const handleClick = () => findDOMNode(this.inputComponent).click()
-
     return (
-      <div className="we-popup">
-        <strong><T id="webentity-crawl-popup-title" /></strong>
-        <p><T id="webentity-crawl-popup-message" /></p>
-        <p><T id="webentity-crawl-popup-message-2" /></p>
-        <p><T id="webentity-crawl-popup-message-3" /></p>
-        <div className="we-popup-footer">
-          <input ref={ component => this.inputComponent = component } type="checkbox" defaultChecked={ noCrawlPopup } onChange={ markToggleOnSubmit } />
-          <label onClick={ handleClick }>
-            <T id="do-not-show-again" />
-          </label>
-          <button disabled={ saving } className="apply-we-popup" onClick={ apply }><T id="launch" /></button>
-          <button disabled={ saving } className="cancel-we-popup" onClick={ cancel }><T id="cancel" /></button>
-        </div>
-      </div>
+      <InModal
+        isOpen
+        onRequestClose={ cancel }
+        onSuccess={ apply }
+        url={ this.props.server.url }
+        corpusId={ this.props.corpusId }
+        tabUrl={ this.props.url }
+        tlds={ this.props.tlds }
+        webentity={ webentity }
+      />
     )
   }
 

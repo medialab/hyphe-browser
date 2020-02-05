@@ -1,10 +1,9 @@
 import './WebentityBrowseLayout.styl'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, intlShape } from 'react-intl'
 import pickBy from 'lodash/fp/pickBy'
-import { connect } from 'react-redux'
 
 import { TAGS_NS } from '../../constants'
 
@@ -16,16 +15,11 @@ import LinkedWebentities from '../../components/LinkedWebentities'
 import KnownPages from '../../components/KnownPages'
 import Tags from '../../components/Tags'
 import Tooltipable from '../../components/Tooltipable'
-import InModal from './InModal'
 
 import HelpPin from '../../components/HelpPin'
 import WebentityNameField from './WebentityNameField'
 
-const FromInModal = connect(state => ({
-  url: state.servers.selected.url,
-  corpus_id: state.corpora.selected.corpus_id,
-  tlds: state.webentities.tlds,
-}))(InModal)
+const pickByIdentity = pickBy(v => v)
 
 const WebentityBrowseLayout = ({
   webentity,
@@ -60,7 +54,6 @@ const WebentityBrowseLayout = ({
   const [notesOpen, setNotesOpen] = useState(false)
   const [nameOpen, setNameOpen] = useState(true)
   const [statusOpen, setStatusOpen] = useState(true)
-  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   /**
    * Linked entities related
@@ -103,17 +96,20 @@ const WebentityBrowseLayout = ({
     webentity.id === webentitiesList[webentitiesList.length - 1].id
   const goNextWebentity = () => rotateWebentity(1)
   const goPrevWebentity = () => rotateWebentity(-1)
-  
+
   const resetLinkedEntitiesActions = () => {
     setStatusActions({})
   }
   
-  const pendingActions = Object.keys(pickBy(v => v)(statusActions)).map((key) =>  {
-    return {
-      id: +key,
-      type: pickBy(v => v)(statusActions)[key]
-    }
-  })
+  const pendingActions = React.useMemo(() => 
+    Object.keys(pickByIdentity(statusActions)).map((key) =>  {
+      return {
+        id: +key,
+        type: pickByIdentity(statusActions)[key]
+      }
+    }),
+    [statusActions],
+  )
 
   const submitLinkedEntitiesActions = () => {
     onBatchActions(pendingActions, selectedLinkedEntities)
@@ -129,7 +125,7 @@ const WebentityBrowseLayout = ({
     category,
     value: (userTags && userTags[category] && userTags[category][0]) || ''
   })), [categories, userTags])
-
+                                        
   /**
    * field notes related
    */
@@ -147,28 +143,9 @@ const WebentityBrowseLayout = ({
 
   const prevDisabled = !selectedStack ||  isFirst || loadingStack || loadingWebentity
   const nextDisabled = !selectedStack || isLast || loadingStack || loadingWebentity
-
-  const closeModal = useCallback(() => setModalIsOpen(false))
-  const onInClick = useCallback(() => {
-    setModalIsOpen(true)
-    // onSetWebentityStatus('IN')
-  })
-  const onModalSuccess = useCallback(() => {
-    closeModal()
-    onSetWebentityStatus('IN')
-  })
-
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        {!!modalIsOpen &&
-          <FromInModal
-            tabUrl={ tabUrl }
-            isOpen={ modalIsOpen }
-            onRequestClose={ closeModal }
-            onSuccess={ onModalSuccess }
-            webentity={ webentity }
-          />}
         <Tooltipable 
           Tag="button"
           className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !prevDisabled }) }
@@ -188,11 +165,11 @@ const WebentityBrowseLayout = ({
           <span className="current-webentity-stack-indicators">
             {
               webentity.status !== initialStatus
-              &&
-              <>
-                <span className={ cx('current-webentity-stack-indicator', formatStackName(initialStatus)) }>{formatStackName(initialStatus)}</span>
-                <span className="arrow ti-arrow-right" />
-              </>
+            &&
+            <>
+              <span className={ cx('current-webentity-stack-indicator', formatStackName(initialStatus)) }>{formatStackName(initialStatus)}</span>
+              <span className="arrow ti-arrow-right" />
+            </>
             }
           </span>
           <span className={ cx('current-webentity-stack-indicator', formatStackName(webentity.status)) }>{formatStackName(webentity.status)}</span>
@@ -222,7 +199,7 @@ const WebentityBrowseLayout = ({
             <li 
               className={ webentity.status === 'IN' ? 'in' : '' } 
               // onClick={ () => setModalIsOpen(true)}
-              onClick={ onInClick }
+              onClick={ () => onSetWebentityStatus('IN')  }
             >
                 IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
             </li>

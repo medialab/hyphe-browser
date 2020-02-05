@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import cx from 'classnames'
 import { isWebUri } from 'valid-url'
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { intlShape } from 'react-intl'
 
 import { getSearchUrl } from '../../utils/search-web'
 
@@ -115,7 +115,7 @@ const BrowserBar = function ({
               onKeyUp={ handleKeyUp }
               onBlur={ () => setEdited(false) } 
               onChange={ e => setTabUrl(e.target.value) }
-              placeholder={formatMessage({id: 'empty-url'})}
+              placeholder={formatMessage({ id: 'empty-url' })}
               value={ tabUrl }
             />
             :

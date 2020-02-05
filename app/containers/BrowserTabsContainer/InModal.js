@@ -25,14 +25,12 @@ const compareWithWww = (lru) => {
 
 const compareWithoutWww = (lru) => {
   const lrus = lruVariations(lru)
-  return (url) => {
-    const urlLrus = lruVariations(url.lru)
-    return urlLrus.some(urlVariation => {
-      return lrus.some(lruVariation => {
-        return urlVariation.startsWith(lruVariation)
-      })
-    })
-  }
+  return (url) => 
+    lruVariations(url.lru).some(urlVariation =>
+      lrus.some(lruVariation =>
+        urlVariation.startsWith(lruVariation)
+      )
+    )
 }
 
 const parsePrefixes = (lruLru, url, tldTree) => {
@@ -104,16 +102,18 @@ const PagesList = ({
 const Prefixes = (props) => {
   return (
     <React.Fragment>
-      <div className="prefixx@-input-container">
-        <PrefixSetter parts={ props.prefixes } setPrefix={ props.onSetPrefixes } />
+      <div className="prefix-input-container">
+        <PrefixSetter
+          parts={ props.prefixes }
+          setPrefix={ props.onSetPrefixes }
+        />
         <ul className="actions-container">
-          {/*step > 1*/}
           <li>
             <button
-              disabled={ props.disable || props.existingPrefixes }
+              disabled={ props.disable || props.existingPrefixes || props.loading }
               onClick={ props.onValidate }
               className='btn btn-success'
-            >{props.loading ? <Spinner /> : 'confirm'}</button></li>
+            >confirm</button></li>
         </ul>
       </div>
       {props.existingPrefixes &&
@@ -149,7 +149,7 @@ const EntityModal = ({
   onSuccess,
   webentity,
   url,
-  corpus_id,
+  corpusId,
   tabUrl,
   tlds,
 }) => {
@@ -178,7 +178,7 @@ const EntityModal = ({
     dispatch({ type: 'LOADING' })
     jsonrpc(url)('store.get_lru_definedprefixes', {
       lru: prefix,
-      corpus: corpus_id
+      corpus: corpusId
     }).catch(() => dispatch({ type: 'ERROR' })).then(matchingWebentities => {
       if (matchingWebentities.filter(({ id }) => webentity.id !== id).length) {
         return dispatch({ type: 'ERROR' })
@@ -201,6 +201,12 @@ const EntityModal = ({
       setStep(3)
     }
   }, [step])
+  const setPage = useCallback((index) => {
+    setSelectedPage(index)
+    if (step > 2) {
+      setStep(2)
+    }
+  }, [setSelectedPage, step]);
   return (
     <Modal
       isOpen={ isOpen }
@@ -233,18 +239,16 @@ const EntityModal = ({
               <span>Step <span className="step-marker">2/{totalStepsNumber}</span> : choose the webentity homepage <HelpPin place="top">This is the page choosen to display a main URL address for the webentity in lists and visualizations</HelpPin></span>
               <button disabled={ ndLock }  onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
             </h3>
-            <PagesList
-              pages={ webentity.mostLinked.filter(compareWithoutWww(prefixState.selected)) }
-              selectedPage={ selectedPage }
-              setSelectedPage={ useCallback((index) => {
-                setSelectedPage(index)
-                if (step > 2) {
-                  setStep(2)
-                }
-              }, [setSelectedPage, step]) }
-            />
+            {
+              webentity.mostLinked ? 
+                <PagesList
+                  pages={ webentity.mostLinked.filter(compareWithoutWww(prefixState.selected)) }
+                  selectedPage={ selectedPage }
+                  setSelectedPage={ setPage }
+                /> : <Spinner />
+            }
             <li className="standalone-confirm-container">
-              <button disabled={ ndLock }  onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
+              <button disabled={ ndLock } onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
             </li>
           </div>
           <div className={ cx('step-container', { 'is-disabled': step < 3 }) }>

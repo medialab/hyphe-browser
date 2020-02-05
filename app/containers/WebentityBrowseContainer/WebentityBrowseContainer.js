@@ -25,7 +25,7 @@ import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 const empty = {}
 
 const WebentityBrowseContainer = ({ 
-  activeTab,
+  activeTab, 
   corpusId,
   serverUrl,
   webentities,
@@ -39,6 +39,8 @@ const WebentityBrowseContainer = ({
   tlds,
   stacks,
   // actions
+  fetchStack,
+  selectStack,
   setTabUrl,
   openTab,
   setWebentityName,
@@ -67,14 +69,14 @@ const WebentityBrowseContainer = ({
     }
   }, [webentity && webentity.id])
 
-  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
+  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : [];
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
     setSimpleTabWebentity(webentity, activeTab.id)
     setTabUrl(webentity.homepage, activeTab.id)
   }
-
+  
   const handleDownloadList = (list) => {
     let listName
     switch (list) {
