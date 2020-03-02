@@ -3,22 +3,16 @@ import './PrefixSetter.styl'
 import React, { useState, useRef, useEffect } from 'react'
 import Draggable from 'react-draggable'
 import cx from 'classnames'
+import findLastIndex from 'lodash/fp/findLastIndex'
+
+const findLastEditable = findLastIndex(part => part.selected)
 
 const PrefixSetter = function ({
   parts = [],
   setPrefix
 }) {
-  let initialIndex = parts.length - 1
-  parts.some((p, i) => {
-    if (p.editable) {
-      initialIndex = i - 1
-      return true
-    }
-  })
-  const refs = []
-  parts.forEach(() => {
-    refs.push(useRef(null))
-  })
+  const initialIndex = findLastEditable(parts)
+  const refs = parts.map(() => useRef(null))
   const container = useRef(null)
   const [index, setIndex] = useState(initialIndex)
   const [startingX, setStartingX] = useState(0)

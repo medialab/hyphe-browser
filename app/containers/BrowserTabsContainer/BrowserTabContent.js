@@ -1,9 +1,8 @@
 import './BrowserTabContent.styl'
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { findDOMNode } from 'react-dom'
 import { intlShape } from 'react-intl'
 
 import networkErrors from 'chromium-net-errors'
@@ -185,9 +184,10 @@ class BrowserTabContent extends React.Component {
     }
   }
 
-  saveAdjustChanges = (props) => {
+  saveAdjustChanges = (props, adjust) => {
     const { saveAdjustedWebentity, hideAdjustWebentity, server, corpusId,
       webentity, adjusting, hideError, showError, id, disableWebentity } = props
+    const localAdjust = adjust ? adjust : adjusting
 
     // no change by default
     this.setState({ setDoNotShowAgainAfterSubmit: null })
@@ -196,7 +196,7 @@ class BrowserTabContent extends React.Component {
       return
     }
 
-    saveAdjustedWebentity(server.url, corpusId, webentity, adjusting, id)
+    saveAdjustedWebentity(server.url, corpusId, webentity, localAdjust, id)
       .then(() => {
         hideError()
         hideAdjustWebentity(webentity.id)
@@ -214,35 +214,6 @@ class BrowserTabContent extends React.Component {
 
     this.setState({ webentityName: name })
     setWebentityName(server.url, corpusId, name, webentity.id)
-  }
-
-  renderContent () {
-    const { 
-      id, url, eventBus, closable, isEmpty, server, corpusId,
-      selectedEngine, fetchStackAndSetTab,
-      onChangeEngine, setTabUrl } = this.props
-    const handleSetTabUrl = (value) => setTabUrl(value, id)
-    
-    const handleFetchStackAndSetTab = (stack, filter) => {
-      fetchStackAndSetTab({
-        serverUrl: server.url, 
-        corpusId, 
-        stack, 
-        filter,
-        tabId: id
-      })
-    }
-    return (url === PAGE_HYPHE_HOME) ? 
-      <NewTabContent 
-        isEmpty={ isEmpty }
-        selectedEngine = { selectedEngine }
-        onSelectStack = { handleFetchStackAndSetTab }
-        onChangeEngine = { onChangeEngine }
-        onSetTabUrl={ handleSetTabUrl } 
-      />:
-      <WebView
-        id={ id } url={ url } closable={ closable } eventBus={ eventBus }
-      />
   }
 
   renderOverlay () {
@@ -287,38 +258,6 @@ class BrowserTabContent extends React.Component {
     )
   }
 
-  renderCrawlPopup () {
-    const { webentity, hideAdjustWebentity, saving, noCrawlPopup, toggleDoNotShowAgain } = this.props
-
-    const doToggle = () => {
-      if (this.state.setDoNotShowAgainAfterSubmit !== null) {
-        toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
-      }
-    }
-
-    const apply = () => {
-      doToggle()
-      this.saveAdjustChanges(this.props)
-    }
-
-    const cancel = () => {
-      hideAdjustWebentity(webentity.id)
-    }
-
-    return (
-      <InModal
-        isOpen
-        onRequestClose={ cancel }
-        onSuccess={ apply }
-        url={ this.props.server.url }
-        corpusId={ this.props.corpusId }
-        tabUrl={ this.props.url }
-        tlds={ this.props.tlds }
-        webentity={ webentity }
-      />
-    )
-  }
-
   handleKeyUp = (e) => {
     const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
     if (e.keyCode === 27 && active) { // ESCAPE
@@ -335,7 +274,9 @@ class BrowserTabContent extends React.Component {
     const { 
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
       noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
-      selectedEngine } = this.props
+      selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
+      hideAdjustWebentity, toggleDoNotShowAgain
+    } = this.props
     
     let isHomepage = false
     if (webentity && webentity.homepage) {
@@ -347,7 +288,6 @@ class BrowserTabContent extends React.Component {
         eventBus.emit('reload', e.ctrlKey || e.shiftKey)
       }
     }
-
     const handleGoBack = () => {
       eventBus.emit('goBack')
     }
@@ -356,6 +296,35 @@ class BrowserTabContent extends React.Component {
     }
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     const handleSetWebentityHomepage = () => setWebentityHomepage(server.url, corpusId, url, webentity.id)
+    const onAddClick = () => {
+      showAdjustWebentity(webentity.id, true)
+    }
+
+    const handleFetchStackAndSetTab = (stack, filter) => {
+      fetchStackAndSetTab({
+        serverUrl: server.url, 
+        corpusId, 
+        stack, 
+        filter,
+        tabId: id
+      })
+    }
+
+    const doToggle = () => {
+      if (this.state.setDoNotShowAgainAfterSubmit !== null) {
+        toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
+      }
+    }
+
+    const apply = (webentity, info) => {
+      doToggle()
+      setAdjustWebentity(webentity.id, info)
+      this.saveAdjustChanges(this.props, info)
+    }
+
+    const cancel = () => {
+      hideAdjustWebentity(webentity.id)
+    }
 
     return (
       <div
@@ -381,9 +350,32 @@ class BrowserTabContent extends React.Component {
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
           displayAddButton={ webentity && webentity.status === 'IN' }
+          onAddClick={ onAddClick }
         />
-        {this.renderContent()}
-        { !noCrawlPopup && adjusting && adjusting.crawl && this.renderCrawlPopup() }
+        {url === PAGE_HYPHE_HOME ?
+          <NewTabContent 
+            isEmpty={ isEmpty }
+            selectedEngine = { selectedEngine }
+            onSelectStack = { handleFetchStackAndSetTab }
+            onChangeEngine = { onChangeEngine }
+            onSetTabUrl={ handleSetTabUrl } 
+          /> :
+          <WebView
+            id={ id } url={ url } closable={ closable } eventBus={ eventBus }
+          />
+        }
+        { !noCrawlPopup && adjusting && adjusting.crawl && 
+          <InModal
+            isOpen
+            onRequestClose={ cancel }
+            onSuccess={ apply }
+            url={ this.props.server.url }
+            corpusId={ this.props.corpusId }
+            tabUrl={ this.props.url }
+            tlds={ this.props.tlds }
+            webentity={ webentity }
+          />
+        }
         { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }
         { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
       </div>

@@ -199,7 +199,7 @@ const WebentityBrowseLayout = ({
             <li 
               className={ webentity.status === 'IN' ? 'in' : '' } 
               // onClick={ () => setModalIsOpen(true)}
-              onClick={ () => onSetWebentityStatus('IN')  }
+              onClick={ () => onSetWebentityStatus('IN') }
             >
                 IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
             </li>

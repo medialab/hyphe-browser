@@ -25,7 +25,7 @@ import {
 
 import { showNotification } from './browser'
 import { fetchStack } from './stacks'
-
+import { addTag } from './tags'
 
 // adding a page to corpus
 export const DECLARE_PAGE_REQUEST = '§_DECLARE_PAGE_REQUEST'
@@ -168,7 +168,6 @@ export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => 
 
 export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null) => (dispatch) => {
   dispatch({ type: CREATE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, name, prefixUrl } })
-
   return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', [prefixUrl, name, null, null, true, corpusId])
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
@@ -269,13 +268,41 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 
   const { prefix, homepage, name, crawl } = adjust
   const operations = []
+  const prefixChanged = prefix && !webentity.prefixes.some(p => prefix === p)
 
-  if (prefix) {
+  if (prefixChanged) {
     // Create a new web entity
     // Set its name and homepage at the same time + refresh tab by passing tab id
     // Note: since https://trello.com/c/74rYBHON/130-urlbar-creer-une-nouvelle-webentite-pour-un-prefixe
     // name and homepage are not set here (but where?)
-    operations.push(createWebentity(serverUrl, corpusId, prefix, null, null, tabId)(dispatch))
+    const createWebentityPromise = createWebentity(serverUrl, corpusId, homepage, name, homepage, tabId)(dispatch)
+    operations.push(createWebentityPromise)
+    if (adjust.copy.tags) {
+      // Ca devrais fonctionner mais non
+      // const saveTags = createWebentityPromise.then(newWebentity => 
+      //   transform(webentity.tags.USER, (sequentiel, tags, category) =>
+      //     transform(tags, (sequentiel, tag) => sequentiel.then(() => 
+      //       addTag(serverUrl, corpusId, category, newWebentity.id, tag)(dispatch)
+      //     ), sequentiel),
+      //   Promise.resolve())
+      // )
+
+      const categories = Object.entries(webentity.tags.USER)
+      const saveTags = createWebentityPromise.then(newWebentity => {
+        let sequentiel = Promise.resolve()
+        for (let index = 0; index < categories.length; index++) {
+          const [category, tags] = categories[index]
+          for (let k = 0; k < tags.length; k++) {
+            const tag = tags[k]
+            sequentiel = sequentiel.then(() =>
+              addTag(serverUrl, corpusId, category, newWebentity.id, tag)(dispatch)
+            )
+          }
+        }
+        return sequentiel
+      })
+      operations.push(saveTags)
+    }
   } else {
     if (homepage && homepage !== webentity.homepage) {
       operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
@@ -287,12 +314,12 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 
   return Promise.all(operations)
     .then(([head]) => {
-      if (prefix && head.created) {
+      if (prefixChanged && head.created) {
         dispatch(showNotification({ id: NOTICE_WEBENTITY_CREATED, messageId: 'webentity-info-created-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       }
       if (crawl) {
-        // if prefix, then webentity just been created, and we want this id, not the old one
-        const id = prefix ? head.id : webentity.id
+        // if prefixChanged, then webentity just been created, and we want this id, not the old one
+        const id = prefixChanged ? head.id : webentity.id
         const depth = CRAWL_DEPTH
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
           .then(() => {

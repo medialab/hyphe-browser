@@ -1,5 +1,5 @@
 import './BrowserBar.styl'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 import cx from 'classnames'
@@ -26,7 +26,8 @@ const BrowserBar = function ({
   onGoBack,
   onGoForward,
   onSetTabUrl,
-  onSetHomepage
+  onSetHomepage,
+  onAddClick
 }, { intl }) {
   const { formatMessage } = intl
 
@@ -48,21 +49,21 @@ const BrowserBar = function ({
     }
   }, [edited])
 
-  const handleFormClick = () => {
+  const handleFormClick = useCallback(() => {
     if (!edited) {
       setEdited(true)
       setTimeout(() => input.current.focus())
     }
-  }
+  }, [edited])
 
-  const handleKeyUp = (e) => {
+  const handleKeyUp = useCallback((e) => {
     if (e.keyCode === 27) { // ESCAPE
       e.target.blur()
       setTabUrl(initialUrl)
     }
-  }
+  }, [initialUrl])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault()
     setEdited(false)
     const url = ((u) => {
@@ -81,7 +82,8 @@ const BrowserBar = function ({
       }
     })(tabUrl.trim())
     onSetTabUrl(url)
-  }
+  }, [tabUrl])
+
   return (
     <div className="browser-bar">
       <div className="browser-tab-toolbar-navigation">
@@ -120,13 +122,14 @@ const BrowserBar = function ({
             />
             :
             lruPrefixes ?
-              <span 
+              <span
                 className= { cx('browser-tab-url', { loading }) }
                 dangerouslySetInnerHTML={ {
                   __html: highlightUrlHTML(lruPrefixes, tabUrl, tlds)
-                } } />:
+                } }
+              />:
               <span className={ cx('browser-tab-url empty', { loading }) }>
-                {tabUrl || formatMessage({id: 'empty-url'})}
+                {tabUrl || formatMessage({ id: 'empty-url' })}
               </span>
           }
         </form>
@@ -135,7 +138,7 @@ const BrowserBar = function ({
             {
               !edited && displayAddButton
               &&
-              <button className="create-btn hint--left" aria-label={ formatMessage({ id: 'browse-create' }) }>
+              <button onClick={ onAddClick } className="create-btn hint--left" aria-label={ formatMessage({ id: 'browse-create' }) }>
                 <span className="ti-plus" />
               </button>
             }
@@ -146,7 +149,8 @@ const BrowserBar = function ({
                   'is-active': isHomepage
                 }) }
                 aria-label={ isHomepage ? formatMessage({ id: 'is-homepage' }) : formatMessage({ id: 'set-homepage' }) }
-                onClick={ onSetHomepage }>
+                onClick={ onSetHomepage }
+              >
                 <span className="ti-layers-alt" />
               </button>
             }

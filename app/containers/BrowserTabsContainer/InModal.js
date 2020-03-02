@@ -1,27 +1,19 @@
-import React, { useState, useCallback, useReducer } from 'react'
+import React, { useState, useCallback, useReducer, useMemo } from 'react'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
 import isNumber from 'lodash/fp/isNumber'
+import head from 'lodash/fp/head'
 
 import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
 import PrefixSetter from '../../components/PrefixSetter'
 import CardsList from '../../components/CardsList'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
-import { longestMatching, urlToLru, lruVariations } from '../../utils/lru'
+import { urlToLru, lruVariations, lruToUrl, parseLru } from '../../utils/lru'
 import jsonrpc from '../../utils/jsonrpc'
 
 import './InModal.styl'
-
-// eslint-disable-next-line no-unused-vars
-const compareWithWww = (lru) => {
-  return (url) => {
-    const urlLru = url.lru.split(/\|h:(.+)/)[1] || ''
-    const lruLru = lru.split(/\|h:(.+)/)[1] || ''
-    return urlLru.startsWith(lruLru)
-  }
-}
 
 const compareWithoutWww = (lru) => {
   const lrus = lruVariations(lru)
@@ -31,55 +23,6 @@ const compareWithoutWww = (lru) => {
         urlVariation.startsWith(lruVariation)
       )
     )
-}
-
-const parsePrefixes = (lruLru, url, tldTree) => {
-  const urlLru = urlToLru(url, tldTree)
-  if (!urlLru) {
-    return url
-  }
-
-  if (!lruLru) {
-    return url
-  }
-
-  let prefixes = [{ name: urlLru.scheme, editable: false, min: 's' }]
-
-  if (urlLru.port && urlLru.port !== '80') {
-    prefixes.push({
-      name: urlLru.port,
-      editable: false,
-      min: 't'
-    })
-  }
-
-  if (urlLru.tld) {
-    prefixes.push({
-      name: urlLru.tld,
-      editable: false,
-      min: 'h'
-    })
-  }
-
-  prefixes = prefixes.concat(urlLru.host.map((host, index) => ({ name: host, editable: index !== 0, min: 'h' })))
-  prefixes = prefixes.concat(urlLru.path.map(path => ({ name: path, editable: true, min: 'p' })))
-
-  if (urlLru.query) {
-    prefixes.push({
-      name: urlLru.query,
-      editable: true,
-      min: 'q',
-    })
-  }
-  if (urlLru.fragment) {
-    prefixes.push({
-      name: urlLru.fragment,
-      editable: true,
-      min: 'f',
-    })
-  }
-
-  return prefixes
 }
 
 const PagesList = ({
@@ -125,6 +68,79 @@ const Prefixes = (props) => {
   )
 }
 
+const parsePrefixes = (lruString, url, newEntity, tldTree) => {
+  const urlLru = urlToLru(url, tldTree)
+  const lruLru = parseLru(lruString, tldTree)
+
+  let prefixes = [{ name: urlLru.scheme, editable: false, selected: true, min: 's' }]
+
+  if (urlLru.port && urlLru.port !== '80') {
+    prefixes.push({
+      name: urlLru.port,
+      editable: false,
+      selected: true,
+      min: 't'
+    })
+  }
+
+  if (urlLru.tld) {
+    prefixes.push({
+      name: urlLru.tld,
+      editable: false,
+      selected: true,
+      min: 'h'
+    })
+  }
+
+  prefixes = prefixes.concat(urlLru.host.map((host) => {
+    const included = lruLru.host.includes(host)
+    return {
+      name: host,
+      editable: !included,
+      selected: !included || newEntity,
+      min: 'h'
+    }
+  }))
+  prefixes = prefixes.concat(urlLru.path.map(path => {
+    const included = lruLru.path.includes(path)
+    return {
+      name: path,
+      editable: !included,
+      selected: !included || newEntity,
+      min: 'p'
+    }
+  }))
+
+  if (urlLru.query) {
+    prefixes.push({
+      name: urlLru.query,
+      editable: true,
+      selected: newEntity,
+      min: 'q',
+    })
+  }
+  if (urlLru.fragment) {
+    prefixes.push({
+      name: urlLru.fragment,
+      editable: true,
+      selected: newEntity,
+      min: 'f',
+    })
+  }
+
+  if (newEntity) {
+    for (let index = 0; index < prefixes.length; index++) {
+      const element = prefixes[index]
+      if (element.editable === true) {
+        element.editable = false
+        break
+      }
+    }
+  }
+
+  return prefixes
+}
+
 const prefixReducer = (state, action) => {
   switch (action.type) {
   case 'ERROR':
@@ -143,6 +159,36 @@ const prefixReducer = (state, action) => {
   }
 }
 
+const useOrderLists = (mostLinked, prefix) => {
+  if (mostLinked) {
+    const filtered = mostLinked.filter(compareWithoutWww(prefix))
+    const foundUrl = filtered.find(link => {
+      return link.lru === prefix
+    })
+    if (foundUrl) {
+      const index = filtered.indexOf(foundUrl)
+      if (index > -1) {
+        filtered.splice(index, 1)
+      }
+      return [
+        foundUrl,
+        ...filtered
+      ]
+    }
+    return [
+      {
+        url: lruToUrl(prefix),
+        crawled: null,
+        lru: prefix,
+        linked: null,
+      },
+      ...filtered
+    ]
+  } else {
+    return []
+  }
+}
+
 const EntityModal = ({
   isOpen,
   onRequestClose,
@@ -153,23 +199,41 @@ const EntityModal = ({
   tabUrl,
   tlds,
 }) => {
-  const longestLru = longestMatching(webentity.prefixes, tabUrl, tlds).lru
-  const prefixes = parsePrefixes(longestLru, tabUrl, tlds)
+  const comeFromPlus = webentity.status !== 'DISCOVERED'
+  const longestLru = useMemo(() => head(webentity.prefixes.sort((a, b) => b.length - a.length)), webentity.prefixes)
+  const prefixes = useMemo(() => parsePrefixes(longestLru, tabUrl, comeFromPlus, tlds), [longestLru, tabUrl, comeFromPlus, tlds])
   const [step, setStep] = useState(1)
   const [selectedPage, setSelectedPage] = useState(null)
   const [name, setName] = useState(webentity.name)
-  const withPreviousTags = false
-  const totalStepsNumber = withPreviousTags ? 4 : 3
-
-  const onSubmit = useCallback(() => onSuccess(webentity), [])
+  const initialSelected = useMemo(() => prefixes
+    .filter(({ editable }) => !editable)
+    .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, ''))
 
   const [prefixState, dispatch] = useReducer(prefixReducer, {
-    selected: React.useMemo(() => prefixes
-      .filter(({ editable }) => !editable)
-      .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, '')),
+    selected: initialSelected,
     loadding: false,
     error: false,
   })
+  const prefixHasChanged = initialSelected !== prefixState.selected
+  const hasTags = !!(webentity.tags.USER && Object.keys(webentity.tags.USER).length)
+  const showCopyStep = (prefixHasChanged || comeFromPlus) && hasTags
+  const totalStepsNumber = showCopyStep ? 4 : 3
+  const [copyTags, setCopyTags] = useState({ tags: true, notes: true })
+
+  const pagesList = useMemo(
+    () => useOrderLists(webentity.mostLinked, prefixState.selected),
+    [webentity.mostLinked, prefixState.selected]
+  )
+
+  const onSubmit = useCallback(() => {
+    onSuccess(webentity, {
+      prefix: prefixState.selected,
+      homepage: pagesList[selectedPage].url,
+      name,
+      crawl: true,
+      copy: copyTags,
+    })
+  }, [prefixState, selectedPage, name, pagesList, copyTags])
 
   const onSetPrefixes = useCallback((prefix) => {
     if (prefix === prefixState.selected) {
@@ -180,7 +244,11 @@ const EntityModal = ({
       lru: prefix,
       corpus: corpusId
     }).catch(() => dispatch({ type: 'ERROR' })).then(matchingWebentities => {
-      if (matchingWebentities.filter(({ id }) => webentity.id !== id).length) {
+      const webentityExists = matchingWebentities
+        .filter(({ id, lru }) =>
+          webentity.id !== id && webentity.prefixes.includes(lru)
+        ).length
+      if (webentityExists) {
         return dispatch({ type: 'ERROR' })
       }
       dispatch({ type: 'SET', payload: prefix })
@@ -206,7 +274,10 @@ const EntityModal = ({
     if (step > 2) {
       setStep(2)
     }
-  }, [setSelectedPage, step]);
+  }, [setSelectedPage, step])
+  const validatesCopyTags = useCallback(() => {
+    setStep(5)
+  })
   return (
     <Modal
       isOpen={ isOpen }
@@ -242,7 +313,7 @@ const EntityModal = ({
             {
               webentity.mostLinked ? 
                 <PagesList
-                  pages={ webentity.mostLinked.filter(compareWithoutWww(prefixState.selected)) }
+                  pages={ pagesList }
                   selectedPage={ selectedPage }
                   setSelectedPage={ setPage }
                 /> : <Spinner />
@@ -272,10 +343,15 @@ const EntityModal = ({
               <form className="settings-container">
                 <ul >
                   <li>
-                    <input id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
+                    <input checked={ copyTags.tags } onChange={ (event) => setCopyTags({ ...copyTags, tags: event.target.checked }) } id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
                   </li>
                   <li>
-                    <input id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>
+                    <input checked={ copyTags.notes } onChange={ (event) => setCopyTags({ ...copyTags, notes: event.target.checked }) } id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>
+                  </li>
+                </ul>
+                <ul className="actions-container">
+                  <li className="standalone-confirm-container">
+                    <button disabled={ step !== 4 }  onClick={ validatesCopyTags } className="btn btn-success">confirm</button>
                   </li>
                 </ul>
               </form>
@@ -285,7 +361,7 @@ const EntityModal = ({
         <div className="modal-footer">
           <ul className="actions-container big">
             <li><button onClick={ onRequestClose } className="btn btn-danger">cancel</button></li>
-            <li><button onClick={ onSubmit } disabled={ step !== 4 } className="btn btn-success">include webentity and analyze it !</button></li>
+            <li><button onClick={ onSubmit } disabled={ step !== totalStepsNumber + 1 } className="btn btn-success">include webentity and analyze it !</button></li>
           </ul>
         </div>
       </div>
