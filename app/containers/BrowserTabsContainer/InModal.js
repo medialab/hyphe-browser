@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useMemo } from 'react'
+import React, { useRef, useEffect, useCallback, useReducer, useMemo } from 'react'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
@@ -211,7 +211,7 @@ const EntityModal = ({
     [webentity.mostLinked, state.prefix]
   )
 
-  const onSubmit = useCallback(() => {
+  const onSubmit = useCallback(() =>
     onSuccess(webentity, {
       prefix: state.prefix,
       homepage: pagesList[state.selectedPage].url,
@@ -222,7 +222,7 @@ const EntityModal = ({
         notes: state.notes
       },
     })
-  }, [state])
+  , [state])
 
   const onSetPrefixes = useCallback((prefix) => {
     if (prefix === state.prefix) {
@@ -256,15 +256,20 @@ const EntityModal = ({
       dispatch({ type: 'SET_STEP', payload: 3 })
     }
   }, [state.step])
-  const setPage = useCallback((index) => {
-    dispatch({
-      type: 'SET_PAGE',
-      payload: index,
-    })
+  const setPage = useCallback((index) => dispatch({ type: 'SET_PAGE', payload: index }))
+  const validatestags = useCallback(() => dispatch({ type: 'SET_STEP', payload: 5 }))
+
+  const modalBody = useRef()
+  useEffect(() => {
+    // state.step
+    if (modalBody.current) {
+      const element = modalBody.current.querySelector(`.step-container:nth-child(${state.step + 1})`)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' })
+      }
+    }
   }, [state.step])
-  const validatestags = useCallback(() => {
-    dispatch({ type: 'SET_STEP', payload: 5 })
-  })
+
   return (
     <Modal
       isOpen={ isOpen }
@@ -276,7 +281,7 @@ const EntityModal = ({
         <div className="modal-header">
           <h2><span>Include a webentity in the corpus</span><i onClick={ onRequestClose } className="ti-close" /></h2>
         </div>
-        <div className="modal-body">
+        <div className="modal-body" ref={ modalBody }>
           <div className="explanation-text">
               You are about to define a webentity as belonging the corpus. 
             <br />
