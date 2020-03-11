@@ -55,8 +55,13 @@ const PrefixSetter = function ({
     setSliderX()
   }
 
+  const scrollContainer = useRef()
+  useEffect(() => {
+    scrollContainer.current.scrollTo(Number.MAX_SAFE_INTEGER, 0)
+  })
+
   return (
-    <div className="prefix-setter">
+    <div className="prefix-setter" ref={ scrollContainer }>
       <ul ref={ container } className="parts-container">
         {
           parts.map((part, partIndex) => {
