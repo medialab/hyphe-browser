@@ -261,7 +261,6 @@ const EntityModal = ({
 
   const modalBody = useRef()
   useEffect(() => {
-    // state.step
     if (modalBody.current) {
       const element = modalBody.current.querySelector(`.step-container:nth-child(${state.step + 1})`)
       if (element) {

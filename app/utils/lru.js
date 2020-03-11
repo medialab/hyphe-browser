@@ -3,6 +3,7 @@ const authorityRegExp = /^(?:([^:]+)(?::([^@]+))?\@)?(\[[\da-f]*:[\da-f:]*\]|[^\
 const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*\]/i
 
 import tail from 'lodash/fp/tail'
+import last from 'lodash/fp/last'
 
 // Convert a LRU (string or object) to fully qualified LRU object
 // full host: right to left (i.e: [com, faceboook, fr-fr, wwww])
@@ -230,12 +231,23 @@ export function highlightUrlHTML (lrus, url, tldTree) {
   // subhost may be empty, but urlLru.host ≥ lruLru.host
   const subhost = urlLru.host.slice(lruLru.host.length).reverse().join('.')
   // same for path
-  const subpath = urlLru.path.slice(lruLru.path.length).join('.')
-  const path = (urlLru.path.length > 0)
-    ? ((lruLru.path.length > 0)
-      ? ('<em>/' + lruLru.path.join('/') + '</em>') + (subpath && ('/' + subpath))
-      : ('/' + urlLru.path.join('/')))
-    : (urlLru.query || urlLru.fragment) ? '/' : ''
+  const subpath = urlLru.path.slice(lruLru.path.length).join('/')
+
+  let path
+  if (urlLru.path.length > 0) {
+    if (lruLru.path.length > 0) {
+      path = ('<em>/' + lruLru.path.join('/') + '</em>')
+      if (subpath || last(urlLru.path) === '') {
+        path += '/' + subpath
+      }
+    } else {
+      path = '/' + urlLru.path.join('/')
+    }
+  } else if (urlLru.query || urlLru.fragment) {
+    path = '/'
+  } else {
+    path = ''
+  }
 
   // We have enough information, as it's a match we don't have to check again
   // if scheme, host, path, query, fragment… are matches
