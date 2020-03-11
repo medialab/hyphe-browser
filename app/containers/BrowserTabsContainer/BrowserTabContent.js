@@ -1,6 +1,6 @@
 import './BrowserTabContent.styl'
 
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { intlShape } from 'react-intl'
@@ -364,7 +364,7 @@ class BrowserTabContent extends React.Component {
             id={ id } url={ url } closable={ closable } eventBus={ eventBus }
           />
         }
-        { !noCrawlPopup && adjusting && adjusting.crawl && 
+        { !noCrawlPopup && active && adjusting && adjusting.crawl && 
           <InModal
             isOpen
             onRequestClose={ cancel }
