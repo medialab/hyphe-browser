@@ -2,6 +2,8 @@ const urlToLruRegExp = /^([^:\/?#]+):(?:\/\/([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:
 const authorityRegExp = /^(?:([^:]+)(?::([^@]+))?\@)?(\[[\da-f]*:[\da-f:]*\]|[^\s:]+)(?::(\d+))?$/i
 const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*\]/i
 
+import tail from 'lodash/fp/tail'
+
 // Convert a LRU (string or object) to fully qualified LRU object
 // full host: right to left (i.e: [com, faceboook, fr-fr, wwww])
 export function parseLru (input, tldTree) {
@@ -101,13 +103,19 @@ export function urlToLru (url, tldTree) {
       const [ host, tld ] = specialHostsRegExp.test(matchedHost)
         ? [ [ matchedHost.toLowerCase() ], '' ]
         : _lruHostInfo(matchedHost, tldTree)
-
+      let pathArray = ['']
+      if (path !== '/') {
+        pathArray = (path || '').split('/')
+        if (pathArray[0] === '' && pathArray.length >= 2) {
+          pathArray = tail(pathArray)
+        }
+      }
       return {
         scheme: scheme || 'http',
         host: host.slice().reverse(), // Clone here to not reverse original object and mess up with logging
         tld: tld || '',
         port: port || '',
-        path: (path || '').split('/').filter((s) => !!s),
+        path: pathArray,
         query: query || '',
         fragment: fragment || ''
       }

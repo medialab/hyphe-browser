@@ -27,7 +27,7 @@ const PrefixSetter = function ({
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
-      setStartingX(x + box.width )
+      setStartingX(x + box.width)
     }
   }
 
@@ -41,7 +41,7 @@ const PrefixSetter = function ({
     refs.some((ref, refIndex) => {
       if (ref.current) {
         const box = ref.current.getBoundingClientRect()
-        const THRESHOLD = 10;
+        const THRESHOLD = 10
         if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && parts[refIndex].editable) {
           setIndex(refIndex)
           return true

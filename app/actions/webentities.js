@@ -9,6 +9,8 @@
 // - store.get_webentity_subwebentities
 // - crawl_webentity (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', phantom_timeouts = {}, corpus = '--hyphe--')
 
+import omit from 'lodash/fp/omit'
+
 import jsonrpc from '../utils/jsonrpc'
 
 import {
@@ -193,7 +195,8 @@ export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
   dispatch({ type: FETCH_MOST_LINKED_REQUEST, payload: { serverUrl, corpusId, webentity } })
   const params = {
     webentity_id: webentity.id,
-    corpus: corpusId
+    corpus: corpusId,
+    npages: 200,
   }
   return jsonrpc(serverUrl)('store.get_webentity_mostlinked_pages', params)
     .then(mostLinked => dispatch({ type: FETCH_MOST_LINKED_SUCCESS, payload: { serverUrl, corpusId, webentity, mostLinked } }))
@@ -277,7 +280,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     // name and homepage are not set here (but where?)
     const createWebentityPromise = createWebentity(serverUrl, corpusId, homepage, name, homepage, tabId)(dispatch)
     operations.push(createWebentityPromise)
-    if (adjust.copy.tags) {
+    if (adjust.copy.tags || adjust.copy.notes) {
       // Ca devrais fonctionner mais non
       // const saveTags = createWebentityPromise.then(newWebentity => 
       //   transform(webentity.tags.USER, (sequentiel, tags, category) =>
@@ -286,8 +289,14 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
       //     ), sequentiel),
       //   Promise.resolve())
       // )
-
-      const categories = Object.entries(webentity.tags.USER)
+      let filteredTags = webentity.tags.USER
+      if (adjust.copy.tags === false) {
+        filteredTags = { FREETAGS: webentity.tags.USER.FREETAGS }
+      }
+      if (adjust.copy.notes === false) {
+        filteredTags = omit('FREETAGS', webentity.tags.USER)
+      }
+      const categories = Object.entries(filteredTags)
       const saveTags = createWebentityPromise.then(newWebentity => {
         let sequentiel = Promise.resolve()
         for (let index = 0; index < categories.length; index++) {

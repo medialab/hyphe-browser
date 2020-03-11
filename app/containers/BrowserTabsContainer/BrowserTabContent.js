@@ -349,7 +349,7 @@ class BrowserTabContent extends React.Component {
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ webentity && webentity.status === 'IN' }
+          displayAddButton={ webentity && webentity.status !== 'DISCOVERED' }
           onAddClick={ onAddClick }
         />
         {url === PAGE_HYPHE_HOME ?

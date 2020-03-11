@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useReducer, useMemo } from 'react'
+import React, { useCallback, useReducer, useMemo } from 'react'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
 import isNumber from 'lodash/fp/isNumber'
-import head from 'lodash/fp/head'
+import initial from 'lodash/fp/initial'
 
 import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
 import PrefixSetter from '../../components/PrefixSetter'
 import CardsList from '../../components/CardsList'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
-import { urlToLru, lruVariations, lruToUrl, parseLru } from '../../utils/lru'
+import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
 import jsonrpc from '../../utils/jsonrpc'
 
 import './InModal.styl'
@@ -68,88 +68,83 @@ const Prefixes = (props) => {
   )
 }
 
-const parsePrefixes = (lruString, url, newEntity, tldTree) => {
-  const urlLru = urlToLru(url, tldTree)
-  const lruLru = parseLru(lruString, tldTree)
-
-  let prefixes = [{ name: urlLru.scheme, editable: false, selected: true, min: 's' }]
-
-  if (urlLru.port && urlLru.port !== '80') {
-    prefixes.push({
-      name: urlLru.port,
-      editable: false,
-      selected: true,
-      min: 't'
-    })
-  }
-
-  if (urlLru.tld) {
-    prefixes.push({
-      name: urlLru.tld,
-      editable: false,
-      selected: true,
-      min: 'h'
-    })
-  }
-
-  prefixes = prefixes.concat(urlLru.host.map((host) => {
-    const included = lruLru.host.includes(host)
+const parsePrefixes = (lru, url, newEntity, tldTree) => {
+  const urlLru = lruObjectToString(urlToLru(url, tldTree))
+  const l = lru.split('|').length
+  return initial(urlLru.split('|')).map((stem, index) => {
+    const editable = newEntity ? index >= l : index >= l - 1
     return {
-      name: host,
-      editable: !included,
-      selected: !included || newEntity,
-      min: 'h'
+      name: stem,
+      editable,
+      selected: index < l - 1 || newEntity,
     }
-  }))
-  prefixes = prefixes.concat(urlLru.path.map(path => {
-    const included = lruLru.path.includes(path)
-    return {
-      name: path,
-      editable: !included,
-      selected: !included || newEntity,
-      min: 'p'
-    }
-  }))
-
-  if (urlLru.query) {
-    prefixes.push({
-      name: urlLru.query,
-      editable: true,
-      selected: newEntity,
-      min: 'q',
-    })
-  }
-  if (urlLru.fragment) {
-    prefixes.push({
-      name: urlLru.fragment,
-      editable: true,
-      selected: newEntity,
-      min: 'f',
-    })
-  }
-
-  if (newEntity) {
-    for (let index = 0; index < prefixes.length; index++) {
-      const element = prefixes[index]
-      if (element.editable === true) {
-        element.editable = false
-        break
-      }
-    }
-  }
-
-  return prefixes
+  })
 }
 
-const prefixReducer = (state, action) => {
+const orderList = (mostLinked, prefix) => {
+  if (mostLinked) {
+    let found = false
+    const filtered = mostLinked.filter(compareWithoutWww(prefix)).sort((linkA, linkB) => {
+      if (linkB.lru === prefix) {
+        found = true
+        return 1
+      }
+      return linkA.url.length - linkB.url.length || linkA.url.localeCompare(linkB.lru)
+    })
+    if (!found) { 
+      return [
+        {
+          url: lruToUrl(prefix),
+          crawled: null,
+          lru: prefix,
+          linked: null,
+        },
+        ...filtered
+      ]
+    }
+    return filtered
+  } else {
+    return []
+  }
+}
+
+const modalReducer = (state, action) => {
   switch (action.type) {
   case 'ERROR':
     return { ...state, error: true, loading: false }
-  case 'SET':
+  case 'SET_PREFIX':
     return {
       ...state,
-      selected: action.payload,
+      prefix: action.payload,
       loading: false,
+      step: 1
+    }
+  case 'SET_NAME':
+    return {
+      ...state,
+      name: action.payload,
+      step: 4
+    }
+  case 'SET_PAGE':
+    return {
+      ...state,
+      selectedPage: action.payload,
+      step: state.step > 2 ? 2 : state.step,
+    }
+  case 'SET_STEP':
+    return {
+      ...state,
+      step: action.payload
+    }
+  case 'SET_TAGS':
+    return {
+      ...state,
+      tags: action.payload
+    }
+  case 'SET_NOTES':
+    return {
+      ...state,
+      notes: action.payload
     }
   case 'LOADING':
     return {
@@ -157,35 +152,13 @@ const prefixReducer = (state, action) => {
       loading: true
     }
   }
+  return state
 }
 
-const useOrderLists = (mostLinked, prefix) => {
-  if (mostLinked) {
-    const filtered = mostLinked.filter(compareWithoutWww(prefix))
-    const foundUrl = filtered.find(link => {
-      return link.lru === prefix
-    })
-    if (foundUrl) {
-      const index = filtered.indexOf(foundUrl)
-      if (index > -1) {
-        filtered.splice(index, 1)
-      }
-      return [
-        foundUrl,
-        ...filtered
-      ]
-    }
-    return [
-      {
-        url: lruToUrl(prefix),
-        crawled: null,
-        lru: prefix,
-        linked: null,
-      },
-      ...filtered
-    ]
-  } else {
-    return []
+const customStyles = {
+  content: {
+    padding: 0,
+    top: 60,
   }
 }
 
@@ -200,43 +173,59 @@ const EntityModal = ({
   tlds,
 }) => {
   const comeFromPlus = webentity.status !== 'DISCOVERED'
-  const longestLru = useMemo(() => head(webentity.prefixes.sort((a, b) => b.length - a.length)), webentity.prefixes)
-  const prefixes = useMemo(() => parsePrefixes(longestLru, tabUrl, comeFromPlus, tlds), [longestLru, tabUrl, comeFromPlus, tlds])
-  const [step, setStep] = useState(1)
-  const [selectedPage, setSelectedPage] = useState(null)
-  const [name, setName] = useState(webentity.name)
-  const initialSelected = useMemo(() => prefixes
-    .filter(({ editable }) => !editable)
-    .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, ''))
+  const longestLru = useMemo(
+    () => longestMatching(webentity.prefixes, tabUrl, tlds).lru,
+    [webentity.prefixes, tabUrl, tlds]
+  )
+  const prefixes = useMemo(
+    () => parsePrefixes(lruObjectToString(longestLru), tabUrl, comeFromPlus, tlds),
+    [longestLru, tabUrl, comeFromPlus, tlds]
+  )
+  const initialPrefix = useMemo(
+    () => prefixes
+      .filter(({ selected }) => selected)
+      .reduce((prev, part) => `${prev}${part.name}|`, '')
+  )
 
-  const [prefixState, dispatch] = useReducer(prefixReducer, {
-    selected: initialSelected,
-    loadding: false,
-    error: false,
-  })
-  const prefixHasChanged = initialSelected !== prefixState.selected
+  const [state, dispatch] = useReducer(
+    modalReducer,
+    {
+      step: 1,
+      selectedPage: null,
+      name: webentity.name,
+      prefix: initialPrefix,
+      loadding: false,
+      error: false,
+      tags: true,
+      notes: true
+    }
+  )
+
+  const prefixHasChanged = initialPrefix !== state.prefix
   const hasTags = !!(webentity.tags.USER && Object.keys(webentity.tags.USER).length)
   const showCopyStep = (prefixHasChanged || comeFromPlus) && hasTags
   const totalStepsNumber = showCopyStep ? 4 : 3
-  const [copyTags, setCopyTags] = useState({ tags: true, notes: true })
 
   const pagesList = useMemo(
-    () => useOrderLists(webentity.mostLinked, prefixState.selected),
-    [webentity.mostLinked, prefixState.selected]
+    () => orderList(webentity.mostLinked, state.prefix),
+    [webentity.mostLinked, state.prefix]
   )
 
   const onSubmit = useCallback(() => {
     onSuccess(webentity, {
-      prefix: prefixState.selected,
-      homepage: pagesList[selectedPage].url,
-      name,
+      prefix: state.prefix,
+      homepage: pagesList[state.selectedPage].url,
+      name: state.name,
       crawl: true,
-      copy: copyTags,
+      copy: {
+        tags: state.tags,
+        notes: state.notes
+      },
     })
-  }, [prefixState, selectedPage, name, pagesList, copyTags])
+  }, [state])
 
   const onSetPrefixes = useCallback((prefix) => {
-    if (prefix === prefixState.selected) {
+    if (prefix === state.prefix) {
       return
     }
     dispatch({ type: 'LOADING' })
@@ -251,37 +240,36 @@ const EntityModal = ({
       if (webentityExists) {
         return dispatch({ type: 'ERROR' })
       }
-      dispatch({ type: 'SET', payload: prefix })
-      setStep(1)
+      dispatch({ type: 'SET_PREFIX', payload: prefix })
     })
-  }, [prefixState])
+  }, [state.prefix])
 
-  const ndLock = !(step === 2 && isNumber(selectedPage))
-  const ref = React.useRef(null)
+  const ndLock = state.step !== 2 || !isNumber(state.selectedPage)
+  const nameRef = React.useRef(null)
   const onNameConfirm = useCallback(() => {
-    if (ref.current.value.length) {
-      setName(ref.current.value)
-      setStep(4)
+    if (nameRef.current.value.length) {
+      dispatch({ type: 'SET_NAME', payload: nameRef.current.value })
     }
   }, [])
   const onInputChange = useCallback(() => {
-    if (step !== 3) {
-      setStep(3)
+    if (state.step !== 3) {
+      dispatch({ type: 'SET_STEP', payload: 3 })
     }
-  }, [step])
+  }, [state.step])
   const setPage = useCallback((index) => {
-    setSelectedPage(index)
-    if (step > 2) {
-      setStep(2)
-    }
-  }, [setSelectedPage, step])
-  const validatesCopyTags = useCallback(() => {
-    setStep(5)
+    dispatch({
+      type: 'SET_PAGE',
+      payload: index,
+    })
+  }, [state.step])
+  const validatestags = useCallback(() => {
+    dispatch({ type: 'SET_STEP', payload: 5 })
   })
   return (
     <Modal
       isOpen={ isOpen }
       onRequestClose={ onRequestClose }
+      style={ customStyles }
       contentLabel="New entity modal"
     >
       <div className="new-entity-modal-container">
@@ -296,62 +284,63 @@ const EntityModal = ({
           </div>
           <div className={ cx('step-container') }>
             <h3>Step <span className="step-marker">1/{totalStepsNumber}</span> : define the webentity URL scope <HelpPin place="top">This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server</HelpPin></h3>
+
             <Prefixes
               prefixes={ prefixes }
               onSetPrefixes={ onSetPrefixes }
-              loading={ prefixState.loading }
-              existingPrefixes={ prefixState.error }
-              disable={ step > 1 }
-              onValidate={ () => setStep(2) }
+              loading={ state.loading }
+              existingPrefixes={ state.error }
+              disable={ state.step > 1 }
+              onValidate={ () => dispatch({ type: 'SET_STEP', payload: 2 }) }
             />
           </div>
-          <div className={ cx('step-container', { 'is-disabled': step < 2 }) }>
+          <div className={ cx('step-container', { 'is-disabled': state.step < 2 }) }>
             <h3 className="step3-title-container">
               <span>Step <span className="step-marker">2/{totalStepsNumber}</span> : choose the webentity homepage <HelpPin place="top">This is the page choosen to display a main URL address for the webentity in lists and visualizations</HelpPin></span>
-              <button disabled={ ndLock }  onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
+              <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success">confirm</button>
             </h3>
             {
               webentity.mostLinked ? 
                 <PagesList
                   pages={ pagesList }
-                  selectedPage={ selectedPage }
+                  selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
                 /> : <Spinner />
             }
             <li className="standalone-confirm-container">
-              <button disabled={ ndLock } onClick={ () => setStep(3) } className="btn btn-success">confirm</button>
+              <button disabled={ ndLock } onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success">confirm</button>
             </li>
           </div>
-          <div className={ cx('step-container', { 'is-disabled': step < 3 }) }>
+          <div className={ cx('step-container', { 'is-disabled': state.step < 3 }) }>
             <h3>Step <span className="step-marker">3/{ totalStepsNumber }</span> : check the webentity name <HelpPin  place="top">This is the name that will be displayed in the lists and visualizations related to the corpus</HelpPin></h3>
             <div className="name-input-container">
               <input
                 className="input"
-                ref={ ref }
-                defaultValue={ name }
+                ref={ nameRef }
+                defaultValue={ state.name }
                 onChange={ onInputChange }
               />
               <ul className="actions-container">
-                <li><button disabled={ step !== 3 }  onClick={ onNameConfirm } className="btn btn-success">confirm</button></li>
+                <li><button disabled={ state.step !== 3 }  onClick={ onNameConfirm } className="btn btn-success">confirm</button></li>
               </ul>
             </div>
           </div>
           {
             totalStepsNumber === 4 &&
-            <div className={ cx('step-container', { 'is-disabled': step < 4 }) }>
+            <div className={ cx('step-container', { 'is-disabled': state.step < 4 }) }>
               <h3>Step <span className="step-marker">4/{totalStepsNumber}</span> : set creation settings <HelpPin  place="top">Additional settings for creation</HelpPin></h3>
               <form className="settings-container">
                 <ul >
                   <li>
-                    <input checked={ copyTags.tags } onChange={ (event) => setCopyTags({ ...copyTags, tags: event.target.checked }) } id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
+                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_TAGS', payload: event.target.checked }) } id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
                   </li>
                   <li>
-                    <input checked={ copyTags.notes } onChange={ (event) => setCopyTags({ ...copyTags, notes: event.target.checked }) } id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>
+                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_NOTES', payload: event.target.checked }) } id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>
                   </li>
                 </ul>
                 <ul className="actions-container">
                   <li className="standalone-confirm-container">
-                    <button disabled={ step !== 4 }  onClick={ validatesCopyTags } className="btn btn-success">confirm</button>
+                    <button disabled={ state.step !== 4 }  onClick={ validatestags } className="btn btn-success">confirm</button>
                   </li>
                 </ul>
               </form>
@@ -361,7 +350,7 @@ const EntityModal = ({
         <div className="modal-footer">
           <ul className="actions-container big">
             <li><button onClick={ onRequestClose } className="btn btn-danger">cancel</button></li>
-            <li><button onClick={ onSubmit } disabled={ step !== totalStepsNumber + 1 } className="btn btn-success">include webentity and analyze it !</button></li>
+            <li><button onClick={ onSubmit } disabled={ state.step !== totalStepsNumber + 1 } className="btn btn-success">include webentity and analyze it !</button></li>
           </ul>
         </div>
       </div>

@@ -7,6 +7,11 @@ import findLastIndex from 'lodash/fp/findLastIndex'
 
 const findLastEditable = findLastIndex(part => part.selected)
 
+const dict = {
+  h: '.',
+  p: '/',
+}
+
 const PrefixSetter = function ({
   parts = [],
   setPrefix
@@ -46,7 +51,7 @@ const PrefixSetter = function ({
   const handleStop = () => {
     setPrefix(parts
       .filter((_, i) => i <= index )
-      .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, ''))
+      .reduce((prev, part) => `${prev}${part.name}|`, ''))
     setSliderX()
   }
 
@@ -61,11 +66,12 @@ const PrefixSetter = function ({
                 setIndex(selectedIndex)
                 setPrefix(parts
                   .filter((_, i) => i <= selectedIndex)
-                  .reduce((prev, part) => `${prev}${part.min}:${part.name}|`, '')
+                  .reduce((prev, part) => `${prev}${part.name}|`, '')
                 )
                 setSliderX(selectedIndex)
               }
             }
+            const [char, content] = part.name.split(':')
             return (
               <li
                 key={ partIndex }
@@ -75,7 +81,7 @@ const PrefixSetter = function ({
                   'active': !part.editable || index >= partIndex,
                   'editable': part.editable
                 }) }
-              >{part.name}</li>
+              >{dict[char]}{content.length ? content : '<empty>'}</li>
             )
           })
         }

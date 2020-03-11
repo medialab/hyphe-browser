@@ -14,6 +14,7 @@
     margin: 0 auto
 
 .new-entity-modal-container
+    font-family: var(--font-mont)
     stretch(column)
     max-height: 100%
     overflow : hidden
@@ -147,10 +148,11 @@
     .prefix-input-container
         position: relative
         stretch(row)
-        align-items: center
+        align-items: baseline
         .prefix-setter
             flex: 1
-            margin-right: 5px
+            margin-right: 15px
+            overflow: auto;
     .modal-header
         h2
             stretch(row)
