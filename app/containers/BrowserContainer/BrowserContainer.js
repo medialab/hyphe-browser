@@ -125,7 +125,7 @@ BroswerContainer.propTypes = {
   openTab: PropTypes.func
 }
 
-const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }, stacks, ui }) => ({
+const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }, stacks }) => ({
   corpus: corpora.selected,
   status: corpora.status,
   selectedStack: stacks.selected,

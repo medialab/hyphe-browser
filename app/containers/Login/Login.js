@@ -2,11 +2,8 @@ import './login.styl'
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { FormattedMessage as T, intlShape } from 'react-intl'
-// import { routerActions } from 'react-router-redux'
-import cx from 'classnames'
+import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import { deselectServer, deleteServer } from '../../actions/servers'
@@ -45,7 +42,7 @@ class Login extends React.Component {
 
   renderServerSelect () {
     const { selectedServer, servers, location } = this.props
-    const { formatMessage } = this.context.intl
+    const { formatMessage } = this.props.intl
 
     const options = servers.map((s) => ({
       label: `${s.name} (${s.url})`,
@@ -133,10 +130,6 @@ class Login extends React.Component {
   }
 }
 
-Login.contextTypes = {
-  intl: intlShape,
-}
-
 Login.propTypes = {
   children: PropTypes.node,
   selectedServer: PropTypes.object,
@@ -167,4 +160,4 @@ const mapDispatchToProps = {
   deleteServer,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login))

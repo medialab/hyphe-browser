@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
 import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
-import { intlShape } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import { eventBusShape } from '../../types'
 
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
@@ -229,7 +229,7 @@ class WebView extends React.Component {
   }
 
   translate (id) {
-    return this.context.intl.formatMessage({ id })
+    return this.props.intl.formatMessage({ id })
   }
   render () {
     // the preload script below is used to handle right click context menu
@@ -241,10 +241,6 @@ class WebView extends React.Component {
       />
     )
   }
-}
-
-WebView.contextTypes = {
-  intl: intlShape
 }
 
 WebView.propTypes = {
@@ -261,4 +257,4 @@ WebView.defaultProps = {
   visible: true
 }
 
-export default WebView
+export default injectIntl(WebView)

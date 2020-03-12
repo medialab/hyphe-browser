@@ -93,6 +93,8 @@
     "webpack-target-electron-renderer": "^0.4.0"
   },
   "dependencies": {
+    "@formatjs/intl-pluralrules": "^1.5.2",
+    "@formatjs/intl-utils": "^2.2.0",
     "@hot-loader/react-dom": "^16.8.6",
     "animate.css": "^3.5.2",
     "chromium-net-errors": "^1.0.3",
@@ -111,7 +113,7 @@
     "react-dom": "^16.8.6",
     "react-draggable": "^3.3.0",
     "react-infinite": "^0.13.0",
-    "react-intl": "^2.1.5",
+    "react-intl": "^4.1.1",
     "react-modal": "^3.8.1",
     "react-redux": "^7.0.3",
     "react-router": "^5.0.0",

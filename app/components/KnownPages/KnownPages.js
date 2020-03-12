@@ -1,7 +1,7 @@
 import './KnownPages.styl'
 
 import React from 'react'
-import { intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import DownloadListBtn from '../DownloadListBtn'
 import CardsList from '../CardsList'
@@ -16,9 +16,9 @@ const KnownPages = ({
   onDownloadList,
   onSetHomepage,
   onSetTabUrl
-}, { intl }) => {
+}) => {
 
-  const { formatMessage } = intl
+  const { formatMessage } = useIntl()
 
   const handleDownloadList = () => {
     onDownloadList('mostLinked')
@@ -62,10 +62,6 @@ const KnownPages = ({
       }
     </div>
   )
-}
-
-KnownPages.contextTypes = {
-  intl: intlShape
 }
 
 export default KnownPages

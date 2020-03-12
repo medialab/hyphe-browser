@@ -1,19 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage as T, FormattedRelative as D, intlShape } from 'react-intl'
+import { FormattedMessage as T, FormattedRelativeTime as D, useIntl } from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 
 const CorpusCard = ({
   server, 
   corpus, 
   selectCorpus, 
   routerPush
-}, {intl: {formatMessage}}) => {
+}) => {
+  const { formatMessage } = useIntl()
   const { password, name, status, webentities_in, created_at, last_activity } = corpus
   const handleSelectCorpus = () => {
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
     selectCorpus(server, corpus)
     routerPush(path)
   }
+  
   return (
     <li className="corpus-card" onClick={ handleSelectCorpus }>
       <h2 className="corpus-name">
@@ -23,9 +26,14 @@ const CorpusCard = ({
       </h2>
       <div className="corpus-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
       <div className="corpus-dates">
-        <span><T id="created-ago" values={ { relative: <D value={ created_at } /> } } /></span>
+        <span>
+          <T
+            id="created-ago"
+            values={ { relative: <D { ...selectUnit(created_at) } numeric='auto' style='long' /> } }
+          />
+        </span>
         <span> - </span>
-        <span><T id="used-ago" values={ { relative: <D value={ last_activity } /> } } /></span>
+        <span><T id="used-ago" values={ { relative: <D  { ...selectUnit(last_activity) } /> } } /></span>
       </div>
     </li>
   )
@@ -40,10 +48,6 @@ CorpusCard.propTypes = {
 
   // actions
   selectCorpus: PropTypes.func,
-}
-
-CorpusCard.contextTypes = {
-  intl: PropTypes.object,
 }
 
 

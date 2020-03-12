@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useIntl } from 'react-intl'
 
 const WebentityNameField = ({
   initialName,
   onSubmit,
   id
-}, { intl: { formatMessage }}) => {
+}) => {
   const [webentityName, setWebentityName] = useState(initialName)
   const [webentityId, setWebentityId] = useState(id)
+  const { formatMessage } = useIntl()
 
   useEffect(() => {
     setWebentityName(initialName)
@@ -41,28 +42,25 @@ const WebentityNameField = ({
         className="input" 
         value={ webentityName }
         onKeyUp={ handleKeyUp }
-        placeholder={formatMessage({ id: 'sidebar.cartel.webentity-name-title' })}
+        placeholder={ formatMessage({ id: 'sidebar.cartel.webentity-name-title' }) }
         // onFocus={ handleFocus }
         // onBlur={ handleBlur }
-        onChange={ handleChange } />
-        {
-          id === webentityId &&
+        onChange={ handleChange }
+      />
+      {
+        id === webentityId &&
           webentityName !== initialName &&
           <>
-            <button onClick={handleValidate} className="btn btn-success">
+            <button onClick={ handleValidate } className="btn btn-success">
               <i className="ti-check" />
             </button>
-            <button onClick={handleCancel} className="btn btn-error">
+            <button onClick={ handleCancel } className="btn btn-error">
               <i className="ti-close" />
             </button>
           </>
-        }
+      }
     </div>
   )
-}
-
-WebentityNameField.contextTypes = {
-  intl: PropTypes.object,
 }
 
 export default WebentityNameField

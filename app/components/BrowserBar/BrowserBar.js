@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import cx from 'classnames'
 import { isWebUri } from 'valid-url'
-import { intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import { getSearchUrl } from '../../utils/search-web'
 
@@ -28,8 +28,8 @@ const BrowserBar = function ({
   onSetTabUrl,
   onSetHomepage,
   onAddClick
-}, { intl }) {
-  const { formatMessage } = intl
+}) {
+  const { formatMessage } = useIntl()
 
   const [edited, setEdited] = useState(isLanding ? true : false)
   const [tabUrl, setTabUrl] = useState(initialUrl)
@@ -91,21 +91,24 @@ const BrowserBar = function ({
           className="btn btn-default navigate-btn hint--left"
           aria-label={ formatMessage({ id: 'browse-back' }) }
           disabled={ disableBack }
-          onClick={ onGoBack }>
+          onClick={ onGoBack }
+        >
           <span className="ti-angle-left" />
         </button>
         <button
           className="btn btn-default navigate-btn hint--left" 
           aria-label={ formatMessage({ id: 'browse-forward' }) }
           disabled={ disableForward }
-          onClick={ onGoForward }>
+          onClick={ onGoForward }
+        >
           <span className="ti-angle-right" />
         </button>
         <button 
           className="btn btn-default navigate-btn hint--left" 
           aria-label={ formatMessage({ id: 'browse-reload' }) }
           disabled={ disableReload }
-          onClick={ onReload }>
+          onClick={ onReload }
+        >
           <span className="ti-reload" />
         </button>
       </div>
@@ -117,7 +120,7 @@ const BrowserBar = function ({
               onKeyUp={ handleKeyUp }
               onBlur={ () => setEdited(false) } 
               onChange={ e => setTabUrl(e.target.value) }
-              placeholder={formatMessage({ id: 'empty-url' })}
+              placeholder={ formatMessage({ id: 'empty-url' }) }
               value={ tabUrl }
             />
             :
@@ -159,10 +162,6 @@ const BrowserBar = function ({
       </div>
     </div>
   )
-}
-
-BrowserBar.contextTypes = {
-  intl: intlShape
 }
 
 BrowserBar.propTypes = {

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { createCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
@@ -46,7 +46,7 @@ class CorpusForm extends React.Component {
   }
 
   renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
-    const {intl: {formatMessage}} = this.context
+    const { intl: { formatMessage } } = this.props
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
@@ -54,7 +54,7 @@ class CorpusForm extends React.Component {
           disabled={ this.state.submitting }
           autoFocus={ autoFocus }
           name={ name }
-          placeholder={formatMessage({id: label})}
+          placeholder={ formatMessage({ id: label }) }
           onChange={ ({ target }) => this.setDataState(name, target.value) }
           type={ type }
           value={ this.state.data[name] || '' }
@@ -115,7 +115,7 @@ class CorpusForm extends React.Component {
     const onTogglePasswordProtected = () => {
       let newState = {
         passwordProtected: !passwordProtected
-      };
+      }
       // if disabling password protected clear the password
       if (passwordProtected) {
         newState = {
@@ -136,16 +136,16 @@ class CorpusForm extends React.Component {
         }
 
         { this.state.submitting ?
-           <h5>{this.state.data.name}</h5>
+          <h5>{this.state.data.name}</h5>
           :
-           this.renderFormGroup('name', 'corpus-name', 'text', true) 
+          this.renderFormGroup('name', 'corpus-name', 'text', true) 
         }
         {
           !this.state.submitting &&
-          <div onClick={onTogglePasswordProtected} className="form-group horizontal">
-          <input readOnly checked={passwordProtected} type="checkbox"/>
-          <label><T id="password-protected" /></label>
-        </div>
+          <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
+            <input readOnly checked={ passwordProtected } type="checkbox" />
+            <label><T id="password-protected" /></label>
+          </div>
         }
         
         { passwordProtected && this.renderFormGroup('password', 'password', 'password') }
@@ -156,12 +156,12 @@ class CorpusForm extends React.Component {
           : (
             <div className="buttons-row">
               <li>
-              <Link className="btn btn-error" to="/login"><T id="cancel" /></Link>
+                <Link className="btn btn-error" to="/login"><T id="cancel" /></Link>
               </li>
               <li className="main-button-container">
-              <button className={cx("btn btn-primary", {'is-disabled': !this.state.data.name})} disabled={ this.state.submitting }>
-                <T id="create-corpus" />
-              </button>
+                <button className={ cx('btn btn-primary', { 'is-disabled': !this.state.data.name }) } disabled={ this.state.submitting }>
+                  <T id="create-corpus" />
+                </button>
               </li>
             </div>
           )
@@ -180,10 +180,6 @@ CorpusForm.propTypes = {
   createCorpus: PropTypes.func
 }
 
-CorpusForm.contextTypes = {
-  intl: PropTypes.object
-}
-
 const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({
   locale,
   server: servers.selected,
@@ -194,4 +190,4 @@ const ConnectedCorpusForm = connect(mapStateToProps, {
   createCorpus
 })(CorpusForm)
 
-export default ConnectedCorpusForm
+export default injectIntl(ConnectedCorpusForm)

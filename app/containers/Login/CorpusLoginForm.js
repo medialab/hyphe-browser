@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { selectCorpus } from '../../actions/corpora'
 import jsonrpc from '../../utils/jsonrpc'
@@ -36,7 +36,7 @@ class CorpusLoginForm extends React.Component {
   }
 
   render() {
-    const {intl: {formatMessage}} = this.context
+    const { intl: { formatMessage } } = this.props
     return (
       <form className="server-form" onSubmit={this.onSubmit}>
         <h3 className="section-header">
@@ -52,7 +52,7 @@ class CorpusLoginForm extends React.Component {
           <input placeholder={formatMessage({id: 'password'})} autoFocus type="password" onChange={(evt) => this.setState({ password: evt.target.value })} />
         </div>
         <div className="buttons-row">
-        <li>
+          <li>
             <Link className="btn btn-error" to="/login"><T id="cancel" /></Link>
           </li>
           <li>
@@ -78,18 +78,14 @@ CorpusLoginForm.propTypes = {
   selectCorpus: PropTypes.func,
 }
 
-CorpusLoginForm.contextTypes = {
-  intl: PropTypes.object
-}
-
 const mapStateToProps = ({ corpora, intl: { locale }, servers }) => ({
   corpus: corpora.selected,
   locale,
   server: servers.selected,
 })
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   // routerPush: routerActions.push,
   selectCorpus
-})(CorpusLoginForm)
+})(CorpusLoginForm))
 

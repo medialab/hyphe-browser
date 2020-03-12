@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useCallback, useReducer, useMemo } from 'react'
+// import { useIntl } from 'react-intl'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
@@ -43,6 +44,7 @@ const PagesList = ({
 )
 
 const Prefixes = (props) => {
+  // const intl = useIntl()
   return (
     <React.Fragment>
       <div className="prefix-input-container">
@@ -353,8 +355,21 @@ const EntityModal = ({
         </div>
         <div className="modal-footer">
           <ul className="actions-container big">
-            <li><button onClick={ onRequestClose } className="btn btn-danger">cancel</button></li>
-            <li><button onClick={ onSubmit } disabled={ state.step !== totalStepsNumber + 1 } className="btn btn-success">include webentity and analyze it !</button></li>
+            <li>
+              <button
+                onClick={ onRequestClose }
+                className="btn btn-danger"
+              >cancel</button>
+            </li>
+            <li>
+              <button
+                onClick={ onSubmit }
+                disabled={ state.step !== totalStepsNumber + 1 }
+                className="btn btn-success"
+              >
+                include webentity and analyze it !
+              </button>
+            </li>
           </ul>
         </div>
       </div>

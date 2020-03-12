@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
-import PropTypes from 'prop-types'
+import { useIntl } from 'react-intl'
 
 import './ServerSelect.styl'
 
@@ -14,7 +14,8 @@ const ServerSelect = ({
   onChange,
   onEdit,
   onForget
-}, { intl: { formatMessage } }) => {
+}) => {
+  const { formatMessage } = useIntl()
   const options = [
     // add default option only when no server selected
     !selectedServer || !selectedServer.url ?
@@ -43,28 +44,28 @@ const ServerSelect = ({
       <div className="server-select">
         <select
           autoFocus
-          value={selectedServer ? selectedServer.url : ""}
-          disabled={isDisabled}
-          onChange={(evt) => { if (evt.target.value) onChange(evt.target.value) }}
+          value={ selectedServer ? selectedServer.url : '' }
+          disabled={ isDisabled }
+          onChange={ (evt) => { if (evt.target.value) onChange(evt.target.value) } }
         >
-          {options.map((o) => <option key={o.key + o.label} value={o.value}>{o.label}</option>)}
+          {options.map((o) => <option key={ o.key + o.label } value={ o.value }>{o.label}</option>)}
         </select>
         {
           selectedServer &&
           <>
-            <button onClick={onEdit} className="hint--bottom" aria-label={formatMessage({ id: 'edit-server-tooltip' })}>
+            <button onClick={ onEdit } className="hint--bottom" aria-label={ formatMessage({ id: 'edit-server-tooltip' }) }>
               <i className="ti-pencil" />
             </button>
-            <button onClick={() => setForgetPrompted(true)} className="hint--bottom" aria-label={formatMessage({ id: 'forget-server-tooltip' })}>
+            <button onClick={ () => setForgetPrompted(true) } className="hint--bottom" aria-label={ formatMessage({ id: 'forget-server-tooltip' }) }>
               <i className="ti-trash" />
             </button>
           </>
         }
       </div>
       <Modal
-        isOpen={forgetPrompted}
-        onRequestClose={() => setForgetPrompted(false)}
-        style={{
+        isOpen={ forgetPrompted }
+        onRequestClose={ () => setForgetPrompted(false) }
+        style={ {
           content: {
             width: 700,
             maxWidth: '40vw',
@@ -75,7 +76,7 @@ const ServerSelect = ({
             overflow: 'hidden',
             padding: 0
           }
-        }}
+        } }
       >
         <div className="modal-content-container">
           <div className="modal-content-header">
@@ -84,7 +85,7 @@ const ServerSelect = ({
           <div className="modal-content-body">
             {formatMessage({ id: 'confirm-forget-server' })}</div>
           <div className="modal-content-footer">
-            <ul onClick={() => setForgetPrompted(false)} className="buttons-row">
+            <ul onClick={ () => setForgetPrompted(false) } className="buttons-row">
               <li>
                 <button className="btn btn-error">
                   {formatMessage({ id: 'cancel' })}
@@ -92,7 +93,7 @@ const ServerSelect = ({
               </li>
 
               <li>
-                <button onClick={onForget} className="btn btn-primary">
+                <button onClick={ onForget } className="btn btn-primary">
                   {formatMessage({ id: 'forget-this-server' })}
                 </button>
               </li>
@@ -101,11 +102,7 @@ const ServerSelect = ({
         </div>
       </Modal>
     </>
-  );
+  )
 }
 
-ServerSelect.contextTypes = {
-  intl: PropTypes.object,
-}
-
-export default ServerSelect;
+export default ServerSelect

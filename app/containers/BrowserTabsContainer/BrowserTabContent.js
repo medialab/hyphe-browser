@@ -3,7 +3,6 @@ import './BrowserTabContent.styl'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { intlShape } from 'react-intl'
 
 import networkErrors from 'chromium-net-errors'
 
@@ -381,10 +380,6 @@ class BrowserTabContent extends React.Component {
       </div>
     )
   }
-}
-
-BrowserTabContent.contextTypes = {
-  intl: intlShape
 }
 
 BrowserTabContent.propTypes = {

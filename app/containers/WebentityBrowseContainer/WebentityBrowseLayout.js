@@ -2,7 +2,7 @@ import './WebentityBrowseLayout.styl'
 
 import React, { useState } from 'react'
 import cx from 'classnames'
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 import pickBy from 'lodash/fp/pickBy'
 
 import { TAGS_NS } from '../../constants'
@@ -44,9 +44,8 @@ const WebentityBrowseLayout = ({
   onAddTag,
   onUpdateTag,
   onRemoveTag,
-
-}, { intl }) => {
-  const { formatMessage } = intl
+}) => {
+  const { formatMessage } = useIntl()
 
   const [knownPagesOpen, setKnownPagesOpen] = useState(false)
   const [linkedEntitiesOpen, setLinkedEntitiesOpen] = useState(false)
@@ -107,8 +106,7 @@ const WebentityBrowseLayout = ({
         id: +key,
         type: pickByIdentity(statusActions)[key]
       }
-    }),
-    [statusActions],
+    }), [statusActions],
   )
 
   const submitLinkedEntitiesActions = () => {
@@ -325,10 +323,6 @@ const WebentityBrowseLayout = ({
       </ul>    
     </div>
   )
-}
-
-WebentityBrowseLayout.contextTypes = {
-  intl: intlShape
 }
 
 export default WebentityBrowseLayout

@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ipcRenderer as ipc } from 'electron'
-import { intlShape } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import EventBus from 'jvent'
 
 import {
@@ -94,14 +94,12 @@ class BrowserTabsContainer extends React.Component {
       openTab,
       closeTab,
       selectTab,
-      setSearchEngine
+      setSearchEngine,
+      intl
     } = this.props
 
-    const { intl } = this.context
     const { formatMessage } = intl
     const { total_webentities } = corpus
-
-
     const handleOpenNewTab = () => openTab(PAGE_HYPHE_HOME)
     const handleGetWebentity = (tabId) => webentities && webentities.webentities[webentities.tabs[tabId]]
 
@@ -171,10 +169,6 @@ class BrowserTabsContainer extends React.Component {
   }
 }
 
-BrowserTabsContainer.contextTypes = {
-  intl: intlShape
-}
-
 BrowserTabsContainer.propTypes = {
   tabs: PropTypes.array,
   activeTabId: PropTypes.string,
@@ -203,7 +197,7 @@ const mapStateToProps = ({ tabs, corpora, webentities, intl: { locale }, servers
   locale,
 })
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   openTab,
   closeTab,
   selectNextTab,
@@ -211,4 +205,4 @@ export default connect(mapStateToProps, {
   selectTab,
   selectHypheTab,
   setSearchEngine,
-})(BrowserTabsContainer)
+})(BrowserTabsContainer))

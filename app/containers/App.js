@@ -1,14 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { IntlProvider, addLocaleData } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 import { connect } from 'react-redux'
 
 import { ipcRenderer as ipc } from 'electron'
 
-import en from 'react-intl/locale-data/en'
-import fr from 'react-intl/locale-data/fr'
+import '@formatjs/intl-pluralrules/polyfill'
+import '@formatjs/intl-pluralrules/dist/locale-data/en' // Add locale data for en
+import '@formatjs/intl-pluralrules/dist/locale-data/fr' // Add locale data for fr
 
-addLocaleData([...fr, ...en])
+import '@formatjs/intl-relativetimeformat/polyfill'
+import '@formatjs/intl-relativetimeformat/dist/locale-data/en'
+import '@formatjs/intl-relativetimeformat/dist/locale-data/fr'
+
+// import en from 'react-intl/locale-data/en'
+// import fr from 'react-intl/locale-data/fr'
+
+// addLocaleData([...fr, ...en])
 
 import { setLocale } from '../actions/intl'
 

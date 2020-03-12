@@ -13,21 +13,20 @@ const [intro_en_processed, intro_fr_processed] = [
 ].map(([dict, md]) => {
   const definitions = Object.keys(dict)
     .filter(key => key.indexOf('definition.') === 0)
-    .map((key) => ({ key: [key.split('definition.').pop()], value: dict[key]}));
+    .map((key) => ({ key: [key.split('definition.').pop()], value: dict[key] }))
 
   const processed = definitions.reduce((str, definition) => {
-    const regexp = new RegExp('<a href="#' + definition.key + '">([^<]*)<\/a>', 'gi')
-    let match;
+    const regexp = new RegExp('<a href="#' + definition.key + '">([^<]*)</a>', 'gi')
+    let match
     while ((match = regexp.exec(str)) !== null) {
-      const content = match[1];
-      const newContent = `<span class="definition hint--top" aria-label="${definition.value}">${content}</span>`;
+      const content = match[1]
+      const newContent = `<span class="definition hint--top" aria-label="${definition.value}">${content}</span>`
       str = `${str.slice(0, match.index)}${newContent}${str.slice(match.index + match[0].length)}`
     }
-    return str;
+    return str
   }, md)
-  return processed;
+  return `<div>${processed}</div>`
 })
-
 export const en = {
   ...en_json,
   'intro_md': intro_en_processed

@@ -27,8 +27,7 @@ const PrefixSetter = function ({
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
-      const res = x + box.width
-      setStartingX(res)
+      setStartingX(x + box.width)
     }
   }
 
@@ -57,8 +56,9 @@ const PrefixSetter = function ({
 
   const scrollContainer = useRef()
   useEffect(() => {
-    scrollContainer.current.scrollTo(Number.MAX_SAFE_INTEGER, 0)
-  })
+    const id = setTimeout(() => scrollContainer.current.scrollTo(Number.MAX_SAFE_INTEGER, 0), 0)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className="prefix-setter" ref={ scrollContainer }>

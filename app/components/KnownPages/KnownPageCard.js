@@ -1,6 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import Tooltipable from '../Tooltipable'
 
@@ -14,9 +14,9 @@ export const KnownPageCard = ({
 
   onClick,
   onClickHomepage
-}, { intl }) => {
+}) => {
 
-  const { formatMessage } = intl
+  const { formatMessage } = useIntl()
 
   return (
     <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id } title={ url }>
@@ -35,7 +35,7 @@ export const KnownPageCard = ({
             Tag="button" 
             className={ cx('homepage-btn', 'hint--right', { 'is-active': isHomepage }) } 
             onClick = { onClickHomepage }
-            aria-label={ isHomepage ? formatMessage({ id: 'here-homepage' }): formatMessage({ id: 'set-homepage' }) }
+            aria-label={ isHomepage ? formatMessage({ id: 'here-homepage' }) : formatMessage({ id: 'set-homepage' }) }
           >
             <span className="ti-layers-alt" />
           </Tooltipable>
@@ -44,10 +44,5 @@ export const KnownPageCard = ({
     </li>
   )
 }
-
-KnownPageCard.contextTypes = {
-  intl: intlShape
-}
-
 
 export default KnownPageCard

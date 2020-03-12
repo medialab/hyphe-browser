@@ -1,10 +1,9 @@
 import './Tags.styl'
 
 import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { Creatable } from 'react-select'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 import uniqBy from 'lodash/uniqBy'
 
 const getSuggestions = (suggestions, category, value) => {
@@ -22,7 +21,7 @@ const getSuggestions = (suggestions, category, value) => {
 
 import HelpPin from '../HelpPin'
 
-const Tags = (props, { intl: { formatMessage } }) => {
+const Tags = (props) => {
   const {
     webentityId,
     initialTags,
@@ -35,6 +34,7 @@ const Tags = (props, { intl: { formatMessage } }) => {
   const [newCategoryStr, setNewCategoryStr] = useState('')
   const [newCategoryOpen, setNewCategoryOpen] = useState(false)
   const inputRef = useRef(null)
+  const { formatMessage } = useIntl()
 
   useEffect(() => {
     setCategories(initialTags)
@@ -184,10 +184,6 @@ const Tags = (props, { intl: { formatMessage } }) => {
       </div>
     </div>
   )
-}
-
-Tags.contextTypes = {
-  intl: PropTypes.object,
 }
 
 export default React.memo(Tags)

@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { findDOMNode } from 'react-dom'
-import { intlShape } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
 import { HYPHE_TAB_ID } from '../../constants'
@@ -18,7 +18,7 @@ class BrowserTab extends React.Component {
   }
 
   componentDidMount () {
-    const { formatMessage } = this.context.intl
+    const { formatMessage } = this.props.intl
     const el = findDOMNode(this)
 
     const translate = (id) => {
@@ -60,7 +60,7 @@ class BrowserTab extends React.Component {
   }
 
   render () {
-    const { formatMessage } = this.context.intl
+    const { formatMessage } = this.props.intl
     const { active, id, title, webentity, icon, loading, newTab, fixed, closable } = this.props
     const cls = cx('browser-tab-label', { active }, {
       'browser-tab-label-fixed': fixed,
@@ -120,8 +120,4 @@ BrowserTab.propTypes = {
   closeTab: PropTypes.func.isRequired,
 }
 
-BrowserTab.contextTypes = {
-  intl: intlShape
-}
-
-export default BrowserTab
+export default injectIntl(BrowserTab)

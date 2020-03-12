@@ -99,7 +99,6 @@
   "webentity-card.move-to-out": "exclude this webentity and move it to the OUT list",
   "webentity-card.merge-with-current-entity": "merge with the currently browsed webentity",
 
-
   "browse-create": "Create a new entity distinct from the current one ...",
   "cancel": "cancel",
   "confirm-password": "Confirm password",
@@ -256,5 +255,7 @@
   "webentity-merge-popup-message-redirect": "WARNING: The webentity \"{old}\" which you tried to access automatically redirected you to a webpage that belongs to another webentity \"{new}\".",
   "webentity-merge-popup-message-manual": "WARNING: Do you want to merge \"{old}\" to another webentity \"{new}\".",
   "webentity-merge-popup-message-2": "You can either merge these two webentities together, or ignore this message.",
-  "webentity-merge-popup-message-3": "If you don't merge the webentities, you won't be able to edit the status, name or tags or the intended webentity from Hyphe-Browser, you should instead use Hyphe's special tab and look for the webentity to edit it from within Hyphe's classical web interface."
+  "webentity-merge-popup-message-3": "If you don't merge the webentities, you won't be able to edit the status, name or tags or the intended webentity from Hyphe-Browser, you should instead use Hyphe's special tab and look for the webentity to edit it from within Hyphe's classical web interface.",
+
+  "in-modale.confirm": "confirm"
 }

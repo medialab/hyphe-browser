@@ -1,9 +1,8 @@
 import './BrowserLayout.styl'
 
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import cx from 'classnames'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import StackListContainer from '../StackListContainer'
 import WebentityBrowseContainer from '../WebentityBrowseContainer'
@@ -24,13 +23,15 @@ const BrowserLayout = ({
   openTab,
 
   selectedStack,
-}, { intl: { formatMessage } }) => {
+}) => {
 
   /**
    * lists management
    */
   const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
   const [browserMode, setBrowserMode] = useState('browse')
+
+  const { formatMessage } = useIntl()
 
   const onSetAsideMode = mode => setAsideMode(mode)
 
@@ -114,10 +115,6 @@ const BrowserLayout = ({
         url={hypheUrl} onOpenTabFromHyphe={handleOpenTabFromHyphe} />
     </div>
   )
-}
-
-BrowserLayout.contextTypes = {
-  intl: PropTypes.object
 }
 
 export default BrowserLayout

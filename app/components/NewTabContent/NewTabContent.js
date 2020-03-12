@@ -2,7 +2,7 @@ import './NewTabContent.styl'
 
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage as T, intlShape, FormattedHTMLMessage } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 import { isWebUri } from 'valid-url'
 
 import { SEARCH_ENGINES } from  '../../constants'
@@ -20,8 +20,9 @@ const NewTabContent = ({
   selectedEngine,
   onSelectStack,
   onSetTabUrl,
-  onChangeEngine
-}, {intl: { formatMessage }}) => {
+  onChangeEngine,
+}) => {
+  const { formatMessage } = useIntl()
   const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
   const [query, setQuery] = useState('')
   const [searchUrl, setSearchUrl] = useState('')
@@ -71,7 +72,8 @@ const NewTabContent = ({
             </li>
             <li 
               onClick = { () => onSelectStack('DISCOVERED') }
-              className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
+              className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
+            >
               <button>
                 <h3><T id="new-tab.review" /></h3>
                 <h4><T id="new-tab.review-sentence" /></h4>
@@ -79,7 +81,8 @@ const NewTabContent = ({
             </li>
             <li 
               onClick = { handleSelectTagStack }
-              className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }>
+              className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
+            >
               <button>
                 <h3><T id="new-tab.tag" /></h3>
                 <h4><T id="new-tab.tag-sentence" /></h4>
@@ -103,8 +106,9 @@ const NewTabContent = ({
                   <form className="form" onSubmit={ handleSubmitQuery }>
                     <input 
                       value={ query }
-                      placeholder={ formatMessage({ id: `new-tab.search-placeholder` }, { selectedEngine }) }
-                      onChange={ e => setQuery(e.target.value) } />
+                      placeholder={ formatMessage({ id: 'new-tab.search-placeholder' }, { selectedEngine }) }
+                      onChange={ e => setQuery(e.target.value) }
+                    />
                     <button>
                       <T id="search" />
                     </button>
@@ -117,7 +121,7 @@ const NewTabContent = ({
                   <form className="form" onSubmit={ handleSubmitSearchUrl }>
                     <input 
                       value={ searchUrl } 
-                      placeholder={ formatMessage({id: 'new-tab.url-placeholder'})}
+                      placeholder={ formatMessage({ id: 'new-tab.url-placeholder' }) }
                       onChange={ e => setSearchUrl(e.target.value) } 
                     />
                     <button>
@@ -130,14 +134,11 @@ const NewTabContent = ({
           }
         </div>
         <div className="doc-intro-container">
-          <FormattedHTMLMessage id="intro_md" />
-          </div>
+          <T id="intro_md">{chunks => <span  dangerouslySetInnerHTML={ { __html: chunks } } />}</T>
+        </div>
       </div>
     </div>
   )
-}
-NewTabContent.contextTypes = {
-  intl: intlShape
 }
 
 NewTabContent.propTypes = {

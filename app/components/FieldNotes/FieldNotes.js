@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
-import PropTypes from 'prop-types'
 
-import {FormattedMessage as T} from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import Textarea from 'react-autosize-textarea'
 
@@ -16,7 +15,8 @@ const FieldNotes = ({
   onAddNote,
   onUpdateNote,
   onRemoveNote,
-}, {intl: {formatMessage}}) => {
+}) => {
+  const { formatMessage } = useIntl()
   const [textAreaText, setTextAreaText] = useState('')
   const [notes, setNotes] = useState(initialNotes)
   const [editedIndex, setEditedIndex] = useState(undefined)
@@ -157,10 +157,6 @@ const FieldNotes = ({
       }   
     </div>
   )
-}
-
-FieldNotes.contextTypes = {
-  intl: PropTypes.object,
 }
 
 export default FieldNotes

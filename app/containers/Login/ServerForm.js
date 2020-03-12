@@ -11,7 +11,7 @@ import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { createServer, updateServer, deleteServer } from '../../actions/servers'
 // for async validation
@@ -21,7 +21,7 @@ class ServerForm extends React.Component {
 
   // generic form methods
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -32,7 +32,7 @@ class ServerForm extends React.Component {
   }
 
   // deal with fields values
-  setDataState(key, value) {
+  setDataState (key, value) {
     const data = {
       ...this.state.data,
       [key]: value
@@ -40,25 +40,25 @@ class ServerForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup(name, label = name, type = 'text', autoFocus = false) {
-    const {intl: {formatMessage}} = this.context;
+  renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
+    const { intl: { formatMessage } } = this.props
     return (
       <div className="form-group">
-        <label><T id={label} /></label>
+        <label><T id={ label } /></label>
         <input
-          disabled={this.state.submitting}
-          name={name}
-          placeholder={formatMessage({id: label})}
-          autoFocus={autoFocus}
-          onChange={({ target }) => this.setDataState(name, target.value)}
-          type={type}
-          value={this.state.data[name]}
+          disabled={ this.state.submitting }
+          name={ name }
+          placeholder={ formatMessage({ id: label }) }
+          autoFocus={ autoFocus }
+          onChange={ ({ target }) => this.setDataState(name, target.value) }
+          type={ type }
+          value={ this.state.data[name] }
         />
       </div>
     )
   }
 
-  getInitData() {
+  getInitData () {
     if (this.props.editMode) {
       return { ...this.props.server }
     }
@@ -98,7 +98,7 @@ class ServerForm extends React.Component {
       })
   }
 
-  saveAndRedirect() {
+  saveAndRedirect () {
     const server = this.cleanData()
     !this.props.editMode
       ? this.props.createServer(server)
@@ -108,7 +108,7 @@ class ServerForm extends React.Component {
     this.props.history.push('/login')
   }
 
-  cleanData() {
+  cleanData () {
     const server = {
       ...this.state.data
     }
@@ -122,7 +122,7 @@ class ServerForm extends React.Component {
   }
 
   // local validation
-  isValid() {
+  isValid () {
     return this.state.data.url && this.state.data.name
   }
 
@@ -132,15 +132,15 @@ class ServerForm extends React.Component {
     this.props.history.push('/login')
   }
 
-  render() {
+  render () {
 
     return (
-      <form className="server-form" onSubmit={this.onSubmit}>
+      <form className="server-form" onSubmit={ this.onSubmit }>
         <h3 className="section-header">
           <T id="create-or-configure-server" />
         </h3>
         {this.state.errors.map((error) =>
-          <div className="form-error" key={error}><T id={error} /></div>
+          <div className="form-error" key={ error }><T id={ error } /></div>
         )}
 
         {this.renderFormGroup('name', 'server-name')}
@@ -151,12 +151,12 @@ class ServerForm extends React.Component {
 
         <div className="buttons-row">
           <li>
-            <Link className="btn btn-error" to="/login" disabled={this.state.submitting}>
+            <Link className="btn btn-error" to="/login" disabled={ this.state.submitting }>
               <T id="cancel" />
             </Link>
           </li>
           <li className="main-button-container">
-            <button className={cx("btn btn-primary", {'is-disabled': !this.state.data.name || !this.state.data.url})} disabled={this.state.submitting}>
+            <button className={ cx('btn btn-primary', { 'is-disabled': !this.state.data.name || !this.state.data.url }) } disabled={ this.state.submitting }>
               <T id="save-server" />
             </button>
           </li>
@@ -182,20 +182,16 @@ ServerForm.propTypes = {
   deleteServer: PropTypes.func,
 }
 
-ServerForm.contextTypes = {
-  intl: PropTypes.object,
-}
-
-const mapStateToProps = ({ servers, intl: { locale } }, { location }) => ({
+const mapStateToProps = ({ servers, intl: { locale } }) => ({
   // beware, edit could be set to null
-  editMode: !!~window.location.href.indexOf("?edit"),
+  editMode: !!~window.location.href.indexOf('?edit'),
   locale,
   server: servers.selected
 })
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   createServer,
   updateServer,
   deleteServer,
   // routerPush: routerActions.push,
-})(ServerForm)
+})(ServerForm))

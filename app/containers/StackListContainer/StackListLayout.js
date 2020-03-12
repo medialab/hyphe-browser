@@ -2,7 +2,7 @@ import './StackListLayout.styl'
 
 import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import pickBy from 'lodash/pickBy'
 
@@ -29,8 +29,8 @@ const StackListLayout = ({
   onLoadNextPage,
   onDownloadList,
   onSelectWebentity,
-}, { intl }) => {
-  const { formatMessage } = intl
+}) => {
+  const { formatMessage } = useIntl()
 
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [filterValue, setFilterValue] = useState(stackFilter)
@@ -308,10 +308,6 @@ const StackListLayout = ({
       </div>
     </div>
   )
-}
-
-StackListLayout.contextTypes = {
-  intl: intlShape
 }
 
 export default StackListLayout

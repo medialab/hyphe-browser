@@ -1,8 +1,8 @@
 import './LinkedWebentities.styl'
 
-import { FormattedMessage as T, intlShape } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
-import React, { useState } from 'react'
+import React from 'react'
 import cx from 'classnames'
 
 import HelpPin from '../HelpPin'
@@ -23,8 +23,8 @@ const LinkedWebentities = ({
   setStatusActions,
   onOpenTab,
   onDownloadList
-}, { intl }) => {
-  const { formatMessage } = intl
+}) => {
+  const { formatMessage } = useIntl()
   const handleDownloadList = () => {
     onDownloadList(selected)
   }
@@ -55,82 +55,78 @@ const LinkedWebentities = ({
             ) }
         </nav>
         <div className="main-wrapper">
-        <CardsList>
-          { list.length ? list.map((link, index) => {
+          <CardsList>
+            { list.length ? list.map((link, index) => {
 
-            const toggleAction = (obj, key, status) => {
-              return {
-                ...obj,
-                [key]: obj[key] === status ? null : status
+              const toggleAction = (obj, key, status) => {
+                return {
+                  ...obj,
+                  [key]: obj[key] === status ? null : status
+                }
               }
-            }
 
-            const handleClickLink = () => onOpenTab(link.homepage)
-            const handleClickMerge = (e) => {
-              e.stopPropagation()
-              setStatusActions(toggleAction(statusActions, link.id, 'MERGE'))
-            }
-            const handleClickOut = (e) => {
-              e.stopPropagation()
-              setStatusActions(toggleAction(statusActions, link.id, 'OUT'))
-            }
-            const handleClickUndecided = (e) => {
-              e.stopPropagation()
-              setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
-            }
+              const handleClickLink = () => onOpenTab(link.homepage)
+              const handleClickMerge = (e) => {
+                e.stopPropagation()
+                setStatusActions(toggleAction(statusActions, link.id, 'MERGE'))
+              }
+              const handleClickOut = (e) => {
+                e.stopPropagation()
+                setStatusActions(toggleAction(statusActions, link.id, 'OUT'))
+              }
+              const handleClickUndecided = (e) => {
+                e.stopPropagation()
+                setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
+              }
 
-            const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id);
-                          
-            return (
-              <EntityCard 
-                key={ index }
-                allowMerge
-                link={ link }
-                isViewed={ isViewed }
-                onClickLink={ handleClickLink } 
-                onClickMerge={ handleClickMerge }
-                onClickOut={ handleClickOut }
-                onClickUndecided={ handleClickUndecided }
-                isMergeActive={ statusActions[link.id] === 'MERGE' }
-                isUndecidedActive={ statusActions[link.id] === 'UNDECIDED' }
-                isOutActive={ statusActions[link.id] === 'OUT' }
-              />
-            )
-          }) : <div className="empty-indicator">
-                  { formatMessage({ id: 'none' }) }
-                </div>
-        }
-        </CardsList>
-        
-        {
-          pendingActions && pendingActions.length > 0
-          &&
-          <ul className="actions-container">
-            <li onClick={ resetActions } >
-              <button className="btn cancel-btn">
-                <T id="discard-decisions" values={{count: pendingActions.length}} />
-              </button>
-            </li>
-            <li onClick={ submitActions }><button className="btn confirm-btn">
-              <T id="apply-decisions" values={{count: pendingActions.length}} />
-            </button></li>
-          </ul>
-        }
-                    
-        { list.length > 0 &&
-          <div className="download">
-            <DownloadListBtn onClickDownload={ handleDownloadList } />
-          </div>
-        }
+              const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id);
+                            
+              return (
+                <EntityCard 
+                  key={ index }
+                  allowMerge
+                  link={ link }
+                  isViewed={ isViewed }
+                  onClickLink={ handleClickLink } 
+                  onClickMerge={ handleClickMerge }
+                  onClickOut={ handleClickOut }
+                  onClickUndecided={ handleClickUndecided }
+                  isMergeActive={ statusActions[link.id] === 'MERGE' }
+                  isUndecidedActive={ statusActions[link.id] === 'UNDECIDED' }
+                  isOutActive={ statusActions[link.id] === 'OUT' }
+                />
+              )
+            })
+              : <div className="empty-indicator">
+                { formatMessage({ id: 'none' }) }
+              </div>
+            }
+          </CardsList>
+          
+          {
+            pendingActions && pendingActions.length > 0
+            &&
+            <ul className="actions-container">
+              <li onClick={ resetActions } >
+                <button className="btn cancel-btn">
+                  <T id="discard-decisions" values={{ count: pendingActions.length }} />
+                </button>
+              </li>
+              <li onClick={ submitActions }><button className="btn confirm-btn">
+                <T id="apply-decisions" values={{ count: pendingActions.length }} />
+              </button></li>
+            </ul>
+          }
+                      
+          { list.length > 0 &&
+            <div className="download">
+              <DownloadListBtn onClickDownload={ handleDownloadList } />
+            </div>
+          }
         </div>               
       </div>
     </div>
   )
-}
-
-
-LinkedWebentities.contextTypes = {
-  intl: intlShape
 }
 
 export default LinkedWebentities
