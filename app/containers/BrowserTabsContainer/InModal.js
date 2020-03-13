@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, useReducer, useMemo } from 'react'
-// import { useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
@@ -12,7 +12,6 @@ import PrefixSetter from '../../components/PrefixSetter'
 import CardsList from '../../components/CardsList'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
 import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
-import jsonrpc from '../../utils/jsonrpc'
 
 import './InModal.styl'
 
@@ -39,12 +38,11 @@ const PagesList = ({
           displayHomePageButton={ false }
         />
       )
-    }) : 'No links to display' }
+    }) : <FormattedMessage id="in-modale.no-links" /> }
   </CardsList>
 )
 
 const Prefixes = (props) => {
-  // const intl = useIntl()
   return (
     <React.Fragment>
       <div className="prefix-input-container">
@@ -55,17 +53,12 @@ const Prefixes = (props) => {
         <ul className="actions-container">
           <li>
             <button
-              disabled={ props.disable || props.existingPrefixes || props.loading }
+              disabled={ props.disable || props.loading }
               onClick={ props.onValidate }
               className='btn btn-success'
-            >confirm</button></li>
+            ><FormattedMessage id="in-modale.confirm" /></button></li>
         </ul>
       </div>
-      {props.existingPrefixes &&
-        <div className="form-error">
-          There is already a webentity with this URL scope in your corpus
-        </div>
-      }
     </React.Fragment>
   )
 }
@@ -194,7 +187,7 @@ const EntityModal = ({
     {
       step: 1,
       selectedPage: null,
-      name: webentity.name,
+      name: comeFromPlus ? '' : webentity.name,
       prefix: initialPrefix,
       loadding: false,
       error: false,
@@ -230,20 +223,7 @@ const EntityModal = ({
     if (prefix === state.prefix) {
       return
     }
-    dispatch({ type: 'LOADING' })
-    jsonrpc(url)('store.get_lru_definedprefixes', {
-      lru: prefix,
-      corpus: corpusId
-    }).catch(() => dispatch({ type: 'ERROR' })).then(matchingWebentities => {
-      const webentityExists = matchingWebentities
-        .filter(({ id, lru }) =>
-          webentity.id !== id && webentity.prefixes.includes(lru)
-        ).length
-      if (webentityExists) {
-        return dispatch({ type: 'ERROR' })
-      }
-      dispatch({ type: 'SET_PREFIX', payload: prefix })
-    })
+    dispatch({ type: 'SET_PREFIX', payload: prefix })
   }, [state.prefix])
 
   const ndLock = state.step !== 2 || !isNumber(state.selectedPage)
@@ -280,30 +260,31 @@ const EntityModal = ({
     >
       <div className="new-entity-modal-container">
         <div className="modal-header">
-          <h2><span>Include a webentity in the corpus</span><i onClick={ onRequestClose } className="ti-close" /></h2>
+          <h2><span>{ comeFromPlus ? <FormattedMessage id="browse-create" /> : <FormattedMessage id="in-modale.title-in" /> }</span><i onClick={ onRequestClose } className="ti-close" /></h2>
         </div>
         <div className="modal-body" ref={ modalBody }>
           <div className="explanation-text">
-              You are about to define a webentity as belonging the corpus. 
+            {comeFromPlus ? <FormattedMessage id="in-modale.explanation-text-first-in" /> : <FormattedMessage id="in-modale.explanation-text-first-add" />}
             <br />
-              Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (discovered webentities will be added to the PROSPECTIONS list).
+            <FormattedMessage id="in-modale.explanation-text-base" />
           </div>
           <div className={ cx('step-container') }>
-            <h3>Step <span className="step-marker">1/{totalStepsNumber}</span> : define the webentity URL scope <HelpPin place="top">This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server</HelpPin></h3>
-
+            <h3>
+              <FormattedMessage id="in-modale.step" />
+              <span className="step-marker">1/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-1" /><HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-1" /></HelpPin>
+            </h3>
             <Prefixes
               prefixes={ prefixes }
               onSetPrefixes={ onSetPrefixes }
               loading={ state.loading }
-              existingPrefixes={ state.error }
               disable={ state.step > 1 }
               onValidate={ () => dispatch({ type: 'SET_STEP', payload: 2 }) }
             />
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 2 }) }>
             <h3 className="step3-title-container">
-              <span>Step <span className="step-marker">2/{totalStepsNumber}</span> : choose the webentity homepage <HelpPin place="top">This is the page choosen to display a main URL address for the webentity in lists and visualizations</HelpPin></span>
-              <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success">confirm</button>
+              <span><FormattedMessage id="in-modale.step" /><span className="step-marker">2/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-2" /> <HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-2" /></HelpPin></span>
+              <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
             </h3>
             {
               webentity.mostLinked ? 
@@ -314,11 +295,11 @@ const EntityModal = ({
                 /> : <Spinner />
             }
             <li className="standalone-confirm-container">
-              <button disabled={ ndLock } onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success">confirm</button>
+              <button disabled={ ndLock } onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
             </li>
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 3 }) }>
-            <h3>Step <span className="step-marker">3/{ totalStepsNumber }</span> : check the webentity name <HelpPin  place="top">This is the name that will be displayed in the lists and visualizations related to the corpus</HelpPin></h3>
+            <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">3/{ totalStepsNumber }</span> : { comeFromPlus ? <FormattedMessage id="in-modale.title-step-3-add" /> : <FormattedMessage id="in-modale.title-step-3-in" /> }<HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-3" /></HelpPin></h3>
             <div className="name-input-container">
               <input
                 className="input"
@@ -327,26 +308,26 @@ const EntityModal = ({
                 onChange={ onInputChange }
               />
               <ul className="actions-container">
-                <li><button disabled={ state.step !== 3 }  onClick={ onNameConfirm } className="btn btn-success">confirm</button></li>
+                <li><button disabled={ state.step !== 3 }  onClick={ onNameConfirm } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button></li>
               </ul>
             </div>
           </div>
           {
             totalStepsNumber === 4 &&
             <div className={ cx('step-container', { 'is-disabled': state.step < 4 }) }>
-              <h3>Step <span className="step-marker">4/{totalStepsNumber}</span> : set creation settings <HelpPin  place="top">Additional settings for creation</HelpPin></h3>
+              <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">4/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-4" /><HelpPin  place="top"><FormattedMessage id="in-modale.tooltip-step-4" /></HelpPin></h3>
               <form className="settings-container">
                 <ul >
                   <li>
-                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_TAGS', payload: event.target.checked }) } id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
+                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_TAGS', payload: event.target.checked }) } id="copy-tags" type="checkbox" /><label htmlFor="copy-tags"><FormattedMessage id="in-modale.copy-tags" /></label>
                   </li>
                   <li>
-                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_NOTES', payload: event.target.checked }) } id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>
+                    <input defaultChecked onChange={ (event) => dispatch({ type: 'SET_NOTES', payload: event.target.checked }) } id="copy-notes" type="checkbox" /><label htmlFor="copy-notes"><FormattedMessage id="in-modale.copy-notes" /></label>
                   </li>
                 </ul>
                 <ul className="actions-container">
                   <li className="standalone-confirm-container">
-                    <button disabled={ state.step !== 4 }  onClick={ validatestags } className="btn btn-success">confirm</button>
+                    <button disabled={ state.step !== 4 } onClick={ validatestags } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
                   </li>
                 </ul>
               </form>
@@ -359,7 +340,7 @@ const EntityModal = ({
               <button
                 onClick={ onRequestClose }
                 className="btn btn-danger"
-              >cancel</button>
+              ><FormattedMessage id="cancel" /></button>
             </li>
             <li>
               <button
@@ -367,7 +348,7 @@ const EntityModal = ({
                 disabled={ state.step !== totalStepsNumber + 1 }
                 className="btn btn-success"
               >
-                include webentity and analyze it !
+                {comeFromPlus ? <FormattedMessage id="in-modale.confirm-modale-add" /> : <FormattedMessage id="in-modale.confirm-modale-in" />}
               </button>
             </li>
           </ul>

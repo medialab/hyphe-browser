@@ -105,7 +105,7 @@
 
   "go-to-homepage": "cliquer pour naviguer sur la Homepage de la webentité",  
   
-  "browse-create": "Créer une nouvelle entité distincte de l'actuelle...",
+  "browse-create": "Créer une nouvelle entité distincte de l'actuelle",
   "cancel": "annuler",
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",
@@ -260,5 +260,34 @@
   "webentity-merge-popup-message-redirect": "ATTENTION : La webentité \"{old}\" à laquelle vous avez essayé d'accéder vous a redirigé automatiquement vers une page appartenant à une autre webentité \"{new}\".",
   "webentity-merge-popup-message-manual": "ATTENTION : voulez-vous fusionner la webentité \"{old}\" avec l'autre webentité \"{new}\".",
   "webentity-merge-popup-message-2": "Vous pouvez soit fusionner ces deux webentités, soit ignorer ce message.",
-  "webentity-merge-popup-message-3": "Si vous ne les fusionnez pas, vous ne pourrez pas éditer le statut, le nom ou les tags de la webentité d'origine depuis Hyphe-Browser, vous pouvez à la place utiliser l'onglet spécial Hyphe et chercher la webentité pour l'éditer depuis l'interface web classique de Hyphe."
+  "webentity-merge-popup-message-3": "Si vous ne les fusionnez pas, vous ne pourrez pas éditer le statut, le nom ou les tags de la webentité d'origine depuis Hyphe-Browser, vous pouvez à la place utiliser l'onglet spécial Hyphe et chercher la webentité pour l'éditer depuis l'interface web classique de Hyphe.",
+
+  "in-modale.confirm": "Confirmer",
+  "in-modale.no-links": "Aucun lien à afficher",
+
+  "in-modale.title-in": "Ajouter cette webentité dans le corpus",
+
+  "in-modale.step": "étape ",
+  "in-modale.title-step-1": "define the webentity URL scope",
+
+  "in-modale.tooltip-step-1": "This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server",
+
+  "in-modale.title-step-2": "choose the webentity homepage",
+  "in-modale.tooltip-step-2": "This is the page choosen to display a main URL address for the webentity in lists and visualizations",
+
+  
+  "in-modale.title-step-3-in": "check the webentity name",
+  "in-modale.title-step-3-add": "set the webentity name",
+  "in-modale.tooltip-step-3": "This is the page choosen to display a main URL address for the webentity in lists and visualizations",
+
+  "in-modale.copy-tags": "Copy existing tags",
+  "in-modale.copy-notes": "Copy existing notes",
+
+  "in-modale.explanation-text-first-in": "You are about to define a webentity as belonging the corpus.",
+  "in-modale.explanation-text-first-add": "You are about to create a new webentity from a subset of the webpages of the currently browsed one.",
+  "in-modale.explanation-text-base": "Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (discovered webentities will be added to the PROSPECTIONS list).",
+  "in-modale.tooltip-step-4": "Choose which information will be copied from the original webentity",
+  "in-modale.title-step-4": "check copied informations",
+  "in-modale.confirm-modale-in": "include webentity and analyze it",
+  "in-modale.confirm-modale-add": "create webentity and analyze it"
 }
