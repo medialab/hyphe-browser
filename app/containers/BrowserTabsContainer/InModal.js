@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, useReducer, useMemo } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import Modal from 'react-modal'
 import cx from 'classnames'
 
@@ -162,19 +162,19 @@ const EntityModal = ({
   onRequestClose,
   onSuccess,
   webentity,
-  url,
-  corpusId,
+  createNewEntity,
   tabUrl,
   tlds,
 }) => {
-  const comeFromPlus = webentity.status !== 'DISCOVERED'
+  const { formatMessage } = useIntl()
+  console.log(createNewEntity, webentity.status)
   const longestLru = useMemo(
     () => longestMatching(webentity.prefixes, tabUrl, tlds).lru,
     [webentity.prefixes, tabUrl, tlds]
   )
   const prefixes = useMemo(
-    () => parsePrefixes(lruObjectToString(longestLru), tabUrl, comeFromPlus, tlds),
-    [longestLru, tabUrl, comeFromPlus, tlds]
+    () => parsePrefixes(lruObjectToString(longestLru), tabUrl, createNewEntity, tlds),
+    [longestLru, tabUrl, createNewEntity, tlds]
   )
   const initialPrefix = useMemo(
     () => prefixes
@@ -187,7 +187,7 @@ const EntityModal = ({
     {
       step: 1,
       selectedPage: null,
-      name: comeFromPlus ? '' : webentity.name,
+      name: createNewEntity ? '' : webentity.name,
       prefix: initialPrefix,
       loadding: false,
       error: false,
@@ -198,7 +198,7 @@ const EntityModal = ({
 
   const prefixHasChanged = initialPrefix !== state.prefix
   const hasTags = !!(webentity.tags.USER && Object.keys(webentity.tags.USER).length)
-  const showCopyStep = (prefixHasChanged || comeFromPlus) && hasTags
+  const showCopyStep = (prefixHasChanged || createNewEntity) && hasTags
   const totalStepsNumber = showCopyStep ? 4 : 3
 
   const pagesList = useMemo(
@@ -260,18 +260,18 @@ const EntityModal = ({
     >
       <div className="new-entity-modal-container">
         <div className="modal-header">
-          <h2><span>{ comeFromPlus ? <FormattedMessage id="browse-create" /> : <FormattedMessage id="in-modale.title-in" /> }</span><i onClick={ onRequestClose } className="ti-close" /></h2>
+          <h2><span>{ createNewEntity ? <FormattedMessage id="browse-create" /> : <FormattedMessage id="in-modale.title-in" /> }</span><i onClick={ onRequestClose } className="ti-close" /></h2>
         </div>
         <div className="modal-body" ref={ modalBody }>
           <div className="explanation-text">
-            {comeFromPlus ? <FormattedMessage id="in-modale.explanation-text-first-in" /> : <FormattedMessage id="in-modale.explanation-text-first-add" />}
+            {createNewEntity ? <FormattedMessage id="in-modale.explanation-text-first-in" /> : <FormattedMessage id="in-modale.explanation-text-first-add" />}
             <br />
             <FormattedMessage id="in-modale.explanation-text-base" />
           </div>
           <div className={ cx('step-container') }>
             <h3>
               <FormattedMessage id="in-modale.step" />
-              <span className="step-marker">1/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-1" /><HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-1" /></HelpPin>
+              <span className="step-marker">1/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-1" /><HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-1' })}</HelpPin>
             </h3>
             <Prefixes
               prefixes={ prefixes }
@@ -283,7 +283,7 @@ const EntityModal = ({
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 2 }) }>
             <h3 className="step3-title-container">
-              <span><FormattedMessage id="in-modale.step" /><span className="step-marker">2/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-2" /> <HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-2" /></HelpPin></span>
+              <span><FormattedMessage id="in-modale.step" /><span className="step-marker">2/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-2" /> <HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-2' })}</HelpPin></span>
               <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
             </h3>
             {
@@ -299,7 +299,7 @@ const EntityModal = ({
             </li>
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 3 }) }>
-            <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">3/{ totalStepsNumber }</span> : { comeFromPlus ? <FormattedMessage id="in-modale.title-step-3-add" /> : <FormattedMessage id="in-modale.title-step-3-in" /> }<HelpPin place="top"><FormattedMessage id="in-modale.tooltip-step-3" /></HelpPin></h3>
+            <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">3/{ totalStepsNumber }</span> : { createNewEntity ? <FormattedMessage id="in-modale.title-step-3-add" /> : <FormattedMessage id="in-modale.title-step-3-in" /> }<HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-3' })}</HelpPin></h3>
             <div className="name-input-container">
               <input
                 className="input"
@@ -315,7 +315,7 @@ const EntityModal = ({
           {
             totalStepsNumber === 4 &&
             <div className={ cx('step-container', { 'is-disabled': state.step < 4 }) }>
-              <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">4/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-4" /><HelpPin  place="top"><FormattedMessage id="in-modale.tooltip-step-4" /></HelpPin></h3>
+              <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">4/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-4" /><HelpPin  place="top">{formatMessage({ id: 'in-modale.tooltip-step-4' })}</HelpPin></h3>
               <form className="settings-container">
                 <ul >
                   <li>
@@ -348,7 +348,7 @@ const EntityModal = ({
                 disabled={ state.step !== totalStepsNumber + 1 }
                 className="btn btn-success"
               >
-                {comeFromPlus ? <FormattedMessage id="in-modale.confirm-modale-add" /> : <FormattedMessage id="in-modale.confirm-modale-in" />}
+                {createNewEntity ? <FormattedMessage id="in-modale.confirm-modale-add" /> : <FormattedMessage id="in-modale.confirm-modale-in" />}
               </button>
             </li>
           </ul>

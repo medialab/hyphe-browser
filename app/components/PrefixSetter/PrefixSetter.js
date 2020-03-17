@@ -84,7 +84,7 @@ const PrefixSetter = function ({
                 onClick={ handleClick }
                 className={ cx('part', {
                   'active': !part.editable || index >= partIndex,
-                  'editable': part.editable
+                  'editable': part.editable || partIndex === parts.length - 1
                 }) }
               >{dict[char]}{content.length ? content : '<empty>'}</li>
             )

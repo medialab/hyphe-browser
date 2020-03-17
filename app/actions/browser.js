@@ -11,7 +11,6 @@ export const TOGGLE_CONTEXT = '§_TOGGLE_CONTEXT'
 export const TOGGLE_CATEGORIES = '§_TOGGLE_CATEGORIES'
 export const TOGGLE_FREETAGS = '§_TOGGLE_FREETAGS'
 
-
 export const showNotification = ({ id, messageId, messageValues = {}, type = 'notice', timeout = 0 }) => (dispatch) => {
   dispatch({
     type: SHOW_NOTIFICATION,

@@ -296,7 +296,7 @@ class BrowserTabContent extends React.Component {
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     const handleSetWebentityHomepage = () => setWebentityHomepage(server.url, corpusId, url, webentity.id)
     const onAddClick = () => {
-      showAdjustWebentity(webentity.id, true)
+      showAdjustWebentity(webentity.id, true, true)
     }
 
     const handleFetchStackAndSetTab = (stack, filter) => {
@@ -373,6 +373,7 @@ class BrowserTabContent extends React.Component {
             tabUrl={ this.props.url }
             tlds={ this.props.tlds }
             webentity={ webentity }
+            createNewEntity={ this.props.adjusting && this.props.adjusting.createNewEntity }
           />
         }
         { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }

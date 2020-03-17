@@ -262,7 +262,7 @@ export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
 }
 
 export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
-export const showAdjustWebentity = (webentityId, crawl = false) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl })
+export const showAdjustWebentity = (webentityId, crawl = false, createNewEntity = true) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl, createNewEntity })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
 export const setSimpleTabWebentity = (webentity, tabId) => ({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 

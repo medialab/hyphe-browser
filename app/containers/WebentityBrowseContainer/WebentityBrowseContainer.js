@@ -123,7 +123,7 @@ const WebentityBrowseContainer = ({
 
     if (status === 'IN' && !crawling) {
       // Set to IN = go to "adjust" mode and validation triggers crawling
-      showAdjustWebentity(we.id, true)
+      showAdjustWebentity(we.id, true, false)
     } else {
       setWebentityStatus(serverUrl, corpusId, status, we.id)
     }
