@@ -264,7 +264,7 @@ const EntityModal = ({
         </div>
         <div className="modal-body" ref={ modalBody }>
           <div className="explanation-text">
-            {createNewEntity ? <FormattedMessage id="in-modale.explanation-text-first-in" /> : <FormattedMessage id="in-modale.explanation-text-first-add" />}
+            {createNewEntity ? <FormattedMessage id="in-modale.explanation-text-first-add" /> : <FormattedMessage id="in-modale.explanation-text-first-in" />}
             <br />
             <FormattedMessage id="in-modale.explanation-text-base" />
           </div>
