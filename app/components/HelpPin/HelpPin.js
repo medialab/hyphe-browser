@@ -33,7 +33,7 @@ const HelpPin = ({
 
   useEffect(() => {
     updatePos()
-  }) 
+  }, [])
   return (
     <span className="help-pin" ref={ container }>
       <span

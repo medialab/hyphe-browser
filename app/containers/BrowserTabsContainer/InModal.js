@@ -112,7 +112,8 @@ const modalReducer = (state, action) => {
       ...state,
       prefix: action.payload,
       loading: false,
-      step: 1
+      step: 1,
+      selectedPage: null,
     }
   case 'SET_NAME':
     return {
@@ -167,7 +168,6 @@ const EntityModal = ({
   tlds,
 }) => {
   const { formatMessage } = useIntl()
-  console.log(createNewEntity, webentity.status)
   const longestLru = useMemo(
     () => longestMatching(webentity.prefixes, tabUrl, tlds).lru,
     [webentity.prefixes, tabUrl, tlds]
