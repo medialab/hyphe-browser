@@ -76,28 +76,28 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
   })
 }
 
-const orderList = (mostLinked, prefix) => {
+const orderList = (mostLinked, prefix, tabUrl) => {
   if (mostLinked) {
-    let found = false
     const filtered = mostLinked.filter(compareWithoutWww(prefix)).sort((linkA, linkB) => {
-      if (linkB.lru === prefix) {
-        found = true
-        return 1
-      }
       return linkA.url.length - linkB.url.length || linkA.url.localeCompare(linkB.lru)
     })
-    if (!found) { 
-      return [
-        {
-          url: lruToUrl(prefix),
-          crawled: null,
-          lru: prefix,
-          linked: null,
-        },
-        ...filtered
-      ]
-    }
-    return filtered
+    return [tabUrl, prefix].reduce((accumulator, value) => {
+      const found = accumulator.find(({ lru }) => lru === value)
+      console.log(found, accumulator, value, filtered)
+      if (!found) {
+        return [
+          {
+            url: lruToUrl(value),
+            crawled: null,
+            lru: value,
+            linked: null,
+          },
+          ...accumulator
+        ]
+      } else {
+        return accumulator
+      }
+    }, filtered)
   } else {
     return []
   }
@@ -202,8 +202,8 @@ const EntityModal = ({
   const totalStepsNumber = showCopyStep ? 4 : 3
 
   const pagesList = useMemo(
-    () => orderList(webentity.mostLinked, state.prefix),
-    [webentity.mostLinked, state.prefix]
+    () => orderList(webentity.mostLinked, state.prefix, lruObjectToString(urlToLru(tabUrl, tlds))),
+    [webentity.mostLinked, state.prefix, tlds, tabUrl]
   )
 
   const onSubmit = useCallback(() =>
