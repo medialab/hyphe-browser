@@ -1,4 +1,7 @@
-# hyphe-browser
+# Hyphe Browser (HyBro)
+
+Hyphe Browser is a desktop application to be downloaded which consists of a web browser based on Chrome's engine (using electron). It allows to browse the web while being connected to Hyphe at all times.
+It permits to build a web corpus while visualizing the pages of the websites so that the user can curate and categorize them easily.
 
 ## Install
 
