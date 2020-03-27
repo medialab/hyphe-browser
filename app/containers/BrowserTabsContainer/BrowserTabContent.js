@@ -32,7 +32,7 @@ import {
 import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import { getSearchUrl } from '../../utils/search-web'
-import { compareUrls, longestMatching } from '../../utils/lru'
+import { compareUrls, longestMatching, urlToLru, lruObjectToString } from '../../utils/lru'
 import InModal from './InModal'
 
 class BrowserTabContent extends React.Component {
@@ -71,7 +71,6 @@ class BrowserTabContent extends React.Component {
       this.saveAdjustChanges(props)
     }
   }
-
 
   componentWillUnmount () {
     const { eventBus } = this.props
@@ -220,7 +219,6 @@ class BrowserTabContent extends React.Component {
     const handleClick = () => {
       return mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
     }
-
     return <div className="global-overlay" onClick={ handleClick } />
   }
 
@@ -348,7 +346,7 @@ class BrowserTabContent extends React.Component {
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ webentity && webentity.status !== 'DISCOVERED' }
+          displayAddButton={ webentity && webentity.status !== 'DISCOVERED' && !webentity.prefixes.includes(lruObjectToString(urlToLru(url))) }
           onAddClick={ onAddClick }
         />
         {url === PAGE_HYPHE_HOME ?

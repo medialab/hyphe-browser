@@ -183,5 +183,4 @@ BrowserBar.propTypes = {
   onSetHomepage: PropTypes.func
 }
 
-
 export default BrowserBar

@@ -78,13 +78,8 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
 
 const orderList = (mostLinked, prefix, tabUrl) => {
   if (mostLinked) {
-    const filtered = mostLinked.filter(compareWithoutWww(prefix)).sort((linkA, linkB) => {
-      return linkA.url.length - linkB.url.length || linkA.url.localeCompare(linkB.lru)
-    })
     return [tabUrl, prefix].reduce((accumulator, value) => {
-      const found = accumulator.find(({ lru }) => lru === value)
-      console.log(found, accumulator, value, filtered)
-      if (!found) {
+      if (!accumulator.some(({ lru }) => lru === value)) {
         return [
           {
             url: lruToUrl(value),
@@ -97,7 +92,10 @@ const orderList = (mostLinked, prefix, tabUrl) => {
       } else {
         return accumulator
       }
-    }, filtered)
+    },
+    mostLinked.filter(compareWithoutWww(prefix)).sort((linkA, linkB) => 
+      linkA.url.length - linkB.url.length || linkA.url.localeCompare(linkB.lru)
+    ))
   } else {
     return []
   }
