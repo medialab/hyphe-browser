@@ -196,7 +196,7 @@ export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
   const params = {
     webentity_id: webentity.id,
     corpus: corpusId,
-    npages: 200,
+    npages: 20,
   }
   return jsonrpc(serverUrl)('store.get_webentity_mostlinked_pages', params)
     .then(mostLinked => dispatch({ type: FETCH_MOST_LINKED_SUCCESS, payload: { serverUrl, corpusId, webentity, mostLinked } }))

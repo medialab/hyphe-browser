@@ -3,12 +3,15 @@
     display: flex
     flex-flow: row nowrap
     .parts-container
-        display: flex
-        flex-flow: row nowrap
         padding: 0
         margin: 0
+
+        overflow-x: scroll
+        overflow-y: hidden
+        white-space: nowrap
         position: relative
         .part
+            display: inline-block
             list-style-type: none
             padding: 10px
             user-select: none

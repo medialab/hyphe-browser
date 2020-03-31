@@ -23,11 +23,11 @@ const PrefixSetter = function ({
   const [startingX, setStartingX] = useState(0)
 
   const setSliderX = (i = index) => {
-    const anchor = refs && refs[i] && refs[i].current
+    const anchor = refs[i] && refs[i].current
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
-      setStartingX(x + box.width)
+      setStartingX(Math.ceil(x + box.width))
     }
   }
 
@@ -54,14 +54,13 @@ const PrefixSetter = function ({
     setSliderX()
   }
 
-  const scrollContainer = useRef()
   useEffect(() => {
-    const id = setTimeout(() => scrollContainer.current.scrollTo(Number.MAX_SAFE_INTEGER, 0), 0)
+    const id = setTimeout(() => container.current.scrollTo(Number.MAX_SAFE_INTEGER, 0), 0)
     return () => clearInterval(id)
   }, [])
 
   return (
-    <div className="prefix-setter" ref={ scrollContainer }>
+    <div className="prefix-setter">
       <ul ref={ container } className="parts-container">
         {
           parts.map((part, partIndex) => {
