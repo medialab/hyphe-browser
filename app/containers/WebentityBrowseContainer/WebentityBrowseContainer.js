@@ -136,11 +136,11 @@ const WebentityBrowseContainer = ({
   const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
   const handleOpenTab = (url) => openTab(url, activeTab.id)
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
-  
+
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
-  const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), categories)
+  const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), [categories])
   /**
    * Display loading bar if no we is provided
    */
