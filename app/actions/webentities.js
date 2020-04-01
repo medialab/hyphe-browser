@@ -28,6 +28,7 @@ import {
 import { showNotification } from './browser'
 import { fetchStack } from './stacks'
 import { addTag } from './tags'
+import { lruToUrl } from '../utils/lru'
 
 // adding a page to corpus
 export const DECLARE_PAGE_REQUEST = '§_DECLARE_PAGE_REQUEST'
@@ -278,7 +279,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     // Set its name and homepage at the same time + refresh tab by passing tab id
     // Note: since https://trello.com/c/74rYBHON/130-urlbar-creer-une-nouvelle-webentite-pour-un-prefixe
     // name and homepage are not set here (but where?)
-    const createWebentityPromise = createWebentity(serverUrl, corpusId, homepage, name, homepage, tabId)(dispatch)
+    const createWebentityPromise = createWebentity(serverUrl, corpusId, lruToUrl(prefix), name, homepage, tabId)(dispatch)
     operations.push(createWebentityPromise)
     if (adjust.copy.tags || adjust.copy.notes) {
       // Ca devrais fonctionner mais non

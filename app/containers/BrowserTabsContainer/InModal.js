@@ -5,6 +5,7 @@ import cx from 'classnames'
 
 import isNumber from 'lodash/fp/isNumber'
 import initial from 'lodash/fp/initial'
+import dropRightWhile from 'lodash/fp/dropRightWhile'
 
 import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
@@ -66,7 +67,7 @@ const Prefixes = (props) => {
 const parsePrefixes = (lru, url, newEntity, tldTree) => {
   const urlLru = lruObjectToString(urlToLru(url, tldTree))
   const l = lru.split('|').length
-  return initial(urlLru.split('|')).map((stem, index) => {
+  return dropRightWhile((stem) => stem === 'p:', initial(urlLru.split('|'))).map((stem, index) => {
     const editable = newEntity ? index >= l : index >= l - 1
     return {
       name: stem,
@@ -211,8 +212,8 @@ const EntityModal = ({
       name: state.name,
       crawl: true,
       copy: {
-        tags: state.tags,
-        notes: state.notes
+        tags: showCopyStep && state.tags,
+        notes: showCopyStep && state.notes
       },
     })
   , [state])

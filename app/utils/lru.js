@@ -2,7 +2,7 @@ const urlToLruRegExp = /^([^:\/?#]+):(?:\/\/([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:
 const authorityRegExp = /^(?:([^:]+)(?::([^@]+))?\@)?(\[[\da-f]*:[\da-f:]*\]|[^\s:]+)(?::(\d+))?$/i
 const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*\]/i
 
-import dropRightWhile from 'lodash/fp/dropRightWhile'
+import tail from 'lodash/fp/tail'
 import isEqual from 'lodash/fp/isEqual'
 import last from 'lodash/fp/last'
 
@@ -107,9 +107,16 @@ export function urlToLru (url, tldTree) {
       const [ host, tld ] = specialHostsRegExp.test(matchedHost)
         ? [ [ matchedHost.toLowerCase() ], '' ]
         : _lruHostInfo(matchedHost, tldTree)
-      const pathArray = dropRightWhile(isEmptySpace, (path || '').split('/'))
-      if (isEmptySpace(pathArray[0]) && pathArray.length >= 2) {
-        pathArray.shift()
+      // const pathArray = dropRightWhile(isEmptySpace, (path || '').split('/'))
+      // if (isEmptySpace(pathArray[0]) && pathArray.length >= 2) {
+      //   pathArray.shift()
+      // }
+      let pathArray = ['']
+      if (path !== '/') {
+        pathArray = (path || '').split('/')
+        if (pathArray[0] === '' && pathArray.length >= 2) {
+          pathArray = tail(pathArray)
+        }
       }
       return {
         scheme: scheme || 'http',
@@ -248,7 +255,6 @@ export function highlightUrlHTML (lrus, url, tldTree) {
   } else {
     path = ''
   }
-  const trailingSlashes = url.split(lruToUrl(urlLru))[1]
   // We have enough information, as it's a match we don't have to check again
   // if scheme, host, path, query, fragment… are matches
   return '<em>' + urlLru.scheme + '</em>://'
@@ -257,7 +263,6 @@ export function highlightUrlHTML (lrus, url, tldTree) {
         +(urlLru.tld && ('<em>.' + urlLru.tld + '</em>'))
         +(urlLru.port && ('<em>:' + urlLru.port + '</em>'))
         +path
-        +(trailingSlashes ? trailingSlashes : '')
         +(lruLru.query ? ('<em>?' + lruLru.query + '</em>') : (urlLru.query && ('?' + urlLru.query)))
         +(lruLru.fragment ? ('<em>#' + lruLru.fragment + '</em>') : (urlLru.fragment && ('#' + urlLru.fragment)))
 }
