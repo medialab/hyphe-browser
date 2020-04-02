@@ -146,13 +146,14 @@
             flex: 1
             margin-right: 5px
     .prefix-input-container
-        position: relative
-        stretch(row)
-        align-items: baseline
-        .prefix-setter
-            flex: 1
-            margin-right: 15px
-            overflow: auto;
+        display: flex
+        justify-content: space-between
+        flex-wrap: wrap
+        position relative
+
+        .actions-container
+            margin-left: auto
+            margin-top: 3px
     .modal-header
         h2
             stretch(row)

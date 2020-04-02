@@ -27,7 +27,7 @@ const PrefixSetter = function ({
     if (anchor) {
       const box = anchor.getBoundingClientRect()
       const x = box.x - container.current.getBoundingClientRect().x
-      setStartingX(Math.ceil(x + box.width))
+      setStartingX(Math.ceil(x + box.width + container.current.scrollLeft))
     }
   }
 
