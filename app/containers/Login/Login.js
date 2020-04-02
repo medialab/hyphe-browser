@@ -1,6 +1,7 @@
 import './login.styl'
 
 import React from 'react'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
@@ -26,9 +27,10 @@ class Login extends React.Component {
   refreshStatusAndCorpora (url) {
     const { fetchCorpora, fetchServerStatus, deselectServer, history } = this.props
     const { push: routerPush } = history
-    if (url === 'add') {
+
+    if (url === 'add' || url === 'create') {
       deselectServer()
-      routerPush('/login/server-form')
+      routerPush(url === 'add' ? '/login/server-form' : '/login/create-form')
       return
     }
 
@@ -64,6 +66,11 @@ class Login extends React.Component {
       value: 'add',
       key: 'server-add'
     })
+    options.push({
+      label: formatMessage({ id: 'server-create' }),
+      value: 'create',
+      key: 'server-create'
+    })
 
     return (
       <select
@@ -78,9 +85,9 @@ class Login extends React.Component {
   }
 
   render () {
-    const { 
-      selectedServer, 
-      location, 
+    const {
+      selectedServer,
+      location,
       servers,
       history,
       deleteServer
@@ -99,19 +106,20 @@ class Login extends React.Component {
       deleteServer(selectedServer)
       this.props.history.push('/login')
     }
+
     return (
       <div className="login">
         <main className="login-container">
           <LogoTitle />
-          <div className="config-container">
+          <div className={ cx('config-container', location.pathname === '/login/create-form' && 'large') }>
             {
               location.pathname === '/login' &&
               <div className="server-container">
                 <h3 className="section-header"><T id="choose-hyphe-server" /></h3>
                 <ServerSelect
                   { ...{
-                    selectedServer, 
-                    servers, 
+                    selectedServer,
+                    servers,
                     location,
                   } }
                   isDisabled={ location.pathname !== '/login' }
@@ -121,7 +129,7 @@ class Login extends React.Component {
                 />
               </div>
             }
-            
+
             { this.props.children}
           </div>
         </main>

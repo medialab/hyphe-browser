@@ -26,7 +26,7 @@ const ServerSelect = ({
       } : undefined,
     // add registered servers list
     ...servers.map((s) => ({
-      label: `${s.name} (${s.url})`,
+      label: s.name,
       value: s.url,
       key: s.url
     })),
@@ -34,6 +34,11 @@ const ServerSelect = ({
       label: formatMessage({ id: 'server-add' }),
       value: 'add',
       key: 'server-add'
+    },
+    {
+      label: formatMessage({ id: 'server-create' }),
+      value: 'create',
+      key: 'server-create'
     }
   ].filter(o => o)
 

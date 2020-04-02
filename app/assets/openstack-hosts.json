@@ -1,0 +1,12 @@
+{
+  "OVH": {
+    "publicCloudURL": "https://www.ovhcloud.com/fr/public-cloud/",
+    "keystone": "https://auth.cloud.ovh.net/v3/",
+    "image": {
+      "name": "Debian 8 - Docker",
+      "id": "e9565e58-357a-407b-8fba-6260ba23ac81"
+    },
+    "priceURL": "https://www.ovhcloud.com/fr/public-cloud/prices/",
+    "dataCenterURL": "https://www.ovhcloud.com/fr/public-cloud/prices/"
+  }
+}
