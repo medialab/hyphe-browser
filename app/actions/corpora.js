@@ -104,7 +104,7 @@ export const createCorpus = (server, corpus) => (dispatch) => {
 
   // create_corpus does not return the full created corpus
   // so we must trigger a full fetch of all corpora
-  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password])
+  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password || "", {}])
     .then((miniCorpus) => {
       if (miniCorpus.status === 'error') {
         return Promise.reject(miniCorpus)
