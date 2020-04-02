@@ -21,8 +21,8 @@ const CorpusCard = ({
     <li className="corpus-card" onClick={ handleSelectCorpus }>
       <h2 className="corpus-name">
         { name }
-        { password && <span className="info-icon hint--right" aria-label={formatMessage({id: 'password-protected'})}><i className="ti-lock"/></span> }
-        { status === 'ready' && <span className="info-icon hint--right" aria-label={formatMessage({id: 'running'})}><i className="ti-control-play"/></span> }
+        { password && <span className="info-icon hint--right" aria-label={ formatMessage({ id: 'password-protected' }) }><i className="ti-lock" /></span> }
+        { status === 'ready' && <span className="info-icon hint--right" aria-label={ formatMessage({ id: 'running' }) }><i className="ti-control-play" /></span> }
       </h2>
       <div className="corpus-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
       <div className="corpus-dates">
@@ -52,4 +52,4 @@ CorpusCard.propTypes = {
 
 
 
-export default CorpusCard;
+export default CorpusCard

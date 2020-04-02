@@ -78,13 +78,13 @@ const BrowserBarMockupContainer = ({
   return (
     <BrowserBar
       {
-        ...{
-          displayAddButton,
-          isHomePage,
-          isLanding,
-          edited,
-          setEdited,
-        }
+      ...{
+        displayAddButton,
+        isHomePage,
+        isLanding,
+        edited,
+        setEdited,
+      }
       }
     />
   )

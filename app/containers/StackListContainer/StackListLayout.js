@@ -127,21 +127,21 @@ const StackListLayout = ({
       <ul className="status-list-container">
         <EditionCartel
           isAlwaysOpen
-          title={formatMessage({ id: 'sidebar.overview.current-webentities-list' })}
-          help={formatMessage({ id: 'sidebar.overview.current-webentities-list-help' })}
+          title={ formatMessage({ id: 'sidebar.overview.current-webentities-list' }) }
+          help={ formatMessage({ id: 'sidebar.overview.current-webentities-list-help' }) }
         >
-          <div className={cx('status-list', { 'is-open': isOpen })}>
-            <ul className={cx('webentities-list-of-lists')}>
+          <div className={ cx('status-list', { 'is-open': isOpen }) }>
+            <ul className={ cx('webentities-list-of-lists') }>
               {
                 USED_STACKS.map((stack, index) => {
                   const handleSelectList = () => {
                     setSelectedList(stack.id)
                   }
                   return (
-                    <li key={index} onClick={handleSelectList} className={'list-name-container ' + (selectedList === stack.id ? 'is-active' : '')}>
+                    <li key={ index } onClick={ handleSelectList } className={ 'list-name-container ' + (selectedList === stack.id ? 'is-active' : '') }>
                       <span className="list-btn-container">
-                        <button className={`list-btn ${stack.value}`}>
-                          <T id={`stack-status.${stack.id}`} />
+                        <button className={ `list-btn ${stack.value}` }>
+                          <T id={ `stack-status.${stack.id}` } />
                           <HelpPin>
                             {formatMessage({ id: `stack-status.help.${stack.id}` })}
                           </HelpPin>
@@ -155,8 +155,8 @@ const StackListLayout = ({
                 })
               }
             </ul>
-            <button onClick={() => setOpen(!isOpen)} className="status-list-toggle">
-              <i className={isOpen ? 'ti-angle-up' : 'ti-angle-down'} />
+            <button onClick={ () => setOpen(!isOpen) } className="status-list-toggle">
+              <i className={ isOpen ? 'ti-angle-up' : 'ti-angle-down' } />
             </button>
           </div>
         </EditionCartel>
@@ -165,17 +165,17 @@ const StackListLayout = ({
       <div className="webentities-list-wrapper">
 
         <div className="webentities-list-container">
-          <div className={cx('webentities-list-header', { 'is-disabled': isEmpty })}>
+          <div className={ cx('webentities-list-header', { 'is-disabled': isEmpty }) }>
             <input
-              placeholder={formatMessage({ id: 'sidebar.overview.search-a-webentity' })}
-              value={searchString}
-              onChange={handleSearch}
+              placeholder={ formatMessage({ id: 'sidebar.overview.search-a-webentity' }) }
+              value={ searchString }
+              onChange={ handleSearch }
             />
-            <span className={cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue })}>
+            <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
 
               <button
-                aria-label={formatMessage({ id: 'filter' })}
-                onClick={() => setFilterOpen(!isFilterOpen)}
+                aria-label={ formatMessage({ id: 'filter' }) }
+                onClick={ () => setFilterOpen(!isFilterOpen) }
                 className="filter hint--bottom"
               >
                 {/* <T id="filter" /> <i className="ti-angle-down" /> */}
@@ -185,9 +185,9 @@ const StackListLayout = ({
 
               {isFilterOpen &&
                 <ul className="filter-options">
-                  <li className={cx('filter-option', { 'is-active': !filterValue })} onClick={() => handleSelectFilter()}><T id="sidebar.overview.show-all-we" /></li>
-                  <li className={cx('filter-option', { 'is-active': filterValue === 'no-tag' })} onClick={() => handleSelectFilter('no-tag')}><T id="sidebar.overview.show-only-no-tags" /></li>
-                  <li className={cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' })} onClick={() => handleSelectFilter('incomplete-tag')}><T id="sidebar.overview.show-only-incomplete-tags" /></li>
+                  <li className={ cx('filter-option', { 'is-active': !filterValue }) } onClick={ () => handleSelectFilter() }><T id="sidebar.overview.show-all-we" /></li>
+                  <li className={ cx('filter-option', { 'is-active': filterValue === 'no-tag' }) } onClick={ () => handleSelectFilter('no-tag') }><T id="sidebar.overview.show-only-no-tags" /></li>
+                  <li className={ cx('filter-option', { 'is-active': filterValue === 'incomplete-tag' }) } onClick={ () => handleSelectFilter('incomplete-tag') }><T id="sidebar.overview.show-only-incomplete-tags" /></li>
                 </ul>
               }
             </span>
@@ -195,7 +195,7 @@ const StackListLayout = ({
           {
             tabWebentity &&
             <div className="locate-container">
-              <button onClick={handleLocate} className={cx("btn locate hint--bottom", tabWebentity.status)} aria-label={formatMessage({ id: 'locate-currently-browsed-webentity-help' })}>
+              <button onClick={ handleLocate } className={ cx('btn locate hint--bottom', tabWebentity.status) } aria-label={ formatMessage({ id: 'locate-currently-browsed-webentity-help' }) }>
                 <T id="locate-currently-browsed-webentity" />
               </button>
             </div>
@@ -203,22 +203,22 @@ const StackListLayout = ({
           {
             counters[selectedStack] !== numberOfEntities &&
             <div className="actualize-container">
-              <button className="btn actualize" onClick={handleRefresh}>
+              <button className="btn actualize" onClick={ handleRefresh }>
                 {formatMessage({ id: 'actualize-entities-list' })}
                 {` (${counters[selectedStack] > numberOfEntities ? `+${counters[selectedStack] - numberOfEntities}` : `-${numberOfEntities - counters[selectedStack]}`})`}
               </button>
             </div>
           }
           <WebentitiesContainer
-            scrollTo={isLocating && `entity-card-${isLocating}`}
-            onScrollSuccess={handleLocateSuccess}
-            isLoading={isLoading}
-            isEmpty={isEmpty}
-            trigger={stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities}
+            scrollTo={ isLocating && `entity-card-${isLocating}` }
+            onScrollSuccess={ handleLocateSuccess }
+            isLoading={ isLoading }
+            isEmpty={ isEmpty }
+            trigger={ stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities }
           >
             {isEmpty ?
               <li className="placeholder-empty">
-                <T id="stack-status.no-webentities" values={{ list: selectedStack.toUpperCase() }} />
+                <T id="stack-status.no-webentities" values={ { list: selectedStack.toUpperCase() } } />
               </li>
               :
               stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
@@ -251,16 +251,16 @@ const StackListLayout = ({
 
                   return (
                     <EntityCard
-                      key={index}
-                      allowMerge={false}
-                      link={entity}
-                      isViewed={entity.viewed}
-                      isActive={isActive}
-                      onClickLink={handleClickLink}
-                      onClickOut={handleClickOut}
-                      onClickUndecided={handleClickUndecided}
-                      isUndecidedActive={statusActions[entity.id] === 'UNDECIDED'}
-                      isOutActive={statusActions[entity.id] === 'OUT'}
+                      key={ index }
+                      allowMerge={ false }
+                      link={ entity }
+                      isViewed={ entity.viewed }
+                      isActive={ isActive }
+                      onClickLink={ handleClickLink }
+                      onClickOut={ handleClickOut }
+                      onClickUndecided={ handleClickUndecided }
+                      isUndecidedActive={ statusActions[entity.id] === 'UNDECIDED' }
+                      isOutActive={ statusActions[entity.id] === 'OUT' }
                     />
                   )
                 })
@@ -270,7 +270,7 @@ const StackListLayout = ({
               stackWebentities[selectedStack] &&
               stackWebentities[selectedStack].token &&
               stackWebentities[selectedStack].next_page &&
-              <li className="entity-card pagination" onClick={handleLoadNextPage}>
+              <li className="entity-card pagination" onClick={ handleLoadNextPage }>
                 <T id="load-more-webentities" />
               </li>
             }
@@ -285,14 +285,14 @@ const StackListLayout = ({
             pendingActions && pendingActions.length > 0
             &&
             <ul className="actions-container">
-              <li onClick={resetActions} >
+              <li onClick={ resetActions } >
                 <button className="btn cancel-btn">
-                  <T id="discard-decisions" values={{ count: pendingActions.length }} />
+                  <T id="discard-decisions" values={ { count: pendingActions.length } } />
                 </button>
               </li>
-              <li onClick={submitActions}>
+              <li onClick={ submitActions }>
                 <button className="btn confirm-btn">
-                  <T id="apply-decisions" values={{ count: pendingActions.length }} />
+                  <T id="apply-decisions" values={ { count: pendingActions.length } } />
                 </button>
               </li>
             </ul>
@@ -300,7 +300,7 @@ const StackListLayout = ({
           {
             !isEmpty &&
             <div className="webentities-list-footer">
-              <DownloadListBtn onClickDownload={handleDownloadList} />
+              <DownloadListBtn onClickDownload={ handleDownloadList } />
             </div>
           }
         </div>

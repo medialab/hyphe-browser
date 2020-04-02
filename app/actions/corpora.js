@@ -7,7 +7,6 @@
 import jsonrpc from '../utils/jsonrpc'
 // for redirections after success / errors from server
 import { push } from 'connected-react-router'
-import { addHypheTab } from './tabs'
 
 import { createAction } from 'redux-actions'
 

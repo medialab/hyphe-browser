@@ -113,7 +113,9 @@ export default createReducer(initialState, {
 function updateTab (state, id, updates) {
   const foundTab = state.tabs.find((tab) => tab.id === id)
   const updatedTab = { ...foundTab, ...updates(foundTab) }
-  const tabs = state.tabs.map((tab) => (tab.id === id) ? updatedTab : tab)
+  const tabs = state.tabs.map((tab) => {
+    return (tab.id === id) ? updatedTab : tab
+  })
   const activeTab = (state.activeTab && state.activeTab.id === id) ? updatedTab : state.activeTab
 
   return { ...state, tabs, activeTab }

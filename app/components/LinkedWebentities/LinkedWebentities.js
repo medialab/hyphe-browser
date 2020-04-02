@@ -79,7 +79,7 @@ const LinkedWebentities = ({
                 setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
               }
 
-              const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id);
+              const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id)
                             
               return (
                 <EntityCard 
@@ -109,11 +109,11 @@ const LinkedWebentities = ({
             <ul className="actions-container">
               <li onClick={ resetActions } >
                 <button className="btn cancel-btn">
-                  <T id="discard-decisions" values={{ count: pendingActions.length }} />
+                  <T id="discard-decisions" values={ { count: pendingActions.length } } />
                 </button>
               </li>
               <li onClick={ submitActions }><button className="btn confirm-btn">
-                <T id="apply-decisions" values={{ count: pendingActions.length }} />
+                <T id="apply-decisions" values={ { count: pendingActions.length } } />
               </button></li>
             </ul>
           }

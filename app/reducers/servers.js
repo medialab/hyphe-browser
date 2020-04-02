@@ -48,7 +48,9 @@ export default createReducer(initialState, {
 
   [UPDATE_SERVER]: (state, { server }) => ({
     ...state,
-    list: state.list.map(s => s.id === server.id ? server : s),
+    list: state.list.map(s => {
+      return s.id === server.id ? server : s
+    }),
     selected: server
   }),
 

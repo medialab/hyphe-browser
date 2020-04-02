@@ -16,7 +16,7 @@ const Tooltipable = ({
   children,
   Tag = 'div',
   style = {},
-  className = "",
+  className = '',
   ...props
 }) => {
   const container = useRef(null)
@@ -50,19 +50,19 @@ const Tooltipable = ({
   return (
     <>
       <Tag 
-        {...props} 
-        style={style}
-        onMouseEnter={handleMouseEnter}  
-        onMouseLeave={handleMouseLeave}  
-        className={`${className.replace('hint', '')} ${isHovered ? 'is-hidden': ''} tooltipable-anchor`}
-        ref={container} 
+        { ...props } 
+        style={ style }
+        onMouseEnter={ handleMouseEnter }  
+        onMouseLeave={ handleMouseLeave }  
+        className={ `${className.replace('hint', '')} ${isHovered ? 'is-hidden': ''} tooltipable-anchor` }
+        ref={ container } 
       >
         {children}
       </Tag>
       {/* <div style={{display: 'inline-block', width: 0, height: 0}} ref={targetRef} /> */}
       <Tag 
-        {...props} 
-        className={`${className} ${isHovered ? 'is-visible': ''} tooltipable-placeholder hint--always`}
+        { ...props } 
+        className={ `${className} ${isHovered ? 'is-visible': ''} tooltipable-placeholder hint--always` }
         style={ { 
           ...style, 
           position: 'fixed', 

@@ -162,8 +162,8 @@ storiesOf('Splash screen & loading', module)
  */
 import ServerChoice from './ServerChoice'
 storiesOf('Server choice', module)
-.add('No server chosen', () => <ServerChoice noServer />)
-.add('Server choice (loading)', () => <ServerChoice loading />)
-.add('Server choice', () => <ServerChoice />)
-.add('Add a new server', () => <ServerChoice newServer />)
-.add('Add a new corpus', () => <ServerChoice newCorpus />)
+  .add('No server chosen', () => <ServerChoice noServer />)
+  .add('Server choice (loading)', () => <ServerChoice loading />)
+  .add('Server choice', () => <ServerChoice />)
+  .add('Add a new server', () => <ServerChoice newServer />)
+  .add('Add a new corpus', () => <ServerChoice newCorpus />)

@@ -35,7 +35,7 @@ class HypheView extends React.Component {
 
     if (DEBUG_WEBVIEW) {
       webview.addEventListener('console-message', (e) => {
-        console.log('[HypheView console]', e.message)
+        console.log('[HypheView console]', e.message) // eslint-disable-line no-console
       })
     }
   }

@@ -161,7 +161,8 @@ class BrowserTabsContainer extends React.Component {
                 selectedEngine = { searchEngines[corpus.corpus_id] || 'google' }
                 onChangeEngine = { handleChangeEngine }
                 disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
-                disableNavigatioFn={ !tab.navigable } />)
+                disableNavigatioFn={ !tab.navigable }
+              />)
           })
         }
       </div>

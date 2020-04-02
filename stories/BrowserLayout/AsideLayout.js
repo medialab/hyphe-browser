@@ -44,20 +44,20 @@ const AsideLayout = function ({
               isEmpty={ isEmpty } 
               status={ status } 
               {
-                ...{
-                  hasPendingActions,
-                  setSelectedList,
-                  setUndecidedActions,
-                  setOutActions,
-                  setMergeActions,
-                  selectedList,
-                  isOpen,
-                  setOpen,
-                  mergeActions,
-                  outActions,
-                  undecidedActions,
-                  resetActions
-                }
+              ...{
+                hasPendingActions,
+                setSelectedList,
+                setUndecidedActions,
+                setOutActions,
+                setMergeActions,
+                selectedList,
+                isOpen,
+                setOpen,
+                mergeActions,
+                outActions,
+                undecidedActions,
+                resetActions
+              }
               }
             />
             :

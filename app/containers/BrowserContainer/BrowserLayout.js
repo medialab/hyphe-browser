@@ -53,50 +53,52 @@ const BrowserLayout = ({
   return (
     <div className="browser-layout">
       <BrowserHeader
-        corpus={corpus}
-        status={status}
-        browserMode={browserMode}
-        onSetBrowserMode={setBrowserMode} />
+        corpus={ corpus }
+        status={ status }
+        browserMode={ browserMode }
+        onSetBrowserMode={ setBrowserMode }
+      />
       {ready ?
         <div
           className="browser-main-container"
-          style={browserMode === 'browse' ? {} : { display: 'none' }}>
+          style={ browserMode === 'browse' ? {} : { display: 'none' } }
+        >
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
-              <li><button onClick={() => onSetAsideMode('stackList')} className={cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) })}>
+              <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
                 <span className="switch-mode-title">
                   <span
-                    className={cx('current-stack-indicator hint--right', selectedStack)}
-                    aria-label={formatMessage({ id: 'overview-location' }, { status: formatStackName(selectedStack) })}
+                    className={ cx('current-stack-indicator hint--right', selectedStack) }
+                    aria-label={ formatMessage({ id: 'overview-location' }, { status: formatStackName(selectedStack) }) }
                   >
-                      <i className="ti-menu" />
+                    <i className="ti-menu" />
                   </span>
                   <T id="sidebar.inquiry-overview" />
 
-                  <HelpPin>{formatMessage({ id: "sidebar.inquiry-overview-help" })}</HelpPin></span></button>
+                  <HelpPin>{formatMessage({ id: 'sidebar.inquiry-overview-help' })}</HelpPin></span></button>
               </li>
               <li>
-                <button disabled={isLanding} onClick={() => onSetAsideMode('webentityBrowse')} className={cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) })}>
+                <button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
                   <span className="switch-mode-title">
                     <span
-                      className={cx('current-stack-indicator hint--bottom', webentity && webentity.status)}
-                      aria-label={formatMessage({ id: 'currently-browsed-webentity-location' }, { status: formatStackName(webentity && webentity.status) })}
+                      className={ cx('current-stack-indicator hint--bottom', webentity && webentity.status) }
+                      aria-label={ formatMessage({ id: 'currently-browsed-webentity-location' }, { status: formatStackName(webentity && webentity.status) }) }
                     >
                       <i className="ti-desktop" />
                     </span>
                     <T id="sidebar.browsed-webentity" />
 
-                    <HelpPin>{formatMessage({ id: "sidebar.browsed-webentity-help" })}</HelpPin>
+                    <HelpPin>{formatMessage({ id: 'sidebar.browsed-webentity-help' })}</HelpPin>
                   </span>
                 </button>
               </li>
             </ul>
-            <div className="aside-content" style={(asideMode === 'webentityBrowse' && !isLanding) ? {} : { display: 'none' }}>
+            <div className="aside-content" style={ (asideMode === 'webentityBrowse' && !isLanding) ? {} : { display: 'none' } }>
               <WebentityBrowseContainer />
             </div>
-            <div className="aside-content" style={(asideMode === 'stackList' || isLanding) ? {} : { display: 'none' }}>
+            <div className="aside-content" style={ (asideMode === 'stackList' || isLanding) ? {} : { display: 'none' } }>
               <StackListContainer
-                setAsideMode={onSetAsideMode}
+                setAsideMode={ onSetAsideMode }
               />
             </div>
           </aside>
@@ -110,9 +112,10 @@ const BrowserLayout = ({
       }
 
       <HypheView
-        style={browserMode === 'hyphe' ? {} : { display: 'none' }}
-        isHypheView={browserMode === 'hyphe'}
-        url={hypheUrl} onOpenTabFromHyphe={handleOpenTabFromHyphe} />
+        style={ browserMode === 'hyphe' ? {} : { display: 'none' } }
+        isHypheView={ browserMode === 'hyphe' }
+        url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe }
+      />
     </div>
   )
 }

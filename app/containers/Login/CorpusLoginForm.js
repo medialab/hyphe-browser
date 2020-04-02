@@ -10,7 +10,7 @@ import { selectCorpus } from '../../actions/corpora'
 import jsonrpc from '../../utils/jsonrpc'
 
 class CorpusLoginForm extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       submitting: false,
@@ -35,28 +35,28 @@ class CorpusLoginForm extends React.Component {
       })
   }
 
-  render() {
+  render () {
     const { intl: { formatMessage } } = this.props
     return (
-      <form className="server-form" onSubmit={this.onSubmit}>
+      <form className="server-form" onSubmit={ this.onSubmit }>
         <h3 className="section-header">
-          <T id="login-corpus" values={{ name: this.props.corpus.name }} />
+          <T id="login-corpus" values={ { name: this.props.corpus.name } } />
         </h3>
 
         {this.state.errors.map((error) =>
-          <div className="form-error" key={error}><T id={error} /></div>
+          <div className="form-error" key={ error }><T id={ error } /></div>
         )}
 
         <div className="form-group">
           <label><T id="password" /></label>
-          <input placeholder={formatMessage({id: 'password'})} autoFocus type="password" onChange={(evt) => this.setState({ password: evt.target.value })} />
+          <input placeholder={ formatMessage({ id: 'password' }) } autoFocus type="password" onChange={ (evt) => this.setState({ password: evt.target.value }) } />
         </div>
         <div className="buttons-row">
           <li>
             <Link className="btn btn-error" to="/login"><T id="cancel" /></Link>
           </li>
           <li>
-            <button className="btn btn-primary" disabled={this.state.submitting}>
+            <button className="btn btn-primary" disabled={ this.state.submitting }>
               <T id="connect" />
             </button>
           </li>

@@ -9,7 +9,8 @@ export default ({
 }) => (
   <button 
     className="download-list-btn"
-    onClick={ onClickDownload }>
+    onClick={ onClickDownload }
+  >
     <T id="sidebar.contextual.downloadToCSV" />
     <span>&nbsp;</span>
     <span className="ti-download" />

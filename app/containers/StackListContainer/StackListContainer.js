@@ -49,9 +49,13 @@ const StackListContainer = ({
   
   const handleDownloadList = (list) => {
     const fileName = `${corpusId}_${selectedStack}`
-    const parsedWebentity = list.map(
-      (we) => we.tags ? fieldParser(we, tlds, 'csv') : we
-    )
+    const parsedWebentity = list.map((we) => {
+      if (we.tags) {
+        return fieldParser(we, tlds, 'csv')
+      } else {
+        return we
+      }
+    })
 
     const flatList = flatTag(parsedWebentity)
     downloadFile(flatList, fileName, 'csv')
@@ -78,22 +82,25 @@ const StackListContainer = ({
   const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   if (!selectedStack) return null
-  return (<StackListLayout
-    counters={ counters }
-    stackWebentities = { stackWebentities }
-    selectedStack={ selectedStack }
-    stackFilter={ stackFilter }
-    loadingStack={ loadingStack }
-    loadingWebentity= { loadingWebentity }
-    loadingBatchActions = { loadingBatchActions }
-    tabWebentity={ tabWebentity }
-    onSelectWebentity={ handleSelectWebentity }
-    onDownloadList={ handleDownloadList }
-    onSetTabUrl={ handleSetTabUrl }
-    onSelectStack= { handleSelectStack }
-    onLoadNextPage={ handleFetchStackPage }
-    onOpenTab={ handleOpenTab }
-    onBatchActions = { handleBatchActions } />)
+  return (
+    <StackListLayout
+      counters={ counters }
+      stackWebentities = { stackWebentities }
+      selectedStack={ selectedStack }
+      stackFilter={ stackFilter }
+      loadingStack={ loadingStack }
+      loadingWebentity= { loadingWebentity }
+      loadingBatchActions = { loadingBatchActions }
+      tabWebentity={ tabWebentity }
+      onSelectWebentity={ handleSelectWebentity }
+      onDownloadList={ handleDownloadList }
+      onSetTabUrl={ handleSetTabUrl }
+      onSelectStack= { handleSelectStack }
+      onLoadNextPage={ handleFetchStackPage }
+      onOpenTab={ handleOpenTab }
+      onBatchActions = { handleBatchActions }
+    />
+  )
 }
 
 

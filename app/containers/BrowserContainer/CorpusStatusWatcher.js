@@ -11,8 +11,7 @@ import { fetchStack } from '../../actions/stacks'
 
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
-  ERROR_CORPUS_NOT_STARTED,
-  ERROR_SERVER_NO_RESOURCE
+  ERROR_CORPUS_NOT_STARTED
 } from '../../constants'
 
 class CorpusStatusWatcher extends React.Component {
@@ -51,20 +50,15 @@ class CorpusStatusWatcher extends React.Component {
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
       if (!status.corpus.ready) {
         // TODO: test number of corpus started ?
-        if (true) {
-          // Resources available: start corpus
-          showError({ id: ERROR_CORPUS_NOT_STARTED, messageId: 'error.corpus-not-started-starting', fatal: true })
-          return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
-            showError({ messageId: 'error.corpus-failed-starting', messageValues: { error: err.message }, fatal: true })
-          }).then(() => {
-            hideError()
-            // Specific case: we want the next status query to happen ASAP
-            return true
-          })
-        } else {
-          // No resource, such a dramatic failure :(
-          showError({ id: ERROR_SERVER_NO_RESOURCE, messageId: 'error.corpus-not-started-no-resource', fatal: true })
-        }
+        // Resources available: start corpus
+        showError({ id: ERROR_CORPUS_NOT_STARTED, messageId: 'error.corpus-not-started-starting', fatal: true })
+        return startCorpus(serverUrl, corpus, corpusPassword).catch((err) => {
+          showError({ messageId: 'error.corpus-failed-starting', messageValues: { error: err.message }, fatal: true })
+        }).then(() => {
+          hideError()
+          // Specific case: we want the next status query to happen ASAP
+          return true
+        })
       } else {
         // Corpus is ready: initialize data
         if (this.shouldInitializedCorpusData) {

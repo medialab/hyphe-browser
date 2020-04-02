@@ -1,34 +1,34 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 
 import './ServerChoice.styl'
 
 import LogoTitle from '../LogoTitle'
 
-const CorporaList = ({loading}) => {
-  const [modalOpen, setModalOpen] = useState(false);
+const CorporaList = ({ loading }) => {
+  const [modalOpen, setModalOpen] = useState(false)
   return (
     <div className="config-container">
       <div className="server-container">
         <h3 className="section-header">Choose a hyphe server</h3>
         <div className="select-container">
           <select
-              autoFocus
-              value = { 'server-1' }
-            >
-              <option value="Sélectionner un serveur">Select a server</option>
-              <option value="server-1">Serveur 1</option>
-              <option value="server-2">Serveur 2</option>
-              <option value="add">Add a server</option>
-            </select>
-            <button className="hint--bottom" aria-label="Edit server information">
-              <i className="ti-pencil" />
-            </button>
-            <button onClick={() => setModalOpen(true)} className="hint--bottom" aria-label="Forget server">
-              <i className="ti-trash" />
-            </button>
-          </div>
+            autoFocus
+            value = { 'server-1' }
+          >
+            <option value="Sélectionner un serveur">Select a server</option>
+            <option value="server-1">Serveur 1</option>
+            <option value="server-2">Serveur 2</option>
+            <option value="add">Add a server</option>
+          </select>
+          <button className="hint--bottom" aria-label="Edit server information">
+            <i className="ti-pencil" />
+          </button>
+          <button onClick={ () => setModalOpen(true) } className="hint--bottom" aria-label="Forget server">
+            <i className="ti-trash" />
+          </button>
         </div>
+      </div>
       <div>
         {!loading && <h3>Choose a corpus</h3>}
         {!loading &&
@@ -39,19 +39,19 @@ const CorporaList = ({loading}) => {
         }
       </div>
       {loading ?
-      <div className="loading-container">
+        <div className="loading-container">
         Loading corpora list<span>.</span><span>.</span><span>.</span>
-      </div>
-      :
-      <ul className="corpora-list-container">
-        {Array(10).fill(1).map((e, i) => <li key={i} className="corpus-card">
-          <h2>Nom du corpus</h2>
-          <h3>3 webentities</h3>
-          <div className="corpus-dates">
+        </div>
+        :
+        <ul className="corpora-list-container">
+          {Array(10).fill(1).map((e, i) => (<li key={ i } className="corpus-card">
+            <h2>Nom du corpus</h2>
+            <h3>3 webentities</h3>
+            <div className="corpus-dates">
             Created 2 minutes ago - used 2 minutes ago
-          </div>
-        </li>)}
-      </ul>
+            </div>
+          </li>))}
+        </ul>
       }
       {!loading && <div className="create-corpus-container">
         <button>
@@ -59,9 +59,9 @@ const CorporaList = ({loading}) => {
         </button>
       </div>}
       <Modal 
-        isOpen={modalOpen} 
-        onRequestClose={() => setModalOpen(false)}
-        style={{
+        isOpen={ modalOpen } 
+        onRequestClose={ () => setModalOpen(false) }
+        style={ {
           content: {
             width: 700,
             maxWidth: '90vw',
@@ -72,10 +72,10 @@ const CorporaList = ({loading}) => {
             overflow: 'hidden',
             padding: 0
           }
-        }}
+        } }
       >
-        <div style={{marginBottom: '10px', padding: '10px'}}>Are you sure you want to forget this server (you will have to re-enter its URL if you change your mind) ?</div>
-        <ul onClick={() => setModalOpen(false)} className="buttons-row">
+        <div style={ { marginBottom: '10px', padding: '10px' } }>Are you sure you want to forget this server (you will have to re-enter its URL if you change your mind) ?</div>
+        <ul onClick={ () => setModalOpen(false) } className="buttons-row">
           <li>
             <btn className="btn btn-error">
               Cancel
@@ -102,9 +102,9 @@ const ServerChoice = ({
   return (
     <div className="server-choice">
       <div className="server-choice-container">
-          <LogoTitle />
-          {
-            noServer ?
+        <LogoTitle />
+        {
+          noServer ?
             <div className="config-container">
               <h3 className="section-header">Choose a hyphe server</h3>
               <select
@@ -119,19 +119,19 @@ const ServerChoice = ({
             </div>
             :
             null
-          }
-          {
-            newServer &&
+        }
+        {
+          newServer &&
             <div className="config-container">
               <h3 className="section-header">Create/configure a server information</h3>
               <div className="config-form">
                 <div className="field">
                   <label>Choose a name for the hyphe server</label>
-                  <input placeholder="Server name" value="pprd"/>
+                  <input placeholder="Server name" value="pprd" />
                 </div>
                 <div className="field">
                   <label>Indicate the hyphe server's URL</label>
-                  <input placeholder="Server URL" value="https://hyphe.medialab.sciences-po.fr/demo/api/"/>
+                  <input placeholder="Server URL" value="https://hyphe.medialab.sciences-po.fr/demo/api/" />
                 </div>
               </div>
               <ul className="buttons-row">
@@ -149,27 +149,27 @@ const ServerChoice = ({
                 </li>
               </ul>
             </div>
-          }
-          {
-            newCorpus &&
+        }
+        {
+          newCorpus &&
             <div className="config-container">
               <h3 className="section-header">Create a new corpus</h3>
               <div className="config-form">
                 <div className="field">
                   <label>Corpus name</label>
-                  <input placeholder="Corpus name"/>
+                  <input placeholder="Corpus name" />
                 </div>
                 <div className="field horizontal">
-                  <input type="radio"/>
+                  <input type="radio" />
                   <label>password protected (optional)</label>
                 </div>
                 <div className="field">
                   <label>Corpus password</label>
-                  <input placeholder="Corpus password" type="password"/>
+                  <input placeholder="Corpus password" type="password" />
                 </div>
                 <div className="field">
                   <label>Confirm corpus password</label>
-                  <input placeholder="Corpus password" type="password"/>
+                  <input placeholder="Corpus password" type="password" />
                 </div>
               </div>
               <ul className="buttons-row">
@@ -187,12 +187,12 @@ const ServerChoice = ({
                 </li>
               </ul>
             </div>
-          }
-          {
-            (!newServer && !newCorpus && !noServer) &&
-            <CorporaList loading={loading} />
-          }
-        </div>
+        }
+        {
+          (!newServer && !newCorpus && !noServer) &&
+            <CorporaList loading={ loading } />
+        }
+      </div>
     </div>
   )
 }

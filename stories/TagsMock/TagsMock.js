@@ -121,13 +121,13 @@ const TagsMock = function ({ startingCategories = [] }){
       >
         <Tags 
           {
-            ...{
-              onNewCat,
-              categories,
-              setCategories,
-              newCategoryStr, 
-              setNewCategoryStr,
-            }
+          ...{
+            onNewCat,
+            categories,
+            setCategories,
+            newCategoryStr, 
+            setNewCategoryStr,
+          }
           }
         />
       </EditionCartel>

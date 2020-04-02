@@ -20,7 +20,6 @@ import { setLocale } from './actions/intl'
 import { DEFAULT_LOCALE } from './constants'
 
 import getOption from './utils/get-option'
-import jsonrpc from './utils/jsonrpc'
 
 const store = configureStore()
 

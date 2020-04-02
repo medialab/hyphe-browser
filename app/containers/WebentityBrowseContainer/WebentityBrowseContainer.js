@@ -39,8 +39,6 @@ const WebentityBrowseContainer = ({
   tlds,
   stacks,
   // actions
-  fetchStack,
-  selectStack,
   setTabUrl,
   openTab,
   setWebentityName,
@@ -69,7 +67,7 @@ const WebentityBrowseContainer = ({
     }
   }, [webentity && webentity.id])
 
-  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : [];
+  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)

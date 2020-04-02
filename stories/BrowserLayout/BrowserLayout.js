@@ -1,6 +1,6 @@
 import './BrowserLayout.styl'
 
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import BrowserBar from '../BrowserBarMock'
 import NewTabContent from '../NewTabContent'
@@ -47,18 +47,18 @@ const BrowserLayout = ({
   const onSetAsideMode = mode => {
     if (mode === 'browse') {
       if (hasPendingActions) {
-        setActionsPendingModalOpen(true);
+        setActionsPendingModalOpen(true)
       } else {
-        setAsideMode(mode);
+        setAsideMode(mode)
       }
     } else {
-      setAsideMode(mode);
+      setAsideMode(mode)
     }
   }
 
   const onCloseActionsPendingModalOpen = () => {
-    setActionsPendingModalOpen(false);
-    setAsideMode('browse');
+    setActionsPendingModalOpen(false)
+    setAsideMode('browse')
   }
   
   return (
@@ -82,7 +82,8 @@ const BrowserLayout = ({
           resetActions,
           asideMode,
           onSetAsideMode
-        } } />
+        } }
+        />
         <section className="browser-column browser-main-column">
           <BrowserTabs isEmpty={ isEmpty } />
           <BrowserBar isLanding={ isLanding } displayAddButton={ status === 'in' } />
@@ -110,7 +111,7 @@ const BrowserLayout = ({
           }
         } }
       >
-         <div className="pending-actions-modal-container">
+        <div className="pending-actions-modal-container">
           <div className="modal-header">
             <h2><span>Unresolved decisions on webentities</span><i onClick={ onCloseActionsPendingModalOpen } className="ti-close" /></h2>
           </div>

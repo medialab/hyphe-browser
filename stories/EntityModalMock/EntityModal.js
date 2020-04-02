@@ -141,7 +141,7 @@ const EntityModal = ({
               <form className="settings-container">
                 <ul >
                   <li>
-                    <input id="copy-tags" type="checkbox"/><label htmlFor="copy-tags">Copy existing tags</label>
+                    <input id="copy-tags" type="checkbox" /><label htmlFor="copy-tags">Copy existing tags</label>
                   </li>
                   <li>
                     <input id="copy-notes" type="checkbox" /><label htmlFor="copy-notes">Copy existing notes</label>

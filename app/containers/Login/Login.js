@@ -8,8 +8,8 @@ import { FormattedMessage as T, injectIntl } from 'react-intl'
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import { deselectServer, deleteServer } from '../../actions/servers'
 
-import LogoTitle from '../../components/LogoTitle';
-import ServerSelect from '../../components/ServerSelect';
+import LogoTitle from '../../components/LogoTitle'
+import ServerSelect from '../../components/ServerSelect'
 
 
 class Login extends React.Component {
@@ -68,7 +68,7 @@ class Login extends React.Component {
     return (
       <select
         autoFocus
-        value = { selectedServer ? selectedServer.url : "" }
+        value = { selectedServer ? selectedServer.url : '' }
         disabled={ location.pathname !== '/login' }
         onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
       >
@@ -109,15 +109,15 @@ class Login extends React.Component {
               <div className="server-container">
                 <h3 className="section-header"><T id="choose-hyphe-server" /></h3>
                 <ServerSelect
-                  {...{
+                  { ...{
                     selectedServer, 
                     servers, 
                     location,
-                  }}
-                  isDisabled={location.pathname !== '/login'}
-                  onChange={url => this.refreshStatusAndCorpora(url)}
-                  onEdit={handleEditServer}
-                  onForget={handleForget}
+                  } }
+                  isDisabled={ location.pathname !== '/login' }
+                  onChange={ url => this.refreshStatusAndCorpora(url) }
+                  onEdit={ handleEditServer }
+                  onForget={ handleForget }
                 />
               </div>
             }

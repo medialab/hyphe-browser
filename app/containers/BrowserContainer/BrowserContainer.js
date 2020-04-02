@@ -38,9 +38,13 @@ class BroswerContainer extends React.Component {
     if (list.length === 0) return
     const { tlds, corpus } = this.props
     const corpusId = corpus.corpus_id
-    const parsedWebentity = list.map(
-      (we) => we.tags ? fieldParser(we, tlds, fileFormat) : we
-    )
+    const parsedWebentity = list.map((we) => {
+      if (we.tags) {
+        return fieldParser(we, tlds, fileFormat)
+      } else {
+        return we
+      }
+    })
     const fileName = `${corpusId}_${listName}`
     if (fileFormat === 'csv') {
       const flatList = flatTag(parsedWebentity)
@@ -102,11 +106,12 @@ class BroswerContainer extends React.Component {
         <BrowserLayout 
           corpus={ corpus }
           status={ status }
-          webentity={webentity}
+          webentity={ webentity }
           selectedStack={ selectedStack }
           isLanding = { activeTab.url === PAGE_HYPHE_HOME }
           instanceUrl={ instanceUrl }
-          openTab={ openTab } />
+          openTab={ openTab }
+        />
         }
         <Notification />
       </CorpusStatusWatcher>
