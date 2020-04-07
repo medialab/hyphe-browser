@@ -122,7 +122,11 @@ const modalReducer = (state, action) => {
     return {
       ...state,
       name: action.payload,
-      step: 4
+    }
+  case 'VALIDATE_NAME':
+    return {
+      ...state,
+      step: 4,
     }
   case 'SET_PAGE':
     return {
@@ -233,10 +237,11 @@ const EntityModal = ({
   const nameRef = React.useRef(null)
   const onNameConfirm = useCallback(() => {
     if (nameRef.current.value.length) {
-      dispatch({ type: 'SET_NAME', payload: nameRef.current.value })
+      dispatch({ type: 'VALIDATE_NAME', payload: nameRef.current.value })
     }
   }, [])
-  const onInputChange = useCallback(() => {
+  const onInputChange = useCallback((e) => {
+    dispatch({ type: 'SET_NAME', payload: e.target.value })
     if (state.step !== 3) {
       dispatch({ type: 'SET_STEP', payload: 3 })
     }
@@ -311,7 +316,7 @@ const EntityModal = ({
                 onChange={ onInputChange }
               />
               <ul className="actions-container">
-                <li><button disabled={ state.step !== 3 }  onClick={ onNameConfirm } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button></li>
+                <li><button disabled={ state.step !== 3 || !state.name }  onClick={ onNameConfirm } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button></li>
               </ul>
             </div>
           </div>
