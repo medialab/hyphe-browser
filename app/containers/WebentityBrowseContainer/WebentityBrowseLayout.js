@@ -236,7 +236,7 @@ const WebentityBrowseLayout = ({
         >
           {
             webentity.mostLinked ?
-              <KnownPages 
+              <KnownPages
                 list={ webentity.mostLinked }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }

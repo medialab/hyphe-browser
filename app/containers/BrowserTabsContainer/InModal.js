@@ -35,7 +35,11 @@ const PagesList = ({
     { pages.length ? pages.map((link, index) => {
       return (
         <KnownPageCard
-          isActive={ index === selectedPage } onClick={ () => setSelectedPage(index) } key={ index } { ...link }
+          isActive={ index === selectedPage }
+          onClick={ () => setSelectedPage(index) }
+          key={ index }
+          { ...link }
+          innerWidth={ 560 }
           displayHomePageButton={ false }
         />
       )
@@ -78,7 +82,6 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
 }
 
 const orderList = (mostLinked, prefix, tabLru) => {
-  console.log(prefix, tabLru, mostLinked)
   if (mostLinked) {
     return [tabLru, prefix].reduce((accumulator, value) => {
       if (!accumulator.some(({ lru }) => lru === value)) {

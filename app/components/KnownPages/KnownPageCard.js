@@ -3,6 +3,7 @@ import cx from 'classnames'
 import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import Tooltipable from '../Tooltipable'
+const letterWidth = 7.19
 
 export const KnownPageCard = ({
   id,
@@ -11,17 +12,19 @@ export const KnownPageCard = ({
   isActive,
   isHomepage,
   displayHomePageButton = true,
-
+  innerWidth = 2048,
   onClick,
   onClickHomepage
 }) => {
 
   const { formatMessage } = useIntl()
 
+  const maxLetters = Math.ceil(innerWidth / letterWidth)
+
   return (
     <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id } title={ url }>
       <div className="card-content">
-        <div className="known-page-url" >{ url }</div>
+        <div className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</div>
         {linked && <div className="known-page-statistics">
           { formatMessage({ id: 'linked' }) }
           <T className="link-linked" id="linkedtimes" values={ { count: linked } } />
