@@ -77,9 +77,10 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
   })
 }
 
-const orderList = (mostLinked, prefix, tabUrl) => {
+const orderList = (mostLinked, prefix, tabLru) => {
+  console.log(prefix, tabLru, mostLinked)
   if (mostLinked) {
-    return [tabUrl, prefix].reduce((accumulator, value) => {
+    return [tabLru, prefix].reduce((accumulator, value) => {
       if (!accumulator.some(({ lru }) => lru === value)) {
         return [
           {
