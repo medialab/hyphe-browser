@@ -139,6 +139,28 @@ const WebentityBrowseContainer = ({
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
   const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), [categories])
+
+  const [cartels, dispatchCartels] = React.useReducer(
+    (state, action) => ({
+      ...state,
+      [action.type]: action.payload
+    }), {
+      tags: false,
+      notes: false,
+      knownPages: false,
+      linkedentities: false,
+      name: true,
+      status: true,
+    }
+  )
+
+  const setCartels = React.useCallback((type, status) =>
+    dispatchCartels({
+      type,
+      payload: status
+    })
+  , [])
+
   /**
    * Display loading bar if no we is provided
    */
@@ -170,6 +192,8 @@ const WebentityBrowseContainer = ({
       onSetWebentityStatus={ handleSetWenentityStatus }
       onSetWebentityName={ handleSetWebentityName }
       onSetWebentityHomepage={ handleSetWebentityHomepage }
+      cartels={ cartels }
+      setCartels={ setCartels }
     />
   )
 }

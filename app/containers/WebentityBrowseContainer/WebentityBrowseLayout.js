@@ -44,15 +44,10 @@ const WebentityBrowseLayout = ({
   onAddTag,
   onUpdateTag,
   onRemoveTag,
+  cartels,
+  setCartels,
 }) => {
   const { formatMessage } = useIntl()
-
-  const [knownPagesOpen, setKnownPagesOpen] = useState(false)
-  const [linkedEntitiesOpen, setLinkedEntitiesOpen] = useState(false)
-  const [tagsOpen, setTagsOpen] = useState(false)
-  const [notesOpen, setNotesOpen] = useState(false)
-  const [nameOpen, setNameOpen] = useState(true)
-  const [statusOpen, setStatusOpen] = useState(true)
 
   /**
    * Linked entities related
@@ -187,8 +182,8 @@ const WebentityBrowseLayout = ({
       <ul className="browse-edition-container">
         
         <EditionCartel
-          isOpen={ statusOpen }
-          onToggle={ () => setStatusOpen(!statusOpen) }
+          isOpen={ cartels.status }
+          onToggle={ () => setCartels('status', !cartels.status) }
           title={ formatMessage({ id: 'sidebar.cartel.webentity-status-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.webentity-status-help' }) }
           helpPlace={ 'right' }
@@ -217,8 +212,8 @@ const WebentityBrowseLayout = ({
         </EditionCartel>
   
         <EditionCartel
-          isOpen={ nameOpen }
-          onToggle={ () => setNameOpen(!nameOpen) }
+          isOpen={ cartels.name }
+          onToggle={ () => setCartels('name', !cartels.name) }
           title={ formatMessage({ id: 'sidebar.cartel.webentity-name-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.webentity-name-help' }) }
         >
@@ -229,8 +224,8 @@ const WebentityBrowseLayout = ({
           />
         </EditionCartel>
         <EditionCartel
-          isOpen={ knownPagesOpen }
-          onToggle={ () => setKnownPagesOpen(!knownPagesOpen) }
+          isOpen={ cartels.knownPages }
+          onToggle={ () => setCartels('knownPages', !cartels.knownPages) }
           title={ formatMessage({ id: 'sidebar.cartel.known-webpages-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.known-webpages-help' }) }
         >
@@ -248,8 +243,8 @@ const WebentityBrowseLayout = ({
           }
         </EditionCartel>
         <EditionCartel
-          isOpen={ linkedEntitiesOpen }
-          onToggle={ () => setLinkedEntitiesOpen(!linkedEntitiesOpen) }
+          isOpen={ cartels.linkedentities }
+          onToggle={ () => setCartels('linkedentities', !cartels.linkedentities) }
           title={ formatMessage({ id: 'sidebar.cartel.linked-webentities-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.linked-webentities-help' }) }
         >
@@ -278,8 +273,8 @@ const WebentityBrowseLayout = ({
           }
         </EditionCartel>
         <EditionCartel
-          isOpen={ tagsOpen }
-          onToggle={ () => setTagsOpen(!tagsOpen) }
+          isOpen={ cartels.tags }
+          onToggle={ () => setCartels('tags', !cartels.tags) }
           title={ formatMessage({ id: 'sidebar.cartel.tags-title' }) }
           helpPlace={ 'right' }
           help={ formatMessage({ id: 'sidebar.cartel.tags-help' }) }
@@ -298,8 +293,8 @@ const WebentityBrowseLayout = ({
           />
         </EditionCartel>
         <EditionCartel
-          isOpen={ notesOpen }
-          onToggle={ () => setNotesOpen(!notesOpen) }
+          isOpen={ cartels.notes }
+          onToggle={ () => setCartels('notes', !cartels.notes) }
           title={ formatMessage({ id: 'sidebar.cartel.field-notes-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.field-notes-help' }) }
           helpPlace="top"
@@ -316,11 +311,7 @@ const WebentityBrowseLayout = ({
             }
           />
         </EditionCartel>
-        {/* <EntityModal
-          isOpen={ modalIsOpen }
-          onToggle={ () => setModalIsOpen(false) }
-        /> */}
-      </ul>    
+      </ul>
     </div>
   )
 }
