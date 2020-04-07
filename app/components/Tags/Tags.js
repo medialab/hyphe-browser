@@ -30,15 +30,23 @@ const Tags = (props) => {
     onUpdateTag,
     onAddTag,
   } = props
-  const [categories, setCategories] = useState(initialTags)
+
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => setCategories([]) , [webentityId])
+
+  const cachedCategories = React.useMemo(
+    () => [
+      ...initialTags.map(tag => categories.find(cat => tag.category === cat.category) || tag),
+      ...categories.filter(cat => !initialTags.find(tag => tag.category === cat.category))
+    ],
+    [categories, initialTags, webentityId]
+  )
+
   const [newCategoryStr, setNewCategoryStr] = useState('')
   const [newCategoryOpen, setNewCategoryOpen] = useState(false)
   const inputRef = useRef(null)
   const { formatMessage } = useIntl()
-
-  useEffect(() => {
-    setCategories(initialTags)
-  }, [webentityId, initialTags])
 
   useEffect(() => {
     if (newCategoryOpen) {
@@ -76,14 +84,14 @@ const Tags = (props) => {
     <div className="tags-container">
       <div className="categories-container">
         {
-          categories.length ?
+          cachedCategories.length ?
             <ul className="categories-list">
               {
-                categories.map(({ category, value }) => {
+                cachedCategories.map(({ category, value }) => {
 
                   const handleUpdateTag = (option) => {
                     const newTag = option ? option.value.trim() : ''
-                    const prevTag = categories.find((cat) => cat.category === category).value
+                    const prevTag = cachedCategories.find((cat) => cat.category === category).value
                     if (prevTag && option) {
                       onUpdateTag(category, prevTag, newTag)
                     } else {
@@ -96,7 +104,7 @@ const Tags = (props) => {
                     }
 
                     setCategories(
-                      categories.map((cat) => {
+                      cachedCategories.map((cat) => {
                         if (cat.category === category) {
                           return {
                             ...cat,
