@@ -62,6 +62,7 @@ export const addTagsCategory = (serverUrl, corpusId, webentityId, category) => (
 }
 
 export const addTag = (serverUrl, corpusId, category, webentityId, value, updatedValue) => (dispatch) => {
+  if (!value) return
   dispatch({ type: ADD_TAG_REQUEST, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } })
   return jsonrpc(serverUrl)('store.add_webentity_tag_value', [webentityId, TAGS_NS, category, value, corpusId])
     .then(() => dispatch({ type: ADD_TAG_SUCCESS, payload: { serverUrl, corpusId, category, webentityId, value, updatedValue } }))
