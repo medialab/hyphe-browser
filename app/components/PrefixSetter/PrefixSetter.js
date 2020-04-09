@@ -4,8 +4,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import Draggable from 'react-draggable'
 import cx from 'classnames'
 import findLastIndex from 'lodash/fp/findLastIndex'
+import findIndex from 'lodash/fp/findIndex'
 
-const findLastEditable = findLastIndex(part => part.selected)
+const findLastSelected = findLastIndex(part => part.selected)
+const findFirstEditable = findIndex(part => part.editable)
 
 const dict = {
   h: '.',
@@ -16,7 +18,11 @@ const PrefixSetter = function ({
   parts = [],
   setPrefix
 }) {
-  const initialIndex = findLastEditable(parts)
+  const initialIndex = findLastSelected(parts)
+  let firstEditableIndex = findFirstEditable(parts) - 1
+  if (firstEditableIndex <= 0) {
+    firstEditableIndex = initialIndex
+  }
   const refs = parts.map(() => useRef(null))
   const container = useRef(null)
   const [index, setIndex] = useState(initialIndex)
@@ -58,32 +64,34 @@ const PrefixSetter = function ({
     const id = setTimeout(() => container.current.scrollTo(Number.MAX_SAFE_INTEGER, 0), 0)
     return () => clearInterval(id)
   }, [])
-
   return (
     <div className="prefix-setter">
       <ul ref={ container } className="parts-container">
         {
           parts.map((part, partIndex) => {
             const handleClick = () => {
-              if (part.editable) {
-                const selectedIndex = partIndex === index ? partIndex - 1 : partIndex
-                setIndex(selectedIndex)
-                setPrefix(parts
-                  .filter((_, i) => i <= selectedIndex)
-                  .reduce((prev, part) => `${prev}${part.name}|`, '')
-                )
-                setSliderX(selectedIndex)
+              let selectedIndex = partIndex
+              if (partIndex <= firstEditableIndex) {
+                selectedIndex = firstEditableIndex
+              } else if (partIndex === index) {
+                selectedIndex = selectedIndex - 1
               }
+              setIndex(selectedIndex)
+              setPrefix(parts
+                .filter((_, i) => i <= selectedIndex)
+                .reduce((prev, part) => `${prev}${part.name}|`, '')
+              )
+              setSliderX(selectedIndex)
             }
             const [char, content] = part.name.split(':')
             return (
               <li
                 key={ partIndex }
-                ref ={ refs[partIndex] }
+                ref={ refs[partIndex] }
                 onClick={ handleClick }
                 className={ cx('part', {
                   'active': !part.editable || index >= partIndex,
-                  'editable': part.editable || partIndex === parts.length - 1
+                  'editable': part.editable || partIndex === firstEditableIndex
                 }) }
               >{dict[char]}{content.length ? content : '<empty>'}</li>
             )
