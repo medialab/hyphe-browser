@@ -17,24 +17,32 @@ class AuthenticationStep extends CreateServerFormStep {
     host: NULL_SELECT_VALUE,
     hostData: null,
     keystoneURL: '',
+    domain: '',
+    project: '',
     openStackID: '',
     openStackPassword: '',
     openStackClient: null,
   }
   isDisabled (data) {
-    const { host, hostData, keystoneURL, openStackID, openStackPassword } = data
-    return !host || !hostData || !keystoneURL || !openStackID || !openStackPassword
+    const { hostData, keystoneURL, domain, project, openStackID, openStackPassword } = data
+    return (
+      !hostData
+      || !keystoneURL || keystoneURL === NULL_SELECT_VALUE
+      || !domain
+      || (hostData.projectRequired && !project)
+      || !openStackID || !openStackPassword
+    )
   }
   handleSubmit = (doSubmit) => {
     const { setError, setIsProcessing } = this.props
-    const { host, openStackID, openStackPassword } = this.props.data
+    const { host, keystoneURL, domain, project, openStackID, openStackPassword } = this.props.data
 
-    const openStackClient = new OpenStackClient(HOSTS[host].keystone)
+    const openStackClient = new OpenStackClient(keystoneURL)
 
     setIsProcessing(true)
 
     openStackClient
-      .authenticate(openStackID, openStackPassword)
+      .authenticate(openStackID, openStackPassword, domain, project)
       .then(() => {
         this.props.saveCredentials(
           host,
@@ -74,13 +82,19 @@ class AuthenticationStep extends CreateServerFormStep {
         ...this.props.data,
         host,
         hostData: HOSTS[host],
-        keystoneURL: HOSTS[host].keystone,
+        domain: HOSTS[host].domainName,
+        project: HOSTS[host].projectRequired ? this.props.data.project : null,
+        keystoneURL: HOSTS[host].keystone.length === 1 ?
+          HOSTS[host].keystone[0].URL :
+          NULL_SELECT_VALUE,
         ...(creds ? { openStackID: creds.id, openStackPassword: creds.password } : {})
       })
     }
   }
   render () {
-    const { intl: { formatMessage } } = this.props
+    const { data, intl: { formatMessage } } = this.props
+    const hostData = data.hostData || {}
+    const keystoneURLs = hostData.keystone || []
 
     return (
       <>
@@ -108,7 +122,27 @@ class AuthenticationStep extends CreateServerFormStep {
             }
           )
         }
-        {this.renderInput('keystoneURL', 'create-cloud-server.step1.keystone-url', { attributes: { disabled: true } })}
+        {
+          this.renderInput(
+            'keystoneURL',
+            'create-cloud-server.step1.keystone-url',
+            {
+              type: 'select',
+              options: [
+                ...(keystoneURLs.length === 1 ?
+                  [] :
+                  [{
+                    key: NULL_SELECT_VALUE,
+                    label: formatMessage({ id: 'create-cloud-server.step1.keystone-placeholder' })
+                  }]),
+                ...keystoneURLs.map(({ URL, label }) => ({ key: URL, label: label + ' - ' + URL }))
+              ],
+              attributes: { disabled: keystoneURLs.length <= 1 }
+            }
+          )
+        }
+        {this.renderInput('domain', 'create-cloud-server.step1.domain')}
+        {this.renderInput('project', 'create-cloud-server.step1.project', { attributes: { disabled: !hostData.projectRequired } })}
         {this.renderInput('openStackID', 'create-cloud-server.step1.openstack-id')}
         {this.renderInput('openStackPassword', 'create-cloud-server.step1.openstack-password', { type: 'password' })}
       </>

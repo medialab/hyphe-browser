@@ -4,7 +4,7 @@ import { FormattedMessage as T } from 'react-intl'
 
 import CreateServerFormStep from './CreateServerFormStep'
 import Ellipsis from '../../../components/Ellipsis'
-import postInstallScript from 'raw-loader!../../../assets/post-install.sh'
+import postInstallScript from 'raw-loader!openstack-client/test/shell/script.sh'
 import promiseRetry from '../../../utils/promise-retry'
 import { getIP } from '../../../utils/cloud-helpers'
 import { createServer } from '../../../actions/servers'
@@ -37,16 +37,23 @@ class DeployStep extends CreateServerFormStep {
     setData({ ...data, deploying: true })
     setIsProcessing(true)
 
-    openStackClient
+    Promise.all([
       // Check if there is an SSH key already
-      .getComputeKeypairs(dataCenter, { limit: 1 })
-      .then((sshKeys) => {
-        return sshKeys.length ?
-          sshKeys[0] :
-          openStackClient.setComputeKeypair(dataCenter, `ssh-${serverName}`)
-      })
+      openStackClient
+        .getComputeKeypairs(dataCenter, { limit: 1 })
+        .then((sshKeys) => {
+          return sshKeys.length ?
+            sshKeys[0] :
+            openStackClient.setComputeKeypair(dataCenter, `ssh-${serverName}`)
+        }),
+      // Retrieve proper image ID
+      openStackClient
+        .getImages(dataCenter, {
+          name: hostData.image.name
+        }).then(images => images[0].id)
+    ])
       // Create server
-      .then(sshKey => {
+      .then(([sshKey, imageId]) => {
         setData({
           ...this.props.data,
           sshData: sshKey,
@@ -56,7 +63,7 @@ class DeployStep extends CreateServerFormStep {
         return openStackClient.createComputeServer(
           dataCenter,
           serverName,
-          hostData.image.id,
+          imageId,
           serverFlavor,
           { key_name: sshKey.name, user_data: btoa(postInstallScript) }
         )
@@ -81,8 +88,8 @@ class DeployStep extends CreateServerFormStep {
         setIsProcessing(false)
 
         const ip = getIP(server)
-        const url = `http://${ip}/api/`
-        const home = `http://${ip}/`
+        const url = `http://${ip}:81/api/`
+        const home = `http://${ip}:81/`
 
         this.props.createServer({
           url,

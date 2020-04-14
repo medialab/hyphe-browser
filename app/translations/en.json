@@ -42,8 +42,11 @@
   "create-cloud-server.step1.p1": "Before creating your own Hyphe server online, you first need to create an account at a cloud provider offering a \"Public cloud OpenStack\" service. Then, you need to create an OpenStack user account.",
   "create-cloud-server.step1.p1.link": "Read more documentation on this topic.",
   "create-cloud-server.step1.host": "Host",
-  "create-cloud-server.step1.host-placeholder": "Choose a host or fill the form by yourself",
+  "create-cloud-server.step1.host-placeholder": "Choose a host",
+  "create-cloud-server.step1.keystone-placeholder": "Choose a KeyStone API",
   "create-cloud-server.step1.keystone-url": "OpenStack Keystone URL",
+  "create-cloud-server.step1.domain": "Domain",
+  "create-cloud-server.step1.project": "Project",
   "create-cloud-server.step1.openstack-id": "OpenStack login",
   "create-cloud-server.step1.openstack-password": "OpenStack password",
   "create-cloud-server.step1.error.wrong-credentials": "Invalid credentials. Please try again.",
@@ -51,7 +54,7 @@
   "create-cloud-server.step2.title": "Set up your Hyphe server",
   "create-cloud-server.step2.submit": "Step 3: set up the cloud server",
   "create-cloud-server.step2.p1": "You can paste here a JSON encoded custom Hyphe configuration if you want. Else, our default Hyphe configuration will be used instead.",
-  "create-cloud-server.step2.hyphe-config": "JSON Hyphe configuration (optional)",
+  "create-cloud-server.step2.hyphe-config": "JSON Hyphe configuration (optional) (TODO)",
 
   "create-cloud-server.step3.title": "Set up the cloud server",
   "create-cloud-server.step3.submit": "Step 4: deploy the server",
@@ -73,6 +76,7 @@
   "create-cloud-server.step3.confirm-deploy.p1": "Once the server starts being deployed, you will not be able to stop it until it is fully operational. Also, your provider will probably start charge.",
   "create-cloud-server.step3.confirm-deploy.p2": "Are you sure you want to continue?",
   "create-cloud-server.step3.confirm-deploy.action": "Deploy",
+  "create-cloud-server.step3.error.default": "An unknown error occured. Please try again later.",
 
   "create-cloud-server.step4.title": "Deploy the server",
   "create-cloud-server.step4.submit": "Use the new Hyphe server",
@@ -82,6 +86,7 @@
   "create-cloud-server.step4.server-deployed": "Server deployed ✓",
   "create-cloud-server.step4.deploy-hyphe": "Hyphe deployment (can take more than 10 minutes)",
   "create-cloud-server.step4.hyphe-deployed": "Hyphe deployed ✓",
+  "create-cloud-server.step4.error.default": "An unknown error occured. Please read the installation logs on the server to know more.",
 
   "webentity-already-visited": "this webentity has already been visited",
   "webentity-never-visited": "this webentity has never been visited",

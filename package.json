@@ -107,7 +107,7 @@
     "jvent": "^1.0.0",
     "lodash": "^4.17.15",
     "open": "6.3.0",
-    "openstack-client": "github:medialab/hyphe_openstack_client#master",
+    "openstack-client": "github:medialab/hyphe_openstack_client#85d34ee845c4e1b3f842c819d9a00b25194e26a3",
     "papaparse": "^4.6.3",
     "react": "^16.8.6",
     "react-addons-shallow-compare": "^15.3.2",
