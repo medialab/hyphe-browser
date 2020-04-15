@@ -60,5 +60,5 @@ export default createReducer(initialState, {
   }),
 
   // the user has chosen to forget every cloud related data (TODO)
-  [RESET_ALL_CLOUD_DATA]: (state) => initialState,
+  [RESET_ALL_CLOUD_DATA]: () => initialState,
 })

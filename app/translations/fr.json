@@ -63,8 +63,10 @@
   "create-cloud-server.step3.server-capacity-placeholder": "Choisissez parmi les choix disponibles",
   "create-cloud-server.step3.error.unknown-api-error": "Nous ne parvenons pas à récupérer les informations du fournisseur. Veuillez réessayer plus tard.",
   "create-cloud-server.step3.confirm-deploy.title": "Déployement du serveur",
-  "create-cloud-server.step3.confirm-deploy.text": "Une fois le déployement du serveur lancé, il ne sera pas possible de l'arrêter jusqu'à ce qu'il soit opérationnel. Aussi, votre fournisseur commencera certainement à vous facturer. Êtes-vous sûr(e) de vouloir continuer ?",
+  "create-cloud-server.step3.confirm-deploy.p1": "Une fois le déployement du serveur lancé, il ne sera pas possible de l'arrêter jusqu'à ce qu'il soit opérationnel. Aussi, votre fournisseur commencera certainement à vous facturer.",
+  "create-cloud-server.step3.confirm-deploy.p2": "Êtes-vous sûr(e) de vouloir continuer ?",
   "create-cloud-server.step3.confirm-deploy.action": "Déployer",
+  "create-cloud-server.step3.error.default": "Une erreur est survenue. Veuillez réessayer plus tard.",
 
   "create-cloud-server.step4.title": "Déployer le serveur",
   "create-cloud-server.step4.submit": "Utiliser le nouveau serveur Hyphe",
@@ -72,8 +74,9 @@
   "create-cloud-server.step4.ssh-deployed": "Clé SSH déployée ✓",
   "create-cloud-server.step4.deploy-server": "Déployement du serveur en cours",
   "create-cloud-server.step4.server-deployed": "Serveur déployé ✓",
-  "create-cloud-server.step4.deploy-hyphe": "Déployement de Hyphe en cours",
+  "create-cloud-server.step4.deploy-hyphe": "Déployement de Hyphe en cours (peut prendre plusieurs minutes)",
   "create-cloud-server.step4.hyphe-deployed": "Hyphe déployé ✓",
+  "create-cloud-server.step4.error.default": "Une erreur est survenue. Veuillez consulter les logs d'installation pour en savoir plus.",
 
   "webentity-already-visited": "cette webentité a déjà été visitée",
   "webentity-never-visited": "cette webentité n'a jamais été visitée",
