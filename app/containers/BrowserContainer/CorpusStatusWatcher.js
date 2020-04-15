@@ -8,6 +8,7 @@ import { fetchCorpusStatus, startCorpus } from '../../actions/corpora'
 import { fetchTagsCategories, fetchTags } from '../../actions/tags'
 import { fetchTLDs } from '../../actions/webentities'
 import { fetchStack } from '../../actions/stacks'
+import { push } from 'connected-react-router'
 
 import {
   CORPUS_STATUS_WATCHER_INTERVAL,
@@ -20,6 +21,7 @@ class CorpusStatusWatcher extends React.Component {
     super(props)
 
     this.watchTimeout = null
+    this.unmounted = false
   }
 
   componentDidMount () {
@@ -28,6 +30,7 @@ class CorpusStatusWatcher extends React.Component {
   }
 
   componentWillUnmount () {
+    this.unmounted = true
     if (this.watchTimeout) {
       clearTimeout(this.watchTimeout)
       this.watchTimeout = null
@@ -36,10 +39,13 @@ class CorpusStatusWatcher extends React.Component {
 
   // Data that should be fetched frequently to keep an eye on their evolution (status)
   watchStatus () {
-    const { fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories, fetchTags } = this.props
+    const { push, fetchCorpusStatus, showError, hideError, startCorpus, serverUrl, corpus, corpusPassword, fetchTagsCategories, fetchTags } = this.props
 
     const repeat = (immediate = false) => {
-      this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 0 : CORPUS_STATUS_WATCHER_INTERVAL)
+      if (this.unmounted) {
+        return;
+      }
+      this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 1000 : CORPUS_STATUS_WATCHER_INTERVAL)
     }
 
     // Asynchronously fetch tags categories
@@ -48,6 +54,9 @@ class CorpusStatusWatcher extends React.Component {
     fetchTags(serverUrl, corpus.corpus_id)
 
     fetchCorpusStatus(serverUrl, corpus).then(({ payload: { status } }) => {
+      if (status.corpus.status === 'missing') {
+        return push('/login')
+      }
       if (!status.corpus.ready) {
         // TODO: test number of corpus started ?
         // Resources available: start corpus
@@ -124,5 +133,6 @@ export default connect(mapStateToProps, {
   fetchTagsCategories,
   fetchTags,
   fetchStack,
-  fetchTLDs
+  fetchTLDs,
+  push
 })(CorpusStatusWatcher)
