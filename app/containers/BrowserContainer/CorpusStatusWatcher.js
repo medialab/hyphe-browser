@@ -43,7 +43,7 @@ class CorpusStatusWatcher extends React.Component {
 
     const repeat = (immediate = false) => {
       if (this.unmounted) {
-        return;
+        return
       }
       this.watchTimeout = setTimeout(() => this.watchStatus(), immediate ? 1000 : CORPUS_STATUS_WATCHER_INTERVAL)
     }

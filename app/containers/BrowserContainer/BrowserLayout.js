@@ -12,6 +12,7 @@ import BrowserHeader from '../../components/BrowserHeader'
 import BrowserTabsContainer from '../BrowserTabsContainer'
 import HypheView from './HypheView'
 import Spinner from '../../components/Spinner'
+import { compareUrls } from '../../utils/lru'
 
 const BrowserLayout = ({
   webentity,
@@ -33,12 +34,15 @@ const BrowserLayout = ({
 
   const { formatMessage } = useIntl()
 
-  const onSetAsideMode = mode => setAsideMode(mode)
-
   const handleOpenTabFromHyphe = (url) => {
-    setBrowserMode('browse')
-    openTab(url)
+    const isExternalUrl = !compareUrls(url, hypheUrl)
+    if (isExternalUrl) {
+      setBrowserMode('browse')
+      openTab(url)
+    }
+    return isExternalUrl
   }
+
   const hypheUrl = instanceUrl + '/#/project/' + corpus.corpus_id + '/network'
 
   const { ready } = status && status.corpus
@@ -65,7 +69,7 @@ const BrowserLayout = ({
         >
           <aside className="browser-column browser-aside-column">
             <ul className="aside-header switch-mode-container">
-              <li><button onClick={ () => onSetAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
+              <li><button onClick={ () => setAsideMode('stackList') } className={ cx('mode-btn', { 'is-active': (asideMode === 'stackList' || isLanding) }) }>
                 <span className="switch-mode-title">
                   <span
                     className={ cx('current-stack-indicator hint--right', selectedStack) }
@@ -78,7 +82,7 @@ const BrowserLayout = ({
                   <HelpPin>{formatMessage({ id: 'sidebar.inquiry-overview-help' })}</HelpPin></span></button>
               </li>
               <li>
-                <button disabled={ isLanding } onClick={ () => onSetAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
+                <button disabled={ isLanding } onClick={ () => setAsideMode('webentityBrowse') } className={ cx('mode-btn', { 'is-active': (asideMode === 'webentityBrowse' && !isLanding) }) }>
                   <span className="switch-mode-title">
                     <span
                       className={ cx('current-stack-indicator hint--bottom', webentity && webentity.status) }
@@ -98,7 +102,7 @@ const BrowserLayout = ({
             </div>
             <div className="aside-content" style={ (asideMode === 'stackList' || isLanding) ? {} : { display: 'none' } }>
               <StackListContainer
-                setAsideMode={ onSetAsideMode }
+                setAsideMode={ setAsideMode }
               />
             </div>
           </aside>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import once from 'lodash/once'
 
 import { DEBUG_WEBVIEW } from '../../constants'
 import Spinner from '../../components/Spinner'
@@ -16,21 +17,32 @@ class HypheView extends React.Component {
     const webview = document.querySelector('webview')
     this.node = webview
 
+    const inejectStyle = once(() => {
+      webview.executeJavaScript(`
+        const style = document.createElement('style');
+        style.textContent = ".topbar-project button, .topbar-project .flex, #hybro-link, .no-hybro { display: none !important; }";
+        document.head.append(style);
+        console.log(style);
+      `)
+    })
+
     webview.addEventListener('did-start-loading', this.loadStart)
     webview.addEventListener('did-stop-loading', () => {
       this.loadStop()
+      inejectStyle()
+
       webview.executeJavaScript(
         // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
-        "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; " +
-        // Remove leave corpus button from Hyphe tab within HyBro
-        "document.querySelector('.topbar-project button').remove(); " +
-        "document.querySelector('.topbar-project .flex').remove(); " +
-        "document.querySelector('#hybro-link').remove();"
+        "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; "
       )
     })
 
     webview.addEventListener('new-window', ({ url }) => {
-      this.props.onOpenTabFromHyphe(url)
+      if (!this.props.onOpenTabFromHyphe(url)) {
+        webview.executeJavaScript(
+          `window.history.pushState({}, 'Hyphe', '${url}')`
+        )
+      }
     })
 
     if (DEBUG_WEBVIEW) {
@@ -67,7 +79,7 @@ class HypheView extends React.Component {
       <div className="hyphe-view-container" style={ this.props.style }>
         {isLoading &&
           <div className="spinner-container">
-            <Spinner /> 
+            <Spinner />
           </div>
         }
         <webview
