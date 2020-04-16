@@ -9,12 +9,13 @@ import { FormattedMessage as T, useIntl } from 'react-intl'
 import { selectCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
 import CardsList from '../../components/CardsList'
+import ServerLogs from '../../components/ServerLogs'
 import CorpusCard from './CorpusCard'
 
 const CorpusList = props => {
-  
+
   const [filter, setFilter] = useState('')
-    
+
   const { formatMessage } = useIntl()
   const { server, /*status,*/ ui, selectCorpus, history } = props
   const { push: routerPush } = history
@@ -24,6 +25,7 @@ const CorpusList = props => {
 
   if (ui.loaders && ui.loaders.corpora) return <Spinner textId="loading-corpora" />
   if (!server) return null
+  if (server.cloud && !server.cloud.installed) return <ServerLogs server={ server } />
 
   let corpora = Object.keys(props.corpora)
     .sort()

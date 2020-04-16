@@ -14,13 +14,9 @@ import ServerSelect from '../../components/ServerSelect'
 
 
 class Login extends React.Component {
-  componentDidMount () {
-    this.refreshStatusAndCorpora()
-  }
-
   componentWillReceiveProps ({ selectedServer }) {
     if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
-      this.refreshStatusAndCorpora(selectedServer.url)
+      this.refreshStatusAndCorpora(selectedServer)
     }
   }
 
@@ -34,7 +30,18 @@ class Login extends React.Component {
       return
     }
 
-    if (url) {
+    const server = this.props.servers.find(data => data.url === url)
+
+    if (!url || !server) return
+
+    if (server.cloud && !server.cloud.installed) {
+      // Edge case:
+      // The server has been created from HyBro, and hasn't finished being
+      // installed:
+      // TODO
+    } else {
+      // Normal case:
+      // The server (cloud or not) is supposed to be accessible:
       fetchServerStatus(url)
         .then(({ payload }) => {
           if (!payload.error) return fetchCorpora(url)

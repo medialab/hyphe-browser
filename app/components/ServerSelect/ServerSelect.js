@@ -26,7 +26,7 @@ const ServerSelect = ({
       } : undefined,
     // add registered servers list
     ...servers.map((s) => ({
-      label: s.cloud ? '☁ ' + s.host + ' | ' + s.name : s.name,
+      label: s.cloud ? '☁ ' + s.cloud.host + ' | ' + s.name : s.name,
       value: s.url,
       key: s.url
     })),

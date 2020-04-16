@@ -7,13 +7,8 @@ import Ellipsis from '../../../components/Ellipsis'
 import postInstallScript from 'raw-loader!openstack-client/test/shell/script.sh'
 import promiseRetry from '../../../utils/promise-retry'
 import { getIP } from '../../../utils/cloud-helpers'
-import { createServer } from '../../../actions/servers'
-
-const INITIAL_STEP = 0
-const DEPLOYING_SSH = 1
-const DEPLOYING_SERVER = 2
-const DEPLOYING_HYPHE = 3
-const DEPLOYMENT_DONE = 4
+import { createServer, updateServer } from '../../../actions/servers'
+import ServerLogs from '../../../components/ServerLogs'
 
 class DeployStep extends CreateServerFormStep {
   constructor (props) {
@@ -26,7 +21,7 @@ class DeployStep extends CreateServerFormStep {
 
   initialData = {
     deploying: false,
-    deployStep: INITIAL_STEP,
+    hypheServerData: null,
     sshData: null,
     serverData: null,
   }
@@ -57,15 +52,18 @@ class DeployStep extends CreateServerFormStep {
         setData({
           ...this.props.data,
           sshData: sshKey,
-          deployStep: DEPLOYING_SERVER,
         })
+
+        // Prepare script:
+        // TODO: Insert proper Hyphe env variables
+        const script = postInstallScript
 
         return openStackClient.createComputeServer(
           dataCenter,
           serverName,
           imageId,
           serverFlavor,
-          { key_name: sshKey.name, user_data: btoa(postInstallScript) }
+          { key_name: sshKey.name, user_data: btoa(script) }
         )
       })
       // Load full server data until the status is "ACTIVE"
@@ -79,34 +77,48 @@ class DeployStep extends CreateServerFormStep {
       )
       // Start monitoring Hyphe state
       .then(server => {
-        setData({
-          ...this.props.data,
-          deployStep: DEPLOYING_HYPHE,
-          serverData: server,
-        })
-
-        setIsProcessing(false)
-
         const ip = getIP(server)
         const url = `http://${ip}:81/api/`
         const home = `http://${ip}:81/`
-
-        this.props.createServer({
+        const hypheServerData = {
           url,
           home,
-          host,
           name: serverName,
-          cloud: true,
-          ready: false
+          host,
+          cloud: {
+            host,
+            server: {
+              id: server.id,
+              region: dataCenter,
+              flavor: serverFlavor
+            },
+            ssh: this.props.data.sshData,
+            openStack: {
+              keystone: data.keystoneURL,
+              id: data.openStackID,
+              password: data.openStackPassword,
+              domain: data.domain,
+              project: data.project
+            },
+            createdAt: Date.now(),
+            deployed: true,
+            installed: false
+          }
+        }
+
+        setData({
+          ...this.props.data,
+          serverData: server,
+          hypheServerData,
         })
 
+        setIsProcessing(false)
+        this.props.createServer(hypheServerData)
         return promiseRetry(() => fetch(url).then(r => r.json()), 2000)
       })
       .then(() => {
-        setData({
-          ...this.props.data,
-          deployStep: DEPLOYMENT_DONE,
-        })
+        const hypheServerData = this.props.data.hypheServerData
+        this.props.updateServer({ ...hypheServerData, cloud: { ...hypheServerData.cloud, installed: true } })
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -119,18 +131,14 @@ class DeployStep extends CreateServerFormStep {
 
   }
   render () {
-    const { deployStep } = this.props.data
+    const { hypheServerData } = this.props.data
 
     return (
       <>
-        { deployStep === DEPLOYING_SSH && <p><T id="create-cloud-server.step4.deploy-ssh" /><Ellipsis /></p> }
-        { deployStep > DEPLOYING_SSH && <p><T id="create-cloud-server.step4.ssh-deployed" /></p> }
+        { !hypheServerData && <p><T id="create-cloud-server.step4.deploy-server" /><Ellipsis /></p> }
+        { hypheServerData && <p><T id="create-cloud-server.step4.server-deployed" /></p> }
 
-        { deployStep === DEPLOYING_SERVER && <p><T id="create-cloud-server.step4.deploy-server" /><Ellipsis /></p> }
-        { deployStep > DEPLOYING_SERVER && <p><T id="create-cloud-server.step4.server-deployed" /></p> }
-
-        { deployStep === DEPLOYING_HYPHE && <p><T id="create-cloud-server.step4.deploy-hyphe" /><Ellipsis /></p> }
-        { deployStep > DEPLOYING_HYPHE && <p><T id="create-cloud-server.step4.hyphe-deployed" /></p> }
+        { hypheServerData && <ServerLogs server={ hypheServerData } /> }
       </>
     )
   }
@@ -138,7 +146,7 @@ class DeployStep extends CreateServerFormStep {
 
 export default connect(
   ({ cloud }) => ({ credentials: cloud.credentials }),
-  { createServer },
+  { createServer, updateServer },
   null,
   { forwardRef: true }
 )(DeployStep)
