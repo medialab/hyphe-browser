@@ -14,6 +14,16 @@
     height: 80vh
     margin: 0 auto
 
+.modal--spiner-conainer
+    position absolute
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+    background-color: rgba(255, 255, 255, 0.8)
+    z-index: 100
+    padding-top: calc(50%)
+
 .new-entity-modal-container
     font-family: var(--font-mont)
     stretch(column)
@@ -170,6 +180,7 @@
                 cursor: pointer
     .modal-body
         flex: 1
+        position: relative
         overflow-x: hidden
         overflow-y: auto
         background: white

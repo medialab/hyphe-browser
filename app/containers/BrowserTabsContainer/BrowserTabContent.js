@@ -90,8 +90,10 @@ class BrowserTabContent extends React.Component {
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
       tlds, selectedEngine, addNavigationHistory } = this.props
     // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
-    if (event === 'open' && disableWebentity && this.samePage(info)) {
+
+    if (event === 'start' && compareUrls(server.home, info)) {
       event = 'start'
+      throw new Error()
     }
     switch (event) {
     case 'open':

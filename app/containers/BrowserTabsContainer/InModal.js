@@ -58,7 +58,7 @@ const Prefixes = (props) => {
         <ul className="actions-container">
           <li>
             <button
-              disabled={ props.disable || props.loading }
+              disabled={ props.disable }
               onClick={ props.onValidate }
               className='btn btn-success'
             ><FormattedMessage id="in-modale.confirm" /></button></li>
@@ -114,7 +114,6 @@ const modalReducer = (state, action) => {
     return {
       ...state,
       prefix: action.payload,
-      loading: false,
       step: 1,
       selectedPage: null,
     }
@@ -196,7 +195,7 @@ const EntityModal = ({
       selectedPage: null,
       name: createNewEntity ? '' : webentity.name,
       prefix: initialPrefix,
-      loadding: false,
+      loading: false,
       error: false,
       tags: true,
       notes: true
@@ -213,7 +212,10 @@ const EntityModal = ({
     [webentity.mostLinked, state.prefix, tlds, tabUrl]
   )
 
-  const onSubmit = useCallback(() =>
+  const onSubmit = useCallback(() => {
+    dispatch({
+      type: 'LOADING',
+    })
     onSuccess(webentity, {
       prefix: state.prefix,
       homepage: pagesList[state.selectedPage].url,
@@ -224,7 +226,7 @@ const EntityModal = ({
         notes: showCopyStep && state.notes
       },
     })
-  , [state])
+  }, [state])
 
   const onSetPrefixes = useCallback((prefix) => {
     if (prefix === state.prefix) {
@@ -267,6 +269,11 @@ const EntityModal = ({
       contentLabel="New entity modal"
     >
       <div className="new-entity-modal-container">
+        {state.loading && (
+          <div className="modal--spiner-conainer">
+            <Spinner />
+          </div>
+        )}
         <div className="modal-header">
           <h2><span>{ createNewEntity ? <FormattedMessage id="browse-create" /> : <FormattedMessage id="in-modale.title-in" /> }</span><i onClick={ onRequestClose } className="ti-close" /></h2>
         </div>
@@ -284,7 +291,6 @@ const EntityModal = ({
             <Prefixes
               prefixes={ prefixes }
               onSetPrefixes={ onSetPrefixes }
-              loading={ state.loading }
               disable={ state.step > 1 }
               onValidate={ () => dispatch({ type: 'SET_STEP', payload: 2 }) }
             />
