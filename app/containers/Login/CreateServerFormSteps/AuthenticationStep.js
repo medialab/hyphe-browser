@@ -13,15 +13,17 @@ class AuthenticationStep extends CreateServerFormStep {
     super(props)
   }
 
-  initialData = {
-    host: NULL_SELECT_VALUE,
-    hostData: null,
-    keystoneURL: '',
-    domain: '',
-    project: '',
-    openStackID: '',
-    openStackPassword: '',
-    openStackClient: null,
+  getInitialData () {
+    return {
+      host: NULL_SELECT_VALUE,
+      hostData: null,
+      keystoneURL: '',
+      domain: '',
+      project: '',
+      openStackID: '',
+      openStackPassword: '',
+      openStackClient: null,
+    }
   }
   isDisabled (data) {
     const { hostData, keystoneURL, domain, project, openStackID, openStackPassword } = data

@@ -8,8 +8,10 @@ class HypheConfigurationStep extends CreateServerFormStep {
     super(props)
   }
 
-  initialData = {
-    hypheConfig: null,
+  getInitialData () {
+    return {
+      hypheConfig: null,
+    }
   }
   isDisabled (data) {
     // Only accept a valid JSON string or nothing for `hypheConfig`:

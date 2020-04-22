@@ -6,9 +6,10 @@ class CreateServerFormStep extends React.Component {
   constructor (props) {
     super(props)
 
+    // Use inital state as state placeholder:
     props.setData({
-      ...props.data,
-      ...this.initialData
+      ...this.getInitialData(),
+      ...props.data
     })
   }
 
@@ -24,7 +25,9 @@ class CreateServerFormStep extends React.Component {
    * DEFAULTS TO OVERRIDE:
    * *********************
    */
-  initialData = {}
+  getInitialData () {
+    return {}
+  }
   isDisabled () {
     return false
   }

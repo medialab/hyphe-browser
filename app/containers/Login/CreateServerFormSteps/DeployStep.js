@@ -19,11 +19,13 @@ class DeployStep extends CreateServerFormStep {
     }
   }
 
-  initialData = {
-    deploying: false,
-    hypheServerData: null,
-    sshData: null,
-    serverData: null,
+  getInitialData () {
+    return {
+      deploying: false,
+      hypheServerData: null,
+      sshData: null,
+      serverData: null,
+    }
   }
   deployServer () {
     const { data, setData, setError, setIsProcessing } = this.props

@@ -13,11 +13,13 @@ class ServerConfigurationStep extends CreateServerFormStep {
     super(props)
   }
 
-  initialData = {
-    serverName: '',
-    dataCenter: NULL_SELECT_VALUE,
-    serverFlavor: NULL_SELECT_VALUE,
-    showConfirmModal: false,
+  getInitialData () {
+    return {
+      serverName: '',
+      dataCenter: NULL_SELECT_VALUE,
+      serverFlavor: NULL_SELECT_VALUE,
+      showConfirmModal: false,
+    }
   }
   isDisabled (data) {
     const { serverName, dataCenter, serverFlavor } = data
