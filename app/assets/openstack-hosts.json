@@ -3,8 +3,7 @@
     "publicCloudURL": "https://www.ovhcloud.com/fr/public-cloud/",
     "keystone": [{"URL":"https://auth.cloud.ovh.net/v3/", "label": "API OpenStack OVH"}],
     "image": {
-      "name": "Debian 10",
-      "id": "f5cda5c4-297a-4b20-9062-7a5da6599f92"
+      "name": "Debian 9"
     },
     "domainName": "Default",
     "priceURL": "https://www.ovhcloud.com/fr/public-cloud/prices/",
@@ -53,8 +52,7 @@
     "domainName": "CCP_Domain_38263",
     "projectRequired": true,
     "image": {
-      "name": "Debian 9.1.1",
-      "id": "e27b27b8-b918-4bea-8981-911371778da2"
+      "name": "Debian 9.1.1"
     },
     "priceURL": "https://citycloud.com/price-list/",
     "dataCenterURL": "https://citycloud.com/regions-services/",
