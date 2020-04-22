@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { fill } from 'lodash'
 
 import { useInterval } from '../../utils/hooks'
@@ -11,7 +11,7 @@ const Ellipsis = () => {
   }, 500)
 
   return (
-    <span>{fill(Array(dots + 1), '.').join('')}</span>
+    fill(Array(dots + 1), '.').join('')
   )
 }
 
