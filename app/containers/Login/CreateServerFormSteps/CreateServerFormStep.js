@@ -51,6 +51,8 @@ class CreateServerFormStep extends React.Component {
    *                   component's parent data state.
    * @param labelKey   The localisation key for the label.
    * @param onChange   A `(value: any) => void` handler (optional)
+   * @param horizontal If true, the `form-group` will have the `horizontal`
+   *                   class, and the input will be rendered before the label.
    * @param type       The input type (optional, defaults to `"text"`). Accepts
    *                   all valid values for `input` tags, and `select` and
    *                   `textarea`.
@@ -61,7 +63,7 @@ class CreateServerFormStep extends React.Component {
    *                   the input element.
    * @returns          A React pseudo-DOM tree.
    */
-  renderInput (key, labelKey, { onChange, type = 'text', options = [], attributes = {} } = {}) {
+  renderInput (key, labelKey, { onChange, horizontal, type = 'text', options = [], attributes = {} } = {}) {
     const value = this.props.data[key] || ''
     const id = `step${this.props.step}-${key}`
     const handler = ({ target }) => {
@@ -106,9 +108,10 @@ class CreateServerFormStep extends React.Component {
     }
 
     return (
-      <div className="form-group">
+      <div key={ key } className={ cx('form-group', horizontal && 'horizontal') }>
+        {horizontal && input}
         <label htmlFor={ id }><T id={ labelKey } /></label>
-        {input}
+        {!horizontal && input}
       </div>
     )
   }
