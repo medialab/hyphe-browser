@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
-import { deselectServer, deleteServer } from '../../actions/servers'
+import { selectServer, deselectServer, deleteServer } from '../../actions/servers'
 
 import LogoTitle from '../../components/LogoTitle'
 import ServerSelect from '../../components/ServerSelect'
@@ -16,12 +16,12 @@ import ServerSelect from '../../components/ServerSelect'
 class Login extends React.Component {
   componentWillReceiveProps ({ selectedServer }) {
     if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
-      this.refreshStatusAndCorpora(selectedServer)
+      this.selectOption(selectedServer.url)
     }
   }
 
-  refreshStatusAndCorpora (url) {
-    const { fetchCorpora, fetchServerStatus, deselectServer, history } = this.props
+  selectOption (url) {
+    const { fetchCorpora, fetchServerStatus, selectServer, deselectServer, history } = this.props
     const { push: routerPush } = history
 
     if (url === 'add' || url === 'create') {
@@ -39,6 +39,7 @@ class Login extends React.Component {
       // The server has been created from HyBro, and hasn't finished being
       // installed:
       // TODO
+      selectServer(server)
     } else {
       // Normal case:
       // The server (cloud or not) is supposed to be accessible:
@@ -49,45 +50,10 @@ class Login extends React.Component {
     }
   }
 
-  renderServerSelect () {
-    const { selectedServer, servers, location } = this.props
-    const { formatMessage } = this.props.intl
-
-    const options = servers.map((s) => ({
-      label: `${s.name} (${s.url})`,
-      value: s.url,
-      key: s.url
-    }))
-
-    // add default option only when no server selected
-    if (!selectedServer || !selectedServer.url) {
-      options.unshift({
-        label: formatMessage({ id: 'select-server' }),
-        value: '',
-        key: 'default'
-      })
-    }
-
-    options.push({
-      label: formatMessage({ id: 'server-add' }),
-      value: 'add',
-      key: 'server-add'
-    })
-    options.push({
-      label: formatMessage({ id: 'server-create' }),
-      value: 'create',
-      key: 'server-create'
-    })
-
+  isLarge () {
+    const { selectedServer, location } = this.props
     return (
-      <select
-        autoFocus
-        value = { selectedServer ? selectedServer.url : '' }
-        disabled={ location.pathname !== '/login' }
-        onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
-      >
-        { options.map((o) => <option key={ o.key + o.label } value={ o.value }>{ o.label }</option>) }
-      </select>
+      location.pathname === '/login/create-form' || (selectedServer && selectedServer.cloud && !selectedServer.cloud.installed)
     )
   }
 
@@ -118,7 +84,7 @@ class Login extends React.Component {
       <div className="login">
         <main className="login-container">
           <LogoTitle />
-          <div className={ cx('config-container', location.pathname === '/login/create-form' && 'large') }>
+          <div className={ cx('config-container', this.isLarge() && 'large') }>
             {
               location.pathname === '/login' &&
               <div className="server-container">
@@ -130,7 +96,7 @@ class Login extends React.Component {
                     location,
                   } }
                   isDisabled={ location.pathname !== '/login' }
-                  onChange={ url => this.refreshStatusAndCorpora(url) }
+                  onChange={ url => this.selectOption(url) }
                   onEdit={ handleEditServer }
                   onForget={ handleForget }
                 />
@@ -155,6 +121,7 @@ Login.propTypes = {
   history: PropTypes.object,
 
   // actions
+  selectServer: PropTypes.func,
   deselectServer: PropTypes.func,
   fetchCorpora: PropTypes.func,
   fetchServerStatus: PropTypes.func,
@@ -169,6 +136,7 @@ const mapStateToProps = ({ servers, intl: { locale } }) => ({
 })
 
 const mapDispatchToProps = {
+  selectServer,
   deselectServer,
   fetchCorpora,
   fetchServerStatus,

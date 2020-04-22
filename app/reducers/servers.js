@@ -5,6 +5,7 @@ import {
   UPDATE_SERVER,
   DELETE_SERVER,
   RESET_SERVERS,
+  SELECT_SERVER,
   DESELECT_SERVER
 } from '../actions/servers'
 
@@ -64,6 +65,11 @@ export default createReducer(initialState, {
 
   [RESET_SERVERS]: () => ({
     ...initialState
+  }),
+
+  [SELECT_SERVER]: (state, { server }) => ({
+    ...state,
+    selected: state.list.find(s => s.id === server.id) || null
   }),
 
   [DESELECT_SERVER]: (state) => ({
