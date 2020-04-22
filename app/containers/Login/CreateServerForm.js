@@ -116,7 +116,9 @@ class CreateServerForm extends React.Component {
             step,
             intl: this.props.intl,
             data: this.state.data,
+            isProcessing: this.state.isProcessing,
 
+            submit: () => this.onSubmit(),
             setData: data => this.setState({ ...this.state, data }),
             setError: error => this.setState({ ...this.state, errors: [error] }),
             setIsProcessing: isProcessing => this.setState({ isProcessing }),

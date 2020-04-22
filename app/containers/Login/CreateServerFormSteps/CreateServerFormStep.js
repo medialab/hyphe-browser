@@ -1,4 +1,5 @@
 import React from 'react'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { FormattedMessage as T } from 'react-intl'
 
@@ -121,8 +122,10 @@ CreateServerFormStep.propTypes = {
   intl: PropTypes.object.isRequired,
   step: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
+  isProcessing: PropTypes.bool.isRequired,
 
   // Handlers:
+  submit: PropTypes.func.isRequired,
   setData: PropTypes.func.isRequired,
   setError: PropTypes.func.isRequired,
   setIsProcessing: PropTypes.func.isRequired,

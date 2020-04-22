@@ -16,14 +16,30 @@ class ServerConfigurationStep extends CreateServerFormStep {
   getInitialData () {
     return {
       serverName: '',
+      loadingFlavors: false,
       dataCenter: NULL_SELECT_VALUE,
       serverFlavor: NULL_SELECT_VALUE,
       showConfirmModal: false,
+
+      // Flavor filtering:
+      cpus: '1',
+      ram: '4',
+      disk: '0'
     }
   }
   isDisabled (data) {
     const { serverName, dataCenter, serverFlavor } = data
     return !serverName || !dataCenter || dataCenter === NULL_SELECT_VALUE || !serverFlavor || serverFlavor === NULL_SELECT_VALUE
+  }
+  handleSubmit = (doSubmit) => {
+    const { data, setData } = this.props
+    const { showConfirmModal } = data
+
+    if (showConfirmModal) {
+      doSubmit()
+    } else {
+      setData({ ...data, showConfirmModal: true })
+    }
   }
   changeDatacenter = (value) => {
     const { setError, setIsProcessing, data, setData } = this.props
@@ -53,7 +69,6 @@ class ServerConfigurationStep extends CreateServerFormStep {
         setData({
           ...this.props.data,
           serverFlavorsList: sortBy(flavors, flavor => flavor.name)
-            .map(({ name, id }) => ({ key: id, label: name }))
         })
         setIsProcessing(false)
       })
@@ -66,10 +81,30 @@ class ServerConfigurationStep extends CreateServerFormStep {
         setIsProcessing(false)
       })
   }
+  getFilteredFlavorsList () {
+    const data = this.props.data
+    const cpusNb = +data.cpus
+    const ramNb = +data.ram
+    const diskNb = +data.disk
+
+    const list = (data.serverFlavorsList || [])
+      .filter(server => (
+        (server.vcpus >= cpusNb) &&
+        (server.ram / 1024 >= ramNb) &&
+        (server.disk >= diskNb)
+      ))
+      .map(({ name, id, vcpus, ram, disk }) => ({
+        key: id,
+        distance: (vcpus - cpusNb) + (ram / 1000 - ramNb) + (disk - diskNb),
+        label: `${name} - ${vcpus} CPU${vcpus > 1 ? 's' : ''}, ${(ram / 1024).toFixed(2)}Go RAM, ${disk}Go disk`
+      }))
+
+    return sortBy(list, 'distance')
+  }
 
   render () {
-    const { hostData, dataCentersList, serverFlavorsList, dataCenter, showConfirmModal } = this.props.data
-    const { intl: { formatMessage } } = this.props
+    const { isProcessing, data, setData, intl: { formatMessage } } = this.props
+    const { hostData, dataCentersList, serverFlavorsList, dataCenter, showConfirmModal } = data
 
     return (
       <>
@@ -126,8 +161,10 @@ class ServerConfigurationStep extends CreateServerFormStep {
             {
               type: 'select',
               options: [
-                { key: NULL_SELECT_VALUE, label: formatMessage({ id: 'create-cloud-server.step3.server-capacity-placeholder' }) },
-                ...(serverFlavorsList || [])
+                { key: NULL_SELECT_VALUE, label: formatMessage({ id: isProcessing ?
+                  'create-cloud-server.step3.server-capacity-loading-values' :
+                  'create-cloud-server.step3.server-capacity-placeholder' }) },
+                ...this.getFilteredFlavorsList()
               ],
               attributes: {
                 disabled: dataCenter === NULL_SELECT_VALUE || !serverFlavorsList || !serverFlavorsList.length
@@ -136,10 +173,35 @@ class ServerConfigurationStep extends CreateServerFormStep {
           )
         }
 
+        <div className="form-group">
+          <label>
+            <T id="create-cloud-server.step3.filter-flavors" />
+          </label>
+        </div>
+
+        {
+          ['cpus', 'ram', 'disk'].map(key => (
+            this.renderInput(
+              key,
+              'create-cloud-server.step3.' + key,
+              {
+                type: 'number',
+                horizontal: true,
+                attributes: {
+                  min: 0,
+                  step: 1,
+                  className:'narrow',
+                  disabled: (isProcessing || !serverFlavorsList || !serverFlavorsList.length)
+                }
+              }
+            )
+          ))
+        }
+
         {
           <Modal
             isOpen={ showConfirmModal }
-            onRequestClose={ () => this.setDataState('showConfirmModal', false) }
+            onRequestClose={ () => setData({ ...data, showConfirmModal: false }) }
             style={ {
               content: {
                 width: 700,
@@ -164,13 +226,13 @@ class ServerConfigurationStep extends CreateServerFormStep {
               <div className="modal-content-footer">
                 <ul className="buttons-row">
                   <li>
-                    <button onClick={ () => this.setDataState('showConfirmModal', false) } className="btn btn-error">
+                    <button onClick={ () => setData({ ...data, showConfirmModal: false }) } className="btn btn-error">
                       <T id="cancel" />
                     </button>
                   </li>
 
                   <li>
-                    <button onClick={ () => this.onSubmit() } className="btn btn-primary">
+                    <button onClick={ () => this.props.submit() } className="btn btn-primary">
                       <T id="create-cloud-server.step3.confirm-deploy.action" />
                     </button>
                   </li>
