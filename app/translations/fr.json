@@ -11,6 +11,7 @@
   "confirm-forget-server": "Êtes-vous sûr de vouloir oublier ce serveur ?",
   "forget-this-server": "Oublier ce serveur",
   "choose-a-corpus": "Choisir un corpus",
+  "server-being-installed": "Le server est en cours d'installation",
   "corpus-list-search": "Chercher parmi {nbCorpora} corpora",
   "create-or-configure-server": "Ajouter/configurer un serveur",
   "create-a-corpus": "Créer un corpus",

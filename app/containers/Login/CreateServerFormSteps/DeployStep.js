@@ -79,14 +79,15 @@ class DeployStep extends CreateServerFormStep {
       .then(server => {
         const ip = getIP(server)
         const url = `http://${ip}:81/api/`
-        const home = `http://${ip}:81/`
+        const home = `http://${ip}/`
+        const logsURL = `http://${ip}/install.log`
         const hypheServerData = {
           url,
           home,
           name: serverName,
-          host,
           cloud: {
             host,
+            logsURL,
             server: {
               id: server.id,
               region: dataCenter,
@@ -138,7 +139,9 @@ class DeployStep extends CreateServerFormStep {
         { !hypheServerData && <p><T id="create-cloud-server.step4.deploy-server" /><Ellipsis /></p> }
         { hypheServerData && <p><T id="create-cloud-server.step4.server-deployed" /></p> }
 
-        { hypheServerData && <ServerLogs server={ hypheServerData } /> }
+        { hypheServerData && !(hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.deploy-hyphe" /><Ellipsis /></p> }
+        { hypheServerData && (hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.hyphe-deployed" /></p> }
+        { hypheServerData && <ServerLogs showError={ false } server={ hypheServerData } /> }
       </>
     )
   }
