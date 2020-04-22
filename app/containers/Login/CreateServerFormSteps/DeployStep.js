@@ -6,7 +6,7 @@ import CreateServerFormStep from './CreateServerFormStep'
 import Ellipsis from '../../../components/Ellipsis'
 import postInstallScript from 'raw-loader!openstack-client/test/shell/script.sh'
 import promiseRetry from '../../../utils/promise-retry'
-import { getIP } from '../../../utils/cloud-helpers'
+import { getIP, isInstalledPromise } from '../../../utils/cloud-helpers'
 import { createServer, updateServer } from '../../../actions/servers'
 import ServerLogs from '../../../components/ServerLogs'
 
@@ -115,7 +115,7 @@ class DeployStep extends CreateServerFormStep {
 
         setIsProcessing(false)
         this.props.createServer(hypheServerData)
-        return promiseRetry(() => fetch(url).then(r => r.json()), 2000)
+        return promiseRetry(() => isInstalledPromise(hypheServerData), 2000)
       })
       .then(() => {
         const hypheServerData = this.props.data.hypheServerData
