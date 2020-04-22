@@ -37,7 +37,8 @@ class AuthenticationStep extends CreateServerFormStep {
   }
   handleSubmit = (doSubmit) => {
     const { setError, setIsProcessing } = this.props
-    const { host, keystoneURL, domain, project, openStackID, openStackPassword } = this.props.data
+    const { host, hostData, keystoneURL, domain, project, openStackID, openStackPassword } = this.props.data
+    const regionsDict = (hostData || {}).dataCenters || {}
 
     const openStackClient = new OpenStackClient(keystoneURL)
 
@@ -56,7 +57,7 @@ class AuthenticationStep extends CreateServerFormStep {
         this.props.setData({
           ...this.props.data,
           openStackClient,
-          dataCentersList: regions.map(({ region, region_id }) => ({ key: region_id, label: region }))
+          dataCentersList: regions.map(({ region, region_id }) => ({ key: region_id, label: regionsDict[region] || region }))
         })
         setIsProcessing(false)
         setTimeout(doSubmit)
