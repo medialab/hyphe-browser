@@ -32,7 +32,7 @@ const PagesList = ({
   pages,
 }) => (
   <CardsList>
-    { pages.length ? pages.map((link, index) => {
+    { pages.map((link, index) => {
       return (
         <KnownPageCard
           isActive={ index === selectedPage }
@@ -43,7 +43,7 @@ const PagesList = ({
           displayHomePageButton={ false }
         />
       )
-    }) : <FormattedMessage id="in-modale.no-links" /> }
+    }) }
   </CardsList>
 )
 
@@ -285,8 +285,7 @@ const EntityModal = ({
           </div>
           <div className={ cx('step-container') }>
             <h3>
-              <FormattedMessage id="in-modale.step" />
-              <span className="step-marker">1/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-1" /><HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-1' })}</HelpPin>
+              <span className="step-marker">1/{totalStepsNumber}</span> <FormattedMessage id="in-modale.title-step-1" /><HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-1' })}</HelpPin>
             </h3>
             <Prefixes
               prefixes={ prefixes }
@@ -297,7 +296,7 @@ const EntityModal = ({
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 2 }) }>
             <h3 className="step3-title-container">
-              <span><FormattedMessage id="in-modale.step" /><span className="step-marker">2/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-2" /> <HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-2' })}</HelpPin></span>
+              <span><span className="step-marker">2/{totalStepsNumber}</span> <FormattedMessage id="in-modale.title-step-2" /> <HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-2' })}</HelpPin></span>
               <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
             </h3>
             {
@@ -313,7 +312,9 @@ const EntityModal = ({
             </li>
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 3 }) }>
-            <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">3/{ totalStepsNumber }</span> : { createNewEntity ? <FormattedMessage id="in-modale.title-step-3-add" /> : <FormattedMessage id="in-modale.title-step-3-in" /> }<HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-3' })}</HelpPin></h3>
+            <h3>
+              <span className="step-marker">3/{ totalStepsNumber }</span> { createNewEntity ? <FormattedMessage id="in-modale.title-step-3-add" /> : <FormattedMessage id="in-modale.title-step-3-in" /> }<HelpPin place="top">{formatMessage({ id: 'in-modale.tooltip-step-3' })}</HelpPin>
+            </h3>
             <div className="name-input-container">
               <input
                 className="input"
@@ -329,7 +330,9 @@ const EntityModal = ({
           {
             totalStepsNumber === 4 &&
             <div className={ cx('step-container', { 'is-disabled': state.step < 4 }) }>
-              <h3><FormattedMessage id="in-modale.step" /> <span className="step-marker">4/{totalStepsNumber}</span> : <FormattedMessage id="in-modale.title-step-4" /><HelpPin  place="top">{formatMessage({ id: 'in-modale.tooltip-step-4' })}</HelpPin></h3>
+              <h3>
+                <span className="step-marker">4/{totalStepsNumber}</span> <FormattedMessage id="in-modale.title-step-4" /><HelpPin  place="top">{formatMessage({ id: 'in-modale.tooltip-step-4' })}</HelpPin>
+              </h3>
               <form className="settings-container">
                 <ul >
                   <li>

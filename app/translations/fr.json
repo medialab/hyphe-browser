@@ -105,7 +105,6 @@
 
   "go-to-homepage": "cliquer pour naviguer sur la Homepage de la webentité",  
   
-  "browse-create": "Créer une nouvelle entité distincte de l'actuelle",
   "cancel": "annuler",
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",
@@ -262,31 +261,30 @@
   "webentity-merge-popup-message-2": "Vous pouvez soit fusionner ces deux webentités, soit ignorer ce message.",
   "webentity-merge-popup-message-3": "Si vous ne les fusionnez pas, vous ne pourrez pas éditer le statut, le nom ou les tags de la webentité d'origine depuis Hyphe-Browser, vous pouvez à la place utiliser l'onglet spécial Hyphe et chercher la webentité pour l'éditer depuis l'interface web classique de Hyphe.",
 
-  "in-modale.confirm": "Confirmer",
-  "in-modale.no-links": "Aucun lien à afficher",
+  "in-modale.title-in": "Inclure cette webentité dans le corpus",
+  "in-modale.explanation-text-first-in": "Vous vous apprétez à ajouter cette webentité à celles d'intérêt pour le corpus.",
+  "browse-create": "Créer une nouvelle webentité plus spécialisée que l'actuelle à partir de cette page",
+  "in-modale.explanation-text-first-add": "Vous vous apprétez à créer une nouvelle webentité pour une sélection de pages de celle actuellement visitée.",
+  "in-modale.explanation-text-base": "Hyphe va automatiquement naviguer à travers ses pages pour découvrir de nouvelles webentités à prospecter, à partir des liens hypertextes trouvées dans celle-ci (les webentités découvertes s'ajouteront à la liste de PROSPECTION).",
 
-  "in-modale.title-in": "Ajouter cette webentité dans le corpus",
+  "in-modale.title-step-1": "définir le périmètre des URLs de la webentité",
+  "in-modale.tooltip-step-1": "La webentité agrégera l'ensemble des pages web dont l'URL commence par ce \"préfixe d'URL\"",
 
-  "in-modale.step": "étape ",
-  "in-modale.title-step-1": "define the webentity URL scope",
+  "in-modale.title-step-2": "choisir la page d'accueil de la webentité",
+  "in-modale.tooltip-step-2": "Il s'agit de la page principale à laquelle se référer quand on travaille avec cette webentité. C'est la page qui sera affichée et chargée lorsqu'on visite ou visualise cette webentité",
 
-  "in-modale.tooltip-step-1": "This is the URL address root level from which known pages will be gathered and analyzed by the hyphe server",
+  "in-modale.title-step-3-in": "ajuster le nom de la webentité",
+  "in-modale.title-step-3-add": "donner un nom à la webentité",
+  "in-modale.tooltip-step-3": "Choisir un nom pour la webentité afin de facilement la réidentifier plus tard",
 
-  "in-modale.title-step-2": "choose the webentity homepage",
-  "in-modale.tooltip-step-2": "This is the page choosen to display a main URL address for the webentity in lists and visualizations",
+  "in-modale.title-step-4": "réutiliser les métadonnées de la webentité existante ?",
+  "in-modale.tooltip-step-4": "Choisir si les tags et notes de terrain déjà ajoutés à la webentité doivent être également ajoutés à la nouvelle",
+  "in-modale.copy-tags": "copier les tags existants",
+  "in-modale.copy-notes": "copier les notes de terrain existantes",
 
-  "in-modale.title-step-3-in": "check the webentity name",
-  "in-modale.title-step-3-add": "set the webentity name",
-  "in-modale.tooltip-step-3": "This is the page choosen to display a main URL address for the webentity in lists and visualizations",
+  "in-modale.confirm-modale-in": "inclure la webentité et lancer la fouille automatique",
+  "in-modale.confirm-modale-add": "créer la webentité et lancer la fouille automatique",
 
-  "in-modale.copy-tags": "Copy existing tags",
-  "in-modale.copy-notes": "Copy existing notes",
-
-  "in-modale.explanation-text-first-in": "You are about to define a webentity as belonging the corpus.",
-  "in-modale.explanation-text-first-add": "You are about to create a new webentity from a subset of the webpages of the currently browsed one.",
-  "in-modale.explanation-text-base": "Its known webpages will be automatically analyzed by the hyphe server to discover new webentities based on the hyperlinks present in these ones (discovered webentities will be added to the PROSPECTIONS list).",
-  "in-modale.tooltip-step-4": "Choose which information will be copied from the original webentity",
-  "in-modale.title-step-4": "check copied informations",
-  "in-modale.confirm-modale-in": "include webentity and analyze it",
-  "in-modale.confirm-modale-add": "create webentity and analyze it"
+  "in-modale.confirm": "confirmer",
+  "in-modale.webentity-exist": "Il y a déjà une webentité dans le corpus avec le même périmètre d'URLs"
 }
