@@ -5,6 +5,7 @@ import Draggable from 'react-draggable'
 import cx from 'classnames'
 import findLastIndex from 'lodash/fp/findLastIndex'
 import findIndex from 'lodash/fp/findIndex'
+import take from 'lodash/fp/take'
 
 const findLastSelected = findLastIndex(part => part.selected)
 const findFirstEditable = findIndex(part => part.editable)
@@ -54,9 +55,9 @@ const PrefixSetter = function ({
   }
 
   const handleStop = () => {
-    setPrefix(parts
-      .filter((_, i) => i <= index )
-      .reduce((prev, part) => `${prev}${part.name}|`, ''))
+    setPrefix(
+      take(index + 1, parts).reduce((prev, part) => `${prev}${part.name}|`, '')
+    )
     setSliderX()
   }
 

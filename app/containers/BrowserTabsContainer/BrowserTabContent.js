@@ -186,7 +186,8 @@ class BrowserTabContent extends React.Component {
 
   saveAdjustChanges = (props, adjust) => {
     const { saveAdjustedWebentity, hideAdjustWebentity, server, corpusId,
-      webentity, adjusting, hideError, showError, id, disableWebentity } = props
+      webentity, adjusting, hideError, showError, id, disableWebentity,
+      declarePage, url } = props
     const localAdjust = adjust ? adjust : adjusting
 
     // no change by default
@@ -203,9 +204,11 @@ class BrowserTabContent extends React.Component {
       })
       .catch((err) => {
         showError( !~err.message.indexOf('is already set to an existing WebEntity')
-          ? { messageId: 'error.save-webentity', messageValues: { error: err.message }, fatal: false }
+          ? { messageId: 'error.save-webentity', messageValues: { error: `${err.message}` }, fatal: false }
           : { messageId: 'error.existing-prefix', fatal: false }
         )
+        hideAdjustWebentity(webentity.id)
+        declarePage(server.url, corpusId, url, id)
       })
   }
 

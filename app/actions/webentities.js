@@ -187,7 +187,7 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
       }
     })
     .catch((error) => {
-      dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error } })
+      dispatch({ type: CREATE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, name, prefixUrl, error: error.toString() } })
       throw error
     })
 }
@@ -342,7 +342,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
     .then(() => dispatch({ type: SAVE_ADJUSTED_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, adjust, webentity } }))
     .catch((error) => {
-      dispatch({ type: SAVE_ADJUSTED_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, adjust, webentity, error } })
+      dispatch({ type: SAVE_ADJUSTED_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, adjust, webentity, error: error.toString() } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_ADJUST_FAILURE, messageId: 'webentity-info-adjust-failure-notification', type: 'warning' }))
       throw error
     })

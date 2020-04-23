@@ -145,7 +145,6 @@ class BrowserTabsContainer extends React.Component {
         </div>
         {
           tabs.map((tab) => {
-
             const handleChangeEngine = (value) => setSearchEngine(value, corpus.corpus_id)
             return (
               <BrowserTabContent

@@ -26,6 +26,8 @@ location.hash = 'login'
 const domRoot = document.getElementById('root')
 render(<Container />, domRoot)
 
+window.rebuild = () => render(<Container />, domRoot)
+
 // Debugging utilities
 if (process.env.NODE_ENV === 'development') {
   console.debug('Development: JSON RPC client set as global variable') // eslint-disable-line no-console

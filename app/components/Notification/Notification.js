@@ -39,8 +39,6 @@ Notification.propTypes = {
   hideNotif: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ ui }) => ({
-  ...ui.notification,
-})
+const mapStateToProps = ({ ui }) => (ui.notification)
 
 export default connect(mapStateToProps, { hideNotif })(Notification)
