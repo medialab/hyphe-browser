@@ -49,7 +49,7 @@ class AuthenticationStep extends CreateServerFormStep {
       .then(() => {
         this.props.saveCredentials(
           host,
-          { id: openStackID, password: openStackPassword }
+          { id: openStackID, password: openStackPassword, project }
         )
       })
       .then(() => openStackClient.getRegions('compute'))
@@ -90,7 +90,7 @@ class AuthenticationStep extends CreateServerFormStep {
         keystoneURL: HOSTS[host].keystone.length === 1 ?
           HOSTS[host].keystone[0].URL :
           NULL_SELECT_VALUE,
-        ...(creds ? { openStackID: creds.id, openStackPassword: creds.password } : {})
+        ...(creds ? { openStackID: creds.id, openStackPassword: creds.password, project: creds.project } : {})
       })
     }
   }
