@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { omitBy, isUndefined } from 'lodash'
 import { FormattedMessage as T } from 'react-intl'
 
 import CreateServerFormStep from './CreateServerFormStep'
 import Ellipsis from '../../../components/Ellipsis'
-import postInstallScript from 'raw-loader!openstack-client/test/shell/script.sh'
 import promiseRetry from '../../../utils/promise-retry'
-import { getIP, isInstalledPromise } from '../../../utils/cloud-helpers'
+import { getIP } from '../../../utils/cloud-helpers'
 import { createServer, updateServer } from '../../../actions/servers'
 import SelectedServerLogs from '../../../components/SelectedServerLogs'
 
@@ -27,48 +27,48 @@ class DeployStep extends CreateServerFormStep {
       serverData: null,
     }
   }
+  isDisabled () {
+    // As soon as the server is created (thus selected), the submit button
+    // becomes available:
+    return !this.props.selectedServer
+  }
+
   deployServer () {
     const { data, setData, setError, setIsProcessing } = this.props
-    const { openStackClient, host, dataCenter, serverName, hostData, serverFlavor } = data
+    const { openStackClient, host, dataCenter, serverName, hostData, serverFlavor, serverHasNoDisk, diskVolume } = data
 
     setData({ ...data, deploying: true })
     setIsProcessing(true)
 
-    Promise.all([
-      // Check if there is an SSH key already
-      openStackClient
-        .getComputeKeypairs(dataCenter, { limit: 1 })
-        .then((sshKeys) => {
-          return sshKeys.length ?
-            sshKeys[0] :
-            openStackClient.setComputeKeypair(dataCenter, `ssh-${serverName}`)
-        }),
-      // Retrieve proper image ID
-      openStackClient
-        .getImages(dataCenter, {
-          name: hostData.image.name
-        }).then(images => images[0].id)
-    ])
-      // Create server
-      .then(([sshKey, imageId]) => {
+    openStackClient
+      // Step 1.
+      // Get an SSH key or create one:
+      .getComputeKeypairs(dataCenter, { limit: 1 })
+      .then((sshKeys) => {
+        return sshKeys.length ?
+          sshKeys[0] :
+          openStackClient.setComputeKeypair(dataCenter, `ssh-${serverName}`)
+      })
+      // Step 2.
+      // Install Hyphe on a new server:
+      .then(ssh => {
         setData({
           ...this.props.data,
-          sshData: sshKey,
+          sshData: ssh
         })
 
-        // Prepare script:
-        // TODO: Insert proper Hyphe env variables
-        const script = postInstallScript
-
-        return openStackClient.createComputeServer(
-          dataCenter,
-          serverName,
-          imageId,
-          serverFlavor,
-          { key_name: sshKey.name, user_data: btoa(script) }
-        )
+        return openStackClient
+          .hypheDeploy(dataCenter, omitBy({
+            serverName,
+            ssh,
+            image: hostData.image.name,
+            flavor: serverFlavor,
+            disk: serverHasNoDisk ? (+diskVolume || 0) : undefined,
+            hyphe_config:{/* TODO: Add Hyphe config here */}
+          }, isUndefined))
       })
-      // Load full server data until the status is "ACTIVE"
+      // Step 3.
+      // Wait for the server to be deployed (not installed):
       .then(server => promiseRetry(() => openStackClient
         .getComputeServer(dataCenter, server.id)
         .then(fullServer => {
@@ -77,10 +77,11 @@ class DeployStep extends CreateServerFormStep {
             Promise.reject('nope')
         }), 2000)
       )
-      // Start monitoring Hyphe state
+      // Step 4.
+      // Wait for Hyphe to be installed:
       .then(server => {
         const ip = getIP(server)
-        const url = `http://${ip}:81/api/`
+        const url = `http://${ip}/api/`
         const home = `http://${ip}/`
         const logsURL = `http://${ip}/install.log`
         const hypheServerData = {
@@ -117,11 +118,6 @@ class DeployStep extends CreateServerFormStep {
 
         setIsProcessing(false)
         this.props.createServer(hypheServerData)
-        return promiseRetry(() => isInstalledPromise(hypheServerData), 2000)
-      })
-      .then(() => {
-        const hypheServerData = this.props.data.hypheServerData
-        this.props.updateServer({ ...hypheServerData, cloud: { ...hypheServerData.cloud, installed: true } })
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -150,7 +146,10 @@ class DeployStep extends CreateServerFormStep {
 }
 
 export default connect(
-  ({ cloud }) => ({ credentials: cloud.credentials }),
+  ({ cloud, servers }) => ({
+    credentials: cloud.credentials,
+    selectedServer: servers.selected
+  }),
   { createServer, updateServer },
   null,
   { forwardRef: true }

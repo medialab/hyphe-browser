@@ -11,6 +11,7 @@ import AuthenticationStep from './CreateServerFormSteps/AuthenticationStep'
 import HypheConfigurationStep from './CreateServerFormSteps/HypheConfigurationStep'
 import ServerConfigurationStep from './CreateServerFormSteps/ServerConfigurationStep'
 import DeployStep from './CreateServerFormSteps/DeployStep'
+import Ellipsis from '../../components/Ellipsis'
 
 /**
  * Each of the following components extends the dumb `CreateServerFormStep`.
@@ -87,7 +88,7 @@ class CreateServerForm extends React.Component {
   }
 
   render () {
-    const { step, errors } = this.state
+    const { step, errors, isProcessing } = this.state
 
     const FormStepComponent = STEPS[step]
 
@@ -114,9 +115,9 @@ class CreateServerForm extends React.Component {
             ref: this.formStep,
 
             step,
+            isProcessing,
             intl: this.props.intl,
             data: this.state.data,
-            isProcessing: this.state.isProcessing,
 
             submit: () => this.onSubmit(),
             setData: data => this.setState({ ...this.state, data }),
@@ -139,6 +140,7 @@ class CreateServerForm extends React.Component {
           <li className="main-button-container">
             <button className={ cx('btn btn-primary', { 'is-disabled': this.isDisabled() }) }>
               <T id={ `create-cloud-server.step${step}.submit` } />
+              { isProcessing && <Ellipsis /> }
             </button>
           </li>
         </div>
