@@ -23,12 +23,11 @@
       "GRA7" : "Gravelines, France"
     }
   },
-  "vexxhost": {
+  "VexxHost": {
     "publicCloudURL": "https://vexxhost.com/public-cloud/",
     "keystone": [{"URL":"https://auth.vexxhost.net/v3/", "label": "API OpenStack Vexxhost"}],
     "image": {
-      "name": "Debian GNU/Linux 10 (buster) [2019-12-02]",
-      "id": "57578bb1-ae0c-489b-bd35-1f26b1b948ad"
+      "name": "Debian GNU/Linux 9 (stretch) [2019-04-09]"
     },
     "domainName": "Default",
     "projectRequired": true,
@@ -39,7 +38,7 @@
       "Sjc1" : "Santa Clara, California, USA"
     }
   },
-  "citycloud": {
+  "CityCloud": {
     "publicCloudURL": "https://citycloud.com/compute/",
     "keystone": [
       {"URL":"https://kna1.citycloud.com:5000/v3", "label":"Europe (Karlskrona, Sweden) or USA (Buffalo, NewYork)"},
