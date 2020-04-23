@@ -70,6 +70,8 @@
   "create-cloud-server.step3.cpus": "Nombre minimum de CPUs",
   "create-cloud-server.step3.ram": "Mémoire RAM minimale (en Go)",
   "create-cloud-server.step3.disk": "Mémoire de stockage minimale (en Go)",
+  "create-cloud-server.step3.no-disk": "Le type de serveur sélectionné n'a aucun volume monté par défaut. Veuillez sélectionner un volume disque à ajouté au server (minimum requis : 10 Go). Le prix est proportionnel à la taille du volume (voir le lien plus haut vers les prix de stockage de votre hébergeur).",
+  "create-cloud-server.step3.disk-volume": "Taille du volume disque (en Go)",
   "create-cloud-server.step3.error.unknown-api-error": "Nous ne parvenons pas à récupérer les informations du fournisseur. Veuillez réessayer plus tard.",
   "create-cloud-server.step3.confirm-deploy.title": "Déployement du serveur",
   "create-cloud-server.step3.confirm-deploy.p1": "Une fois le déployement du serveur lancé, il ne sera pas possible de l'arrêter jusqu'à ce qu'il soit opérationnel. Aussi, votre fournisseur commencera certainement à vous facturer.",

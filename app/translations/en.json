@@ -77,6 +77,8 @@
   "create-cloud-server.step3.cpus": "Minimal CPUs number",
   "create-cloud-server.step3.ram": "Minimal RAM (Go)",
   "create-cloud-server.step3.disk": "Minimal disk storage (Go)",
+  "create-cloud-server.step3.no-disk": "This flavor has no disk volume by default. Please chose a disk volume to add to your server (minimum required 10Go). Fees are proportional to the disk volume amount (see the upper link to the host's prices page).",
+  "create-cloud-server.step3.disk-volume": "Disk volume size (Go)",
   "create-cloud-server.step3.error.unknown-api-error": "We cannot reach the provider's API. Please retry later.",
   "create-cloud-server.step3.confirm-deploy.title": "Server deployment",
   "create-cloud-server.step3.confirm-deploy.p1": "Once the server starts being deployed, you will not be able to stop it until it is fully operational. Also, your provider will probably start charge.",

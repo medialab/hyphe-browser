@@ -20,6 +20,8 @@ class ServerConfigurationStep extends CreateServerFormStep {
       dataCenter: NULL_SELECT_VALUE,
       serverFlavor: NULL_SELECT_VALUE,
       showConfirmModal: false,
+      diskVolume: '10',
+      serverHasNoDisk: false,
 
       // Flavor filtering:
       cpus: '1',
@@ -41,6 +43,7 @@ class ServerConfigurationStep extends CreateServerFormStep {
       setData({ ...data, showConfirmModal: true })
     }
   }
+
   changeDatacenter = (value) => {
     const { setError, setIsProcessing, data, setData } = this.props
     const { openStackClient } = data
@@ -81,6 +84,18 @@ class ServerConfigurationStep extends CreateServerFormStep {
         setIsProcessing(false)
       })
   }
+  changeServerFlavor = (value) => {
+    const { data, setData } = this.props
+    const { serverFlavorsList } = data
+
+    const serverData = (serverFlavorsList || []).find(server => server.id === value)
+
+    setData({
+      ...data,
+      serverFlavor: value,
+      serverHasNoDisk: !!(serverData && !serverData.disk)
+    })
+  }
   getFilteredFlavorsList () {
     const data = this.props.data
     const cpusNb = +data.cpus
@@ -104,7 +119,7 @@ class ServerConfigurationStep extends CreateServerFormStep {
 
   render () {
     const { isProcessing, data, setData, intl: { formatMessage } } = this.props
-    const { hostData, dataCentersList, serverFlavorsList, dataCenter, showConfirmModal } = data
+    const { hostData, dataCentersList, serverFlavorsList, dataCenter, showConfirmModal, serverHasNoDisk } = data
 
     return (
       <>
@@ -160,6 +175,7 @@ class ServerConfigurationStep extends CreateServerFormStep {
             'create-cloud-server.step3.server-capacity',
             {
               type: 'select',
+              onChange: this.changeServerFlavor,
               options: [
                 { key: NULL_SELECT_VALUE, label: formatMessage({ id: isProcessing ?
                   'create-cloud-server.step3.server-capacity-loading-values' :
@@ -196,6 +212,30 @@ class ServerConfigurationStep extends CreateServerFormStep {
               }
             )
           ))
+        }
+
+        {
+          serverHasNoDisk && (
+            <>
+              <p><T id="create-cloud-server.step3.no-disk" /></p>
+
+              {
+                this.renderInput(
+                  'disk-volume',
+                  'create-cloud-server.step3.disk-volume',
+                  {
+                    type: 'number',
+                    horizontal: true,
+                    attributes: {
+                      min: 10,
+                      step: 1,
+                      className:'narrow',
+                    }
+                  }
+                )
+              }
+            </>
+          )
         }
 
         {
