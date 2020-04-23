@@ -9,8 +9,8 @@ import { FormattedMessage as T, useIntl } from 'react-intl'
 import { selectCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
 import CardsList from '../../components/CardsList'
+import SelectedServerLogs from '../../components/SelectedServerLogs'
 import CorpusCard from './CorpusCard'
-import InstallingServer from './InstallingServer'
 
 const CorpusList = props => {
 
@@ -25,7 +25,12 @@ const CorpusList = props => {
 
   if (ui.loaders && ui.loaders.corpora) return <Spinner textId="loading-corpora" />
   if (!server) return null
-  if (server.cloud && !server.cloud.installed) return <InstallingServer server={ server } />
+  if (server.cloud && !server.cloud.installed) return (
+    <div className="installing-server-container">
+      <h3 className="section-header"><T id="server-being-installed" /></h3>
+      <SelectedServerLogs />
+    </div>
+  )
 
   let corpora = Object.keys(props.corpora)
     .sort()

@@ -8,7 +8,7 @@ import postInstallScript from 'raw-loader!openstack-client/test/shell/script.sh'
 import promiseRetry from '../../../utils/promise-retry'
 import { getIP, isInstalledPromise } from '../../../utils/cloud-helpers'
 import { createServer, updateServer } from '../../../actions/servers'
-import ServerLogs from '../../../components/ServerLogs'
+import SelectedServerLogs from '../../../components/SelectedServerLogs'
 
 class DeployStep extends CreateServerFormStep {
   constructor (props) {
@@ -143,7 +143,7 @@ class DeployStep extends CreateServerFormStep {
 
         { hypheServerData && !(hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.deploy-hyphe" /><Ellipsis /></p> }
         { hypheServerData && (hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.hyphe-deployed" /></p> }
-        { hypheServerData && <ServerLogs showError={ false } server={ hypheServerData } /> }
+        { hypheServerData && <SelectedServerLogs /> }
       </>
     )
   }
