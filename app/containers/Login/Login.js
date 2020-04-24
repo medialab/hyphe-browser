@@ -35,14 +35,8 @@ class Login extends React.Component {
     if (!url || !server) return
 
     if (server.cloud && !server.cloud.installed) {
-      // Edge case:
-      // The server has been created from HyBro, and hasn't finished being
-      // installed:
-      // TODO
       selectServer(server)
     } else {
-      // Normal case:
-      // The server (cloud or not) is supposed to be accessible:
       fetchServerStatus(url)
         .then(({ payload }) => {
           if (!payload.error) return fetchCorpora(url)

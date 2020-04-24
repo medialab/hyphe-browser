@@ -7,17 +7,24 @@ import Ellipsis from '../Ellipsis'
 import { useRetry } from '../../utils/hooks'
 import { isInstalledPromise } from '../../utils/cloud-helpers'
 import { updateServer } from '../../actions/servers'
+import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 
 import './SelectedServerLogs.styl'
 
 /**
- * This component monitors selected cloud server's installation, and set it as
- * `installed` once it's fully installed.
+ * This component monitors selected cloud server's installation, and once it's
+ * fully installed, set it as `installed` and load corpora.
  *
  * It will display an error message if there is no selected server or if it is
  * not a cloud server (ie. installed from this HypheBrowser instance).
+ *
+ * TODO:
+ * *****
+ * Move the impactful actions calls into actual actions, to make it so that it
+ * does not require this component to finalize a cloud server installation in
+ * the app state.
  */
-const SelectedServerLogs = ({ server, updateServer }) => {
+const SelectedServerLogs = ({ server, updateServer, fetchCorpora, fetchServerStatus }) => {
   if (!server || !server.cloud) return (
     <div className="server-logs error">
       This server is not managed by this Hyphe-Browser yet.
@@ -52,15 +59,16 @@ const SelectedServerLogs = ({ server, updateServer }) => {
 
     if (url && !server.cloud.installed) {
       return isInstalledPromise(server)
-        .then(() => {
-          updateServer({
-            ...server,
-            cloud: {
-              ...server.cloud,
-              installed: true,
-            }
-          })
-        }).catch(retry)
+        .then(() => fetchServerStatus(url))
+        .then(({ payload }) => !payload.error && fetchCorpora(url))
+        .then(() => updateServer({
+          ...server,
+          cloud: {
+            ...server.cloud,
+            installed: true,
+          }
+        }))
+        .catch(retry)
     }
   }, 2000)
 
@@ -76,10 +84,12 @@ const SelectedServerLogs = ({ server, updateServer }) => {
 
 SelectedServerLogs.propTypes = {
   server: PropTypes.object,
-  updateServer: PropTypes.func.isRequired
+  updateServer: PropTypes.func.isRequired,
+  fetchCorpora: PropTypes.func.isRequired,
+  fetchServerStatus: PropTypes.func.isRequired
 }
 
 export default connect(
   ({ servers }) => ({ server: servers.selected }),
-  { updateServer }
+  { updateServer, fetchCorpora, fetchServerStatus }
 )(SelectedServerLogs)

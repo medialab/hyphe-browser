@@ -31,6 +31,7 @@ const CorpusList = props => {
       <SelectedServerLogs />
     </div>
   )
+  if (!props.corpora) return null
 
   let corpora = Object.keys(props.corpora)
     .sort()
