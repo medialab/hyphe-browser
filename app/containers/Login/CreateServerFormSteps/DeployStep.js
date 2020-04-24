@@ -28,11 +28,6 @@ class DeployStep extends CreateServerFormStep {
       serverData: null,
     }
   }
-  isDisabled () {
-    // As soon as the server is created (thus selected), the submit button
-    // becomes available:
-    return !this.props.selectedServer
-  }
 
   deployServer () {
     const { data, setData, setError, setIsProcessing } = this.props
@@ -134,16 +129,16 @@ class DeployStep extends CreateServerFormStep {
 
   }
   render () {
-    const { hypheServerData } = this.props.data
+    const { selectedServer } = this.props
 
     return (
       <>
-        { !hypheServerData && <p><T id="create-cloud-server.step4.deploy-server" /><Ellipsis /></p> }
-        { hypheServerData && <p><T id="create-cloud-server.step4.server-deployed" /></p> }
+        { !selectedServer && <p><T id="create-cloud-server.step4.deploy-server" /><Ellipsis /></p> }
+        { selectedServer && <p><T id="create-cloud-server.step4.server-deployed" /></p> }
 
-        { hypheServerData && !(hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.deploy-hyphe" /><Ellipsis /></p> }
-        { hypheServerData && (hypheServerData.cloud || {}).installed && <p><T id="create-cloud-server.step4.hyphe-deployed" /></p> }
-        { hypheServerData && <SelectedServerLogs /> }
+        { selectedServer && !selectedServer.cloud.installed && <p><T id="create-cloud-server.step4.deploy-hyphe" /><Ellipsis /></p> }
+        { selectedServer && selectedServer.cloud.installed && <p><T id="create-cloud-server.step4.hyphe-deployed" /></p> }
+        { selectedServer && <SelectedServerLogs /> }
       </>
     )
   }
