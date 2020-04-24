@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { omitBy, isUndefined } from 'lodash'
+import { omitBy, isUndefined, mapValues } from 'lodash'
 import { FormattedMessage as T } from 'react-intl'
 
 import CreateServerFormStep from './CreateServerFormStep'
+import { HYPHE_SETTINGS_KEY } from './HypheConfigurationStep'
 import Ellipsis from '../../../components/Ellipsis'
 import promiseRetry from '../../../utils/promise-retry'
 import { getIP } from '../../../utils/cloud-helpers'
@@ -63,8 +64,11 @@ class DeployStep extends CreateServerFormStep {
             ssh,
             image: hostData.image.name,
             flavor: serverFlavor,
-            disk: serverHasNoDisk ? (+diskVolume || 0) : undefined,
-            hyphe_config:{/* TODO: Add Hyphe config here */}
+            disk: serverHasNoDisk ? (+diskVolume || 0) : undefined,
+            hyphe_config: mapValues(
+              omitBy(data[HYPHE_SETTINGS_KEY], isUndefined),
+              value => value + ''
+            )
           }, isUndefined))
       })
       // Step 3.

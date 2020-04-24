@@ -2,6 +2,7 @@ import React from 'react'
 import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { FormattedMessage as T } from 'react-intl'
+import { get, set } from 'lodash'
 
 class CreateServerFormStep extends React.Component {
   constructor (props) {
@@ -48,10 +49,13 @@ class CreateServerFormStep extends React.Component {
   /**
    * This method renders an input
    *
-   * @param key        The key where the input data is attached in the
+   * @param keys       The key where the input data is attached in the
    *                   component's parent data state.
+   *                   Also accepts an array of strings, used as a path in the
+   *                   state object.
    * @param labelKey   The localisation key for the label.
    * @param onChange   A `(value: any) => void` handler (optional)
+   * @param error      An error message that will be shown next to the label.
    * @param horizontal If true, the `form-group` will have the `horizontal`
    *                   class, and the input will be rendered before the label.
    * @param type       The input type (optional, defaults to `"text"`). Accepts
@@ -64,14 +68,17 @@ class CreateServerFormStep extends React.Component {
    *                   the input element.
    * @returns          A React pseudo-DOM tree.
    */
-  renderInput (key, labelKey, { onChange, horizontal, type = 'text', options = [], attributes = {} } = {}) {
-    const value = this.props.data[key] || ''
+  renderInput (keys, labelKey, { onChange, error, horizontal, type = 'text', options = [], attributes = {} } = {}) {
+    const key = Array.isArray(keys) ? keys.join('.') : keys
+    const value = get(this.props.data, keys, '')
     const id = `step${this.props.step}-${key}`
     const handler = ({ target }) => {
+      const v = type === 'checkbox' ? target.checked : target.value
+
       if (onChange) {
-        onChange(target.value)
+        onChange(v)
       } else {
-        this.props.setData({ ...this.props.data, [key]: target.value })
+        this.props.setData(set({ ...this.props.data }, keys, v))
       }
     }
     let input
@@ -96,6 +103,16 @@ class CreateServerFormStep extends React.Component {
           { options.map(({ key, label }) => <option key={ key } value={ key }>{label}</option>) }
         </select>
       )
+    } else if (type === 'checkbox') {
+      input = (
+        <input
+          id={ id }
+          type={ type }
+          onChange={ handler }
+          checked={ value }
+          { ...attributes }
+        />
+      )
     } else {
       input = (
         <input
@@ -109,9 +126,9 @@ class CreateServerFormStep extends React.Component {
     }
 
     return (
-      <div key={ key } className={ cx('form-group', horizontal && 'horizontal') }>
+      <div key={ key } className={ cx('form-group', horizontal && 'horizontal', error && 'error') }>
         {horizontal && input}
-        <label htmlFor={ id }><T id={ labelKey } /></label>
+        <label htmlFor={ id }><T id={ labelKey } />{ error && <span className="error-message">❌ { error }</span> }</label>
         {!horizontal && input}
       </div>
     )
