@@ -121,7 +121,7 @@ export default createReducer(initialState, {
   [FETCH_CORPUS_STATUS_SUCCESS]: toggleLoader('corporus_status', false),
   [FETCH_CORPUS_STATUS_FAILURE]: toggleLoader('corporus_status', false),
 
-  [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', true),
+  [DECLARE_PAGE_REQUEST]: toggleLoader('webentity', false),
   [DECLARE_PAGE_SUCCESS]: toggleLoader('webentity', false),
   [DECLARE_PAGE_FAILURE]: toggleLoader('webentity', false),
 

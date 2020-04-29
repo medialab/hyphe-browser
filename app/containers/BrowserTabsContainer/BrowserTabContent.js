@@ -159,11 +159,7 @@ class BrowserTabContent extends React.Component {
         console.debug(info) // eslint-disable-line no-console
         console.error(err) // eslint-disable-line no-console
       }
-      // https://github.com/medialab/hyphe-browser/issues/130
-      // Any redirection, even 30x throw a -3 error.
-      if (info.errorCode !== -3) {
-        setTabStatus({ loading: false, error: info }, id)        
-      }
+      setTabStatus({ loading: false, error: info }, id)
       stoppedLoadingWebentity()
       // Main page triggered the error, it's important
       if (info.pageURL === info.validatedURL) {
@@ -173,7 +169,11 @@ class BrowserTabContent extends React.Component {
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
           setTabUrl(getSearchUrl(selectedEngine, term), id)
         } else {
-          showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
+          if (info.errorCode !== -3) {
+            // https://github.com/medialab/hyphe-browser/issues/130
+            // Any redirection, even 30x throw a -3 error.
+            showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
+          }
           setTabUrl(info.pageURL, id)
         }
       }
