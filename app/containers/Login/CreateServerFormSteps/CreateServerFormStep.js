@@ -63,12 +63,14 @@ class CreateServerFormStep extends React.Component {
    *                   `textarea`.
    * @param options    An array of `{key: string, label: string}` available
    *                   values, to generate the options list, when using a
-   *                   `select` type.
+   *                   `select` type. Also, you can use `labelKey` instead of
+   *                   `label`, in which case it will be used with intl.
+   * @param labelTag   An optional string tag to use instead of `label`.
    * @param attributes A map of arbitrary HTML attributes, that will be added to
    *                   the input element.
    * @returns          A React pseudo-DOM tree.
    */
-  renderInput (keys, labelKey, { onChange, error, horizontal, type = 'text', options = [], attributes = {} } = {}) {
+  renderInput (keys, labelKey, { onChange, error, horizontal, type = 'text', options = [], labelTag = null, attributes = {} } = {}) {
     const key = Array.isArray(keys) ? keys.join('.') : keys
     const value = get(this.props.data, keys, '')
     const id = `step${this.props.step}-${key}`
@@ -100,7 +102,11 @@ class CreateServerFormStep extends React.Component {
           onChange={ handler }
           { ...attributes }
         >
-          { options.map(({ key, label }) => <option key={ key } value={ key }>{label}</option>) }
+          { options.map(({ key, label, labelKey }) => (
+            <option key={ key } value={ key }>{
+              labelKey ? this.props.intl.formatMessage({ id: labelKey }) : label || key
+            }</option>
+          )) }
         </select>
       )
     } else if (type === 'checkbox') {
@@ -125,10 +131,12 @@ class CreateServerFormStep extends React.Component {
       )
     }
 
+    const LabelTag = labelTag || 'label'
+
     return (
       <div key={ key } className={ cx('form-group', horizontal && 'horizontal', error && 'error') }>
         {horizontal && input}
-        <label htmlFor={ id }><T id={ labelKey } />{ error && <span className="error-message">❌ { error }</span> }</label>
+        <LabelTag htmlFor={ id }><T id={ labelKey } />{ error && <span className="error-message">❌ { error }</span> }</LabelTag>
         {!horizontal && input}
       </div>
     )
