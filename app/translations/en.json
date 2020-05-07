@@ -78,7 +78,7 @@
   "create-cloud-server.step2.HYPHE_DEFAULT_CREATION_RULE.subdomain": "Subdomain",
   "create-cloud-server.step2.HYPHE_DEFAULT_CREATION_RULE.domain": "Domain",
   "create-cloud-server.step2.HYPHE_DEFAULT_CREATION_RULE.page": "Page",
-  "create-cloud-server.step2.web-entities-creation": "Web entities creation rules",
+  "create-cloud-server.step2.HYPHE_CREATION_RULES": "Web entities creation rules",
   "create-cloud-server.step2.automatic-redirection": "Redirections to resolve automatically",
   "create-cloud-server.step2.add-redirection": "Add the \"{label}\" redirection domain",
   "create-cloud-server.step2.web-settings": "Authorizations and web settings",

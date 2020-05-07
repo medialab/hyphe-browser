@@ -1,6 +1,18 @@
+/**
+ * This component implements the Hyphe configuration form. The workflow is the
+ * following:
+ *
+ * 1. The `SETTINGS` array represents the list of all inputs. Check the
+ *    `#renderElement` method to understand how those inputs are described
+ *
+ * 2. The inputs are bound to `props.data[HYPHE_SETTINGS_RAW_KEY]` state
+ *
+ * 3. Anytime the raw data are modified, the `props.data[HYPHE_SETTINGS_KEY]`
+ *    (cleaned data) are regenerated, using the `rawToCleanedSettings` function
+ */
 import React from 'react'
 import { Creatable } from 'react-select'
-import { clamp, identity } from 'lodash'
+import { clamp, identity, values, mapValues, omitBy } from 'lodash'
 import { FormattedMessage as T } from 'react-intl'
 
 import CreateServerFormStep from './CreateServerFormStep'
@@ -10,7 +22,12 @@ import './hypheConfigurationStep.styl'
 export const HYPHE_SETTINGS_KEY = 'hypheSettings'
 export const HYPHE_SETTINGS_RAW_KEY = 'hypheSettingsRaw'
 const HTTP_RE = /^https?:\/\//
+const CREATION_RULE_RE = /^(page|domain|subdomain(-[12]?\d)?|path-[12]?\d)$/
 
+/**
+ * This array represents each inputs required for Hyphe configuration. To
+ * understand more precisely the specs, check
+ */
 const SETTINGS = [
   { customRender: (key) => <h3 key={ key }><T id="create-cloud-server.step2.crawl" /></h3> },
   { id: 'HYPHE_MAXDEPTH',
@@ -68,9 +85,11 @@ const SETTINGS = [
   { customRender: (key) => <h3 key={ key }><T id="create-cloud-server.step2.web-entites" /></h3> },
   { customRender: (key) => <h4 key={ key }><T id="create-cloud-server.step2.start-pages" /></h4> },
   { id: 'START_HOMEPAGE',
+    customClean: true,
     inline: true,
     type: 'checkbox' },
   { id: 'START_PREFIXES',
+    customClean: true,
     inline: true,
     type: 'checkbox' },
   { customRender: (key, { data, setRawData }) => {
@@ -80,10 +99,7 @@ const SETTINGS = [
     const MIN_COUNT = 1
     const MAX_COUNT = 1000
 
-    const change = (key, value) => setRawData({
-      ...data[HYPHE_SETTINGS_RAW_KEY],
-      [key]: value
-    })
+    const change = (key, value) => setRawData(key, value)
 
     return (
       <div key={ key } className="form-group horizontal">
@@ -110,6 +126,7 @@ const SETTINGS = [
     )
   } },
   { id: 'HYPHE_DEFAULT_CREATION_RULE',
+    customClean: true,
     type: 'select',
     labelTag: 'h4',
     options: [
@@ -117,14 +134,30 @@ const SETTINGS = [
       { key: 'domain', labelKey: 'create-cloud-server.step2.HYPHE_DEFAULT_CREATION_RULE.domain' },
       { key: 'page', labelKey: 'create-cloud-server.step2.HYPHE_DEFAULT_CREATION_RULE.page' }
     ] },
-  { customRender: (key) => {
-    return (
-      <div key={ key } className="form-group">
-        <h4><T id="create-cloud-server.step2.web-entities-creation" /></h4>
-        <div>TODO</div>
-      </div>
-    )
-  } },
+  { id: 'HYPHE_CREATION_RULES',
+    customClean: true,
+    type: 'textarea',
+    labelTag: 'h4',
+    attributes: {
+      style: { height: 280, resize: 'vertical' }
+    },
+    checkError: value => {
+      const str = value
+      let data
+      if (!str) return null
+      try {
+        data = JSON.parse(str)
+      } catch(e) {
+        return 'Not a valid JSON string'
+      }
+      try {
+        const wrongValue = values(data).find(s => !s.match(CREATION_RULE_RE))
+        if (wrongValue)
+          return `Value "${wrongValue}" does not match ${CREATION_RULE_RE}`
+      } catch(e) {
+        return 'Invalid data format'
+      }
+    } },
   { customRender: (key, { data, setRawData, intl: { formatMessage } }) => {
     const values = data[HYPHE_SETTINGS_RAW_KEY].HYPHE_FOLLOW_REDIRECTS || []
 
@@ -137,10 +170,10 @@ const SETTINGS = [
           placeholder=""
           name="hyphe-follow-redirects"
           value={ values.map(value => ({ value, label: value })) }
-          onChange={ values => setRawData({
-            ...data,
-            HYPHE_FOLLOW_REDIRECTS: values.map(({ value }) => value)
-          }) }
+          onChange={ values => setRawData(
+            'HYPHE_FOLLOW_REDIRECTS',
+            values.map(({ value }) => value)
+          ) }
           promptTextCreator={ label => formatMessage({ id: 'create-cloud-server.step2.add-redirection' }, { label }) }
         />
       </div>
@@ -172,6 +205,24 @@ const INITIAL_RAW_SETTINGS = {
   START_MOST_CITED: false,
   START_MOST_CITED_COUNT: '5',
   HYPHE_DEFAULT_CREATION_RULE: 'subdomain',
+  HYPHE_CREATION_RULES: JSON.stringify({
+    'twitter.com': 'path-1',
+    'facebook.com': 'path-1',
+    'facebook.com/pages': 'path-2',
+    'facebook.com/groups': 'path-2',
+    'facebook.com/people': 'path-2',
+    'plus.google.com': 'path-1',
+    'linkedin.com': 'path-2',
+    'viadeo.com/user': 'path-2',
+    'ello.co': 'path-1',
+    'pinterest.com': 'path-1',
+    'over-blog.com': 'subdomain',
+    'tumblr.com': 'subdomain',
+    'wordpress.com': 'subdomain',
+    'vimeo.com/user': 'path-2',
+    'dailymotion.com/user': 'path-2',
+    'youtube.com/user': 'path-2'
+  }, null, '  '),
   HYPHE_FOLLOW_REDIRECTS: [
     'fb.me',
     'l.facebook.com',
@@ -236,28 +287,52 @@ const INITIAL_RAW_SETTINGS = {
 }
 
 function rawToCleanedSettings (rawSettings) {
-  const cleanedSettings = {}
+  let cleanedSettings = {}
 
   // 1. Deal with "normal" settings (raw === cleaned):
   // 2. Deal with settings with a `clean` method:
-  SETTINGS.filter(({ id, custom }) => id && !custom).forEach(({ id, type, clean }) => {
-    if (!id) return
+  SETTINGS.filter(({ id, custom }) => id && !custom).forEach(({ id, type, clean, customClean }) => {
+    if (!id || customClean) return
 
     if (clean) {
       cleanedSettings[id] = clean(rawSettings[id])
     } else if (type === 'checkbox') {
-      cleanedSettings[id] = (!!rawSettings[id] + '').toUpperCase()
+      cleanedSettings[id] = (!!rawSettings[id] + '')
+    } else {
+      cleanedSettings[id] = rawSettings[id] + ''
     }
   })
 
   // 3. Deal with complex settings:
-  // Start pages:
+  // - Start pages:
   cleanedSettings.HYPHE_DEFAULT_STARTPAGES_MODE = [
     rawSettings.START_HOMEPAGE && 'homepage',
     rawSettings.START_PREFIXES && 'prefixes',
     rawSettings.START_MOST_CITED && ('pages-' + rawSettings.START_MOST_CITED_COUNT)
   ].filter(identity)
-  // TODO: Shape the result for the env var injection in openstack-client
+
+  // - Creation rules:
+  try {
+    if (rawSettings.HYPHE_CREATION_RULES) {
+      cleanedSettings.HYPHE_CREATION_RULES = JSON.parse(rawSettings.HYPHE_CREATION_RULES)
+    }
+  } catch (e) {
+    // Nothing to do here...
+  }
+
+  // 4. Serialize every non-scalar data:
+  cleanedSettings = mapValues(cleanedSettings, val => {
+    return typeof val === 'object' ? JSON.stringify(val) : val
+  })
+
+  // 5. Echap double quotes with a backslash
+  // TODO: Move that part into the client when possible
+  cleanedSettings = mapValues(cleanedSettings, val => {
+    return typeof val === 'string' ? val.replace(/"/g, '\\"') : val
+  })
+
+  // 6. Remove empty, null and undefined values
+  cleanedSettings = omitBy(cleanedSettings, value => value === null || value === undefined || value === '')
 
   return cleanedSettings
 }
@@ -278,10 +353,15 @@ class HypheConfigurationStep extends CreateServerFormStep {
     }
   }
   isDisabled (data) {
-    return SETTINGS.some(({ id, checkError }) => checkError && checkError(data[HYPHE_SETTINGS_KEY][id]))
+    return SETTINGS.some(({ id, checkError }) => checkError && checkError(data[HYPHE_SETTINGS_RAW_KEY][id]))
   }
-  setRawData = (rawSettings) => {
+  setRawData = (...args) => {
+    const rawSettings = args.length === 2 ?
+      { ...this.props.data[HYPHE_SETTINGS_RAW_KEY], [args[0]]: args[1] } :
+      args[0]
+
     this.props.setData({
+      ...this.props.data,
       [HYPHE_SETTINGS_RAW_KEY]: rawSettings,
       [HYPHE_SETTINGS_KEY]: rawToCleanedSettings(rawSettings)
     })
@@ -296,10 +376,7 @@ class HypheConfigurationStep extends CreateServerFormStep {
     if (setting.customRender) return setting.customRender(i, { ...this.props, setRawData: this.setRawData })
 
     const onChange = value => {
-      this.setRawData({
-        ...this.props.data[HYPHE_SETTINGS_RAW_KEY],
-        [setting.id]: value
-      })
+      this.setRawData(setting.id, value)
     }
 
     return (setting.important || this.state.showAllSettings) ? this.renderInput(

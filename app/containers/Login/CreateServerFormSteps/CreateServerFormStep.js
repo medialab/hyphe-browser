@@ -115,7 +115,7 @@ class CreateServerFormStep extends React.Component {
           id={ id }
           type={ type }
           onChange={ handler }
-          checked={ value }
+          checked={ !!value }
           { ...attributes }
         />
       )
