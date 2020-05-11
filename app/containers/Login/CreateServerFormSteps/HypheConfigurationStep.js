@@ -158,27 +158,28 @@ const SETTINGS = [
         return 'Invalid data format'
       }
     } },
-  { customRender: (key, { data, setRawData, intl: { formatMessage } }) => {
-    const values = data[HYPHE_SETTINGS_RAW_KEY].HYPHE_FOLLOW_REDIRECTS || []
+  { id: 'HYPHE_FOLLOW_REDIRECTS',
+    customRender: (key, { data, setRawData, intl: { formatMessage } }) => {
+      const values = data[HYPHE_SETTINGS_RAW_KEY].HYPHE_FOLLOW_REDIRECTS || []
 
-    return (
-      <div key={ key } className="form-group">
-        <h4><T id="create-cloud-server.step2.automatic-redirection" /></h4>
-        <Creatable
-          multi
-          clearable
-          placeholder=""
-          name="hyphe-follow-redirects"
-          value={ values.map(value => ({ value, label: value })) }
-          onChange={ values => setRawData(
-            'HYPHE_FOLLOW_REDIRECTS',
-            values.map(({ value }) => value)
-          ) }
-          promptTextCreator={ label => formatMessage({ id: 'create-cloud-server.step2.add-redirection' }, { label }) }
-        />
-      </div>
-    )
-  } },
+      return (
+        <div key={ key } className="form-group">
+          <h4><T id="create-cloud-server.step2.automatic-redirection" /></h4>
+          <Creatable
+            multi
+            clearable
+            placeholder=""
+            name="hyphe-follow-redirects"
+            value={ values.map(value => ({ value, label: value })) }
+            onChange={ values => setRawData(
+              'HYPHE_FOLLOW_REDIRECTS',
+              values.map(({ value }) => value)
+            ) }
+            promptTextCreator={ label => formatMessage({ id: 'create-cloud-server.step2.add-redirection' }, { label }) }
+          />
+        </div>
+      )
+    } },
 
   { customRender: (key) => <h3 key={ key }><T id="create-cloud-server.step2.web-settings" /></h3> },
   { id: 'HYPHE_OPEN_CORS_API',
@@ -299,7 +300,7 @@ function rawToCleanedSettings (rawSettings) {
     } else if (type === 'checkbox') {
       cleanedSettings[id] = (!!rawSettings[id] + '')
     } else {
-      cleanedSettings[id] = rawSettings[id] + ''
+      cleanedSettings[id] = (typeof rawSettings[id] === 'object') ? JSON.stringify(rawSettings[id]) : (rawSettings[id] + '')
     }
   })
 
@@ -325,13 +326,7 @@ function rawToCleanedSettings (rawSettings) {
     return typeof val === 'object' ? JSON.stringify(val) : val
   })
 
-  // 5. Echap double quotes with a backslash
-  // TODO: Move that part into the client when possible
-  cleanedSettings = mapValues(cleanedSettings, val => {
-    return typeof val === 'string' ? val.replace(/"/g, '\\"') : val
-  })
-
-  // 6. Remove empty, null and undefined values
+  // 5. Remove empty, null and undefined values
   cleanedSettings = omitBy(cleanedSettings, value => value === null || value === undefined || value === '')
 
   return cleanedSettings
