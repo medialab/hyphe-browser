@@ -29,7 +29,7 @@ In this file, you will find all the needed information.
 
 This is an example of the content of a RC file (example from Vexxhost) :
 
-```
+```bash
 #!/usr/bin/env bash
 # To use an OpenStack cloud you need to authenticate against the Identity
 # service named keystone, which returns a **Token** and **Service Catalog**.
