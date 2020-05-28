@@ -27,7 +27,7 @@
     "publicCloudURL": "https://vexxhost.com/public-cloud/",
     "keystone": [{"URL":"https://auth.vexxhost.net/v3/", "label": "API OpenStack Vexxhost"}],
     "image": {
-      "name": "Debian GNU/Linux 9 (stretch) [2019-04-09]"
+      "name": "Debian GNU/Linux 9 (stretch)"
     },
     "domainName": "Default",
     "projectRequired": true,
@@ -35,7 +35,7 @@
     "dataCenterURL": "https://vexxhost.com/company/data-centers/",
     "dataCenters": {
       "ca-ymq-1": "Montreal, Quebec, Canada",
-      "Sjc1" : "Santa Clara, California, USA"
+      "sjc1" : "Santa Clara, California, USA"
     }
   },
   "CityCloud": {

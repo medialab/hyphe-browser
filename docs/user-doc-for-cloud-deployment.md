@@ -83,6 +83,6 @@ Once the server is created & online, you can follow the hyphe installation by ch
 
 ![Hyphe browser - deployment log](./assets/user-manual/hybro-step7-with-log.png)
 
-At this setp, your hyphe server is up and running, and you can use it in your hyphe browser.
+At this step, your hyphe server is up and running, and you can use it in your hyphe browser.
 
 // TODO /!\ VEXXHOST SPECIFIC POST-PROCESS DOC /!\
