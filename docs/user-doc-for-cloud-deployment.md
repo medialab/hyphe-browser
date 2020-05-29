@@ -35,8 +35,6 @@ To retreive it, you need to got on `Identity > project` in the dashboard.
 
 Like in the screenshot, you should just have one line in the table. You should save somewhere the name (not the ID) of the project.
 
-// TODO : VEXXHOST SPECIFIC PRE-PROCESS DOC /!\
-
 ### Hyphe browser
 
 Now that you Vexxhost is created and working, you can open your hyphe browser.
@@ -85,4 +83,88 @@ Once the server is created & online, you can follow the hyphe installation by ch
 
 At this step, your hyphe server is up and running, and you can use it in your hyphe browser.
 
-// TODO /!\ VEXXHOST SPECIFIC POST-PROCESS DOC /!\
+## City Cloud
+
+### Account creation
+
+Go to this url to create an account : https://admin.citycloud.com/login
+
+![Citycloud - registration](./assets/user-manual/citycloud-registration.png)
+
+Fulfill the form and validate it.
+
+Then you will receive an email in your mailbox with a validation link.
+Click on it, and you should be redirected to this webpage :
+
+![Citycloud - registration - step 2](./assets/user-manual/citycloud-registration-step2.png)
+
+### Open Stack Cloud
+
+One your account is created, you need to go https://citycontrolpanel.com with your account.
+
+You have 3 :
+
+- find your domain & project name
+- find / create an openstack user
+- create a network
+
+#### Find the project
+
+At the creation of your account, city cloud creates a default domain and project, and you will need them in hyphe-browser.
+To find them , just go on this page : https://citycontrolpanel.com/openstack#manage_projects
+
+![Citycloud - projects](./assets/user-manual/citycloud-project.png)
+
+In this example, I have two projects _test Hype_ and _Default Project 38263_.
+You should save somewhere the name of the project, because you will need it in hyphe browser.
+
+#### Find the domain and create a user
+
+Now, go on this page : https://citycontrolpanel.com/openstack#openstack_api_access
+
+![Citycloud - Users](./assets/user-manual/citycloud-users.png)
+
+This page list all the regions of the cloud provider (ie. the datacenters).
+And for each region you can find the name of the domaine (here _CCP_Domain_38263_), and you can also a create a user
+
+![Citycloud - User creation](./assets/user-manual/citycloud-user-creation.png)
+
+#### Create a network
+
+Go to this page https://citycontrolpanel.com/openstack#networks , and click on the button _Create Network_
+
+![Citycloud - Network creation](./assets/user-manual/citycloud-network-creation.png)
+
+The only thing you need to do, it's to fulfill the name of the network, as for example _hyphe-network_,
+and the data center where you want to deploy your hyphe server (in the example _London_).
+
+## Hyphe browser
+
+On Hyphe browser, you just have to follow the classic workflow to create the server.
+
+Citycloud can't dynamically create a server with a public IP, that's why at the end of the process you can't see the server's log and that you will be stuck on this page :
+
+![Citycloud deploy server](./assets/user-manual/citycloud-hybro-deploy.png)
+
+But your server is created !
+
+To correct that, you need to give a public IP to your server :
+
+1. Go to https://citycontrolpanel.com/openstack#list-servers
+2. Click on the cog menu on the line of your created server, and select the item _Connect Floating IP_
+
+![Citycloud - Server floating IP](./assets/user-manual/citycloud-floatingip.png)
+
+3. On the popin, just click on the button _Add floating IP_ and wait
+
+4. When it's done, you should see on the line of your server, the public IP addressof your server
+
+Now your hyphe server is ready and you can access it throw your browser.
+But if you want to use it with hyphe-browser, you need to change the URL that it has registered .
+
+Just open your hyphe-browser, and in the list of server select the one you have created,
+and click on the pencil on the right of the select box.
+
+![Hyphe brother - change ip of a server](./assets/user-manual/citycloud-hybro-serverip.png)
+
+Here you just have to change the URL with the floating IP your server has.
