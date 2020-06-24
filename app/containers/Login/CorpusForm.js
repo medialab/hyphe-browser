@@ -22,7 +22,7 @@ class CorpusForm extends React.Component {
     this.state = {
       submitting: false,
       error: null,
-      data: this.getInitData(),
+      data: this.getInitData(props),
       passwordProtected: false,
     }
   }
@@ -63,9 +63,10 @@ class CorpusForm extends React.Component {
     )
   }
 
-  getInitData () {
+  getInitData (props) {
+    const { location } = props
     return {
-      name: null,
+      name: location.state && location.state.filterName,
       password: null,
       passwordConfirm: null
     }

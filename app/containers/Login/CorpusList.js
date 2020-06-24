@@ -76,7 +76,15 @@ const CorpusList = props => {
       {!hypheFull &&
         !(notification && notification.messageValues && notification.messageValues.error) &&
         <div className="buttons-row">
-          <Link className="btn btn-primary btn-fullwidth" to="/login/corpus-form"><T id="create-corpus" /></Link>
+          <Link
+            className="btn btn-primary btn-fullwidth"
+            to={ {
+              pathname: '/login/corpus-form',
+              state: { filterName: filter }
+            } }
+          >
+            <T id="create-corpus" />
+          </Link>
         </div>
       }
     </div>
