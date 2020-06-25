@@ -31,6 +31,7 @@ export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Cmd+PageDown']
 export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'CmdOrCtrl+PageUp']
 export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
 export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Cmd+Shift+R', 'Cmd+F5']
+export const SHORTCUT_FIND_IN_PAGE = ['CmdOrCtrl+F']
 
 export const PAGE_HYPHE_HOME = 'hyphe://home'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'

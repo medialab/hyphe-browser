@@ -6,13 +6,16 @@ import { connect } from 'react-redux'
 
 import networkErrors from 'chromium-net-errors'
 
-import { PAGE_HYPHE_HOME } from '../../constants'
+import { PAGE_HYPHE_HOME, SHORTCUT_FIND_IN_PAGE } from '../../constants'
 
 import BrowserBar from '../../components/BrowserBar'
 import NewTabContent from '../../components/NewTabContent'
 
 import WebView from './WebView'
+import SearchBar from './SearchBar'
 import { FormattedMessage as T } from 'react-intl'
+
+import { ipcRenderer as ipc } from 'electron'
 
 import { eventBusShape } from '../../types'
 
@@ -45,6 +48,7 @@ class BrowserTabContent extends React.Component {
       disableBack: true,
       disableForward: true,
       disableApplyButton: false,
+      showSearchBar: false,
       setDoNotShowAgainAfterSubmit: null
     }
   }
@@ -62,6 +66,9 @@ class BrowserTabContent extends React.Component {
     eventBus.on('close', this.navCloseHandler)
     this.navOpenHandler = (url) => openTab(url, id)
     eventBus.on('open', this.navOpenHandler)
+    
+    ipc.on(`shortcut-${SHORTCUT_FIND_IN_PAGE}`, this.handleShowSearchBar)
+    ipc.send('registerShortcut', SHORTCUT_FIND_IN_PAGE)
   }
 
   componentWillReceiveProps (props) {
@@ -276,6 +283,13 @@ class BrowserTabContent extends React.Component {
     }
   }
 
+  handleShowSearchBar = () => {
+    if(this.props.active) this.setState({ showSearchBar: true })
+  }
+  handleHideSearchBar = () => {
+    if(this.props.active) this.setState({ showSearchBar: false })
+  }
+
   render () {
     const { 
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
@@ -300,6 +314,11 @@ class BrowserTabContent extends React.Component {
     const handleGoForward = () => {
       eventBus.emit('goForward')
     }
+
+    const handleUpdateSearch = (value) => eventBus.emit('findInPage', value, false)
+    const handleFindNext = (value) => eventBus.emit('findInPage', value, true)
+    const handleClearSearch = () => eventBus.emit('stopFindInPage')
+
     const handleSetTabUrl = (value) => setTabUrl(value, id)
     const handleSetWebentityHomepage = () => setWebentityHomepage(server.url, corpusId, url, webentity.id)
     const onAddClick = () => {
@@ -366,9 +385,19 @@ class BrowserTabContent extends React.Component {
             onChangeEngine = { onChangeEngine }
             onSetTabUrl={ handleSetTabUrl } 
           /> :
-          <WebView
-            id={ id } url={ url } closable={ closable } eventBus={ eventBus }
-          />
+          <>
+            <WebView
+              id={ id } url={ url } closable={ closable } eventBus={ eventBus }
+            />
+            {this.state.showSearchBar && 
+              <SearchBar 
+                id={ id }
+                onUpdateSearch={ handleUpdateSearch }
+                onFindNext={ handleFindNext }
+                onClearSearch={ handleClearSearch }
+                onHideSearchBar={ this.handleHideSearchBar } 
+              />}
+          </>
         }
         { !noCrawlPopup && active && adjusting && adjusting.crawl && 
           <InModal

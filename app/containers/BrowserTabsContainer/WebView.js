@@ -66,6 +66,8 @@ class WebView extends React.Component {
         webview.closeDevTools()
       }
     }
+    this.findInPageHandler = (value) => webview.findInPage(value)
+    this.stopFindInPageHandler = () => webview.stopFindInPage('clearSelection')
 
     // Notify changing (cached to avoid duplicate emits) status of navigability
     let canGoBack = null
@@ -91,6 +93,8 @@ class WebView extends React.Component {
     eventBus.on('goBack', this.goBackHandler)
     eventBus.on('goForward', this.goForwardHandler)
     eventBus.on('toggleDevTools', this.toggleDevToolsHandler)
+    eventBus.on('findInPage', this.findInPageHandler)
+    eventBus.on('stopFindInPage', this.stopFindInPageHandler)
 
     // If debug: log status changes
     if (DEBUG_WEBVIEW) {
@@ -184,6 +188,13 @@ class WebView extends React.Component {
     webview.addEventListener('did-navigate', (event) => {
       update('navigate', event.url)
     })
+
+    webview.addEventListener('found-in-page', (event) => {
+      if (event.result && event.result.finalUpdate)  {
+        webview.stopFindInPage('keepSelection')
+      }
+    })
+  
   }
 
   componentWillReceiveProps ({ url, ua }) {
@@ -226,6 +237,8 @@ class WebView extends React.Component {
     eventBus.off('goBack', this.goBackHandler)
     eventBus.off('goForward', this.goForwardHandler)
     eventBus.off('toggleDevTools', this.toggleDevToolsHandler)
+    eventBus.off('findInPage', this.findInPageHandler)
+    eventBus.off('stopFindInPage', this.stopFindInPageHandler)
   }
 
   translate (id) {
