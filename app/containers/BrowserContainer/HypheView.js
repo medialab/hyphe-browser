@@ -1,21 +1,21 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import once from 'lodash/once'
 
 import { DEBUG_WEBVIEW } from '../../constants'
 import Spinner from '../../components/Spinner'
 
-class HypheView extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      isLoading: true
-    }
-  }
+const HypheView = ({
+  url,
+  style,
+  isHypheView,
+  onOpenTabFromHyphe
+}) => {
+  const [loading, setLoading] = useState(true)
+  const webviewRef = useRef(null)
 
-  componentDidMount () {
-    const webview = document.querySelector('webview')
-    this.node = webview
+  useEffect(() => {
+    const webview = webviewRef.current
 
     const inejectStyle = once(() => {
       webview.executeJavaScript(`
@@ -26,9 +26,11 @@ class HypheView extends React.Component {
       `)
     })
 
-    webview.addEventListener('did-start-loading', this.loadStart)
+    webview.addEventListener('did-start-loading', () => {
+      setLoading(true)
+    })
     webview.addEventListener('did-stop-loading', () => {
-      this.loadStop()
+      setLoading(false)
       inejectStyle()
 
       webview.executeJavaScript(
@@ -38,7 +40,7 @@ class HypheView extends React.Component {
     })
 
     webview.addEventListener('new-window', ({ url }) => {
-      if (!this.props.onOpenTabFromHyphe(url)) {
+      if (!onOpenTabFromHyphe(url)) {
         webview.executeJavaScript(
           `window.history.pushState({}, 'Hyphe', '${url}')`
         )
@@ -50,51 +52,38 @@ class HypheView extends React.Component {
         console.log('[HypheView console]', e.message) // eslint-disable-line no-console
       })
     }
-  }
-
-  componentDidUpdate (prevProps) {
-    // reload when is network view
-    if (this.props.isHypheView !== prevProps.isHypheView &&
-        this.props.isHypheView && 
-        this.node.src === this.props.url ) {
-      this.node.reload()
-    }
-  }
-
-  loadStart = () => {
-    this.setState({
-      isLoading: true
-    })
-  }
-
-  loadStop = () => {
-    this.setState({
-      isLoading: false
-    })
-  }
   
-  render () {
-    const { isLoading } = this.state
-    return (
-      <div className="hyphe-view-container" style={ this.props.style }>
-        {isLoading &&
-          <div className="spinner-container">
-            <Spinner />
-          </div>
-        }
-        <webview
-          src={ this.props.url }
-        />
-      </div>
-    )
-  }
+  }, [])
+  
+  // reload hyphe if is network page
+  useEffect(() => {
+    const webview = webviewRef.current
+
+    if (isHypheView && webview.src === url) {
+      webview.reload()
+    }
+  }, [isHypheView])
+
+  return (
+    <div className="hyphe-view-container" style={ style }>
+      {loading &&
+        <div className="spinner-container">
+          <Spinner />
+        </div>
+      }
+      <webview
+        ref={ webviewRef }
+        src={ url }
+      />
+    </div>
+  )
 }
 
 HypheView.propTypes = {
   url: PropTypes.string.isRequired,
+  style: PropTypes.object,
   isHypheView: PropTypes.bool.isRequired,
   onOpenTabFromHyphe: PropTypes.func.isRequired,
 }
-
 
 export default HypheView
