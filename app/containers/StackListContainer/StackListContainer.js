@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { 
+import {
   batchWebentityActions,
   setSimpleTabWebentity
 } from '../../actions/webentities'
@@ -16,8 +16,8 @@ import StackListLayout from './StackListLayout'
 
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 
-const StackListContainer = ({ 
-  activeTab, 
+const StackListContainer = ({
+  activeTab,
   corpusId,
   status,
   serverUrl,
@@ -39,6 +39,19 @@ const StackListContainer = ({
   viewWebentity,
   batchWebentityActions,
 }) => {
+  const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+  const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
+
+  useEffect(() => {
+    if (tabWebentity && selectedStack === 'DISCOVERED') {
+      const idx = webentitiesList.findIndex(x => x.id === tabWebentity.id)
+      // Auto fetch next page for "DISCOVERED" list
+      if (idx === webentitiesList.length - 1) {
+        const { token, next_page } = stackWebentities[selectedStack]
+        fetchStackPage({ serverUrl, corpusId, stack: selectedStack, token, page: next_page })
+      }
+    }
+  }, [tabWebentity && tabWebentity.id])
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
@@ -46,7 +59,7 @@ const StackListContainer = ({
     setSimpleTabWebentity(webentity, activeTab.id)
     setAsideMode('webentityBrowse')
   }
-  
+
   const handleDownloadList = (list) => {
     const fileName = `${corpusId}_${selectedStack}`
     const parsedWebentity = list.map((we) => {
@@ -74,12 +87,11 @@ const StackListContainer = ({
   const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
   const handleOpenTab = (url) => openTab(url, activeTab.id)
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
-  
+
   const handleFetchStackPage = (stack, token, page) => {
     fetchStackPage({ serverUrl, corpusId, stack, token, page })
   }
   const counters = status.corpus.traph.webentities
-  const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
 
   if (!selectedStack) return null
   return (
