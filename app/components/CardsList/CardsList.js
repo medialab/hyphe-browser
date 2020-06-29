@@ -1,10 +1,19 @@
 import './CardsList.styl'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
-const CardsList = ({ children }) => {
+const CardsList = ({ onLoadPages, children }) => {
+  const listRef = useRef(null)
+
+  const handleScroll = () => {
+    const scroller = listRef.current
+    if (scroller.scrollHeight - scroller.scrollTop <= scroller.clientHeight && onLoadPages) {
+      onLoadPages()
+    }
+  }
+
   return (
-    <div className="cards-list">
-      <ul className="list-container">
+    <div className="cards-list" >
+      <ul ref={listRef} onScroll={ handleScroll } className="list-container">
         {children}
       </ul>
     </div>

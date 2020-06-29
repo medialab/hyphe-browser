@@ -34,6 +34,7 @@ const WebentityBrowseLayout = ({
   categories,
   tagsSuggestions,
   onSelectWebentity,
+  onLoadPages,
   onDownloadList,
   onSetWebentityStatus,
   onSetTabUrl,
@@ -94,8 +95,8 @@ const WebentityBrowseLayout = ({
   const resetLinkedEntitiesActions = () => {
     setStatusActions({})
   }
-  
-  const pendingActions = React.useMemo(() => 
+
+  const pendingActions = React.useMemo(() =>
     Object.keys(pickByIdentity(statusActions)).map((key) =>  {
       return {
         id: +key,
@@ -112,13 +113,13 @@ const WebentityBrowseLayout = ({
   /**
    * tags related
    */
-  
+
   const userTags = webentity.tags[TAGS_NS]
   const initialTags = React.useMemo(() => categories.map((category) => ({
     category,
     value: (userTags && userTags[category] && userTags[category][0]) || ''
   })), [categories, userTags])
-                                        
+
   /**
    * field notes related
    */
@@ -126,7 +127,7 @@ const WebentityBrowseLayout = ({
   const onUpdateNote = (oldNote, newNote) => onUpdateTag('FREETAGS', oldNote, newNote)
   const onRemoveNote = (note) => onRemoveTag('FREETAGS', note)
 
-  const notOnHomepage = webentity.homepage && (webentity.homepage !== tabUrl && `${webentity.homepage}/` !== tabUrl ) 
+  const notOnHomepage = webentity.homepage && (webentity.homepage !== tabUrl && `${webentity.homepage}/` !== tabUrl )
   const handleSetTabHomepage = () => {
     if (!webentity.homepage) return
     if (notOnHomepage) {
@@ -139,7 +140,7 @@ const WebentityBrowseLayout = ({
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
-        <Tooltipable 
+        <Tooltipable
           Tag="button"
           className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !prevDisabled }) }
           onClick={ goPrevWebentity }
@@ -148,8 +149,8 @@ const WebentityBrowseLayout = ({
         >
           <i className="ti-angle-left" />
         </Tooltipable>
-        <span 
-          title={ webentity.name } 
+        <span
+          title={ webentity.name }
           className={ cx('current-webentity-name', { 'clickable':  notOnHomepage, 'hint--bottom': notOnHomepage }) }
           onClick={ handleSetTabHomepage }
           aria-label={ notOnHomepage ? formatMessage({ id: 'go-to-homepage' }) : null }
@@ -166,10 +167,10 @@ const WebentityBrowseLayout = ({
             }
           </span>
           <span className={ cx('current-webentity-stack-indicator', formatStackName(webentity.status)) }>{formatStackName(webentity.status)}</span>
-         
+
         </span>
-        
-        <Tooltipable 
+
+        <Tooltipable
           Tag="button"
           className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !nextDisabled }) }
           onClick={ goNextWebentity }
@@ -180,7 +181,7 @@ const WebentityBrowseLayout = ({
         </Tooltipable>
       </nav>
       <ul className="browse-edition-container">
-        
+
         <EditionCartel
           isOpen={ cartels.status }
           onToggle={ () => setCartels('status', !cartels.status) }
@@ -189,20 +190,20 @@ const WebentityBrowseLayout = ({
           helpPlace={ 'right' }
         >
           <ul className="set-status-container">
-            <li 
-              className={ webentity.status === 'IN' ? 'in' : '' } 
+            <li
+              className={ webentity.status === 'IN' ? 'in' : '' }
               // onClick={ () => setModalIsOpen(true)}
               onClick={ () => onSetWebentityStatus('IN') }
             >
                 IN<HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
             </li>
-            <li 
+            <li
               className={ webentity.status === 'UNDECIDED' ? 'undecided' : '' }
               onClick={ () => onSetWebentityStatus('UNDECIDED') }
             >
                 UND.<HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.UND' })}</HelpPin>
             </li>
-            <li 
+            <li
               className={ webentity.status === 'OUT' ? 'out' : '' }
               onClick={ () => onSetWebentityStatus('OUT') }
             >
@@ -210,16 +211,16 @@ const WebentityBrowseLayout = ({
             </li>
           </ul>
         </EditionCartel>
-  
+
         <EditionCartel
           isOpen={ cartels.name }
           onToggle={ () => setCartels('name', !cartels.name) }
           title={ formatMessage({ id: 'sidebar.cartel.webentity-name-title' }) }
           help={ formatMessage({ id: 'sidebar.cartel.webentity-name-help' }) }
         >
-          <WebentityNameField 
+          <WebentityNameField
             initialName={ webentity.name }
-            onSubmit={ onSetWebentityName } 
+            onSubmit={ onSetWebentityName }
             id={ webentity.id }
           />
         </EditionCartel>
@@ -230,11 +231,13 @@ const WebentityBrowseLayout = ({
           help={ formatMessage({ id: 'sidebar.cartel.known-webpages-help' }) }
         >
           {
-            webentity.mostLinked ?
+            webentity.paginatePages ?
               <KnownPages
-                list={ webentity.mostLinked }
+                list={ webentity.paginatePages }
+                token={ webentity.token }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }
+                onLoadPages={ onLoadPages }
                 onDownloadList={ onDownloadList }
                 onSetTabUrl= { onSetTabUrl }
                 onSetHomepage = { onSetWebentityHomepage }
@@ -250,7 +253,7 @@ const WebentityBrowseLayout = ({
         >
           {
             webentity[selectedLinkedEntities] ?
-              <LinkedWebentities 
+              <LinkedWebentities
                 {
                 ...{
                   setSelected: setSelectedLinkedEntities,
@@ -261,7 +264,7 @@ const WebentityBrowseLayout = ({
                   pendingActions,
                   loadingBatchActions,
                   viewedProspectionIds,
-                  
+
                   statusActions,
                   setStatusActions,
                   onDownloadList,
@@ -279,7 +282,7 @@ const WebentityBrowseLayout = ({
           helpPlace={ 'right' }
           help={ formatMessage({ id: 'sidebar.cartel.tags-help' }) }
         >
-          <Tags 
+          <Tags
             {
             ...{
               webentityId: webentity.id,
@@ -303,7 +306,7 @@ const WebentityBrowseLayout = ({
             {
             ...{
               webentityId: webentity.id,
-              initialNotes: (userTags && userTags['FREETAGS'] && userTags['FREETAGS']) || [], 
+              initialNotes: (userTags && userTags['FREETAGS'] && userTags['FREETAGS']) || [],
               onAddNote,
               onUpdateNote,
               onRemoveNote
