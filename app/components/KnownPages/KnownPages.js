@@ -62,12 +62,6 @@ const KnownPages = ({
           <DownloadListBtn onClickDownload={ handleDownloadList } />
         </div>
       }
-      {/* {
-        token &&
-        <li className="entity-card pagination" onClick={ onLoadPages }>
-          <T id="load-more-webentities" />
-        </li>
-      } */}
     </div>
   )
 }

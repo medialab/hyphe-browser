@@ -222,7 +222,8 @@ WebentityBrowseContainer.propTypes = {
   setTabUrl: PropTypes.func,
   setWebentityName: PropTypes.func,
   setWebentityStatus: PropTypes.func,
-  setWebentityHomepage: PropTypes.func
+  setWebentityHomepage: PropTypes.func,
+  fetchPaginatePages: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { loaders } }) => ({
