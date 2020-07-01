@@ -33,8 +33,13 @@ const FieldNotes = ({
     setTextAreaText(e.target.value) 
   }
 
+  const handleKeyAdd = (e) => {
+    if (e.keyCode === 13 && e.ctrlKey) handleAddNote(e)
+  }
+
   const handleAddNote = (e) => {
     const newNote = textAreaText.trim()
+    if (!validateNote(newNote)) return
     if (newNote.length) {
       setNotes([newNote, ...notes])
       onAddNote(newNote)
@@ -78,6 +83,7 @@ const FieldNotes = ({
 
             const handleUpdateNote = () => {
               const newNote = textAreaText.trim()
+              if (!validateNote(newNote)) return
               if(newNote.length) {
                 setNotes(notes.map((n) => {
                   if (n === note) {
@@ -90,6 +96,11 @@ const FieldNotes = ({
               setEditedIndex(undefined)
               setTextAreaText('')
             }
+
+            const handleKeyUpdate= (e) => {
+              if (e.keyCode===13 && e.ctrlKey) handleUpdateNote()
+            }
+
             if (editedIndex !== undefined && editedIndex === index) {
               return (
                 <form onSubmit={ handleUpdateNote } className="field-note-creation-container">
@@ -97,6 +108,7 @@ const FieldNotes = ({
                     value={ textAreaText } 
                     ref={ input }
                     onChange={ handleChangeText }
+                    onKeyUp={ handleKeyUpdate }
                     placeholder={ formatMessage({ id: 'fieldnotes.placeholder' }) }
                   />
                   <ul className="actions-container">
@@ -138,6 +150,7 @@ const FieldNotes = ({
           value={ textAreaText } 
           ref={ input }
           onChange={ handleChangeText }
+          onKeyUp={ handleKeyAdd }
           placeholder={ formatMessage({ id: 'fieldnotes.placeholder' }) }
         />
         <ul className="actions-container">

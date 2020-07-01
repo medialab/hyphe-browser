@@ -27,7 +27,7 @@ import {
   addNavigationHistory,
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchPaginatePages,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
   hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
@@ -144,7 +144,7 @@ class BrowserTabContent extends React.Component {
       setTabUrl(info, id)
       if (
         !disableWebentity &&
-        !this.samePage(info) && 
+        !this.samePage(info) &&
         !(webentity &&
           // if webentity is loaded from memory the longestMatching used to
           // avoid too much declaration will prevent all declaration. So we
@@ -160,7 +160,7 @@ class BrowserTabContent extends React.Component {
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
-      
+
       // In all cases, log to console
       if (process.env.NODE_ENV === 'development') {
         console.debug(info) // eslint-disable-line no-console
@@ -291,13 +291,13 @@ class BrowserTabContent extends React.Component {
   }
 
   render () {
-    const { 
+    const {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
-      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
+      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage, fetchPaginatePages,
       selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
       hideAdjustWebentity, toggleDoNotShowAgain
     } = this.props
-    
+
     let isHomepage = false
     if (webentity && webentity.homepage) {
       isHomepage = compareUrls(webentity.homepage, url)
@@ -327,12 +327,19 @@ class BrowserTabContent extends React.Component {
 
     const handleFetchStackAndSetTab = (stack, filter) => {
       fetchStackAndSetTab({
-        serverUrl: server.url, 
-        corpusId, 
-        stack, 
+        serverUrl: server.url,
+        corpusId,
+        stack,
         filter,
         tabId: id
       })
+    }
+
+    const handleLoadPages = () => {
+      const {token} = webentity
+      if (token) {
+        fetchPaginatePages({ serverUrl: server.url, corpusId, webentity, token})
+      }
     }
 
     const doToggle = () => {
@@ -353,10 +360,10 @@ class BrowserTabContent extends React.Component {
 
     return (
       <div
-        key={ id } tabIndex="1" className="browser-tab-content" 
+        key={ id } tabIndex="1" className="browser-tab-content"
         style={ active ? {} : { display:'none' } }
         onKeyUp={ this.handleKeyUp }
-      > 
+      >
         <BrowserBar
           isLanding={ url === PAGE_HYPHE_HOME }
           isHomepage={ isHomepage }
@@ -378,12 +385,12 @@ class BrowserTabContent extends React.Component {
           onAddClick={ onAddClick }
         />
         {url === PAGE_HYPHE_HOME ?
-          <NewTabContent 
+          <NewTabContent
             isEmpty={ isEmpty }
             selectedEngine = { selectedEngine }
             onSelectStack = { handleFetchStackAndSetTab }
             onChangeEngine = { onChangeEngine }
-            onSetTabUrl={ handleSetTabUrl } 
+            onSetTabUrl={ handleSetTabUrl }
           /> :
           <>
             <WebView
@@ -399,11 +406,12 @@ class BrowserTabContent extends React.Component {
               />}
           </>
         }
-        { !noCrawlPopup && active && adjusting && adjusting.crawl && 
+        { !noCrawlPopup && active && adjusting && adjusting.crawl &&
           <InModal
             isOpen
             onRequestClose={ cancel }
             onSuccess={ apply }
+            onLoadPages={ handleLoadPages }
             url={ this.props.server.url }
             corpusId={ this.props.corpusId }
             tabUrl={ this.props.url }
@@ -464,6 +472,7 @@ BrowserTabContent.propTypes = {
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
+  fetchPaginatePages: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
@@ -505,7 +514,7 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab, fetchPaginatePages,
   stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }

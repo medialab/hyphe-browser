@@ -13,6 +13,7 @@ const KnownPages = ({
   list,
   tabUrl,
   homepage,
+  onLoadPages,
   onDownloadList,
   onSetHomepage,
   onSetTabUrl
@@ -23,10 +24,10 @@ const KnownPages = ({
   const handleDownloadList = () => {
     onDownloadList('mostLinked')
   }
-  
+
   return (
     <div className="known-pages">
-      <CardsList>
+      <CardsList onLoadPages={onLoadPages}>
         { list && list.length ? list.map((link, index) => {
           const isHomepage = compareUrls(homepage, link.url)
           const isActive = compareUrls(tabUrl, link.url)
@@ -43,20 +44,20 @@ const KnownPages = ({
           }
 
           return (
-            <KnownPageCard 
-              key={ index } 
-              isActive={ isActive } 
+            <KnownPageCard
+              key={ index }
+              isActive={ isActive }
               isHomepage={ isHomepage }
               onClick= { handleSetTabUrl }
               onClickHomepage = { handleSetHomepage }
               innerWidth={ 166 }
-              { ...link } 
+              { ...link }
             />
           )
         }) : formatMessage({ id: 'none' }) }
-      </CardsList>         
+      </CardsList>
       {
-        list && list.length > 0 && 
+        list && list.length > 0 &&
         <div className="download-container">
           <DownloadListBtn onClickDownload={ handleDownloadList } />
         </div>

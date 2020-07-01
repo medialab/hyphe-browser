@@ -26,19 +26,44 @@ const PrefixSetter = function ({
   }
   const refs = parts.map(() => useRef(null))
   const container = useRef(null)
+  const editableRef = useRef(null)
   const [index, setIndex] = useState(initialIndex)
   const [startingX, setStartingX] = useState(0)
+  const [editableStyle, setEditableStyle] = useState(null)
+
+  const setEditable = () => {
+    const firstEditableNode = refs[firstEditableIndex] && refs[firstEditableIndex].current
+    const firstEditableBox = firstEditableNode.getBoundingClientRect()
+    const containerBox =  container.current.getBoundingClientRect()
+    const left = firstEditableBox.x - containerBox.x
+    let width
+    // compute bounds offset and width, check if container has scrollbar
+    if(container.current.scrollWidth > containerBox.width) {
+      width = container.current.scrollWidth - left
+    } else {
+      // Offset 15px to make slider visible
+      width = containerBox.width - 15 - left
+    }
+    setEditableStyle({
+      left,
+      width
+    })
+  }
 
   const setSliderX = (i = index) => {
     const anchor = refs[i] && refs[i].current
+    const firstEditableNode = refs[firstEditableIndex] && refs[firstEditableIndex].current
+    const firstEditableBox = firstEditableNode.getBoundingClientRect()
     if (anchor) {
       const box = anchor.getBoundingClientRect()
-      const x = box.x - container.current.getBoundingClientRect().x
-      setStartingX(Math.ceil(x + box.width + container.current.scrollLeft) - 1)
+      const x = box.x - firstEditableBox.x
+      setStartingX(Math.ceil(x + box.width + editableRef.current.scrollLeft) - 1)
     }
   }
-
-  useEffect(setSliderX, [])
+  useEffect(()=> {
+    setSliderX()
+    setEditable()
+  }, [])
 
   const handleDrag = (event) => {
     const { clientX } = event
@@ -98,25 +123,29 @@ const PrefixSetter = function ({
             )
           })
         }
-        <Draggable
-          bounds="parent"
-          axis="x"
-          handle=".slider-handle"
-          defaultPosition={ { x: startingX, y: 0 } }
-          position={ { x: startingX, y: 0 } }
-          grid={ [2, 2] }
-          scale={ 1 }
-          onDrag={ handleDrag }
-          onStop={ handleStop }
-        >
+        <div ref={editableRef}
+          className="editable-wrapper"
+          style={ editableStyle }>
+          <Draggable
+            bounds="parent"
+            axis="x"
+            handle=".slider-handle"
+            defaultPosition={ { x: startingX, y: 0 } }
+            position={ { x: startingX, y: 0 } }
+            grid={ [2, 2] }
+            scale={ 1 }
+            onDrag={ handleDrag }
+            onStop={ handleStop }
+          >
           <span className="slider">
             <span className="slider-handle" />
           </span>
         </Draggable>
-      </ul>
+      </div>
+    </ul>
     </div>
   )
-        
+
 }
 
 export default PrefixSetter

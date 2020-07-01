@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Spinner from '../../components/Spinner'
 
-import { 
-  setWebentityName, 
+import {
+  setWebentityName,
   setWebentityHomepage,
   showAdjustWebentity,
   cancelWebentityCrawls,
   batchWebentityActions,
   setSimpleTabWebentity,
-  setWebentityStatus } from '../../actions/webentities'
+  setWebentityStatus,
+  fetchPaginatePages
+} from '../../actions/webentities'
 
 import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
 
@@ -24,8 +26,8 @@ import WebentityBrowseLayout from './WebentityBrowseLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 const empty = {}
 
-const WebentityBrowseContainer = ({ 
-  activeTab, 
+const WebentityBrowseContainer = ({
+  activeTab,
   corpusId,
   serverUrl,
   webentities,
@@ -48,6 +50,7 @@ const WebentityBrowseContainer = ({
   viewWebentity,
   batchWebentityActions,
   setWebentityHomepage,
+  fetchPaginatePages,
   addTag,
   updateTag,
   removeTag,
@@ -57,7 +60,7 @@ const WebentityBrowseContainer = ({
   const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
 
   // storing viewed prospections in an efficient way
-  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED 
+  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED
   && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
   viewedProspectionIds = new Set(viewedProspectionIds)
 
@@ -74,7 +77,7 @@ const WebentityBrowseContainer = ({
     setSimpleTabWebentity(webentity, activeTab.id)
     setTabUrl(webentity.homepage, activeTab.id)
   }
-  
+
   const handleDownloadList = (list) => {
     let listName
     switch (list) {
@@ -107,10 +110,17 @@ const WebentityBrowseContainer = ({
     const fileName = `${corpusId}_${webentityName}_${listName}`
     downloadFile(flatList, fileName, 'csv')
   }
-  
+
+  const handleLoadPages = () => {
+    const {token} = webentity
+    if (token) {
+      fetchPaginatePages({ serverUrl, corpusId, webentity, token})
+    }
+  }
+
   const handleSetWebentityName = (name) => setWebentityName(serverUrl, corpusId, name, webentity.id)
   const handleSetWebentityHomepage = (url) => setWebentityHomepage(serverUrl, corpusId, url, webentity.id)
-  
+
   const handleSetWenentityStatus = (status, we = webentity) => {
     const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(we))
 
@@ -182,6 +192,7 @@ const WebentityBrowseContainer = ({
       categories={ filteredCategories }
       tagsSuggestions={ tagsSuggestions || empty }
       onSelectWebentity={ handleSelectWebentity }
+      onLoadPages={ handleLoadPages }
       onDownloadList={ handleDownloadList }
       onSetTabUrl={ handleSetTabUrl }
       onOpenTab={ handleOpenTab }
@@ -211,7 +222,8 @@ WebentityBrowseContainer.propTypes = {
   setTabUrl: PropTypes.func,
   setWebentityName: PropTypes.func,
   setWebentityStatus: PropTypes.func,
-  setWebentityHomepage: PropTypes.func
+  setWebentityHomepage: PropTypes.func,
+  fetchPaginatePages: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { loaders } }) => ({
@@ -247,4 +259,5 @@ export default connect(mapStateToProps, {
   updateTag,
   removeTag,
   setSimpleTabWebentity,
+  fetchPaginatePages
 })(React.memo(WebentityBrowseContainer))

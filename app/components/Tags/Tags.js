@@ -2,7 +2,7 @@ import './Tags.styl'
 
 import React, { useState, useEffect, useRef } from 'react'
 import cx from 'classnames'
-import { Creatable } from 'react-select'
+import Creatable from 'react-select/creatable'
 import { FormattedMessage as T, useIntl } from 'react-intl'
 import uniqBy from 'lodash/uniqBy'
 
@@ -20,6 +20,68 @@ const getSuggestions = (suggestions, category, value) => {
 }
 
 import HelpPin from '../HelpPin'
+
+const TagCreatable = ({
+  value,
+  suggestions,
+  category,
+  handleUpdateTag,
+}) => {
+  const creatableRef = useRef(null)
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      fontSize: '12px',
+      border: '1px solid lightgrey',
+      boxShadow: 'none'
+    }),
+    option: (base) => ({
+      ...base,
+      color: '#000000'
+    }),
+    menu: base => ({
+      ...base,
+      fontSize: '12px',
+      // kill the gap
+      marginTop: 0,
+    })
+  }
+
+  // make Creatable editable
+  const handleFocus = () => {
+    if (value.length && creatableRef.current) {
+      creatableRef.current.select.select.handleInputChange({
+        currentTarget: { value }
+      })
+    }
+  }
+
+  return (
+    <Creatable
+      ref={ creatableRef }
+      styles= { customStyles }
+      theme={ theme => ({
+        ...theme,
+        colors: {
+          ...theme.colors,
+          primary25: '#F0F0F0',
+          primary: '#DEEBFF',
+        },
+      }) }
+      name="cat-select"
+      isClearable={ value.length > 0 ? true : false }
+      backspaceRemovesValue={ false }
+      components={ { DropdownIndicator:() => null, IndicatorSeparator:() => null } }
+      autoFocus
+      autoBlur
+      options={ getSuggestions(suggestions, category, value) }
+      value={ { value, label: value } }
+      onFocus={ handleFocus }
+      onChange={ handleUpdateTag }
+    />
+  )
+}
 
 const Tags = (props) => {
   const {
@@ -116,32 +178,17 @@ const Tags = (props) => {
                     )
                   }
 
-                  const renderArrow = (props) => {
-                    const { isOpen } = props
-                    if (value.length > 0 && !isOpen) return null
-                    else {
-                      return (isOpen ? <span className="ti-angle-up" /> : <span className="ti-angle-down" />)
-                    }
-                  }
-
                   return (
                     <li className="category-item-container" key={ category }>
                       <span className="category-name">
                         {category}
                       </span>
                       <span className="category-input">
-                        <Creatable
-                          name="cat-select"
-                          clearable={ value.length > 0 ? true : false }
-                          backspaceRemoves={ false }
-                          searchable
-                          autoFocus
-                          autoBlur
-                          ignoreCase
-                          arrowRenderer={ renderArrow }
-                          options={ getSuggestions(suggestions, category, value) }
+                        <TagCreatable
                           value={ value }
-                          onChange={ handleUpdateTag }
+                          category={ category }
+                          suggestions={ suggestions }
+                          handleUpdateTag={ handleUpdateTag }
                         />
                       </span>
                     </li>

@@ -13,8 +13,8 @@
         white-space: nowrap
         position: relative
         width: 100%
-        padding-right: 15px
         margin-bottom: 7px
+        margin-right: 15px
 
         .part
             display: inline-block
@@ -28,6 +28,11 @@
             color: rgb(230, 241, 248)
         .part:not(.editable)
             opacity: .8
+        .editable-wrapper
+            position: absolute
+            top: 0
+            height: 100%
+            pointer-events: none
         .slider
             position: absolute
             left: 0
@@ -38,6 +43,7 @@
             cursor: move
         .slider-handle
             cursor: move
+            pointer-events: auto
             position: absolute
             top: calc(100% - 30px)
             left: -7.5px

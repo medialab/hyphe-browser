@@ -22,6 +22,8 @@ import {
   MERGE_WEBENTITY,
   STOP_MERGE_WEBENTITY,
   FETCH_MOST_LINKED_SUCCESS,
+  INIT_PAGINATE_PAGES_SUCCESS,
+  FETCH_PAGINATE_PAGES_SUCCESS,
   FETCH_REFERRERS_SUCCESS,
   FETCH_REFERRALS_SUCCESS,
   FETCH_PARENTS_SUCCESS,
@@ -97,6 +99,35 @@ export default createReducer(initialState, {
         [webentity.id]: {
           ...state.webentities[webentity.id],
           mostLinked
+        }
+      }
+    }
+  },
+
+  [INIT_PAGINATE_PAGES_SUCCESS]: (state, { webentity, pages, token }) => {
+    return {
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          paginatePages: pages,
+          token
+        }
+      }
+    }
+  },
+
+  [FETCH_PAGINATE_PAGES_SUCCESS]: (state, { webentity, pages, token }) => {
+    const paginatePages = state.webentities[webentity.id].paginatePages || []
+    return {
+      ...state,
+      webentities: {
+        ...state.webentities,
+        [webentity.id]: {
+          ...state.webentities[webentity.id],
+          paginatePages: paginatePages.concat(pages),
+          token
         }
       }
     }

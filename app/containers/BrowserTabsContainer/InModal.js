@@ -18,7 +18,7 @@ import './InModal.styl'
 
 const compareWithoutWww = (lru) => {
   const lrus = lruVariations(lru)
-  return (url) => 
+  return (url) =>
     lruVariations(url.lru).some(urlVariation =>
       lrus.some(lruVariation =>
         urlVariation.startsWith(lruVariation)
@@ -29,9 +29,10 @@ const compareWithoutWww = (lru) => {
 const PagesList = ({
   selectedPage,
   setSelectedPage,
+  onLoadPages,
   pages,
 }) => (
-  <CardsList>
+  <CardsList onLoadPages={onLoadPages} >
     { pages.map((link, index) => {
       return (
         <KnownPageCard
@@ -81,8 +82,8 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
   })
 }
 
-const orderList = (mostLinked, prefix, tabLru) => {
-  if (mostLinked) {
+const orderList = (pages, prefix, tabLru) => {
+  if (pages) {
     return [tabLru, prefix].reduce((accumulator, value) => {
       if (!accumulator.some(({ lru }) => lru === value)) {
         return [
@@ -98,7 +99,7 @@ const orderList = (mostLinked, prefix, tabLru) => {
         return accumulator
       }
     },
-    mostLinked.filter(compareWithoutWww(prefix)).sort((linkA, linkB) => 
+    pages.filter(compareWithoutWww(prefix)).sort((linkA, linkB) =>
       linkA.url.length - linkB.url.length || linkA.url.localeCompare(linkB.lru)
     ))
   } else {
@@ -168,6 +169,7 @@ const EntityModal = ({
   isOpen,
   onRequestClose,
   onSuccess,
+  onLoadPages,
   webentity,
   createNewEntity,
   tabUrl,
@@ -208,8 +210,8 @@ const EntityModal = ({
   const totalStepsNumber = showCopyStep ? 4 : 3
 
   const pagesList = useMemo(
-    () => orderList(webentity.mostLinked, state.prefix, lruObjectToString(urlToLru(tabUrl, tlds))),
-    [webentity.mostLinked, state.prefix, tlds, tabUrl]
+    () => orderList(webentity.paginatePages, state.prefix, lruObjectToString(urlToLru(tabUrl, tlds))),
+    [webentity.paginatePages, state.prefix, tlds, tabUrl]
   )
 
   const onSubmit = useCallback(() => {
@@ -300,11 +302,12 @@ const EntityModal = ({
               <button disabled={ ndLock }  onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
             </h3>
             {
-              webentity.mostLinked ? 
+              webentity.paginatePages ?
                 <PagesList
                   pages={ pagesList }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
+                  onLoadPages={ onLoadPages }
                 /> : <Spinner />
             }
             <li className="standalone-confirm-container">

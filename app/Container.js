@@ -2,8 +2,6 @@ import './css/style'
 import './css/themify-icons'
 import './css/helpers.styl'
 
-import 'react-select/dist/react-select.css'
-
 import { hot } from 'react-hot-loader'
 
 

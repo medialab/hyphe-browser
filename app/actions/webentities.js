@@ -62,6 +62,11 @@ export const FETCH_MOST_LINKED_REQUEST = '§_FETCH_MOST_LINKED_REQUEST'
 export const FETCH_MOST_LINKED_SUCCESS = '§_FETCH_MOST_LINKED_SUCCESS'
 export const FETCH_MOST_LINKED_FAILURE = '§_FETCH_MOST_LINKED_FAILURE'
 
+export const FETCH_PAGINATE_PAGES_REQUEST = '§_FETCH_PAGINATE_PAGES_REQUEST'
+export const FETCH_PAGINATE_PAGES_SUCCESS = '§_FETCH_PAGINATE_PAGES_SUCCESS'
+export const INIT_PAGINATE_PAGES_SUCCESS = '§_INIT_PAGINATE_PAGES_SUCCESS'
+export const FETCH_PAGINATE_PAGES_FAILURE = '§_FETCH_PAGINATE_PAGES_FAILURE'
+
 export const FETCH_REFERRERS_REQUEST = '§_FETCH_REFERRERS_REQUEST'
 export const FETCH_REFERRERS_SUCCESS = '§_FETCH_REFERRERS_SUCCESS'
 export const FETCH_REFERRERS_FAILURE = '§_FETCH_REFERRERS_FAILURE'
@@ -129,7 +134,8 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
 
 export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispatch) => {
   if (webentity) {
-    dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
+    // dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
+    dispatch(fetchPaginatePages({ serverUrl, corpusId, webentity }))
     dispatch(fetchReferrers(serverUrl, corpusId, webentity))
     dispatch(fetchReferrals(serverUrl, corpusId, webentity))
   }
@@ -207,6 +213,36 @@ export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
     })
 }
 
+export const fetchPaginatePages = ({ serverUrl, corpusId, webentity, token }) => dispatch => {
+  dispatch({ type: FETCH_PAGINATE_PAGES_REQUEST, payload: { serverUrl, corpusId, webentity } })
+  const params = {
+    webentity_id: webentity.id,
+    corpus: corpusId,
+    pagination_token: token,
+    count: 200
+  }
+  return jsonrpc(serverUrl)(
+    'store.paginate_webentity_pages',
+    params
+  ).then((res) => {
+    if (token) {
+      dispatch({
+        type: FETCH_PAGINATE_PAGES_SUCCESS,
+        payload: { serverUrl, corpusId, webentity, pages: res.pages, token: res.token }
+      })
+    } else {
+      dispatch({
+        type: INIT_PAGINATE_PAGES_SUCCESS,
+        payload: { serverUrl, corpusId, webentity, pages: res.pages, token: res.token }
+      })
+    }
+  }).catch((error) => dispatch({
+    type: FETCH_PAGINATE_PAGES_FAILURE,
+    payload: { serverUrl, corpusId, webentity, token, error }
+  }))
+}
+
+
 export const fetchReferrers = (serverUrl, corpusId, webentity) => dispatch => {
   dispatch({ type: FETCH_REFERRERS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
@@ -283,9 +319,9 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     operations.push(createWebentityPromise)
     if (adjust.copy.tags || adjust.copy.notes) {
       // Ca devrais fonctionner mais non
-      // const saveTags = createWebentityPromise.then(newWebentity => 
+      // const saveTags = createWebentityPromise.then(newWebentity =>
       //   transform(webentity.tags.USER, (sequentiel, tags, category) =>
-      //     transform(tags, (sequentiel, tag) => sequentiel.then(() => 
+      //     transform(tags, (sequentiel, tag) => sequentiel.then(() =>
       //       addTag(serverUrl, corpusId, category, newWebentity.id, tag)(dispatch)
       //     ), sequentiel),
       //   Promise.resolve())
