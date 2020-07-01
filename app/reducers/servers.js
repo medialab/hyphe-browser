@@ -16,7 +16,7 @@ const initialState = {
       name: 'Hyphe demo server (limited use)',
       url: 'http://hyphe.medialab.sciences-po.fr/demo/api/',
       home: 'http://hyphe.medialab.sciences-po.fr/demo',
-      cloud: false
+      cloud: null
     }
   ],
   selected: null
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
     name: 'dev',
     url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
     home: 'http://hyphe.medialab.sciences-po.fr/dev-forccast',
-    cloud: false
+    cloud: null
   })
 }
 

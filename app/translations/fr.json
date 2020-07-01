@@ -7,15 +7,31 @@
   "browse-reload": "Rafraîchir",
 
   "edit-server-tooltip": "éditer les informations du serveur",
+  "export-server-config-tooltip": "exporter la configuration du server (JSON)",
   "forget-server-tooltip": "oublier ce serveur",
   "confirm-forget-server": "Êtes-vous sûr de vouloir oublier ce serveur ?",
   "forget-this-server": "Oublier ce serveur",
+  "export-this-server-config": "Export du serveur",
+  "export-this-server-config-text": "La configuration a bien été copiée dans le presse-papier",
   "choose-a-corpus": "Choisir un corpus",
   "server-being-installed": "Le server est en cours d'installation",
   "corpus-list-search": "Chercher parmi {nbCorpora} corpora",
   "create-or-configure-server": "Ajouter/configurer un serveur",
   "create-a-corpus": "Créer un corpus",
   "password-protected": "protégé par un mot de passe (optionnel)",
+
+  "server-api-url": "URL de l'API",
+  "server-gui-url": "URL de l'interface",
+  "server-status": "Status du serveur",
+
+  "server-status-ok": "✓  OK",
+  "server-status-stopped": "Arrêté",
+  "server-status-deploying": "En cours de déploiement",
+  "server-status-installing": "En cours d'installation",
+
+  "server-stop": "Arrêter le serveur",
+  "server-start": "Démarrer le serveur",
+  "server-restart": "Redémarrer le serveur",
 
   "create-cloud-server.step0.title": "Créer un serveur Hyphe cloud",
   "create-cloud-server.step0.submit": "Étape 1 : créer un compte cloud",

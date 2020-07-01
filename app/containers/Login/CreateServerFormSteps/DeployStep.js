@@ -105,7 +105,8 @@ class DeployStep extends CreateServerFormStep {
             },
             createdAt: Date.now(),
             deployed: true,
-            installed: false
+            installed: false,
+            running: false
           }
         }
 

@@ -11,7 +11,7 @@ import { selectServer, deselectServer, deleteServer } from '../../actions/server
 
 import LogoTitle from '../../components/LogoTitle'
 import ServerSelect from '../../components/ServerSelect'
-
+import ServerSumup from './ServerSumup'
 
 class Login extends React.Component {
   componentWillReceiveProps ({ selectedServer }) {
@@ -94,6 +94,7 @@ class Login extends React.Component {
                   onEdit={ handleEditServer }
                   onForget={ handleForget }
                 />
+                <ServerSumup />
               </div>
             }
 

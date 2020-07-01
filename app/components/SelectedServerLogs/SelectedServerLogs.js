@@ -66,6 +66,7 @@ const SelectedServerLogs = ({ server, updateServer, fetchCorpora, fetchServerSta
           cloud: {
             ...server.cloud,
             installed: true,
+            running: true,
           }
         }))
         .catch(retry)
