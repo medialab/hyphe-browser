@@ -8,6 +8,7 @@
 
 import React from 'react'
 import cx from 'classnames'
+import { identity } from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -16,6 +17,15 @@ import { FormattedMessage as T, injectIntl } from 'react-intl'
 import { createServer, updateServer, deleteServer } from '../../actions/servers'
 // for async validation
 import jsonrpc from '../../utils/jsonrpc'
+
+const JSON_PLACEHOLDER = JSON.stringify(
+  {
+    name: 'My Hyphe server',
+    url: 'http://example.com/hyphe/'
+  },
+  null,
+  '  '
+)
 
 class ServerForm extends React.Component {
 
@@ -40,22 +50,46 @@ class ServerForm extends React.Component {
     this.setState({ data })
   }
 
-  renderFormGroup (name, label = name, type = 'text', autoFocus = false) {
+  renderFormGroup (name, label = name, type = 'text', autoFocus = false, disabled = false) {
     const { intl: { formatMessage } } = this.props
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
         <input
-          disabled={ this.state.submitting }
+          disabled={ disabled || this.state.submitting }
           name={ name }
           placeholder={ formatMessage({ id: label }) }
           autoFocus={ autoFocus }
           onChange={ ({ target }) => this.setDataState(name, target.value) }
           type={ type }
-          value={ this.state.data[name] }
+          value={ this.state.data[name] || '' }
         />
       </div>
     )
+  }
+
+  /**
+   * Returns:
+   * - `null` when no string config is set in the text area
+   * - A string error message when the value is invalid
+   * - The config object else
+   */
+  parseJSONConfig () {
+    const { jsonConfig } = this.state.data
+
+    if (!jsonConfig) return null
+
+    try {
+      const data = JSON.parse(jsonConfig)
+
+      if (!data) return 'error.json-null-config'
+      if (typeof data !== 'object' || Array.isArray(data)) return 'error.json-not-object'
+      if (!data.url) return 'error.json-missing-url'
+      if (!data.name) return 'error.json-missing-name'
+      return data
+    } catch (e) {
+      return 'error.json-invalid-json'
+    }
   }
 
   getInitData () {
@@ -66,6 +100,7 @@ class ServerForm extends React.Component {
       url: undefined,
       name: undefined,
       password: undefined,
+      jsonConfig: undefined,
     }
   }
 
@@ -86,8 +121,17 @@ class ServerForm extends React.Component {
       return this.setState(newState)
     }
 
+    const server = this.cleanData()
+
+    // check for existing server with same URL
+    if (this.props.servers.some(({ url }) => url === server.url)) {
+      newState.submitting = false
+      newState.errors = ['error.server-url-already-used']
+      return this.setState(newState)
+    }
+
     // async validation
-    jsonrpc(this.state.data.url)('list_corpus')
+    jsonrpc(server.url)('list_corpus')
       .then(() => {
         this.setState(newState)
         this.saveAndRedirect()
@@ -109,21 +153,23 @@ class ServerForm extends React.Component {
   }
 
   cleanData () {
-    const server = {
-      ...this.state.data
-    }
-    if (!server.password) {
-      delete server.password
-    }
-    if (!server.home) {
-      server.home = server.url.replace(/[/-]api\/?$/, '')
-    }
+    const fullConfig = this.parseJSONConfig()
+    const server = (fullConfig && typeof fullConfig === 'object') ?
+      fullConfig :
+      { ...this.state.data }
+
+    if (!server.password) delete server.password
+    if (!server.home) server.home = server.url.replace(/[/-]api\/?$/, '')
+
     return server
   }
 
   // local validation
   isValid () {
-    return this.state.data.url && this.state.data.name
+    const { url, name } = this.state.data
+    const fullConfig = this.parseJSONConfig()
+
+    return (fullConfig && typeof fullConfig === 'object') || (url && name)
   }
 
   delete = (evt) => {
@@ -133,21 +179,42 @@ class ServerForm extends React.Component {
   }
 
   render () {
+    const { jsonConfig } = this.state.data
+    const fullConfig = this.parseJSONConfig()
 
     return (
       <form className="server-form" onSubmit={ this.onSubmit }>
         <h3 className="section-header">
           <T id="create-or-configure-server" />
         </h3>
-        {this.state.errors.map((error) =>
+        {[typeof fullConfig === 'string' && fullConfig, ...this.state.errors].filter(identity).map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         )}
 
-        {this.renderFormGroup('name', 'server-name')}
-        {this.renderFormGroup('url', 'api-url', 'text', true)}
+        {this.renderFormGroup('name', 'server-name', 'text', false, jsonConfig)}
+        {this.renderFormGroup('url', 'api-url', 'text', true, !!(this.props.server || {}).cloud || jsonConfig)}
 
         {false && this.renderFormGroup('login')}
         {false && this.renderFormGroup('password', 'password', 'password')}
+
+        {
+          !this.props.editMode &&
+          <div
+            className="form-group"
+            style={ { borderTop: '1px solid var(--color-grey-dark)' } }
+          >
+            <label>...<strong><T id="or" /></strong>{' '}<T id="paste-json-config" /></label>
+            <textarea
+              value={ jsonConfig || '' }
+              onChange={ ({ target }) => this.setDataState('jsonConfig', target.value) }
+              placeholder={ JSON_PLACEHOLDER }
+              style={ {
+                resize: 'vertical',
+                height: 200
+              } }
+            />
+          </div>
+        }
 
         <div className="buttons-row">
           <li>
@@ -156,7 +223,7 @@ class ServerForm extends React.Component {
             </Link>
           </li>
           <li className="main-button-container">
-            <button className={ cx('btn btn-primary', { 'is-disabled': !this.state.data.name || !this.state.data.url }) } disabled={ this.state.submitting }>
+            <button className={ cx('btn btn-primary', { 'is-disabled': !this.isValid() }) } disabled={ this.state.submitting }>
               <T id="save-server" />
             </button>
           </li>
@@ -174,6 +241,7 @@ ServerForm.propTypes = {
 
   editMode: PropTypes.bool,
   locale: PropTypes.string.isRequired,
+  servers: PropTypes.array,
   server: PropTypes.object,
 
   // actions
@@ -186,6 +254,7 @@ const mapStateToProps = ({ servers, intl: { locale } }) => ({
   // beware, edit could be set to null
   editMode: !!~window.location.href.indexOf('?edit'),
   locale,
+  servers: servers.list,
   server: servers.selected
 })
 

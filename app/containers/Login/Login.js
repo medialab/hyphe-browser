@@ -14,6 +14,10 @@ import ServerSelect from '../../components/ServerSelect'
 import ServerSumup from './ServerSumup'
 
 class Login extends React.Component {
+  componentDidMount() {
+    if (this.props.selectedServer) this.selectOption(this.props.selectedServer.url)
+  }
+
   componentWillReceiveProps ({ selectedServer }) {
     if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
       this.selectOption(selectedServer.url)
