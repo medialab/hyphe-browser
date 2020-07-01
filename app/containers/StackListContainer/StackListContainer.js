@@ -45,9 +45,9 @@ const StackListContainer = ({
   useEffect(() => {
     if (tabWebentity && selectedStack === 'DISCOVERED') {
       const idx = webentitiesList.findIndex(x => x.id === tabWebentity.id)
-      // Auto fetch next page for "DISCOVERED" list
-      if (idx === webentitiesList.length - 1) {
-        const { token, next_page } = stackWebentities[selectedStack]
+      // Auto fetch next page for "DISCOVERED" list if current entity reaches last 3 items
+      const { token, next_page } = stackWebentities[selectedStack]
+      if (idx >= webentitiesList.length - 3 && token && next_page) {
         fetchStackPage({ serverUrl, corpusId, stack: selectedStack, token, page: next_page })
       }
     }
