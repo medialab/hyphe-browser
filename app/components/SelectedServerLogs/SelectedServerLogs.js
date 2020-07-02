@@ -10,6 +10,7 @@ import { updateServer } from '../../actions/servers'
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 
 import './SelectedServerLogs.styl'
+import { SERVER_STATUS_ACTIVE } from '../../constants'
 
 /**
  * This component monitors selected cloud server's installation, and once it's
@@ -66,7 +67,7 @@ const SelectedServerLogs = ({ server, updateServer, fetchCorpora, fetchServerSta
           cloud: {
             ...server.cloud,
             installed: true,
-            running: true,
+            status: SERVER_STATUS_ACTIVE,
           }
         }))
         .catch(retry)

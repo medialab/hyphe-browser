@@ -1,3 +1,5 @@
+import { OpenStackClient } from 'openstack-client'
+
 /**
  * Helper to retrieve some OpenStack server data's IP address:
  *
@@ -34,4 +36,52 @@ export function isInstalledPromise (server) {
       .then(() => resolve())
       .catch(() => reject('Server is not properly installed'))
   })
+}
+
+/**
+ * Takes a full (cloud) server data object, and returns a promise that will emit
+ * an authentified client if possible, or an error else
+ *
+ * @param server A cloud server, installed from this Hyphe browser
+ * @returns {Promise<OpenStackClient>}
+ */
+export function getOpenStackClientPromise (server) {
+  if (!server || !server.cloud) return Promise.reject('Server is not a cloud server')
+
+  const { keystone, id, password, domain, project } = server.cloud.openStack
+  const client = new OpenStackClient(keystone)
+
+  return client.authenticate(id, password, domain, project)
+    .then(() => client)
+}
+
+/**
+ * Takes a full (cloud) server data object, and returns a promise that will
+ * perform a given action, and return the related promise.
+ *
+ * Some available actions:
+ * - "os-start"
+ * - "os-stop"
+ * - "suspend"
+ * - "resume"
+ * - "pause"
+ * - "unpause"
+ *
+ * @param server A cloud server, installed from this Hyphe browser
+ * @param action The string action name
+ * @returns {Promise}
+ */
+export function performActionOnServerPromise (server, action) {
+  if (!server || !server.cloud) return Promise.reject('Server is not a cloud server')
+
+  const { region, id } = server.cloud.server
+
+  return (
+    getOpenStackClientPromise(server)
+      .then(client => client.actionComputeServer(
+        region,
+        id,
+        { [action]: null }
+      ))
+  )
 }

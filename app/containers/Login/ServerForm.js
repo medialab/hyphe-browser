@@ -124,7 +124,7 @@ class ServerForm extends React.Component {
     const server = this.cleanData()
 
     // check for existing server with same URL
-    if (this.props.servers.some(({ url }) => url === server.url)) {
+    if (!this.props.editMode && this.props.servers.some(({ url }) => url === server.url)) {
       newState.submitting = false
       newState.errors = ['error.server-url-already-used']
       return this.setState(newState)

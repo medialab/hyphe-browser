@@ -11,6 +11,17 @@ import Spinner from '../../components/Spinner'
 import CardsList from '../../components/CardsList'
 import SelectedServerLogs from '../../components/SelectedServerLogs'
 import CorpusCard from './CorpusCard'
+import {
+  SERVER_STATUS_PROCESSING,
+  SERVER_STATUS_SHUTOFF,
+  SERVER_STATUS_UNKNOWN
+} from '../../constants'
+
+const NO_CORPORA_STATUSES = {
+  [SERVER_STATUS_PROCESSING]: true,
+  [SERVER_STATUS_SHUTOFF]: true,
+  [SERVER_STATUS_UNKNOWN]: true,
+}
 
 const CorpusList = props => {
 
@@ -23,15 +34,20 @@ const CorpusList = props => {
 
   const hypheFull = false
 
-  if (ui.loaders && ui.loaders.corpora) return <Spinner textId="loading-corpora" />
   if (!server) return null
-  if (server.cloud && !server.cloud.installed) return (
-    <div className="installing-server-container">
-      <h3 className="section-header"><T id="server-being-installed" /></h3>
-      <SelectedServerLogs />
-    </div>
-  )
+  if (server.cloud) {
+    if (!server.cloud.installed) return (
+      <div className="installing-server-container">
+        <h3 className="section-header"><T id="server-being-installed" /></h3>
+        <SelectedServerLogs />
+      </div>
+    )
+    if (NO_CORPORA_STATUSES[server.cloud.status]) return null
+  }
   if (!props.corpora) return null
+
+  if (ui.loaders && (ui.loaders.corpora || ui.loaders.cloudserver_action))
+    return <Spinner textId="loading-corpora" />
 
   let corpora = Object.keys(props.corpora)
     .sort()

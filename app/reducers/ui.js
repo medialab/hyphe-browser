@@ -22,6 +22,20 @@ import {
   TOGGLE_FREETAGS
 } from '../actions/browser'
 import {
+  FETCH_CLOUD_SERVER_STATUS_REQUEST,
+  FETCH_CLOUD_SERVER_STATUS_SUCCESS,
+  FETCH_CLOUD_SERVER_STATUS_FAILURE,
+  STOP_CLOUD_SERVER_REQUEST,
+  STOP_CLOUD_SERVER_SUCCESS,
+  STOP_CLOUD_SERVER_FAILURE,
+  START_CLOUD_SERVER_REQUEST,
+  START_CLOUD_SERVER_SUCCESS,
+  START_CLOUD_SERVER_FAILURE,
+  DELETE_CLOUD_SERVER_REQUEST,
+  DELETE_CLOUD_SERVER_SUCCESS,
+  DELETE_CLOUD_SERVER_FAILURE
+} from '../actions/servers'
+import {
   DECLARE_PAGE_REQUEST,
   DECLARE_PAGE_SUCCESS,
   DECLARE_PAGE_FAILURE,
@@ -81,7 +95,7 @@ const toggleLoader = (loader, enabled, err) => (state, payload) => {
   let notification = { ... state.notification }
   if (enabled) {
     notification = emptyNotification
-  } 
+  }
   if (err) {
     const messageValues = payload && payload.error ? { error: payload.error } : null
     notification =  { ...err, type: 'error', messageValues }
@@ -152,6 +166,22 @@ export default createReducer(initialState, {
   [BATCH_WEBENTITY_ACTIONS_SUCCESS]: toggleLoader('webentity_batch_actions', false),
   [BATCH_WEBENTITY_ACTIONS_FAILURE]: toggleLoader('webentity_batch_actions', false),
 
+  [FETCH_CLOUD_SERVER_STATUS_REQUEST]: toggleLoader('cloudserver_action', true),
+  [FETCH_CLOUD_SERVER_STATUS_SUCCESS]: toggleLoader('cloudserver_action', false),
+  [FETCH_CLOUD_SERVER_STATUS_FAILURE]: toggleLoader('cloudserver_action', false),
+
+  [STOP_CLOUD_SERVER_REQUEST]: toggleLoader('cloudserver_action', true),
+  [STOP_CLOUD_SERVER_SUCCESS]: toggleLoader('cloudserver_action', false),
+  [STOP_CLOUD_SERVER_FAILURE]: toggleLoader('cloudserver_action', false),
+
+  [START_CLOUD_SERVER_REQUEST]: toggleLoader('cloudserver_action', true),
+  [START_CLOUD_SERVER_SUCCESS]: toggleLoader('cloudserver_action', false),
+  [START_CLOUD_SERVER_FAILURE]: toggleLoader('cloudserver_action', false),
+
+  [DELETE_CLOUD_SERVER_REQUEST]: toggleLoader('cloudserver_action', true),
+  [DELETE_CLOUD_SERVER_SUCCESS]: toggleLoader('cloudserver_action', false),
+  [DELETE_CLOUD_SERVER_FAILURE]: toggleLoader('cloudserver_action', false),
+
   [CREATE_CORPUS_FAILURE]: (state, { error }) => {
     if (error.message) {
       return {
@@ -169,7 +199,7 @@ export default createReducer(initialState, {
       }
     }
   },
-  
+
   [SELECT_CONTEXTUAL_LIST]: (state, { selectedContext }) => ({
     ...state,
     selectedContext

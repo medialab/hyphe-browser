@@ -27,12 +27,19 @@
 
   "server-status-ok": "✓  OK",
   "server-status-stopped": "Arrêté",
-  "server-status-deploying": "En cours de déploiement",
   "server-status-installing": "En cours d'installation",
+  "server-status-processing": "Tâche(s) en cours :",
+  "server-status-unknown": "Status inconnu",
+  "server-status-loading": "Chargement des données du serveur",
 
   "server-stop": "Arrêter le serveur",
   "server-start": "Démarrer le serveur",
   "server-restart": "Redémarrer le serveur",
+  "server-refresh": "Recharger le status",
+  "server-delete": "Supprimer le serveur",
+
+  "delete-server-title": "Suppression du serveur",
+  "delete-server-confirm": "Êtes-vous sûr(e) de vouloir supprimer ce serveur ? Cette action est définitive.",
 
   "create-cloud-server.step0.title": "Créer un serveur Hyphe cloud",
   "create-cloud-server.step0.submit": "Étape 1 : créer un compte cloud",

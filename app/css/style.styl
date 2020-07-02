@@ -8,7 +8,7 @@
 @import './hint.base.css';
 @import './themify-icons.css';
 
-  
+
 /**
  * LAYOUT
  */
@@ -33,7 +33,7 @@ input:disabled, input[disabled] {
   color: #999;
 }
 
-input 
+input
   box-sizing: border-box
 
 .ReactModal__Overlay
@@ -66,6 +66,8 @@ select[disabled]
     stretch(row)
     &.main-button-container
       flex: 4
+  li.small
+    flex: 0
   li:not(:last-of-type)
     margin-right: 5px
   .btn
@@ -88,7 +90,7 @@ select[disabled]
       margin: 0
   .modal-content-body
     padding: 10px
-  
+
 .form-error
   background: var(--color-red)
   color: var(--color-white)

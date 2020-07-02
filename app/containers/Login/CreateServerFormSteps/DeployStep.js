@@ -10,6 +10,7 @@ import promiseRetry from '../../../utils/promise-retry'
 import { getIP } from '../../../utils/cloud-helpers'
 import { createServer, updateServer } from '../../../actions/servers'
 import SelectedServerLogs from '../../../components/SelectedServerLogs'
+import { SERVER_STATUS_UNKNOWN } from '../../../constants'
 
 class DeployStep extends CreateServerFormStep {
   constructor (props) {
@@ -104,9 +105,8 @@ class DeployStep extends CreateServerFormStep {
               project: data.project
             },
             createdAt: Date.now(),
-            deployed: true,
             installed: false,
-            running: false
+            status: SERVER_STATUS_UNKNOWN
           }
         }
 

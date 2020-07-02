@@ -7,25 +7,26 @@ import { connect } from 'react-redux'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
-import { selectServer, deselectServer, deleteServer } from '../../actions/servers'
+import { selectServer, deselectServer, deleteServer, fetchCloudServerStatus } from '../../actions/servers'
 
 import LogoTitle from '../../components/LogoTitle'
 import ServerSelect from '../../components/ServerSelect'
 import ServerSumup from './ServerSumup'
 
 class Login extends React.Component {
-  componentDidMount() {
-    if (this.props.selectedServer) this.selectOption(this.props.selectedServer.url)
-  }
-
-  componentWillReceiveProps ({ selectedServer }) {
-    if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
-      this.selectOption(selectedServer.url)
+  componentDidMount () {
+    if (this.props.selectedServer) {
+      this.selectOption(this.props.selectedServer.url, true)
     }
   }
 
-  selectOption (url) {
-    const { fetchCorpora, fetchServerStatus, selectServer, deselectServer, history } = this.props
+  selectOption (url, force) {
+    if (!force && url === (this.props.selectedServer || {}).url) return
+
+    const {
+      fetchCorpora, fetchServerStatus, fetchCloudServerStatus,
+      selectServer, deselectServer, history
+    } = this.props
     const { push: routerPush } = history
 
     if (url === 'add' || url === 'create') {
@@ -38,8 +39,14 @@ class Login extends React.Component {
 
     if (!url || !server) return
 
-    if (server.cloud && !server.cloud.installed) {
-      selectServer(server)
+    selectServer(server)
+
+    if (server.cloud && server.cloud.installed) {
+      fetchCloudServerStatus(server)
+        .then(() => fetchServerStatus(url))
+        .then(({ payload }) => {
+          if (!payload.error) return fetchCorpora(url)
+        })
     } else {
       fetchServerStatus(url)
         .then(({ payload }) => {
@@ -139,6 +146,7 @@ const mapDispatchToProps = {
   deselectServer,
   fetchCorpora,
   fetchServerStatus,
+  fetchCloudServerStatus,
   deleteServer,
 }
 
