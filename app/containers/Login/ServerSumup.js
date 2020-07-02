@@ -4,12 +4,12 @@ import cx from 'classnames'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { get } from 'lodash'
 import Link from '../../components/Link'
 import Ellipsis from '../../components/Ellipsis'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 import Modal from 'react-modal'
 import {
+  deleteServer,
   startCloudServer,
   stopCloudServer,
   deleteCloudServer,
@@ -23,7 +23,9 @@ import {
 
 const ServerSumup = props => {
   const { server, isLoading, intl: { formatMessage } } = props
-  const [deletePrompted, setDeletePrompted] = useState(false)
+  const [confirmPrompted, setConfirmPrompted] = useState(false)
+  const [successPrompted, setSuccessPrompted] = useState(false)
+  const [processing, setProcessing] = useState(false)
 
   if (!server) return null
 
@@ -36,6 +38,7 @@ const ServerSumup = props => {
 
     if (!installed) {
       label = formatMessage({ id: 'server-status-installing' })
+      actionDisabled = true
     }
     else if (status === SERVER_STATUS_ACTIVE) {
       label = formatMessage({ id: 'server-status-ok' })
@@ -107,14 +110,7 @@ const ServerSumup = props => {
             <li className="small">
               <button
                 className={ cx('btn btn-primary', isLoading && 'is-disabled') }
-                onClick={ () => {
-                  if (isLoading) return
-                  props.fetchCloudServerStatus(server)
-                    .then(data => {
-                      if (get(data, ['payload', 'server', 'cloud', 'status']) === SERVER_STATUS_ACTIVE)
-                        return props.fetchCorpora(server.url)
-                    })
-                } }
+                onClick={ () => !isLoading && props.fetchCloudServerStatus(server) }
               >
                 <i className="ti-reload" />
               </button>
@@ -130,7 +126,7 @@ const ServerSumup = props => {
             <li>
               <button
                 className={ cx('btn btn-negative', isLoading && 'is-disabled') }
-                onClick={ () => !isLoading && setDeletePrompted(true) }
+                onClick={ () => !isLoading && setConfirmPrompted(true) }
               >
                 <T id="server-delete" />
               </button>
@@ -139,9 +135,10 @@ const ServerSumup = props => {
         </>
       }
 
+      {/* Server deletion confirm modal */}
       <Modal
-        isOpen={ deletePrompted }
-        onRequestClose={ () => setDeletePrompted(false) }
+        isOpen={ confirmPrompted }
+        onRequestClose={ () => !processing && setConfirmPrompted(false) }
         style={ {
           content: {
             width: 700,
@@ -163,16 +160,32 @@ const ServerSumup = props => {
             <T id="delete-server-confirm" />
           </div>
           <div className="modal-content-footer">
-            <ul onClick={ () => setDeletePrompted(false) } className="buttons-row">
+            <ul className="buttons-row">
               <li>
-                <button className="btn btn-error">
+                <button
+                  className="btn btn-error"
+                  onClick={ () => !processing && setConfirmPrompted(false) }
+                >
                   <T id="cancel" />
                 </button>
               </li>
               <li>
-                {/* TODO: Activate this button */}
-                <button onClick={ () => null } className="btn btn-primary is-disabled">
+                <button
+                  className={ cx('btn btn-primary', processing && 'is-disabled') }
+                  onClick={ () => {
+                    setProcessing(true)
+                    props.deleteCloudServer(server)
+                    // Promise.resolve(true)
+                      .then(() => {
+                        setSuccessPrompted(true)
+                        setProcessing(false)
+                        setConfirmPrompted(false)
+                      })
+                      .catch(() => setConfirmPrompted())
+                  } }
+                >
                   <T id="server-delete" />
+                  { processing && <Ellipsis /> }
                 </button>
               </li>
             </ul>
@@ -180,6 +193,44 @@ const ServerSumup = props => {
         </div>
       </Modal>
 
+      {/* Server deleted information modal */}
+      <Modal
+        isOpen={ successPrompted }
+        onRequestClose={ () => props.deleteServer(server) }
+        style={ {
+          content: {
+            width: 700,
+            maxWidth: '40vw',
+            position: 'relative',
+            height: 'unset',
+            top: 0,
+            left: 0,
+            overflow: 'hidden',
+            padding: 0
+          }
+        } }
+      >
+        <div className="modal-content-container">
+          <div className="modal-content-header">
+            <h2><T id="deleted-server-title" /></h2>
+          </div>
+          <div className="modal-content-body">
+            <T id="deleted-server-info" />
+          </div>
+          <div className="modal-content-footer">
+            <ul className="buttons-row">
+              <li>
+                <button
+                  className="btn btn-success"
+                  onClick={ () => props.deleteServer(server) }
+                >
+                  <T id="ok" />
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
@@ -207,6 +258,7 @@ export default injectIntl(connect(mapStateToProps, {
   startCloudServer,
   stopCloudServer,
   deleteCloudServer,
+  deleteServer,
   fetchCorpora,
   fetchCloudServerStatus
 })(ServerSumup))

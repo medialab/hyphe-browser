@@ -151,13 +151,10 @@ export const deleteCloudServer = (server) => (dispatch) => {
         region,
         id
       ))
-      .then(() => {
-        dispatch({
-          type: DELETE_CLOUD_SERVER_SUCCESS,
-          payload: { server }
-        })
-        dispatch(deleteServer(server))
-      })
+      .then(() => dispatch({
+        type: DELETE_CLOUD_SERVER_SUCCESS,
+        payload: { server }
+      }))
       .catch(error => dispatch({
         type: DELETE_CLOUD_SERVER_FAILURE,
         payload: { error, server }

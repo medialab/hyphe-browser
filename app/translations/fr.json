@@ -41,6 +41,9 @@
   "delete-server-title": "Suppression du serveur",
   "delete-server-confirm": "Êtes-vous sûr(e) de vouloir supprimer ce serveur ? Cette action est définitive.",
 
+  "deleted-server-title": "Server supprimé",
+  "deleted-server-info": "Le serveur a bien été supprimé.",
+
   "create-cloud-server.step0.title": "Créer un serveur Hyphe cloud",
   "create-cloud-server.step0.submit": "Étape 1 : créer un compte cloud",
   "create-cloud-server.step0.p1": "Il est possible de créer facilement son propre serveur Hyphe chez un prestataire d'hébergement.",
@@ -314,6 +317,7 @@
   "missing-homepage": "Homepage pas encore définie",
   "name": "Nom",
   "or": "ou",
+  "ok": "ok",
   "new-tab": "Nouvel onglet",
   "none": "Aucune",
   "open-tab": "Ouvrir un nouvel onglet",

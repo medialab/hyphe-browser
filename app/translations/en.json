@@ -48,6 +48,9 @@
   "delete-server-title": "Server deletion",
   "delete-server-confirm": "Are you sure you want to destroy this server? There will be no coming back.",
 
+  "deleted-server-title": "Deleted server",
+  "deleted-server-info": "The server has successfully been deleted.",
+
   "create-cloud-server.step0.title": "Create a Hyphe cloud server",
   "create-cloud-server.step0.submit": "Step 1: create the cloud account",
   "create-cloud-server.step0.p1": "You can easily create your own Hyphe server, hosted on a cloud provider.",
@@ -167,7 +170,6 @@
 
   "apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
   "discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
-
 
   "sidebar.overview.current-webentities-list": "Current webentities list",
   "sidebar.overview.current-webentities-list-help": "Choose which list of webentities you want to review",
@@ -308,6 +310,7 @@
   "missing-homepage": "No Homepage defined yet",
   "name": "Name",
   "or": "or",
+  "ok": "ok",
   "new-tab": "New tab",
   "none": "None",
   "open-tab": "Open new tab",
