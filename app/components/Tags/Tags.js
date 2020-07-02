@@ -57,6 +57,12 @@ const TagCreatable = ({
     }
   }
 
+  const handleMenuClose = () => {
+    if (value.length && creatableRef.current) {
+      creatableRef.current.blur()
+    }
+  }
+
   return (
     <Creatable
       ref={ creatableRef }
@@ -71,13 +77,13 @@ const TagCreatable = ({
       }) }
       name="cat-select"
       isClearable={ value.length > 0 ? true : false }
-      backspaceRemovesValue={ false }
       components={ { DropdownIndicator:() => null, IndicatorSeparator:() => null } }
-      autoFocus
-      autoBlur
+      blurInputOnSelect
+      autoFocus={ false }
       options={ getSuggestions(suggestions, category, value) }
       value={ { value, label: value } }
       onFocus={ handleFocus }
+      onMenuClose= { handleMenuClose }
       onChange={ handleUpdateTag }
     />
   )
@@ -151,7 +157,8 @@ const Tags = (props) => {
               {
                 cachedCategories.map(({ category, value }) => {
 
-                  const handleUpdateTag = (option) => {
+                  const handleUpdateTag = (option, {action}) => {
+                    console.log(action)
                     const newTag = option ? option.value.trim() : ''
                     const prevTag = cachedCategories.find((cat) => cat.category === category).value
                     if (prevTag && option) {
@@ -211,7 +218,7 @@ const Tags = (props) => {
                 className="add-category-input"
                 value={ newCategoryStr }
                 ref={ inputRef }
-                onChange={ setCategory } 
+                onChange={ setCategory }
                 onKeyDown={ handleNewCatKeyDown }
                 type="text"
               />
