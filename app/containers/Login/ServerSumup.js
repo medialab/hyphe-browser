@@ -15,7 +15,7 @@ import {
   deleteCloudServer,
   fetchCloudServerStatus
 } from '../../actions/servers'
-import { fetchCorpora } from '../../actions/corpora'
+import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 import {
   SERVER_STATUS_ACTIVE, SERVER_STATUS_PROCESSING,
   SERVER_STATUS_SHUTOFF
@@ -23,6 +23,7 @@ import {
 
 const ServerSumup = props => {
   const { server, isLoading, intl: { formatMessage } } = props
+  const { fetchCloudServerStatus, fetchServerStatus, fetchCorpora } = props
   const [confirmPrompted, setConfirmPrompted] = useState(false)
   const [successPrompted, setSuccessPrompted] = useState(false)
   const [processing, setProcessing] = useState(false)
@@ -110,7 +111,12 @@ const ServerSumup = props => {
             <li className="small">
               <button
                 className={ cx('btn btn-primary', isLoading && 'is-disabled') }
-                onClick={ () => !isLoading && props.fetchCloudServerStatus(server) }
+                onClick={ () => {
+                  if (!isLoading)
+                    return fetchCloudServerStatus(server)
+                      .then(() => fetchServerStatus(server.url))
+                      .then(({ payload }) => !payload.error && fetchCorpora(server.url))
+                } }
               >
                 <i className="ti-reload" />
               </button>
@@ -175,7 +181,6 @@ const ServerSumup = props => {
                   onClick={ () => {
                     setProcessing(true)
                     props.deleteCloudServer(server)
-                    // Promise.resolve(true)
                       .then(() => {
                         setSuccessPrompted(true)
                         setProcessing(false)
@@ -222,7 +227,10 @@ const ServerSumup = props => {
               <li>
                 <button
                   className="btn btn-success"
-                  onClick={ () => props.deleteServer(server) }
+                  onClick={ () => {
+                    setSuccessPrompted(false)
+                    props.deleteServer(server)
+                  } }
                 >
                   <T id="ok" />
                 </button>
@@ -260,5 +268,6 @@ export default injectIntl(connect(mapStateToProps, {
   deleteCloudServer,
   deleteServer,
   fetchCorpora,
-  fetchCloudServerStatus
+  fetchCloudServerStatus,
+  fetchServerStatus
 })(ServerSumup))
