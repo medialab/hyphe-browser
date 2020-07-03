@@ -15,6 +15,8 @@ const dict = {
   p: '/',
 }
 
+const THRESHOLD = 0.25
+
 const PrefixSetter = function ({
   parts = [],
   setPrefix
@@ -70,8 +72,12 @@ const PrefixSetter = function ({
     refs.some((ref, refIndex) => {
       if (ref.current) {
         const box = ref.current.getBoundingClientRect()
-        const THRESHOLD = 10
-        if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && (parts[refIndex + 1] && parts[refIndex + 1].editable || parts[refIndex].editable)) {
+        let maximum = box.x + box.width
+        if (refIndex < refs.length - 1) {
+          const boxNext = refs[refIndex + 1].current.getBoundingClientRect()
+          maximum = boxNext.x + boxNext.width * THRESHOLD
+        }
+        if (clientX > box.x + box.width * THRESHOLD && clientX <= maximum && (parts[refIndex + 1] && parts[refIndex + 1].editable || parts[refIndex].editable)) {
           setIndex(refIndex)
           return true
         }
