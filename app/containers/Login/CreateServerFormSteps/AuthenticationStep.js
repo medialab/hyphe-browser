@@ -103,9 +103,12 @@ class AuthenticationStep extends CreateServerFormStep {
       <>
         <p>
           <T id="create-cloud-server.step1.p1" />
-          <Link url="https://docs.openstack.org/train/">
-            <T id="create-cloud-server.step1.p1.link" />
-          </Link>
+        </p>
+        <p>
+          <T id="create-cloud-server.step1.p2" />
+          <Link url="https://github.com/medialab/hyphe-browser/blob/master/docs/user-doc-for-cloud-deployment.md">
+            <T id="create-cloud-server.step1.p2.link" />
+          </Link> (<T id="create-cloud-server.step1.p2.link-explanation" />).
         </p>
 
         {
@@ -125,29 +128,42 @@ class AuthenticationStep extends CreateServerFormStep {
             }
           )
         }
-        {
-          this.renderInput(
-            'keystoneURL',
-            'create-cloud-server.step1.keystone-url',
-            {
-              type: 'select',
-              options: [
-                ...(keystoneURLs.length === 1 ?
-                  [] :
-                  [{
-                    key: NULL_SELECT_VALUE,
-                    label: formatMessage({ id: 'create-cloud-server.step1.keystone-placeholder' })
-                  }]),
-                ...keystoneURLs.map(({ URL, label }) => ({ key: URL, label: label + ' - ' + URL }))
-              ],
-              attributes: { disabled: keystoneURLs.length <= 1 }
-            }
-          )
-        }
-        {this.renderInput('domain', 'create-cloud-server.step1.domain')}
-        {this.renderInput('project', 'create-cloud-server.step1.project', { attributes: { disabled: !hostData.projectRequired } })}
-        {this.renderInput('openStackID', 'create-cloud-server.step1.openstack-id')}
-        {this.renderInput('openStackPassword', 'create-cloud-server.step1.openstack-password', { type: 'password' })}
+
+        <div style={{display: hostData.publicCloudURL ? 'block' : 'none'}}>
+          <small>
+            <T id="create-cloud-server.step1.host-url" />
+            <Link url={ hostData.publicCloudURL }>{ hostData.publicCloudURL }</Link>
+            <br/>
+            <T id="create-cloud-server.step1.host-prices" />
+            <Link url={ hostData.priceURL }>{ hostData.priceURL }</Link>
+            <br/>
+            <br/>
+          </small>
+  
+          {this.renderInput('openStackID', 'create-cloud-server.step1.openstack-id')}
+          {this.renderInput('openStackPassword', 'create-cloud-server.step1.openstack-password', { type: 'password' })}
+          {
+            this.renderInput(
+              'keystoneURL',
+              'create-cloud-server.step1.keystone-url',
+              {
+                type: 'select',
+                options: [
+                  ...(keystoneURLs.length === 1 ?
+                    [] :
+                    [{
+                      key: NULL_SELECT_VALUE,
+                      label: formatMessage({ id: 'create-cloud-server.step1.keystone-placeholder' })
+                    }]),
+                  ...keystoneURLs.map(({ URL, label }) => ({ key: URL, label: label + ' - ' + URL }))
+                ],
+                attributes: { disabled: keystoneURLs.length <= 1 }
+              }
+            )
+          }
+          {this.renderInput('domain', 'create-cloud-server.step1.domain')}
+          {hostData.projectRequired && this.renderInput('project', 'create-cloud-server.step1.project')}
+        </div>
       </>
     )
   }
