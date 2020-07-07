@@ -34,7 +34,6 @@ const WebentityBrowseLayout = ({
   categories,
   tagsSuggestions,
   onSelectWebentity,
-  onLoadPages,
   onDownloadList,
   onSetWebentityStatus,
   onSetTabUrl,
@@ -231,13 +230,11 @@ const WebentityBrowseLayout = ({
           help={ formatMessage({ id: 'sidebar.cartel.known-webpages-help' }) }
         >
           {
-            webentity.paginatePages ?
+            webentity.paginatePages && !webentity.token ?
               <KnownPages
                 list={ webentity.paginatePages }
-                token={ webentity.token }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }
-                onLoadPages={ onLoadPages }
                 onDownloadList={ onDownloadList }
                 onSetTabUrl= { onSetTabUrl }
                 onSetHomepage = { onSetWebentityHomepage }

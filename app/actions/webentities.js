@@ -121,7 +121,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
+        dispatch(setTabWebentity(tabId, webentity))
         const state = getState()
         if (state.webentities.merges[tabId] && state.webentities.merges[tabId].mergeable) {
           dispatch(setMergeWebentity(tabId, state.webentities.merges[tabId].mergeable, webentity, 'redirect'))
@@ -132,13 +132,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .catch((error) => dispatch({ type: DECLARE_PAGE_FAILURE, payload: { serverUrl, corpusId, url, error } }))
 }
 
-export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispatch) => {
-  if (webentity) {
-    // dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
-    dispatch(fetchPaginatePages({ serverUrl, corpusId, webentity }))
-    dispatch(fetchReferrers(serverUrl, corpusId, webentity))
-    dispatch(fetchReferrals(serverUrl, corpusId, webentity))
-  }
+export const setTabWebentity = (tabId, webentity) => (dispatch) => {
   dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 }
 
@@ -181,7 +175,7 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
+        dispatch(setTabWebentity(tabId, webentity))
       }
       return webentity
     })
@@ -301,7 +295,6 @@ export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
 export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
 export const showAdjustWebentity = (webentityId, crawl = false, createNewEntity = true) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl, createNewEntity })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
-export const setSimpleTabWebentity = (webentity, tabId) => ({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 
 export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })

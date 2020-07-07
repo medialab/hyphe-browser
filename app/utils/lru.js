@@ -328,7 +328,7 @@ function toDomainCase (s) {
 }
 
 function simplierUrl (url) {
-  return url.replace(/#[^#]*$/, '').replace(/\/$/, '')
+  return url.replace(/#[^#]*$/, '').replace(/\/$/, '').replace(/^(?:https?:\/\/)?/i,'')
 }
 
 export function compareUrls (url1, url2) {

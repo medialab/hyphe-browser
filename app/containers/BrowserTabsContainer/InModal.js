@@ -29,10 +29,9 @@ const compareWithoutWww = (lru) => {
 const PagesList = ({
   selectedPage,
   setSelectedPage,
-  onLoadPages,
   pages,
 }) => (
-  <CardsList onLoadPages={onLoadPages} >
+  <CardsList >
     { pages.map((link, index) => {
       return (
         <KnownPageCard
@@ -169,7 +168,6 @@ const EntityModal = ({
   isOpen,
   onRequestClose,
   onSuccess,
-  onLoadPages,
   webentity,
   createNewEntity,
   tabUrl,
@@ -307,7 +305,6 @@ const EntityModal = ({
                   pages={ pagesList }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
-                  onLoadPages={ onLoadPages }
                 /> : <Spinner />
             }
             <li className="standalone-confirm-container">

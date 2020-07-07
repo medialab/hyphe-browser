@@ -13,7 +13,6 @@ const KnownPages = ({
   list,
   tabUrl,
   homepage,
-  onLoadPages,
   onDownloadList,
   onSetHomepage,
   onSetTabUrl
@@ -27,7 +26,7 @@ const KnownPages = ({
 
   return (
     <div className="known-pages">
-      <CardsList onLoadPages={onLoadPages}>
+      <CardsList>
         { list && list.length ? list.map((link, index) => {
           const isHomepage = compareUrls(homepage, link.url)
           const isActive = compareUrls(tabUrl, link.url)

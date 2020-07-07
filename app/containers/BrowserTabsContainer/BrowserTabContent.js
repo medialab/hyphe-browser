@@ -89,12 +89,6 @@ class BrowserTabContent extends React.Component {
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
       tlds, selectedEngine, addNavigationHistory } = this.props
-    // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
-
-    if (event === 'start' && compareUrls(server.home, info)) {
-      event = 'start'
-      throw new Error()
-    }
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
@@ -107,19 +101,29 @@ class BrowserTabContent extends React.Component {
         !this.samePage(info) &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-        setTabWebentity(server.url, corpusId, id, null)
+        setTabWebentity(id, null)
       }
       setTabUrl(info, id)
       break
     case 'stop':
-      // Redirect Hyphe special tab to network when userclosed or misstarted
-      if (disableWebentity && info === server.home + '/#/login') {
-        info = server.home + '/#/project/' + corpusId + '/network'
+      if (
+        !disableWebentity &&
+        !this.samePage(info) &&
+        !(webentity &&
+          // if webentity is loaded from memory the longestMatching used to
+          // avoid too much declaration will prevent all declaration. So we
+          // need to allow declaration at least from homepage because it's
+          // the first page visited when clicking in the sidebar.
+          !compareUrls(webentity.homepage, info) &&
+          longestMatching(webentity.prefixes, info, tlds)
+        )
+      ) {
+        declarePage(server.url, corpusId, info, id)
       }
+      this.setState({ previousUrl: info })
       setTabStatus({ loading: false, url: info }, id)
       addNavigationHistory(info, corpusId)
       stoppedLoadingWebentity()
-      this.setState({ previousUrl: info })
       break
     case 'redirect':
       if (loadingWebentityStack && selectedWebentity &&
@@ -135,21 +139,6 @@ class BrowserTabContent extends React.Component {
       break
     case 'navigate':
       setTabUrl(info, id)
-      if (
-        !disableWebentity &&
-        !this.samePage(info) &&
-        !(webentity &&
-          // if webentity is loaded from memory the longestMatching used to
-          // avoid too much declaration will prevent all declaration. So we
-          // need to allow declaration at least from homepage because it's
-          // the first page visited when clicking in the sidebar.
-          !compareUrls(webentity.homepage, info) &&
-          longestMatching(webentity.prefixes, info, tlds)
-        )
-      ) {
-        declarePage(server.url, corpusId, info, id)
-        setTabWebentity(server.url, corpusId, id, webentity)
-      }
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
