@@ -37,7 +37,7 @@ const PrefixSetter = function ({
     const firstEditableNode = refs[firstEditableIndex] && refs[firstEditableIndex].current
     const firstEditableBox = firstEditableNode.getBoundingClientRect()
     const containerBox =  container.current.getBoundingClientRect()
-    const left = firstEditableBox.x - containerBox.x
+    const left = firstEditableBox.x + firstEditableBox.width - containerBox.x
     let width
     // compute bounds offset and width, check if container has scrollbar
     if(container.current.scrollWidth > containerBox.width) {
@@ -58,7 +58,7 @@ const PrefixSetter = function ({
     const firstEditableBox = firstEditableNode.getBoundingClientRect()
     if (anchor) {
       const box = anchor.getBoundingClientRect()
-      const x = box.x - firstEditableBox.x
+      const x = box.x - (firstEditableBox.x + firstEditableBox.width)
       setStartingX(Math.ceil(x + box.width + editableRef.current.scrollLeft) - 1)
     }
   }
@@ -129,9 +129,11 @@ const PrefixSetter = function ({
             )
           })
         }
-        <div ref={editableRef}
+        <div
+          ref={ editableRef }
           className="editable-wrapper"
-          style={ editableStyle }>
+          style={ editableStyle }
+        >
           <Draggable
             bounds="parent"
             axis="x"
@@ -143,12 +145,12 @@ const PrefixSetter = function ({
             onDrag={ handleDrag }
             onStop={ handleStop }
           >
-          <span className="slider">
-            <span className="slider-handle" />
-          </span>
-        </Draggable>
-      </div>
-    </ul>
+            <span className="slider">
+              <span className="slider-handle" />
+            </span>
+          </Draggable>
+        </div>
+      </ul>
     </div>
   )
 
