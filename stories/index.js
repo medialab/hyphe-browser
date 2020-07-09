@@ -116,6 +116,14 @@ storiesOf('New entity modal', module)
   .add('Creating an entity with previous tags', () => <EntityModalMock withPreviousTags />)
   .add('Attempting to create an entity that create a duplicate with an existing one', () => <EntityExistsModalMock />)
 
+
+/**
+ * Redirection modal
+ */
+import RedirectionModalMock from './RedirectionModalMock'
+storiesOf('Redirection modal', module)
+  .add('Mockup', () => <RedirectionModalMock />)
+
 /**
  * Entity card
  */
