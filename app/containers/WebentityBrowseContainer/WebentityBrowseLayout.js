@@ -230,11 +230,13 @@ const WebentityBrowseLayout = ({
           help={ formatMessage({ id: 'sidebar.cartel.known-webpages-help' }) }
         >
           {
-            webentity.paginatePages && !webentity.token ?
+            webentity.paginatePages ?
               <KnownPages
                 list={ webentity.paginatePages }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }
+                paginating={ webentity.token }
+                totalPages={ webentity.pages_total }
                 onDownloadList={ onDownloadList }
                 onSetTabUrl= { onSetTabUrl }
                 onSetHomepage = { onSetWebentityHomepage }
