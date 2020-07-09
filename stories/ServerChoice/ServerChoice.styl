@@ -96,6 +96,21 @@
         input()
       &.horizontal
         stretch(row)
+    .minified
+      margin-bottom: 5px
+    .options-wrapper
+      transition: all .5s ease;
+      border: 1px solid transparent;
+      margin: 0;
+      overflow:hidden;
+      max-height: 40px;
+      &.active
+        border: 1px solid lightgrey
+        padding: 10px;
+        padding-bottom: 0;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        max-height: 100vh;
 .buttons-row
   stretch(row)
   padding: 0

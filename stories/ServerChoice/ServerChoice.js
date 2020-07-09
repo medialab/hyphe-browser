@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
+import cx from 'classnames';
+import HelpPin from '../../app/components/HelpPin'
 
 import './ServerChoice.styl'
 
@@ -99,6 +101,8 @@ const ServerChoice = ({
   newCorpus,
   loading
 }) => {
+  const [passwordProtected, setPasswordProtected] = useState(false)
+  const [advancedOptions, setAdvancedOptions] = useState(false)
   return (
     <div className="server-choice">
       <div className="server-choice-container">
@@ -159,19 +163,74 @@ const ServerChoice = ({
                   <label>Corpus name</label>
                   <input placeholder="Corpus name" />
                 </div>
-                <div className="field horizontal">
-                  <input type="radio" />
-                  <label>password protected (optional)</label>
+                <div className={cx('options-wrapper', {active: passwordProtected})}>
+                  <div onClick={ () => setPasswordProtected(!passwordProtected) } className="field horizontal">
+                    <input checked={ passwordProtected } type="radio" />
+                    <label>password protected</label>
+                  </div>
+                  {passwordProtected && 
+                  <>
+                    <div className="field">
+                      <label>Corpus password</label>
+                      <input placeholder="Corpus password" type="password" />
+                    </div>
+                    <div className="field">
+                      <label>Confirm corpus password</label>
+                      <input placeholder="Corpus password" type="password" />
+                    </div>
+                  </>
+                  }
                 </div>
-                <div className="field">
-                  <label>Corpus password</label>
-                  <input placeholder="Corpus password" type="password" />
-                </div>
-                <div className="field">
-                  <label>Confirm corpus password</label>
-                  <input placeholder="Corpus password" type="password" />
+                <div className={cx('options-wrapper', {active: advancedOptions})}>
+                  <div onClick={ () => setAdvancedOptions(!advancedOptions) } className="field horizontal">
+                    <input checked={ advancedOptions } type="radio" />
+                    <label>advanced creation options</label>
+                  </div>
+                  {advancedOptions && 
+                  <>
+                    <div className="field">
+                      <label>Default depth of crawl <HelpPin place="top">
+                       define how many iterations of crawling to do after having INcluded a new webentity in the corpus
+                      </HelpPin>
+
+                      </label>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>1</label>
+                      </div>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>2</label>
+                      </div>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>3</label>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label>Default webentity creation rules <HelpPin place="top">
+                      define at which level or URL to "cut" by default when grouping webpages into webentities
+                      </HelpPin>
+
+                      </label>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>domain</label>
+                      </div>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>subdomain</label>
+                      </div>
+                      <div className="field horizontal minified">
+                        <input type="radio" />
+                        <label>page</label>
+                      </div>
+                    </div>
+                  </>
+                  }
                 </div>
               </div>
+              
               <ul className="buttons-row">
                 
                 <li>
