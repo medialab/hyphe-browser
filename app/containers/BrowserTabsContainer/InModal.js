@@ -30,8 +30,13 @@ const PagesList = ({
   selectedPage,
   setSelectedPage,
   pages,
+  isPaginating,
+  totalPages
 }) => (
-  <CardsList >
+  <CardsList
+    displayLoader={ isPaginating }
+    count={ pages.length }
+    total={ totalPages }>
     { pages.map((link, index) => {
       return (
         <KnownPageCard
@@ -303,6 +308,8 @@ const EntityModal = ({
               webentity.paginatePages ?
                 <PagesList
                   pages={ pagesList }
+                  isPaginating={ webentity.token }
+                  totalPages={ webentity.pages_total }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
                 /> : <Spinner />

@@ -1,7 +1,7 @@
 import './KnownPages.styl'
 
 import React from 'react'
-import { useIntl, FormattedMessage as T} from 'react-intl'
+import { useIntl, FormattedMessage as T } from 'react-intl'
 
 import DownloadListBtn from '../DownloadListBtn'
 import CardsList from '../CardsList'
@@ -13,7 +13,7 @@ const KnownPages = ({
   list,
   tabUrl,
   homepage,
-  paginating,
+  isPaginating,
   totalPages,
   onDownloadList,
   onSetHomepage,
@@ -61,10 +61,10 @@ const KnownPages = ({
         list && list.length > 0 &&
         <div className="button-container">
           {
-            paginating ?
+            isPaginating ?
               <button className="loading-btn">
-                <T id="loading-pages" />
-                <span> ({list.length}/{totalPages})</span>
+                <T id="loading" />
+                <span> ({list.length}/{totalPages} webpages)</span>
               </button> :
               <DownloadListBtn onClickDownload={ handleDownloadList } />
           }

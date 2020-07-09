@@ -162,7 +162,6 @@
   "linked": "Linked ",
   "linkedtimes": "{count, plural, \n=1 {once}\n=2 {twice}\nother {# times}}",
   "loading-corpora": "Loading corpora…",
-  "loading-pages": "Loading pages",
   "loading": "Loading…",
   "login": "Login",
   "login-corpus": "Login to {name}",

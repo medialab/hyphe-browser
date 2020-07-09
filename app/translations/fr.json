@@ -168,7 +168,6 @@
   "linked": "Citée ",
   "linkedtimes": "{count, plural, \n=1 {une fois}\nother {# fois}}",
   "loading-corpora": "Chargement des corpus…",
-  "loading-pages": "Chargement des pages",
   "loading": "Chargement…",
   "login": "Identifiant",
   "login-corpus": "Connexion à {name}",
