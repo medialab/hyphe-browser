@@ -36,7 +36,7 @@ const PagesList = ({
   selectedPage,
   setSelectedPage
 }) => (
-  <CardsList>
+  <CardsList displayLoader>
     { PAGES.length ? PAGES.map((link, index) => {
 
       return (

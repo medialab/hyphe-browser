@@ -12,3 +12,17 @@
         max-height: 30vh;
         overflow-y: auto;
         margin: 0;
+    .cards-list-loader
+        padding: 5px 20px;
+        background: white;
+        margin: 10px;
+        margin-bottom: 0;
+        font-size: 12px;
+        animation: blink 1s linear infinite;
+        border-radius: 5px;
+
+@keyframes blink{
+    0%{background-opacity: .5;}
+    50%{background-opacity: .7;}
+    100%{background-opacity: 1;}
+}
