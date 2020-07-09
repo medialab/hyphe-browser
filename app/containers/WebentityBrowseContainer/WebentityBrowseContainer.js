@@ -61,6 +61,7 @@ const WebentityBrowseContainer = ({
   setTabWebentity,
 }) => {
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+  const selectedWebentity = webentities && webentities.selected
   const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
 
   // storing viewed prospections in an efficient way
@@ -200,6 +201,7 @@ const WebentityBrowseContainer = ({
       initialStatus={ initialStatus }
       webentitiesList= { webentitiesList }
       selectedStack={ selectedStack }
+      selectedWebentity = { selectedWebentity }
       loadingStack={ loadingStack }
       loadingWebentity= { loadingWebentity }
       loadingBatchActions = { loadingBatchActions }

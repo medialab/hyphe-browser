@@ -27,6 +27,7 @@ const WebentityBrowseLayout = ({
   initialStatus,
   viewedProspectionIds,
   selectedStack,
+  selectedWebentity,
   loadingStack,
   loadingWebentity,
   loadingBatchActions,
@@ -66,12 +67,16 @@ const WebentityBrowseLayout = ({
     return stackName
   }
 
-  // used by Prev (-1) / Next (+1) buttons
+  /**
+  * used by Prev (-1) / Next (+1) buttons
+  */
   const rotateWebentity = (offset) => {
-    const idx = webentitiesList.findIndex(x => x.id === webentity.id)
+    // locate index if current webentity is in the stack list,
+    // otherwise get index of last viewed webenetity from the list
+    let idx = webentitiesList.findIndex(x => x.id === webentity.id)
+    if (idx=== -1) idx = webentitiesList.findIndex(x => x.id === selectedWebentity.id)
     let findWebentity
     if (idx === -1) {
-      // TODO: case webentity is not found in stack fetched, cause "DISCOVERED" list limit is 200
       findWebentity = webentitiesList[0]
     } else if (idx === 0 && offset === -1) {
       findWebentity = webentitiesList[webentitiesList.length - 1]
