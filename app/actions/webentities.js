@@ -98,8 +98,9 @@ export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUE
 export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
 export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
 
-export const MERGE_WEBENTITY = '§_MERGE_WEBENTITY'
-export const STOP_MERGE_WEBENTITY = '§_STOP_MERGE_WEBENTITY'
+export const SET_MERGE_URL = '§_SET_MERGE_URL'
+export const SET_MERGE_WEBENTITY = '§_SET_MERGE_WEBENTITY'
+export const UNSET_MERGE_WEBENTITY = '§_UNSET_MERGE_WEBENTITY'
 export const MERGE_WEBENTITY_REQUEST = '§_MERGE_WEBENTITY_REQUEST'
 export const MERGE_WEBENTITY_SUCCESS = '§_MERGE_WEBENTITY_SUCCESS'
 export const MERGE_WEBENTITY_FAILURE = '§_MERGE_WEBENTITY_FAILURE'
@@ -122,10 +123,6 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
       if (tabId) {
         dispatch(setTabWebentity(tabId, webentity))
-        const state = getState()
-        if (state.webentities.merges[tabId] && state.webentities.merges[tabId].mergeable) {
-          dispatch(setMergeWebentity(tabId, state.webentities.merges[tabId].mergeable, webentity, 'redirect'))
-        }
       }
       return webentity
     })
@@ -377,8 +374,9 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
 }
 
-export const setMergeWebentity = (tabId, mergeable, host, type = 'redirect') => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host, type } })
-export const unsetMergeWebentity = (tabId) => ({ type: STOP_MERGE_WEBENTITY, payload: { tabId } })
+export const setMergeUrl = ({ tabId, originalUrl, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, originalUrl, redirectUrl, originalWebentity } })
+export const setMergeWebentity = ({ tabId, redirectWebentity, type = 'redirect' }) => ({ type: SET_MERGE_WEBENTITY, payload: { tabId, redirectWebentity, type } })
+export const unsetMergeWebentity = (tabId) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
 
 export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, webentity, type) => (dispatch) => {
   const { id: hostId } = webentity

@@ -24,9 +24,9 @@ import {
   addNavigationHistory,
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchPaginatePages,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
   setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
-  hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
+  hideAdjustWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
 import { fetchStackAndSetTab } from '../../actions/stacks'
@@ -34,6 +34,7 @@ import { fetchStackAndSetTab } from '../../actions/stacks'
 import { getSearchUrl } from '../../utils/search-web'
 import { compareUrls, longestMatching, urlToLru, lruObjectToString } from '../../utils/lru'
 import InModal from './InModal'
+import RedirectionModal from './RedirectionModal'
 
 class BrowserTabContent extends React.Component {
 
@@ -84,11 +85,12 @@ class BrowserTabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
+    const { id,  mergeRequired, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
-      webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
+      webentity, loadingWebentityStack, setMergeUrl, setMergeWebentity,
       tlds, selectedEngine, addNavigationHistory } = this.props
+
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
@@ -119,6 +121,13 @@ class BrowserTabContent extends React.Component {
         )
       ) {
         declarePage(server.url, corpusId, info, id)
+        if ( mergeRequired ) {
+          setMergeWebentity({
+            tabId: id,
+            redirectWebentity: webentity,
+            type: 'redirect'
+          })
+        }
       }
       this.setState({ previousUrl: info })
       setTabStatus({ loading: false, url: info }, id)
@@ -126,9 +135,14 @@ class BrowserTabContent extends React.Component {
       stoppedLoadingWebentity()
       break
     case 'redirect':
-      if (loadingWebentityStack && selectedWebentity &&
-        !longestMatching(selectedWebentity.prefixes, info.newURL, tlds)) {
-        setMergeWebentity(id, selectedWebentity)
+      if (loadingWebentityStack && webentity &&
+        !longestMatching(webentity.prefixes, info.newURL, tlds)) {
+        setMergeUrl({
+          tabId: id,
+          originalUrl: info.oldURL,
+          redirectUrl: info.newURL,
+          originalWebentity: webentity
+        })
       }
       break
     case 'title':
@@ -226,7 +240,7 @@ class BrowserTabContent extends React.Component {
 
     const merge = e => {
       e.preventDefault()
-      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity, mergeRequired.type)
+      mergeWebentities(server.url, corpusId, id, mergeRequired.originalWebentity.id, webentity, mergeRequired.type)
     }
 
     const cancel = e => {
@@ -238,10 +252,10 @@ class BrowserTabContent extends React.Component {
       <div className="we-popup">
         <strong><T id="webentity-merge-popup-title" /></strong>
         {
-          mergeRequired.mergeable.type === 'redirect'?
-            <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
+          mergeRequired.originalWebentity.type === 'redirect'?
+            <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.originalWebentity.name } } /></p>
             :
-            <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
+            <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.originalWebentity.name } } /></p>
         }
         <p><T id="webentity-merge-popup-message-2" /></p>
         <p><T id="webentity-merge-popup-message-3" /></p>
@@ -268,9 +282,9 @@ class BrowserTabContent extends React.Component {
   render () {
     const {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
-      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage, fetchPaginatePages,
+      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
       selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
-      hideAdjustWebentity, toggleDoNotShowAgain
+      hideAdjustWebentity, toggleDoNotShowAgain, unsetMergeWebentity
     } = this.props
 
     let isHomepage = false
@@ -305,13 +319,6 @@ class BrowserTabContent extends React.Component {
       })
     }
 
-    const handleLoadPages = () => {
-      const {token} = webentity
-      if (token) {
-        fetchPaginatePages({ serverUrl: server.url, corpusId, webentity, token})
-      }
-    }
-
     const doToggle = () => {
       if (this.state.setDoNotShowAgainAfterSubmit !== null) {
         toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
@@ -326,6 +333,10 @@ class BrowserTabContent extends React.Component {
 
     const cancel = () => {
       hideAdjustWebentity(webentity.id)
+    }
+
+    const handleValidateDecision = () => {
+      unsetMergeWebentity(id)
     }
 
     return (
@@ -371,7 +382,6 @@ class BrowserTabContent extends React.Component {
             isOpen
             onRequestClose={ cancel }
             onSuccess={ apply }
-            onLoadPages={ handleLoadPages }
             url={ this.props.server.url }
             corpusId={ this.props.corpusId }
             tabUrl={ this.props.url }
@@ -380,8 +390,17 @@ class BrowserTabContent extends React.Component {
             createNewEntity={ this.props.adjusting && this.props.adjusting.createNewEntity }
           />
         }
-        { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }
-        { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
+        {
+          webentity && mergeRequired &&
+          <RedirectionModal
+            isOpen
+            mergeRequired = { mergeRequired }
+            redirectWebentity={ webentity }
+            onValidateDecision={ handleValidateDecision }
+          />
+        }
+        {/* { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() } */}
+        {/* { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() } */}
       </div>
     )
   }
@@ -432,13 +451,13 @@ BrowserTabContent.propTypes = {
   setTabWebentity: PropTypes.func.isRequired,
   setWebentityName: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
-  fetchPaginatePages: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
   hideAdjustWebentity: PropTypes.func.isRequired,
   toggleDoNotShowAgain: PropTypes.func.isRequired,
+  setMergeUrl: PropTypes.func.isRequired,
   setMergeWebentity: PropTypes.func.isRequired,
   unsetMergeWebentity: PropTypes.func.isRequired,
   mergeWebentities: PropTypes.func.isRequired,
@@ -474,9 +493,9 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab, fetchPaginatePages,
+  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab,
   stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
-  saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
+  saveAdjustedWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowserTabContent)
