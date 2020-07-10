@@ -201,7 +201,10 @@ const ServerSumup = props => {
       {/* Server deleted information modal */}
       <Modal
         isOpen={ successPrompted }
-        onRequestClose={ () => props.deleteServer(server) }
+        onRequestClose={ () => {
+          setSuccessPrompted(false)
+          props.deleteServer(server)
+        } }
         style={ {
           content: {
             width: 700,
