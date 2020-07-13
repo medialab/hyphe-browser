@@ -121,8 +121,17 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
+      const state = getState()
       if (tabId) {
-        dispatch(setTabWebentity(tabId, webentity))
+        if (state.webentities.merges[tabId]) {
+          dispatch(setMergeWebentity({
+            tabId,
+            redirectWebentity: webentity,
+            type: 'redirect'
+          }))
+        } else {
+          dispatch(setTabWebentity(tabId, webentity))
+        }
       }
       return webentity
     })
@@ -155,7 +164,7 @@ export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dis
     })
 }
 
-export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => (dispatch) => {
+export const setWebentityStatus = ({ serverUrl, corpusId, status, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, status, webentityId } })
 
   return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
@@ -376,26 +385,26 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
 
 export const setMergeUrl = ({ tabId, originalUrl, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, originalUrl, redirectUrl, originalWebentity } })
 export const setMergeWebentity = ({ tabId, redirectWebentity, type = 'redirect' }) => ({ type: SET_MERGE_WEBENTITY, payload: { tabId, redirectWebentity, type } })
-export const unsetMergeWebentity = (tabId) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
+export const unsetMergeWebentity = ({ tabId }) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
 
-export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, webentity, type) => (dispatch) => {
-  const { id: hostId } = webentity
-  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, mergeableId, hostId } })
-  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [mergeableId, hostId, true, false, false, corpusId])
+export const mergeWebentities = ({ serverUrl, corpusId, tabId, originalWebentityId, redirectWebentity, type }) => (dispatch) => {
+  const { id: redirectWebentityId } = redirectWebentity
+  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
+  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [originalWebentityId, redirectWebentityId, true, false, false, corpusId])
     .then(() => {
-      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, mergeableId, hostId } })
+      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       if (type === 'referrers') {
-        dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+        dispatch(fetchReferrers(serverUrl, corpusId, redirectWebentity))
       }
       if (type === 'referrals') {
-        dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+        dispatch(fetchReferrals(serverUrl, corpusId, redirectWebentity))
       }
-      dispatch(unsetMergeWebentity(tabId))
+      dispatch(unsetMergeWebentity({ tabId }))
       //TODO : apply to stack merged webentity the attributes of the host
     })
     .catch((error) => {
-      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, mergeableId, hostId, error } })
+      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId, error } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning' }))
       throw error
     })

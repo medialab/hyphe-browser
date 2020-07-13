@@ -8,10 +8,9 @@ Modal.setAppElement('#root')
 const RedirectionModal = ({
   isOpen,
   mergeRequired,
-  redirectWebentity,
   onValidateDecision
 }) => {
-  const { originalUrl, redirectUrl, originalWebentity } = mergeRequired
+  const { originalUrl, redirectUrl, originalWebentity, redirectWebentity } = mergeRequired
 
   const [redirectionDecision, onSetRedirectionDecision] = useState(null)
   const [mergeDecision, onSetMergeDecision] = useState(null)
@@ -58,8 +57,8 @@ const RedirectionModal = ({
           <div className={ cx('step-container') }>
             <h3>What should we do regarding the redirection ?</h3>
             <ul className="actions-container big">
-              <li><button onClick={ handleDeny } className={cx('btn', { 'btn-success': redirectionDecision === false })}>deny redirection</button></li>
-              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={cx('btn', {'btn-success': redirectionDecision === true }) }>accept redirection</button></li>
+              <li><button onClick={ handleDeny } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }>deny redirection</button></li>
+              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }>accept redirection</button></li>
             </ul>
           </div>
           {
@@ -67,8 +66,8 @@ const RedirectionModal = ({
             <div className={ cx('step-container') }>
               <h3>What should we do with the source of the redirection ("{ originalUrl }") ?</h3>
               <ul className="actions-container big">
-                <li><button onClick={() => onSetMergeDecision('out')} className={cx('btn', {'btn-success': mergeDecision === 'out'})}>put it into OUT list</button></li>
-                <li><button  onClick={() => onSetMergeDecision('merge')} className={cx('btn', {'btn-success': mergeDecision === 'merge'})}>merge it with the redirection destination webentity</button></li>
+                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>put it into OUT list</button></li>
+                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge it with the redirection destination webentity</button></li>
               </ul>
             </div>
           }
@@ -88,27 +87,5 @@ const RedirectionModal = ({
     </Modal>
   )
 }
-
-
-// const RedirectionModalMockupContainer = ({
-//   isOpen = true,
-// }) => {
-//   const [redirectionDecision, onSetRedirectionDecision] = useState(null)
-//   const [mergeDecision, onSetMergeDecision] = useState(null)
-
-//   return (
-//     <RedirectionModal
-//       {
-//       ...{
-//         isOpen,
-//         onSetRedirectionDecision,
-//         redirectionDecision,
-//         onSetMergeDecision,
-//         mergeDecision,
-//       }
-//       }
-//     />
-//   )
-// }
 
 export default RedirectionModal

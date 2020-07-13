@@ -25,7 +25,7 @@ import {
 } from '../../actions/tabs'
 import {
   declarePage, setTabWebentity, setWebentityName, setWebentityHomepage,
-  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
+  setWebentityStatus, setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
   hideAdjustWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
@@ -88,7 +88,7 @@ class BrowserTabContent extends React.Component {
     const { id,  mergeRequired, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
-      webentity, loadingWebentityStack, setMergeUrl, setMergeWebentity,
+      webentity, loadingWebentityStack, setMergeUrl,
       tlds, selectedEngine, addNavigationHistory } = this.props
 
     switch (event) {
@@ -101,6 +101,8 @@ class BrowserTabContent extends React.Component {
       if (!disableWebentity &&
         // do not declare pages(show sidebar) when only changing url's anchor
         !this.samePage(info) &&
+        // do not unset tab webentity if there is a redirect
+        !mergeRequired &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
         setTabWebentity(id, null)
@@ -121,13 +123,6 @@ class BrowserTabContent extends React.Component {
         )
       ) {
         declarePage(server.url, corpusId, info, id)
-        if ( mergeRequired ) {
-          setMergeWebentity({
-            tabId: id,
-            redirectWebentity: webentity,
-            type: 'redirect'
-          })
-        }
       }
       this.setState({ previousUrl: info })
       setTabStatus({ loading: false, url: info }, id)
@@ -274,7 +269,7 @@ class BrowserTabContent extends React.Component {
       if (adjusting) {
         hideAdjustWebentity(webentity.id)
       } else if (mergeRequired && webentity) {
-        unsetMergeWebentity(id)
+        unsetMergeWebentity({ tabId: id })
       }
     }
   }
@@ -282,7 +277,7 @@ class BrowserTabContent extends React.Component {
   render () {
     const {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
-      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage,
+      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage, setWebentityStatus,
       selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
       hideAdjustWebentity, toggleDoNotShowAgain, unsetMergeWebentity
     } = this.props
@@ -335,8 +330,28 @@ class BrowserTabContent extends React.Component {
       hideAdjustWebentity(webentity.id)
     }
 
-    const handleValidateDecision = () => {
-      unsetMergeWebentity(id)
+    const handleValidateDecision = ({ redirectionDecision, mergeDecision }) => {
+      if (redirectionDecision && mergeDecision === 'OUT') {
+        setWebentityStatus({
+          serverUrl: server.url,
+          corpusId,
+          status: 'OUT',
+          webentityId: mergeRequired.originalWebentity.id,
+        })
+        setTabWebentity(id, mergeRequired.redirectWebentity)
+        unsetMergeWebentity({ tabId: id })
+      } else if (redirectionDecision && mergeDecision === 'MERGE') {
+        mergeWebentities({
+          serverUrl: server.url,
+          corpusId,
+          originalWebentityId: mergeRequired.originalWebentity.id,
+          redirectWebentity: mergeRequired.redirectWebentity,
+          type: mergeRequired.type
+        })
+        setTabWebentity(id, mergeRequired.redirectWebentity)
+      } else {
+        unsetMergeWebentity({ tabId: id })
+      }
     }
 
     return (
@@ -391,11 +406,10 @@ class BrowserTabContent extends React.Component {
           />
         }
         {
-          webentity && mergeRequired &&
+          webentity && mergeRequired && mergeRequired.redirectWebentity &&
           <RedirectionModal
             isOpen
             mergeRequired = { mergeRequired }
-            redirectWebentity={ webentity }
             onValidateDecision={ handleValidateDecision }
           />
         }
@@ -453,6 +467,7 @@ BrowserTabContent.propTypes = {
   setWebentityHomepage: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
+  setWebentityStatus: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
   hideAdjustWebentity: PropTypes.func.isRequired,
@@ -494,7 +509,7 @@ const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
   declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab,
-  stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
+  stoppedLoadingWebentity, setWebentityStatus, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 
