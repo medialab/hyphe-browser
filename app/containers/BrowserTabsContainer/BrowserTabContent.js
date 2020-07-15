@@ -97,7 +97,8 @@ class BrowserTabContent extends React.Component {
       break
     case 'start':
       hideError()
-      setTabStatus({ loading: true, url: info }, id)
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
         // do not declare pages(show sidebar) when only changing url's anchor
         !this.samePage(info) &&
@@ -107,9 +108,10 @@ class BrowserTabContent extends React.Component {
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
         setTabWebentity(id, null)
       }
-      setTabUrl(info, id)
       break
     case 'stop':
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabStatus({ loading: false, url: info }, id)
       if (mergeRequired ||
           (!disableWebentity &&
           !this.samePage(info) &&
@@ -125,7 +127,6 @@ class BrowserTabContent extends React.Component {
         declarePage(server.url, corpusId, info, id)
       }
       this.setState({ previousUrl: info })
-      setTabStatus({ loading: false, url: info }, id)
       addNavigationHistory(info, corpusId)
       stoppedLoadingWebentity()
       break
@@ -147,7 +148,8 @@ class BrowserTabContent extends React.Component {
       setTabIcon(info, id)
       break
     case 'navigate':
-      setTabUrl(info, id)
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabUrl(info, id)
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -273,21 +275,25 @@ class BrowserTabContent extends React.Component {
     const handleCloseRedirectModal = () => unsetMergeWebentity({ tabId: id })
 
     const handleValidateDecision = ({ redirectionDecision, mergeDecision }) => {
-      if (redirectionDecision && mergeDecision === 'OUT') {
-        setWebentityStatus({
-          serverUrl: server.url,
-          corpusId,
-          status: 'OUT',
-          webentityId: mergeRequired.originalWebentity.id,
-        })
-      } else if (redirectionDecision && mergeDecision === 'MERGE') {
-        mergeWebentities({
-          serverUrl: server.url,
-          corpusId,
-          originalWebentityId: mergeRequired.originalWebentity.id,
-          redirectWebentity: mergeRequired.redirectWebentity,
-          type: mergeRequired.type
-        })
+      if (redirectionDecision) {
+        if(mergeDecision === 'OUT') {
+          setWebentityStatus({
+            serverUrl: server.url,
+            corpusId,
+            status: 'OUT',
+            webentityId: mergeRequired.originalWebentity.id,
+          })
+        } else {
+          mergeWebentities({
+            serverUrl: server.url,
+            corpusId,
+            originalWebentityId: mergeRequired.originalWebentity.id,
+            redirectWebentity: mergeRequired.redirectWebentity,
+            type: mergeRequired.type
+          })
+        }
+        // set current webentity to redirected one
+        setTabUrl(mergeRequired.redirectUrl, id)
         setTabWebentity(id, mergeRequired.redirectWebentity)
       }
       handleCloseRedirectModal()
