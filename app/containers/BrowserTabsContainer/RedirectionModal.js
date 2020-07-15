@@ -7,6 +7,7 @@ Modal.setAppElement('#root')
 
 const RedirectionModal = ({
   isOpen,
+  // onClose,
   mergeRequired,
   onValidateDecision
 }) => {
@@ -30,6 +31,7 @@ const RedirectionModal = ({
   return (
     <Modal
       isOpen={ isOpen }
+      // onRequestClose={ onClose }
       contentLabel="Redirection modal"
       style={ {
         content: {
@@ -46,7 +48,7 @@ const RedirectionModal = ({
       <div className="new-entity-modal-container">
         <div className="modal-header">
           <h2><span>This page requests a redirection</span>
-          {/*<i onClick={ onToggle } className="ti-close" />*/}
+            {/* <i onClick={ onClose } className="ti-close" /> */}
           </h2>
         </div>
         <div className="modal-body">
