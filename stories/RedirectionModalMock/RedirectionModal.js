@@ -65,6 +65,7 @@ const RedirectionModal = ({
         content: {
           width: 700,
           maxWidth: '90vw',
+          maxHeight: '90vh',
           position: 'relative',
           top: 0,
           left: 0,
@@ -76,7 +77,7 @@ const RedirectionModal = ({
       <div className="new-entity-modal-container">
         <div className="modal-header">
           <h2><span>This page requests a redirection</span>
-          {/*<i onClick={ onToggle } className="ti-close" />*/}
+            {/*<i onClick={ onToggle } className="ti-close" />*/}
           </h2>
         </div>
         <div className="modal-body">
@@ -87,20 +88,37 @@ const RedirectionModal = ({
           <div className={ cx('step-container') }>
             <h3>What should we do regarding the redirection ?</h3>
             <ul className="actions-container big">
-              <li><button onClick={ () => {
-                onSetRedirectionDecision(false);
-                onSetMergeDecision(null)
-              } } className={cx('btn', {'btn-success': redirectionDecision === false})}>deny redirection</button></li>
-              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={cx('btn', {'btn-success': redirectionDecision === true})}>accept redirection</button></li>
+              <li><button
+                onClick={ () => {
+                  onSetRedirectionDecision(false)
+                  onSetMergeDecision(null)
+                } } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }
+              >deny redirection</button></li>
+              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }>accept redirection</button></li>
             </ul>
           </div>
           {
             redirectionDecision === true &&
             <div className={ cx('step-container') }>
-              <h3>What should we do with the source of the redirection ("https://fr.linkedin.com/in/gualfond-nicolas-82052432" ) ?</h3>
-              <ul className="actions-container big">
-                <li><button onClick={() => onSetMergeDecision('out')} className={cx('btn', {'btn-success': mergeDecision === 'out'})}>put it into OUT list</button></li>
-                <li><button  onClick={() => onSetMergeDecision('merge')} className={cx('btn', {'btn-success': mergeDecision === 'merge'})}>merge it with the redirection destination webentity</button></li>
+              <h3>What should we do with the source with the two webentities ?</h3>
+              <ul className="actions-container big column">
+                <li><button onClick={ () => onSetMergeDecision('out') } className={ cx('btn', { 'btn-success': mergeDecision === 'out' }) }>move <strong>nicolas gualfond</strong> webentity to OUT list</button></li>
+                <li><button  onClick={ () => onSetMergeDecision('merge') } className={ cx('btn', { 'btn-success': mergeDecision === 'merge' }) }>merge <strong>nicolas gualfond</strong>  within the <strong>linkedin</strong> </button></li>
+                <li>
+                  <button  onClick={ () => onSetMergeDecision('merge-reverse') } className={ cx('btn', { 'btn-success': mergeDecision === 'merge-reverse' }) }>merge <strong>linkedin</strong>  within the <strong>nicolas gualfond</strong> </button>
+                  
+                  {mergeDecision === 'merge-reverse' ? 
+                  <div>
+                    <p>Choose the level of prefix to add to <strong>nicolas gualfond</strong>:</p>
+                    <PrefixSetter
+                      parts={[
+                        {editable: false, name: 'http'}, {name: 'fr'}, {name: 'linkedin'}, {name: 'com'},
+                        {name: 'in'}, {name: 'gualfond-nicolas-82052432 ', editable: true}
+                    ]}
+                  />
+                  </div>
+                  : null}
+                </li>
               </ul>
             </div>
           }

@@ -13,6 +13,7 @@
     overflow : hidden
     height: 100%
     position: relative
+    max-height: calc(90vh - 15px);
     input 
         input()
     .step3-title-container
@@ -96,13 +97,25 @@
             margin-right: 10px
     .actions-container.big
         justify-content: stretch
-        li
+        
+        > li
             flex: 1
             display: flex
             justify-content: stretch
+            flex-direction: column
             .btn
                 flex: 1
                 font-size: 14px
+            .prefix-setter
+                margin-top: 10px
+                font-size: 14px
+                li
+                    flex: unset
+                    margin: 0
+        &.column
+            flex-direction: column
+            li
+                margin-bottom: 5px
     .btn-success
         background: var(--color-blue)
         color: white

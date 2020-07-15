@@ -14,7 +14,8 @@ import Modal from 'react-modal'
 const BrowserLayout = ({
   status,
   isEmpty,
-  isLanding
+  isLanding,
+  hasDeniedRedirection
 }) => {
   /**
    * lists management
@@ -91,7 +92,14 @@ const BrowserLayout = ({
             isLanding ?
               <NewTabContent isEmpty={ isEmpty } />
               :
-              <iframe className="webview" src="https://fr.wikipedia.org/wiki/La_Maison_des_feuilles" />
+              hasDeniedRedirection ?
+                <div className="denied-redirection-container">
+                  <div className="notification">
+                    This page has nothing to show because it is a redirection (when the redirection was triggered a first time, you chose to keep it as is).
+                  </div>
+                </div>
+                :
+                <iframe className="webview" src="https://fr.wikipedia.org/wiki/La_Maison_des_feuilles" />
           }
         </section>
       </div>

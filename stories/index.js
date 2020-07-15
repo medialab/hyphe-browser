@@ -117,12 +117,6 @@ storiesOf('New entity modal', module)
   .add('Attempting to create an entity that create a duplicate with an existing one', () => <EntityExistsModalMock />)
 
 
-/**
- * Redirection modal
- */
-import RedirectionModalMock from './RedirectionModalMock'
-storiesOf('Redirection modal', module)
-  .add('Mockup', () => <RedirectionModalMock />)
 
 /**
  * Entity card
@@ -175,3 +169,11 @@ storiesOf('Server choice', module)
   .add('Server choice', () => <ServerChoice />)
   .add('Add a new server', () => <ServerChoice newServer />)
   .add('Add a new corpus', () => <ServerChoice newCorpus />)
+
+/**
+ * Redirection modal
+ */
+import RedirectionModalMock from './RedirectionModalMock'
+storiesOf('Redirection modal', module)
+  .add('Mockup', () => <RedirectionModalMock />)
+  .add('Denied redirection', () => <BrowserLayoutProposal status={ 'prospection' } hasDeniedRedirection/>)
