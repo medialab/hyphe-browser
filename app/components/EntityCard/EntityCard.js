@@ -16,7 +16,7 @@ const EntityCard = ({
   isUndecidedActive,
   isOutActive,
   isViewed,
-  
+
   onClickLink,
   onClickMerge,
   onClickOut,
@@ -25,9 +25,9 @@ const EntityCard = ({
   const { status, name, homepage, indegree, viewed } = link
   const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
   const { formatMessage } = useIntl()
-  
+
   return (
-    <li 
+    <li
       className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
       id={ `entity-card-${link.id}` }
       onClick={ onClickLink }
@@ -39,24 +39,24 @@ const EntityCard = ({
         {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div className="card-content">
-        <h4 title={ name } className="name">{ellipseStr(name, 25)}</h4>
+        <h4 aria-label={ name } className="name hint--bottom">{ellipseStr(name, 25)}</h4>
         <h5 className="url">{homepage}</h5>
         {
-          !!indegree && 
+          !!indegree &&
           <div className="statistics">
             <i className="ti-link" />
             <span className="text">
               <T
-                id="webentity-card.cited-by-n-webentities" 
-                values={ { count: indegree } } 
+                id="webentity-card.cited-by-n-webentities"
+                values={ { count: indegree } }
               />
             </span>
           </div>
         }
       </div>
       <div className="card-actions">
-        
-        
+
+
         <ul className="card-actions-row">
           {
             status !== 'UNDECIDED'

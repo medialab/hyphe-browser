@@ -84,12 +84,14 @@ class BrowserTab extends React.Component {
     // use of <object> explained here: http://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js
     // because medialab return a 200 with no favicon :s
     return (
-      <div key={ id } className={ cls } onClick={ selectHandler } title={ title }>
+      <div key={ id } className={ cls } onClick={ selectHandler }>
         { loading
           ? <span className="loading" />
           : (icon && <object data={ icon } width="16" height="16" className="browser-tab-favicon" />)
         }
-        <span className="browser-tab-title">{ label }</span>
+        <span className={ title && 'hint--right' } aria-label={ title }>
+          <span className="browser-tab-title">{ label }</span>
+        </span>
         { !fixed && closable && <span className="ti-close" onClick={ closeHandler } /> }
       </div>
     )

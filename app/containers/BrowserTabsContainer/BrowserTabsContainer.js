@@ -134,10 +134,9 @@ class BrowserTabsContainer extends React.Component {
               }
               <div
                 className="browser-tab-new"
-                title={ formatMessage({ id: 'open-tab' }) }
                 onClick={ handleOpenNewTab }
               >
-                <span>+</span>
+                <span className="hint--right" aria-label={ formatMessage({ id: 'open-tab' }) }>+</span>
               </div>
             </div>
           </div>
