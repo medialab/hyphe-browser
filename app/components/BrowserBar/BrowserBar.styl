@@ -10,6 +10,7 @@
     .browser-tab-toolbar-url
         background: white
         flex: 1
+        height: 35px
         position: relative
         border-radius: var(--radius)
         overflow: hidden
@@ -21,7 +22,7 @@
             position: absolute
             width: 100%
             border-radius: var(--radius)
-            input 
+            input
                 input()
                 border: none
                 width: 100%
@@ -30,7 +31,7 @@
         &:not(.edited)
             form
                 width: calc(100% - 10px)
-    
+
     .browser-tab-url
         display: flex
         flex-flow: row nowrap
@@ -50,26 +51,26 @@
 
         em
             cursor: inherit;
-        
+
 
         /* :first-child = scheme */
         em:first-child
             font-style: normal;
-        
+
 
         em:not(:first-child)
             background: var(--color-grey);
             padding: 2px 0px;
             font-weight: bold;
             font-style: normal;
-        
 
-        em:nth-child(2) 
+
+        em:nth-child(2)
             border-radius: 3px 0 0 3px;
-        
-        em:last-child 
+
+        em:last-child
             border-radius: 0 3px 3px 0;
-        
+
 
         &.loading
             background-image: url(../../images/loading.svg);
@@ -77,20 +78,20 @@
             background-repeat: no-repeat;
             background-size: 30px;
         &.empty
-            span 
+            span
                 position: relative
                 top: -2px
     .navigate-btn:disabled,
     .navigate-btn[disabled]
         color: var(--color-black)
         opacity: 0.5
-        
+
     .toolbar-placeholder
         font-size: 12px
         color: var(--color-grey-dark)
         padding: 5px
         padding-top: 7px
-    
+
 
     .page-actions
         position : absolute
@@ -110,7 +111,7 @@
             margin-right: 5px
         button:last-of-type
             margin-right: 0
-        
+
         .homepage-btn
             font-size: 12px
             &.is-active
