@@ -154,10 +154,9 @@ const WebentityBrowseLayout = ({
           <i className="ti-angle-left" />
         </Tooltipable>
         <span
-          title={ webentity.name }
-          className={ cx('current-webentity-name', { 'clickable':  notOnHomepage, 'hint--bottom': notOnHomepage }) }
+          className={ cx('current-webentity-name hint--bottom', { 'clickable':  notOnHomepage }) }
           onClick={ handleSetTabHomepage }
-          aria-label={ notOnHomepage ? formatMessage({ id: 'go-to-homepage' }) : null }
+          aria-label={ notOnHomepage ? formatMessage({ id: 'go-to-homepage' }) : webentity.name }
         >
           {ellipseStr(webentity.name, 20)}
           <span className="current-webentity-stack-indicators">
