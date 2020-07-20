@@ -1,6 +1,6 @@
 import './KnownPages.styl'
 
-import React from 'react'
+import React, { useMemo }from 'react'
 import { useIntl, FormattedMessage as T } from 'react-intl'
 
 import DownloadListBtn from '../DownloadListBtn'
@@ -22,6 +22,7 @@ const KnownPages = ({
 
   const { formatMessage } = useIntl()
 
+  const pagesList = useMemo(() => list, [list])
   const handleDownloadList = () => {
     onDownloadList('mostLinked')
   }
@@ -29,7 +30,7 @@ const KnownPages = ({
   return (
     <div className="known-pages">
       <CardsList>
-        { list && list.length ? list.map((link, index) => {
+        { pagesList && pagesList.length ? pagesList.map((link, index) => {
           const isHomepage = compareUrls(homepage, link.url)
           const isActive = compareUrls(tabUrl, link.url)
 

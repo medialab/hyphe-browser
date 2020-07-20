@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { debounce } from 'lodash'
+
 import Spinner from '../../components/Spinner'
 
 import {
@@ -64,6 +66,8 @@ const WebentityBrowseContainer = ({
   const selectedWebentity = webentities && webentities.selected
   const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
 
+  const debounceFetchPaginatePages = debounce(fetchPaginatePages, 1000)
+
   // storing viewed prospections in an efficient way
   let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED
   && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
@@ -88,7 +92,7 @@ const WebentityBrowseContainer = ({
   useEffect(() => {
     // Fetch paginatePages if token
     if (webentity && webentity.token) {
-      fetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
+      debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
     }
   }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
 
