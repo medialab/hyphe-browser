@@ -1,20 +1,39 @@
 import './RedirectionModal.styl'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import Modal from 'react-modal'
+import PrefixSetter from '../../components/PrefixSetter'
 import cx from 'classnames'
+import dropRightWhile from 'lodash/fp/dropRightWhile'
+import initial from 'lodash/fp/initial'
+
+import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
 
 Modal.setAppElement('#root')
 
+const parsePrefixes = (lru, url, newEntity, tldTree) => {
+  const urlLru = lruObjectToString(urlToLru(url, tldTree))
+  const l = lru.split('|').length
+  return dropRightWhile((stem) => stem === 'p:', initial(urlLru.split('|'))).map((stem, index) => {
+    const editable = newEntity ? index >= l : index >= l - 1
+    return {
+      name: stem,
+      editable,
+      selected: index < l - 1 || newEntity,
+    }
+  })
+}
 const RedirectionModal = ({
   isOpen,
   // onClose,
   mergeRequired,
+  tlds,
   onValidateDecision
 }) => {
-  const { originalUrl, redirectUrl, originalWebentity, redirectWebentity } = mergeRequired
+  const { redirectUrl, originalWebentity, redirectWebentity } = mergeRequired
 
   const [redirectionDecision, onSetRedirectionDecision] = useState(null)
   const [mergeDecision, onSetMergeDecision] = useState(null)
+  const [lruPrefixes, setLruPrefixes] = useState(redirectWebentity.prefixes)
 
   const handleDeny = () => {
     onSetRedirectionDecision(false)
@@ -24,9 +43,35 @@ const RedirectionModal = ({
   const handleDecision = () => {
     onValidateDecision({
       redirectionDecision,
-      mergeDecision
+      mergeDecision,
+      prefixes: lruPrefixes
     })
   }
+  const handleSetPrefix = (prefix) => {
+    setPrefixUrl(lruToUrl(prefix))
+    setLruPrefixes(lruVariations(prefix))
+  }
+
+  const longestLru = useMemo(
+    () => longestMatching(redirectWebentity.prefixes, redirectUrl, tlds).lru,
+    [redirectWebentity.prefixes, redirectUrl, tlds]
+  )
+  const prefixes = useMemo(
+    () => parsePrefixes(lruObjectToString(longestLru), redirectUrl, true, tlds),
+    [longestLru, redirectUrl, tlds]
+  )
+
+  const initialPrefix = useMemo(
+    () => prefixes
+      .filter(({ selected }) => selected)
+      .reduce((prev, part) => `${prev}${part.name}|`, '')
+  )
+
+  const [prefixUrl, setPrefixUrl] = useState(lruToUrl(initialPrefix))
+
+
+  // const longestLru = longestMatching(redirectWebentity.prefixes, redirectUrl, tlds).lru
+  // const prefixes = parsePrefixes(lruObjectToString(longestLru), redirectUrl, true, tlds)
 
   return (
     <Modal
@@ -53,7 +98,7 @@ const RedirectionModal = ({
         </div>
         <div className="modal-body">
           <div className="explanation-text">
-            The webpage <code>{originalUrl}</code> (belonging to webentity <strong>{originalWebentity.name}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (belonging to webentity <strong>{redirectWebentity.name}</strong>)
+            The webpage <code>{originalWebentity.homepage}</code> (belonging to webentity <strong>{originalWebentity.name}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (belonging to webentity <strong>{redirectWebentity.name}</strong>)
           </div>
 
           <div className={ cx('step-container') }>
@@ -66,11 +111,22 @@ const RedirectionModal = ({
           {
             redirectionDecision === true &&
             <div className={ cx('step-container') }>
-              <h3>What should we do with the source of the redirection ("{ originalUrl }") ?</h3>
-              <ul className="actions-container big">
-                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>put it into OUT list</button></li>
-                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge it with the redirection destination webentity</button></li>
+              <h3>What should we do with the source with the two webentities ?</h3>
+              <ul className="actions-container big column">
+                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>move <strong>{ originalWebentity.name }</strong> webentity to OUT list</button></li>
+                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge <strong>{ originalWebentity.name }</strong>  within the <strong>{redirectWebentity.name}</strong> </button></li>
+                <li>
+                  <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>merge <strong>{ redirectWebentity.name }</strong>  within the <strong>{ originalWebentity.name }</strong> </button>
+                </li>
               </ul>
+              {mergeDecision === 'MERGE-REVERSE' &&
+                <div>
+                  <p>Choose the level of prefix (<code>{prefixUrl}</code>) to add to <strong>{ originalWebentity.name }</strong>:</p>
+                  <PrefixSetter
+                    parts={ prefixes }
+                    setPrefix={ handleSetPrefix }
+                  />
+                </div>}
             </div>
           }
         </div>

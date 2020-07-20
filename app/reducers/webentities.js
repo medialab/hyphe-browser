@@ -15,6 +15,7 @@ import {
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
+  ADD_WEBENTITY_PREFIXES_SUCCESS,
   SET_WEBENTITY_CRAWLING_STATUS,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
@@ -271,14 +272,25 @@ export default createReducer(initialState, {
     }
   }),
 
+  // [ADD_WEBENTITY_PREFIXES_SUCCESS]: (state, { webentityId, prefixes }) => ({
+  //   ...state,
+  //   webentities: {
+  //     ...state.webeneities,
+  //     [webeneityId]: {
+  //       ...state.webentities[webeneityId],
+  //       prefixes: state.webentities[webentityId].prefixes.concat(prefixes)
+  //     }
+  //   }
+  // }),
+
   // Keep track of current WE merges
-  [SET_MERGE_URL]: (state, { tabId, originalUrl, redirectUrl, originalWebentity }) => {
+  [SET_MERGE_URL]: (state,{tabId, redirectUrl, originalWebentity }) => {
     return {
       ...state,
       merges: {
         ...state.merges,
         [tabId]: {
-          originalUrl,
+          ...state.merges[tabId],
           redirectUrl,
           originalWebentity
         }
@@ -287,7 +299,6 @@ export default createReducer(initialState, {
   },
 
   [SET_MERGE_WEBENTITY]: (state, { tabId, redirectWebentity, type }) => {
-    // const merge = state.merges[tabId]
     // We do not want to re-set `mergeable` because we want to keep the first
     // redirection as mergeable.
     return {
@@ -297,20 +308,21 @@ export default createReducer(initialState, {
         [tabId]: {
           ...state.merges[tabId],
           redirectWebentity,
-          // mergeable: (merge && merge.mergeable) ? merge.mergeable : mergeable,
           type
         }
       }
     }
   },
 
-  [UNSET_MERGE_WEBENTITY]: (state, { tabId }) => ({
-    ...state,
-    merges: {
-      ...state.merges,
-      [tabId]: null
-    }
-  }),
+  [UNSET_MERGE_WEBENTITY]: (state, { tabId }) => {
+    return ({
+      ...state,
+      merges: {
+        ...state.merges,
+        [tabId]: null
+      }
+    })
+  },
 
   [VIEW_WEBENTITY]: (state, { webentity }) => ({
     ...state,

@@ -104,6 +104,9 @@ export const UNSET_MERGE_WEBENTITY = '§_UNSET_MERGE_WEBENTITY'
 export const MERGE_WEBENTITY_REQUEST = '§_MERGE_WEBENTITY_REQUEST'
 export const MERGE_WEBENTITY_SUCCESS = '§_MERGE_WEBENTITY_SUCCESS'
 export const MERGE_WEBENTITY_FAILURE = '§_MERGE_WEBENTITY_FAILURE'
+export const ADD_WEBENTITY_PREFIXES_REQUEST = '§_ADD_WEBENTITY_PREFIXES_REQUEST'
+export const ADD_WEBENTITY_PREFIXES_SUCCESS = '§_ADD_WEBENTITY_PREFIXES_SUCCESS'
+export const ADD_WEBENTITY_PREFIXES_FAILURE = '§_ADD_WEBENTITY_PREFIXES_FAILURE'
 
 // canceling a webentity's crawls
 export const CANCEL_WEBENTITY_CRAWLS_REQUEST = '§_CANCEL_WEBENTITY_CRAWLS_REQUEST'
@@ -171,6 +174,22 @@ export const setWebentityStatus = ({ serverUrl, corpusId, status, webentityId })
     .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status, webentityId } }))
     .catch((error) => {
       dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, status, webentityId, error } })
+      throw error
+    })
+}
+
+export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixes, tabId }) => (dispatch, getState) => {
+  dispatch({ type: ADD_WEBENTITY_PREFIXES_REQUEST, payload: { serverUrl, corpusId, webentityId, prefixes } })
+
+  return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentityId, prefixes, corpusId])
+    .then(() => {
+      const state = getState()
+      const url = state.webentities.webentities[webentityId].homepage
+      dispatch(declarePage(serverUrl, corpusId, url, tabId))
+      dispatch({ type: ADD_WEBENTITY_PREFIXES_SUCCESS, payload: { serverUrl, corpusId, webentityId, prefixes } })
+    })
+    .catch((error) => {
+      dispatch({ type: ADD_WEBENTITY_PREFIXES_FAILURE, payload: { serverUrl, corpusId, webentityId, prefixes, error } })
       throw error
     })
 }
@@ -383,7 +402,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
 }
 
-export const setMergeUrl = ({ tabId, originalUrl, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, originalUrl, redirectUrl, originalWebentity } })
+export const setMergeUrl = ({ tabId, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, redirectUrl, originalWebentity } })
 export const setMergeWebentity = ({ tabId, redirectWebentity, type = 'redirect' }) => ({ type: SET_MERGE_WEBENTITY, payload: { tabId, redirectWebentity, type } })
 export const unsetMergeWebentity = ({ tabId }) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
 
