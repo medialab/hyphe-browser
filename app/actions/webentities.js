@@ -178,15 +178,13 @@ export const setWebentityStatus = ({ serverUrl, corpusId, status, webentityId })
     })
 }
 
-export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixes, tabId }) => (dispatch, getState) => {
+export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixes }) => (dispatch) => {
   dispatch({ type: ADD_WEBENTITY_PREFIXES_REQUEST, payload: { serverUrl, corpusId, webentityId, prefixes } })
 
   return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentityId, prefixes, corpusId])
-    .then(() => {
-      const state = getState()
-      const url = state.webentities.webentities[webentityId].homepage
-      dispatch(declarePage(serverUrl, corpusId, url, tabId))
+    .then((res) => {
       dispatch({ type: ADD_WEBENTITY_PREFIXES_SUCCESS, payload: { serverUrl, corpusId, webentityId, prefixes } })
+      return res
     })
     .catch((error) => {
       dispatch({ type: ADD_WEBENTITY_PREFIXES_FAILURE, payload: { serverUrl, corpusId, webentityId, prefixes, error } })

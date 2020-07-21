@@ -231,7 +231,7 @@ class BrowserTabContent extends React.Component {
     const {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
       noCrawlPopup, mergeRequired, eventBus, setTabUrl, setTabWebentity, setWebentityHomepage, setWebentityStatus,
-      selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
+      selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine, declarePage,
       hideAdjustWebentity, toggleDoNotShowAgain, mergeWebentities, unsetMergeWebentity, addWebentityPrefixes
     } = this.props
 
@@ -301,6 +301,9 @@ class BrowserTabContent extends React.Component {
             status: 'OUT',
             webentityId: mergeRequired.originalWebentity.id,
           })
+          // set current webentity to redirected one
+          setTabUrl(mergeRequired.redirectUrl, id)
+          setTabWebentity(id, mergeRequired.redirectWebentity)
         } else if (mergeDecision === 'MERGE') {
           mergeWebentities({
             serverUrl: server.url,
@@ -309,6 +312,9 @@ class BrowserTabContent extends React.Component {
             redirectWebentity: mergeRequired.redirectWebentity,
             type: mergeRequired.type
           })
+          // set current webentity to redirected one
+          setTabUrl(mergeRequired.redirectUrl, id)
+          setTabWebentity(id, mergeRequired.redirectWebentity)
         } else if (mergeDecision === 'MERGE-REVERSE') {
           addWebentityPrefixes({
             serverUrl: server.url,
@@ -316,11 +322,11 @@ class BrowserTabContent extends React.Component {
             webentityId: mergeRequired.originalWebentity.id,
             prefixes,
             tabId: id
+          }).then(() => {
+            declarePage(server.url, corpusId, url, id)
+            setTabUrl(mergeRequired.redirectUrl, id)
           })
         }
-        // set current webentity to redirected one
-        setTabUrl(mergeRequired.redirectUrl, id)
-        setTabWebentity(id, mergeRequired.redirectWebentity)
       }
       handleCloseRedirectModal()
     }

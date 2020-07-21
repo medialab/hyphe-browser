@@ -15,7 +15,6 @@ import {
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
-  ADD_WEBENTITY_PREFIXES_SUCCESS,
   SET_WEBENTITY_CRAWLING_STATUS,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
@@ -272,19 +271,8 @@ export default createReducer(initialState, {
     }
   }),
 
-  // [ADD_WEBENTITY_PREFIXES_SUCCESS]: (state, { webentityId, prefixes }) => ({
-  //   ...state,
-  //   webentities: {
-  //     ...state.webeneities,
-  //     [webeneityId]: {
-  //       ...state.webentities[webeneityId],
-  //       prefixes: state.webentities[webentityId].prefixes.concat(prefixes)
-  //     }
-  //   }
-  // }),
-
   // Keep track of current WE merges
-  [SET_MERGE_URL]: (state,{tabId, redirectUrl, originalWebentity }) => {
+  [SET_MERGE_URL]: (state,{ tabId, redirectUrl, originalWebentity }) => {
     return {
       ...state,
       merges: {

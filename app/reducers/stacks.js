@@ -4,6 +4,7 @@ import set from 'lodash/fp/set'
 import {
   EMPTY_STACK,
   SELECT_STACK,
+  UPDATE_STACK,
   FETCH_STACK_REQUEST,
   FETCH_STACK_SUCCESS,
   FETCH_STACK_PAGE_REQUEST,
@@ -14,6 +15,7 @@ import {
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
 
+import { ADD_WEBENTITY_PREFIXES_SUCCESS } from '../actions/webentities'
 import {
   ADD_TAG_SUCCESS,
   UPDATE_TAG_SUCCESS,
@@ -104,6 +106,13 @@ export default createReducer(initialState, {
   [STOPPED_LOADING_WEBENTITY]: (state) => ({
     ...state,
     loadingWebentity: false
+  }),
+
+  [ADD_WEBENTITY_PREFIXES_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      prefixes: webentity.prefixes.concat(payload.prefixes)
+    }
   }),
 
   [UPDATE_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
