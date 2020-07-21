@@ -98,9 +98,6 @@ export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUE
 export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
 export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
 
-export const SET_MERGE_URL = '§_SET_MERGE_URL'
-export const SET_MERGE_WEBENTITY = '§_SET_MERGE_WEBENTITY'
-export const UNSET_MERGE_WEBENTITY = '§_UNSET_MERGE_WEBENTITY'
 export const MERGE_WEBENTITY_REQUEST = '§_MERGE_WEBENTITY_REQUEST'
 export const MERGE_WEBENTITY_SUCCESS = '§_MERGE_WEBENTITY_SUCCESS'
 export const MERGE_WEBENTITY_FAILURE = '§_MERGE_WEBENTITY_FAILURE'
@@ -118,24 +115,12 @@ export const BATCH_WEBENTITY_ACTIONS_REQUEST = '§_BATCH_WEBENTITY_ACTIONS_REQUE
 export const BATCH_WEBENTITY_ACTIONS_SUCCESS = '§_BATCH_WEBENTITY_ACTIONS_SUCCESS'
 export const BATCH_WEBENTITY_ACTIONS_FAILURE = '§_BATCH_WEBENTITY_ACTIONS_FAILURE'
 
-export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch, getState) => {
+export const declarePage = (serverUrl, corpusId, url) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
-      const state = getState()
-      if (tabId) {
-        if (state.webentities.merges[tabId]) {
-          dispatch(setMergeWebentity({
-            tabId,
-            redirectWebentity: webentity,
-            type: 'redirect'
-          }))
-        } else {
-          dispatch(setTabWebentity(tabId, webentity))
-        }
-      }
       return webentity
     })
     .catch((error) => dispatch({ type: DECLARE_PAGE_FAILURE, payload: { serverUrl, corpusId, url, error } }))
@@ -400,11 +385,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
 }
 
-export const setMergeUrl = ({ tabId, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, redirectUrl, originalWebentity } })
-export const setMergeWebentity = ({ tabId, redirectWebentity, type = 'redirect' }) => ({ type: SET_MERGE_WEBENTITY, payload: { tabId, redirectWebentity, type } })
-export const unsetMergeWebentity = ({ tabId }) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
-
-export const mergeWebentities = ({ serverUrl, corpusId, tabId, originalWebentityId, redirectWebentity, type }) => (dispatch) => {
+export const mergeWebentities = ({ serverUrl, corpusId, originalWebentityId, redirectWebentity, type }) => (dispatch) => {
   const { id: redirectWebentityId } = redirectWebentity
   dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
   return jsonrpc(serverUrl)('store.merge_webentity_into_another', [originalWebentityId, redirectWebentityId, true, false, false, corpusId])
@@ -417,7 +398,6 @@ export const mergeWebentities = ({ serverUrl, corpusId, tabId, originalWebentity
       if (type === 'referrals') {
         dispatch(fetchReferrals(serverUrl, corpusId, redirectWebentity))
       }
-      dispatch(unsetMergeWebentity({ tabId }))
       //TODO : apply to stack merged webentity the attributes of the host
     })
     .catch((error) => {
