@@ -33,7 +33,6 @@ const RedirectionModal = ({
 
   const [redirectionDecision, onSetRedirectionDecision] = useState(null)
   const [mergeDecision, onSetMergeDecision] = useState(null)
-  const [lruPrefixes, setLruPrefixes] = useState(redirectWebentity.prefixes)
 
   const handleDeny = () => {
     onSetRedirectionDecision(false)
@@ -68,10 +67,7 @@ const RedirectionModal = ({
   )
 
   const [prefixUrl, setPrefixUrl] = useState(lruToUrl(initialPrefix))
-
-
-  // const longestLru = longestMatching(redirectWebentity.prefixes, redirectUrl, tlds).lru
-  // const prefixes = parsePrefixes(lruObjectToString(longestLru), redirectUrl, true, tlds)
+  const [lruPrefixes, setLruPrefixes] = useState(lruVariations(initialPrefix))
 
   return (
     <Modal
