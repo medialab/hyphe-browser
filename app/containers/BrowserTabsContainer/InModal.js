@@ -29,10 +29,14 @@ const compareWithoutWww = (lru) => {
 const PagesList = ({
   selectedPage,
   setSelectedPage,
-  onLoadPages,
   pages,
+  isPaginating,
+  totalPages
 }) => (
-  <CardsList onLoadPages={onLoadPages} >
+  <CardsList
+    displayLoader={ isPaginating }
+    count={ pages.length }
+    total={ totalPages }>
     { pages.map((link, index) => {
       return (
         <KnownPageCard
@@ -169,7 +173,6 @@ const EntityModal = ({
   isOpen,
   onRequestClose,
   onSuccess,
-  onLoadPages,
   webentity,
   createNewEntity,
   tabUrl,
@@ -305,9 +308,10 @@ const EntityModal = ({
               webentity.paginatePages ?
                 <PagesList
                   pages={ pagesList }
+                  isPaginating={ webentity.token }
+                  totalPages={ webentity.pages_total }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
-                  onLoadPages={ onLoadPages }
                 /> : <Spinner />
             }
             <li className="standalone-confirm-container">

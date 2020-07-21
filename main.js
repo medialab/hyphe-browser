@@ -47,10 +47,10 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', () => {
-  window = new BrowserWindow({ 
-    center: true, 
-    width: 1024, 
-    height: 728, 
+  window = new BrowserWindow({
+    center: true,
+    width: 1024,
+    height: 728,
     resizable: true
   })
 
@@ -90,7 +90,7 @@ app.on('ready', () => {
     const menu = getNewMenuBar(locale, menuSetting)
     Menu.setApplicationMenu(menu)
   })
-  
+
   ipc.on('setLocaleMain', (e, locale) => {
     const menu = getNewMenuBar(locale, menuSetting)
     Menu.setApplicationMenu(menu)
@@ -100,7 +100,7 @@ app.on('ready', () => {
   shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
   shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
   shortcuts.register('F12', () => window.toggleDevTools())
-  
+
   // Force reload
   shortcuts.register('Shift+Ctrl+R', () => window.reload())
 
@@ -154,7 +154,7 @@ function getNewMenuBar (locale, setting) {
       label: appName,
       submenu: [
         { role: 'about',
-          label: langEn ? 'About' : `À propos de ${appName}` 
+          label: langEn ? 'About' : `À propos de ${appName}`
         },
         { type: 'separator' },
         { role: 'hide',
@@ -205,10 +205,14 @@ function getNewMenuBar (locale, setting) {
       label:  locale === 'en-US' ? 'Language': 'Langue',
       submenu: [
         { label: locale === 'en-US' ? 'English': 'Anglais',
+          type: 'checkbox',
+          checked: locale === 'en-US' ? true : false,
           enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'en-US') }
         },
         { label: locale === 'en-US' ? 'French': 'Francais',
+          type: 'checkbox',
+          checked: locale === 'en-US' ? false: true,
           enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'fr-FR') }
         }
@@ -217,7 +221,7 @@ function getNewMenuBar (locale, setting) {
     // { role: 'downloadMenu' }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ,
     {
       label: locale === 'en-US' ? 'Download': 'Télécharger',
-      submenu: [                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      submenu: [
         { label: 'IN WebEntities as CSV',
           enabled: enableDownload,
           click () { window.webContents.send('exportFile', 'IN', 'csv') }
@@ -240,7 +244,7 @@ function getNewMenuBar (locale, setting) {
         },
         // { label: 'IN + UNDECIDED WebEntities as Sitography',
         //   enabled: enableDownload,
-        //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') } 
+        //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
         { type: 'separator' },
         { label: 'Tags as CSV',
@@ -260,12 +264,12 @@ function getNewMenuBar (locale, setting) {
       item.enabled = true
     })
   })
-  
+
   ipc.on('corpusClosed', () => {
     menu.items[1].submenu.items.forEach((item) => {
       item.enabled = false
     })
   })
-  
+
   return menu
 }

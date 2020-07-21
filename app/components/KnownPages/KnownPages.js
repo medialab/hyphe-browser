@@ -1,7 +1,7 @@
 import './KnownPages.styl'
 
-import React from 'react'
-import { useIntl } from 'react-intl'
+import React, { useMemo }from 'react'
+import { useIntl, FormattedMessage as T } from 'react-intl'
 
 import DownloadListBtn from '../DownloadListBtn'
 import CardsList from '../CardsList'
@@ -13,7 +13,8 @@ const KnownPages = ({
   list,
   tabUrl,
   homepage,
-  onLoadPages,
+  isPaginating,
+  totalPages,
   onDownloadList,
   onSetHomepage,
   onSetTabUrl
@@ -21,14 +22,15 @@ const KnownPages = ({
 
   const { formatMessage } = useIntl()
 
+  const pagesList = useMemo(() => list, [list])
   const handleDownloadList = () => {
     onDownloadList('mostLinked')
   }
 
   return (
     <div className="known-pages">
-      <CardsList onLoadPages={onLoadPages}>
-        { list && list.length ? list.map((link, index) => {
+      <CardsList>
+        { pagesList && pagesList.length ? pagesList.map((link, index) => {
           const isHomepage = compareUrls(homepage, link.url)
           const isActive = compareUrls(tabUrl, link.url)
 
@@ -58,8 +60,15 @@ const KnownPages = ({
       </CardsList>
       {
         list && list.length > 0 &&
-        <div className="download-container">
-          <DownloadListBtn onClickDownload={ handleDownloadList } />
+        <div className="button-container">
+          {
+            isPaginating ?
+              <button className="loading-btn">
+                <T id="loading" />
+                <span> ({list.length}/{totalPages} webpages)</span>
+              </button> :
+              <DownloadListBtn onClickDownload={ handleDownloadList } />
+          }
         </div>
       }
     </div>

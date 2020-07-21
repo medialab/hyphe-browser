@@ -22,12 +22,14 @@
             padding: 10px
             user-select: none
             background: var(--color-grey)
-            cursor: pointer
         .part.active
             background: var(--color-blue)
             color: rgb(230, 241, 248)
         .part:not(.editable)
             opacity: .8
+            cursor: default
+        .part.editable
+            cursor: pointer
         .editable-wrapper
             position: absolute
             top: 0

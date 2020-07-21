@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { debounce } from 'lodash'
+
 import Spinner from '../../components/Spinner'
 
 import {
@@ -9,9 +11,11 @@ import {
   showAdjustWebentity,
   cancelWebentityCrawls,
   batchWebentityActions,
-  setSimpleTabWebentity,
+  setTabWebentity,
   setWebentityStatus,
-  fetchPaginatePages
+  fetchPaginatePages,
+  fetchReferrals,
+  fetchReferrers
 } from '../../actions/webentities'
 
 import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
@@ -51,13 +55,18 @@ const WebentityBrowseContainer = ({
   batchWebentityActions,
   setWebentityHomepage,
   fetchPaginatePages,
+  fetchReferrals,
+  fetchReferrers,
   addTag,
   updateTag,
   removeTag,
-  setSimpleTabWebentity,
+  setTabWebentity,
 }) => {
   const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
+  const selectedWebentity = webentities && webentities.selected
   const [initialStatus, setInitialStatus] = useState(webentity && webentity.status)
+
+  const debounceFetchPaginatePages = debounce(fetchPaginatePages, 1000)
 
   // storing viewed prospections in an efficient way
   let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED
@@ -68,13 +77,31 @@ const WebentityBrowseContainer = ({
     if (webentity) {
       setInitialStatus(webentity.status)
     }
+    // Fetch paginatePages, referrals and refferes of webentity only once
+    if (webentity && !webentity.referrals) {
+      fetchReferrals(serverUrl, corpusId, webentity)
+    }
+    if (webentity && !webentity.referrers) {
+      fetchReferrers(serverUrl, corpusId, webentity)
+    }
+    if (webentity && !webentity.paginatePages) {
+      fetchPaginatePages({ serverUrl, corpusId, webentity })
+    }
   }, [webentity && webentity.id])
+
+  useEffect(() => {
+    // Fetch paginatePages if token
+    if (webentity && webentity.token) {
+      debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
+    }
+  }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
+
 
   const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
-    setSimpleTabWebentity(webentity, activeTab.id)
+    setTabWebentity(activeTab.id, webentity)
     setTabUrl(webentity.homepage, activeTab.id)
   }
 
@@ -111,13 +138,6 @@ const WebentityBrowseContainer = ({
     downloadFile(flatList, fileName, 'csv')
   }
 
-  const handleLoadPages = () => {
-    const {token} = webentity
-    if (token) {
-      fetchPaginatePages({ serverUrl, corpusId, webentity, token})
-    }
-  }
-
   const handleSetWebentityName = (name) => setWebentityName(serverUrl, corpusId, name, webentity.id)
   const handleSetWebentityHomepage = (url) => setWebentityHomepage(serverUrl, corpusId, url, webentity.id)
 
@@ -133,7 +153,7 @@ const WebentityBrowseContainer = ({
       // Set to IN = go to "adjust" mode and validation triggers crawling
       showAdjustWebentity(we.id, true, false)
     } else {
-      setWebentityStatus(serverUrl, corpusId, status, we.id)
+      setWebentityStatus({ serverUrl, corpusId, status, webentityId: we.id })
     }
 
     if (status === 'OUT' && crawling) {
@@ -185,6 +205,7 @@ const WebentityBrowseContainer = ({
       initialStatus={ initialStatus }
       webentitiesList= { webentitiesList }
       selectedStack={ selectedStack }
+      selectedWebentity = { selectedWebentity }
       loadingStack={ loadingStack }
       loadingWebentity= { loadingWebentity }
       loadingBatchActions = { loadingBatchActions }
@@ -192,7 +213,6 @@ const WebentityBrowseContainer = ({
       categories={ filteredCategories }
       tagsSuggestions={ tagsSuggestions || empty }
       onSelectWebentity={ handleSelectWebentity }
-      onLoadPages={ handleLoadPages }
       onDownloadList={ handleDownloadList }
       onSetTabUrl={ handleSetTabUrl }
       onOpenTab={ handleOpenTab }
@@ -223,6 +243,8 @@ WebentityBrowseContainer.propTypes = {
   setWebentityName: PropTypes.func,
   setWebentityStatus: PropTypes.func,
   setWebentityHomepage: PropTypes.func,
+  fetchReferrers: PropTypes.func.isRequired,
+  fetchReferrals: PropTypes.func.isRequired,
   fetchPaginatePages: PropTypes.func.isRequired
 }
 
@@ -258,6 +280,8 @@ export default connect(mapStateToProps, {
   addTag,
   updateTag,
   removeTag,
-  setSimpleTabWebentity,
+  setTabWebentity,
+  fetchReferrals,
+  fetchReferrers,
   fetchPaginatePages
 })(React.memo(WebentityBrowseContainer))

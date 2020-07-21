@@ -8,7 +8,6 @@ import { findDOMNode } from 'react-dom'
 import { injectIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc } from 'electron'
 import cx from 'classnames'
-import { HYPHE_TAB_ID } from '../../constants'
 
 const { Menu, MenuItem } = remote
 
@@ -24,15 +23,15 @@ class BrowserTab extends React.Component {
     const translate = (id) => {
       return formatMessage({ id })
     }
-    
+
     const openInBrowser = () => {
       ipc.send('openExternal', this.props.url)
     }
-  
+
     const duplicate = () => {
       this.props.openTab(this.props.url, this.props.id)
     }
-  
+
     const close = () => {
       this.props.closeTab(this.props.id)
     }
@@ -64,23 +63,20 @@ class BrowserTab extends React.Component {
     const { active, id, title, webentity, icon, loading, newTab, fixed, closable } = this.props
     const cls = cx('browser-tab-label', { active }, {
       'browser-tab-label-fixed': fixed,
-      'browser-tab-label-hyphe': id === HYPHE_TAB_ID,
     })
     const label = newTab
       ? formatMessage({ id: 'new-tab' })
-      : id === HYPHE_TAB_ID 
-        ? 'H'
-        : webentity && webentity.name
-          ? webentity.name
-          : title
-  
+      : webentity && webentity.name
+        ? webentity.name
+        : title
+
     const closeHandler = (e) => {
       e.preventDefault()
       // do not trigger a selectTab just after
       e.stopPropagation()
       this.props.closeTab(this.props.id)
     }
-  
+
     const selectHandler = (e) => {
       e.preventDefault()
       this.props.selectTab(this.props.id)
@@ -88,12 +84,14 @@ class BrowserTab extends React.Component {
     // use of <object> explained here: http://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js
     // because medialab return a 200 with no favicon :s
     return (
-      <div key={ id } className={ cls } onClick={ selectHandler } title={ title }>
+      <div key={ id } className={ cls } onClick={ selectHandler }>
         { loading
           ? <span className="loading" />
           : (icon && <object data={ icon } width="16" height="16" className="browser-tab-favicon" />)
         }
-        <span className="browser-tab-title">{ label }</span>
+        <span className={ title && 'hint--right' } aria-label={ title }>
+          <span className="browser-tab-title">{ label }</span>
+        </span>
         { !fixed && closable && <span className="ti-close" onClick={ closeHandler } /> }
       </div>
     )

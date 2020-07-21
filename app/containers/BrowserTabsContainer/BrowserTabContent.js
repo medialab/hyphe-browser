@@ -27,9 +27,9 @@ import {
   addNavigationHistory,
 } from '../../actions/tabs'
 import {
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchPaginatePages,
-  setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity,
-  hideAdjustWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
+  declarePage, setTabWebentity, setWebentityHomepage,
+  setWebentityStatus, setAdjustWebentity, saveAdjustedWebentity, showAdjustWebentity, addWebentityPrefixes,
+  hideAdjustWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 } from '../../actions/webentities'
 
 import { fetchStackAndSetTab } from '../../actions/stacks'
@@ -37,6 +37,7 @@ import { fetchStackAndSetTab } from '../../actions/stacks'
 import { getSearchUrl } from '../../utils/search-web'
 import { compareUrls, longestMatching, urlToLru, lruObjectToString } from '../../utils/lru'
 import InModal from './InModal'
+import RedirectionModal from './RedirectionModal'
 
 class BrowserTabContent extends React.Component {
 
@@ -49,6 +50,7 @@ class BrowserTabContent extends React.Component {
       disableForward: true,
       disableApplyButton: false,
       showSearchBar: false,
+      disableRedirect: false,
       setDoNotShowAgainAfterSubmit: null
     }
   }
@@ -66,7 +68,7 @@ class BrowserTabContent extends React.Component {
     eventBus.on('close', this.navCloseHandler)
     this.navOpenHandler = (url) => openTab(url, id)
     eventBus.on('open', this.navOpenHandler)
-    
+
     ipc.on(`shortcut-${SHORTCUT_FIND_IN_PAGE}`, this.handleShowSearchBar)
     ipc.send('registerShortcut', SHORTCUT_FIND_IN_PAGE)
   }
@@ -91,47 +93,70 @@ class BrowserTabContent extends React.Component {
   }
 
   updateTabStatus (event, info) {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
+    const { id, mergeRequired, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
-      webentity, selectedWebentity, loadingWebentityStack, setMergeWebentity,
+      webentity, loadingWebentityStack, setMergeUrl, unsetMergeWebentity,
       tlds, selectedEngine, addNavigationHistory } = this.props
-    // In Hyphe special tab, if target=_blank link points to a Hyphe page, load within special tab
-
-    if (event === 'start' && compareUrls(server.home, info)) {
-      event = 'start'
-      throw new Error()
-    }
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
       break
     case 'start':
       hideError()
-      setTabStatus({ loading: true, url: info }, id)
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
         // do not declare pages(show sidebar) when only changing url's anchor
         !this.samePage(info) &&
+        // do not unset tab webentity if there is a redirect
+        !mergeRequired &&
         // or when probably remaining within the same webentity
         !(webentity && longestMatching(webentity.prefixes, info, tlds))) {
-        setTabWebentity(server.url, corpusId, id, null)
+        setTabWebentity(id, null)
       }
-      setTabUrl(info, id)
       break
     case 'stop':
-      // Redirect Hyphe special tab to network when userclosed or misstarted
-      if (disableWebentity && info === server.home + '/#/login') {
-        info = server.home + '/#/project/' + corpusId + '/network'
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabUrl(info, id)
+      if (mergeRequired ||
+          (!disableWebentity &&
+          !this.samePage(info) &&
+          !(webentity &&
+            // if webentity is loaded from memory the longestMatching used to
+            // avoid too much declaration will prevent all declaration. So we
+            // need to allow declaration at least from homepage because it's
+            // the first page visited when clicking in the sidebar.
+            !compareUrls(webentity.homepage, info) &&
+            longestMatching(webentity.prefixes, info, tlds))
+          )
+      ) {
+        declarePage(server.url, corpusId, info, id)
       }
-      setTabStatus({ loading: false, url: info }, id)
+      this.setState({ previousUrl: info, disableRedirect: false  })
+      setTabStatus({ loading: false }, id)
       addNavigationHistory(info, corpusId)
       stoppedLoadingWebentity()
-      this.setState({ previousUrl: info })
       break
     case 'redirect':
-      if (loadingWebentityStack && selectedWebentity &&
-        !longestMatching(selectedWebentity.prefixes, info.newURL, tlds)) {
-        setMergeWebentity(id, selectedWebentity)
+      if (loadingWebentityStack && webentity &&
+        !compareUrls(info.oldURL, info.newURL) &&
+        !longestMatching(webentity.prefixes, info.newURL, tlds)) {
+        setMergeUrl({
+          tabId: id,
+          redirectUrl: info.newURL,
+          originalWebentity: webentity
+        })
+      } else if (mergeRequired) {
+        setMergeUrl({
+          tabId: id,
+          redirectUrl: info.newURL,
+          originalWebentity: webentity
+        })
+      }
+
+      if (mergeRequired && longestMatching(webentity.prefixes, info.newURL, tlds)) {
+        unsetMergeWebentity({ tabId: id })
       }
       break
     case 'title':
@@ -141,22 +166,8 @@ class BrowserTabContent extends React.Component {
       setTabIcon(info, id)
       break
     case 'navigate':
-      setTabUrl(info, id)
-      if (
-        !disableWebentity &&
-        !this.samePage(info) &&
-        !(webentity &&
-          // if webentity is loaded from memory the longestMatching used to
-          // avoid too much declaration will prevent all declaration. So we
-          // need to allow declaration at least from homepage because it's
-          // the first page visited when clicking in the sidebar.
-          !compareUrls(webentity.homepage, info) &&
-          longestMatching(webentity.prefixes, info, tlds)
-        )
-      ) {
-        declarePage(server.url, corpusId, info, id)
-        setTabWebentity(server.url, corpusId, id, webentity)
-      }
+      // will-navigate not triggered do not set tab url if redirected
+      if (!mergeRequired) setTabUrl(info, id)
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -223,66 +234,6 @@ class BrowserTabContent extends React.Component {
       })
   }
 
-  updateName = (name) => {
-    const { setWebentityName, server, corpusId, webentity } = this.props
-
-    this.setState({ webentityName: name })
-    setWebentityName(server.url, corpusId, name, webentity.id)
-  }
-
-  renderOverlay () {
-    const { id, webentity, hideAdjustWebentity, unsetMergeWebentity, mergeRequired } = this.props
-    const handleClick = () => {
-      return mergeRequired ? unsetMergeWebentity(id) : hideAdjustWebentity(webentity.id)
-    }
-    return <div className="global-overlay" onClick={ handleClick } />
-  }
-
-  renderMergePopup () {
-    const { id, server, corpusId, webentity, mergeRequired, merging,
-      unsetMergeWebentity, mergeWebentities } = this.props
-
-    const merge = e => {
-      e.preventDefault()
-      mergeWebentities(server.url, corpusId, id, mergeRequired.mergeable.id, webentity, mergeRequired.type)
-    }
-
-    const cancel = e => {
-      e.preventDefault()
-      unsetMergeWebentity(id)
-    }
-
-    return (
-      <div className="we-popup">
-        <strong><T id="webentity-merge-popup-title" /></strong>
-        {
-          mergeRequired.mergeable.type === 'redirect'?
-            <p><T id="webentity-merge-popup-message-redirect" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
-            :
-            <p><T id="webentity-merge-popup-message-manual" values={ { new: webentity.name, old: mergeRequired.mergeable.name } } /></p>
-        }
-        <p><T id="webentity-merge-popup-message-2" /></p>
-        <p><T id="webentity-merge-popup-message-3" /></p>
-        <div className="we-popup-footer">
-          <button disabled={ merging || !webentity } className="apply-we-popup" onClick={ merge }><T id="merge" /></button>
-          <button disabled={ merging } className="cancel-we-popup" onClick={ cancel }><T id="ignore" /></button>
-        </div>
-      </div>
-    )
-  }
-
-  handleKeyUp = (e) => {
-    const { active, id, webentity, adjusting, mergeRequired, hideAdjustWebentity, unsetMergeWebentity } = this.props
-    if (e.keyCode === 27 && active) { // ESCAPE
-      e.stopPropagation()
-      if (adjusting) {
-        hideAdjustWebentity(webentity.id)
-      } else if (mergeRequired && webentity) {
-        unsetMergeWebentity(id)
-      }
-    }
-  }
-
   handleShowSearchBar = () => {
     if(this.props.active) this.setState({ showSearchBar: true })
   }
@@ -293,9 +244,9 @@ class BrowserTabContent extends React.Component {
   render () {
     const {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
-      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setWebentityHomepage, fetchPaginatePages,
+      noCrawlPopup, mergeRequired, eventBus, setTabUrl, setTabWebentity, setWebentityHomepage, setWebentityStatus,
       selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine,
-      hideAdjustWebentity, toggleDoNotShowAgain
+      hideAdjustWebentity, toggleDoNotShowAgain, mergeWebentities, unsetMergeWebentity, addWebentityPrefixes
     } = this.props
 
     let isHomepage = false
@@ -335,34 +286,80 @@ class BrowserTabContent extends React.Component {
       })
     }
 
-    const handleLoadPages = () => {
-      const {token} = webentity
-      if (token) {
-        fetchPaginatePages({ serverUrl: server.url, corpusId, webentity, token})
-      }
-    }
-
     const doToggle = () => {
       if (this.state.setDoNotShowAgainAfterSubmit !== null) {
         toggleDoNotShowAgain('crawlPopup', this.state.setDoNotShowAgainAfterSubmit)
       }
     }
 
-    const apply = (webentity, info) => {
+    const handleSaveAdjust = (webentity, info) => {
       doToggle()
       setAdjustWebentity(webentity.id, info)
       this.saveAdjustChanges(this.props, info)
     }
 
-    const cancel = () => {
+    const handleCloseInModal = () => {
       hideAdjustWebentity(webentity.id)
+    }
+
+    const handleCloseRedirectModal = () => unsetMergeWebentity({ tabId: id })
+
+    const handleValidateDecision = ({ redirectionDecision, mergeDecision, prefixes }) => {
+      if (!redirectionDecision) {
+        // previousUrl is redirectedUrl here, need to set it back to originalUrl
+        this.setState({
+          previousUrl: mergeRequired.originalWebentity.homepage,
+          disableRedirect: true
+        })
+      }
+      if (redirectionDecision) {
+        if(mergeDecision === 'OUT') {
+          setWebentityStatus({
+            serverUrl: server.url,
+            corpusId,
+            status: 'OUT',
+            webentityId: mergeRequired.originalWebentity.id,
+          })
+        } else if (mergeDecision === 'MERGE') {
+          mergeWebentities({
+            serverUrl: server.url,
+            corpusId,
+            originalWebentityId: mergeRequired.originalWebentity.id,
+            redirectWebentity: mergeRequired.redirectWebentity,
+            type: mergeRequired.type
+          })
+        } else if (mergeDecision === 'MERGE-REVERSE') {
+          addWebentityPrefixes({
+            serverUrl: server.url,
+            corpusId,
+            webentityId: mergeRequired.originalWebentity.id,
+            prefixes,
+            tabId: id
+          })
+        }
+        // set current webentity to redirected one
+        setTabUrl(mergeRequired.redirectUrl, id)
+        setTabWebentity(id, mergeRequired.redirectWebentity)
+      }
+      handleCloseRedirectModal()
+    }
+
+    const handleKeyUp = (e) => {
+      if (e.keyCode === 27 && active) { // ESCAPE
+        e.stopPropagation()
+        if (adjusting) {
+          handleCloseInModal()
+        } else if (mergeRequired && webentity) {
+          handleCloseRedirectModal()
+        }
+      }
     }
 
     return (
       <div
         key={ id } tabIndex="1" className="browser-tab-content"
         style={ active ? {} : { display:'none' } }
-        onKeyUp={ this.handleKeyUp }
+        onKeyUp={ handleKeyUp }
       >
         <BrowserBar
           isLanding={ url === PAGE_HYPHE_HOME }
@@ -392,26 +389,36 @@ class BrowserTabContent extends React.Component {
             onChangeEngine = { onChangeEngine }
             onSetTabUrl={ handleSetTabUrl }
           /> :
-          <>
+          <div className="webview-container">
             <WebView
               id={ id } url={ url } closable={ closable } eventBus={ eventBus }
             />
-            {this.state.showSearchBar && 
-              <SearchBar 
+            {this.state.showSearchBar &&
+              <SearchBar
                 id={ id }
                 onUpdateSearch={ handleUpdateSearch }
                 onFindNext={ handleFindNext }
                 onClearSearch={ handleClearSearch }
-                onHideSearchBar={ this.handleHideSearchBar } 
+                onHideSearchBar={ this.handleHideSearchBar }
               />}
-          </>
+            {
+              this.state.disableRedirect && !mergeRequired &&
+              <div className="denied-redirection-container">
+                <div className="notification">
+                  This page has nothing to show because it is a redirection (when the redirection was triggered a first time, you chose to keep it as is).
+                </div>
+                <div>
+                  <button className="btn btn-success">Show redirect settings</button>
+                </div>
+              </div>
+            }
+          </div>
         }
         { !noCrawlPopup && active && adjusting && adjusting.crawl &&
           <InModal
             isOpen
-            onRequestClose={ cancel }
-            onSuccess={ apply }
-            onLoadPages={ handleLoadPages }
+            onRequestClose={ handleCloseInModal }
+            onSuccess={ handleSaveAdjust }
             url={ this.props.server.url }
             corpusId={ this.props.corpusId }
             tabUrl={ this.props.url }
@@ -420,8 +427,16 @@ class BrowserTabContent extends React.Component {
             createNewEntity={ this.props.adjusting && this.props.adjusting.createNewEntity }
           />
         }
-        { webentity && mergeRequired && mergeRequired.host && this.renderMergePopup() }
-        { ((adjusting && (!noCrawlPopup || !adjusting.crawl)) || (webentity && mergeRequired)) && this.renderOverlay() }
+        {
+          webentity && mergeRequired && mergeRequired.redirectWebentity &&
+          <RedirectionModal
+            isOpen
+            // onClose={ handleCloseRedirectModal }
+            mergeRequired = { mergeRequired }
+            tlds={this.props.tlds}
+            onValidateDecision={ handleValidateDecision }
+          />
+        }
       </div>
     )
   }
@@ -470,15 +485,16 @@ BrowserTabContent.propTypes = {
 
   declarePage: PropTypes.func.isRequired,
   setTabWebentity: PropTypes.func.isRequired,
-  setWebentityName: PropTypes.func.isRequired,
   setWebentityHomepage: PropTypes.func.isRequired,
-  fetchPaginatePages: PropTypes.func.isRequired,
+  addWebentityPrefixes: PropTypes.func.isRequired,
   stoppedLoadingWebentity: PropTypes.func.isRequired,
   saveAdjustedWebentity: PropTypes.func.isRequired,
+  setWebentityStatus: PropTypes.func.isRequired,
   setAdjustWebentity: PropTypes.func.isRequired,
   showAdjustWebentity: PropTypes.func.isRequired,
   hideAdjustWebentity: PropTypes.func.isRequired,
   toggleDoNotShowAgain: PropTypes.func.isRequired,
+  setMergeUrl: PropTypes.func.isRequired,
   setMergeWebentity: PropTypes.func.isRequired,
   unsetMergeWebentity: PropTypes.func.isRequired,
   mergeWebentities: PropTypes.func.isRequired,
@@ -514,9 +530,9 @@ const mapStateToProps = (
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
   setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
-  declarePage, setTabWebentity, setWebentityName, setWebentityHomepage, fetchStackAndSetTab, fetchPaginatePages,
-  stoppedLoadingWebentity, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
-  saveAdjustedWebentity, setMergeWebentity, unsetMergeWebentity, mergeWebentities
+  declarePage, setTabWebentity, setWebentityHomepage, fetchStackAndSetTab, addWebentityPrefixes,
+  stoppedLoadingWebentity, setWebentityStatus, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
+  saveAdjustedWebentity, setMergeUrl, setMergeWebentity, unsetMergeWebentity, mergeWebentities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrowserTabContent)

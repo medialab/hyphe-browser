@@ -1,21 +1,21 @@
 import './CardsList.styl'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
+import { FormattedMessage as T } from 'react-intl'
 
-const CardsList = ({ onLoadPages, children }) => {
-  const listRef = useRef(null)
 
-  const handleScroll = () => {
-    const scroller = listRef.current
-    if (scroller.scrollHeight - scroller.scrollTop <= scroller.clientHeight && onLoadPages) {
-      onLoadPages()
-    }
-  }
-
+const CardsList = ({ children, displayLoader, count, total }) => {
   return (
     <div className="cards-list" >
-      <ul ref={listRef} onScroll={ handleScroll } className="list-container">
+      <ul className="list-container">
         {children}
       </ul>
+      {
+        displayLoader &&
+        <div className="cards-list-loader">
+          <T id="loading" />
+          <span> ({ count } / { total } webpages)</span>
+        </div>
+      }
     </div>
   )
 }

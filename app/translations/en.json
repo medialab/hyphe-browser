@@ -19,7 +19,7 @@
   "forget-this-server": "Forget this server",
   "choose-a-corpus": "Choose a corpus",
   "corpus-list-search": "Search among {nbCorpora} corpora",
-  "create-or-configure-server": "Add/configure a server", 
+  "create-or-configure-server": "Add/configure a server",
   "create-a-corpus": "Create a corpus",
   "password-protected": "password protected (optional)",
 
@@ -267,7 +267,7 @@
 
   "in-modale.title-step-2": "choose the webentity's homepage",
   "in-modale.tooltip-step-2": "This is the main landing page to consider when working with this webentity. It is the one that will be displayed and loaded when visiting or visualising it",
-  
+
   "in-modale.title-step-3-in": "adjust the webentity's name",
   "in-modale.title-step-3-add": "set the webentity's name",
   "in-modale.tooltip-step-3": "Choose a name for the webentity in order to easily identify it later",

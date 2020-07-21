@@ -27,6 +27,7 @@ const WebentityBrowseLayout = ({
   initialStatus,
   viewedProspectionIds,
   selectedStack,
+  selectedWebentity,
   loadingStack,
   loadingWebentity,
   loadingBatchActions,
@@ -34,7 +35,6 @@ const WebentityBrowseLayout = ({
   categories,
   tagsSuggestions,
   onSelectWebentity,
-  onLoadPages,
   onDownloadList,
   onSetWebentityStatus,
   onSetTabUrl,
@@ -67,12 +67,16 @@ const WebentityBrowseLayout = ({
     return stackName
   }
 
-  // used by Prev (-1) / Next (+1) buttons
+  /**
+  * used by Prev (-1) / Next (+1) buttons
+  */
   const rotateWebentity = (offset) => {
-    const idx = webentitiesList.findIndex(x => x.id === webentity.id)
+    // locate index if current webentity is in the stack list,
+    // otherwise get index of last viewed webenetity from the list
+    let idx = webentitiesList.findIndex(x => x.id === webentity.id)
+    if (idx=== -1) idx = webentitiesList.findIndex(x => x.id === selectedWebentity.id)
     let findWebentity
     if (idx === -1) {
-      // TODO: case webentity is not found in stack fetched, cause "DISCOVERED" list limit is 200
       findWebentity = webentitiesList[0]
     } else if (idx === 0 && offset === -1) {
       findWebentity = webentitiesList[webentitiesList.length - 1]
@@ -150,10 +154,9 @@ const WebentityBrowseLayout = ({
           <i className="ti-angle-left" />
         </Tooltipable>
         <span
-          title={ webentity.name }
-          className={ cx('current-webentity-name', { 'clickable':  notOnHomepage, 'hint--bottom': notOnHomepage }) }
+          className={ cx('current-webentity-name hint--bottom', { 'clickable':  notOnHomepage }) }
           onClick={ handleSetTabHomepage }
-          aria-label={ notOnHomepage ? formatMessage({ id: 'go-to-homepage' }) : null }
+          aria-label={ notOnHomepage ? formatMessage({ id: 'go-to-homepage' }) : webentity.name }
         >
           {ellipseStr(webentity.name, 20)}
           <span className="current-webentity-stack-indicators">
@@ -234,10 +237,10 @@ const WebentityBrowseLayout = ({
             webentity.paginatePages ?
               <KnownPages
                 list={ webentity.paginatePages }
-                token={ webentity.token }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }
-                onLoadPages={ onLoadPages }
+                isPaginating={ webentity.token }
+                totalPages={ webentity.pages_total }
                 onDownloadList={ onDownloadList }
                 onSetTabUrl= { onSetTabUrl }
                 onSetHomepage = { onSetWebentityHomepage }

@@ -15,6 +15,8 @@ const dict = {
   p: '/',
 }
 
+const THRESHOLD = 0.25
+
 const PrefixSetter = function ({
   parts = [],
   setPrefix
@@ -35,7 +37,7 @@ const PrefixSetter = function ({
     const firstEditableNode = refs[firstEditableIndex] && refs[firstEditableIndex].current
     const firstEditableBox = firstEditableNode.getBoundingClientRect()
     const containerBox =  container.current.getBoundingClientRect()
-    const left = firstEditableBox.x - containerBox.x
+    const left = firstEditableBox.x + firstEditableBox.width - containerBox.x
     let width
     // compute bounds offset and width, check if container has scrollbar
     if(container.current.scrollWidth > containerBox.width) {
@@ -56,7 +58,7 @@ const PrefixSetter = function ({
     const firstEditableBox = firstEditableNode.getBoundingClientRect()
     if (anchor) {
       const box = anchor.getBoundingClientRect()
-      const x = box.x - firstEditableBox.x
+      const x = box.x - (firstEditableBox.x + firstEditableBox.width)
       setStartingX(Math.ceil(x + box.width + editableRef.current.scrollLeft) - 1)
     }
   }
@@ -70,8 +72,12 @@ const PrefixSetter = function ({
     refs.some((ref, refIndex) => {
       if (ref.current) {
         const box = ref.current.getBoundingClientRect()
-        const THRESHOLD = 10
-        if (clientX > box.x + THRESHOLD && clientX < box.x + THRESHOLD + box.width && (parts[refIndex + 1] && parts[refIndex + 1].editable || parts[refIndex].editable)) {
+        let maximum = box.x + box.width
+        if (refIndex < refs.length - 1) {
+          const boxNext = refs[refIndex + 1].current.getBoundingClientRect()
+          maximum = boxNext.x + boxNext.width * THRESHOLD
+        }
+        if (clientX > box.x + box.width * THRESHOLD && clientX <= maximum && (parts[refIndex + 1] && parts[refIndex + 1].editable || parts[refIndex].editable)) {
           setIndex(refIndex)
           return true
         }
@@ -123,9 +129,11 @@ const PrefixSetter = function ({
             )
           })
         }
-        <div ref={editableRef}
+        <div
+          ref={ editableRef }
           className="editable-wrapper"
-          style={ editableStyle }>
+          style={ editableStyle }
+        >
           <Draggable
             bounds="parent"
             axis="x"
@@ -137,12 +145,12 @@ const PrefixSetter = function ({
             onDrag={ handleDrag }
             onStop={ handleStop }
           >
-          <span className="slider">
-            <span className="slider-handle" />
-          </span>
-        </Draggable>
-      </div>
-    </ul>
+            <span className="slider">
+              <span className="slider-handle" />
+            </span>
+          </Draggable>
+        </div>
+      </ul>
     </div>
   )
 

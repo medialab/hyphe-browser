@@ -32,13 +32,13 @@
             flex-flow: row nowrap
             justify-content: flex-end
             width: 100%
-       
+
 .known-page-card.is-active
     background: var(--color-blue)
     color: var(--color-white)
 .homepage-btn
     background: var(--color-white)
-    border: none 
+    border: none
     outline: none
     width: 30px
     height: 30px
@@ -56,12 +56,23 @@
     background: var(--color-grey);
     border-radius: var(--radius);
     padding-bottom: 10px
-    .download-container
+    .button-container
         margin: 0 15px
-        
+
     .known-pages-list
         list-style: none
         padding: 0
         max-height: 30vh
         overflow-y: auto
         margin: 0
+
+    .loading-btn
+        width: 100%
+        button()
+        background: var(--color-grey-light)
+        border: none
+        font-family: var(--font-mono)
+        text-align: center
+        padding: 5px
+        transition: background .2s ease
+        cursor: default

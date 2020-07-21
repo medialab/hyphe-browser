@@ -9,13 +9,12 @@ import EventBus from 'jvent'
 
 import {
   PAGE_HYPHE_HOME,
-  HYPHE_TAB_ID,
   SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB,
   SHORTCUT_NEXT_TAB, SHORTCUT_PREV_TAB,
   SHORTCUT_RELOAD_TAB, SHORTCUT_FULL_RELOAD_TAB
 } from '../../constants'
 
-import { openTab, closeTab, selectTab, 
+import { openTab, closeTab, selectTab,
   setSearchEngine,
   selectHypheTab, selectNextTab, selectPrevTab } from '../../actions/tabs'
 
@@ -110,9 +109,9 @@ class BrowserTabsContainer extends React.Component {
             <div className="browser-tab-labels-main">
               {
                 tabs.map((tab) => {
-                  const isNewTab = tab.id !== HYPHE_TAB_ID && tab.title === null
-                  const title = tab.id === HYPHE_TAB_ID ? formatMessage({ id: 'hyphe-tab-title' }) : tab.title
-            
+                  const isNewTab = tab.title === null
+                  const title = tab.title
+
                   const handleSelectTab = () => {
                     if (activeTabId === tab.id) return
                     selectTab(tab.id)
@@ -134,11 +133,10 @@ class BrowserTabsContainer extends React.Component {
                 })
               }
               <div
-                className="browser-tab-new" 
-                title={ formatMessage({ id: 'open-tab' }) }
+                className="browser-tab-new"
                 onClick={ handleOpenNewTab }
               >
-                <span>+</span>
+                <span className="hint--right" aria-label={ formatMessage({ id: 'open-tab' }) }>+</span>
               </div>
             </div>
           </div>
@@ -159,7 +157,7 @@ class BrowserTabsContainer extends React.Component {
                 loading={ tab.loading || false }
                 selectedEngine = { searchEngines[corpus.corpus_id] || 'google' }
                 onChangeEngine = { handleChangeEngine }
-                disableWebentity={ tab.id === HYPHE_TAB_ID || tab.url === PAGE_HYPHE_HOME }
+                disableWebentity={ tab.url === PAGE_HYPHE_HOME }
                 disableNavigatioFn={ !tab.navigable }
               />)
           })

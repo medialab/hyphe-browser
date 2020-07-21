@@ -22,9 +22,11 @@ export const KnownPageCard = ({
   const maxLetters = Math.ceil(innerWidth / letterWidth)
 
   return (
-    <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id } title={ url }>
+    <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id }>
       <div className="card-content">
-        <div className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</div>
+        <Tooltipable Tag="span" className="hint--right" aria-label={ url }>
+          <span className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</span>
+        </Tooltipable>
         {linked && <div className="known-page-statistics">
           { formatMessage({ id: 'linked' }) }
           <T className="link-linked" id="linkedtimes" values={ { count: linked } } />
@@ -35,8 +37,8 @@ export const KnownPageCard = ({
           displayHomePageButton
           &&
           <Tooltipable
-            Tag="button" 
-            className={ cx('homepage-btn', 'hint--right', { 'is-active': isHomepage }) } 
+            Tag="button"
+            className={ cx('homepage-btn', 'hint--right', { 'is-active': isHomepage }) }
             onClick = { onClickHomepage }
             aria-label={ isHomepage ? formatMessage({ id: 'here-homepage' }) : formatMessage({ id: 'set-homepage' }) }
           >

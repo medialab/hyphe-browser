@@ -98,11 +98,15 @@ export const SAVE_ADJUSTED_WEBENTITY_REQUEST = '§_SAVE_ADJUSTED_WEBENTITY_REQUE
 export const SAVE_ADJUSTED_WEBENTITY_SUCCESS = '§_SAVE_ADJUSTED_WEBENTITY_SUCCESS'
 export const SAVE_ADJUSTED_WEBENTITY_FAILURE = '§_SAVE_ADJUSTED_WEBENTITY_FAILURE'
 
-export const MERGE_WEBENTITY = '§_MERGE_WEBENTITY'
-export const STOP_MERGE_WEBENTITY = '§_STOP_MERGE_WEBENTITY'
+export const SET_MERGE_URL = '§_SET_MERGE_URL'
+export const SET_MERGE_WEBENTITY = '§_SET_MERGE_WEBENTITY'
+export const UNSET_MERGE_WEBENTITY = '§_UNSET_MERGE_WEBENTITY'
 export const MERGE_WEBENTITY_REQUEST = '§_MERGE_WEBENTITY_REQUEST'
 export const MERGE_WEBENTITY_SUCCESS = '§_MERGE_WEBENTITY_SUCCESS'
 export const MERGE_WEBENTITY_FAILURE = '§_MERGE_WEBENTITY_FAILURE'
+export const ADD_WEBENTITY_PREFIXES_REQUEST = '§_ADD_WEBENTITY_PREFIXES_REQUEST'
+export const ADD_WEBENTITY_PREFIXES_SUCCESS = '§_ADD_WEBENTITY_PREFIXES_SUCCESS'
+export const ADD_WEBENTITY_PREFIXES_FAILURE = '§_ADD_WEBENTITY_PREFIXES_FAILURE'
 
 // canceling a webentity's crawls
 export const CANCEL_WEBENTITY_CRAWLS_REQUEST = '§_CANCEL_WEBENTITY_CRAWLS_REQUEST'
@@ -120,11 +124,16 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
+      const state = getState()
       if (tabId) {
-        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
-        const state = getState()
-        if (state.webentities.merges[tabId] && state.webentities.merges[tabId].mergeable) {
-          dispatch(setMergeWebentity(tabId, state.webentities.merges[tabId].mergeable, webentity, 'redirect'))
+        if (state.webentities.merges[tabId]) {
+          dispatch(setMergeWebentity({
+            tabId,
+            redirectWebentity: webentity,
+            type: 'redirect'
+          }))
+        } else {
+          dispatch(setTabWebentity(tabId, webentity))
         }
       }
       return webentity
@@ -132,13 +141,7 @@ export const declarePage = (serverUrl, corpusId, url, tabId = null) => (dispatch
     .catch((error) => dispatch({ type: DECLARE_PAGE_FAILURE, payload: { serverUrl, corpusId, url, error } }))
 }
 
-export const setTabWebentity = (serverUrl, corpusId, tabId, webentity) => (dispatch) => {
-  if (webentity) {
-    // dispatch(fetchMostLinked(serverUrl, corpusId, webentity))
-    dispatch(fetchPaginatePages({ serverUrl, corpusId, webentity }))
-    dispatch(fetchReferrers(serverUrl, corpusId, webentity))
-    dispatch(fetchReferrals(serverUrl, corpusId, webentity))
-  }
+export const setTabWebentity = (tabId, webentity) => (dispatch) => {
   dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 }
 
@@ -164,7 +167,7 @@ export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dis
     })
 }
 
-export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => (dispatch) => {
+export const setWebentityStatus = ({ serverUrl, corpusId, status, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, status, webentityId } })
 
   return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
@@ -175,13 +178,29 @@ export const setWebentityStatus = (serverUrl, corpusId, status, webentityId) => 
     })
 }
 
+export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixes, tabId }) => (dispatch, getState) => {
+  dispatch({ type: ADD_WEBENTITY_PREFIXES_REQUEST, payload: { serverUrl, corpusId, webentityId, prefixes } })
+
+  return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentityId, prefixes, corpusId])
+    .then(() => {
+      const state = getState()
+      const url = state.webentities.webentities[webentityId].homepage
+      dispatch(declarePage(serverUrl, corpusId, url, tabId))
+      dispatch({ type: ADD_WEBENTITY_PREFIXES_SUCCESS, payload: { serverUrl, corpusId, webentityId, prefixes } })
+    })
+    .catch((error) => {
+      dispatch({ type: ADD_WEBENTITY_PREFIXES_FAILURE, payload: { serverUrl, corpusId, webentityId, prefixes, error } })
+      throw error
+    })
+}
+
 export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null) => (dispatch) => {
   dispatch({ type: CREATE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, name, prefixUrl } })
   return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', [prefixUrl, name, null, null, true, corpusId])
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(serverUrl, corpusId, tabId, webentity))
+        dispatch(setTabWebentity(tabId, webentity))
       }
       return webentity
     })
@@ -301,7 +320,6 @@ export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
 export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
 export const showAdjustWebentity = (webentityId, crawl = false, createNewEntity = true) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl, createNewEntity })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
-export const setSimpleTabWebentity = (webentity, tabId) => ({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 
 export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })
@@ -384,27 +402,28 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     })
 }
 
-export const setMergeWebentity = (tabId, mergeable, host, type = 'redirect') => ({ type: MERGE_WEBENTITY, payload: { tabId, mergeable, host, type } })
-export const unsetMergeWebentity = (tabId) => ({ type: STOP_MERGE_WEBENTITY, payload: { tabId } })
+export const setMergeUrl = ({ tabId, redirectUrl, originalWebentity }) => ({ type: SET_MERGE_URL, payload: { tabId, redirectUrl, originalWebentity } })
+export const setMergeWebentity = ({ tabId, redirectWebentity, type = 'redirect' }) => ({ type: SET_MERGE_WEBENTITY, payload: { tabId, redirectWebentity, type } })
+export const unsetMergeWebentity = ({ tabId }) => ({ type: UNSET_MERGE_WEBENTITY, payload: { tabId } })
 
-export const mergeWebentities = (serverUrl, corpusId, tabId, mergeableId, webentity, type) => (dispatch) => {
-  const { id: hostId } = webentity
-  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, mergeableId, hostId } })
-  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [mergeableId, hostId, true, false, false, corpusId])
+export const mergeWebentities = ({ serverUrl, corpusId, tabId, originalWebentityId, redirectWebentity, type }) => (dispatch) => {
+  const { id: redirectWebentityId } = redirectWebentity
+  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
+  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [originalWebentityId, redirectWebentityId, true, false, false, corpusId])
     .then(() => {
-      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, mergeableId, hostId } })
+      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       if (type === 'referrers') {
-        dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+        dispatch(fetchReferrers(serverUrl, corpusId, redirectWebentity))
       }
       if (type === 'referrals') {
-        dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+        dispatch(fetchReferrals(serverUrl, corpusId, redirectWebentity))
       }
-      dispatch(unsetMergeWebentity(tabId))
+      dispatch(unsetMergeWebentity({ tabId }))
       //TODO : apply to stack merged webentity the attributes of the host
     })
     .catch((error) => {
-      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, mergeableId, hostId, error } })
+      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId, error } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning' }))
       throw error
     })

@@ -12,7 +12,7 @@
   "forget-this-server": "Oublier ce serveur",
   "choose-a-corpus": "Choisir un corpus",
   "corpus-list-search": "Chercher parmi {nbCorpora} corpora",
-  "create-or-configure-server": "Ajouter/configurer un serveur", 
+  "create-or-configure-server": "Ajouter/configurer un serveur",
   "create-a-corpus": "Créer un corpus",
   "password-protected": "protégé par un mot de passe (optionnel)",
 
@@ -90,7 +90,7 @@
   "definition.in": "les webentités IN sont celles que vous avez définies comme pertinentes pour l'enquête",
   "definition.out": "les webentités OUT sont celles que vous avez définies comme non-pertinentes pour l'enquête",
   "definition.prospection": "les webentités en PROSPECTION sont celles qui ont été découvertes durant votre navigation ou par les opérations de crawling du serveur hyphe",
-  
+
 
   "server-ok": "le serveur est en bonne santé et fonctionnel",
   "server-pending": "le serveur est en attente",
@@ -103,8 +103,8 @@
 
   "webentity-card.cited-by-n-webentities": "{count, plural, one {citée par 1 webentité} other {citée par {count} webentités}}",
 
-  "go-to-homepage": "cliquer pour naviguer sur la Homepage de la webentité",  
-  
+  "go-to-homepage": "cliquer pour naviguer sur la Homepage de la webentité",
+
   "cancel": "annuler",
   "confirm-password": "Confirmer le mot de passe",
   "connect": "Connecter",
