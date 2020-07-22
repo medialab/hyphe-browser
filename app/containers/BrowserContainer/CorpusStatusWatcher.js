@@ -88,9 +88,9 @@ class CorpusStatusWatcher extends React.Component {
   // Data that must be initialized only once
   initDataOnceStarted () {
     const { fetchTLDs, fetchStack, showError, serverUrl, corpus } = this.props
-    fetchStack(serverUrl, corpus.corpus_id, 'DISCOVERED')
-    
-    fetchTLDs(serverUrl, corpus.corpus_id)
+    fetchStack({ serverUrl, corpusId: corpus.corpus_id, stack: 'DISCOVERED' })
+
+    fetchTLDs({ serverUrl, corpusId: corpus.corpus_id })
       .catch(err => showError({ messageId: 'error.corpus-failed-fetching-tlds', messageValues: { error: err.message }, fatal: true }))
   }
 

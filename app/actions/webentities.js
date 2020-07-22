@@ -115,7 +115,7 @@ export const BATCH_WEBENTITY_ACTIONS_REQUEST = '§_BATCH_WEBENTITY_ACTIONS_REQUE
 export const BATCH_WEBENTITY_ACTIONS_SUCCESS = '§_BATCH_WEBENTITY_ACTIONS_SUCCESS'
 export const BATCH_WEBENTITY_ACTIONS_FAILURE = '§_BATCH_WEBENTITY_ACTIONS_FAILURE'
 
-export const declarePage = (serverUrl, corpusId, url) => (dispatch) => {
+export const declarePage = ({ serverUrl, corpusId, url }) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
   return jsonrpc(serverUrl)('declare_page', [url, corpusId])
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
@@ -126,11 +126,11 @@ export const declarePage = (serverUrl, corpusId, url) => (dispatch) => {
     .catch((error) => dispatch({ type: DECLARE_PAGE_FAILURE, payload: { serverUrl, corpusId, url, error } }))
 }
 
-export const setTabWebentity = (tabId, webentity) => (dispatch) => {
+export const setTabWebentity = ({ tabId, webentity }) => (dispatch) => {
   dispatch({ type: SET_TAB_WEBENTITY, payload: { tabId, webentity } })
 }
 
-export const setWebentityHomepage = (serverUrl, corpusId, homepage, webentityId) => (dispatch) => {
+export const setWebentityHomepage = ({ serverUrl, corpusId, homepage, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_HOMEPAGE_REQUEST, payload: { serverUrl, corpusId, homepage, webentityId } })
 
   return jsonrpc(serverUrl)('store.set_webentity_homepage', [webentityId, homepage, corpusId])
@@ -141,7 +141,7 @@ export const setWebentityHomepage = (serverUrl, corpusId, homepage, webentityId)
     })
 }
 
-export const setWebentityName = (serverUrl, corpusId, name, webentityId) => (dispatch) => {
+export const setWebentityName = ({ serverUrl, corpusId, name, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_NAME_REQUEST, payload: { serverUrl, corpusId, name, webentityId } })
 
   return jsonrpc(serverUrl)('store.rename_webentity', [webentityId, name, corpusId])
@@ -177,19 +177,19 @@ export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixe
     })
 }
 
-export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null) => (dispatch) => {
+export const createWebentity = ({ serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null }) => (dispatch) => {
   dispatch({ type: CREATE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, name, prefixUrl } })
   return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', [prefixUrl, name, null, null, true, corpusId])
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
-        dispatch(setTabWebentity(tabId, webentity))
+        dispatch(setTabWebentity({ tabId, webentity }))
       }
       return webentity
     })
     .then((webentity) => {
       if (homepage) {
-        return dispatch(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)).then(() => Object.assign(webentity, { homepage }))
+        return dispatch(setWebentityHomepage({ serverUrl, corpusId, homepage, webentityId: webentity.id })).then(() => Object.assign(webentity, { homepage }))
       } else {
         return webentity
       }
@@ -200,7 +200,7 @@ export const createWebentity = (serverUrl, corpusId, prefixUrl, name = null, hom
     })
 }
 
-export const fetchMostLinked = (serverUrl, corpusId, webentity) => dispatch => {
+export const fetchMostLinked = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_MOST_LINKED_REQUEST, payload: { serverUrl, corpusId, webentity } })
   const params = {
     webentity_id: webentity.id,
@@ -245,7 +245,7 @@ export const fetchPaginatePages = ({ serverUrl, corpusId, webentity, token }) =>
 }
 
 
-export const fetchReferrers = (serverUrl, corpusId, webentity) => dispatch => {
+export const fetchReferrers = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_REFERRERS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_referrers', [webentity.id, -1, 0, false, false, corpusId])
@@ -256,7 +256,7 @@ export const fetchReferrers = (serverUrl, corpusId, webentity) => dispatch => {
     })
 }
 
-export const fetchReferrals = (serverUrl, corpusId, webentity) => dispatch => {
+export const fetchReferrals = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_REFERRALS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_referrals', [webentity.id, -1, 0, false, false, corpusId])
@@ -267,7 +267,7 @@ export const fetchReferrals = (serverUrl, corpusId, webentity) => dispatch => {
     })
 }
 
-export const fetchParents = (serverUrl, corpusId, webentity) => dispatch => {
+export const fetchParents = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_PARENTS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', [webentity.id, false, corpusId])
@@ -278,7 +278,7 @@ export const fetchParents = (serverUrl, corpusId, webentity) => dispatch => {
     })
 }
 
-export const fetchChildren = (serverUrl, corpusId, webentity) => dispatch => {
+export const fetchChildren = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_SUBS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_subwebentities', [webentity.id, false, corpusId])
@@ -289,7 +289,7 @@ export const fetchChildren = (serverUrl, corpusId, webentity) => dispatch => {
     })
 }
 
-export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
+export const fetchTLDs = ({ serverUrl, corpusId }) => dispatch => {
   dispatch({ type: FETCH_TLDS_REQUEST, payload: { serverUrl, corpusId } })
 
   return jsonrpc(serverUrl)('get_corpus_tlds', [corpusId])
@@ -300,11 +300,11 @@ export const fetchTLDs = (serverUrl, corpusId) => dispatch => {
     })
 }
 
-export const setAdjustWebentity = (webentityId, info) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
-export const showAdjustWebentity = (webentityId, crawl = false, createNewEntity = true) => setAdjustWebentity(webentityId, { name: null, homepage: null, prefix: null, crawl, createNewEntity })
-export const hideAdjustWebentity = (webentityId) => setAdjustWebentity(webentityId, null)
+export const setAdjustWebentity = ({ webentityId, info }) => ({ type: ADJUST_WEBENTITY, payload: { id: webentityId, info } })
+export const showAdjustWebentity = ({ webentityId, crawl = false, createNewEntity = true }) => setAdjustWebentity({ webentityId, info:{ name: null, homepage: null, prefix: null, crawl, createNewEntity } })
+export const hideAdjustWebentity = (webentityId) => setAdjustWebentity({ webentityId, info: null })
 
-export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, tabId) => (dispatch) => {
+export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, tabId }) => (dispatch) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })
 
   const { prefix, homepage, name, crawl } = adjust
@@ -316,7 +316,7 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     // Set its name and homepage at the same time + refresh tab by passing tab id
     // Note: since https://trello.com/c/74rYBHON/130-urlbar-creer-une-nouvelle-webentite-pour-un-prefixe
     // name and homepage are not set here (but where?)
-    const createWebentityPromise = createWebentity(serverUrl, corpusId, lruToUrl(prefix), name, homepage, tabId)(dispatch)
+    const createWebentityPromise = createWebentity({ serverUrl, corpusId, prefixUrl: lruToUrl(prefix), name, homepage, tabId })(dispatch)
     operations.push(createWebentityPromise)
     if (adjust.copy.tags || adjust.copy.notes) {
       // Ca devrais fonctionner mais non
@@ -352,10 +352,10 @@ export const saveAdjustedWebentity = (serverUrl, corpusId, webentity, adjust, ta
     }
   } else {
     if (homepage && homepage !== webentity.homepage) {
-      operations.push(setWebentityHomepage(serverUrl, corpusId, homepage, webentity.id)(dispatch))
+      operations.push(setWebentityHomepage({ serverUrl, corpusId, homepage,webentityId: webentity.id })(dispatch))
     }
     if (name && name !== webentity.name) {
-      operations.push(setWebentityName(serverUrl, corpusId, name, webentity.id)(dispatch))
+      operations.push(setWebentityName({serverUrl, corpusId, name,webentityId: webentity.id })(dispatch))
     }
   }
 
@@ -393,10 +393,10 @@ export const mergeWebentities = ({ serverUrl, corpusId, originalWebentityId, red
       dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       if (type === 'referrers') {
-        dispatch(fetchReferrers(serverUrl, corpusId, redirectWebentity))
+        dispatch(fetchReferrers({ serverUrl, corpusId, webentity: redirectWebentity }))
       }
       if (type === 'referrals') {
-        dispatch(fetchReferrals(serverUrl, corpusId, redirectWebentity))
+        dispatch(fetchReferrals({ serverUrl, corpusId, webentity: redirectWebentity }))
       }
       //TODO : apply to stack merged webentity the attributes of the host
     })
@@ -407,7 +407,7 @@ export const mergeWebentities = ({ serverUrl, corpusId, originalWebentityId, red
     })
 }
 
-export const cancelWebentityCrawls = (serverUrl, corpusId, webentityId) => (dispatch) => {
+export const cancelWebentityCrawls = ({ serverUrl, corpusId, webentityId }) => (dispatch) => {
   dispatch({ type: CANCEL_WEBENTITY_CRAWLS_REQUEST, payload: { serverUrl, corpusId, webentityId } })
 
   return jsonrpc(serverUrl)('cancel_webentity_jobs', [webentityId, corpusId])
@@ -435,13 +435,13 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
     .then(() => {
       const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
       if (findStack) {
-        return dispatch(fetchStack(serverUrl, corpusId, selectedList))
+        return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
       }
       if (selectedList === 'referrers') {
-        return dispatch(fetchReferrers(serverUrl, corpusId, webentity))
+        return dispatch(fetchReferrers({ serverUrl, corpusId, webentity }))
       }
       if (selectedList === 'referrals') {
-        return dispatch(fetchReferrals(serverUrl, corpusId, webentity))
+        return dispatch(fetchReferrals({ serverUrl, corpusId, webentity }))
       }
     })
     .then(() => {

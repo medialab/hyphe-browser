@@ -55,8 +55,8 @@ const StackListContainer = ({
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
-    setTabUrl(webentity.homepage, activeTab.id)
-    setTabWebentity(activeTab.id, webentity)
+    setTabUrl({ url: webentity.homepage, id: activeTab.id })
+    setTabWebentity({ tabId: activeTab.id, webentity })
     setAsideMode('webentityBrowse')
   }
 
@@ -79,13 +79,13 @@ const StackListContainer = ({
     // if (stackWebentities[stack]) {
     //   selectStack(stack)
     // } else {
-    //   fetchStack(serverUrl, corpusId, stack, filter)
+    //   fetchStack({serverUrl, corpusId, stack, filter})
     // }
-    fetchStack(serverUrl, corpusId, stack, filter)
+    fetchStack({ serverUrl, corpusId, stack, filter })
   }
 
-  const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
-  const handleOpenTab = (url) => openTab(url, activeTab.id)
+  const handleSetTabUrl = (url) => setTabUrl({ url, id: activeTab.id })
+  const handleOpenTab = (url) => openTab({ url, activeTabId: activeTab.id })
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
 
   const handleFetchStackPage = (stack, token, page) => {

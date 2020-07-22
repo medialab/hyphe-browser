@@ -79,10 +79,10 @@ const WebentityBrowseContainer = ({
     }
     // Fetch paginatePages, referrals and refferes of webentity only once
     if (webentity && !webentity.referrals) {
-      fetchReferrals(serverUrl, corpusId, webentity)
+      fetchReferrals({ serverUrl, corpusId, webentity })
     }
     if (webentity && !webentity.referrers) {
-      fetchReferrers(serverUrl, corpusId, webentity)
+      fetchReferrers({ serverUrl, corpusId, webentity })
     }
     if (webentity && !webentity.paginatePages) {
       fetchPaginatePages({ serverUrl, corpusId, webentity })
@@ -91,6 +91,7 @@ const WebentityBrowseContainer = ({
 
   useEffect(() => {
     // Fetch paginatePages if token
+    // TODO: crawling the declared page should refetch the paginate pages, currently not
     if (webentity && webentity.token) {
       debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
     }
@@ -101,8 +102,8 @@ const WebentityBrowseContainer = ({
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
-    setTabWebentity(activeTab.id, webentity)
-    setTabUrl(webentity.homepage, activeTab.id)
+    setTabWebentity({ tabId: activeTab.id, webentity })
+    setTabUrl({ url: webentity.homepage,id: activeTab.id })
   }
 
   const handleDownloadList = (list) => {
@@ -138,8 +139,8 @@ const WebentityBrowseContainer = ({
     downloadFile(flatList, fileName, 'csv')
   }
 
-  const handleSetWebentityName = (name) => setWebentityName(serverUrl, corpusId, name, webentity.id)
-  const handleSetWebentityHomepage = (url) => setWebentityHomepage(serverUrl, corpusId, url, webentity.id)
+  const handleSetWebentityName = (name) => setWebentityName({ serverUrl, corpusId, name, webentityId: webentity.id })
+  const handleSetWebentityHomepage = (url) => setWebentityHomepage({ serverUrl, corpusId, url, webentityId: webentity.id })
 
   const handleSetWenentityStatus = (status, we = webentity) => {
     const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(we))
@@ -151,18 +152,18 @@ const WebentityBrowseContainer = ({
 
     if (status === 'IN' && !crawling) {
       // Set to IN = go to "adjust" mode and validation triggers crawling
-      showAdjustWebentity(we.id, true, false)
+      showAdjustWebentity({ webentityId: we.id, crawl: true, createNewEntity: false })
     } else {
       setWebentityStatus({ serverUrl, corpusId, status, webentityId: we.id })
     }
 
     if (status === 'OUT' && crawling) {
-      cancelWebentityCrawls(serverUrl, corpusId, we.id)
+      cancelWebentityCrawls({ serverUrl, corpusId, webentityId: we.id })
     }
   }
 
-  const handleSetTabUrl = (url) => setTabUrl(url, activeTab.id)
-  const handleOpenTab = (url) => openTab(url, activeTab.id)
+  const handleSetTabUrl = (url) => setTabUrl({ url, id: activeTab.id })
+  const handleOpenTab = (url) => openTab({ url, activeTabId: activeTab.id })
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
 
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)

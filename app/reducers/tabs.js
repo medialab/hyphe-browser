@@ -1,12 +1,11 @@
 import createReducer from '../utils/create-reducer'
 import uuid from 'uuid'
-import findIndex from 'lodash/findIndex' 
+import findIndex from 'lodash/findIndex'
 
-import { PAGE_HYPHE_HOME, HYPHE_TAB_ID } from '../constants'
+import { PAGE_HYPHE_HOME } from '../constants'
 import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB, SELECT_NEXT_TAB, SELECT_PREV_TAB,
-  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS,
-  ADD_HYPHE_TAB
+  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
@@ -25,13 +24,13 @@ const pageHypheHome = {
   id: uuid()
 }
 
-const hypheTab = {
-  ...defaultTab,
-  url: '{INSTANCE_HOME}/#/project/{CORPUS_ID}/network', // defined dynamically
-  id: HYPHE_TAB_ID,
-  fixed: true,
-  navigable: false
-}
+// const hypheTab = {
+//   ...defaultTab,
+//   url: '{INSTANCE_HOME}/#/project/{CORPUS_ID}/network', // defined dynamically
+//   id: HYPHE_TAB_ID,
+//   fixed: true,
+//   navigable: false
+// }
 
 const initialState = {
   tabs: [pageHypheHome], // tab: { url, id, title, icon, loading, error }
@@ -53,7 +52,7 @@ export default createReducer(initialState, {
       tabs = [...state.tabs.slice(0, activeTabIndex + 1), tab, ...state.tabs.slice(activeTabIndex + 1)]
     }
     else tabs = state.tabs.concat(tab)
-    
+
     return {
       ...state,
       tabs,
@@ -89,16 +88,6 @@ export default createReducer(initialState, {
 
   [SELECT_NEXT_TAB]: prevNextTab(+1),
   [SELECT_PREV_TAB]: prevNextTab(-1),
-
-  [ADD_HYPHE_TAB]: (state, { instanceUrl, corpusId }) => ({
-    ...state,
-    tabs: state.tabs.concat([{
-      ...hypheTab,
-      url: hypheTab.url
-        .replace(/\{INSTANCE_HOME\}/g, instanceUrl)
-        .replace(/\{CORPUS_ID\}/g, corpusId)
-    }])
-  }),
 
   [SET_TAB_URL]: (state, { id, url }) => updateTab(state, id, () => ({ url })),
   [SET_TAB_TITLE]: (state, { id, title }) => updateTab(state, id, () => ({ title })),

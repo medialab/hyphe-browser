@@ -38,7 +38,7 @@ const BrowserLayout = ({
     const isExternalUrl = !compareUrls(url, hypheUrl)
     if (isExternalUrl) {
       setBrowserMode('browse')
-      openTab(url)
+      openTab({ url })
     }
     return isExternalUrl
   }

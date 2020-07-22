@@ -32,7 +32,7 @@ class BrowserTabsContainer extends React.Component {
   }
 
   componentDidMount () {
-    this.ipcOpenTabHandler = () => this.props.openTab(PAGE_HYPHE_HOME)
+    this.ipcOpenTabHandler = () => this.props.openTab({ url: PAGE_HYPHE_HOME })
     ipc.on(`shortcut-${SHORTCUT_OPEN_TAB}`, this.ipcOpenTabHandler)
     ipc.send('registerShortcut', SHORTCUT_OPEN_TAB)
 
@@ -99,7 +99,7 @@ class BrowserTabsContainer extends React.Component {
 
     const { formatMessage } = intl
     const { total_webentities } = corpus
-    const handleOpenNewTab = () => openTab(PAGE_HYPHE_HOME)
+    const handleOpenNewTab = () => openTab({ url: PAGE_HYPHE_HOME })
     const handleGetWebentity = (tabId) => webentities && webentities.webentities[webentities.tabs[tabId]]
 
     return (
@@ -143,7 +143,7 @@ class BrowserTabsContainer extends React.Component {
         </div>
         {
           tabs.map((tab) => {
-            const handleChangeEngine = (value) => setSearchEngine(value, corpus.corpus_id)
+            const handleChangeEngine = (value) => setSearchEngine({ searchEngine: value, corpusId: corpus.corpus_id })
             return (
               <BrowserTabContent
                 key={ tab.id }
