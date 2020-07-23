@@ -94,30 +94,30 @@ const RedirectionModal = ({
         </div>
         <div className="modal-body">
           <div className="explanation-text">
-            The webpage <code>{originalWebentity.homepage}</code> (belonging to webentity <strong>{originalWebentity.name}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (belonging to webentity <strong>{redirectWebentity.name}</strong>)
+            The webpage <code>{originalWebentity.homepage}</code> (which belongs to webentity <strong>{originalWebentity.name}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (which belongs to webentity <strong>{redirectWebentity.name}</strong>)
           </div>
 
           <div className={ cx('step-container') }>
-            <h3>What should we do regarding the redirection ?</h3>
+            <h3>What should we do regarding this redirection?</h3>
             <ul className="actions-container big">
-              <li><button onClick={ handleDeny } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }>deny redirection</button></li>
-              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }>accept redirection</button></li>
+              <li><button onClick={ handleDeny } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }>refuse it and stay there</button></li>
+              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }>accept it</button></li>
             </ul>
           </div>
           {
             redirectionDecision === true &&
             <div className={ cx('step-container') }>
-              <h3>What should we do with the source with the two webentities ?</h3>
+              <h3>What should we do with the two webentities?</h3>
               <ul className="actions-container big column">
-                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>move <strong>{ originalWebentity.name }</strong> webentity to OUT list</button></li>
-                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge <strong>{ originalWebentity.name }</strong>  within the <strong>{redirectWebentity.name}</strong> </button></li>
+                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>put <strong>{ originalWebentity.name }</strong> into the OUT list</button></li>
+                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge <strong>{ originalWebentity.name }</strong> into <strong>{redirectWebentity.name}</strong> </button></li>
                 <li>
-                  <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>merge <strong>{ redirectWebentity.name }</strong>  within the <strong>{ originalWebentity.name }</strong> </button>
+                  <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>merge a part of <strong>{ redirectWebentity.name }</strong> into <strong>{ originalWebentity.name }</strong> </button>
                 </li>
               </ul>
               {mergeDecision === 'MERGE-REVERSE' &&
                 <div>
-                  <p>Choose the level of prefix (<code>{prefixUrl}</code>) to add to <strong>{ originalWebentity.name }</strong>:</p>
+                  <p>Choose which part of <strong>{ redirectWebentity.name }</strong> (<code>{prefixUrl}</code>) you want to merge into <strong>{ originalWebentity.name }</strong>:</p>
                   <PrefixSetter
                     parts={ prefixes }
                     setPrefix={ handleSetPrefix }
@@ -133,7 +133,7 @@ const RedirectionModal = ({
               <button
                 onClick={ handleDecision }
                 disabled={ redirectionDecision === null || redirectionDecision && !mergeDecision }
-                className="btn btn-success">validate this decision</button>
+                className="btn btn-success">confirm this decision</button>
             </li>
           </ul>
         </div>
