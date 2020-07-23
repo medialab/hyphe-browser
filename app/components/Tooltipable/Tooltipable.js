@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
  * this component uses the strategy of superpozing to the relatively positionned element
  * an fixed element which is used as the anchor of the tooltip and does not
  * suffer from hidden overflow issues.
- * @param {*} param0 
+ * @param {*} param0
  */
 const Tooltipable = ({
   children,
@@ -47,31 +47,33 @@ const Tooltipable = ({
   const handleMouseLeave = () => {
     setHovered(false)
   }
+
   return (
     <>
-      <Tag 
-        { ...props } 
+      <Tag
+        { ...props }
         style={ style }
-        onMouseEnter={ handleMouseEnter }  
-        onMouseLeave={ handleMouseLeave }  
+        onMouseEnter={ handleMouseEnter }
+        onMouseLeave={ handleMouseLeave }
+        onWheel={ handleMouseLeave }
         className={ `${className.replace('hint', '')} ${isHovered ? 'is-hidden': ''} tooltipable-anchor` }
-        ref={ container } 
+        ref={ container }
       >
         {children}
       </Tag>
       {/* <div style={{display: 'inline-block', width: 0, height: 0}} ref={targetRef} /> */}
-      <Tag 
-        { ...props } 
+      <Tag
+        { ...props }
         className={ `${className} ${isHovered ? 'is-visible': ''} tooltipable-placeholder hint--always` }
-        style={ { 
-          ...style, 
-          position: 'fixed', 
+        style={ {
+          ...style,
+          position: 'fixed',
           ...position
         } }
       >
         {children}
       </Tag>
-      
+
     </>
   )
 }

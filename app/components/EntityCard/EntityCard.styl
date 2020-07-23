@@ -52,22 +52,23 @@
         flex: 1
         max-width: 40%
         .name
-            font-size: 14px
             padding: 0
             margin: 0
+            font-size: 14px
             font-weight: bold
-            overflow: ellipsis
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
         .url
             font-size: 11px
             margin: 0
             margin-bottom: 10px
             margin-top: 5px
             text-decoration: underline
-            max-height: 1.2em;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            max-width: 200px;
+            max-height: 1.2em
+            text-overflow: ellipsis
+            white-space: nowrap
+            overflow: hidden
         .statistics
             font-size: 10px
             flexStretch()
