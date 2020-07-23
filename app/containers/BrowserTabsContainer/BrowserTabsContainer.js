@@ -94,6 +94,7 @@ class BrowserTabsContainer extends React.Component {
       closeTab,
       selectTab,
       setSearchEngine,
+      setAsideMode,
       intl
     } = this.props
 
@@ -157,6 +158,7 @@ class BrowserTabsContainer extends React.Component {
                 loading={ tab.loading || false }
                 selectedEngine = { searchEngines[corpus.corpus_id] || 'google' }
                 onChangeEngine = { handleChangeEngine }
+                setAsideMode = { setAsideMode }
                 disableWebentity={ tab.url === PAGE_HYPHE_HOME }
                 disableNavigatioFn={ !tab.navigable }
               />)
@@ -176,7 +178,10 @@ BrowserTabsContainer.propTypes = {
   searchEngines: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
 
-  // actions
+  // props action
+  setAsideMode: PropTypes.func.isRequired,
+
+  // redux actions
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   selectNextTab: PropTypes.func.isRequired,

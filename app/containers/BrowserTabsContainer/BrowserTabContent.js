@@ -264,7 +264,7 @@ class BrowserTabContent extends React.Component {
       active, id, url, title, server,corpusId, webentity, tlds, loading, adjusting, disableNavigation,
       noCrawlPopup, eventBus, setTabUrl, setTabWebentity, setWebentityHomepage, setWebentityStatus,
       selectedEngine, showAdjustWebentity, closable, isEmpty, fetchStackAndSetTab, onChangeEngine, declarePage,
-      hideAdjustWebentity, toggleDoNotShowAgain, mergeWebentities, addWebentityPrefixes
+      hideAdjustWebentity, toggleDoNotShowAgain, mergeWebentities, addWebentityPrefixes, setAsideMode
     } = this.props
 
     let isHomepage = false
@@ -283,7 +283,10 @@ class BrowserTabContent extends React.Component {
     const handleGoForward = () => {
       eventBus.emit('goForward')
     }
-    const handleSetTabUrl = (value) => setTabUrl({ url: value, id })
+    const handleSetTabUrl = (value) => {
+      setTabUrl({ url: value, id })
+      setAsideMode('webentityBrowse')
+    }
     const handleSetWebentityHomepage = () => setWebentityHomepage({ serverUrl: server.url, corpusId, url, webentityId: webentity.id })
     const onAddClick = () => {
       showAdjustWebentity({ webentityId: webentity.id, crawl: true, createNewEntity: true })
@@ -522,6 +525,7 @@ BrowserTabContent.propTypes = {
   hideAdjustWebentity: PropTypes.func.isRequired,
   toggleDoNotShowAgain: PropTypes.func.isRequired,
   mergeWebentities: PropTypes.func.isRequired,
+  setAsideMode: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (
