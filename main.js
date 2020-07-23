@@ -202,17 +202,17 @@ function getNewMenuBar (locale, setting) {
     },
     // { role: 'languageMenu' }
     {
-      label:  locale === 'en-US' ? 'Language': 'Langue',
+      label:  langEn ? 'Language': 'Langue',
       submenu: [
-        { label: locale === 'en-US' ? 'English': 'Anglais',
+        { label: langEn ? 'English': 'Anglais',
           type: 'checkbox',
-          checked: locale === 'en-US' ? true : false,
+          checked: langEn ? true : false,
           enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'en-US') }
         },
-        { label: locale === 'en-US' ? 'French': 'Francais',
+        { label: langEn ? 'French': 'Francais',
           type: 'checkbox',
-          checked: locale === 'en-US' ? false: true,
+          checked: langEn ? false: true,
           enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'fr-FR') }
         }
@@ -220,7 +220,7 @@ function getNewMenuBar (locale, setting) {
     },
     // { role: 'downloadMenu' }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ,
     {
-      label: locale === 'en-US' ? 'Download': 'Télécharger',
+      label: langEn ? 'Download': 'Télécharger',
       submenu: [
         { label: 'IN WebEntities as CSV',
           enabled: enableDownload,
@@ -259,14 +259,19 @@ function getNewMenuBar (locale, setting) {
     }
   ]
   const menu = Menu.buildFromTemplate(template)
+  const downloadLabel = langEn ? 'Download': 'Télécharger'
   ipc.on('corpusReady', () => {
-    menu.items[1].submenu.items.forEach((item) => {
+    menuSetting.enableDownload = true
+    const foundMenu = menu.items.find((menu) => menu.label === downloadLabel)
+    foundMenu.submenu.items.forEach((item) => {
       item.enabled = true
     })
   })
 
   ipc.on('corpusClosed', () => {
-    menu.items[1].submenu.items.forEach((item) => {
+    menuSetting.enableDownload = false
+    const foundMenu = menu.items.find((menu) => menu.label === downloadLabel)
+    foundMenu.submenu.items.forEach((item) => {
       item.enabled = false
     })
   })
