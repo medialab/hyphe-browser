@@ -31,11 +31,12 @@ const PagesList = ({
   setSelectedPage,
   pages,
   isPaginating,
+  paginatePages,
   totalPages
 }) => (
   <CardsList
     displayLoader={ isPaginating }
-    count={ pages.length }
+    count={ paginatePages }
     total={ totalPages }>
     { pages.map((link, index) => {
       return (
@@ -309,6 +310,7 @@ const EntityModal = ({
                 <PagesList
                   pages={ pagesList }
                   isPaginating={ webentity.token }
+                  paginatePages={ webentity.paginatePages.length }
                   totalPages={ webentity.pages_total }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
