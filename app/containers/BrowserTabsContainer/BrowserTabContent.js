@@ -427,13 +427,13 @@ class BrowserTabContent extends React.Component {
               this.state.disableRedirect &&
               <div className="denied-redirection-container">
                 <div className="notification">
-                  This page has nothing to show because it is a redirection (when the redirection was triggered a first time, you chose to keep it as is).
+                  This page is empty because it should be redirected to another one but you chose to refuse the redirection so that you can work on its metadata.
                 </div>
                 <div>
                   <button
                     className="btn btn-success"
                     onClick={ handleShowRedirectModal }
-                  >Show redirect settings</button>
+                  >Show redirection settings again</button>
                 </div>
               </div>
             }
