@@ -11,7 +11,7 @@
  *    (cleaned data) are regenerated, using the `rawToCleanedSettings` function
  */
 import React from 'react'
-import { Creatable } from 'react-select'
+import Creatable from 'react-select/creatable'
 import { clamp, identity, values, mapValues, omitBy } from 'lodash'
 import { FormattedMessage as T } from 'react-intl'
 
@@ -166,8 +166,8 @@ const SETTINGS = [
         <div key={ key } className="form-group">
           <h4><T id="create-cloud-server.step2.automatic-redirection" /></h4>
           <Creatable
-            multi
-            clearable
+            isMulti
+            isClearable
             placeholder=""
             name="hyphe-follow-redirects"
             value={ values.map(value => ({ value, label: value })) }
@@ -175,7 +175,7 @@ const SETTINGS = [
               'HYPHE_FOLLOW_REDIRECTS',
               values.map(({ value }) => value)
             ) }
-            promptTextCreator={ label => formatMessage({ id: 'create-cloud-server.step2.add-redirection' }, { label }) }
+            formatCreateLabel={ label => formatMessage({ id: 'create-cloud-server.step2.add-redirection' }, { label }) }
           />
         </div>
       )
