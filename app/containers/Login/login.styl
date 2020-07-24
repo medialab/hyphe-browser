@@ -1,5 +1,9 @@
 @import '../../css/helpers.styl';
 
+.login-container
+  max-height: 100%
+  display: flex
+  flex-direction: column
 
 .login
   abs()
@@ -11,6 +15,13 @@
     padding: 1em
     max-width: 350px
     min-width: 350px
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    &.large
+      max-width: 600px
+      min-width: 600px
     .section-header
       margin-top: 0
       margin-bottom: 10px
@@ -26,6 +37,11 @@
       right: 10px
 
   .corpora-list-container
+    border-top: 1px solid var(--color-grey-dark)
+    margin-top: 20px
+    padding-top: 20px
+
+  .installing-server-container
     margin-top: 20px
 
   .cards-list
@@ -58,6 +74,20 @@
       font-size: 10px
       margin-left: 5px
       display: inline
+
+  .server-sumup-container
+    .server-sumup-label,
+    .server-sumup-value
+      font-size: 14px
+    .server-sumup-label
+      font-weight: bold
+      margin: 15px 0 5px
+    .server-sumup-value
+      margin: 0
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+
 .form-group
   stretch(column)
   margin-bottom: 15px
@@ -70,3 +100,10 @@
     stretch(row)
     align-items: center
     margin-bottom: 10px
+    input.narrow
+      width: 80px
+      margin-right: 10px
+  &.error .error-message
+    margin-left: 10px
+    color: var(--color-red)
+
