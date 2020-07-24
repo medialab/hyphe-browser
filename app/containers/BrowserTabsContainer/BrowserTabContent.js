@@ -47,6 +47,7 @@ class BrowserTabContent extends React.Component {
       disableForward: true,
       disableApplyButton: false,
       disableRedirect: false,
+      originalWebentity: null,
       mergeRequired: null,
       showRedirectionModal: false,
       setDoNotShowAgainAfterSubmit: null
@@ -75,7 +76,7 @@ class BrowserTabContent extends React.Component {
       this.saveAdjustChanges(props)
     }
     if (props.webentity && this.props.webentity && props.webentity.id !== this.props.webentity.id) {
-      this.setState({ mergeRequired: null, disableRedirect: false })
+      this.setState({ originalWebentity: null, mergeRequired: null, disableRedirect: false })
     }
   }
 
@@ -143,7 +144,20 @@ class BrowserTabContent extends React.Component {
                 showRedirectionModal: true
               })
             } else {
-              setTabWebentity({ tabId: id, webentity })
+              if (this.state.originalWebentity && (!this.state.originalWebentity.dnsError) && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+                this.setState({
+                  mergeRequired: {
+                    redirectUrl: info,
+                    originalWebentity: this.state.originalWebentity,
+                    redirectWebentity: webentity
+                  },
+                  showRedirectionModal: true
+                })
+                setTabUrl({ url: this.state.originalWebentity.homepage, id })
+                setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
+              } else {
+                setTabWebentity({ tabId: id, webentity })
+              }
             }
           }
         })
@@ -207,6 +221,12 @@ class BrowserTabContent extends React.Component {
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
           setTabUrl({url: getSearchUrl(selectedEngine, term), id })
+          this.setState({
+            originalWebentity: {
+              ...this.state.originalWebentity,
+              dnsError: true
+            }
+          })
         } else {
           if (info.errorCode !== -3) {
             // https://github.com/medialab/hyphe-browser/issues/130
@@ -286,6 +306,15 @@ class BrowserTabContent extends React.Component {
     const handleSetTabUrl = (value) => {
       setTabUrl({ url: value, id })
       setAsideMode('webentityBrowse')
+      declarePage({
+        serverUrl: server.url,
+        corpusId,
+        url: value
+      }).then((webentity) => {
+        this.setState({
+          originalWebentity: webentity
+        })
+      })
     }
     const handleSetWebentityHomepage = () => setWebentityHomepage({ serverUrl: server.url, corpusId, url, webentityId: webentity.id })
     const onAddClick = () => {
@@ -326,7 +355,8 @@ class BrowserTabContent extends React.Component {
         // previousUrl is redirectedUrl here, need to set it back to originalUrl
         this.setState({
           previousUrl: this.state.mergeRequired.originalWebentity.homepage,
-          disableRedirect: true
+          disableRedirect: true,
+          originalWebentity: null
         })
       } else {
         if(mergeDecision === 'OUT') {
@@ -372,7 +402,7 @@ class BrowserTabContent extends React.Component {
             setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
           })
         }
-        this.setState({ mergeRequired: null, disableRedirect: false })
+        this.setState({ originalWebentity: null, mergeRequired: null, disableRedirect: false })
       }
       handleCloseRedirectModal()
     }
