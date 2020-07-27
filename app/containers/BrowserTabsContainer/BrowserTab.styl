@@ -53,7 +53,8 @@
     -webkit-transform: perspective(100px) rotateX(30deg)
     width: 100%
     z-index: -1
-
+  &:not(.active):hover::after
+    background: var(--color-grey-darker)
 
   &.active
     z-index: 1
