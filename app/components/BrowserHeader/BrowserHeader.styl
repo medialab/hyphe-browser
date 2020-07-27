@@ -38,11 +38,15 @@
             font-family: var(--font-mono)
             outline: none
             cursor: pointer
-        .btn.is-active
-            background: var(--color-white)
-            color: var(--color-black)
-            font-family: var(--font-mono)
-            cursor: default
+            margin-left: 10px
+            &:not(.is-active)
+                &:hover
+                    background: #354958
+            &.is-active
+                background: var(--color-white)
+                color: var(--color-black)
+                font-family: var(--font-mono)
+                cursor: default
 
     .server-status
         display: inline-block

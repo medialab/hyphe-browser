@@ -42,6 +42,14 @@
     top: 14px
     cursor: pointer
     font-size: 10px
+    &:hover
+      background: var(--color-grey-dark)
+      color: white
+      border-radius: 50%
+      padding: 3px
+      font-size: 8px
+      top: 13px
+      right: 3px
 
   &::after
     background: var(--color-grey)
@@ -53,7 +61,8 @@
     -webkit-transform: perspective(100px) rotateX(30deg)
     width: 100%
     z-index: -1
-
+  &:not(.active):hover::after
+    background: var(--color-grey-darker)
 
   &.active
     z-index: 1

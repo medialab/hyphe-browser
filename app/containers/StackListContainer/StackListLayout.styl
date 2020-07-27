@@ -29,6 +29,7 @@
             background: var(--color-grey-dark);
             transition: all .5s ease
             z-index: 3
+            cursor: pointer
         .list-btn.in
                 background: var(--color-corpus-in)
         .list-btn.out
@@ -72,6 +73,8 @@
         opacity: 1
     .list-name-container:not(.is-active)
         opacity: .5
+        &:hover
+            opacity: .8
         .list-btn
             font-size: 10px
             padding: 10px
@@ -110,12 +113,14 @@
             font-size: 14px
             border: none
             color: white
-            background: var(--color-grey-dark)
+            background: var(--color-grey-darker)
             border-radius: 50%
             width: 30px
             height: 30px
             flexCenter()
             cursor: pointer
+            &:hover
+                background: var(--color-grey-dark)
         @media (max-width: $tablet-break-point)
             .status-list-toggle
                 display: none
@@ -181,9 +186,12 @@
                     border: 1px solid var(--color-grey)
                     font-size: 12px
                     cursor: pointer
-                li.is-active
-                    background: var(--color-blue)
-                    color: white
+                    &.is-active
+                        background: var(--color-blue)
+                        color: white
+                    &:not(.is-active):hover
+                        background: var(--color-grey-light)
+
         .actualize-container
             padding: 0 0 10px 10px
             .actualize
