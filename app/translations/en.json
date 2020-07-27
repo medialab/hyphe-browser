@@ -167,6 +167,7 @@
   "webentity-card.cited-by-n-webentities": "{count, plural, one {cited by 1 webentity} other {cited by {count} webentities}}",
 
   "webentity-is-in-list": "this webentity is in the {list} list",
+  "webentity-is-previous-in-list": "this webentity used to be in the {list} list",
   "password-protected": "password protected",
   "running": "running",
 

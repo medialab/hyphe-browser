@@ -33,7 +33,7 @@ const EntityCard = ({
     setWrapperWidth(wrapperBox.width)
   }, [])
 
-  const prevStatus = previousStatus && previousStatus.toLowerCase()
+  const prevStatus = previousStatus && (previousStatus === 'DISCOVERED' ? 'prospection' : previousStatus.toLowerCase())
   return (
     <li
       className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
@@ -45,7 +45,12 @@ const EntityCard = ({
       <div className={ 'status-marker-container' }>
         {
           prevStatus &&
-          <span className={ `status-marker previous-status ${prevStatus} hint--right` } aria-label={ `this webentity used to be in the ${prevStatus} list` }>{prevStatus.charAt(0).toUpperCase()}</span>
+          <span
+            className={ `status-marker previous-status ${previousStatus.toLowerCase()} hint--right` }
+            aria-label={ formatMessage({ id: 'webentity-is-previous-in-list' },{ list: prevStatus.toUpperCase() }) }
+          >
+            {prevStatus.charAt(0).toUpperCase()}
+          </span>
         }
         <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ formatMessage({ id: 'webentity-is-in-list' },{ list: formattedStatus.toUpperCase() }) }>{formattedStatus.charAt(0).toUpperCase()}</span>
         {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}

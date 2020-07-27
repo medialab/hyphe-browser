@@ -181,11 +181,7 @@
   "discard-decisions": "{count, plural, one {annuler la décision} other {annuler les décisions}}",
 
   "webentity-is-in-list": "cette webentité est dans la liste {list}",
-
-
-
-
-
+  "webentity-is-previous-in-list": "cette webentité était dans la liste {list}",
   "tags.corpus-has-no-categories": "Le corpus n'a pas encore de catégories",
   "tags.new-category": "nom de la nouvelle catégorie",
   "tags.add-category": "ajouter une catégorie de tags",
