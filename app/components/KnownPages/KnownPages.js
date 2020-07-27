@@ -1,7 +1,8 @@
 import './KnownPages.styl'
 
 import React, { useMemo, useRef, useEffect, useState } from 'react'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
+
 import { FixedSizeList as List } from 'react-window'
 import  AutoSizer from 'react-virtualized-auto-sizer'
 
@@ -20,7 +21,7 @@ const KnownPages = ({
   onSetHomepage,
   onSetTabUrl
 }) => {
-
+  const { formatMessage } = useIntl()
   const pagesList = useMemo(() => list, [list])
   const listContainer = useRef(null)
   const [containerHeight, setContainerHeight] = useState(0)
@@ -70,18 +71,25 @@ const KnownPages = ({
     <div className="known-pages">
       <div className="pages-container" ref={ listContainer }>
         <ul>
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <List
-                height={ (pagesList.length * 62 < containerHeight) ? pagesList.length * 62 : containerHeight }
-                width={ width }
-                itemCount={ pagesList.length }
-                itemSize={ 62 } // check stylesheet item height: 50px padding: 6px
-              >
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
+          {
+            pagesList.length > 0 ?
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <List
+                    height={ (pagesList.length * 62 < containerHeight) ? pagesList.length * 62 : containerHeight }
+                    width={ width }
+                    itemCount={ pagesList.length }
+                    itemSize={ 62 } // check stylesheet item height: 50px padding: 6px
+                  >
+                    {Row}
+                  </List>
+                )}
+              </AutoSizer>
+              :
+              <div className="empty-indicator">
+                { formatMessage({ id: 'none' }) }
+              </div>
+          }
         </ul  >
       </div>
 
