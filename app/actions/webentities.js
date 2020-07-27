@@ -385,12 +385,12 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
     })
 }
 
-export const mergeWebentities = ({ serverUrl, corpusId, originalWebentityId, redirectWebentity, type }) => (dispatch) => {
+export const mergeWebentities = ({ serverUrl, corpusId, webentityId, redirectWebentity, type }) => (dispatch) => {
   const { id: redirectWebentityId } = redirectWebentity
-  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
-  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [originalWebentityId, redirectWebentityId, true, false, false, corpusId])
+  dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, webentityId, redirectWebentityId } })
+  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [webentityId, redirectWebentityId, true, false, false, corpusId])
     .then(() => {
-      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId } })
+      dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentityId, redirectWebentityId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       if (type === 'referrers') {
         dispatch(fetchReferrers({ serverUrl, corpusId, webentity: redirectWebentity }))
@@ -401,7 +401,7 @@ export const mergeWebentities = ({ serverUrl, corpusId, originalWebentityId, red
       //TODO : apply to stack merged webentity the attributes of the host
     })
     .catch((error) => {
-      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, originalWebentityId, redirectWebentityId, error } })
+      dispatch({ type: MERGE_WEBENTITY_FAILURE, payload: { serverUrl, corpusId, webentityId, redirectWebentityId, error } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning' }))
       throw error
     })

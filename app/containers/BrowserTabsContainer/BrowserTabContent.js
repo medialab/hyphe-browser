@@ -364,7 +364,7 @@ class BrowserTabContent extends React.Component {
             serverUrl: server.url,
             corpusId,
             status: 'OUT',
-            webentityId: this.state.mergeRequired.originalWebentity.id,
+            webentity: this.state.mergeRequired.originalWebentity,
           })
           // set current webentity to redirected one
           setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
@@ -376,7 +376,7 @@ class BrowserTabContent extends React.Component {
           mergeWebentities({
             serverUrl: server.url,
             corpusId,
-            originalWebentityId: this.state.mergeRequired.originalWebentity.id,
+            webentityId: this.state.mergeRequired.originalWebentity.id,
             redirectWebentity: this.state.mergeRequired.redirectWebentity,
             type: this.state.mergeRequired.type
           })
