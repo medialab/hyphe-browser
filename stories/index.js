@@ -123,9 +123,37 @@ storiesOf('New entity modal', module)
  */
 import EntityCard from './EntityCard'
 storiesOf('Entity card', module)
-  .add('Mockup', () => 
+  .add('Default', () => 
     (<div style={ { width: '500px' } }>
       <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={ 12 } />
+    </div>)
+  )
+  .add('Visited', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={ 12 } isVisited />
+    </div>)
+  )
+  .add('Changed status', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard 
+        name="Facebook" 
+        url="https://facebook.com" 
+        numberOfCitations={ 12 } 
+        isVisited 
+        previousStatus="prospection" 
+        status="in" 
+      />
+    </div>)
+  )
+  .add('Merged', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard 
+        name="Facebook" 
+        url="https://facebook.com" 
+        numberOfCitations={ 12 } 
+        status="merged" 
+        previousStatus="prospection"
+      />
     </div>)
   )
 

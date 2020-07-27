@@ -5,6 +5,7 @@ import cx from 'classnames'
 
 const EntityCard = ({
   status = 'prospection',
+  previousStatus,
   name,
   url,
   numberOfCitations,
@@ -26,8 +27,14 @@ const EntityCard = ({
       {displayStatus
       &&
       <div className={ 'status-marker-container' }>
-        <span className={ `status-marker ${status} hint--right` } aria-label={ `this webentity is in the ${status} list` }>{status.charAt(0).toUpperCase()}</span>
+        {
+          previousStatus ?
+          <span className={ `status-marker previous-status ${previousStatus} hint--right` } aria-label={ `this webentity used to be in the ${previousStatus} list` }>{previousStatus.charAt(0).toUpperCase()}</span>
+          : null
+        }
+        <span className={ `status-marker ${status} hint--right` } aria-label={ status === 'merged' ? 'this webentity has been merged within another one' : `this webentity is in the ${status} list` }>{status.charAt(0).toUpperCase()}</span>
         {status === 'prospection' && <span className={ `visited-marker ${status} hint--right` } aria-label={ isVisited ? 'this webentity has already been visited' : 'this webentity has not been visited yet' }>{isVisited ? '✓' : '?'}</span>}
+        
       </div>}
       <div className="card-content hint--bottom" aria-label={ 'click to browse' }>
         <h4 className="name">{name}</h4>
