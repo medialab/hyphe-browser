@@ -144,6 +144,7 @@ class BrowserTabContent extends React.Component {
                 showRedirectionModal: true
               })
             } else {
+              // TODO: this is not right webentity for Linkedin internal redirect cases
               if (this.state.originalWebentity && (!this.state.originalWebentity.dnsError) && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
                 this.setState({
                   mergeRequired: {
@@ -364,7 +365,7 @@ class BrowserTabContent extends React.Component {
             serverUrl: server.url,
             corpusId,
             status: 'OUT',
-            webentity: this.state.mergeRequired.originalWebentity,
+            webentityId: this.state.mergeRequired.originalWebentity.id,
           })
           // set current webentity to redirected one
           setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
