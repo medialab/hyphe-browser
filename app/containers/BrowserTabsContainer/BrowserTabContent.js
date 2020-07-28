@@ -48,6 +48,7 @@ class BrowserTabContent extends React.Component {
       disableApplyButton: false,
       disableRedirect: false,
       originalWebentity: null,
+      dnsError: true,
       mergeRequired: null,
       showRedirectionModal: false,
       setDoNotShowAgainAfterSubmit: null
@@ -76,7 +77,7 @@ class BrowserTabContent extends React.Component {
       this.saveAdjustChanges(props)
     }
     if (props.webentity && this.props.webentity && props.webentity.id !== this.props.webentity.id) {
-      this.setState({ originalWebentity: null, mergeRequired: null, disableRedirect: false })
+      this.setState({ originalWebentity: null, dnsError: false,  mergeRequired: null, disableRedirect: false })
     }
   }
 
@@ -145,7 +146,7 @@ class BrowserTabContent extends React.Component {
               })
             } else {
               // TODO: this is not right webentity for Linkedin internal redirect cases
-              if (this.state.originalWebentity && (!this.state.originalWebentity.dnsError) && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+              if (!this.state.dnsError && this.state.originalWebentity && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
                 this.setState({
                   mergeRequired: {
                     redirectUrl: info,
@@ -221,12 +222,10 @@ class BrowserTabContent extends React.Component {
         if (err.name === 'NameNotResolvedError') {
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
-          setTabUrl({url: getSearchUrl(selectedEngine, term), id })
+          setTabUrl({ url: getSearchUrl(selectedEngine, term), id })
           this.setState({
-            originalWebentity: {
-              ...this.state.originalWebentity,
-              dnsError: true
-            }
+            originalWebentity: null,
+            dnsError: true
           })
         } else {
           if (info.errorCode !== -3) {
@@ -313,6 +312,7 @@ class BrowserTabContent extends React.Component {
         url: value
       }).then((webentity) => {
         this.setState({
+          mergeRequired: null,
           originalWebentity: webentity
         })
       })
@@ -357,7 +357,8 @@ class BrowserTabContent extends React.Component {
         this.setState({
           previousUrl: this.state.mergeRequired.originalWebentity.homepage,
           disableRedirect: true,
-          originalWebentity: null
+          originalWebentity: null,
+          dnsError: false
         })
       } else {
         if(mergeDecision === 'OUT') {
@@ -403,7 +404,7 @@ class BrowserTabContent extends React.Component {
             setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
           })
         }
-        this.setState({ originalWebentity: null, mergeRequired: null, disableRedirect: false })
+        this.setState({ originalWebentity: null, dnsError: false, mergeRequired: null, disableRedirect: false })
       }
       handleCloseRedirectModal()
     }
