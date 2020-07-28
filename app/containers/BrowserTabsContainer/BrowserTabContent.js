@@ -120,15 +120,7 @@ class BrowserTabContent extends React.Component {
       if (!this.state.mergeRequired) setTabUrl({ url: info, id })
       if (this.state.mergeRequired ||
           (!disableWebentity &&
-          !this.samePage(info) &&
-          !(webentity &&
-            // if webentity is loaded from memory the longestMatching used to
-            // avoid too much declaration will prevent all declaration. So we
-            // need to allow declaration at least from homepage because it's
-            // the first page visited when clicking in the sidebar.
-            !compareUrls(webentity.homepage, info) &&
-            longestMatching(webentity.prefixes, info, tlds))
-          )
+          !this.samePage(info))
       ) {
         declarePage({
           serverUrl: server.url,
@@ -155,7 +147,7 @@ class BrowserTabContent extends React.Component {
                   },
                   showRedirectionModal: true
                 })
-                setTabUrl({ url: this.state.originalWebentity.homepage, id })
+                setTabUrl({ url: this.state.originalWebentity.tabUrl, id })
                 setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
               } else {
                 setTabWebentity({ tabId: id, webentity })
@@ -313,7 +305,11 @@ class BrowserTabContent extends React.Component {
       }).then((webentity) => {
         this.setState({
           mergeRequired: null,
-          originalWebentity: webentity
+          dnsError: false,
+          originalWebentity: {
+            ...webentity,
+            tabUrl: value
+          }
         })
       })
     }
@@ -355,7 +351,7 @@ class BrowserTabContent extends React.Component {
       if (!redirectionDecision) {
         // previousUrl is redirectedUrl here, need to set it back to originalUrl
         this.setState({
-          previousUrl: this.state.mergeRequired.originalWebentity.homepage,
+          previousUrl: this.state.mergeRequired.originalWebentity.tabUrl,
           disableRedirect: true,
           originalWebentity: null,
           dnsError: false
