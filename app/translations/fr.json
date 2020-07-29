@@ -425,5 +425,16 @@
   "in-modale.confirm-modale-add": "créer la webentité et lancer la fouille automatique",
 
   "in-modale.confirm": "confirmer",
-  "in-modale.webentity-exist": "Il y a déjà une webentité dans le corpus avec le même périmètre d'URLs"
+  "in-modale.webentity-exist": "Il y a déjà une webentité dans le corpus avec le même périmètre d'URLs",
+  "redirect-modal.title": "This page requests a redirection",
+  "redirect-modal.description": "The webpage <code>{originalUrl}</code> (which belongs to webentity <strong>{originalWebentity}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (which belongs to webentity <strong>{redirectWebentity}</strong>)",
+  "redirect-modal.step-1-title": "What should we do regarding this redirection?",
+  "redirect-modal.step-1-refuse": "refuse it and stay there",
+  "redirect-modal.step-1-accept": "accept it",
+  "redirect-modal.step-2-title": "What should we do with the two webentities?",
+  "redirect-modal.step-2-out": "put <strong>{originalWebentity}</strong> into the OUT list",
+  "redirect-modal.step-2-merge": "merge <strong>{originalWebentity}</strong> into <strong>{redirectWebentity}</strong>",
+  "redirect-modal.step-2-merge-reverse": "merge a part of <strong>{redirectWebentity}</strong> into <strong>{originalWebentity}</strong>",
+  "redirect-modal.step-2-merge-reverse-description": "Choose which part of <strong>{webentity}</strong> (<code>{url}</code>) you want to merge into <strong>{originalWebentity}</strong>:",
+  "redirect-modal.confirm": "confirm this decision"
 }
