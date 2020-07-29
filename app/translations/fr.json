@@ -426,6 +426,10 @@
 
   "in-modale.confirm": "confirmer",
   "in-modale.webentity-exist": "Il y a déjà une webentité dans le corpus avec le même périmètre d'URLs",
+
+  "browser-tab-content.disable-redirect-message": "This page is empty because it should be redirected to another one but you chose to refuse the redirection so that you can work on its metadata.",
+  "browser-tab-content.show-redirection-again": "Show redirection settings again",
+
   "redirect-modal.title": "This page requests a redirection",
   "redirect-modal.description": "The webpage <code>{originalUrl}</code> (which belongs to webentity <strong>{originalWebentity}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (which belongs to webentity <strong>{redirectWebentity}</strong>)",
   "redirect-modal.step-1-title": "What should we do regarding this redirection?",

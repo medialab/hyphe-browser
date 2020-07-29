@@ -12,7 +12,7 @@ import BrowserBar from '../../components/BrowserBar'
 import NewTabContent from '../../components/NewTabContent'
 
 import WebView from './WebView'
-import { FormattedMessage as T } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 import { eventBusShape } from '../../types'
 
@@ -458,13 +458,15 @@ class BrowserTabContent extends React.Component {
               this.state.disableRedirect &&
               <div className="denied-redirection-container">
                 <div className="notification">
-                  This page is empty because it should be redirected to another one but you chose to refuse the redirection so that you can work on its metadata.
+                  <FormattedMessage id="browser-tab-content.disable-redirect-message" />
                 </div>
                 <div>
                   <button
                     className="btn btn-success"
                     onClick={ handleShowRedirectModal }
-                  >Show redirection settings again</button>
+                  >
+                    <FormattedMessage id="browser-tab-content.show-redirection-again" />
+                  </button>
                 </div>
               </div>
             }
