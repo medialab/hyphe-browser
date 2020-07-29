@@ -29,7 +29,7 @@ const BrowserLayout = ({
   /**
    * lists management
    */
-  const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webeneityBrowse')
+  const [asideMode, setAsideMode] = useState(isLanding ? 'stackList' : 'webentityBrowse')
   const [browserMode, setBrowserMode] = useState('browse')
 
   const { formatMessage } = useIntl()
@@ -38,7 +38,7 @@ const BrowserLayout = ({
     const isExternalUrl = !compareUrls(url, hypheUrl)
     if (isExternalUrl) {
       setBrowserMode('browse')
-      openTab(url)
+      openTab({ url })
     }
     return isExternalUrl
   }
@@ -107,7 +107,7 @@ const BrowserLayout = ({
             </div>
           </aside>
           <section className="browser-column browser-main-column">
-            <BrowserTabsContainer />
+            <BrowserTabsContainer setAsideMode={ setAsideMode } />
           </section>
         </div> :
         <div className="spinner-container">

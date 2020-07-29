@@ -20,11 +20,11 @@ export const selectStack = createAction(SELECT_STACK, (stack) => ({ stack }))
 
 export const requestStack = createAction(FETCH_STACK_REQUEST, (serverUrl, stack, filter) => ({ serverUrl, stack, filter }))
 export const receiveStack = createAction(FETCH_STACK_SUCCESS, (serverUrl, stack, webentities, filter) => ({ serverUrl, stack, filter, webentities }))
-export const fetchStack = ( serverUrl, corpusId, stack, filter ) => (dispatch) => {
+export const fetchStack = ({ serverUrl, corpusId, stack, filter }) => (dispatch) => {
   dispatch(requestStack(serverUrl, stack, filter))
   if (filter) {
     return jsonrpc(serverUrl)(
-      'store.get_webentities_mistagged', 
+      'store.get_webentities_mistagged',
       [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
     ).then((res) => {
       if(stack === 'DISCOVERED') {
@@ -67,7 +67,7 @@ export const fetchStackPage = ({ serverUrl, corpusId, stack, token, page }) => (
     type: FETCH_STACK_PAGE_REQUEST
   })
   return jsonrpc(serverUrl)(
-    'store.get_webentities_page', 
+    'store.get_webentities_page',
     [token, page, false, corpusId]
   ).then((res) => {
     dispatch({
@@ -84,16 +84,16 @@ export const viewWebentity = createAction(VIEW_WEBENTITY, (webentity) => ({ webe
 export const stoppedLoadingWebentity = createAction(STOPPED_LOADING_WEBENTITY)
 
 export const fetchStackAndSetTab = ({ serverUrl, corpusId, stack, filter, tabId }) => (dispatch) => {
-  return dispatch(fetchStack(serverUrl, corpusId, stack, filter))
+  return dispatch(fetchStack({ serverUrl, corpusId, stack, filter }))
     .then((action) => {
       const { payload } = action
       if (payload && payload.webentities && payload.webentities.webentities[0]) {
-        const webentity = payload.webentities.webentities[0] 
+        const webentity = payload.webentities.webentities[0]
         dispatch(viewWebentity(webentity))
         if (tabId) {
-          dispatch(setTabUrl(webentity.homepage, tabId))
+          dispatch(setTabUrl({ url: webentity.homepage, id: tabId }))
         } else {
-          dispatch(openTab(webentity.homepage))
+          dispatch(openTab({ url: webentity.homepage }))
         }
       }
     })

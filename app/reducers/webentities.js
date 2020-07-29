@@ -15,14 +15,10 @@ import {
   SET_WEBENTITY_STATUS_REQUEST,
   SET_WEBENTITY_STATUS_SUCCESS,
   SET_WEBENTITY_STATUS_FAILURE,
-  ADD_WEBENTITY_PREFIXES_SUCCESS,
   SET_WEBENTITY_CRAWLING_STATUS,
   SET_TAB_WEBENTITY,
   CREATE_WEBENTITY_SUCCESS,
   ADJUST_WEBENTITY,
-  SET_MERGE_URL,
-  SET_MERGE_WEBENTITY,
-  UNSET_MERGE_WEBENTITY,
   FETCH_MOST_LINKED_SUCCESS,
   INIT_PAGINATE_PAGES_SUCCESS,
   FETCH_PAGINATE_PAGES_SUCCESS,
@@ -271,58 +267,6 @@ export default createReducer(initialState, {
         : info
     }
   }),
-
-  // [ADD_WEBENTITY_PREFIXES_SUCCESS]: (state, { webentityId, prefixes }) => ({
-  //   ...state,
-  //   webentities: {
-  //     ...state.webeneities,
-  //     [webeneityId]: {
-  //       ...state.webentities[webeneityId],
-  //       prefixes: state.webentities[webentityId].prefixes.concat(prefixes)
-  //     }
-  //   }
-  // }),
-
-  // Keep track of current WE merges
-  [SET_MERGE_URL]: (state,{tabId, redirectUrl, originalWebentity }) => {
-    return {
-      ...state,
-      merges: {
-        ...state.merges,
-        [tabId]: {
-          ...state.merges[tabId],
-          redirectUrl,
-          originalWebentity
-        }
-      }
-    }
-  },
-
-  [SET_MERGE_WEBENTITY]: (state, { tabId, redirectWebentity, type }) => {
-    // We do not want to re-set `mergeable` because we want to keep the first
-    // redirection as mergeable.
-    return {
-      ...state,
-      merges: {
-        ...state.merges,
-        [tabId]: {
-          ...state.merges[tabId],
-          redirectWebentity,
-          type
-        }
-      }
-    }
-  },
-
-  [UNSET_MERGE_WEBENTITY]: (state, { tabId }) => {
-    return ({
-      ...state,
-      merges: {
-        ...state.merges,
-        [tabId]: null
-      }
-    })
-  },
 
   [VIEW_WEBENTITY]: (state, { webentity }) => ({
     ...state,

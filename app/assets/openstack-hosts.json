@@ -1,0 +1,90 @@
+{
+  "OVH": {
+    "publicCloudURL": "https://www.ovhcloud.com/fr/public-cloud/",
+    "keystone": [
+      { "URL": "https://auth.cloud.ovh.net/v3/", "label": "API OpenStack OVH" }
+    ],
+    "image": {
+      "name": "Debian 9"
+    },
+    "domainName": "Default",
+    "priceURL": "https://www.ovhcloud.com/fr/public-cloud/prices/",
+    "dataCenterURL": "https://www.ovhcloud.com/fr/public-cloud/prices/",
+    "dataCenters": {
+      "WAW": "Varsovie, Pologne; Warsaw, Poland",
+      "WAW1": "Varsovie, Pologne; Warsaw, Poland",
+      "SBG": "Strasbourg, France",
+      "SBG5": "Strasbourg, France",
+      "UK": "Londres, Royaume-Uni",
+      "UK1": "Londres, Royaume-Uni",
+      "BHS": "Beauharnois, Canada",
+      "BHS5": "Beauharnois, Canada",
+      "DE": "Francfort, Allemagne",
+      "DE1": "Francfort, Allemagne",
+      "GRA": "Gravelines, France",
+      "GRA7": "Gravelines, France"
+    }
+  },
+  "VexxHost": {
+    "publicCloudURL": "https://vexxhost.com/public-cloud/",
+    "keystone": [
+      {
+        "URL": "https://auth.vexxhost.net/v3/",
+        "label": "API OpenStack Vexxhost"
+      }
+    ],
+    "image": {
+      "name": "Debian GNU/Linux 9 (stretch)"
+    },
+    "domainName": "Default",
+    "projectRequired": true,
+    "priceURL": "https://vexxhost.com/pricing/",
+    "dataCenterURL": "https://vexxhost.com/company/data-centers/",
+    "dataCenters": {
+      "ca-ymq-1": "Montreal, Quebec, Canada",
+      "sjc1": "Santa Clara, California, USA"
+    }
+  },
+  "CityCloud": {
+    "publicCloudURL": "https://citycloud.com/compute/",
+    "keystone": [
+      {
+        "URL": "https://kna1.citycloud.com:5000/v3",
+        "label": "Europe (Karlskrona, Sweden) or USA (Buffalo, NewYork)"
+      },
+      {
+        "URL": "https://fra1.citycloud.com:5000/v3",
+        "label": "Frankfurt, Germany"
+      },
+      { "URL": "https://tky1.citycloud.com:5000/v3", "label": "Tokyo, Japan" },
+      {
+        "URL": "https://sto2.citycloud.com:5000/v3",
+        "label": "Stockholm, Sweden"
+      },
+      {
+        "URL": "https://dx1.citycloud.com:5000/v3",
+        "label": "Dubai, United Arab Emirates"
+      },
+      {
+        "URL": "https://lon1.citycloud.com:5000/v3",
+        "label": "London, United Kingdom"
+      }
+    ],
+    "domainName": "CCP_Domain_38263",
+    "projectRequired": true,
+    "image": {
+      "name": "Debian 9.1.1"
+    },
+    "priceURL": "https://citycloud.com/price-list/",
+    "dataCenterURL": "https://citycloud.com/regions-services/",
+    "dataCenters": {
+      "Kna1": "Karlskrona, Sweden",
+      "Buf1": "Buffalo, NewYork, USA",
+      "Fra1": "Frankfurt, Germany",
+      "Tky1": "Tokyo, Japan",
+      "Sto2": "Stockholm, Sweden",
+      "Dx1": "Dubai, United Arab Emirates",
+      "Lon1": "London, United Kingdom"
+    }
+  }
+}

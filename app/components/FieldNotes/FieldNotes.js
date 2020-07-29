@@ -157,6 +157,8 @@ const FieldNotes = ({
           <li>
             <button 
               className={ cx({
+                'btn': true,
+                'btn-success': true,
                 'add-button': true,
                 'is-disabled': !validateNote(textAreaText)
               }) } 

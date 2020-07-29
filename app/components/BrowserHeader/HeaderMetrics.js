@@ -6,7 +6,7 @@ import { formatCounter } from '../../utils/misc'
 const HeaderMetrics = ({ status }) => {
   const { ready } = status && status.corpus
   const { formatMessage } = useIntl()
-  
+
 
   const counters = status.corpus.traph.webentities
 
@@ -16,7 +16,7 @@ const HeaderMetrics = ({ status }) => {
   useEffect(() => {
     setChanged(
       USED_STACKS.reduce((res, stack) =>({
-        ...res, 
+        ...res,
         [stack.id]: counters[stack.id] !== statuses[stack.id]
       }), {})
     )
@@ -32,13 +32,14 @@ const HeaderMetrics = ({ status }) => {
       {
         USED_STACKS.map((stack, index) => {
           return (
-            <li 
-              key={ index } 
+            <li
+              key={ index }
               className="hint--bottom"
               aria-label={ `${counters[stack.id]} ${formatMessage({ id: `tooltip.stack-counter.${stack.id}` })}` }
             >
-              <i className={ `metrics-icon ti-layout-column3-alt ${stack.value} ${changed[stack.id] ? 'changed' : ''}` } />
-              <span className={ `metrics  ${changed[stack.id] ? 'changed' : ''}` }><span>{formatCounter(counters[stack.id])}</span> <label>{stack.label}</label>
+              <span className={ `metrics  ${changed[stack.id] ? 'changed' : ''}` }>
+                <i className={ `metrics-icon ti-layout-column3-alt ${stack.value}` } />
+                <span>{formatCounter(counters[stack.id])}</span> <label>{stack.label}</label>
               </span>
             </li>
           )

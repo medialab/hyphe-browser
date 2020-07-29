@@ -1,38 +1,53 @@
 import './login.styl'
 
 import React from 'react'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
-import { deselectServer, deleteServer } from '../../actions/servers'
+import { selectServer, deselectServer, deleteServer, fetchCloudServerStatus } from '../../actions/servers'
 
 import LogoTitle from '../../components/LogoTitle'
 import ServerSelect from '../../components/ServerSelect'
-
+import ServerSumup from './ServerSumup'
 
 class Login extends React.Component {
   componentDidMount () {
-    this.refreshStatusAndCorpora()
-  }
-
-  componentWillReceiveProps ({ selectedServer }) {
-    if ((selectedServer !== this.props.selectedServer) && selectedServer && selectedServer.url) {
-      this.refreshStatusAndCorpora(selectedServer.url)
+    if (this.props.selectedServer) {
+      this.selectOption(this.props.selectedServer.url, true)
     }
   }
 
-  refreshStatusAndCorpora (url) {
-    const { fetchCorpora, fetchServerStatus, deselectServer, history } = this.props
+  selectOption (url, force) {
+    if (!force && url === (this.props.selectedServer || {}).url) return
+
+    const {
+      fetchCorpora, fetchServerStatus, fetchCloudServerStatus,
+      selectServer, deselectServer, history
+    } = this.props
     const { push: routerPush } = history
-    if (url === 'add') {
+
+    if (url === 'add' || url === 'create') {
       deselectServer()
-      routerPush('/login/server-form')
+      routerPush(url === 'add' ? '/login/server-form' : '/login/create-form')
       return
     }
 
-    if (url) {
+    const server = this.props.servers.find(data => data.url === url)
+
+    if (!url || !server) return
+
+    selectServer(server)
+
+    if (server.cloud && server.cloud.installed) {
+      fetchCloudServerStatus(server)
+        .then(() => fetchServerStatus(url))
+        .then(({ payload }) => {
+          if (!payload.error) return fetchCorpora(url)
+        })
+    } else {
       fetchServerStatus(url)
         .then(({ payload }) => {
           if (!payload.error) return fetchCorpora(url)
@@ -40,47 +55,17 @@ class Login extends React.Component {
     }
   }
 
-  renderServerSelect () {
-    const { selectedServer, servers, location } = this.props
-    const { formatMessage } = this.props.intl
-
-    const options = servers.map((s) => ({
-      label: `${s.name} (${s.url})`,
-      value: s.url,
-      key: s.url
-    }))
-
-    // add default option only when no server selected
-    if (!selectedServer || !selectedServer.url) {
-      options.unshift({
-        label: formatMessage({ id: 'select-server' }),
-        value: '',
-        key: 'default'
-      })
-    }
-
-    options.push({
-      label: formatMessage({ id: 'server-add' }),
-      value: 'add',
-      key: 'server-add'
-    })
-
+  isLarge () {
+    const { selectedServer, location } = this.props
     return (
-      <select
-        autoFocus
-        value = { selectedServer ? selectedServer.url : '' }
-        disabled={ location.pathname !== '/login' }
-        onChange={ (evt) => { if (evt.target.value) this.refreshStatusAndCorpora(evt.target.value) } }
-      >
-        { options.map((o) => <option key={ o.key + o.label } value={ o.value }>{ o.label }</option>) }
-      </select>
+      location.pathname === '/login/create-form' || (selectedServer && selectedServer.cloud && !selectedServer.cloud.installed)
     )
   }
 
   render () {
-    const { 
-      selectedServer, 
-      location, 
+    const {
+      selectedServer,
+      location,
       servers,
       history,
       deleteServer
@@ -99,29 +84,31 @@ class Login extends React.Component {
       deleteServer(selectedServer)
       this.props.history.push('/login')
     }
+
     return (
       <div className="login">
         <main className="login-container">
           <LogoTitle />
-          <div className="config-container">
+          <div className={ cx('config-container', this.isLarge() && 'large') }>
             {
               location.pathname === '/login' &&
               <div className="server-container">
                 <h3 className="section-header"><T id="choose-hyphe-server" /></h3>
                 <ServerSelect
                   { ...{
-                    selectedServer, 
-                    servers, 
+                    selectedServer,
+                    servers,
                     location,
                   } }
                   isDisabled={ location.pathname !== '/login' }
-                  onChange={ url => this.refreshStatusAndCorpora(url) }
+                  onChange={ url => this.selectOption(url) }
                   onEdit={ handleEditServer }
                   onForget={ handleForget }
                 />
+                <ServerSumup />
               </div>
             }
-            
+
             { this.props.children}
           </div>
         </main>
@@ -140,6 +127,7 @@ Login.propTypes = {
   history: PropTypes.object,
 
   // actions
+  selectServer: PropTypes.func,
   deselectServer: PropTypes.func,
   fetchCorpora: PropTypes.func,
   fetchServerStatus: PropTypes.func,
@@ -154,9 +142,11 @@ const mapStateToProps = ({ servers, intl: { locale } }) => ({
 })
 
 const mapDispatchToProps = {
+  selectServer,
   deselectServer,
   fetchCorpora,
   fetchServerStatus,
+  fetchCloudServerStatus,
   deleteServer,
 }
 

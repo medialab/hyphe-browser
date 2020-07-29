@@ -23,7 +23,8 @@ const slicer = () => (state) =>
     corpora: {
       navigationHistory: state.corpora.navigationHistory,
       searchEngines: state.corpora.searchEngines
-    }
+    },
+    cloud: state.cloud
   })
 
 export const history = createHashHistory()

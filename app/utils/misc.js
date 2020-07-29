@@ -1,5 +1,3 @@
-
-
 export const formatCounter = nb => {
   if (nb < 1000) {
     return nb
@@ -12,4 +10,19 @@ export const ellipseStr = (str, limit = 150) => {
     return str.substr(0, limit - 3) + '...'
   }
   return str
+}
+
+/**
+ * This function uses the Selection API to select the whole text content of a
+ * DOM node.
+ * @param domNode DOMElement
+ */
+export function selectNode (domNode) {
+  const range = document.createRange()
+  range.setStartBefore(domNode)
+  range.setEndAfter(domNode)
+
+  const selection = window.getSelection()
+  selection.removeAllRanges()
+  selection.addRange(range)
 }

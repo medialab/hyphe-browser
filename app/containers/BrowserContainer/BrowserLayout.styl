@@ -23,16 +23,19 @@ input
     height: 100%
     @media (max-width: $tablet-break-point)
         height: 30px
-.mode-btn:last-of-type
-    margin-right: 0
-.mode-btn.is-active
-    button('active')
-    font-family: var(--font-mont)
-    margin-right: 0
-    padding: 10px
-.mode-btn[disabled]
-    opacity: 0.5
-    pointer-events: none
+    &:last-of-type
+        margin-right: 0
+    &.is-active
+        button('active')
+        font-family: var(--font-mont)
+        margin-right: 0
+        padding: 10px
+        cursor: default
+    &[disabled]
+        opacity: 0.5
+        pointer-events: none
+    &:not(.is-active):hover
+        background: var(--color-grey-darker)
 
 .help-pin
     padding-left: .2em
@@ -173,4 +176,6 @@ input
         &.UNDECIDED
             background: var(--color-corpus-undecided)
         i 
-            padding-left: 1px
+            padding-left: 0
+            position: relative
+            top: -1px

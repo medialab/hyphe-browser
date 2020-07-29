@@ -15,6 +15,7 @@
         justify-content: center
         align-items: center
         padding-right: 10px
+        position : relative
         .status-marker
             border-radius: 50%
             position : relative
@@ -32,6 +33,16 @@
                 background: var(--color-corpus-out)
             &.undecided
                 background: var(--color-corpus-undecided)
+            &.merged
+                background: grey
+            &.previous-status
+                width: 5px
+                height: 5px
+                font-size: 10px
+                margin-bottom: 5px
+                position: absolute
+                top: -5px
+                left: -5px
         .viewed-marker
             border-radius: 50%
             position : relative
@@ -52,22 +63,23 @@
         flex: 1
         max-width: 40%
         .name
-            font-size: 14px
             padding: 0
             margin: 0
+            font-size: 14px
             font-weight: bold
-            overflow: ellipsis
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
         .url
             font-size: 11px
             margin: 0
             margin-bottom: 10px
             margin-top: 5px
             text-decoration: underline
-            max-height: 1.2em;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            max-width: 200px;
+            max-height: 1.2em
+            text-overflow: ellipsis
+            white-space: nowrap
+            overflow: hidden
         .statistics
             font-size: 10px
             flexStretch()
@@ -101,6 +113,9 @@
                     button('active')
                     background: var(--color-black)
                     padding: 7px
+            &.tooltipable-placeholder
+                .btn,.btn:hover
+                    background: var(--color-grey-darker)
     @media (max-width: $tablet-break-point)
         flex-direction: column
         .card-actions

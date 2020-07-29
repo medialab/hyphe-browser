@@ -1,11 +1,10 @@
 import './EntityCard.styl'
 
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import cx from 'classnames'
 
 import { FormattedMessage as T, useIntl } from 'react-intl'
 import Tooltipable from '../Tooltipable'
-import { ellipseStr } from '../../utils/misc'
 
 const EntityCard = ({
   link,
@@ -22,10 +21,19 @@ const EntityCard = ({
   onClickOut,
   onClickUndecided,
 }) => {
-  const { status, name, homepage, indegree, viewed } = link
+  const { status, name, homepage, indegree, viewed, previousStatus } = link
   const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
+  const [wrapperWidth, setWrapperWidth] = useState(null)
+  const wrapperRef = useRef(null)
+
   const { formatMessage } = useIntl()
 
+  useEffect(() => {
+    const wrapperBox = wrapperRef && wrapperRef.current && wrapperRef.current.getBoundingClientRect()
+    setWrapperWidth(wrapperBox.width)
+  }, [])
+
+  const prevStatus = previousStatus && (previousStatus === 'DISCOVERED' ? 'prospection' : previousStatus.toLowerCase())
   return (
     <li
       className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
@@ -35,11 +43,22 @@ const EntityCard = ({
       {displayStatus
       &&
       <div className={ 'status-marker-container' }>
+        {
+          previousStatus && previousStatus !== status &&
+          <span
+            className={ `status-marker previous-status ${previousStatus.toLowerCase()} hint--right` }
+            aria-label={ formatMessage({ id: 'webentity-is-previous-in-list' },{ list: prevStatus.toUpperCase() }) }
+          >
+            {prevStatus.charAt(0).toUpperCase()}
+          </span>
+        }
         <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ formatMessage({ id: 'webentity-is-in-list' },{ list: formattedStatus.toUpperCase() }) }>{formattedStatus.charAt(0).toUpperCase()}</span>
         {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
-      <div className="card-content">
-        <h4 aria-label={ name } className="name hint--bottom">{ellipseStr(name, 25)}</h4>
+      <div ref={ wrapperRef } className="card-content">
+        <div aria-label={ name } className="name-wrapper hint--bottom">
+          <h4 style={ { width: wrapperWidth } } className="name">{name}</h4>
+        </div>
         <h5 className="url">{homepage}</h5>
         {
           !!indegree &&

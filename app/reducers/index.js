@@ -11,6 +11,7 @@ import stacks from './stacks'
 import tabs from './tabs'
 import ui from './ui'
 import webentities from './webentities'
+import cloud from './cloud'
 
 // returns the rootReducer
 const createRootReducer = ( history ) => combineReducers({
@@ -22,6 +23,7 @@ const createRootReducer = ( history ) => combineReducers({
   tabs,
   ui,
   webentities,
+  cloud,
   router: connectRouter(history),
 })
 

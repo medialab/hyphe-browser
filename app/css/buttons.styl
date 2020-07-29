@@ -13,6 +13,11 @@
   &.is-disabled
     pointer-events: none
     opacity: .5
+  &:not(.is-active):not(.is-selected)
+    &:hover:not([disabled])
+      background: var(--color-grey-darker)
+    &.btn-success:hover:not([disabled])
+      background: var(--color-black)
 
   span, span::before
     cursor: pointer;

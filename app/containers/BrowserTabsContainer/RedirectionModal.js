@@ -1,5 +1,7 @@
 import './RedirectionModal.styl'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { FormattedMessage } from 'react-intl'
+
 import Modal from 'react-modal'
 import PrefixSetter from '../../components/PrefixSetter'
 import cx from 'classnames'
@@ -22,6 +24,61 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
     }
   })
 }
+
+const MergeReverse = ({
+  webentity,
+  url,
+  tlds,
+  originalWebentity,
+  onSetPrefixes
+}) => {
+
+  const longestLru = useMemo(
+    () => longestMatching(webentity.prefixes, url, tlds).lru,
+    [webentity.prefixes, url, tlds]
+  )
+  const prefixes = useMemo(
+    () => parsePrefixes(lruObjectToString(longestLru), url, true, tlds),
+    [longestLru, url, tlds]
+  )
+
+  const initialPrefix = useMemo(
+    () => prefixes
+      .filter(({ selected }) => selected)
+      .reduce((prev, part) => `${prev}${part.name}|`, '')
+  )
+  const handleSetPrefix = (prefix) => {
+    setPrefixUrl(lruToUrl(prefix))
+    onSetPrefixes(lruVariations(prefix))
+  }
+
+  const [prefixUrl, setPrefixUrl] = useState(lruToUrl(initialPrefix))
+
+  useEffect(() => {
+    onSetPrefixes(lruVariations(initialPrefix))
+  },[])
+
+  return (
+    <div>
+      <p>
+        <FormattedMessage
+          id="redirect-modal.step-2-merge-reverse-description"
+          values={ {
+            webentity: webentity.name,
+            originalWebentity: originalWebentity.name,
+            url: prefixUrl,
+            code: (url) => <code>{url}</code>,
+            strong: (name) => <strong>{name}</strong>
+          } }
+        />
+      </p>
+      <PrefixSetter
+        parts={ prefixes }
+        setPrefix={ handleSetPrefix }
+      />
+    </div>
+  )
+}
 const RedirectionModal = ({
   isOpen,
   // onClose,
@@ -33,7 +90,7 @@ const RedirectionModal = ({
 
   const [redirectionDecision, onSetRedirectionDecision] = useState(null)
   const [mergeDecision, onSetMergeDecision] = useState(null)
-  const [lruPrefixes, setLruPrefixes] = useState(redirectWebentity.prefixes)
+  const [lruPrefixes, setLruPrefixes] = useState(null)
 
   const handleDeny = () => {
     onSetRedirectionDecision(false)
@@ -47,31 +104,6 @@ const RedirectionModal = ({
       prefixes: lruPrefixes
     })
   }
-  const handleSetPrefix = (prefix) => {
-    setPrefixUrl(lruToUrl(prefix))
-    setLruPrefixes(lruVariations(prefix))
-  }
-
-  const longestLru = useMemo(
-    () => longestMatching(redirectWebentity.prefixes, redirectUrl, tlds).lru,
-    [redirectWebentity.prefixes, redirectUrl, tlds]
-  )
-  const prefixes = useMemo(
-    () => parsePrefixes(lruObjectToString(longestLru), redirectUrl, true, tlds),
-    [longestLru, redirectUrl, tlds]
-  )
-
-  const initialPrefix = useMemo(
-    () => prefixes
-      .filter(({ selected }) => selected)
-      .reduce((prev, part) => `${prev}${part.name}|`, '')
-  )
-
-  const [prefixUrl, setPrefixUrl] = useState(lruToUrl(initialPrefix))
-
-
-  // const longestLru = longestMatching(redirectWebentity.prefixes, redirectUrl, tlds).lru
-  // const prefixes = parsePrefixes(lruObjectToString(longestLru), redirectUrl, true, tlds)
 
   return (
     <Modal
@@ -92,41 +124,84 @@ const RedirectionModal = ({
     >
       <div className="new-entity-modal-container">
         <div className="modal-header">
-          <h2><span>This page requests a redirection</span>
+          <h2><span><FormattedMessage id="redirect-modal.title" /></span>
             {/* <i onClick={ onClose } className="ti-close" /> */}
           </h2>
         </div>
         <div className="modal-body">
           <div className="explanation-text">
-            The webpage <code>{originalWebentity.homepage}</code> (belonging to webentity <strong>{originalWebentity.name}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (belonging to webentity <strong>{redirectWebentity.name}</strong>)
+            <FormattedMessage
+              id="redirect-modal.description"
+              values={ {
+                originalUrl: originalWebentity.homepage,
+                originalWebentity: originalWebentity.name,
+                redirectUrl,
+                redirectWebentity: redirectWebentity.name,
+                code: (url) => <code>{url}</code>,
+                strong: (name) => <strong>{name}</strong>
+              } }
+            />
           </div>
 
           <div className={ cx('step-container') }>
-            <h3>What should we do regarding the redirection ?</h3>
+            <h3><FormattedMessage id="redirect-modal.step-1-title" /></h3>
             <ul className="actions-container big">
-              <li><button onClick={ handleDeny } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }>deny redirection</button></li>
-              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }>accept redirection</button></li>
+              <li><button onClick={ handleDeny } className={ cx('btn', { 'btn-success': redirectionDecision === false }) }><FormattedMessage id="redirect-modal.step-1-refuse" /></button></li>
+              <li><button onClick={ () => onSetRedirectionDecision(true) }  className={ cx('btn', { 'btn-success': redirectionDecision === true }) }><FormattedMessage id="redirect-modal.step-1-accept" /></button></li>
             </ul>
           </div>
           {
             redirectionDecision === true &&
             <div className={ cx('step-container') }>
-              <h3>What should we do with the source with the two webentities ?</h3>
+              <h3><FormattedMessage id="redirect-modal.step-2-title" /></h3>
               <ul className="actions-container big column">
-                <li><button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>move <strong>{ originalWebentity.name }</strong> webentity to OUT list</button></li>
-                <li><button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>merge <strong>{ originalWebentity.name }</strong>  within the <strong>{redirectWebentity.name}</strong> </button></li>
                 <li>
-                  <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>merge <strong>{ redirectWebentity.name }</strong>  within the <strong>{ originalWebentity.name }</strong> </button>
+                  <button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>
+                    <FormattedMessage
+                      id="redirect-modal.step-2-out"
+                      values={ {
+                        originalWebentity: originalWebentity.name,
+                        strong: (name) => <strong>{name}</strong>
+                      } }
+                    />
+                  </button>
                 </li>
+                <li>
+                  <button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>
+                    <FormattedMessage
+                      id="redirect-modal.step-2-merge"
+                      values={ {
+                        originalWebentity: originalWebentity.name,
+                        redirectWebentity: redirectWebentity.name,
+                        strong: (name) => <strong>{name}</strong>
+                      } }
+                    />
+                  </button>
+                </li>
+                {longestMatching(redirectWebentity.prefixes, redirectUrl, tlds) &&
+                  <li>
+                    <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>
+                      <FormattedMessage
+                        id="redirect-modal.step-2-merge-reverse"
+                        values={ {
+                          originalWebentity: originalWebentity.name,
+                          redirectWebentity: redirectWebentity.name,
+                          strong: (name) => <strong>{name}</strong>
+                        } }
+                      />
+                    </button>
+                  </li>
+                }
               </ul>
               {mergeDecision === 'MERGE-REVERSE' &&
-                <div>
-                  <p>Choose the level of prefix (<code>{prefixUrl}</code>) to add to <strong>{ originalWebentity.name }</strong>:</p>
-                  <PrefixSetter
-                    parts={ prefixes }
-                    setPrefix={ handleSetPrefix }
-                  />
-                </div>}
+                <MergeReverse
+                  webentity={ redirectWebentity }
+                  originalWebentity={ originalWebentity }
+                  url={ redirectUrl }
+                  tlds={ tlds }
+                  onSetPrefixes={ setLruPrefixes }
+                />
+              }
             </div>
           }
         </div>
@@ -137,7 +212,9 @@ const RedirectionModal = ({
               <button
                 onClick={ handleDecision }
                 disabled={ redirectionDecision === null || redirectionDecision && !mergeDecision }
-                className="btn btn-success">validate this decision</button>
+                className="btn btn-success">
+                <FormattedMessage id="redirect-modal.confirm" />
+              </button>
             </li>
           </ul>
         </div>

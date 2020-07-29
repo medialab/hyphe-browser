@@ -29,7 +29,7 @@ class BrowserTab extends React.Component {
     }
 
     const duplicate = () => {
-      this.props.openTab(this.props.url, this.props.id)
+      this.props.openTab({ url: this.props.url, activeTabId: this.props.id })
     }
 
     const close = () => {

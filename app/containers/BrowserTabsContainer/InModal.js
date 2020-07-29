@@ -1,7 +1,10 @@
-import React, { useRef, useEffect, useCallback, useReducer, useMemo } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
+import React, { useRef, useState, useEffect, useCallback, useReducer, useMemo } from 'react'
+import { FormattedMessage , useIntl } from 'react-intl'
 import Modal from 'react-modal'
 import cx from 'classnames'
+
+import { FixedSizeList as List } from 'react-window'
+import  AutoSizer from 'react-virtualized-auto-sizer'
 
 import isNumber from 'lodash/fp/isNumber'
 import initial from 'lodash/fp/initial'
@@ -10,7 +13,6 @@ import dropRightWhile from 'lodash/fp/dropRightWhile'
 import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
 import PrefixSetter from '../../components/PrefixSetter'
-import CardsList from '../../components/CardsList'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
 import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
 
@@ -31,26 +33,62 @@ const PagesList = ({
   setSelectedPage,
   pages,
   isPaginating,
+  paginatePages,
   totalPages
-}) => (
-  <CardsList
-    displayLoader={ isPaginating }
-    count={ pages.length }
-    total={ totalPages }>
-    { pages.map((link, index) => {
-      return (
+}) => {
+
+  const listContainer = useRef(null)
+  const [containerHeight, setContainerHeight] = useState(0)
+
+  useEffect(() => {
+    if (listContainer && listContainer.current) {
+      const height = window.getComputedStyle(listContainer.current).getPropertyValue('max-height').replace('px', '')
+      setContainerHeight(parseInt(height))
+    }
+  })
+
+  const Row = ({ index, style }) => {
+    const link = pages[index]
+    return (
+      <div style={ style }>
         <KnownPageCard
+          key={ index }
           isActive={ index === selectedPage }
           onClick={ () => setSelectedPage(index) }
-          key={ index }
           { ...link }
           innerWidth={ 560 }
           displayHomePageButton={ false }
         />
-      )
-    }) }
-  </CardsList>
-)
+      </div>
+    )
+  }
+
+  return (
+    <div className="pages-list">
+      <ul className="pages-container" ref={ listContainer }>
+        <AutoSizer disableHeight>
+          {({ width }) => (
+            <List
+              height={ (pages.length * 46 < containerHeight) ? pages.length * 46 : containerHeight }
+              width={ width }
+              itemCount={ pages.length }
+              itemSize={ 46 } // check stylesheet
+            >
+              {Row}
+            </List>
+          )}
+        </AutoSizer>
+      </ul>
+      {
+        isPaginating &&
+        <div className="pages-list-loader">
+          <FormattedMessage id="loading" />
+          <span> ({ paginatePages } / { totalPages } webpages)</span>
+        </div>
+      }
+    </div>
+  )
+}
 
 const Prefixes = (props) => {
   return (
@@ -309,6 +347,7 @@ const EntityModal = ({
                 <PagesList
                   pages={ pagesList }
                   isPaginating={ webentity.token }
+                  paginatePages={ webentity.paginatePages.length }
                   totalPages={ webentity.pages_total }
                   selectedPage={ state.selectedPage }
                   setSelectedPage={ setPage }
