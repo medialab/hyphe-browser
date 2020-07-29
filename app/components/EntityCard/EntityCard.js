@@ -44,7 +44,7 @@ const EntityCard = ({
       &&
       <div className={ 'status-marker-container' }>
         {
-          prevStatus &&
+          previousStatus && previousStatus !== status &&
           <span
             className={ `status-marker previous-status ${previousStatus.toLowerCase()} hint--right` }
             aria-label={ formatMessage({ id: 'webentity-is-previous-in-list' },{ list: prevStatus.toUpperCase() }) }
