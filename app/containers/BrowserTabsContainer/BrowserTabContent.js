@@ -470,9 +470,9 @@ class BrowserTabContent extends React.Component {
             onSetTabUrl={ handleSetTabUrl }
           /> :
           <div className="webview-container">
-            <WebView
+            {/* <WebView
               id={ id } url={ url } closable={ closable } eventBus={ eventBus }
-            />
+            /> */}
             {this.state.showSearchBar &&
               <SearchBar
                 id={ id }

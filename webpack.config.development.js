@@ -1,35 +1,72 @@
-'use strict';
+const webpack = require('webpack')
 
-var webpack = require('webpack')
-var webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
-var baseConfig = require('./webpack.config.base')
+module.exports = {
 
+  mode: 'development',
 
-var config = Object.assign({}, baseConfig)
+  target: 'electron-main',
 
-config.mode = 'development'
+  entry: './app/index.js',
 
-config.devtool = 'cheap-module-eval-source-map'
+  output: {
+    path: __dirname + '/dist',
+    publicPath: 'http://localhost:3000/dist/',
+    filename: 'bundle.js',
+  },
 
-config.entry = [
-  'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
-  './app/index'
-]
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: true
+          },
+        },
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader'
+          },
+          {
+            loader: 'markdown-loader'
+          }
+        ]
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
+        loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
+      }
+    ]
+  },
 
-config.output.publicPath = 'http://localhost:3000/dist/'
+  devtool: 'cheap-module-eval-source-map',
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
+    })
+  ],
 
-config.plugins.push(
-  new webpack.NamedModulesPlugin(),
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.DefinePlugin({
-    '__DEV__': true,
-    'process.env': {
-      'NODE_ENV': JSON.stringify('development'),
-      'DIRECT_ACCESS_CORPUS_TEST': JSON.stringify(process.env.DIRECT_ACCESS_CORPUS_TEST)
-    }
-  })
-)
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    },
+    extensions: ['.js', '.json', '.jsx', '.styl', 'css']
+  }
 
-config.target = 'electron-renderer'
-
-module.exports = config
+}

@@ -13,21 +13,9 @@ if (isPackaged) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  require('react-devtools-electron')
   require('electron-debug')({
     showDevTools: true
   })
-
-  // Devtools & electron versions are out sync and are no longer compatible on some os (ae linux).
-  // const devtools = require('electron-devtools-installer')
-
-  // app.on('ready', () => {
-  //   [ 'REDUX_DEVTOOLS' ].forEach(t => {
-  //     devtools.default(devtools[t])
-  //       .then(name => console.log(`Added Extension:  ${name}`)) // eslint-disable-line no-console
-  //       .catch(err => console.error('An error occurred during redux devtools install: ', err)) // eslint-disable-line no-console
-  //   })
-  // })
 
   // this was introduced by @mydu for some reason at one point
   // but it breaks sigma.js integration, so commenting it for now
@@ -48,6 +36,9 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => {
   window = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true
+    },
     center: true,
     width: 1024,
     height: 728,
@@ -69,6 +60,12 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'development') {
     require('./dev-server')
     window.loadURL('file://' + __dirname + '/app/index-dev.html')
+
+    // electron-devtools-installer is not compatible electron 9
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer')
+    installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS])
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err))
   } else {
     window.loadURL('file://' + __dirname + '/app/index.html')
   }

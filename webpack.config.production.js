@@ -1,45 +1,68 @@
-'use strict'
+const webpack = require('webpack')
 
-var webpack = require('webpack')
-// var webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
-var baseConfig = require('./webpack.config.base')
+module.exports = {
 
-var config = Object.assign({}, baseConfig)
+  mode: 'production',
 
-config.mode = 'production';
+  target: 'electron-main',
 
-config.devtool = 'source-map'
+  entry: './app/index.js',
 
-config.entry = './app/index'
+  output: {
+    path: __dirname + '/dist',
+    publicPath: '/dist/',
+    filename: 'bundle.js',
+  },
 
-config.output.publicPath = '/dist/'
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: true
+          },
+        },
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader'
+          },
+          {
+            loader: 'markdown-loader'
+          }
+        ]
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg|jpeg)$/,
+        loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
+      }
+    ]
+  },
 
-/*
-config.module.loaders.push({
-  test: /^((?!\.module).)*\.css$/,
-  loader: ExtractTextPlugin.extract(
-    'style-loader',
-    'css-loader'
-  )
-}, {
-  test: /\.module\.css$/,
-  loader: ExtractTextPlugin.extract(
-    'style-loader',
-    'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-  )
-})
-*/
 
-config.plugins.push(
-  // new webpack.optimize.OccurenceOrderPlugin(),
-  new webpack.DefinePlugin({
-    '__DEV__': false,
-    'process.env': {
-      'NODE_ENV': JSON.stringify('production')
-    }
-  })
-)
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    })
+  ],
 
-config.target = 'electron-renderer'
+  resolve: {
+    extensions: ['.js', '.json', '.jsx', '.styl', 'css']
+  }
 
-module.exports = config
+}

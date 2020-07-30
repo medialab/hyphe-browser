@@ -1,5 +1,5 @@
 import './css/style'
-import './css/themify-icons'
+import './css/themify-icons.css'
 import './css/helpers.styl'
 
 import { hot } from 'react-hot-loader'
