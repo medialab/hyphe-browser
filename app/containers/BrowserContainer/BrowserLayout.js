@@ -115,11 +115,10 @@ const BrowserLayout = ({
         </div>
       }
 
-      {/* <HypheView
-        style={ browserMode === 'hyphe' ? {} : { display: 'none' } }
+      <HypheView
         isHypheView={ browserMode === 'hyphe' }
         url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe }
-      /> */}
+      />
     </div>
   )
 }

@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import once from 'lodash/once'
 
+import BrowserView from 'react-electron-browser-view'
+
 import { DEBUG_WEBVIEW } from '../../constants'
 import Spinner from '../../components/Spinner'
+import { injectIntl } from 'react-intl'
 
 const HypheView = ({
   url,
-  style,
   isHypheView,
   onOpenTabFromHyphe
 }) => {
@@ -17,63 +19,35 @@ const HypheView = ({
   useEffect(() => {
     const webview = webviewRef.current
 
-    const inejectStyle = once(() => {
-      webview.executeJavaScript(`
-        const style = document.createElement('style');
-        style.textContent = ".topbar-project button, .topbar-project .flex, #hybro-link, .no-hybro { display: none !important; }";
-        document.head.append(style);
-        console.log(style);
-      `)
-    })
-
-    webview.addEventListener('did-start-loading', () => {
-      setLoading(true)
-    })
-    webview.addEventListener('did-stop-loading', () => {
-      setLoading(false)
-      inejectStyle()
-
-      webview.executeJavaScript(
-        // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
-        "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; "
-      )
-    })
-
-    webview.addEventListener('new-window', ({ url }) => {
-      if (!onOpenTabFromHyphe(url)) {
-        webview.executeJavaScript(
-          `window.history.pushState({}, 'Hyphe', '${url}')`
-        )
-      }
-    })
-
-    if (DEBUG_WEBVIEW) {
-      webview.addEventListener('console-message', (e) => {
-        console.log('[HypheView console]', e.message) // eslint-disable-line no-console
-      })
-    }
-  
-  }, [])
-  
-  // reload hyphe if is network page
-  useEffect(() => {
-    const webview = webviewRef.current
-
-    if (isHypheView && webview.src === url) {
+    if (isHypheView && webview.getURL() === url) {
       webview.reload()
     }
   }, [isHypheView])
 
+  const handleOpenWindow = (event, url) => {
+    event.preventDefault()
+    onOpenTabFromHyphe(url)
+  }
+
+  const handleFinishLoad = () => {
+    const webview = webviewRef.current
+    webview.insertCSS('.topbar-project button, .topbar-project .flex, #hybro-link, .no-hybro { display: none !important; }')
+  }
+
   return (
-    <div className="hyphe-view-container" style={ style }>
+    <div className="hyphe-view-container" style={ isHypheView ? {} : { display: 'none' } }>
       {loading &&
         <div className="spinner-container">
           <Spinner />
         </div>
       }
-      <webview
-        ref={ webviewRef }
+      <BrowserView
         src={ url }
+        ref={ webviewRef }
+        onDidStartLoading={ () => setLoading(true) }
+        onDidStopLoading={ () => setLoading(false) }
+        onDidFinishLoad={ handleFinishLoad }
+        onNewWindow={ handleOpenWindow }
       />
     </div>
   )
