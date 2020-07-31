@@ -4,7 +4,7 @@ module.exports = {
 
   mode: 'production',
 
-  target: 'electron-main',
+  target: 'electron-renderer',
 
   entry: './app/index.js',
 

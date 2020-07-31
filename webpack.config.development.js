@@ -4,9 +4,12 @@ module.exports = {
 
   mode: 'development',
 
-  target: 'electron-main',
+  target: 'electron-renderer',
 
-  entry: './app/index.js',
+  entry: [
+    'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
+    './app/index.js'
+  ],
 
   output: {
     path: __dirname + '/dist',
