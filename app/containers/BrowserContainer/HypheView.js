@@ -1,12 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import once from 'lodash/once'
 
 import BrowserView from 'react-electron-browser-view'
 
-import { DEBUG_WEBVIEW } from '../../constants'
 import Spinner from '../../components/Spinner'
-import { injectIntl } from 'react-intl'
 
 const HypheView = ({
   url,
@@ -55,7 +52,6 @@ const HypheView = ({
 
 HypheView.propTypes = {
   url: PropTypes.string.isRequired,
-  style: PropTypes.object,
   isHypheView: PropTypes.bool.isRequired,
   onOpenTabFromHyphe: PropTypes.func.isRequired,
 }
