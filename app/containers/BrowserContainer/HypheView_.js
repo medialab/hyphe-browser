@@ -52,9 +52,9 @@ const HypheView = ({
         console.log('[HypheView console]', e.message) // eslint-disable-line no-console
       })
     }
-
+  
   }, [])
-
+  
   // reload hyphe if is network page
   useEffect(() => {
     const webview = webviewRef.current

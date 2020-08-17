@@ -113,7 +113,6 @@
     "react-autosize-textarea": "^7.1.0",
     "react-dom": "^16.13.1",
     "react-draggable": "^3.3.2",
-    "react-electron-browser-view": "^3.0.0",
     "react-infinite": "^0.13.0",
     "react-intl": "^3.12.1",
     "react-modal": "^3.11.2",

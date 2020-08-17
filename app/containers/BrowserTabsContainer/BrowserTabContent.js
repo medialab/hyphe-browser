@@ -469,10 +469,10 @@ class BrowserTabContent extends React.Component {
             onChangeEngine = { onChangeEngine }
             onSetTabUrl={ handleSetTabUrl }
           /> :
-          <div className="webview-container">
-            {/* <WebView
+          <div className="webview-container" >
+            <WebView
               id={ id } url={ url } closable={ closable } eventBus={ eventBus }
-            /> */}
+            />
             {this.state.showSearchBar &&
               <SearchBar
                 id={ id }

@@ -116,6 +116,7 @@ const BrowserLayout = ({
       }
 
       <HypheView
+        style={ browserMode === 'hyphe' ? {} : { display: 'none' } }
         isHypheView={ browserMode === 'hyphe' }
         url={ hypheUrl } onOpenTabFromHyphe={ handleOpenTabFromHyphe }
       />

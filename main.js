@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 
   // this was introduced by @mydu for some reason at one point
   // but it breaks sigma.js integration, so commenting it for now
-  // app.disableHardwareAcceleration()
+  app.disableHardwareAcceleration()
 }
 
 let window
@@ -37,7 +37,8 @@ app.on('window-all-closed', () => {
 app.on('ready', () => {
   window = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webviewTag: true
     },
     center: true,
     width: 1024,

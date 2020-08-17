@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ipcRenderer as ipc } from 'electron'
-import { removeViews } from 'react-electron-browser-view'
 
 import Spinner from '../../components/Spinner'
 import CorpusStatusWatcher from './CorpusStatusWatcher'
@@ -33,7 +32,6 @@ class BroswerContainer extends React.Component {
 
   componentWillUnmount () {
     ipc.send('corpusClosed')
-    removeViews()
   }
 
   downloadWebentities = (list, listName, fileFormat) => {
