@@ -28,10 +28,6 @@ class App extends React.Component {
     }
     ipc.on('setLocale', this.ipcSetLocale)
     ipc.send('appMount', this.props.locale)
-  } 
-
-  componentWillUnmount () {
-    ipc.send('appUnmount', this.props.locale)
   }
 
   render () {

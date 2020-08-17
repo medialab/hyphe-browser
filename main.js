@@ -19,15 +19,15 @@ if (process.env.NODE_ENV === 'development') {
   })
 
   // Devtools & electron versions are out sync and are no longer compatible on some os (ae linux).
-  // const devtools = require('electron-devtools-installer')
+  const devtools = require('electron-devtools-installer')
 
-  // app.on('ready', () => {
-  //   [ 'REDUX_DEVTOOLS' ].forEach(t => {
-  //     devtools.default(devtools[t])
-  //       .then(name => console.log(`Added Extension:  ${name}`)) // eslint-disable-line no-console
-  //       .catch(err => console.error('An error occurred during redux devtools install: ', err)) // eslint-disable-line no-console
-  //   })
-  // })
+  app.on('ready', () => {
+    [ 'REDUX_DEVTOOLS' ].forEach(t => {
+      devtools.default(devtools[t])
+        .then(name => console.log(`Added Extension:  ${name}`)) // eslint-disable-line no-console
+        .catch(err => console.error('An error occurred during redux devtools install: ', err)) // eslint-disable-line no-console
+    })
+  })
 
   // this was introduced by @mydu for some reason at one point
   // but it breaks sigma.js integration, so commenting it for now
@@ -35,10 +35,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let window
-const menuSetting = {
-  enableLanguage: false,
-  enableDownload: false
-}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -61,7 +57,7 @@ app.on('ready', () => {
         value = JSON.parse(value)
         if (!value.options) return
         if (!value.options['locale']) return
-        const menu = getNewMenuBar(value.options['locale'], menuSetting)
+        const menu = getNewMenuBar(value.options['locale'])
         Menu.setApplicationMenu(menu)
       })
   })
@@ -80,19 +76,12 @@ app.on('ready', () => {
   })
 
   ipc.on('appMount', (e, locale) => {
-    menuSetting.enableLanguage = true
-    const menu = getNewMenuBar(locale, menuSetting)
-    Menu.setApplicationMenu(menu)
-  })
-
-  ipc.on('appUnmount', (e, locale) => {
-    menuSetting.enableLanguage = false
-    const menu = getNewMenuBar(locale, menuSetting)
+    const menu = getNewMenuBar(locale)
     Menu.setApplicationMenu(menu)
   })
 
   ipc.on('setLocaleMain', (e, locale) => {
-    const menu = getNewMenuBar(locale, menuSetting)
+    const menu = getNewMenuBar(locale)
     Menu.setApplicationMenu(menu)
   })
 
@@ -143,9 +132,8 @@ app.on('ready', () => {
 })
 
 
-function getNewMenuBar (locale, setting) {
+function getNewMenuBar (locale) {
   const isMac = process.platform === 'darwin'
-  const { enableLanguage, enableDownload } = setting
   const langEn = locale === 'en-US'
   const appName = app.getName()
   const template = [
@@ -174,6 +162,7 @@ function getNewMenuBar (locale, setting) {
     }] : []),
     {
       label: langEn ? '&Edit' : 'Édition',
+      id: 'edit',
       submenu: [
         {
           label: langEn ? 'Select all' : 'Tout sélectionner',
@@ -203,17 +192,16 @@ function getNewMenuBar (locale, setting) {
     // { role: 'languageMenu' }
     {
       label:  langEn ? 'Language': 'Langue',
+      id: 'lang',
       submenu: [
         { label: langEn ? 'English': 'Anglais',
           type: 'checkbox',
           checked: langEn ? true : false,
-          enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'en-US') }
         },
         { label: langEn ? 'French': 'Francais',
           type: 'checkbox',
           checked: langEn ? false: true,
-          enabled: enableLanguage,
           click () { window.webContents.send('setLocale', 'fr-FR') }
         }
       ]
@@ -221,57 +209,55 @@ function getNewMenuBar (locale, setting) {
     // { role: 'downloadMenu' }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ,
     {
       label: langEn ? 'Download': 'Télécharger',
+      id: 'download',
       submenu: [
         { label: 'IN WebEntities as CSV',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'IN', 'csv') }
         },
         { label: 'IN WebEntities as JSON',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'IN', 'json') }
         },
         // { label: 'IN WebEntities as Sitography',
-        //   enabled: enableDownload,
+        //   enabled: false,
         //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
         // },
         { label: 'IN + UNDECIDED WebEntities as CSV',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
         },
         { label: 'IN + UNDECIDED WebEntities as JSON',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
         },
         // { label: 'IN + UNDECIDED WebEntities as Sitography',
-        //   enabled: enableDownload,
+        //   enabled: false,
         //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
         { type: 'separator' },
         { label: 'Tags as CSV',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'tags', 'csv') }
         },
         { label: 'Tags as JSON',
-          enabled: enableDownload,
+          enabled: false,
           click () { window.webContents.send('exportFile', 'tags', 'json') }
         },
       ]
     }
   ]
   const menu = Menu.buildFromTemplate(template)
-  const downloadLabel = langEn ? 'Download': 'Télécharger'
   ipc.on('corpusReady', () => {
-    menuSetting.enableDownload = true
-    const foundMenu = menu.items.find((menu) => menu.label === downloadLabel)
-    foundMenu.submenu.items.forEach((item) => {
+    const downloadMenu = menu.getMenuItemById('download')
+    downloadMenu.submenu.items.forEach((item) => {
       item.enabled = true
     })
   })
 
   ipc.on('corpusClosed', () => {
-    menuSetting.enableDownload = false
-    const foundMenu = menu.items.find((menu) => menu.label === downloadLabel)
-    foundMenu.submenu.items.forEach((item) => {
+    const downloadMenu = menu.getMenuItemById('download')
+    downloadMenu.submenu.items.forEach((item) => {
       item.enabled = false
     })
   })
