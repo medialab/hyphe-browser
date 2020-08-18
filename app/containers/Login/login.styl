@@ -26,15 +26,31 @@
       margin-top: 0
       margin-bottom: 10px
 
-  .search-container
-    position: relative
-    input
-      input()
-      width: 100%
-    .icon
-      position: absolute
-      top: 10px
-      right: 10px
+  .corpora-list-header
+    stretch(row)
+    align-items: center
+    .search-container
+      position: relative
+      flex: 1
+      input
+        input()
+        width: 100%
+      .icon
+        position: absolute
+        top: 10px
+        right: 10px
+
+    .order-container
+      position: relative
+      stretch(row)
+      .order-button
+        buttonIcon()
+      .order-options
+        dropdownOptions()
+
+    .order-container.is-active .order-button
+      background: var(--color-black)
+      color: var(--color-white)
 
   .corpora-list-container
     border-top: 1px solid var(--color-grey-dark)

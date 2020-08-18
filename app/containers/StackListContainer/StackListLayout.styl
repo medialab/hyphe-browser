@@ -9,10 +9,10 @@
     .list-name-container
         stretch(row)
         align-items: center
-        transition: all .5s ease 
+        transition: all .5s ease
         max-height: 30vh
         overflow: hidden
-        
+
         .list-btn-container
             text-align: left
             padding-bottom: 0
@@ -68,7 +68,7 @@
             .count
                 padding-left: 10px
                 display: none
-            
+
     .list-name-container.is-active
         opacity: 1
     .list-name-container:not(.is-active)
@@ -141,7 +141,7 @@
             &.is-disabled
                 opacity: .5
                 pointer-events: none
-            input 
+            input
                 flex: 1
                 input()
             input:focus
@@ -151,20 +151,8 @@
                 position: relative
                 stretch(row)
             .filter
-                padding: 8px
-                margin: 5px
-                margin-right: 0
-                border-radius: var(--radius)
-                background: var(--color-grey-light)
-                cursor: pointer
-                font-size: 12px
-                font-family: var(--font-mono)
-                border: none
-                transition: background .2s ease
-                &:hover
-                    background: var(--color-grey-darker)
-            
-            
+               buttonIcon()
+
             .filter-container.is-active .filter
                 background: var(--color-black)
                 color: var(--color-white)
@@ -173,24 +161,7 @@
                 color: var(--color-white)
 
             .filter-options
-                list-style: none
-                padding: 0
-                position: absolute
-                right: 5px
-                top: 25px
-                z-index: 10
-                width: 200px
-                li
-                    background: white
-                    padding: 10px
-                    border: 1px solid var(--color-grey)
-                    font-size: 12px
-                    cursor: pointer
-                    &.is-active
-                        background: var(--color-blue)
-                        color: white
-                    &:not(.is-active):hover
-                        background: var(--color-grey-light)
+               dropdownOptions()
 
         .actualize-container
             padding: 0 0 10px 10px
@@ -285,7 +256,7 @@
         .btn
             width: 100%
             font-family: var(--font-pt)
-            border: none 
+            border: none
             padding: 5px
             color: var(--color-white)
             height: 40px

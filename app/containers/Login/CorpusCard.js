@@ -4,19 +4,19 @@ import { FormattedMessage as T, FormattedRelativeTime as D, useIntl } from 'reac
 import { selectUnit } from '@formatjs/intl-utils'
 
 const CorpusCard = ({
-  server, 
-  corpus, 
-  selectCorpus, 
+  server,
+  corpus,
+  selectCorpus,
   routerPush
 }) => {
   const { formatMessage } = useIntl()
-  const { password, name, status, webentities_in, created_at, last_activity } = corpus
+  const { password, name, status, webentities_in, total_webentities, created_at, last_activity } = corpus
   const handleSelectCorpus = () => {
     const path = corpus.password ? '/login/corpus-login-form' : 'browser'
     selectCorpus(server, corpus)
     routerPush(path)
   }
-  
+
   return (
     <li className="corpus-card" onClick={ handleSelectCorpus }>
       <h2 className="corpus-name">
@@ -24,7 +24,9 @@ const CorpusCard = ({
         { password && <span className="info-icon hint--right" aria-label={ formatMessage({ id: 'password-protected' }) }><i className="ti-lock" /></span> }
         { status === 'ready' && <span className="info-icon hint--right" aria-label={ formatMessage({ id: 'running' }) }><i className="ti-control-play" /></span> }
       </h2>
-      <div className="corpus-webentities"><T id="webentities" values={ { count: webentities_in } } /></div>
+      <div className="corpus-webentities">
+        <T id="webentities" values={ { in: webentities_in, total: total_webentities  } } />
+      </div>
       <div className="corpus-dates">
         <span>
           <T

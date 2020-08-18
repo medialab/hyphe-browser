@@ -12,6 +12,12 @@ export const ellipseStr = (str, limit = 150) => {
   return str
 }
 
+export const compare = (a, b) => {
+  if (a > b) return 1
+  if (a < b) return -1
+  return 0
+}
+
 /**
  * This function uses the Selection API to select the whole text content of a
  * DOM node.
