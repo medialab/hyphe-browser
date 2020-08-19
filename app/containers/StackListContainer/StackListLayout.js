@@ -103,6 +103,16 @@ const StackListLayout = ({
 
   const isEmpty = counters[selectedList] === 0
   const isLoading = loadingBatchActions || loadingStack
+
+  const filteredWebentities = stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities ?
+    stackWebentities[selectedStack].webentities
+      .filter((webentity) => {
+        if (searchString.length) {
+          return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
+        }
+        return true
+      }) : []
+
   const handleLocate = () => {
     if (tabWebentity.status !== selectedStack) {
       onSelectStack(tabWebentity.status)
@@ -116,6 +126,7 @@ const StackListLayout = ({
     onSelectStack(selectedStack)
     setNumberOfEntities(counters[selectedStack])
   }
+
   return (
     <div className="list-layout">
       <ul className="status-list-container">
@@ -214,15 +225,7 @@ const StackListLayout = ({
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={ { list: selectedStack.toUpperCase() } } />
               </li>
-              :
-              stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities &&
-              stackWebentities[selectedStack].webentities
-                .filter((webentity) => {
-                  if (searchString.length) {
-                    return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
-                  }
-                  return true
-                })
+              : filteredWebentities
                 .map((entity, index) => {
                   const toggleAction = (obj, key, status) => {
                     return {
@@ -294,7 +297,10 @@ const StackListLayout = ({
           {
             !isEmpty &&
             <div className="webentities-list-footer">
-              <DownloadListBtn onClickDownload={ handleDownloadList } />
+              <DownloadListBtn
+                isDisabled={ filteredWebentities.length === 0 }
+                onClickDownload={ handleDownloadList }
+              />
             </div>
           }
         </div>

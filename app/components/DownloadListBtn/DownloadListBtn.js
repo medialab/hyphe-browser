@@ -5,10 +5,12 @@ import { FormattedMessage as T } from 'react-intl'
 
 
 export default ({
+  isDisabled,
   onClickDownload
 }) => (
-  <button 
+  <button
     className="download-list-btn"
+    disabled={ isDisabled }
     onClick={ onClickDownload }
   >
     <T id="sidebar.contextual.downloadToCSV" />
