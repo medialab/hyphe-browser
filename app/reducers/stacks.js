@@ -29,7 +29,6 @@ import {
 const initialState = {
   selected: null,
   lastRefresh: null,
-  filter: null,
   webentities: {},
   loadingWebentity: false
 }
@@ -58,11 +57,10 @@ export default createReducer(initialState, {
     loading: true
   }),
 
-  [FETCH_STACK_SUCCESS]: (state, { stack, filter, webentities }) => ({
+  [FETCH_STACK_SUCCESS]: (state, { stack, webentities }) => ({
     ...state,
     loading: false,
     selected: stack,
-    filter,
     lastRefresh: Date.now(),
     webentities: {
       ...state.webentities,

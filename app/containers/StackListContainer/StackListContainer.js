@@ -23,7 +23,6 @@ const StackListContainer = ({
   serverUrl,
   webentities,
   selectedStack,
-  stackFilter,
   stackWebentities,
   loadingStack,
   loadingWebentity,
@@ -113,7 +112,6 @@ const StackListContainer = ({
       counters={ counters }
       stackWebentities = { stackWebentities }
       selectedStack={ selectedStack }
-      stackFilter={ stackFilter }
       loadingStack={ loadingStack }
       loadingWebentity= { loadingWebentity }
       loadingBatchActions = { loadingBatchActions }
@@ -148,7 +146,6 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   activeTab: tabs.activeTab,
   webentities,
   selectedStack: stacks.selected,
-  stackFilter: stacks.filter,
   stackWebentities: stacks.webentities,
   tlds: webentities.tlds,
   loadingStack: stacks.loading,

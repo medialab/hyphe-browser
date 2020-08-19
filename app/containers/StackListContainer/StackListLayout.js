@@ -19,7 +19,6 @@ import WebentitiesContainer from './WebentitiesContainer'
 const StackListLayout = ({
   counters,
   selectedStack,
-  stackFilter,
   stackWebentities,
   tabWebentity,
   loadingStack,
@@ -33,7 +32,7 @@ const StackListLayout = ({
   const { formatMessage } = useIntl()
 
   const [isFilterOpen, setFilterOpen] = useState(false)
-  const [filterValue, setFilterValue] = useState(stackFilter)
+  const [filterValue, setFilterValue] = useState(null)
   const [selectedList, setSelectedListReal] = useState(selectedStack)
   const [isOpen, setOpen] = useState(false)
   const [searchString, setSearchString] = useState('')
@@ -45,10 +44,6 @@ const StackListLayout = ({
     setSelectedListReal(selectedStack)
     setNumberOfEntities(counters[selectedStack])
   }, [selectedStack])
-
-  useEffect(() => {
-    setFilterValue(stackFilter)
-  }, [stackFilter])
 
   const [statusActions, setStatusActions] = useState({})
 
@@ -72,7 +67,8 @@ const StackListLayout = ({
       setOpen(!isOpen)
     } else {
       setSelectedListReal(l)
-      onSelectStack(l, filterValue)
+      setFilterValue(null)
+      onSelectStack(l)
       setOpen(false)
       resetActions()
     }
