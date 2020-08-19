@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -41,6 +41,7 @@ const StackListContainer = ({
 }) => {
   const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
   const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
+  const [stacksViewedPage, setStacksViewedPage] = useState({})
 
   useEffect(() => {
     if (tabWebentity && selectedStack === 'DISCOVERED') {
@@ -52,6 +53,22 @@ const StackListContainer = ({
       }
     }
   }, [tabWebentity && tabWebentity.id])
+
+  // auto-paginate stack to viewedPage when switch to different stack
+  useEffect(() => {
+    if (stackWebentities[selectedStack] &&
+        stacksViewedPage[selectedStack] &&
+        stackWebentities[selectedStack].next_page &&
+        stackWebentities[selectedStack].page < stacksViewedPage[selectedStack]) {
+      fetchStackPage({
+        serverUrl,
+        corpusId,
+        stack: selectedStack,
+        token: stackWebentities[selectedStack].token,
+        page: stackWebentities[selectedStack].next_page
+      })
+    }
+  }, [selectedStack, selectedStack && stackWebentities[selectedStack] && stackWebentities[selectedStack].page])
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
@@ -76,11 +93,6 @@ const StackListContainer = ({
 
   const handleSelectStack = (stack, filter) => {
     // TO BE DISCUSS: at which point should re-fetch the stack list?
-    // if (stackWebentities[stack]) {
-    //   selectStack(stack)
-    // } else {
-    //   fetchStack({serverUrl, corpusId, stack, filter})
-    // }
     fetchStack({ serverUrl, corpusId, stack, filter })
   }
 
@@ -89,6 +101,8 @@ const StackListContainer = ({
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
 
   const handleFetchStackPage = (stack, token, page) => {
+    // record paginated page for each stack
+    setStacksViewedPage({ [stack]: page })
     fetchStackPage({ serverUrl, corpusId, stack, token, page })
   }
   const counters = status.corpus.traph.webentities

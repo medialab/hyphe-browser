@@ -84,9 +84,7 @@ const StackListLayout = ({
     if (filterValue === value) {
       newValue = null
     }
-    if (value) {
-      onSelectStack(selectedStack, newValue)
-    }
+    onSelectStack(selectedStack, newValue)
     setFilterValue(newValue)
     setFilterOpen(false)
   }

@@ -25,7 +25,7 @@ export const fetchStack = ({ serverUrl, corpusId, stack, filter }) => (dispatch)
   if (filter) {
     return jsonrpc(serverUrl)(
       'store.get_webentities_mistagged',
-      [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 100: -1, 0, false, false, corpusId]
+      [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 50: -1, 0, false, false, corpusId]
     ).then((res) => {
       if(stack === 'DISCOVERED') {
         return dispatch(receiveStack(serverUrl, stack, res, filter))
