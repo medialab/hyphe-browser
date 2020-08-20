@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { debounce } from 'lodash'
 
+import jsonrpc from '../../utils/jsonrpc'
 import {
   batchWebentityActions,
   setTabWebentity
@@ -42,6 +44,10 @@ const StackListContainer = ({
   const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
   const [stacksViewedPage, setStacksViewedPage] = useState({})
 
+  const [searchString, setSearchString] = useState('')
+  const [searchedResult, setSearchedResult] = useState(null)
+  const [isSearching, setIsSearching] = useState(false)
+
   useEffect(() => {
     if (tabWebentity && selectedStack === 'DISCOVERED') {
       const idx = webentitiesList.findIndex(x => x.id === tabWebentity.id)
@@ -68,6 +74,61 @@ const StackListContainer = ({
       })
     }
   }, [selectedStack, selectedStack && stackWebentities[selectedStack] && stackWebentities[selectedStack].page])
+
+  const searchWebentities = (searchString) => {
+    setIsSearching(true)
+    return jsonrpc(serverUrl)(
+      'store.search_webentities',
+      {
+        allFieldsKeywords: searchString,
+        fieldKeywords: [['status', selectedStack]],
+        count: 50,
+        page: 0,
+        light: false,
+        semilight: false,
+        corpus: corpusId,
+      }
+    ).then((res) => {
+      setSearchedResult(res)
+      setIsSearching(false)
+    }).catch((error) => setIsSearching(false))
+  }
+
+  const loadNextSearch = (token, page) => {
+    setIsSearching(true)
+    return jsonrpc(serverUrl)(
+      'store.get_webentities_page',
+      [token, page, false, corpusId]
+    ).then((res) => {
+      setSearchedResult({
+        ...res,
+        webentities: searchedResult.webentities.concat(res.webentities)
+      })
+      setIsSearching(false)
+    }).catch((error) => setIsSearching(false))
+  }
+
+  const debounceSearchWebentities = debounce(searchWebentities, 1000)
+  const handleSearch = (e) => {
+    setSearchString(e.target.value)
+    if (e.target.value.length) {
+      debounceSearchWebentities(e.target.value)
+    } else {
+      setSearchedResult(null)
+    }
+  }
+
+  const handleLoadNextPage = () => {
+    if (searchString.length) {
+      const { token, next_page } = searchedResult
+      loadNextSearch(token, next_page)
+    } else {
+      const { token, next_page } = stackWebentities[selectedStack]
+      // record paginated page for each stack
+      setStacksViewedPage({ [selectedStack]: next_page })
+      fetchStackPage({ serverUrl, corpusId, stack: selectedStack, token, page: next_page })
+    }
+  }
 
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
@@ -99,17 +160,15 @@ const StackListContainer = ({
   const handleOpenTab = (url) => openTab({ url, activeTabId: activeTab.id })
   const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, selectedList })
 
-  const handleFetchStackPage = (stack, token, page) => {
-    // record paginated page for each stack
-    setStacksViewedPage({ [stack]: page })
-    fetchStackPage({ serverUrl, corpusId, stack, token, page })
-  }
   const counters = status.corpus.traph.webentities
 
   if (!selectedStack) return null
   return (
     <StackListLayout
       counters={ counters }
+      searchString={ searchString }
+      searchedResult={ searchedResult }
+      isSearching={ isSearching }
       stackWebentities = { stackWebentities }
       selectedStack={ selectedStack }
       loadingStack={ loadingStack }
@@ -120,8 +179,9 @@ const StackListContainer = ({
       onDownloadList={ handleDownloadList }
       onSetTabUrl={ handleSetTabUrl }
       onSelectStack= { handleSelectStack }
-      onLoadNextPage={ handleFetchStackPage }
       onOpenTab={ handleOpenTab }
+      onUpdateSearch={ handleSearch }
+      onLoadNextPage={ handleLoadNextPage }
       onBatchActions = { handleBatchActions }
     />
   )

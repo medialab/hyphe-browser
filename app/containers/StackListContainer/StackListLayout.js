@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import cx from 'classnames'
 import { FormattedMessage as T, useIntl } from 'react-intl'
 
-import pickBy from 'lodash/pickBy'
+import { pickBy } from 'lodash'
 
 import EntityCard from '../../components/EntityCard'
 import DownloadListBtn from '../../components/DownloadListBtn'
@@ -21,6 +21,9 @@ const StackListLayout = ({
   selectedStack,
   stackWebentities,
   tabWebentity,
+  searchString,
+  searchedResult,
+  isSearching,
   loadingStack,
   loadingBatchActions,
   onSelectStack,
@@ -28,6 +31,7 @@ const StackListLayout = ({
   onLoadNextPage,
   onDownloadList,
   onSelectWebentity,
+  onUpdateSearch
 }) => {
   const { formatMessage } = useIntl()
 
@@ -35,10 +39,15 @@ const StackListLayout = ({
   const [filterValue, setFilterValue] = useState(null)
   const [selectedList, setSelectedListReal] = useState(selectedStack)
   const [isOpen, setOpen] = useState(false)
-  const [searchString, setSearchString] = useState('')
+
   const [isLocating, setIsLocating] = useState(undefined)
 
   const [numberOfEntities, setNumberOfEntities] = useState(counters[selectedStack])
+
+  const isEmpty = counters[selectedList] === 0
+  const isLoading = loadingBatchActions || loadingStack || isSearching
+
+  const filteredList = searchString.length && searchedResult && searchedResult.webentities ? searchedResult.webentities : stackWebentities[selectedStack].webentities
 
   useEffect(() => {
     setSelectedListReal(selectedStack)
@@ -73,7 +82,6 @@ const StackListLayout = ({
       resetActions()
     }
   }
-  const handleSearch = (e) => setSearchString(e.target.value)
 
   const handleSelectFilter = (value) => {
     let newValue = value
@@ -84,34 +92,8 @@ const StackListLayout = ({
     setFilterValue(newValue)
     setFilterOpen(false)
   }
-  const handleLoadNextPage = () => {
-    const { token, next_page } = stackWebentities[selectedStack]
-    onLoadNextPage(selectedStack, token, next_page)
-  }
 
-  const handleDownloadList = () => {
-    const filteredList =
-      stackWebentities[selectedStack].webentities
-        .filter((webentity) => {
-          if (searchString.length) {
-            return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
-          }
-          return true
-        })
-    onDownloadList(filteredList)
-  }
-
-  const isEmpty = counters[selectedList] === 0
-  const isLoading = loadingBatchActions || loadingStack
-
-  const filteredWebentities = stackWebentities[selectedStack] && stackWebentities[selectedStack].webentities ?
-    stackWebentities[selectedStack].webentities
-      .filter((webentity) => {
-        if (searchString.length) {
-          return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
-        }
-        return true
-      }) : []
+  const handleDownloadList = () => onDownloadList(filteredList)
 
   const handleLocate = () => {
     if (tabWebentity.status !== selectedStack) {
@@ -174,7 +156,7 @@ const StackListLayout = ({
             <input
               placeholder={ formatMessage({ id: 'sidebar.overview.search-a-webentity' }) }
               value={ searchString }
-              onChange={ handleSearch }
+              onChange={ onUpdateSearch }
             />
             <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
 
@@ -225,7 +207,7 @@ const StackListLayout = ({
               <li className="placeholder-empty">
                 <T id="stack-status.no-webentities" values={ { list: selectedStack.toUpperCase() } } />
               </li>
-              : filteredWebentities
+              : filteredList
                 .map((entity, index) => {
                   const toggleAction = (obj, key, status) => {
                     return {
@@ -264,12 +246,17 @@ const StackListLayout = ({
 
             }
             {
+              (!searchString.length &&
               stackWebentities[selectedStack] &&
               stackWebentities[selectedStack].token &&
-              stackWebentities[selectedStack].next_page &&
-              <li className="entity-card pagination" onClick={ handleLoadNextPage }>
-                <T id="load-more-webentities" />
-              </li>
+              stackWebentities[selectedStack].next_page) ||
+              (searchString.length &&
+              searchedResult &&
+              searchedResult.token &&
+              searchedResult.next_page) ?
+                <li className="entity-card pagination" onClick={ onLoadNextPage }>
+                  <T id="load-more-webentities" />
+                </li> : null
             }
           </WebentitiesContainer>
           {
@@ -298,7 +285,7 @@ const StackListLayout = ({
             !isEmpty &&
             <div className="webentities-list-footer">
               <DownloadListBtn
-                isDisabled={ filteredWebentities.length === 0 }
+                isDisabled={ filteredList.length === 0 }
                 onClickDownload={ handleDownloadList }
               />
             </div>
