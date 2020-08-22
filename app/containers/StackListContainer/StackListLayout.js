@@ -56,12 +56,17 @@ const StackListLayout = ({
 
   const [statusActions, setStatusActions] = useState({})
 
-  const pendingActions = Object.keys(pickBy(statusActions, v => v)).map((key) => {
-    return {
-      id: +key,
-      type: pickBy(statusActions, v => v)[key]
-    }
-  })
+  const validateAction = (value, key) => {
+    const findEntity = filteredList.find((e) => e.id.toString() === key)
+    if (value && findEntity && findEntity.status !== value) return value
+  }
+  const pendingActions = Object.keys(pickBy(statusActions, validateAction))
+    .map((key) => {
+      return {
+        id: +key,
+        type: statusActions[key]
+      }
+    })
   const resetActions = () => {
     setStatusActions({})
   }

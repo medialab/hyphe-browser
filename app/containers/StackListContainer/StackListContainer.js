@@ -91,7 +91,7 @@ const StackListContainer = ({
     ).then((res) => {
       setSearchedResult(res)
       setIsSearching(false)
-    }).catch((error) => setIsSearching(false))
+    }).catch(() => setIsSearching(false))
   }
 
   const loadNextSearch = (token, page) => {
@@ -105,7 +105,7 @@ const StackListContainer = ({
         webentities: searchedResult.webentities.concat(res.webentities)
       })
       setIsSearching(false)
-    }).catch((error) => setIsSearching(false))
+    }).catch(() => setIsSearching(false))
   }
 
   const debounceSearchWebentities = debounce(searchWebentities, 1000)
