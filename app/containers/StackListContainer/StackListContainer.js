@@ -59,7 +59,7 @@ const StackListContainer = ({
     }
   }, [tabWebentity && tabWebentity.id])
 
-  // auto-paginate stack to viewedPage when switch to different stack
+  // auto-paginate stack to its viewedPage when re-fetch stack is triggered
   useEffect(() => {
     if (stackWebentities[selectedStack] &&
         stacksViewedPage[selectedStack] &&
@@ -109,10 +109,10 @@ const StackListContainer = ({
   }
 
   const debounceSearchWebentities = debounce(searchWebentities, 1000)
-  const handleSearch = (e) => {
-    setSearchString(e.target.value)
-    if (e.target.value.length) {
-      debounceSearchWebentities(e.target.value)
+  const handleSearch = (searchString, filterTags) => {
+    setSearchString(searchString)
+    if (searchString.length && !filterTags) {
+      debounceSearchWebentities(searchString)
     } else {
       setSearchedResult(null)
     }

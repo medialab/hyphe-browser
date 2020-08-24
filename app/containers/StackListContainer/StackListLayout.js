@@ -47,7 +47,18 @@ const StackListLayout = ({
   const isEmpty = counters[selectedList] === 0
   const isLoading = loadingBatchActions || loadingStack || isSearching
 
-  const filteredList = searchString.length && searchedResult && searchedResult.webentities ? searchedResult.webentities : stackWebentities[selectedStack].webentities
+  // if filterValue is set, use local search instead of api search
+  let filteredList = stackWebentities[selectedStack].webentities
+    .filter((webentity) => {
+      if (searchString.length) {
+        return JSON.stringify(webentity).toLowerCase().indexOf(searchString.toLowerCase()) > -1
+      }
+      return true
+    })
+  if (!filterValue && searchString && searchString.length && searchedResult && searchedResult.webentities) {
+    filteredList = searchedResult.webentities
+  }
+
 
   useEffect(() => {
     setSelectedListReal(selectedStack)
@@ -96,6 +107,10 @@ const StackListLayout = ({
     onSelectStack(selectedStack, newValue)
     setFilterValue(newValue)
     setFilterOpen(false)
+  }
+
+  const handleUpdateSearch = (e) => {
+    onUpdateSearch(e.target.value, filterValue)
   }
 
   const handleDownloadList = () => onDownloadList(filteredList)
@@ -161,7 +176,7 @@ const StackListLayout = ({
             <input
               placeholder={ formatMessage({ id: 'sidebar.overview.search-a-webentity' }) }
               value={ searchString }
-              onChange={ onUpdateSearch }
+              onChange={ handleUpdateSearch }
             />
             <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
 
