@@ -304,6 +304,12 @@ const EntityModal = ({
     }
   }, [state.step])
 
+  const handleKeyUp = (e) => {
+    if (e.keyCode === 13) { // ENTER
+      onNameConfirm()
+    }
+  }
+
   return (
     <Modal
       isOpen={ isOpen }
@@ -367,6 +373,7 @@ const EntityModal = ({
                 ref={ nameRef }
                 defaultValue={ state.name }
                 onChange={ onInputChange }
+                onKeyUp= { handleKeyUp }
               />
               <ul className="actions-container">
                 <li><button disabled={ state.step !== 3 || !state.name }  onClick={ onNameConfirm } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button></li>
