@@ -433,17 +433,17 @@
   "in-modale.webentity-exist": "Il y a déjà une webentité dans le corpus avec le même périmètre d'URLs",
 
   "browser-tab-content.disable-redirect-message": "Cette page est vide parce qu'elle devrait rediriger le navigateur vers une autre page, mais vous avez choisi de refuser la redirection pour pouvoir travailler sur ses métadonnées.",
-  "browser-tab-content.show-redirection-again": "Montrer à nouveau les paramètres de redirection",
+  "browser-tab-content.show-redirection-again": "Montrer à nouveau les paramètres de redirection.",
 
-  "redirect-modal.title": "Cette page demande une redirection",
+  "redirect-modal.title": "Cette page essaie de rediriger le navigateur vers une autre adresse.",
   "redirect-modal.description": "La page web <code>{originalUrl}</code> (qui appartient à la webentité <strong>{originalWebentity}</strong>) veut rediriger le navigateur vers la page web <code>{redirectUrl}</code> (qui appartient à la webentité <strong>{redirectWebentity}</strong>)",
-  "redirect-modal.step-1-title": "Que faire avec la redirection ?",
+  "redirect-modal.step-1-title": "Que faire avec cette redirection ?",
   "redirect-modal.step-1-refuse": "refuser et rester sur la page",
   "redirect-modal.step-1-accept": "accepter",
   "redirect-modal.step-2-title": "Que faire avec ces deux webentités ?",
   "redirect-modal.step-2-out": "déplacer <strong>{originalWebentity}</strong> dans la liste OUT",
   "redirect-modal.step-2-merge": "incorporer <strong>{originalWebentity}</strong> dans <strong>{redirectWebentity}</strong>",
   "redirect-modal.step-2-merge-reverse": "incorporer une partie de <strong>{redirectWebentity}</strong> dans <strong>{originalWebentity}</strong>",
-  "redirect-modal.step-2-merge-reverse-description": "Choisir quelle partie de <strong>{webentity}</strong> (<code>{url}</code>) incorporer dans <strong>{originalWebentity}</strong>:",
+  "redirect-modal.step-2-merge-reverse-description": "Choisir quelle partie de <strong>{webentity}</strong> (<code>{url}</code>) incorporer dans <strong>{originalWebentity}</strong> :",
   "redirect-modal.confirm": "confirmer cette décision"
 }
