@@ -37,13 +37,13 @@ const WebentityBrowseContainer = ({
   webentities,
   selectedStack,
   stackWebentities,
+  navigationHistory,
   loadingStack,
   loadingWebentity,
   loadingBatchActions,
   categories,
   tagsSuggestions,
   tlds,
-  stacks,
   // actions
   setTabUrl,
   openTab,
@@ -69,8 +69,10 @@ const WebentityBrowseContainer = ({
   const debounceFetchPaginatePages = debounce(fetchPaginatePages, 1000)
 
   // storing viewed prospections in an efficient way
-  let viewedProspectionIds = stacks && stacks.webentities.DISCOVERED
-  && stacks.webentities.DISCOVERED.webentities.filter(e => e.viewed).map(e => e.id)
+  let viewedProspectionIds = Object.keys(webentities.webentities)
+    .map((id)=> webentities.webentities[id])
+    .filter((e) => e.status === 'DISCOVERED')
+    .map(e => e.id)
   viewedProspectionIds = new Set(viewedProspectionIds)
 
   useEffect(() => {
@@ -202,6 +204,7 @@ const WebentityBrowseContainer = ({
     <WebentityBrowseLayout
       webentity={ webentity }
       viewedProspectionIds={ viewedProspectionIds }
+      navigationHistory={ navigationHistory }
       stackWebentities={ stackWebentities }
       initialStatus={ initialStatus }
       webentitiesList= { webentitiesList }
@@ -260,6 +263,7 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   loadingStack: stacks.loading,
   loadingWebentity: stacks.loadingWebentity,
   loadingBatchActions: loaders.webentity_batch_actions,
+  navigationHistory: corpora.navigationHistory[corpora.selected.corpus_id] || [],
   categories: corpora.list[corpora.selected.corpus_id].tagsCategories || [],
   tagsSuggestions: corpora.tagsSuggestions[corpora.selected.corpus_id] || {},
   serverUrl: servers.selected.url

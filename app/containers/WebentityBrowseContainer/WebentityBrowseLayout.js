@@ -26,6 +26,7 @@ const WebentityBrowseLayout = ({
   webentitiesList,
   initialStatus,
   viewedProspectionIds,
+  navigationHistory,
   selectedStack,
   selectedWebentity,
   loadingStack,
@@ -237,6 +238,7 @@ const WebentityBrowseLayout = ({
             webentity.paginatePages ?
               <KnownPages
                 list={ webentity.paginatePages }
+                navigationHistory={ navigationHistory }
                 tabUrl={ tabUrl }
                 homepage={ webentity.homepage }
                 isPaginating={ webentity.token }

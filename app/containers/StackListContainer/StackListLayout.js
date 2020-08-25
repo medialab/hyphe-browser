@@ -20,6 +20,7 @@ const StackListLayout = ({
   counters,
   selectedStack,
   stackWebentities,
+  visitedWebentities,
   tabWebentity,
   searchString,
   searchedResult,
@@ -229,6 +230,7 @@ const StackListLayout = ({
               </li>
               : filteredList
                 .map((entity, index) => {
+                  const isViewed = visitedWebentities.find(id => id === entity.id.toString()) ? true: false
                   const toggleAction = (obj, key, status) => {
                     return {
                       ...obj,
@@ -253,7 +255,7 @@ const StackListLayout = ({
                       key={ index }
                       allowMerge={ false }
                       link={ entity }
-                      isViewed={ entity.viewed }
+                      isViewed={ isViewed }
                       isActive={ isActive }
                       onClickLink={ handleClickLink }
                       onClickOut={ handleClickOut }

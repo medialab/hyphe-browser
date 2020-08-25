@@ -42,6 +42,8 @@ const StackListContainer = ({
 }) => {
   const tabWebentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
   const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
+  const visitedWebentities = Object.keys(webentities.webentities)
+
   const [stacksViewedPage, setStacksViewedPage] = useState({})
 
   const [searchString, setSearchString] = useState('')
@@ -170,6 +172,7 @@ const StackListContainer = ({
       searchedResult={ searchedResult }
       isSearching={ isSearching }
       stackWebentities = { stackWebentities }
+      visitedWebentities={ visitedWebentities }
       selectedStack={ selectedStack }
       loadingStack={ loadingStack }
       loadingWebentity= { loadingWebentity }

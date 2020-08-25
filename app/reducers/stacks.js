@@ -9,7 +9,6 @@ import {
   FETCH_STACK_PAGE_REQUEST,
   FETCH_STACK_PAGE_SUCCESS,
   FETCH_STACK_FAILURE,
-  VIEW_WEBENTITY,
   STOPPED_LOADING_WEBENTITY
 } from '../actions/stacks'
 import { SELECT_CORPUS } from '../actions/corpora'
@@ -85,23 +84,6 @@ export default createReducer(initialState, {
   [FETCH_STACK_FAILURE]: (state) => ({
     ...state,
     loading: false
-  }),
-
-  [VIEW_WEBENTITY]: (state, { webentity }) => ({
-    ...state,
-    loadingWebentity: true,
-    webentities: {
-      ...state.webentities,
-      [state.selected]: {
-        ...state.webentities[state.selected],
-        webentities: state.webentities[state.selected].webentities.map((w) => {
-          if (w.id === webentity.id) {
-            w.viewed = true
-          }
-          return w
-        })
-      }
-    }
   }),
 
   [STOPPED_LOADING_WEBENTITY]: (state) => ({
