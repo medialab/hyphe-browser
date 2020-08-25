@@ -14,7 +14,6 @@ import { createCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
 import HelpPin from '../../components/HelpPin'
 
-const depths = [1, 2, 3]
 const creationRules = ['domain', 'subdomain', 'page']
 class CorpusForm extends React.Component {
 
@@ -99,7 +98,14 @@ class CorpusForm extends React.Component {
     this.setState(newState)
 
     const corpus = this.cleanData()
-    this.props.createCorpus(this.props.server, corpus)
+    this.props.createCorpus({
+      server: this.props.server,
+      corpus,
+      options: {
+        depth: this.state.crawlDepth,
+        defaultCreationRule: this.state.creationRule
+      }
+    })
   }
 
   cleanData () {
@@ -117,7 +123,9 @@ class CorpusForm extends React.Component {
   }
 
   render () {
-    const { error, passwordProtected, advancedOptions, creationRule, crawlDepth } = this.state
+    const { error, passwordProtected, advancedOptions, creationRule, crawlDepth, serverStatus } = this.state
+    const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 3
+    const depths = [ ...Array(maxDepth).keys() ].map(i => i+1)
 
     const onTogglePasswordProtected = () => {
       let newState = {
@@ -161,10 +169,12 @@ class CorpusForm extends React.Component {
             { passwordProtected && this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
           </div>
           <div className={ cx('options-wrapper', { active: advancedOptions }) }>
-            <div onClick={ () => this.setState({ advancedOptions: !advancedOptions }) } className="form-group horizontal">
-              <input readOnly checked={ advancedOptions } type="radio" />
-              <label>advanced creation options</label>
-            </div>
+            {!this.state.submitting &&
+              <div onClick={ () => this.setState({ advancedOptions: !advancedOptions }) } className="form-group horizontal">
+                <input readOnly checked={ advancedOptions } type="radio" />
+                <label>advanced creation options</label>
+              </div>
+            }
             {advancedOptions &&
             <>
               <div className="form-group">
@@ -240,8 +250,9 @@ CorpusForm.propTypes = {
   createCorpus: PropTypes.func
 }
 
-const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({
+const mapStateToProps = ({ servers, corpora, intl: { locale }, ui }) => ({
   locale,
+  serverStatus: corpora.status,
   server: servers.selected,
   serverError: ui.notification
 })
