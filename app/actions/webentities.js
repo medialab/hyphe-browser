@@ -303,7 +303,7 @@ export const setAdjustWebentity = ({ webentityId, info }) => ({ type: ADJUST_WEB
 export const showAdjustWebentity = ({ webentityId, crawl = false, createNewEntity = true }) => setAdjustWebentity({ webentityId, info:{ name: null, homepage: null, prefix: null, crawl, createNewEntity } })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity({ webentityId, info: null })
 
-export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, tabId }) => (dispatch) => {
+export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, tabId }) => (dispatch, getState) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })
 
   const { prefix, homepage, name, crawl } = adjust
@@ -366,7 +366,9 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
       if (crawl) {
         // if prefixChanged, then webentity just been created, and we want this id, not the old one
         const id = prefixChanged ? head.id : webentity.id
-        const depth = CRAWL_DEPTH
+        const { options } = getState().corpora.status.corpus
+        const depth = options && options.depth || CRAWL_DEPTH
+
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
           .then(() => {
             // Broadcast the information that webentity's status has been updated

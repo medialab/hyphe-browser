@@ -28,7 +28,7 @@ class CorpusForm extends React.Component {
       passwordProtected: false,
       advancedOptions: false,
       crawlDepth: 1,
-      creationRule: 'domain'
+      creationRule: 'subdomain'
     }
   }
 
@@ -102,7 +102,7 @@ class CorpusForm extends React.Component {
       server: this.props.server,
       corpus,
       options: {
-        depth: this.state.crawlDepth,
+        depthHypheBro: this.state.crawlDepth,
         defaultCreationRule: this.state.creationRule
       }
     })
@@ -161,7 +161,7 @@ class CorpusForm extends React.Component {
               !this.state.submitting &&
               <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
                 <input readOnly checked={ passwordProtected } type="radio" />
-                <label><T id="password-protected" /></label>
+                <label><T id="password-protected-creation" /></label>
               </div>
             }
 
@@ -172,16 +172,16 @@ class CorpusForm extends React.Component {
             {!this.state.submitting &&
               <div onClick={ () => this.setState({ advancedOptions: !advancedOptions }) } className="form-group horizontal">
                 <input readOnly checked={ advancedOptions } type="radio" />
-                <label>advanced creation options</label>
+                <label><T id="advanced-creation-options" /></label>
               </div>
             }
             {advancedOptions &&
             <>
               <div className="form-group">
-                <label>Default depth of crawl <HelpPin place="top">
-                  define how many iterations of crawling to do after having INcluded a new webentity in the corpus
-                </HelpPin>
-
+                <label><T id="depth-creation" />
+                  <HelpPin place="top">
+                    <T id="depth-creation-help" />
+                  </HelpPin>
                 </label>
                 {
                   depths.map((depth, index) => (
@@ -197,9 +197,9 @@ class CorpusForm extends React.Component {
                 }
               </div>
               <div className="form-group">
-                <label>Default webentity creation rules
+                <label><T id="default-creation-rule" />
                   <HelpPin place="top">
-                    define at which level or URL to &quot;cut&quot; by default when grouping webpages into webentities
+                    <T id="default-creation-rule-help" />
                   </HelpPin>
 
                 </label>

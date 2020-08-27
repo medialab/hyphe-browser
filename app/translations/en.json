@@ -31,7 +31,12 @@
   "create-or-configure-server": "Add/configure a server",
   "paste-json-config": "paste below the JSON configuration of an existing Hyphe server:",
   "create-a-corpus": "Create a corpus",
-  "password-protected": "password protected (optional)",
+  "password-protected-creation": "password protected (optional)",
+  "advanced-creation-options": "advanced creation options",
+  "depth-creation": "Default depth of crawl",
+  "depth-creation-help": "define how many iterations of crawling to do after having INcluded a new webentity in the corpus",
+  "default-creation-rule": "Default webentity creation rule",
+  "default-creation-rule-help": "define at which level or URL to &quot;cut&quot; by default when grouping webpages into webentities",
 
   "server-api-url": "API endpoint",
   "server-gui-url": "GUI endpoint",

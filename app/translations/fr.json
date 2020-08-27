@@ -24,7 +24,11 @@
   "create-or-configure-server": "Ajouter/configurer un serveur",
   "paste-json-config": "coller ci-dessous la configuration JSON d'un serveur Hyphe existant :",
   "create-a-corpus": "Créer un corpus",
-  "password-protected": "protégé par un mot de passe (optionnel)",
+  "password-protected-creation": "protégé par un mot de passe (optionnel)",
+  "advanced-creation-options": "advanced creation options",
+  "depth-creation": "Default depth of crawl",
+  "depth-creation-help": "define how many iterations of crawling to do after having INcluded a new webentity in the corpus",
+  "default-creation-rule": "Default webentity creation rule",
 
   "server-api-url": "URL de l'API",
   "server-gui-url": "URL de l'interface",
