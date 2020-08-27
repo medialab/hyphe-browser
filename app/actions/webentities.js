@@ -15,7 +15,6 @@ import jsonrpc from '../utils/jsonrpc'
 
 import {
   CRAWL_DEPTH,
-  USED_STACKS,
   NOTICE_WEBENTITY_CREATED,
   NOTICE_WEBENTITY_ADJUST_FAILURE,
   NOTICE_WEBENTITY_CRAWL_STARTED,
@@ -26,7 +25,7 @@ import {
 } from '../constants'
 
 import { showNotification } from './browser'
-import { fetchStack } from './stacks'
+// import { fetchStack } from './stacks'
 import { addTag } from './tags'
 import { lruToUrl } from '../utils/lru'
 
@@ -428,15 +427,16 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
     if (action.type === 'MERGE') {
       return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
     } else {
-      return jsonrpc(serverUrl)('store.set_webentity_status', [action.id, action.type, corpusId])
+      return dispatch(setWebentityStatus({ serverUrl, corpusId, status: action.type, webentityId: action.id }))
     }
   })
   return Promise.all(requestActions)
     .then(() => {
-      const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
-      if (findStack) {
-        return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
-      }
+      // * Do not re-fetch stack after apply actions on stack
+      // const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
+      // if (findStack) {
+      //   return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
+      // }
       if (selectedList === 'referrers') {
         return dispatch(fetchReferrers({ serverUrl, corpusId, webentity }))
       }
