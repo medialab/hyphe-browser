@@ -32,7 +32,6 @@
   "default-creation-rule": "Règle de création des webentités",
   "default-creation-rule-help": "Définit comment les urls seront regroupés automatiquement en webentités par défaut",
 
-  "server-api-url": "URL de l'API",
   "server-gui-url": "URL de l'interface",
   "server-status": "Status du serveur",
 

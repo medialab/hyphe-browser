@@ -80,15 +80,6 @@ const ServerSumup = props => {
   return (
     <div className="server-sumup-container">
       <div>
-        <p className="server-sumup-label"><T id="server-api-url" /></p>
-        <p className="server-sumup-value">
-          <i className="ti-link" />
-          <Link url={ server.url }>
-            { server.url }
-          </Link>
-        </p>
-      </div>
-      <div>
         <p className="server-sumup-label"><T id="server-gui-url" /></p>
         <p className="server-sumup-value">
           <i className="ti-link" />
