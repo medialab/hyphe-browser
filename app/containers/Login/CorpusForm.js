@@ -28,7 +28,7 @@ class CorpusForm extends React.Component {
       passwordProtected: false,
       advancedOptions: false,
       crawlDepth: 1,
-      creationRule: 'subdomain'
+      creationRule: 'domain'
     }
   }
 
