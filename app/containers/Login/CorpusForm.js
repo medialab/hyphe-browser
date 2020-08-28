@@ -123,7 +123,8 @@ class CorpusForm extends React.Component {
   }
 
   render () {
-    const { error, passwordProtected, advancedOptions, creationRule, crawlDepth, serverStatus } = this.state
+    const { error, passwordProtected, advancedOptions, creationRule, crawlDepth } = this.state
+    const { serverStatus } = this.props
     const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 3
     const depths = [ ...Array(maxDepth).keys() ].map(i => i+1)
 
