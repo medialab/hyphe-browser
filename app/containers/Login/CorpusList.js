@@ -113,7 +113,7 @@ const CorpusList = props => {
           <button
             aria-label={ formatMessage({ id: 'corpus-list-sort' }) }
             onClick={ () => setOrderOpen(!isOrderOpen) }
-            className="order-button hint--bottom"
+            className="order-button hint--bottom-left"
           >
             <i className="ti-list" />
           </button>
@@ -135,6 +135,7 @@ const CorpusList = props => {
         </span>
       </div>}
 
+      {!corpora.length && filter && <span>{ formatMessage({ id: 'no-corpus-matching-search' }) }</span>}
       <CardsList>
         {corpora.map((corpus) =>
           (
