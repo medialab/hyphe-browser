@@ -111,8 +111,8 @@ const WebentityBrowseContainer = ({
   const handleDownloadList = (list) => {
     let listName
     switch (list) {
-    case 'mostLinked':
-      listName = 'mostLinkedPages'
+    case 'paginatePages':
+      listName = 'knownPages'
       break
     case 'referrers':
       listName = 'citingWebEntities'

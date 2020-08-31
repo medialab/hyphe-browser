@@ -35,7 +35,7 @@ const KnownPages = ({
   })
 
   const handleDownloadList = () => {
-    onDownloadList('mostLinked')
+    onDownloadList('paginatePages')
   }
 
   const Row = ({ index, style }) => {
