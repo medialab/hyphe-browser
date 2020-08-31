@@ -10,7 +10,7 @@ import Notification from '../../components/Notification'
 import BrowserLayout from './BrowserLayout'
 import { fieldParser, flatTag, downloadFile } from '../../utils/file-downloader'
 import jsonrpc from '../../utils/jsonrpc'
-import { openTab } from '../../actions/tabs'  
+import { openTab } from '../../actions/tabs'
 
 import {
   STACKS_LIST,
@@ -32,6 +32,7 @@ class BroswerContainer extends React.Component {
 
   componentWillUnmount () {
     ipc.send('corpusClosed')
+    ipc.removeListener('exportFile', this.ipcExportFile)
   }
 
   downloadWebentities = (list, listName, fileFormat) => {
@@ -74,7 +75,7 @@ class BroswerContainer extends React.Component {
     default: break
     }
   }
-  
+
   exportTags = (fileFormat) => {
     const { corpus, serverUrl } = this.props
     const corpusId = corpus.corpus_id
@@ -84,17 +85,17 @@ class BroswerContainer extends React.Component {
   }
 
   render () {
-    const { 
-      selectedStack, 
-      corpus, 
-      status, 
-      instanceUrl, 
-      activeTab, 
-      openTab, 
+    const {
+      selectedStack,
+      corpus,
+      status,
+      instanceUrl,
+      activeTab,
+      openTab,
       webentities,
     } = this.props
-    
-  
+
+
     if (!corpus) {
       // Corpus not yet selected
       return <Spinner />
@@ -102,8 +103,8 @@ class BroswerContainer extends React.Component {
     const webentity = webentities && webentities.webentities[webentities.tabs[activeTab.id]]
     return (
       <CorpusStatusWatcher>
-        {corpus && 
-        <BrowserLayout 
+        {corpus &&
+        <BrowserLayout
           corpus={ corpus }
           status={ status }
           webentity={ webentity }
@@ -144,6 +145,6 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
   locale
 })
 
-export default connect(mapStateToProps, { 
+export default connect(mapStateToProps, {
   openTab
 })(BroswerContainer)
