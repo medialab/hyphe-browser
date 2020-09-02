@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 
-import { createServer, updateServer, deleteServer } from '../../actions/servers'\
+import { createServer, updateServer, deleteServer } from '../../actions/servers'
 import { fetchCorpora } from '../../actions/corpora'
 
 const JSON_PLACEHOLDER = JSON.stringify(
