@@ -13,6 +13,7 @@ import { compareUrls } from '../../utils/lru'
 
 const KnownPages = ({
   list,
+  navigationHistory,
   tabUrl,
   homepage,
   isPaginating,
@@ -34,13 +35,14 @@ const KnownPages = ({
   })
 
   const handleDownloadList = () => {
-    onDownloadList('mostLinked')
+    onDownloadList('paginatePages')
   }
 
   const Row = ({ index, style }) => {
     const link = pagesList[index]
     const isHomepage = compareUrls(homepage, link.url)
     const isActive = compareUrls(tabUrl, link.url)
+    const isVisited = navigationHistory.find((page) => compareUrls(page.url, link.url)) ? true: false
 
     const handleSetHomepage = (e) => {
       e.stopPropagation()
@@ -57,6 +59,7 @@ const KnownPages = ({
         <KnownPageCard
           key={ index }
           isActive={ isActive }
+          isVisited={ isVisited }
           isHomepage={ isHomepage }
           onClick= { handleSetTabUrl }
           onClickHomepage = { handleSetHomepage }

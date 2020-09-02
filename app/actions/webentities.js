@@ -15,7 +15,6 @@ import jsonrpc from '../utils/jsonrpc'
 
 import {
   CRAWL_DEPTH,
-  USED_STACKS,
   NOTICE_WEBENTITY_CREATED,
   NOTICE_WEBENTITY_ADJUST_FAILURE,
   NOTICE_WEBENTITY_CRAWL_STARTED,
@@ -26,7 +25,7 @@ import {
 } from '../constants'
 
 import { showNotification } from './browser'
-import { fetchStack } from './stacks'
+// import { fetchStack } from './stacks'
 import { addTag } from './tags'
 import { lruToUrl } from '../utils/lru'
 
@@ -304,7 +303,7 @@ export const setAdjustWebentity = ({ webentityId, info }) => ({ type: ADJUST_WEB
 export const showAdjustWebentity = ({ webentityId, crawl = false, createNewEntity = true }) => setAdjustWebentity({ webentityId, info:{ name: null, homepage: null, prefix: null, crawl, createNewEntity } })
 export const hideAdjustWebentity = (webentityId) => setAdjustWebentity({ webentityId, info: null })
 
-export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, tabId }) => (dispatch) => {
+export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, tabId }) => (dispatch, getState) => {
   dispatch({ type: SAVE_ADJUSTED_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, adjust, webentity } })
 
   const { prefix, homepage, name, crawl } = adjust
@@ -367,7 +366,9 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
       if (crawl) {
         // if prefixChanged, then webentity just been created, and we want this id, not the old one
         const id = prefixChanged ? head.id : webentity.id
-        const depth = CRAWL_DEPTH
+        const { options } = getState().corpora.status.corpus
+        const depth = options && options.depth || CRAWL_DEPTH
+
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
           .then(() => {
             // Broadcast the information that webentity's status has been updated
@@ -428,15 +429,16 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
     if (action.type === 'MERGE') {
       return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
     } else {
-      return jsonrpc(serverUrl)('store.set_webentity_status', [action.id, action.type, corpusId])
+      return dispatch(setWebentityStatus({ serverUrl, corpusId, status: action.type, webentityId: action.id }))
     }
   })
   return Promise.all(requestActions)
     .then(() => {
-      const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
-      if (findStack) {
-        return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
-      }
+      // * Do not re-fetch stack after apply actions on stack
+      // const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
+      // if (findStack) {
+      //   return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
+      // }
       if (selectedList === 'referrers') {
         return dispatch(fetchReferrers({ serverUrl, corpusId, webentity }))
       }

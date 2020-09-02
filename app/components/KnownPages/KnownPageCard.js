@@ -10,6 +10,7 @@ export const KnownPageCard = ({
   linked,
   isActive,
   isHomepage,
+  isVisited,
   displayHomePageButton = true,
   innerWidth = 2048,
   onClick,
@@ -21,7 +22,7 @@ export const KnownPageCard = ({
   const maxLetters = Math.ceil(innerWidth / letterWidth)
 
   return (
-    <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }) } key={ id }>
+    <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }, { 'is-visited': isVisited }) } key={ id }>
       <div className="card-content">
         <span title={ url } className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</span>
         {linked && <div className="known-page-statistics">

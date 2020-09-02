@@ -32,6 +32,7 @@ class BroswerContainer extends React.Component {
 
   componentWillUnmount () {
     ipc.send('corpusClosed')
+    ipc.removeListener('exportFile', this.ipcExportFile)
   }
 
   downloadWebentities = (list, listName, fileFormat) => {

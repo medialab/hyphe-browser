@@ -12,7 +12,9 @@ import { FormattedMessage as T, injectIntl } from 'react-intl'
 
 import { createCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
+import HelpPin from '../../components/HelpPin'
 
+const creationRules = ['domain', 'subdomain', 'page']
 class CorpusForm extends React.Component {
 
   // generic form methods
@@ -24,6 +26,9 @@ class CorpusForm extends React.Component {
       error: null,
       data: this.getInitData(props),
       passwordProtected: false,
+      advancedOptions: false,
+      crawlDepth: 1,
+      creationRule: 'domain'
     }
   }
 
@@ -93,7 +98,14 @@ class CorpusForm extends React.Component {
     this.setState(newState)
 
     const corpus = this.cleanData()
-    this.props.createCorpus(this.props.server, corpus)
+    this.props.createCorpus({
+      server: this.props.server,
+      corpus,
+      options: {
+        depthHypheBro: this.state.crawlDepth,
+        defaultCreationRule: this.state.creationRule
+      }
+    })
   }
 
   cleanData () {
@@ -111,7 +123,10 @@ class CorpusForm extends React.Component {
   }
 
   render () {
-    const { error, passwordProtected } = this.state
+    const { error, passwordProtected, advancedOptions, creationRule, crawlDepth } = this.state
+    const { serverStatus } = this.props
+    const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 3
+    const depths = [ ...Array(maxDepth).keys() ].map(i => i+1)
 
     const onTogglePasswordProtected = () => {
       let newState = {
@@ -132,25 +147,80 @@ class CorpusForm extends React.Component {
         <h3 className="section-header">
           <T id="create-a-corpus" />
         </h3>
-        { error && 
+        { error &&
           <div className="form-error"><T id={ error.messageId } values={ error.messageValues || {} } /></div>
         }
 
-        { this.state.submitting ?
-          <h5>{this.state.data.name}</h5>
-          :
-          this.renderFormGroup('name', 'corpus-name', 'text', true) 
-        }
-        {
-          !this.state.submitting &&
-          <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
-            <input readOnly checked={ passwordProtected } type="checkbox" />
-            <label><T id="password-protected" /></label>
+        <div className="config-form">
+          { this.state.submitting ?
+            <h5>{this.state.data.name}</h5>
+            :
+            this.renderFormGroup('name', 'corpus-name', 'text', true)
+          }
+          <div className={ cx('options-wrapper', { active: passwordProtected }) }>
+            {
+              !this.state.submitting &&
+              <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
+                <input readOnly checked={ passwordProtected } type="radio" />
+                <label><T id="password-protected-creation" /></label>
+              </div>
+            }
+
+            { passwordProtected && this.renderFormGroup('password', 'password', 'password') }
+            { passwordProtected && this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
           </div>
-        }
-        
-        { passwordProtected && this.renderFormGroup('password', 'password', 'password') }
-        { passwordProtected && this.renderFormGroup('passwordConfirm', 'confirm-password', 'password') }
+          <div className={ cx('options-wrapper', { active: advancedOptions }) }>
+            {!this.state.submitting &&
+              <div onClick={ () => this.setState({ advancedOptions: !advancedOptions }) } className="form-group horizontal">
+                <input readOnly checked={ advancedOptions } type="radio" />
+                <label><T id="advanced-creation-options" /></label>
+              </div>
+            }
+            {advancedOptions &&
+            <>
+              <div className="form-group">
+                <label><T id="depth-creation" />
+                  <HelpPin place="top">
+                    <T id="depth-creation-help" />
+                  </HelpPin>
+                </label>
+                {
+                  depths.map((depth, index) => (
+                    <div
+                      key={ index }
+                      className="form-group horizontal minified"
+                      onClick={ () => this.setState({ crawlDepth: depth }) }
+                    >
+                      <input readOnly type="radio" checked={ depth === crawlDepth } />
+                      <label>{depth}</label>
+                    </div>
+                  ))
+                }
+              </div>
+              <div className="form-group">
+                <label><T id="default-creation-rule" />
+                  <HelpPin place="top">
+                    <T id="default-creation-rule-help" />
+                  </HelpPin>
+
+                </label>
+                {
+                  creationRules.map((rule, index) => (
+                    <div
+                      key={ index }
+                      className="form-group horizontal minified"
+                      onClick={ () => this.setState({ creationRule: rule }) }
+                    >
+                      <input readOnly type="radio" checked={ creationRule === rule } />
+                      <label>{rule}</label>
+                    </div>
+                  ))
+                }
+              </div>
+            </>
+            }
+          </div>
+        </div>
 
         { this.state.submitting
           ? <Spinner />
@@ -181,8 +251,9 @@ CorpusForm.propTypes = {
   createCorpus: PropTypes.func
 }
 
-const mapStateToProps = ({ servers, intl: { locale }, ui }) => ({
+const mapStateToProps = ({ servers, corpora, intl: { locale }, ui }) => ({
   locale,
+  serverStatus: corpora.status,
   server: servers.selected,
   serverError: ui.notification
 })

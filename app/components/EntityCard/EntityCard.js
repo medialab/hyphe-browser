@@ -21,7 +21,7 @@ const EntityCard = ({
   onClickOut,
   onClickUndecided,
 }) => {
-  const { status, name, homepage, indegree, viewed, previousStatus } = link
+  const { status, name, homepage, indegree, previousStatus } = link
   const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
   const [wrapperWidth, setWrapperWidth] = useState(null)
   const wrapperRef = useRef(null)
@@ -36,7 +36,7 @@ const EntityCard = ({
   const prevStatus = previousStatus && (previousStatus === 'DISCOVERED' ? 'prospection' : previousStatus.toLowerCase())
   return (
     <li
-      className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': viewed }) }
+      className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': isViewed }) }
       id={ `entity-card-${link.id}` }
       onClick={ onClickLink }
     >
@@ -95,7 +95,7 @@ const EntityCard = ({
 
         <ul className="card-actions-row">
           {allowMerge
-        &&
+        && false &&
         <Tooltipable Tag="li" onClick={ onClickMerge } className={ `hint--right ${isMergeActive ? 'is-active': ''}` } aria-label={ formatMessage({ id: 'webentity-card.merge-with-current-entity' }) }>
           <button className="btn btn-default"><i className="ti-plus" /></button>
         </Tooltipable>

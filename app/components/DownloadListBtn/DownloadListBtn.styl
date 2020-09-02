@@ -9,7 +9,11 @@
     font-family: var(--font-mono)
     text-align: center
     padding: 5px
-    transition: background .2s ease 
+    transition: background .2s ease
     &:hover
         background: var(--color-black)
         color: var(--color-white)
+    &:disabled,&[disabled]
+        background: var(--color-grey-light)
+        color:var(--color-grey-darker)
+        cursor: default

@@ -297,12 +297,16 @@ function updateWebentity (updator) {
   return (state, payload) => {
     const id = payload.webentityId
     const webentity = state.webentities[id]
-    const updates = updator(webentity, payload)
-    const updated = mergeWith({}, webentity, updates, (prev, next) => {
-      if (Array.isArray(next)) {
-        return next // override arrays instead of merging them
-      }
-    })
-    return { ...state, webentities: { ...state.webentities, [id]: updated } }
+    if(webentity) {
+      const updates = updator(webentity, payload)
+      const updated = mergeWith({}, webentity, updates, (prev, next) => {
+        if (Array.isArray(next)) {
+          return next // override arrays instead of merging them
+        }
+      })
+      return { ...state, webentities: { ...state.webentities, [id]: updated } }
+    } else {
+      return state
+    }
   }
 }

@@ -91,19 +91,20 @@ export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
 }
 
 export const receiveCorpus = createAction(CREATE_CORPUS_SUCCESS, (serverUrl, corpus) => ({ serverUrl, corpus }))
-export const createCorpus = (server, corpus) => (dispatch) => {
+export const createCorpus = ({ server, corpus, options }) => (dispatch) => {
   const serverUrl = server.url
   dispatch({
     type: CREATE_CORPUS_REQUEST,
     payload: {
       serverUrl,
-      corpus
+      corpus,
+      options
     }
   })
 
   // create_corpus does not return the full created corpus
   // so we must trigger a full fetch of all corpora
-  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password || '', {}])
+  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password || '', options])
     .then((miniCorpus) => {
       if (miniCorpus.status === 'error') {
         return Promise.reject(miniCorpus)

@@ -1,4 +1,4 @@
-@import '../../css/helpers.styl';
+@import '../../css/helpers.styl'
 
 .login-container
   max-height: 100%
@@ -15,10 +15,10 @@
     padding: 1em
     max-width: 350px
     min-width: 350px
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    flex-grow: 1
+    flex-shrink: 1
+    overflow-y: auto
+    overflow-x: hidden
     &.large
       max-width: 600px
       min-width: 600px
@@ -26,15 +26,31 @@
       margin-top: 0
       margin-bottom: 10px
 
-  .search-container
-    position: relative
-    input
-      input()
-      width: 100%
-    .icon
-      position: absolute
-      top: 10px
-      right: 10px
+  .corpora-list-header
+    stretch(row)
+    align-items: center
+    .search-container
+      position: relative
+      flex: 1
+      input
+        input()
+        width: 100%
+      .icon
+        position: absolute
+        top: 10px
+        right: 10px
+
+    .order-container
+      position: relative
+      stretch(row)
+      .order-button
+        buttonIcon()
+      .order-options
+        dropdownOptions()
+
+    .order-container.is-active .order-button
+      background: var(--color-black)
+      color: var(--color-white)
 
   .corpora-list-container
     border-top: 1px solid var(--color-grey-dark)
@@ -44,13 +60,14 @@
   .installing-server-container
     margin-top: 20px
 
+
   .cards-list
     padding-right: 0
     padding-left: 2px
 
   .corpus-card
     background: var(--color-white)
-    padding: 10px;
+    padding: 10px
     margin-bottom: 10px
     cursor: pointer
     margin-right: 10px
@@ -67,13 +84,28 @@
       white-space: nowrap
       text-overflow: ellipsis
       font-size: 10px
-      opacity: 0.7;
+      opacity: 0.7
     &:hover
       background: var(--color-grey-light)
     .info-icon
       font-size: 10px
       margin-left: 5px
       display: inline
+
+  .corpus-form
+    .options-wrapper
+      transition: all .5s ease
+      border: 1px solid transparent
+      margin: 0
+      overflow:hidden
+      max-height: 40px
+      &.active
+        border: 1px solid lightgrey
+        padding: 10px
+        padding-bottom: 0
+        border-radius: 5px
+        margin-bottom: 10px
+        max-height: 100vh
 
   .server-sumup-container
     .server-sumup-label,
@@ -103,7 +135,8 @@
     input.narrow
       width: 80px
       margin-right: 10px
+  &.minified
+      margin-bottom: 5px
   &.error .error-message
     margin-left: 10px
     color: var(--color-red)
-

@@ -14,9 +14,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FormattedMessage as T, injectIntl } from 'react-intl'
 
-import { createServer, updateServer, deleteServer } from '../../actions/servers'
-// for async validation
-import jsonrpc from '../../utils/jsonrpc'
+import { createServer, updateServer, deleteServer } from '../../actions/servers'\
+import { fetchCorpora } from '../../actions/corpora'
 
 const JSON_PLACEHOLDER = JSON.stringify(
   {
@@ -131,7 +130,7 @@ class ServerForm extends React.Component {
     }
 
     // async validation
-    jsonrpc(server.url)('list_corpus')
+    this.props.fetchCorpora(server.url)
       .then(() => {
         this.setState(newState)
         this.saveAndRedirect()
@@ -248,6 +247,7 @@ ServerForm.propTypes = {
   createServer: PropTypes.func,
   updateServer: PropTypes.func,
   deleteServer: PropTypes.func,
+  fetchCorpora: PropTypes.func,
 }
 
 const mapStateToProps = ({ servers, intl: { locale } }) => ({
@@ -262,5 +262,6 @@ export default injectIntl(connect(mapStateToProps, {
   createServer,
   updateServer,
   deleteServer,
+  fetchCorpora,
   // routerPush: routerActions.push,
 })(ServerForm))
