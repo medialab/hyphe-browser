@@ -99,11 +99,11 @@ class BrowserTabContent extends React.Component {
     return compareUrls(this.state.previousUrl, info)
   }
 
-  updateTabStatus (event, info) {
+  updateTabStatus = (event, info)  => {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
-      webentity, loadingWebentityStack, tlds, selectedEngine, addNavigationHistory } = this.props
+      webentity, tlds, selectedEngine, addNavigationHistory } = this.props
     switch (event) {
     case 'open':
       eventBus.emit('open', info)
@@ -169,7 +169,7 @@ class BrowserTabContent extends React.Component {
       stoppedLoadingWebentity()
       break
     case 'redirect':
-      if (loadingWebentityStack && webentity &&
+      if (webentity &&
         !compareUrls(info.oldURL, info.newURL) &&
         !longestMatching(webentity.prefixes, info.newURL, tlds)) {
         this.setState({
@@ -461,44 +461,44 @@ class BrowserTabContent extends React.Component {
           displayAddButton={ webentity && webentity.status !== 'DISCOVERED' && !webentity.prefixes.includes(lruObjectToString(urlToLru(url))) }
           onAddClick={ onAddClick }
         />
-        {url === PAGE_HYPHE_HOME ?
+        {url === PAGE_HYPHE_HOME &&
           <NewTabContent
             isEmpty={ isEmpty }
             selectedEngine = { selectedEngine }
             onSelectStack = { handleFetchStackAndSetTab }
             onChangeEngine = { onChangeEngine }
             onSetTabUrl={ handleSetTabUrl }
-          /> :
-          <div className="webview-container" >
-            <WebView
-              id={ id } url={ url } closable={ closable } eventBus={ eventBus }
-            />
-            {this.state.showSearchBar &&
-              <SearchBar
-                id={ id }
-                onUpdateSearch={ handleUpdateSearch }
-                onFindNext={ handleFindNext }
-                onClearSearch={ handleClearSearch }
-                onHideSearchBar={ this.handleHideSearchBar }
-              />}
-            {
-              this.state.disableRedirect &&
-              <div className="denied-redirection-container">
-                <div className="notification">
-                  <FormattedMessage id="browser-tab-content.disable-redirect-message" />
-                </div>
-                <div>
-                  <button
-                    className="btn btn-success"
-                    onClick={ handleShowRedirectModal }
-                  >
-                    <FormattedMessage id="browser-tab-content.show-redirection-again" />
-                  </button>
-                </div>
-              </div>
-            }
-          </div>
+          />
         }
+        <div className="webview-container" style={{ display: url === PAGE_HYPHE_HOME ? 'none' : 'block' }} >
+          <WebView
+            id={ id } url={ url } closable={ closable } eventBus={ eventBus }
+          />
+          {/* {this.state.showSearchBar &&
+            <SearchBar
+              id={ id }
+              onUpdateSearch={ handleUpdateSearch }
+              onFindNext={ handleFindNext }
+              onClearSearch={ handleClearSearch }
+              onHideSearchBar={ this.handleHideSearchBar }
+            />} */}
+          {
+            this.state.disableRedirect &&
+            <div className="denied-redirection-container">
+              <div className="notification">
+                <FormattedMessage id="browser-tab-content.disable-redirect-message" />
+              </div>
+              <div>
+                <button
+                  className="btn btn-success"
+                  onClick={ handleShowRedirectModal }
+                >
+                  <FormattedMessage id="browser-tab-content.show-redirection-again" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
         { !noCrawlPopup && active && adjusting && adjusting.crawl &&
           <InModal
             isOpen
@@ -601,7 +601,6 @@ const mapStateToProps = (
   corpusId: corpora.selected.corpus_id,
   webentity,
   selectedWebentity: webentities.selected,
-  loadingWebentityStack: stacks.loadingWebentity,
   adjusting: webentity && webentities.adjustments[webentity.id],
   status: corpora.status,
   tlds: webentities.tlds,

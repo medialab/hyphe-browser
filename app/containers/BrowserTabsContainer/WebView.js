@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { findDOMNode } from 'react-dom'
-import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
-import { injectIntl } from 'react-intl'
-import { eventBusShape } from '../../types'
-
+import { useIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
+
+import { eventBusShape } from '../../types'
+import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
+
+import { compareUrls } from '../../utils/lru'
 
 const { Menu, MenuItem } = remote
 
@@ -33,106 +34,103 @@ const { Menu, MenuItem } = remote
  * - goForward()
  * - toggleDevTools(forceOpen: bool)
  */
-class WebView extends React.Component {
 
-  constructor (props) {
-    super(props)
-
-    // Note those are attributes, not state properties, this is on purpose as any way we disabled re-rendering completely
-    this.isLoading = false
-    this.ignoreNextAbortedError = false
+const WebView = ({
+  url,
+  closable,
+  eventBus,
+}) => {
+  const webviewRef = useRef(null)
+  const [ignoreNextAbortedError, setIgnoreNextAbortedError] = useState(false)
+  const { formatMessage } = useIntl()
+  const translate = (id) => {
+    return formatMessage({ id })
   }
 
-  componentDidMount () {
-    const { eventBus, ua } = this.props
-
-    const webview = findDOMNode(this)
-    this.node = webview
-
-    // Set attributes that React does not recognize itself
-    webview.setAttribute('useragent', ua)
-    webview.setAttribute('autosize', 'on')
-
+  useEffect(() => {
+    const webview = webviewRef.current
     // Store handlers for future cleanup
-    this.reloadHandler = (ignoreCache) => {
+    const reloadHandler = (ignoreCache) => {
       return ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
     }
-    this.goBackHandler = () => webview.goBack()
-    this.goForwardHandler = () => webview.goForward()
-    this.toggleDevToolsHandler = (doOpen) => {
+    const goBackHandler = () => webview.goBack()
+    const goForwardHandler = () => webview.goForward()
+    const toggleDevToolsHandler = (doOpen) => {
       if (doOpen === true || !webview.isDevToolsOpened()) {
         webview.openDevTools()
       } else if (doOpen === false || webview.isDevToolsOpened()) {
         webview.closeDevTools()
       }
     }
-    this.findInPageHandler = (value) => webview.findInPage(value)
-    this.stopFindInPageHandler = () => webview.stopFindInPage('clearSelection')
 
     // Notify changing (cached to avoid duplicate emits) status of navigability
     let canGoBack = null
     let canGoForward = null
     const update = (what, info) => {
-      // Note: we use "this.props.eventBus" instead of destructued one, in case prop had been modified
-      this.props.eventBus.emit('status', what, info)
+      // Note: we use "eventBus" instead of destructued one, in case prop had been modified
+      eventBus.emit('status', what, info)
 
       const newCanGoBack = webview.canGoBack()
       const newCanGoForward = webview.canGoForward()
       if (newCanGoBack !== canGoBack) {
         canGoBack = newCanGoBack
-        this.props.eventBus.emit('canGoBack', canGoBack)
+        eventBus.emit('canGoBack', canGoBack)
       }
       if (newCanGoForward !== canGoForward) {
         canGoForward = newCanGoForward
-        this.props.eventBus.emit('canGoForward', canGoForward)
+        eventBus.emit('canGoForward', canGoForward)
       }
     }
 
     // Declare available navigation actions
-    eventBus.on('reload', this.reloadHandler)
-    eventBus.on('goBack', this.goBackHandler)
-    eventBus.on('goForward', this.goForwardHandler)
-    eventBus.on('toggleDevTools', this.toggleDevToolsHandler)
-    eventBus.on('findInPage', this.findInPageHandler)
-    eventBus.on('stopFindInPage', this.stopFindInPageHandler)
-
-    // If debug: log status changes
-    if (DEBUG_WEBVIEW) {
-      webview.addEventListener('did-start-loading', (e) => console.debug('did-start-loading', this.node.src, e)) // eslint-disable-line no-console
-      webview.addEventListener('did-stop-loading', (e) => console.debug('did-stop-loading', this.node.src, e)) // eslint-disable-line no-console
-      webview.addEventListener('load-commit', (e) => console.debug('load-commit', this.node.src)) // eslint-disable-line no-console,no-unused-vars
-      webview.addEventListener('did-finish-load', (e) => console.debug('did-finish-load', this.node.src)) // eslint-disable-line no-console,no-unused-vars
-      webview.addEventListener('did-frame-finish-load', (e) => console.debug('did-frame-finish-load', this.node.src, e.isMainFrame)) // eslint-disable-line no-console
-      webview.addEventListener('will-navigate', (e) => console.debug('will-navigate', this.node.src, e.url)) // eslint-disable-line no-console
-      webview.addEventListener('did-navigate', (e) => console.debug('did-navigate', this.node.src, e.url)) // eslint-disable-line no-console
-      webview.addEventListener('did-get-redirect-request', (e) => console.debug('did-get-redirect-request', e)) // eslint-disable-line no-console
-    }
+    eventBus.on('reload', reloadHandler)
+    eventBus.on('goBack', goBackHandler)
+    eventBus.on('goForward', goForwardHandler)
+    eventBus.on('toggleDevTools', toggleDevToolsHandler)
 
     // Loading status notifications
     webview.addEventListener('did-start-loading', () => {
-      this.isLoading = true
       update('start', webview.src)
     })
 
     webview.addEventListener('did-stop-loading', () => {
-      this.isLoading = false
       update('stop', webview.src)
     })
 
     // In case of error, notify owner
     webview.addEventListener('did-fail-load', ({ errorCode, errorDescription, validatedURL }) => {
-      if (this.ignoreNextAbortedError && errorCode === -3) {
-        this.ignoreNextAbortedError = false
+      if (ignoreNextAbortedError && errorCode === -3) {
+        setIgnoreNextAbortedError(false)
         return
       }
       update('error', { errorCode, errorDescription, validatedURL, pageURL: webview.getURL() })
     })
 
+    webview.addEventListener('will-navigate', (event) => {
+      update('will-navigate', event.url)
+    })
+
+    webview.addEventListener('did-navigate', (event) => {
+      update('navigate', event.url)
+    })
+
+    // Handle redirects - deprecated
+    // webview.addEventListener('did-get-redirect-request', ({ oldURL, newURL, isMainFrame }) => {
+    //   if (isMainFrame) {
+    //     update('redirect', { oldURL, newURL })
+    //   }
+    // })
+
     // Handle redirects
-    webview.addEventListener('did-get-redirect-request', ({ oldURL, newURL, isMainFrame }) => {
-      if (isMainFrame) {
-        update('redirect', { oldURL, newURL })
-      }
+    webview.addEventListener('dom-ready', () => {
+      const webRequest = remote.webContents.fromId(webview.getWebContentsId()) &&
+                        remote.webContents.fromId(webview.getWebContentsId()).session.webRequest
+      webRequest.onBeforeRedirect((details) => {
+        const { url, redirectURL, resourceType } = details
+        if (resourceType === 'mainFrame') {
+          update('redirect', { oldURL: url, newURL: redirectURL })
+        }
+      })
     })
 
     // Guest page metadata: title, favicon
@@ -170,104 +168,57 @@ class WebView extends React.Component {
       const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
       const menu = new Menu()
       if (href) {
-        menu.append(new MenuItem({ label: this.translate('menu.open-in-new-tab'), click: () => eventBus.emit('open', href) }))
-        menu.append(new MenuItem({ label: this.translate('menu.open-in-browser'), click: () => ipc.send('openExternal', href) }))
+        menu.append(new MenuItem({ label: translate('menu.open-in-new-tab'), click: () => eventBus.emit('open', href) }))
+        menu.append(new MenuItem({ label: translate('menu.open-in-browser'), click: () => ipc.send('openExternal', href) }))
       }
       if (hasSelection) {
-        menu.append(new MenuItem({ label: this.translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
+        menu.append(new MenuItem({ label: translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
       }
-      if (this.props.closable) {
+      if (closable) {
         menu.append(new MenuItem({ type: 'separator' }))
-        menu.append(new MenuItem({ label: this.translate('menu.close-tab'), click: () => eventBus.emit('close') }))
+        menu.append(new MenuItem({ label: translate('menu.close-tab'), click: () => eventBus.emit('close') }))
       }
       if (menu.getItemCount() >= 1) {
         menu.popup(remote.getCurrentWindow())
       }
     })
 
-    webview.addEventListener('did-navigate', (event) => {
-      update('navigate', event.url)
-    })
 
-    webview.addEventListener('found-in-page', (event) => {
-      if (event.result && event.result.finalUpdate)  {
-        webview.stopFindInPage('keepSelection')
-      }
-    })
-  
-  }
-
-  componentWillReceiveProps ({ url, ua }) {
-    let refresh = false // Use this flag in case 'url' AND 'ua' are modified
-
-    if (ua && ua !== this.props.ua) {
-      this.node.setUserAgent(ua)
-      refresh = true
+    return () => {
+      eventBus.off('reload', reloadHandler)
+      eventBus.off('goBack', goBackHandler)
+      eventBus.off('goForward', goForwardHandler)
+      eventBus.off('toggleDevTools', toggleDevToolsHandler)
     }
+  }, [])
 
-    if (url !== this.props.url && url !== this.node.src) {
-      if (this.isLoading) {
-        // Ignore the next "Error -3 Aborted" if current page is still loading
-        this.ignoreNextAbortedError = true
-        setTimeout(() => this.ignoreNextAbortedError = false, 50)
-      }
-      // Set webview's URL
-      this.isLoading = true
-      this.props.eventBus.emit('status', 'start', url)
-      this.node.src = url // This triggers refresh
-      refresh = false // So we don't have to trigger it ourselves
+  useEffect(() => {
+    if (url !== webviewRef.current.src) {
+      webviewRef.current.src = url
     }
+  }, [url])
 
-    if (refresh) {
-      this.node.reload()
-    }
-  }
-
-  shouldComponentUpdate () {
-    // Should never re-render, only use methods of webview tag
-    return false
-  }
-
-  
-
-  componentWillUnmount () {
-    const { eventBus } = this.props
-
-    eventBus.off('reload', this.reloadHandler)
-    eventBus.off('goBack', this.goBackHandler)
-    eventBus.off('goForward', this.goForwardHandler)
-    eventBus.off('toggleDevTools', this.toggleDevToolsHandler)
-    eventBus.off('findInPage', this.findInPageHandler)
-    eventBus.off('stopFindInPage', this.stopFindInPageHandler)
-  }
-
-  translate (id) {
-    return this.props.intl.formatMessage({ id })
-  }
-  render () {
-    // the preload script below is used to handle right click context menu
-    return (
-      <webview
-        tabIndex="0"
-        src={ this.props.url }
-        preload="./utils/webview-preload-script.js"
-      />
-    )
-  }
+  return (
+    <webview
+      ref={ webviewRef }
+      useragent={ WEBVIEW_UA }
+      src={ url }
+      preload="./utils/webview-preload-script.js"
+    />
+  )
 }
 
 WebView.propTypes = {
-  id: PropTypes.string,
-  ua: PropTypes.string,
-  visible: PropTypes.bool,
+  url: PropTypes.string,
   closable: PropTypes.bool,
-  url: PropTypes.string.isRequired,
   eventBus: eventBusShape.isRequired
 }
 
-WebView.defaultProps = {
-  ua: WEBVIEW_UA,
-  visible: true
+const areEqual = (prevProps, nextProps) => {
+  if (!compareUrls(prevProps.url, nextProps.url)) {
+    return false
+  }
+  return true
 }
 
-export default injectIntl(WebView)
+export default React.memo(WebView, areEqual)

@@ -1,3 +1,5 @@
+import {remote} from 'electron'
+const { app } = remote
 export const WEBVIEW_UA = 'Mozilla/5.0 (X11; Linux ax86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/1.0.0 Chrome/52.0.2743.82 Safari/537.36'
 export const CORPUS_STATUS_WATCHER_INTERVAL = (process.env.NODE_ENV === 'development') ? 30000 : 2000
 
@@ -39,7 +41,8 @@ export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
 export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Cmd+Shift+R', 'Cmd+F5']
 export const SHORTCUT_FIND_IN_PAGE = ['CmdOrCtrl+F']
 
-export const PAGE_HYPHE_HOME = 'hyphe://home'
+// local empty html for new home tab
+export const PAGE_HYPHE_HOME = 'file://' + app.getAppPath() + '/app/assets/tab.html'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
 
 export const STACKS_LIST = [
