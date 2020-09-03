@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
 
 import { eventBusShape } from '../../types'
-import { DEBUG_WEBVIEW, WEBVIEW_UA } from '../../constants'
+import { WEBVIEW_UA } from '../../constants'
 
 import { compareUrls } from '../../utils/lru'
 
@@ -63,6 +63,10 @@ const WebView = ({
       }
     }
 
+    // searchbar - webview found-in-place handler
+    const findInPageHandler = (value) => webview.findInPage(value)
+    const stopFindInPageHandler = () => webview.stopFindInPage('clearSelection')
+
     // Notify changing (cached to avoid duplicate emits) status of navigability
     let canGoBack = null
     let canGoForward = null
@@ -87,6 +91,8 @@ const WebView = ({
     eventBus.on('goBack', goBackHandler)
     eventBus.on('goForward', goForwardHandler)
     eventBus.on('toggleDevTools', toggleDevToolsHandler)
+    eventBus.on('findInPage', findInPageHandler)
+    eventBus.on('stopFindInPage', stopFindInPageHandler)
 
     // Loading status notifications
     webview.addEventListener('did-start-loading', () => {
@@ -123,14 +129,28 @@ const WebView = ({
 
     // Handle redirects
     webview.addEventListener('dom-ready', () => {
-      const webRequest = remote.webContents.fromId(webview.getWebContentsId()) &&
-                        remote.webContents.fromId(webview.getWebContentsId()).session.webRequest
-      webRequest.onBeforeRedirect((details) => {
+      const webContents = remote.webContents.fromId(webview.getWebContentsId())
+
+      webContents.session.webRequest.onBeforeRedirect((details) => {
         const { url, redirectURL, resourceType } = details
         if (resourceType === 'mainFrame') {
           update('redirect', { oldURL: url, newURL: redirectURL })
         }
       })
+
+      webContents.on('before-input-event', (event, input) => {
+        if (input.type === 'keyDown') {
+          if (input.key === 'f' && input.control) eventBus.emit('showSearchBar')
+        }
+      })
+
+    })
+
+    // found-in-page event called by searchbar
+    webview.addEventListener('found-in-page', (event) => {
+      if (event.result && event.result.finalUpdate)  {
+        webview.stopFindInPage('keepSelection')
+      }
     })
 
     // Guest page metadata: title, favicon

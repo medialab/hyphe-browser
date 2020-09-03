@@ -1,4 +1,4 @@
-import {remote} from 'electron'
+import { remote } from 'electron'
 const { app } = remote
 export const WEBVIEW_UA = 'Mozilla/5.0 (X11; Linux ax86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/1.0.0 Chrome/52.0.2743.82 Safari/537.36'
 export const CORPUS_STATUS_WATCHER_INTERVAL = (process.env.NODE_ENV === 'development') ? 30000 : 2000

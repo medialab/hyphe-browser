@@ -73,8 +73,10 @@ class BrowserTabContent extends React.Component {
     this.navOpenHandler = (url) => openTab({ url, activeTabId: id })
     eventBus.on('open', this.navOpenHandler)
 
+    this.handleShowSearchBar = () => { if(this.props.active) this.setState({ showSearchBar: true }) }
     ipc.on(`shortcut-${SHORTCUT_FIND_IN_PAGE}`, this.handleShowSearchBar)
     ipc.send('registerShortcut', SHORTCUT_FIND_IN_PAGE)
+    eventBus.on('showSearchBar', this.handleShowSearchBar)
   }
 
   componentWillReceiveProps (props) {
@@ -278,9 +280,7 @@ class BrowserTabContent extends React.Component {
       })
   }
 
-  handleShowSearchBar = () => {
-    if(this.props.active) this.setState({ showSearchBar: true })
-  }
+
   handleHideSearchBar = () => {
     if(this.props.active) this.setState({ showSearchBar: false })
   }
@@ -474,14 +474,14 @@ class BrowserTabContent extends React.Component {
           <WebView
             id={ id } url={ url } closable={ closable } eventBus={ eventBus }
           />
-          {/* {this.state.showSearchBar &&
+          {this.state.showSearchBar &&
             <SearchBar
               id={ id }
               onUpdateSearch={ handleUpdateSearch }
               onFindNext={ handleFindNext }
               onClearSearch={ handleClearSearch }
               onHideSearchBar={ this.handleHideSearchBar }
-            />} */}
+            />}
           {
             this.state.disableRedirect &&
             <div className="denied-redirection-container">
