@@ -106,7 +106,7 @@
     "lodash.uniq": "^4.5.0",
     "lodash.without": "^4.4.0",
     "open": "6.3.0",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "react": "^16.8.6",
     "react-addons-shallow-compare": "^15.3.2",
     "react-autosize-textarea": "^7.0.0",
