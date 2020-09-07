@@ -332,7 +332,7 @@ class BrowserTabContent extends React.Component {
         })
       })
     }
-    const handleSetWebentityHomepage = () => setWebentityHomepage({ serverUrl: server.url, corpusId, url, webentityId: webentity.id })
+    const handleSetWebentityHomepage = () => setWebentityHomepage({ serverUrl: server.url, corpusId, homepage: url, webentityId: webentity.id })
     const onAddClick = () => {
       showAdjustWebentity({ webentityId: webentity.id, crawl: true, createNewEntity: true })
     }
