@@ -113,10 +113,6 @@ const WebView = ({
       update('error', { errorCode, errorDescription, validatedURL, pageURL: webview.getURL() })
     })
 
-    webview.addEventListener('will-navigate', (event) => {
-      update('will-navigate', event.url)
-    })
-
     webview.addEventListener('did-navigate', (event) => {
       update('navigate', event.url)
     })

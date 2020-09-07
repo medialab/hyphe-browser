@@ -52,7 +52,7 @@ class BrowserTabContent extends React.Component {
       showSearchBar: false,
       disableRedirect: false,
       originalWebentity: null,
-      dnsError: true,
+      dnsError: false,
       mergeRequired: null,
       showRedirectionModal: false,
       setDoNotShowAgainAfterSubmit: null
@@ -172,8 +172,10 @@ class BrowserTabContent extends React.Component {
       break
     case 'redirect':
       if (webentity &&
+        !this.state.dnsError &&
         !compareUrls(info.oldURL, info.newURL) &&
         !longestMatching(webentity.prefixes, info.newURL, tlds)) {
+        // initialize mergeRequired
         this.setState({
           mergeRequired: {
             redirectUrl: info.newURL,
@@ -324,7 +326,6 @@ class BrowserTabContent extends React.Component {
       }).then((webentity) => {
         this.setState({
           mergeRequired: null,
-          dnsError: false,
           originalWebentity: {
             ...webentity,
             tabUrl: value
