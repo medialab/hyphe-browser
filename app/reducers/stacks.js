@@ -107,7 +107,7 @@ export default createReducer(initialState, {
     }
   }),
 
-  [SET_WEBENTITY_NAME_SUCCESS]: updateWebentity((webentity, payload) => {
+  [SET_WEBENTITY_HOMEPAGE_SUCCESS]: updateWebentity((webentity, payload) => {
     return {
       ...webentity,
       homepage: payload.homepage
