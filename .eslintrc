@@ -12,19 +12,23 @@
     "node": true,
     "mocha": true
   },
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "destructuring": true,
-    "experimentalObjectRestSpread": true,
-    "jsx": true,
-    "modules": true,
-    "objectLiteralShorthandMethods": true,
-    "spread": true
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "blockBindings": true,
+      "classes": true,
+      "destructuring": true,
+      "experimentalObjectRestSpread": true,
+      "jsx": true,
+      "modules": true,
+      "objectLiteralShorthandMethods": true,
+      "spread": true
+    }
   },
   "rules": {
-    "indent": [2, 2],
+    "indent": ["error", 2, { "ignoredNodes": ["TemplateLiteral"] }],
     "quotes": [1, "single", "avoid-escape"],
     "semi": [1, "never"],
     "space-before-function-paren": [1, "always"],
@@ -89,7 +93,7 @@
     "react/require-render-return": 2,
     "react/jsx-first-prop-new-line": 2,
     "react/jsx-no-target-blank": 2,
-    "react/require-optimization": 2,
+    "react/require-optimization": 0,
     "react/no-unescaped-entities": 2,
     "react/void-dom-elements-no-children": 2,
     "object-curly-spacing": [
@@ -102,6 +106,6 @@
       "createClass": "createReactClass",
       "pragma": "React",
       "version": "detect"
-    },
+    }
   }
 }
