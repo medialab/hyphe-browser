@@ -142,7 +142,7 @@ const WebentityBrowseContainer = ({
   }
 
   const handleSetWebentityName = (name) => setWebentityName({ serverUrl, corpusId, name, webentityId: webentity.id })
-  const handleSetWebentityHomepage = (url) => setWebentityHomepage({ serverUrl, corpusId, url, webentityId: webentity.id })
+  const handleSetWebentityHomepage = (url) => setWebentityHomepage({ serverUrl, corpusId, homepage: url, webentityId: webentity.id })
 
   const handleSetWenentityStatus = (status, we = webentity) => {
     const crawling = !!~['PENDING', 'RUNNING'].indexOf(getWebEntityActivityStatus(we))
