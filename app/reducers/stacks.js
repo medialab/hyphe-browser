@@ -16,6 +16,8 @@ import { SELECT_CORPUS } from '../actions/corpora'
 import {
   ADD_WEBENTITY_PREFIXES_SUCCESS,
   MERGE_WEBENTITY_SUCCESS,
+  SET_WEBENTITY_NAME_SUCCESS,
+  SET_WEBENTITY_HOMEPAGE_SUCCESS,
   SET_WEBENTITY_STATUS_SUCCESS
 } from '../actions/webentities'
 import {
@@ -97,6 +99,21 @@ export default createReducer(initialState, {
       prefixes: webentity.prefixes.concat(payload.prefixes)
     }
   }),
+
+  [SET_WEBENTITY_NAME_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      name: payload.name
+    }
+  }),
+
+  [SET_WEBENTITY_NAME_SUCCESS]: updateWebentity((webentity, payload) => {
+    return {
+      ...webentity,
+      homepage: payload.homepage
+    }
+  }),
+
 
   [SET_WEBENTITY_STATUS_SUCCESS]: updateWebentity((webentity, payload) => {
     return {
