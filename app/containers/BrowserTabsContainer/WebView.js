@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
+import once from 'lodash/once'
 
 import { eventBusShape } from '../../types'
 import { WEBVIEW_UA } from '../../constants'
@@ -126,11 +127,38 @@ const WebView = ({
     //     update('redirect', { oldURL, newURL })
     //   }
     // })
+    const contextMenuHandler = (event, { linkURL, selectionText }) => {
+      const menu = new Menu()
+      if (linkURL) {
+        menu.append(new MenuItem({ label: translate('menu.open-in-new-tab'), click: () => eventBus.emit('open', linkURL) }))
+        menu.append(new MenuItem({ label: translate('menu.open-in-browser'), click: () => ipc.send('openExternal', linkURL) }))
+      }
+      if (selectionText) {
+        menu.append(new MenuItem({ label: translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
+      }
+      if (closable) {
+        menu.append(new MenuItem({ type: 'separator' }))
+        menu.append(new MenuItem({ label: translate('menu.close-tab'), click: () => eventBus.emit('close') }))
+      }
+      if (menu.getItemCount() >= 1) {
+        menu.popup(remote.getCurrentWindow())
+      }
+    }
 
-    // Handle redirects
+    const inputHandler = (event, input) => {
+      if (input.type === 'keyDown' && input.key === 'f' && input.control) {
+        eventBus.emit('showSearchBar')
+      }
+    }
+
     webview.addEventListener('dom-ready', () => {
       const webContents = remote.webContents.fromId(webview.getWebContentsId())
+      // unregister previous event listener
+      webContents.off('context-menu', contextMenuHandler)
+      webContents.off('brefore-input-event', inputHandler)
+      webContents.session.webRequest.onBeforeRedirect(null)
 
+      // Handle redirects
       webContents.session.webRequest.onBeforeRedirect((details) => {
         const { url, redirectURL, resourceType } = details
         if (resourceType === 'mainFrame') {
@@ -138,13 +166,12 @@ const WebView = ({
         }
       })
 
-      webContents.on('before-input-event', (event, input) => {
-        if (input.type === 'keyDown') {
-          if (input.key === 'f' && input.control) eventBus.emit('showSearchBar')
-        }
-      })
-
+      // Handle Ctrl+F(show searchbar) event
+      webContents.on('before-input-event', inputHandler)
+      // Add menu when right-click/selection on webview
+      webContents.on('context-menu', contextMenuHandler)
     })
+
 
     // found-in-page event called by searchbar
     webview.addEventListener('found-in-page', (event) => {
@@ -175,35 +202,6 @@ const WebView = ({
       update('open', url, frameName)
     })
 
-    // Handle right-click context menu
-    // On right-click: tell guest page where the click occurred
-    // Given this information, the guest page will gather information…
-    webview.addEventListener('contextmenu', ({ offsetX, offsetY }) => {
-      webview.send('request-contextmenu-info', { x: offsetX, y: offsetY })
-    })
-    // … and pass it back to us to generate the corresponding menu
-    webview.addEventListener('ipc-message', ({ channel, args }) => {
-      if (channel !== 'show-contextmenu') return
-
-      const [ { x, y, hasSelection, selectionText, href, img, video } ] = args // eslint-disable-line
-      const menu = new Menu()
-      if (href) {
-        menu.append(new MenuItem({ label: translate('menu.open-in-new-tab'), click: () => eventBus.emit('open', href) }))
-        menu.append(new MenuItem({ label: translate('menu.open-in-browser'), click: () => ipc.send('openExternal', href) }))
-      }
-      if (hasSelection) {
-        menu.append(new MenuItem({ label: translate('menu.copy'), click: () => clipboard.writeText(selectionText) }))
-      }
-      if (closable) {
-        menu.append(new MenuItem({ type: 'separator' }))
-        menu.append(new MenuItem({ label: translate('menu.close-tab'), click: () => eventBus.emit('close') }))
-      }
-      if (menu.getItemCount() >= 1) {
-        menu.popup(remote.getCurrentWindow())
-      }
-    })
-
-
     return () => {
       eventBus.off('reload', reloadHandler)
       eventBus.off('goBack', goBackHandler)
@@ -223,7 +221,6 @@ const WebView = ({
       ref={ webviewRef }
       useragent={ WEBVIEW_UA }
       src={ url }
-      preload="./utils/webview-preload-script.js"
     />
   )
 }
