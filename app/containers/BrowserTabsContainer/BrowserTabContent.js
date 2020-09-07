@@ -236,7 +236,9 @@ class BrowserTabContent extends React.Component {
             // Any redirection, even 30x throw a -3 error.
             showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
           }
-          setTabUrl({ url: info.pageURL, id })
+          if (!this.state.mergeRequired) {
+            setTabUrl({ url: info.pageURL, id })
+          }
         }
       }
       break
