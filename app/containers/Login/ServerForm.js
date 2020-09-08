@@ -6,16 +6,21 @@
 // - url points to a non hyphe server
 
 
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
+import { clipboard } from 'electron'
 import { identity } from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { FormattedMessage as T, injectIntl } from 'react-intl'
+import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import { createServer, updateServer, deleteServer } from '../../actions/servers'
 import { fetchCorpora } from '../../actions/corpora'
+
+// for async validation
+// import jsonrpc from '../../utils/jsonrpc'
+import { selectNode } from '../../utils/misc'
 
 const JSON_PLACEHOLDER = JSON.stringify(
   {
@@ -26,42 +31,51 @@ const JSON_PLACEHOLDER = JSON.stringify(
   '  '
 )
 
-class ServerForm extends React.Component {
-
-  // generic form methods
-
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      submitting: false,
-      errors: [],
-      data: this.getInitData()
+const ServerForm = ({
+  editMode,
+  servers,
+  server,
+  history,
+  fetchCorpora,
+  createServer,
+  updateServer,
+}) => {
+  const { formatMessage } = useIntl()
+  const jsonEl = useRef(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [errors, setErrors] = useState([])
+  const [data, setData] = useState(editMode ? { ...server } : {
+    url: undefined,
+    name: undefined,
+    password: undefined,
+    jsonConfig: undefined,
+  })
+  useEffect(() => {
+    if (editMode) {
+      selectNode(jsonEl.current)
+      clipboard.writeText(serverConfig)
     }
-  }
-
+  }, [])
   // deal with fields values
-  setDataState (key, value) {
-    const data = {
-      ...this.state.data,
+  const setDataState = (key, value) => {
+    setData({
+      ...data,
       [key]: value
-    }
-    this.setState({ data })
+    })
   }
 
-  renderFormGroup (name, label = name, type = 'text', autoFocus = false, disabled = false) {
-    const { intl: { formatMessage } } = this.props
+  const renderFormGroup = (name, label = name, type = 'text', autoFocus = false, disabled = false)  => {
     return (
       <div className="form-group">
         <label><T id={ label } /></label>
         <input
-          disabled={ disabled || this.state.submitting }
+          disabled={ disabled || submitting }
           name={ name }
           placeholder={ formatMessage({ id: label }) }
           autoFocus={ autoFocus }
-          onChange={ ({ target }) => this.setDataState(name, target.value) }
+          onChange={ ({ target }) => setDataState(name, target.value) }
           type={ type }
-          value={ this.state.data[name] || '' }
+          value={ data[name] || '' }
         />
       </div>
     )
@@ -73,8 +87,8 @@ class ServerForm extends React.Component {
    * - A string error message when the value is invalid
    * - The config object else
    */
-  parseJSONConfig () {
-    const { jsonConfig } = this.state.data
+  const parseJSONConfig = () => {
+    const { jsonConfig } = data
 
     if (!jsonConfig) return null
 
@@ -91,19 +105,11 @@ class ServerForm extends React.Component {
     }
   }
 
-  getInitData () {
-    if (this.props.editMode) {
-      return { ...this.props.server }
-    }
-    return {
-      url: undefined,
-      name: undefined,
-      password: undefined,
-      jsonConfig: undefined,
-    }
-  }
+  const fullConfig = parseJSONConfig()
+  const { jsonConfig } = data
+  const serverConfig = JSON.stringify(data, null, '  ')
 
-  onSubmit = (evt) => {
+  const onSubmit = (evt) => {
     // no real submit to the server
     evt.preventDefault()
 
@@ -113,49 +119,48 @@ class ServerForm extends React.Component {
     }
 
     // local validation errors
-    if (!this.isValid()) {
-      newState.submitting = false
-      newState.errors = ['error.url-and-name-required']
+    if (!isValid()) {
+      setSubmitting(false)
+      setErrors(['error.url-and-name-required'])
       // TODO deal with login / password when ready on server side
-      return this.setState(newState)
+      return
     }
 
-    const server = this.cleanData()
+    const server = cleanData()
 
     // check for existing server with same URL
-    if (!this.props.editMode && this.props.servers.some(({ url }) => url === server.url)) {
-      newState.submitting = false
-      newState.errors = ['error.server-url-already-used']
-      return this.setState(newState)
+    if (!editMode && servers.some(({ url }) => url === server.url)) {
+      setSubmitting(false)
+      setErrors['error.server-url-already-used']
+      return
     }
 
     // async validation
-    this.props.fetchCorpora(server.url)
+    fetchCorpora(server.url)
       .then(() => {
-        this.setState(newState)
-        this.saveAndRedirect()
+        setSubmitting(true)
+        setErrors([])
+        saveAndRedirect()
       }, () => {
-        newState.submitting = false
-        newState.errors = ['error.server-url']
-        this.setState(newState)
+        setSubmitting(false)
+        setErrors(['error.server-url'])
       })
   }
 
-  saveAndRedirect () {
-    const server = this.cleanData()
-    !this.props.editMode
-      ? this.props.createServer(server)
-      : this.props.updateServer(server)
+  const saveAndRedirect = () => {
+    const server = cleanData()
+    !editMode
+      ? createServer(server)
+      : updateServer(server)
 
     // sync redirect
-    this.props.history.push('/login')
+    history.push('/login')
   }
 
-  cleanData () {
-    const fullConfig = this.parseJSONConfig()
+  const cleanData = () => {
     const server = (fullConfig && typeof fullConfig === 'object') ?
       fullConfig :
-      { ...this.state.data }
+      { ...data }
 
     if (!server.password) delete server.password
     if (!server.home) server.home = server.url.replace(/[/-]api\/?$/, '')
@@ -164,40 +169,35 @@ class ServerForm extends React.Component {
   }
 
   // local validation
-  isValid () {
-    const { url, name } = this.state.data
-    const fullConfig = this.parseJSONConfig()
-
+  const isValid = () => {
+    const { url, name } = data
     return (fullConfig && typeof fullConfig === 'object') || (url && name)
   }
 
-  delete = (evt) => {
-    evt.preventDefault()
-    this.props.deleteServer(this.props.server)
-    this.props.history.push('/login')
-  }
-
-  render () {
-    const { jsonConfig } = this.state.data
-    const fullConfig = this.parseJSONConfig()
-
-    return (
-      <form className="server-form" onSubmit={ this.onSubmit }>
+  // const delete = (evt) => {
+  //   evt.preventDefault()
+  //   this.props.deleteServer(this.props.server)
+  //   this.props.history.push('/login')
+  // }
+  return (
+    <>
+      <form className="server-form" onSubmit={ onSubmit }>
         <h3 className="section-header">
           <T id="create-or-configure-server" />
         </h3>
-        {[typeof fullConfig === 'string' && fullConfig, ...this.state.errors].filter(identity).map((error) =>
+
+        {[typeof fullConfig === 'string' && fullConfig, ...errors].filter(identity).map((error) =>
           <div className="form-error" key={ error }><T id={ error } /></div>
         )}
 
-        {this.renderFormGroup('name', 'server-name', 'text', false, jsonConfig)}
-        {this.renderFormGroup('url', 'api-url', 'text', true, !!(this.props.server || {}).cloud || jsonConfig)}
+        {renderFormGroup('name', 'server-name', 'text', false, jsonConfig)}
+        {renderFormGroup('url', 'api-url', 'text', true, !!(server || {}).cloud || jsonConfig)}
 
-        {false && this.renderFormGroup('login')}
-        {false && this.renderFormGroup('password', 'password', 'password')}
+        {false && renderFormGroup('login')}
+        {false && renderFormGroup('password', 'password', 'password')}
 
         {
-          !this.props.editMode &&
+          !editMode &&
           <div
             className="form-group"
             style={ { borderTop: '1px solid var(--color-grey-dark)' } }
@@ -205,7 +205,7 @@ class ServerForm extends React.Component {
             <label>...<strong><T id="or" /></strong>{' '}<T id="paste-json-config" /></label>
             <textarea
               value={ jsonConfig || '' }
-              onChange={ ({ target }) => this.setDataState('jsonConfig', target.value) }
+              onChange={ ({ target }) => setDataState('jsonConfig', target.value) }
               placeholder={ JSON_PLACEHOLDER }
               style={ {
                 resize: 'vertical',
@@ -215,21 +215,34 @@ class ServerForm extends React.Component {
           </div>
         }
 
+        {
+          editMode &&
+          <div
+            className="form-group"
+            style={ { borderTop: '1px solid var(--color-grey-dark)' } }
+          >
+            <label><T id="export-this-server-config" /></label>
+            <pre className="json-text" ref={ jsonEl }>
+              <code>{ serverConfig }</code>
+            </pre>
+          </div>
+        }
+
         <div className="buttons-row">
           <li>
-            <Link className="btn btn-error" to="/login" disabled={ this.state.submitting }>
+            <Link className="btn btn-error" to="/login" disabled={ submitting }>
               <T id="cancel" />
             </Link>
           </li>
           <li className="main-button-container">
-            <button className={ cx('btn btn-primary', { 'is-disabled': !this.isValid() }) } disabled={ this.state.submitting }>
+            <button className={ cx('btn btn-primary', { 'is-disabled': !isValid() }) } disabled={ submitting }>
               <T id="save-server" />
             </button>
           </li>
         </div>
       </form>
-    )
-  }
+    </>
+  )
 }
 
 ServerForm.propTypes = {
@@ -258,10 +271,10 @@ const mapStateToProps = ({ servers, intl: { locale } }) => ({
   server: servers.selected
 })
 
-export default injectIntl(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   createServer,
   updateServer,
   deleteServer,
   fetchCorpora,
   // routerPush: routerActions.push,
-})(ServerForm))
+})(ServerForm)
