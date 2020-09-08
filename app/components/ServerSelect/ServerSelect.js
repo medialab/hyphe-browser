@@ -1,10 +1,8 @@
-import { clipboard } from 'electron'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { useIntl } from 'react-intl'
 
 import './ServerSelect.styl'
-import { selectNode } from '../../utils/misc'
 
 Modal.setAppElement(document.getElementById('root'))
 
@@ -46,10 +44,6 @@ const ServerSelect = ({
   ].filter(o => o)
 
   const [forgetPrompted, setForgetPrompted] = useState(false)
-  const [configPrompted, setConfigPrompted] = useState(false)
-
-  const jsonEl = useRef(null)
-  const jsonConfig = JSON.stringify(selectedServer, null, '  ')
 
   return (
     <>
@@ -78,13 +72,6 @@ const ServerSelect = ({
                 <i className="ti-trash" />
               </button>
             }
-            <button
-              onClick={ () => setConfigPrompted(true) }
-              className="hint--bottom-left"
-              aria-label={ formatMessage({ id: 'export-server-config-tooltip' }) }
-            >
-              <i className="ti-export" />
-            </button>
           </>
         }
       </div>
@@ -129,52 +116,6 @@ const ServerSelect = ({
           </div>
         </div>
       </Modal>
-
-      {/* "Copy JSON config" modal */}
-      <Modal
-        isOpen={ configPrompted }
-        onRequestClose={ () => setConfigPrompted(false) }
-        onAfterOpen={ () => {
-          selectNode(jsonEl.current)
-          clipboard.writeText(jsonConfig)
-        } }
-        style={ {
-          content: {
-            width: 700,
-            maxWidth: '40vw',
-            position: 'relative',
-            height: 'unset',
-            top: 0,
-            left: 0,
-            overflow: 'hidden',
-            padding: 0
-          }
-        } }
-      >
-        <div className="modal-content-container">
-          <div className="modal-content-header">
-            <h2>{formatMessage({ id: 'export-this-server-config' })}</h2>
-          </div>
-          <div className="modal-content-body">
-            {formatMessage({ id: 'export-this-server-config-text' })}
-            {' '}
-            <i className="ti-check" />
-            <pre className="json-text" ref={ jsonEl }>
-              <code>{ jsonConfig }</code>
-            </pre>
-          </div>
-          <div className="modal-content-footer">
-            <ul onClick={ () => setConfigPrompted(false) } className="buttons-row">
-              <li>
-                <button className="btn btn-primary">
-                  {formatMessage({ id: 'back' })}
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </Modal>
-
     </>
   )
 }
