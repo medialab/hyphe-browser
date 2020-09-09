@@ -149,6 +149,9 @@ const WebView = ({
 
     webview.addEventListener('dom-ready', () => {
       const webContents = remote.webContents.fromId(webview.getWebContentsId())
+      // clear found-in-page event result
+      webview.stopFindInPage('clearSelection')
+
       // unregister previous event listener
       webContents.off('context-menu', contextMenuHandler)
       webContents.off('brefore-input-event', inputHandler)
@@ -172,7 +175,9 @@ const WebView = ({
     // found-in-page event called by searchbar
     webview.addEventListener('found-in-page', (event) => {
       if (event.result && event.result.finalUpdate)  {
-        webview.stopFindInPage('keepSelection')
+        eventBus.emit('foundResult', event.result)
+        // not stopFindPage for now
+        // webview.stopFindInPage('keepSelection')
       }
     })
 
@@ -203,6 +208,8 @@ const WebView = ({
       eventBus.off('goBack', goBackHandler)
       eventBus.off('goForward', goForwardHandler)
       eventBus.off('toggleDevTools', toggleDevToolsHandler)
+      eventBus.off('findInPage', findInPageHandler)
+      eventBus.off('stopFindInPage', stopFindInPageHandler)
     }
   }, [])
 

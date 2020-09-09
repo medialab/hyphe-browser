@@ -74,7 +74,6 @@ class BrowserTabContent extends React.Component {
     this.navOpenHandler = (url) => openTab({ url, activeTabId: id })
     eventBus.on('open', this.navOpenHandler)
 
-    this.handleShowSearchBar = () => { if(this.props.active) this.setState({ showSearchBar: true }) }
     ipc.on(`shortcut-${SHORTCUT_FIND_IN_PAGE}`, this.handleShowSearchBar)
     ipc.send('registerShortcut', SHORTCUT_FIND_IN_PAGE)
     eventBus.on('showSearchBar', this.handleShowSearchBar)
@@ -86,7 +85,13 @@ class BrowserTabContent extends React.Component {
       this.saveAdjustChanges(this.props)
     }
     if (this.props.webentity && prevProps.webentity && this.props.webentity.id !== prevProps.webentity.id) {
-      this.setState({ originalWebentity: null, dnsError: false,  mergeRequired: null, disableRedirect: false })
+      this.setState({
+        originalWebentity: null,
+        dnsError: false,
+        mergeRequired: null,
+        disableRedirect: false
+      })
+      this.handleHideSearchBar()
     }
   }
 
@@ -208,6 +213,9 @@ class BrowserTabContent extends React.Component {
     case 'navigate':
       // will-navigate not triggered do not set tab url if redirected
       if (!this.state.mergeRequired) setTabUrl({ url: info, id })
+      if (this.state.showSearchBar) {
+        this.handleHideSearchBar()
+      }
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -285,8 +293,20 @@ class BrowserTabContent extends React.Component {
   }
 
 
+  handleShowSearchBar = () => { if(this.props.active) this.setState({ showSearchBar: true }) }
+
   handleHideSearchBar = () => {
-    if(this.props.active) this.setState({ showSearchBar: false })
+    if(this.props.active) {
+      this.setState({ showSearchBar: false })
+      this.handleClearSearch()
+    }
+  }
+
+  handleUpdateSearch = (value) => {
+    this.props.eventBus.emit('findInPage', value)
+  }
+  handleClearSearch = () => {
+    this.props.eventBus.emit('stopFindInPage')
   }
 
   render () {
@@ -313,10 +333,6 @@ class BrowserTabContent extends React.Component {
     const handleGoForward = () => {
       eventBus.emit('goForward')
     }
-
-    const handleUpdateSearch = (value) => eventBus.emit('findInPage', value, false)
-    const handleFindNext = (value) => eventBus.emit('findInPage', value, true)
-    const handleClearSearch = () => eventBus.emit('stopFindInPage')
 
     const handleSetTabUrl = (value) => {
       setTabUrl({ url: value, id })
@@ -480,9 +496,9 @@ class BrowserTabContent extends React.Component {
           {this.state.showSearchBar &&
             <SearchBar
               id={ id }
-              onUpdateSearch={ handleUpdateSearch }
-              onFindNext={ handleFindNext }
-              onClearSearch={ handleClearSearch }
+              eventBus={ eventBus }
+              onUpdateSearch={ this.handleUpdateSearch }
+              onClearSearch={ this.handleClearSearch }
               onHideSearchBar={ this.handleHideSearchBar }
             />}
           {
