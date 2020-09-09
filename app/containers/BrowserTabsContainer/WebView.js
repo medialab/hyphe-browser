@@ -65,7 +65,11 @@ const WebView = ({
     }
 
     // searchbar - webview found-in-place handler
-    const findInPageHandler = (value) => webview.findInPage(value)
+    const findInPageHandler = (value, direction) => {
+      webview.findInPage(value, {
+        forward: direction === -1 ? false: true
+      })
+    }
     const stopFindInPageHandler = () => webview.stopFindInPage('clearSelection')
 
     // Notify changing (cached to avoid duplicate emits) status of navigability

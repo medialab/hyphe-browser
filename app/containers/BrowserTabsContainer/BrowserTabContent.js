@@ -302,8 +302,8 @@ class BrowserTabContent extends React.Component {
     }
   }
 
-  handleUpdateSearch = (value) => {
-    this.props.eventBus.emit('findInPage', value)
+  handleUpdateSearch = (value, direction) => {
+    this.props.eventBus.emit('findInPage', value, direction)
   }
   handleClearSearch = () => {
     this.props.eventBus.emit('stopFindInPage')
