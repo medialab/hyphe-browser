@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import './BrowserTabContent.styl'
 
 import React from 'react'
@@ -79,13 +80,12 @@ class BrowserTabContent extends React.Component {
     eventBus.on('showSearchBar', this.handleShowSearchBar)
   }
 
-  componentWillReceiveProps (props) {
-    // Handle the case when user clicked "IN" button and does *not* want to show a popup
-    if (props.adjusting && props.adjusting.crawl && props.noCrawlPopup &&
-      (!this.props.adjusting || !this.props.adjusting.crawl)) {
-      this.saveAdjustChanges(props)
+  componentDidUpdate (prevProps) {
+    if (this.props.adjusting && this.props.adjusting.crawl && this.props.noCrawlPopup &&
+      (!prevProps.adjusting || !prevProps.adjusting.crawl)) {
+      this.saveAdjustChanges(this.props)
     }
-    if (props.webentity && this.props.webentity && props.webentity.id !== this.props.webentity.id) {
+    if (this.props.webentity && prevProps.webentity && this.props.webentity.id !== prevProps.webentity.id) {
       this.setState({ originalWebentity: null, dnsError: false,  mergeRequired: null, disableRedirect: false })
     }
   }
@@ -588,7 +588,7 @@ BrowserTabContent.propTypes = {
 }
 
 const mapStateToProps = (
-  { corpora, intl: { locale }, servers, stacks, tabs, webentities, ui: { loaders, doNotShow } }, // store
+  { corpora, intl: { locale }, servers, tabs, webentities, ui: { loaders, doNotShow } }, // store
   { id, url, loading, disableWebentity, disableNavigation, eventBus, webentity } // own props
 ) => ({
   id,
