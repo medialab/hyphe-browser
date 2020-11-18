@@ -145,7 +145,7 @@ const CorpusForm = ({
           {
             !submitting &&
             <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
-              <input readOnly checked={ passwordProtected } type="radio" />
+              <input readOnly checked={ passwordProtected } type="checkbox" />
               <label><T id="password-protected-creation" /></label>
             </div>
           }
@@ -156,7 +156,7 @@ const CorpusForm = ({
         <div className={ cx('options-wrapper', { active: advancedOptions }) }>
           {!submitting &&
             <div onClick={ () => setAdvancedOptions(!advancedOptions) } className="form-group horizontal">
-              <input readOnly checked={ advancedOptions } type="radio" />
+              <input readOnly checked={ advancedOptions } type="checkbox" />
               <label><T id="advanced-creation-options" /></label>
             </div>
           }
