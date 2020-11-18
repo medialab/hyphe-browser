@@ -36,7 +36,7 @@ const CorpusForm = ({
   const [crawlDepth, setCrawlDepth] = useState(1)
   const [creationRule, setCreationRule] = useState('domain')
 
-  const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 3
+  const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 1
   const depths = [ ...Array(maxDepth).keys() ].map(i => i+1)
   const { formatMessage } = useIntl()
 

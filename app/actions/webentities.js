@@ -367,7 +367,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         // if prefixChanged, then webentity just been created, and we want this id, not the old one
         const id = prefixChanged ? head.id : webentity.id
         const { options } = getState().corpora.status.corpus
-        const depth = options && options.depth || CRAWL_DEPTH
+        const depth = options && options.depthHypheBro || CRAWL_DEPTH
 
         return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
           .then(() => {
