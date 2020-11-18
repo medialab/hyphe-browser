@@ -155,7 +155,9 @@ const Tags = (props) => {
           cachedCategories.length ?
             <ul className="categories-list">
               {
-                cachedCategories.map(({ category, value }) => {
+                cachedCategories
+                .sort((a, b) => a.category.toLowerCase().localeCompare(b.category.toLowerCase()))
+                .map(({ category, value }) => {
 
                   const handleUpdateTag = (option, {action}) => {
                     console.log(action)

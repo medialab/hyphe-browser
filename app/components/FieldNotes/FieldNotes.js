@@ -69,6 +69,7 @@ const FieldNotes = ({
     <div className="field-notes-container">
       {
         notes
+          .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
           .map((note, index) => { 
             const handleRemoveNote = () => {
               setNotes(notes.filter((n) => n !== note ))
