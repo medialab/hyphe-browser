@@ -165,7 +165,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="depth-creation" />
                 <HelpPin place="top">
-                  <T id="depth-creation-help" />
+                  {formatMessage({ id: "depth-creation-help" })}
                 </HelpPin>
               </label>
               {
@@ -184,7 +184,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="default-creation-rule" />
                 <HelpPin place="top">
-                  <T id="default-creation-rule-help" />
+                  {formatMessage({ id: "default-creation-rule-help" })}
                 </HelpPin>
 
               </label>
