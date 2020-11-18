@@ -6,13 +6,14 @@ In order to deploy a Hyphe server on the cloud, you need to have an account on o
 
 - [Create an account on OVH](#ovh)
 - [Create an account on Vexxhost](#vexxhost)
-- [Create an account on CityCloud](#citycloud)
+- [Create an account on CityCloud](#city-cloud)
 
 For all providers, you will need to setup an account, some billing method, and an OpenStack account. You can read more advanced information about this on this page: https://docs.openstack.org/train/
 
 
 ### OVH
 
+Go to https://www.ovh.com/auth/?create-account-email=&ovhCompany=ovh&onsuccess=https%3A%2F%2Fwww.ovh.com%2Fmanager%2Fpublic-cloud%2F&ovhSubsidiary=FR and fill the form.
 
 
 ### Vexxhost

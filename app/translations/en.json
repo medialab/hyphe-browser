@@ -70,7 +70,7 @@
   "create-cloud-server.step0.p3.l3": "set up the Hyphe server;",
   "create-cloud-server.step0.p3.l4": "deploy Hyphe;",
   "create-cloud-server.step0.p3.l5": "use the created server and/or share it with your coworkers;",
-  "create-cloud-server.step0.p3.l6": "manage the new server (pause, stop, reboot, delete...).",
+  "create-cloud-server.step0.p3.l6": "manage the new server (stop, reboot, delete...).",
   "create-cloud-server.step0.note": "Note",
   "create-cloud-server.step0.p4": "The médialab wrote this guide to allow more people to use Hyphe. The médialab does not take any action in this fully automatized process. The only fees for the server functioning are to be paid to the cloud provider.",
   "create-cloud-server.step0.submit": "Step 1: create a cloud account",

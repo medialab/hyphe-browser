@@ -63,7 +63,7 @@
   "create-cloud-server.step0.p3.l3": "configurer le serveur Hyphe ;",
   "create-cloud-server.step0.p3.l4": "lancer le déploiement ;",
   "create-cloud-server.step0.p3.l5": "utiliser le serveur et/ou le partager à vos collaborateurs ;",
-  "create-cloud-server.step0.p3.l6": "administrer le serveur créé (pause, arret, redémarrage, suppression...).",
+  "create-cloud-server.step0.p3.l6": "administrer le serveur créé (arret, redémarrage, suppression...).",
   "create-cloud-server.step0.note": "Note",
   "create-cloud-server.step0.p4": "Ce guide a été réalisé par le médialab pour faciliter l'usage de Hyphe par le plus grand nombre. Le médialab n'intervient pas dans le processus qui est automatisé. Seul le fonctionnement du serveur sera facturé par le prestataire d'hébergement.",
   "create-cloud-server.step0.submit": "Étape 1 : créer un compte cloud",
