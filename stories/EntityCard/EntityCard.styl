@@ -15,6 +15,7 @@
         justify-content: center
         align-items: center
         padding-right: 10px
+        position : relative
         .status-marker
             border-radius: 50%
             position : relative
@@ -32,6 +33,16 @@
                 background: var(--color-corpus-out)
             &.undecided
                 background: var(--color-corpus-undecided)
+            &.merged
+                background: grey
+            &.previous-status
+                width: 5px
+                height: 5px
+                font-size: 10px
+                margin-bottom: 5px
+                position: absolute
+                top: -5px
+                left: -5px
         .visited-marker
             border-radius: 50%
             position : relative

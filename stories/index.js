@@ -116,14 +116,44 @@ storiesOf('New entity modal', module)
   .add('Creating an entity with previous tags', () => <EntityModalMock withPreviousTags />)
   .add('Attempting to create an entity that create a duplicate with an existing one', () => <EntityExistsModalMock />)
 
+
+
 /**
  * Entity card
  */
 import EntityCard from './EntityCard'
 storiesOf('Entity card', module)
-  .add('Mockup', () => 
+  .add('Default', () => 
     (<div style={ { width: '500px' } }>
       <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={ 12 } />
+    </div>)
+  )
+  .add('Visited', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard name="Facebook" url="https://facebook.com" numberOfCitations={ 12 } isVisited />
+    </div>)
+  )
+  .add('Changed status', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard 
+        name="Facebook" 
+        url="https://facebook.com" 
+        numberOfCitations={ 12 } 
+        isVisited 
+        previousStatus="prospection" 
+        status="in" 
+      />
+    </div>)
+  )
+  .add('Merged', () => 
+    (<div style={ { width: '500px' } }>
+      <EntityCard 
+        name="Facebook" 
+        url="https://facebook.com" 
+        numberOfCitations={ 12 } 
+        status="merged" 
+        previousStatus="prospection"
+      />
     </div>)
   )
 
@@ -167,3 +197,11 @@ storiesOf('Server choice', module)
   .add('Server choice', () => <ServerChoice />)
   .add('Add a new server', () => <ServerChoice newServer />)
   .add('Add a new corpus', () => <ServerChoice newCorpus />)
+
+/**
+ * Redirection modal
+ */
+import RedirectionModalMock from './RedirectionModalMock'
+storiesOf('Redirection modal', module)
+  .add('Mockup', () => <RedirectionModalMock />)
+  .add('Denied redirection', () => <BrowserLayoutProposal status={ 'prospection' } hasDeniedRedirection/>)
