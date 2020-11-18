@@ -11,7 +11,7 @@
   "forget-server-tooltip": "oublier ce serveur",
   "confirm-forget-server": "Êtes-vous sûr de vouloir oublier ce serveur ?",
   "forget-this-server": "Oublier ce serveur",
-  "export-this-server-config": "Export du serveur",
+  "export-this-server-config": "Copier la configuration du serveur",
   "export-this-server-config-text": "La configuration a bien été copiée dans le presse-papier",
   "choose-a-corpus": "Choisir un corpus",
   "server-being-installed": "Le server est en cours d'installation",
@@ -32,7 +32,7 @@
   "default-creation-rule": "Règle de création des webentités",
   "default-creation-rule-help": "Définit comment les urls seront regroupés automatiquement en webentités par défaut",
 
-  "server-gui-url": "URL de l'interface",
+  "server-gui-url": "URL de l'interface web classique",
   "server-status": "Status du serveur",
 
   "server-status-ok": "✓  OK",
