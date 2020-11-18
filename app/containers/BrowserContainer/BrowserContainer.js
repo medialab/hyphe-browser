@@ -16,7 +16,7 @@ import {
   STACKS_LIST,
   PAGE_HYPHE_HOME } from '../../constants'
 
-class BroswerContainer extends React.Component {
+class BrowserContainer extends React.Component {
   componentDidMount () {
     ipc.send('corpusReady')
     this.ipcExportFile = (e, type, fileFormat) => {
@@ -120,7 +120,7 @@ class BroswerContainer extends React.Component {
   }
 }
 
-BroswerContainer.propTypes = {
+BrowserContainer.propTypes = {
   corpus: PropTypes.object,
   status: PropTypes.object,
   serverUrl: PropTypes.string,
@@ -147,4 +147,4 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
 
 export default connect(mapStateToProps, {
   openTab
-})(BroswerContainer)
+})(BrowserContainer)
