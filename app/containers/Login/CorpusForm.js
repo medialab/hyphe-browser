@@ -36,7 +36,7 @@ const CorpusForm = ({
   const [crawlDepth, setCrawlDepth] = useState(1)
   const [creationRule, setCreationRule] = useState('domain')
 
-  const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 3
+  const maxDepth = serverStatus && serverStatus.hyphe && serverStatus.hyphe.max_depth || 1
   const depths = [ ...Array(maxDepth).keys() ].map(i => i+1)
   const { formatMessage } = useIntl()
 
@@ -145,7 +145,7 @@ const CorpusForm = ({
           {
             !submitting &&
             <div onClick={ onTogglePasswordProtected } className="form-group horizontal">
-              <input readOnly checked={ passwordProtected } type="radio" />
+              <input readOnly checked={ passwordProtected } type="checkbox" />
               <label><T id="password-protected-creation" /></label>
             </div>
           }
@@ -156,7 +156,7 @@ const CorpusForm = ({
         <div className={ cx('options-wrapper', { active: advancedOptions }) }>
           {!submitting &&
             <div onClick={ () => setAdvancedOptions(!advancedOptions) } className="form-group horizontal">
-              <input readOnly checked={ advancedOptions } type="radio" />
+              <input readOnly checked={ advancedOptions } type="checkbox" />
               <label><T id="advanced-creation-options" /></label>
             </div>
           }
@@ -165,7 +165,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="depth-creation" />
                 <HelpPin place="top">
-                  <T id="depth-creation-help" />
+                  {formatMessage({ id: "depth-creation-help" })}
                 </HelpPin>
               </label>
               {
@@ -184,7 +184,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="default-creation-rule" />
                 <HelpPin place="top">
-                  <T id="default-creation-rule-help" />
+                  {formatMessage({ id: "default-creation-rule-help" })}
                 </HelpPin>
 
               </label>

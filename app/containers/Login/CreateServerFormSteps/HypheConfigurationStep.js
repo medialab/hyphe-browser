@@ -205,7 +205,7 @@ const INITIAL_RAW_SETTINGS = {
   START_PREFIXES: false,
   START_MOST_CITED: false,
   START_MOST_CITED_COUNT: '5',
-  HYPHE_DEFAULT_CREATION_RULE: 'subdomain',
+  HYPHE_DEFAULT_CREATION_RULE: 'domain',
   HYPHE_CREATION_RULES: JSON.stringify({
     'twitter.com': 'path-1',
     'facebook.com': 'path-1',

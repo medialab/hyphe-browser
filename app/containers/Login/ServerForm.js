@@ -6,7 +6,7 @@
 // - url points to a non hyphe server
 
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import cx from 'classnames'
 import { clipboard } from 'electron'
 import { identity } from 'lodash'
@@ -50,12 +50,6 @@ const ServerForm = ({
     password: undefined,
     jsonConfig: undefined,
   })
-  useEffect(() => {
-    if (editMode) {
-      selectNode(jsonEl.current)
-      clipboard.writeText(serverConfig)
-    }
-  }, [])
   // deal with fields values
   const setDataState = (key, value) => {
     setData({
@@ -221,10 +215,30 @@ const ServerForm = ({
             className="form-group"
             style={ { borderTop: '1px solid var(--color-grey-dark)' } }
           >
-            <label><T id="export-this-server-config" /></label>
-            <pre className="json-text" ref={ jsonEl }>
-              <code>{ serverConfig }</code>
-            </pre>
+            <label>
+              <span><T id="export-this-server-config" /></span>
+              <button
+                style={ { float: 'right' } }
+                onClick={ () => {
+                  clipboard.writeText(serverConfig)
+                  window.alert(formatMessage({ id: 'export-this-server-config-text' }))
+                } }
+                className="hint--bottom-left"
+                aria-label={ formatMessage({ id: 'export-this-server-config' }) }
+              >
+                <i className="ti-export" />
+              </button>
+            </label>
+            <textarea
+              readonly
+              value={ serverConfig }
+              style={ {
+                resize: 'none',
+                height: '200px',
+                overflow: 'hidden',
+                width: '100%'
+              } }
+            />
           </div>
         }
 
