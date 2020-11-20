@@ -2,6 +2,8 @@
   "adjust": "Créer une nouvelle webentité à partir de cette url",
   "api-url": "URL du serveur Hyphe",
   "available-corpora": "{count, plural, \n=0 {aucun corpus}\n=1 {1 corpus}\nother {# corpus}}",
+  "no-webentities-to-download": "Il n'y a pas encore de telle WebEntité dans le corpus.",
+
   "browse-back": "Page précédente",
   "browse-forward": "Page suivante",
   "browse-reload": "Rafraîchir",
