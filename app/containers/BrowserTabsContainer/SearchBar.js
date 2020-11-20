@@ -45,20 +45,23 @@ const SearchBar = ({
       setSearchText('')
       onHideSearchBar()
     }
-    if (e.target.value.length > 0 && e.keyCode === 13 ) {
-      if (e.shitKey) {
+    if (e.target.value.length > 0 && (e.keyCode === 13 || (e.keyCode === 71 && e.ctrlKey))) {
+      if (e.shiftKey) {
         onUpdateSearch(e.target.value, -1)
       } else {
         onUpdateSearch(e.target.value, 1)
       }
-
     }
+  }
+
+  const handleCancel = () => {
+    setSearchText('')
+    onHideSearchBar()
   }
   return (
     <div
       id={ `searchbar-${ id }` }
       className="searchbar-container"
-      style={ { position: 'fixed', zIndex: 1, bottom: '0px' } }
     >
       <span className="search-input">
         <input
@@ -74,9 +77,9 @@ const SearchBar = ({
           <button onClick={ handleFindPrev }><i className="ti-angle-up" /></button>
           <button onClick={ handleFindNext }><i className="ti-angle-down" /></button>
           <span>{ result.activeMatchOrdinal }/{ result.matches }</span>
-        </span>
-        : null
+        </span> : null
       }
+      <button className="cancel" onClick={ handleCancel }><i className="ti-close" /></button>
     </div>
   )
 }

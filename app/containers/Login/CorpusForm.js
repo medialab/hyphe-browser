@@ -47,6 +47,13 @@ const CorpusForm = ({
     }
   }, [serverError])
 
+  useEffect(() => {
+    if(!advancedOptions) {
+      setCrawlDepth(1);
+      setCreationRule('domain')
+    }
+  }, [advancedOptions])
+
   // deal with fields values
   const setDataState = (key, value) => {
     setData({
@@ -165,7 +172,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="depth-creation" />
                 <HelpPin place="top">
-                  {formatMessage({ id: "depth-creation-help" })}
+                  {formatMessage({ id: 'depth-creation-help' })}
                 </HelpPin>
               </label>
               {
@@ -175,7 +182,7 @@ const CorpusForm = ({
                     className="form-group horizontal minified"
                     onClick={ () => setCrawlDepth(depth) }
                   >
-                    <input readOnly type="radio" checked={ depth === crawlDepth } />
+                    <input disabled={ submitting } readOnly type="radio" checked={ depth === crawlDepth } />
                     <label>{depth}</label>
                   </div>
                 ))
@@ -184,7 +191,7 @@ const CorpusForm = ({
             <div className="form-group">
               <label><T id="default-creation-rule" />
                 <HelpPin place="top">
-                  {formatMessage({ id: "default-creation-rule-help" })}
+                  {formatMessage({ id: 'default-creation-rule-help' })}
                 </HelpPin>
 
               </label>
@@ -195,7 +202,7 @@ const CorpusForm = ({
                     className="form-group horizontal minified"
                     onClick={ () => setCreationRule(rule) }
                   >
-                    <input readOnly type="radio" checked={ creationRule === rule } />
+                    <input readOnly disabled={ submitting } type="radio" checked={ creationRule === rule } />
                     <label>{rule}</label>
                   </div>
                 ))
