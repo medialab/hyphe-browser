@@ -81,7 +81,23 @@ class BrowserContainer extends React.Component {
     const corpusId = corpus.corpus_id
     const fileName = `${corpusId}_tags`
     jsonrpc(serverUrl)('store.get_tags', ['USER', corpusId])
-      .then((tags) => downloadFile(tags, fileName, fileFormat))
+      .then((tags) => {
+        if (fileFormat === 'csv') {
+          const flatTags = []
+          Object.keys(tags).forEach((cat) => {
+            Object.keys(tags[cat]).forEach((val) => {
+              flatTags.push({
+                "CATEGORY": cat,
+                "VALUE": val,
+                "COUNT": tags[cat][val]
+              })
+            })
+          })
+          downloadFile(flatTags, fileName, fileFormat)
+        } else {
+          downloadFile(tags, fileName, fileFormat)
+        }
+      })
   }
 
   render () {
