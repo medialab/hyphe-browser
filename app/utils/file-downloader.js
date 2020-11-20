@@ -39,12 +39,10 @@ const translateValue = (value, type, mode) => {
     return ''
   } else if(type == 'json'){
 
-    if(mode == 'JSON'){
-      return value
-    } else if(mode == 'MD'){
+    if(mode == 'MD'){
       return '```sh\n' + JSON.stringify(value) + '\n```'
     } else {
-      return JSON.stringify(value)
+      return value
     }
 
   }
