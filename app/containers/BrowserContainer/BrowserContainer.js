@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ipcRenderer as ipc } from 'electron'
+import { injectIntl } from 'react-intl'
 
 import Spinner from '../../components/Spinner'
 import CorpusStatusWatcher from './CorpusStatusWatcher'
@@ -36,8 +37,9 @@ class BrowserContainer extends React.Component {
   }
 
   downloadWebentities = (list, listName, fileFormat) => {
-    if (list.length === 0) return
-    const { tlds, corpus } = this.props
+    const { tlds, corpus, intl } = this.props
+    const { formatMessage } = intl
+    if (list.length === 0) return window.alert(formatMessage({id: 'no-webentities-to-download'}))
     const corpusId = corpus.corpus_id
     const parsedWebentity = list.map((we) => {
       if (we.tags) {
@@ -161,6 +163,6 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
   locale
 })
 
-export default connect(mapStateToProps, {
+export default injectIntl(connect(mapStateToProps, {
   openTab
-})(BrowserContainer)
+})(BrowserContainer))

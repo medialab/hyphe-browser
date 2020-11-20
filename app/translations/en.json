@@ -2,6 +2,7 @@
   "adjust": "Create a new webentity for this url",
   "api-url": "Hyphe server url",
   "available-corpora": "{count, plural, \n=0 {no corpus}\n=1 {1 corpus}\nother {# corpora}}",
+  "no-webentities-to-download": "There is no such WebEntity in the corpus yet.",
 
   "browse-back": "Previous page",
   "browse-forward": "Next page",
