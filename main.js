@@ -23,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let window
+let corpusReady = false
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -210,36 +211,36 @@ function getNewMenuBar (locale) {
       id: 'download',
       submenu: [
         { label: 'IN WebEntities as CSV',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'csv') }
         },
         { label: 'IN WebEntities as JSON',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'json') }
         },
         // { label: 'IN WebEntities as Sitography',
-        //   enabled: false,
+        //   enabled: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
         // },
         { label: 'IN + UNDECIDED WebEntities as CSV',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
         },
         { label: 'IN + UNDECIDED WebEntities as JSON',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
         },
         // { label: 'IN + UNDECIDED WebEntities as Sitography',
-        //   enabled: false,
+        //   enabled: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
         { type: 'separator' },
         { label: 'Tags as CSV',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'csv') }
         },
         { label: 'Tags as JSON',
-          enabled: false,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'json') }
         },
       ]
@@ -247,6 +248,7 @@ function getNewMenuBar (locale) {
   ]
   const menu = Menu.buildFromTemplate(template)
   ipc.on('corpusReady', () => {
+    corpusReady = true
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
       item.enabled = true
@@ -254,6 +256,7 @@ function getNewMenuBar (locale) {
   })
 
   ipc.on('corpusClosed', () => {
+    corpusReady = false
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
       item.enabled = false
