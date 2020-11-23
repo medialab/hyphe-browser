@@ -59,7 +59,9 @@ const EntityCard = ({
         <div aria-label={ name } className="name-wrapper hint--bottom">
           <h4 style={ { width: wrapperWidth } } className="name">{name}</h4>
         </div>
-        <h5 className="url">{homepage}</h5>
+        <div className="homepage-wrapper hint--bottom" aria-label={ homepage }>
+          <h5 className="url">{homepage}</h5>
+        </div>
         {
           !!indegree &&
           <div className="statistics">
