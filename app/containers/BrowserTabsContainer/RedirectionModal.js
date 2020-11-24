@@ -133,7 +133,7 @@ const RedirectionModal = ({
             <FormattedMessage
               id="redirect-modal.description"
               values={ {
-                originalUrl: originalWebentity.homepage,
+                originalUrl: originalWebentity.tabUrl || originalWebentity.homepage,
                 originalWebentity: originalWebentity.name,
                 redirectUrl,
                 redirectWebentity: redirectWebentity.name,
