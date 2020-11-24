@@ -25,11 +25,12 @@
             // font-size: 13px;
             font-weight: bold;
             padding: 10px
-            text-transform: uppercase;
             background: var(--color-grey-dark);
             transition: all .5s ease
             z-index: 3
             cursor: pointer
+            .list-btn-text
+                text-transform: uppercase;
         .list-btn.in
                 background: var(--color-corpus-in)
         .list-btn.out
@@ -74,7 +75,7 @@
     .list-name-container:not(.is-active)
         opacity: .5
         &:hover
-            opacity: .8
+            opacity: 1
         .list-btn
             font-size: 10px
             padding: 10px

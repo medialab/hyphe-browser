@@ -149,7 +149,9 @@ const StackListLayout = ({
                     <li key={ index } onClick={ handleSelectList } className={ 'list-name-container ' + (selectedList === stack.id ? 'is-active' : '') }>
                       <span className="list-btn-container">
                         <button className={ `list-btn ${stack.value}` }>
-                          <T id={ `stack-status.${stack.id}` } />
+                          <span className="list-btn-text">
+                            <T id={ `stack-status.${stack.id}` } />
+                          </span>
                           <HelpPin>
                             {formatMessage({ id: `stack-status.help.${stack.id}` })}
                           </HelpPin>
