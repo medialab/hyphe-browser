@@ -160,7 +160,7 @@ function getNewMenuBar (locale) {
       ]
     }] : []),
     {
-      label: langEn ? '&Edit' : 'Édition',
+      label: langEn ? '&Edit' : '&Edition',
       id: 'edit',
       submenu: [
         {
@@ -190,7 +190,7 @@ function getNewMenuBar (locale) {
     },
     // { role: 'languageMenu' }
     {
-      label:  langEn ? 'Language': 'Langue',
+      label:  langEn ? '&Language': '&Langue',
       id: 'lang',
       submenu: [
         { label: langEn ? 'English': 'Anglais',
@@ -207,40 +207,40 @@ function getNewMenuBar (locale) {
     },
     // { role: 'downloadMenu' },
     {
-      label: langEn ? 'Download': 'Télécharger',
+      label: langEn ? '&Download': '&Télécharger',
       id: 'download',
       submenu: [
         { label: 'IN WebEntities as CSV',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'csv') }
         },
         { label: 'IN WebEntities as JSON',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'json') }
         },
         // { label: 'IN WebEntities as Sitography',
-        //   enabled: corpusReady,
+        //   visible: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
         // },
         { label: 'IN + UNDECIDED WebEntities as CSV',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
         },
         { label: 'IN + UNDECIDED WebEntities as JSON',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
         },
         // { label: 'IN + UNDECIDED WebEntities as Sitography',
-        //   enabled: corpusReady,
+        //   visible: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
-        { type: 'separator' },
+        { type: 'separator', visible: corpusReady },
         { label: 'Tags as CSV',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'csv') }
         },
         { label: 'Tags as JSON',
-          enabled: corpusReady,
+          visible: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'json') }
         },
       ]
@@ -251,7 +251,7 @@ function getNewMenuBar (locale) {
     corpusReady = true
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
-      item.enabled = true
+      item.visible = true
     })
   })
 
@@ -259,7 +259,7 @@ function getNewMenuBar (locale) {
     corpusReady = false
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
-      item.enabled = false
+      item.visible = false
     })
   })
 
