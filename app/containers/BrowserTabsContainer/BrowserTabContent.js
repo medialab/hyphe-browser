@@ -152,7 +152,7 @@ class BrowserTabContent extends React.Component {
               })
             } else {
               // TODO: this is not right webentity for Linkedin internal redirect cases
-              if (!this.state.dnsError && this.state.originalWebentity && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+              if (!this.state.dnsError && this.state.originalWebentity && webentity.id !== this.state.originalWebentity.id && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
                 this.setState({
                   mergeRequired: {
                     redirectUrl: info,
