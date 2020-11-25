@@ -187,16 +187,22 @@
                 border: none
                 transition: background .2s ease
                 color: var(--color-white)
-                &:hover
-                    background: var(--color-grey-darker)
                 &.IN
                     background: var(--color-corpus-in)
+                    &:hover
+                        background: var(--color-black)
                 &.OUT
-                        background: var(--color-corpus-out)
+                    background: var(--color-corpus-out)
+                    &:hover
+                        background: var(--color-black)
                 &.UNDECIDED
-                        background: var(--color-corpus-undecided)
+                    background: var(--color-corpus-undecided)
+                    &:hover
+                        background: var(--color-black)
                 &.DISCOVERED
                     background: var(--color-corpus-discovered)
+                    &:hover
+                        background: var(--color-black)
         .webentities-list-container
             background: var(--color-grey)
             margin: 10px
