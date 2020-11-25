@@ -437,6 +437,13 @@ class BrowserTabContent extends React.Component {
             }).then((webentity) => setTabWebentity({ tabId: id, webentity }))
             setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
           })
+        } else if (mergeDecision === 'NONE') {
+          // set current webentity to redirected one
+          setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
+          setTabWebentity({
+            tabId: id,
+            webentity: this.state.mergeRequired.redirectWebentity
+          })
         }
         this.setState({ originalWebentity: null, dnsError: false, mergeRequired: null, disableRedirect: false })
       }

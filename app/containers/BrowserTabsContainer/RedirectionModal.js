@@ -167,7 +167,7 @@ const RedirectionModal = ({
                   </button>
                 </li>
                 <li>
-                  <button  onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>
+                  <button onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>
                     <FormattedMessage
                       id="redirect-modal.step-2-merge"
                       values={ {
@@ -180,7 +180,7 @@ const RedirectionModal = ({
                 </li>
                 {longestMatching(redirectWebentity.prefixes, redirectUrl, tlds) &&
                   <li>
-                    <button  onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>
+                    <button onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>
                       <FormattedMessage
                         id="redirect-modal.step-2-merge-reverse"
                         values={ {
@@ -192,6 +192,16 @@ const RedirectionModal = ({
                     </button>
                   </li>
                 }
+                <li>
+                  <button onClick={ () => onSetMergeDecision('NONE') } className={ cx('btn', { 'btn-success': mergeDecision === 'NONE' }) }>
+                    <FormattedMessage
+                      id="redirect-modal.step-2-no-action"
+                      values={ {
+                        strong: (name) => <strong>{name}</strong>
+                      } }
+                    />
+                  </button>
+                </li>
               </ul>
               {mergeDecision === 'MERGE-REVERSE' &&
                 <MergeReverse
