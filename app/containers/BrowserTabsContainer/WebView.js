@@ -226,6 +226,7 @@ const WebView = ({
   return (
     <webview
       ref={ webviewRef }
+      preload="./utils/webview-preload-script.js"
       useragent={ WEBVIEW_UA }
       src={ url }
     />
