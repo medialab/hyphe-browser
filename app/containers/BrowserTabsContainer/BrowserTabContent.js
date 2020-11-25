@@ -152,7 +152,7 @@ class BrowserTabContent extends React.Component {
               })
             } else {
               // TODO: this is not right webentity for Linkedin internal redirect cases
-              if (!this.state.dnsError && this.state.originalWebentity && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+              if (!this.state.dnsError && this.state.originalWebentity && webentity.id !== this.state.originalWebentity.id && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
                 this.setState({
                   mergeRequired: {
                     redirectUrl: info,
@@ -436,6 +436,13 @@ class BrowserTabContent extends React.Component {
               url
             }).then((webentity) => setTabWebentity({ tabId: id, webentity }))
             setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
+          })
+        } else if (mergeDecision === 'NONE') {
+          // set current webentity to redirected one
+          setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
+          setTabWebentity({
+            tabId: id,
+            webentity: this.state.mergeRequired.redirectWebentity
           })
         }
         this.setState({ originalWebentity: null, dnsError: false, mergeRequired: null, disableRedirect: false })

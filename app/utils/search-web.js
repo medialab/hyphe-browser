@@ -3,7 +3,7 @@ export function getSearchUrl (engine, query) {
   switch(engine) {
   case 'google':
   default:
-    searchUrl = `https://google.fr/search?q=${ encodeURIComponent(query) }`
+    searchUrl = `https://www.google.com/search?q=${ encodeURIComponent(query) }`
     break
   case 'duckduckgo':
     searchUrl = `https://duckduckgo.com/?q=${ encodeURIComponent(query) }`
