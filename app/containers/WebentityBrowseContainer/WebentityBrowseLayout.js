@@ -140,20 +140,20 @@ const WebentityBrowseLayout = ({
     }
   }
 
-  const prevDisabled = !selectedStack ||  isFirst || loadingStack || loadingWebentity
-  const nextDisabled = !selectedStack || isLast || loadingStack || loadingWebentity
+  const prevDisabled = !selectedStack || isFirst || loadingStack || loadingWebentity
+  const nextDisabled = !selectedStack || isLast  || loadingStack || loadingWebentity
   return (
     <div className="browse-layout">
       <nav className="browse-nav">
+        { !prevDisabled &&
         <Tooltipable
           Tag="button"
-          className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !prevDisabled }) }
+          className={ cx('stack-nav-btn', formatStackName(selectedStack), 'hint--right') }
           onClick={ goPrevWebentity }
-          disabled={ prevDisabled }
-          aria-label={ !prevDisabled ? formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) : null }
+          aria-label={ formatMessage({ id: 'tooltip.stack-prev' }, { stack: formatStackName(selectedStack) }) }
         >
           <i className="ti-angle-left" />
-        </Tooltipable>
+        </Tooltipable> }
         <span
           className={ cx('current-webentity-name hint--bottom', { 'clickable':  notOnHomepage }) }
           onClick={ handleSetTabHomepage }
@@ -174,15 +174,15 @@ const WebentityBrowseLayout = ({
 
         </span>
 
+        { !nextDisabled &&
         <Tooltipable
           Tag="button"
-          className={ cx('stack-nav-btn', formatStackName(selectedStack), { 'hint--right': !nextDisabled }) }
+          className={ cx('stack-nav-btn', formatStackName(selectedStack), 'hint--right') }
           onClick={ goNextWebentity }
-          disabled={ nextDisabled }
-          aria-label={ !nextDisabled ? formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) : null }
+          aria-label={ formatMessage({ id: 'tooltip.stack-next' }, { stack: formatStackName(selectedStack) }) }
         >
           <i className="ti-angle-right" />
-        </Tooltipable>
+        </Tooltipable> }
       </nav>
       <ul className="browse-edition-container">
 

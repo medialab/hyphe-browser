@@ -88,12 +88,20 @@
             color: var(--color-white)
             &.IN
                 background: var(--color-corpus-in)
+                &.hint--always
+                    background: var(--color-black)!important
             &.OUT
                 background: var(--color-corpus-out)
+                &.hint--always
+                    background: var(--color-black)!important
             &.PROSPECTION
                 background: var(--color-corpus-discovered)
+                &.hint--always
+                    background: var(--color-black)!important
             &.UNDECIDED
                 background: var(--color-corpus-undecided)
+                &.hint--always
+                    background: var(--color-black)!important
         .current-webentity-name
             flex: 1
             font-weight: bold
