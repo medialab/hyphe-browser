@@ -77,7 +77,9 @@ const BrowserLayout = ({
                   >
                     <i className="ti-menu" />
                   </span>
-                  <T id="sidebar.inquiry-overview" />
+                  <span className="switch-mode-title-text">
+                    <T id="sidebar.inquiry-overview" />
+                  </span>
 
                   <HelpPin>{formatMessage({ id: 'sidebar.inquiry-overview-help' })}</HelpPin></span></button>
               </li>
@@ -90,7 +92,9 @@ const BrowserLayout = ({
                     >
                       <i className="ti-desktop" />
                     </span>
-                    <T id="sidebar.browsed-webentity" />
+                    <span className="switch-mode-title-text">
+                      <T id="sidebar.browsed-webentity" />
+                    </span>
 
                     <HelpPin>{formatMessage({ id: 'sidebar.browsed-webentity-help' })}</HelpPin>
                   </span>

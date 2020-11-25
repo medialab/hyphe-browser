@@ -45,7 +45,9 @@ const LinkedWebentities = ({
                   key={ index } 
                   onClick={ handleSelectContextualList }
                 >
-                  <T id={ `sidebar.contextual.${l}` } />
+                  <span className="list-toggle-title">
+                    <T id={ `sidebar.contextual.${l}` } />
+                  </span>
                   <HelpPin>
                     {formatMessage({ id: `sidebar.contextual.${l}-help` })}
                   </HelpPin>
