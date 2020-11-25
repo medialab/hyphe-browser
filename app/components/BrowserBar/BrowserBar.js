@@ -88,7 +88,7 @@ const BrowserBar = function ({
     <div className="browser-bar">
       <div className="browser-tab-toolbar-navigation">
         <button 
-          className="btn btn-default navigate-btn hint--left"
+          className="btn btn-default navigate-btn hint--right"
           aria-label={ formatMessage({ id: 'browse-back' }) }
           disabled={ disableBack }
           onClick={ onGoBack }
@@ -96,7 +96,7 @@ const BrowserBar = function ({
           <span className="ti-angle-left" />
         </button>
         <button
-          className="btn btn-default navigate-btn hint--left" 
+          className="btn btn-default navigate-btn hint--right"
           aria-label={ formatMessage({ id: 'browse-forward' }) }
           disabled={ disableForward }
           onClick={ onGoForward }

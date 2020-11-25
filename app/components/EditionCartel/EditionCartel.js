@@ -12,7 +12,7 @@ const EditionCartel = ({
   title,
   help,
   isAlwaysOpen,
-  helpPlace = 'bottom'
+  helpPlace = 'bottom-right'
 }) => {
   return (
     <li className={ cx('edition-cartel', { 'is-always-open': isAlwaysOpen, 'is-open': isAlwaysOpen || isOpen }) }>
