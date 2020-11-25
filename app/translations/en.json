@@ -182,7 +182,7 @@
   "password-protected": "password protected",
   "running": "running",
 
-  "go-to-homepage": "click to browse to webentity's homepage",
+  "go-to-homepage": "click to browse to webentity's Homepage",
 
   "apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
   "discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
@@ -339,8 +339,8 @@
   "server-add": "Add server",
   "server-create": "Create a Hyphe server on the cloud (fees)",
   "server-name": "Name of your choice",
-  "set-homepage": "Set this webpage as the homepage of the webentity",
-  "is-homepage": "Tthis webpage is the homepage of the webentity",
+  "set-homepage": "Set this webpage as the Homepage of the webentity",
+  "is-homepage": "This webpage is the Homepage of the webentity",
   "sidebar.add-tags-category": "Add new category",
   "sidebar.categories": "Categories",
   "sidebar.freetags": "Research notes",
@@ -419,7 +419,7 @@
   "in-modale.title-step-1": "define the webentity's URLs perimeter",
   "in-modale.tooltip-step-1": "The webentity will aggregate all webpages whose URL begin with this \"URL prefix\"",
 
-  "in-modale.title-step-2": "choose the webentity's homepage",
+  "in-modale.title-step-2": "choose the webentity's Homepage",
   "in-modale.tooltip-step-2": "This is the main landing page to consider when working with this webentity. It is the one that will be displayed and loaded when visiting or visualising it",
 
   "in-modale.title-step-3-in": "adjust the webentity's name",

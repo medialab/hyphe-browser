@@ -30,7 +30,7 @@
   "password-protected-creation": "protégé par un mot de passe (optionnel)",
   "advanced-creation-options": "réglages avancés",
   "depth-creation": "Profondeur automatique des crawls",
-  "depth-creation-help": "Définit le nombre maximum de clicks effectués depuis la page d'accueil quand une webentité ajoutée en IN au corpus est crawlée automatiquement",
+  "depth-creation-help": "Définit le nombre maximum de clicks effectués depuis la Homepage quand une webentité ajoutée en IN au corpus est crawlée automatiquement",
   "default-creation-rule": "Règle de création des webentités",
   "default-creation-rule-help": "Définit comment les urls seront regroupés automatiquement en webentités par défaut",
 
@@ -106,7 +106,7 @@
   "create-cloud-server.step2.HYPHE_TRAPH_MAX_SIM_PAGES": "Traph simul pages",
   "create-cloud-server.step2.web-entites": "Gestion des web entités",
   "create-cloud-server.step2.start-pages": "Quelles pages utiliser pour démarrer un crawl ?",
-  "create-cloud-server.step2.START_HOMEPAGE": "Page d'accueil",
+  "create-cloud-server.step2.START_HOMEPAGE": "Homepage",
   "create-cloud-server.step2.START_PREFIXES": "Préfixes",
   "create-cloud-server.step2.START_MOST_CITED-1": "Les",
   "create-cloud-server.step2.START_MOST_CITED-2": "pages les plus sitées",
@@ -421,8 +421,8 @@
   "in-modale.title-step-1": "définir le périmètre des URLs de la webentité",
   "in-modale.tooltip-step-1": "La webentité agrégera l'ensemble des pages web dont l'URL commence par ce \"préfixe d'URL\"",
 
-  "in-modale.title-step-2": "choisir la page d'accueil de la webentité",
-  "in-modale.tooltip-step-2": "Il s'agit de la page principale à laquelle se référer quand on travaille avec cette webentité. C'est la page qui sera affichée et chargée lorsqu'on visite ou visualise cette webentité",
+  "in-modale.title-step-2": "choisir la Homepage de la webentité",
+  "in-modale.tooltip-step-2": "Il s'agit de la page principale à laquelle se référer quand on travaille avec cette webentité, généralement la page d'accueil du site. C'est celle qui sera affichée et chargée lorsqu'on visite ou visualise cette webentité",
 
   "in-modale.title-step-3-in": "ajuster le nom de la webentité",
   "in-modale.title-step-3-add": "donner un nom à la webentité",
