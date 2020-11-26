@@ -36,7 +36,7 @@
                 flex-direction: column
                 justify-content: stretch
                 align-items: stretch
-            
+
             li
                 background: var(--color-grey)
                 border-radius: var(--radius)
@@ -46,10 +46,9 @@
                 max-width: calc(30% - 10px)
                 transition: all .2s ease
                 min-width: 30%
-                
+
                 span.set-status-container-text
                     font-weight: bold
-                    margin-right: 3px
 
                 @media (max-width: $tablet-break-point)
                     width: 100%
@@ -65,7 +64,7 @@
                 &.undecided
                     background: var(--color-corpus-undecided)
                     color: white
-                
+
             li:hover:not(.in):not(.out):not(.undecided)
                 background: var(--color-grey-darker)
     .browse-nav
@@ -91,20 +90,14 @@
             color: var(--color-white)
             &.IN
                 background: var(--color-corpus-in)
-                &.hint--always
-                    background: var(--color-black)!important
             &.OUT
                 background: var(--color-corpus-out)
-                &.hint--always
-                    background: var(--color-black)!important
             &.PROSPECTION
                 background: var(--color-corpus-discovered)
-                &.hint--always
-                    background: var(--color-black)!important
             &.UNDECIDED
                 background: var(--color-corpus-undecided)
-                &.hint--always
-                    background: var(--color-black)!important
+            &.hint--always
+                background: var(--color-black)!important
         .current-webentity-name
             flex: 1
             font-weight: bold
@@ -140,9 +133,9 @@
                 background: var(--color-corpus-undecided)
             @media (max-width: $tablet-break-point)
                 display: none
-        button 
-            background: inherit 
-            border: none 
+        button
+            background: inherit
+            border: none
             font-size: 20px
             outline: none
             padding: 0
@@ -154,7 +147,7 @@
                 opacity: 0.2
     .webentity-name-container
         stretch(row)
-        input 
+        input
             flex: 1
         .btn
             margin-left: 5px

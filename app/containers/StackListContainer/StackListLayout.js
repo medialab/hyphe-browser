@@ -152,7 +152,7 @@ const StackListLayout = ({
                           <span className="list-btn-text">
                             <T id={ `stack-status.${stack.id}` } />
                           </span>
-                          <HelpPin>
+                          <HelpPin className="list-btn-help">
                             {formatMessage({ id: `stack-status.help.${stack.id}` })}
                           </HelpPin>
                         </button>

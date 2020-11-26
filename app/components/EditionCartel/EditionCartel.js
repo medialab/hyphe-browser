@@ -25,7 +25,8 @@ const EditionCartel = ({
               <i className="ti-angle-down" />
           }
           </span>
-          <span className="title">{title} <HelpPin place={ helpPlace }>{help}</HelpPin></span>
+          <span className="title">{title}</span>
+          <HelpPin place={ helpPlace }>{help}</HelpPin>
         </h4>
       </div>
       <div className="edition-cartel-content">

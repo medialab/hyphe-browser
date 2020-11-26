@@ -199,22 +199,22 @@ const WebentityBrowseLayout = ({
               // onClick={ () => setModalIsOpen(true)}
               onClick={ () => onSetWebentityStatus('IN') }
             >
-                <span className="set-status-container-text">IN</span>
-                <HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
+              <span className="set-status-container-text">IN</span>
+              <HelpPin>{formatMessage({ id: 'sidebar.cartel.webentity-status-help.IN' })}</HelpPin>
             </li>
             <li
               className={ webentity.status === 'UNDECIDED' ? 'undecided' : '' }
               onClick={ () => onSetWebentityStatus('UNDECIDED') }
             >
-                <span className="set-status-container-text">UND.</span>
-                <HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.UND' })}</HelpPin>
+              <span className="set-status-container-text">UND.</span>
+              <HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.UND' })}</HelpPin>
             </li>
             <li
               className={ webentity.status === 'OUT' ? 'out' : '' }
               onClick={ () => onSetWebentityStatus('OUT') }
             >
-                <span className="set-status-container-text">OUT</span>
-                <HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.OUT' })}</HelpPin>
+              <span className="set-status-container-text">OUT</span>
+              <HelpPin place="right">{formatMessage({ id: 'sidebar.cartel.webentity-status-help.OUT' })}</HelpPin>
             </li>
           </ul>
         </EditionCartel>

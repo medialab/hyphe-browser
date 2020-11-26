@@ -19,14 +19,14 @@ const HelpPin = ({
   className = '',
 }) => {
   return (
-    <span>
-     <Tooltipable
+    <span className={ `help-pin ${className}` }>
+      <Tooltipable
         Tag="span"
-        className={`hint--${place} ${className}`}
+        className={ `hint--${place} ` }
         aria-label={ children }
       >
         <i className="ti-help-alt" />
-     </Tooltipable>
+      </Tooltipable>
     </span>
   )
 }
