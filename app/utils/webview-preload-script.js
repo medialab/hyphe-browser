@@ -39,4 +39,8 @@ window.addEventListener('DOMContentLoaded', () => {
       bubble.style.display = 'none'
     }
   })
+
+  document.querySelectorAll('a').forEach((elem) => {
+    elem.setAttribute('target', '_blank')
+  })
 })

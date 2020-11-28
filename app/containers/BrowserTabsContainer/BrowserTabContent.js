@@ -130,47 +130,45 @@ class BrowserTabContent extends React.Component {
       }
       break
     case 'stop':
-      // will-navigate not triggered do not set tab url if redirected
+      this.setState({ previousUrl: info, disableRedirect: false })
       if (!this.state.mergeRequired) setTabUrl({ url: info, id })
-      if (this.state.mergeRequired ||
-          (!disableWebentity &&
-          !this.samePage(info))
-      ) {
+      if (!disableWebentity) {
         declarePage({
           serverUrl: server.url,
           corpusId,
           url: info
         }).then((webentity) => {
-          if (id) {
-            if (this.state.mergeRequired) {
-              this.setState({
-                mergeRequired: {
-                  ...this.state.mergeRequired,
-                  redirectWebentity: webentity
-                },
-                showRedirectionModal: true
-              })
-            } else {
-              // TODO: this is not right webentity for Linkedin internal redirect cases
-              if (!this.state.dnsError && this.state.originalWebentity && webentity.id !== this.state.originalWebentity.id && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
-                this.setState({
-                  mergeRequired: {
-                    redirectUrl: info,
-                    originalWebentity: this.state.originalWebentity,
-                    redirectWebentity: webentity
-                  },
-                  showRedirectionModal: true
-                })
-                setTabUrl({ url: this.state.originalWebentity.tabUrl, id })
-                setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
-              } else {
-                setTabWebentity({ tabId: id, webentity })
-              }
-            }
+          if (this.state.mergeRequired) {
+            // wait for url stop loading to declare webentity, then show RedirectionModal
+            this.setState({
+              mergeRequired: {
+                ...this.state.mergeRequired,
+                redirectWebentity: webentity
+              },
+              showRedirectionModal: true
+            })
+          } else if (!this.samePage(info) &&
+            !this.state.dnsError &&
+            this.state.originalWebentity &&
+            webentity.id !== this.state.originalWebentity.id &&
+            !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+            // handle uncatched redirection, if originalWebentity is not equal to final webentity
+            this.setState({
+              mergeRequired: {
+                redirectUrl: info,
+                originalWebentity: this.state.originalWebentity,
+                redirectWebentity: webentity
+              },
+              showRedirectionModal: true
+            })
+            setTabUrl({ url: this.state.originalWebentity.tabUrl, id })
+            setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
+          } else {
+            setTabWebentity({ tabId: id, webentity })
           }
         })
       }
-      this.setState({ previousUrl: info, disableRedirect: false  })
+
       setTabStatus({ loading: false }, id)
       addNavigationHistory({ url: info, corpusId })
       stoppedLoadingWebentity()
@@ -180,7 +178,7 @@ class BrowserTabContent extends React.Component {
         !this.state.dnsError &&
         !compareUrls(info.oldURL, info.newURL) &&
         !longestMatching(webentity.prefixes, info.newURL, tlds)) {
-        // initialize mergeRequired
+        // first redirect, initialize mergeRequired
         this.setState({
           mergeRequired: {
             redirectUrl: info.newURL,
@@ -188,6 +186,7 @@ class BrowserTabContent extends React.Component {
           }
         })
       } else if (this.state.mergeRequired) {
+        // intermediate redirect, most cases are http -> https redirection, then just update newURL
         this.setState({
           mergeRequired: {
             ...this.state.mergeRequired,
@@ -197,7 +196,7 @@ class BrowserTabContent extends React.Component {
       }
 
       if (this.state.mergeRequired && longestMatching(webentity.prefixes, info.newURL, tlds)) {
-        // handle redirect multiple times and longestMatching passes at final url
+        // handle redirect multiple times but if longestMatching passes at final url
         this.setState({
           mergeRequired: null,
           showRedirectionModal: false
@@ -496,7 +495,7 @@ class BrowserTabContent extends React.Component {
             onSetTabUrl={ handleSetTabUrl }
           />
         }
-        <div className="webview-container" style={{ display: url === PAGE_HYPHE_HOME ? 'none' : 'block' }} >
+        <div className="webview-container" style={ { display: url === PAGE_HYPHE_HOME ? 'none' : 'block' } } >
           <WebView
             id={ id } url={ url } closable={ closable } eventBus={ eventBus }
           />
