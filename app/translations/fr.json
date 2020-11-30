@@ -2,7 +2,7 @@
   "adjust": "Créer une nouvelle webentité à partir de cette url",
   "api-url": "URL du serveur Hyphe",
   "available-corpora": "{count, plural, \n=0 {aucun corpus}\n=1 {1 corpus}\nother {# corpus}}",
-  "no-webentities-to-download": "Il n'y a pas encore de telle WebEntité dans le corpus.",
+  "no-webentities-to-download": "Il n'y a pas encore de telle webentité dans le corpus.",
 
   "browse-back": "Page précédente",
   "browse-forward": "Page suivante",
@@ -311,7 +311,7 @@
   "hyphe-tab-title": "Onglet Hyphe",
   "ignore": "Ignorer",
   "indegree": "Citée par",
-  "info": "WebEntité",
+  "info": "Webentité",
   "launch": "Démarrer !",
   "linked": "Citée ",
   "linkedtimes": "{count, plural, \n=1 {une fois}\nother {# fois}}",
