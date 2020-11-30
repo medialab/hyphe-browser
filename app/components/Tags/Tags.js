@@ -40,6 +40,7 @@ const TagCreatable = ({
       ...base,
       color: '#000000'
     }),
+    menuPortal: base => ({ ...base, zIndex: 9999 }),
     menu: base => ({
       ...base,
       fontSize: '12px',
@@ -67,6 +68,7 @@ const TagCreatable = ({
     <Creatable
       ref={ creatableRef }
       styles= { customStyles }
+      menuPortalTarget={ document.body }
       theme={ theme => ({
         ...theme,
         colors: {
@@ -156,53 +158,53 @@ const Tags = (props) => {
             <ul className="categories-list">
               {
                 cachedCategories
-                .sort((a, b) => a.category.toLowerCase().localeCompare(b.category.toLowerCase()))
-                .map(({ category, value }) => {
+                  .sort((a, b) => a.category.toLowerCase().localeCompare(b.category.toLowerCase()))
+                  .map(({ category, value }) => {
 
-                  const handleUpdateTag = (option, {action}) => {
-                    console.log(action)
-                    const newTag = option ? option.value.trim() : ''
-                    const prevTag = cachedCategories.find((cat) => cat.category === category).value
-                    if (prevTag && option) {
-                      onUpdateTag(category, prevTag, newTag)
-                    } else {
-                      if (prevTag) {
-                        onRemoveTag(category, prevTag)
+                    const handleUpdateTag = (option, { action }) => {
+                      console.log(action)
+                      const newTag = option ? option.value.trim() : ''
+                      const prevTag = cachedCategories.find((cat) => cat.category === category).value
+                      if (prevTag && option) {
+                        onUpdateTag(category, prevTag, newTag)
+                      } else {
+                        if (prevTag) {
+                          onRemoveTag(category, prevTag)
+                        }
+                        if (option) {
+                          onAddTag(category, newTag)
+                        }
                       }
-                      if (option) {
-                        onAddTag(category, newTag)
-                      }
+
+                      setCategories(
+                        cachedCategories.map((cat) => {
+                          if (cat.category === category) {
+                            return {
+                              ...cat,
+                              value: newTag
+                            }
+                          }
+                          return cat
+                        })
+                      )
                     }
 
-                    setCategories(
-                      cachedCategories.map((cat) => {
-                        if (cat.category === category) {
-                          return {
-                            ...cat,
-                            value: newTag
-                          }
-                        }
-                        return cat
-                      })
+                    return (
+                      <li className="category-item-container" key={ category }>
+                        <span className="category-name">
+                          {category}
+                        </span>
+                        <span className="category-input">
+                          <TagCreatable
+                            value={ value }
+                            category={ category }
+                            suggestions={ suggestions }
+                            handleUpdateTag={ handleUpdateTag }
+                          />
+                        </span>
+                      </li>
                     )
-                  }
-
-                  return (
-                    <li className="category-item-container" key={ category }>
-                      <span className="category-name">
-                        {category}
-                      </span>
-                      <span className="category-input">
-                        <TagCreatable
-                          value={ value }
-                          category={ category }
-                          suggestions={ suggestions }
-                          handleUpdateTag={ handleUpdateTag }
-                        />
-                      </span>
-                    </li>
-                  )
-                })
+                  })
               }
             </ul>
             :
