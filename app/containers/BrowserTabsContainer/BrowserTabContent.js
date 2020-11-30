@@ -106,6 +106,25 @@ class BrowserTabContent extends React.Component {
     return compareUrls(this.state.previousUrl, info)
   }
 
+  handleSetTabUrl = (value) => {
+    const { id, server, corpusId, setTabUrl, setAsideMode, declarePage } = this.props
+    setTabUrl({ url: value, id })
+    setAsideMode('webentityBrowse')
+    declarePage({
+      serverUrl: server.url,
+      corpusId,
+      url: value
+    }).then((webentity) => {
+      this.setState({
+        mergeRequired: null,
+        originalWebentity: {
+          ...webentity,
+          tabUrl: value
+        }
+      })
+    })
+  }
+
   updateTabStatus = (event, info)  => {
     const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
       showError, showNotification, hideError, declarePage, setTabWebentity,
@@ -117,7 +136,6 @@ class BrowserTabContent extends React.Component {
       break
     case 'start':
       hideError()
-      // will-navigate not triggered do not set tab url if redirected
       if (!this.state.mergeRequired) setTabStatus({ loading: true, url: info }, id)
       if (!disableWebentity &&
         // do not declare pages(show sidebar) when only changing url's anchor
@@ -182,7 +200,8 @@ class BrowserTabContent extends React.Component {
         this.setState({
           mergeRequired: {
             redirectUrl: info.newURL,
-            originalWebentity: webentity
+            // for will-navigate cases use updated state originalWebentity instead of props webentity
+            originalWebentity: this.state.originalWebentity || webentity
           }
         })
       } else if (this.state.mergeRequired) {
@@ -210,11 +229,14 @@ class BrowserTabContent extends React.Component {
       setTabIcon({ icon: info, id })
       break
     case 'navigate':
-      // will-navigate not triggered do not set tab url if redirected
       if (!this.state.mergeRequired) setTabUrl({ url: info, id })
       if (this.state.showSearchBar) {
         this.handleHideSearchBar()
       }
+      break
+    case 'will-navigate':
+      // user click link in webpage
+      this.handleSetTabUrl(info)
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)
@@ -331,24 +353,6 @@ class BrowserTabContent extends React.Component {
     }
     const handleGoForward = () => {
       eventBus.emit('goForward')
-    }
-
-    const handleSetTabUrl = (value) => {
-      setTabUrl({ url: value, id })
-      setAsideMode('webentityBrowse')
-      declarePage({
-        serverUrl: server.url,
-        corpusId,
-        url: value
-      }).then((webentity) => {
-        this.setState({
-          mergeRequired: null,
-          originalWebentity: {
-            ...webentity,
-            tabUrl: value
-          }
-        })
-      })
     }
     const handleSetWebentityHomepage = () => setWebentityHomepage({ serverUrl: server.url, corpusId, homepage: url, webentityId: webentity.id })
     const onAddClick = () => {
@@ -478,7 +482,7 @@ class BrowserTabContent extends React.Component {
           onReload={ handleReload }
           onGoBack={ handleGoBack }
           onGoForward={ handleGoForward }
-          onSetTabUrl={ handleSetTabUrl }
+          onSetTabUrl={ this.handleSetTabUrl }
           onSetHomepage = { handleSetWebentityHomepage }
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
@@ -492,7 +496,7 @@ class BrowserTabContent extends React.Component {
             selectedEngine = { selectedEngine }
             onSelectStack = { handleFetchStackAndSetTab }
             onChangeEngine = { onChangeEngine }
-            onSetTabUrl={ handleSetTabUrl }
+            onSetTabUrl={ this.handleSetTabUrl }
           />
         }
         <div className="webview-container" style={ { display: url === PAGE_HYPHE_HOME ? 'none' : 'block' } } >

@@ -121,6 +121,11 @@ const WebView = ({
       update('navigate', event.url)
     })
 
+    // when the window.location object is changed or a user clicks a link in the page.
+    webview.addEventListener('will-navigate', (event) => {
+      update('will-navigate', event.url)
+    })
+
     // Handle redirects - deprecated
     // webview.addEventListener('did-get-redirect-request', ({ oldURL, newURL, isMainFrame }) => {
     //   if (isMainFrame) {
