@@ -211,36 +211,36 @@ function getNewMenuBar (locale) {
       id: 'download',
       submenu: [
         { label: 'IN WebEntities as CSV',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'csv') }
         },
         { label: 'IN WebEntities as JSON',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN', 'json') }
         },
         // { label: 'IN WebEntities as Sitography',
-        //   visible: corpusReady,
+        //   enabled: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN', 'sito') }
         // },
         { label: 'IN + UNDECIDED WebEntities as CSV',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'csv') }
         },
         { label: 'IN + UNDECIDED WebEntities as JSON',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'json') }
         },
         // { label: 'IN + UNDECIDED WebEntities as Sitography',
-        //   visible: corpusReady,
+        //   enabled: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
-        { type: 'separator', visible: corpusReady },
+        { type: 'separator'},
         { label: 'Tags as CSV',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'csv') }
         },
         { label: 'Tags as JSON',
-          visible: corpusReady,
+          enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'json') }
         },
       ]
