@@ -9,12 +9,6 @@ import { SEARCH_ENGINES } from  '../../constants'
 
 import { getSearchUrl } from '../../utils/search-web'
 
-// const CORPUS_HELP = 'a corpus is a network of webpages, regrouped as webentities, representing the result of an inquiry into a specific issue on the web'
-// const WEBENTITY_HELP = 'a webentity is a group of webpages defined to correspond to the presence of a specific actor on the web'
-// const IN_HELP = 'the IN webentities are the webentities defined as relevant to the inquiry'
-// const OUT_HELP = 'the IN webentities are the webentities defined as irrelevant to the inquiry'
-// const PROSPECTION_HELP = 'the PROSPECTION webentities are the webentities discovered during the inquiry during browsing, or crawling operations by the hyphe server'
-
 const NewTabContent = ({
   isEmpty,
   selectedEngine,

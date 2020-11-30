@@ -13,7 +13,7 @@ import DownloadListBtn from '../DownloadListBtn'
 const LinkedWebentities = ({
   setSelected,
   selected,
-  viewedProspectionIds,
+  viewedSuggestionIds,
   list,
   loadingBatchActions,
   resetActions,
@@ -81,7 +81,7 @@ const LinkedWebentities = ({
                 setStatusActions(toggleAction(statusActions, link.id, 'UNDECIDED'))
               }
 
-              const isViewed = link.status === 'DISCOVERED' && viewedProspectionIds && viewedProspectionIds.has(link.id)
+              const isViewed = link.status === 'DISCOVERED' && viewedSuggestionIds && viewedSuggestionIds.has(link.id)
                             
               return (
                 <EntityCard 

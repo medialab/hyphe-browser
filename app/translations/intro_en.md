@@ -11,8 +11,8 @@ Hyphe browser allows to qualitatively - and collectively - review and define the
 A typical workflow with hyphe browser could look like that :
 
 1.  you define a few websites of individuals, organizations, actors, ... relevant to your inquiry, browse to them with hyphe browser, and include them [IN](#in) the corpus
-2.  each webentity included in the corpus will be automatically analyzed (_crawled_) by the hyphe server to discover new possibly relevant webentities and add them to the [PROSPECTION](#prospection) list
-3.  you review webentities proposed by the server in the [PROSPECTION](#prospection) list, reading them with the browser and making the choice to include them [IN](#in) the corpus or exclude them [OUT](#out) of the corpus
+2.  each webentity included in the corpus will be automatically analyzed (_crawled_) by the hyphe server to discover new possibly relevant webentities and add them to the [SUGGESTIONS](#suggestions) list
+3.  you review webentities proposed by the server in the [SUGGESTIONS](#suggestions) list, reading them with the browser and making the choice to include them [IN](#in) the corpus or exclude them [OUT](#out) of the corpus
 4.  the 2 previous steps repeat as long as you are not satisfied with the web territory covered by your inquiry
 5.  once your corpus is stabilized and your mapping seems comprehensive enough to start analyzing their relations, you can tag your webentities according to different categories and then visualize them as a network in hyphe (top right button)
 6.  of course, all of this process is iterative and previous steps can repeat as much as necessary

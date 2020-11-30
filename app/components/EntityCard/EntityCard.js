@@ -22,7 +22,7 @@ const EntityCard = ({
   onClickUndecided,
 }) => {
   const { status, name, homepage, indegree, previousStatus } = link
-  const formattedStatus = status === 'DISCOVERED' ? 'prospection' : status
+  const formattedStatus = status === 'DISCOVERED' ? 'suggestions' : status
   const [wrapperWidth, setWrapperWidth] = useState(null)
   const wrapperRef = useRef(null)
 
@@ -33,7 +33,7 @@ const EntityCard = ({
     setWrapperWidth(wrapperBox.width)
   }, [])
 
-  const prevStatus = previousStatus && (previousStatus === 'DISCOVERED' ? 'prospection' : previousStatus.toLowerCase())
+  const prevStatus = previousStatus && (previousStatus === 'DISCOVERED' ? 'suggestions' : previousStatus.toLowerCase())
   return (
     <li
       className={ cx('entity-card', status, { 'is-active': isActive }, { 'is-visited': isViewed }) }
@@ -53,7 +53,7 @@ const EntityCard = ({
           </span>
         }
         <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ formatMessage({ id: 'webentity-is-in-list' },{ list: formattedStatus.toUpperCase() }) }>{formattedStatus.charAt(0).toUpperCase()}</span>
-        {formattedStatus === 'prospection' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
+        {formattedStatus === 'suggestions' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div ref={ wrapperRef } className="card-content">
         <div aria-label={ name } className="name-wrapper hint--bottom">

@@ -25,7 +25,7 @@ const WebentityBrowseLayout = ({
   webentity,
   webentitiesList,
   initialStatus,
-  viewedProspectionIds,
+  viewedSuggestionIds,
   navigationHistory,
   selectedStack,
   selectedWebentity,
@@ -63,7 +63,7 @@ const WebentityBrowseLayout = ({
 
   const formatStackName = stackName => {
     if (stackName === 'DISCOVERED') {
-      return 'PROSPECTION'
+      return 'SUGGESTIONS'
     }
     return stackName
   }
@@ -271,7 +271,7 @@ const WebentityBrowseLayout = ({
                   submitActions: submitLinkedEntitiesActions,
                   pendingActions,
                   loadingBatchActions,
-                  viewedProspectionIds,
+                  viewedSuggestionIds,
 
                   statusActions,
                   setStatusActions,

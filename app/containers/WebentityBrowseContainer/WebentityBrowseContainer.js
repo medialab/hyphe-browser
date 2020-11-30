@@ -68,12 +68,12 @@ const WebentityBrowseContainer = ({
 
   const debounceFetchPaginatePages = debounce(fetchPaginatePages, 1000)
 
-  // storing viewed prospections in an efficient way
-  let viewedProspectionIds = Object.keys(webentities.webentities)
+  // storing viewed suggestions in an efficient way
+  let viewedSuggestionIds = Object.keys(webentities.webentities)
     .map((id)=> webentities.webentities[id])
     .filter((e) => e.status === 'DISCOVERED')
     .map(e => e.id)
-  viewedProspectionIds = new Set(viewedProspectionIds)
+  viewedSuggestionIds = new Set(viewedSuggestionIds)
 
   useEffect(() => {
     if (webentity) {
@@ -203,7 +203,7 @@ const WebentityBrowseContainer = ({
   return (
     <WebentityBrowseLayout
       webentity={ webentity }
-      viewedProspectionIds={ viewedProspectionIds }
+      viewedSuggestionIds={ viewedSuggestionIds }
       navigationHistory={ navigationHistory }
       stackWebentities={ stackWebentities }
       initialStatus={ initialStatus }

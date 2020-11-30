@@ -49,7 +49,7 @@ const BrowserLayout = ({
 
   const formatStackName = stackName => {
     if (stackName === 'DISCOVERED') {
-      return 'PROSPECTION'
+      return 'SUGGESTIONS'
     }
     return stackName
   }
