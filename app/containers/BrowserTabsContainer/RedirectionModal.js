@@ -156,17 +156,6 @@ const RedirectionModal = ({
               <h3><FormattedMessage id="redirect-modal.step-2-title" /></h3>
               <ul className="actions-container big column">
                 <li>
-                  <button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>
-                    <FormattedMessage
-                      id="redirect-modal.step-2-out"
-                      values={ {
-                        originalWebentity: originalWebentity.name,
-                        strong: (name) => <strong>{name}</strong>
-                      } }
-                    />
-                  </button>
-                </li>
-                <li>
                   <button onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>
                     <FormattedMessage
                       id="redirect-modal.step-2-merge"
@@ -192,6 +181,17 @@ const RedirectionModal = ({
                     </button>
                   </li>
                 }
+                <li>
+                  <button onClick={ () => onSetMergeDecision('OUT') } className={ cx('btn', { 'btn-success': mergeDecision === 'OUT' }) }>
+                    <FormattedMessage
+                      id="redirect-modal.step-2-out"
+                      values={ {
+                        originalWebentity: originalWebentity.name,
+                        strong: (name) => <strong>{name}</strong>
+                      } }
+                    />
+                  </button>
+                </li>
                 <li>
                   <button onClick={ () => onSetMergeDecision('NONE') } className={ cx('btn', { 'btn-success': mergeDecision === 'NONE' }) }>
                     <FormattedMessage
