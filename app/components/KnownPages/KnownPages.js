@@ -63,7 +63,6 @@ const KnownPages = ({
           isHomepage={ isHomepage }
           onClick= { handleSetTabUrl }
           onClickHomepage = { handleSetHomepage }
-          innerWidth={ 166 }
           { ...link }
         />
       </div>
