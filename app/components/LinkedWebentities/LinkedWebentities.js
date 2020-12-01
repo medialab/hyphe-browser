@@ -11,6 +11,7 @@ import CardsList from '../CardsList'
 import DownloadListBtn from '../DownloadListBtn'
 
 const LinkedWebentities = ({
+  webentity,
   setSelected,
   selected,
   viewedSuggestionIds,
@@ -33,12 +34,13 @@ const LinkedWebentities = ({
       <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
         <nav className="list-toggle">
           {
-            // hide parents and children tabs for now
             ['referrers', 'referrals'].map((l, index) => {
               const handleSelectContextualList = () => {
                 setSelected(l)
                 resetActions()
               }
+              const count = webentity[(l === 'referrers' ? 'in' : 'out') + 'degree']
+
               return (
                 <button
                   className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selected }) }
@@ -46,7 +48,7 @@ const LinkedWebentities = ({
                   onClick={ handleSelectContextualList }
                 >
                   <span className="list-toggle-title">
-                    <T id={ `sidebar.contextual.${l}` } />
+                    <T id={ `sidebar.contextual.${l}` } values={ { count: count} } />
                   </span>
                   <HelpPin>
                     {formatMessage({ id: `sidebar.contextual.${l}-help` })}

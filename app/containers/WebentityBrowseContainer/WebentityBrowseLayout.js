@@ -264,6 +264,7 @@ const WebentityBrowseLayout = ({
               <LinkedWebentities
                 {
                 ...{
+                  webentity: webentity,
                   setSelected: setSelectedLinkedEntities,
                   selected: selectedLinkedEntities,
                   list: webentity[selectedLinkedEntities],
