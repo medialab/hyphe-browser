@@ -2,10 +2,9 @@
 
 /* eslint no-path-concat: 0, func-names:0 */
 
-const { app, BrowserWindow, ipcMain: ipc, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain: ipc, Menu, globalShortcut } = require('electron')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
-const shortcuts = require('electron-localshortcut')
 
 // Force production environment in final binary
 if (isPackaged) {
@@ -85,12 +84,12 @@ app.on('ready', () => {
   })
 
   // Debug menu, whatever environment
-  shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
-  shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
-  shortcuts.register('F12', () => window.toggleDevTools())
+  globalShortcut.register('Shift+Ctrl+C', () => window.toggleDevTools())
+  globalShortcut.register('Shift+Cmd+C', () => window.toggleDevTools())
+  globalShortcut.register('F12', () => window.toggleDevTools())
 
   // Force reload
-  shortcuts.register('Shift+Ctrl+R', () => window.reload())
+  globalShortcut.register('Shift+Ctrl+R', () => window.reload())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
@@ -105,13 +104,13 @@ app.on('ready', () => {
     if (!Array.isArray(accels)) {
       accels = [accels]
     }
-    accels.forEach(accel => shortcuts.register(accel, () => event.sender.send(eventName)))
+    accels.forEach(accel => globalShortcut.register(accel, () => event.sender.send(eventName)))
   })
   ipc.on('unregisterShortcut', (_, accels) => {
     if (!Array.isArray(accels)) {
       accels = [accels]
     }
-    accels.forEach(accel => shortcuts.unregister(accel))
+    accels.forEach(accel => globalShortcut.unregister(accel))
   })
 
   // Open files in external app
