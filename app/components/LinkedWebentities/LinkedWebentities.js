@@ -42,7 +42,7 @@ const LinkedWebentities = ({
               return (
                 <button
                   className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selected }) }
-                  key={ index } 
+                  key={ index }
                   onClick={ handleSelectContextualList }
                 >
                   <span className="list-toggle-title">
@@ -82,14 +82,14 @@ const LinkedWebentities = ({
               }
 
               const isViewed = link.status === 'DISCOVERED' && viewedSuggestionIds && viewedSuggestionIds.has(link.id)
-                            
+
               return (
-                <EntityCard 
+                <EntityCard
                   key={ index }
                   allowMerge
                   link={ link }
                   isViewed={ isViewed }
-                  onClickLink={ handleClickLink } 
+                  onClickLink={ handleClickLink }
                   onClickMerge={ handleClickMerge }
                   onClickOut={ handleClickOut }
                   onClickUndecided={ handleClickUndecided }
@@ -104,7 +104,7 @@ const LinkedWebentities = ({
               </div>
             }
           </CardsList>
-          
+
           {
             pendingActions && pendingActions.length > 0
             &&
@@ -119,13 +119,13 @@ const LinkedWebentities = ({
               </button></li>
             </ul>
           }
-                      
+
           { list.length > 0 &&
             <div className="download">
               <DownloadListBtn onClickDownload={ handleDownloadList } />
             </div>
           }
-        </div>               
+        </div>
       </div>
     </div>
   )

@@ -46,14 +46,14 @@ const EntityCard = ({
         {
           previousStatus && previousStatus !== status &&
           <span
-            className={ `status-marker previous-status ${previousStatus.toLowerCase()} hint--right` }
+            className={ `status-marker previous-status ${previousStatus.toLowerCase()} hint--bottom-right` }
             aria-label={ formatMessage({ id: 'webentity-is-previous-in-list' },{ list: prevStatus.toUpperCase() }) }
           >
             {prevStatus.charAt(0).toUpperCase()}
           </span>
         }
-        <span className={ `status-marker ${status.toLowerCase()} hint--right` } aria-label={ formatMessage({ id: 'webentity-is-in-list' },{ list: formattedStatus.toUpperCase() }) }>{formattedStatus.charAt(0).toUpperCase()}</span>
-        {formattedStatus === 'suggestions' && <span className={ `viewed-marker ${status} hint--right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
+        <span className={ `status-marker ${status.toLowerCase()} hint--bottom-right` } aria-label={ formatMessage({ id: 'webentity-is-in-list' },{ list: formattedStatus.toUpperCase() }) }>{formattedStatus.charAt(0).toUpperCase()}</span>
+        {formattedStatus === 'suggestions' && <span className={ `viewed-marker ${status} hint--bottom-right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
       </div>}
       <div ref={ wrapperRef } className="card-content">
         <div aria-label={ name } className="name-wrapper hint--bottom">
