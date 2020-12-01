@@ -5,13 +5,14 @@ import findIndex from 'lodash/findIndex'
 import { PAGE_HYPHE_HOME } from '../constants'
 import {
   OPEN_TAB, CLOSE_TAB, SELECT_TAB, SELECT_NEXT_TAB, SELECT_PREV_TAB,
-  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_STATUS
+  SET_TAB_URL, SET_TAB_TITLE, SET_TAB_ICON, SET_TAB_COOKIES, SET_TAB_STATUS
 } from '../actions/tabs'
 import { SELECT_CORPUS } from '../actions/corpora'
 
 const defaultTab = {
   title: null, // title === null is a specific case handled later
   icon: null, // TODO default icon?
+  cookies: null,
   loading: false,
   error: null,
   fixed: false,
@@ -92,6 +93,7 @@ export default createReducer(initialState, {
   [SET_TAB_URL]: (state, { id, url }) => updateTab(state, id, () => ({ url })),
   [SET_TAB_TITLE]: (state, { id, title }) => updateTab(state, id, () => ({ title })),
   [SET_TAB_ICON]: (state, { id, icon }) => updateTab(state, id, () => ({ icon })),
+  [SET_TAB_COOKIES]: (state, { id, cookies }) => updateTab(state, id, () => ({ cookies })),
   [SET_TAB_STATUS]: (state, { id, loading, error, url }) => updateTab(state, id, (tab) => ({ loading, error, url: url || tab.url })),
 
   // Reset state when selecting corpus
