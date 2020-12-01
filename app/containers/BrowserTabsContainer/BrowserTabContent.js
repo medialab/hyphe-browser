@@ -36,7 +36,7 @@ import {
 import { fetchStackAndSetTab } from '../../actions/stacks'
 
 import { getSearchUrl } from '../../utils/search-web'
-import { compareUrls, longestMatching, urlToLru, lruObjectToString } from '../../utils/lru'
+import { simplierUrl, compareUrls, longestMatching, urlToLru, lruObjectToString } from '../../utils/lru'
 import InModal from './InModal'
 import RedirectionModal from './RedirectionModal'
 
@@ -249,9 +249,12 @@ class BrowserTabContent extends React.Component {
       setTabStatus({ loading: false, error: info }, id)
       stoppedLoadingWebentity()
       // Main page triggered the error, it's important
-      if (info.pageURL === info.validatedURL) {
-        // DNS error: let's search instead
-        if (err.name === 'NameNotResolvedError') {
+      if (info.errorCode !== -3 && info.pageURL === info.validatedURL) {
+        if (err.name === 'NameNotResolvedError' && simplierUrl(info.validatedURL).substr(0,4) !== 'www.') {
+          // cases that webview cannot resolve url without www, try add www manually
+          this.handleSetTabUrl('http://www.' + simplierUrl(info.validatedURL))
+        } else {
+          // DNS error (ERR_NAME_NOT_RESOLVED(-105) || ERR_NAME_RESOLUTION_FAIL(-139)): let's search instead
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
           const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
           setTabUrl({ url: getSearchUrl(selectedEngine, term), id })
@@ -259,15 +262,15 @@ class BrowserTabContent extends React.Component {
             originalWebentity: null,
             dnsError: true
           })
-        } else {
-          if (info.errorCode !== -3) {
-            // https://github.com/medialab/hyphe-browser/issues/130
-            // Any redirection, even 30x throw a -3 error.
-            showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
-          }
-          if (!this.state.mergeRequired) {
-            setTabUrl({ url: info.pageURL, id })
-          }
+        }
+      } else {
+        if (info.errorCode !== -3) {
+          // https://github.com/medialab/hyphe-browser/issues/130
+          // Any redirection, even 30x throw a -3 error.
+          showError({ messageId: 'error.network-error', messageValues: { error: err.message } })
+        }
+        if (!this.state.mergeRequired) {
+          setTabUrl({ url: info.pageURL, id })
         }
       }
       break
@@ -487,7 +490,7 @@ class BrowserTabContent extends React.Component {
           disableReload={ !!adjusting || disableNavigation }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
-          displayAddButton={ webentity && webentity.status !== 'DISCOVERED' && !webentity.prefixes.includes(lruObjectToString(urlToLru(url))) }
+          displayAddButton={ webentity && webentity.status !== 'DISCOVERED' && webentity.prefixes && !webentity.prefixes.includes(lruObjectToString(urlToLru(url))) }
           onAddClick={ onAddClick }
         />
         {url === PAGE_HYPHE_HOME &&

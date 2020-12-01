@@ -3,12 +3,11 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 import cx from 'classnames'
-import { isWebUri } from 'valid-url'
 import { useIntl } from 'react-intl'
 
 import { getSearchUrl } from '../../utils/search-web'
 
-import { highlightUrlHTML } from '../../utils/lru'
+import { isValidUrl, highlightUrlHTML } from '../../utils/lru'
 
 const BrowserBar = function ({
   initialUrl,
@@ -39,7 +38,7 @@ const BrowserBar = function ({
   useEffect(() => {
     if (initialUrl !== tabUrl) {
       setTabUrl(initialUrl)
-    } 
+    }
   }, [initialUrl])
 
   // auto-focus input when new tab
@@ -67,9 +66,9 @@ const BrowserBar = function ({
     e.preventDefault()
     setEdited(false)
     const url = ((u) => {
-      if (!isWebUri(u)) {
+      if (!isValidUrl(u)) {
         const httpu = 'http://' + u
-        if (isWebUri(httpu)) {
+        if (isValidUrl(httpu)) {
           setTabUrl(httpu)
           return httpu
         } else {
@@ -87,7 +86,7 @@ const BrowserBar = function ({
   return (
     <div className="browser-bar">
       <div className="browser-tab-toolbar-navigation">
-        <button 
+        <button
           className="btn btn-default navigate-btn hint--right"
           aria-label={ formatMessage({ id: 'browse-back' }) }
           disabled={ disableBack }
@@ -103,8 +102,8 @@ const BrowserBar = function ({
         >
           <span className="ti-angle-right" />
         </button>
-        <button 
-          className="btn btn-default navigate-btn hint--left" 
+        <button
+          className="btn btn-default navigate-btn hint--left"
           aria-label={ formatMessage({ id: 'browse-reload' }) }
           disabled={ disableReload }
           onClick={ onReload }
@@ -115,10 +114,10 @@ const BrowserBar = function ({
       <div className={ cx('browser-tab-toolbar-url', { edited }) }>
         <form onClick={ handleFormClick } onSubmit={ handleSubmit }>
           {edited ?
-            <input 
+            <input
               ref={ input }
               onKeyUp={ handleKeyUp }
-              onBlur={ () => setEdited(false) } 
+              onBlur={ () => setEdited(false) }
               onChange={ e => setTabUrl(e.target.value) }
               placeholder={ formatMessage({ id: 'empty-url' }) }
               value={ tabUrl }
@@ -136,7 +135,7 @@ const BrowserBar = function ({
               </span>
           }
         </form>
-        {!loading && 
+        {!loading &&
           <div className="page-actions">
             {
               !edited && displayAddButton

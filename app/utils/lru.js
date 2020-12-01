@@ -327,7 +327,16 @@ function toDomainCase (s) {
   return s.replace(/\w[^ -]*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 }
 
-function simplierUrl (url) {
+export function isValidUrl (string) {
+  try {
+    new URL(string)
+  } catch (_) {
+    return false;
+  }
+  return true
+}
+
+export function simplierUrl (url) {
   return url.replace(/#[^#]*$/, '').replace(/\/$/, '').replace(/^(?:https?:\/\/)?/i,'')
 }
 

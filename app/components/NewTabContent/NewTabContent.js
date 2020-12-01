@@ -3,7 +3,7 @@ import './NewTabContent.styl'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage as T, useIntl } from 'react-intl'
-import { isWebUri } from 'valid-url'
+import { isValidUrl } from '../../utils/lru'
 
 import { SEARCH_ENGINES } from  '../../constants'
 
@@ -20,7 +20,7 @@ const NewTabContent = ({
   const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
   const [query, setQuery] = useState('')
   const [searchUrl, setSearchUrl] = useState('')
-  
+
   const handleSubmitQuery = (e) => {
     e.preventDefault()
     onSetTabUrl(getSearchUrl(selectedEngine, query))
@@ -29,9 +29,9 @@ const NewTabContent = ({
   const handleSubmitSearchUrl = (e) => {
     e.preventDefault()
     const url = ((u) => {
-      if (!isWebUri(u)) {
+      if (!isValidUrl(u)) {
         const httpu = 'http://' + u
-        if (isWebUri(httpu)) {
+        if (isValidUrl(httpu)) {
           return httpu
         } else {
           const searchu = getSearchUrl(selectedEngine, u)
@@ -43,12 +43,12 @@ const NewTabContent = ({
     })(searchUrl.trim())
     onSetTabUrl(url)
   }
-  
+
   const handleChangeEngine = (e) => onChangeEngine(e.target.value)
   const handleSelectTagStack = () => {
     const filter = 'no-tag'
     onSelectStack('IN', filter)
-  } 
+  }
   return (
     <div className="entry-tab-content">
       <div className="content-wrapper">
@@ -64,7 +64,7 @@ const NewTabContent = ({
                 <h4><T id="new-tab.browse-sentence" /></h4>
               </button>
             </li>
-            <li 
+            <li
               onClick = { () => onSelectStack('DISCOVERED') }
               className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
             >
@@ -73,7 +73,7 @@ const NewTabContent = ({
                 <h4><T id="new-tab.review-sentence" /></h4>
               </button>
             </li>
-            <li 
+            <li
               onClick = { handleSelectTagStack }
               className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
             >
@@ -98,7 +98,7 @@ const NewTabContent = ({
                 </li>
                 <li className="form-container">
                   <form className="form" onSubmit={ handleSubmitQuery }>
-                    <input 
+                    <input
                       value={ query }
                       placeholder={ formatMessage({ id: 'new-tab.search-placeholder' }, { selectedEngine }) }
                       onChange={ e => setQuery(e.target.value) }
@@ -113,10 +113,10 @@ const NewTabContent = ({
                 </li>
                 <li className="form-container">
                   <form className="form" onSubmit={ handleSubmitSearchUrl }>
-                    <input 
-                      value={ searchUrl } 
+                    <input
+                      value={ searchUrl }
                       placeholder={ formatMessage({ id: 'new-tab.url-placeholder' }) }
-                      onChange={ e => setSearchUrl(e.target.value) } 
+                      onChange={ e => setSearchUrl(e.target.value) }
                     />
                     <button>
                       <T id="new-tab.visit" />
