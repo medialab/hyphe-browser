@@ -7,7 +7,7 @@
 // - store.get_webentity_mostlinked_pages
 // - store.get_webentity_parentwebentities
 // - store.get_webentity_subwebentities
-// - crawl_webentity (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', phantom_timeouts = {}, corpus = '--hyphe--')
+// - crawl_webentity_with_startmode (webentity_id, depth = 0, phantom_crawl = false, status = 'IN', startmode = 'default', cookies_string = null, phantom_timeouts = {}, corpus = '--hyphe--')
 
 import omit from 'lodash/fp/omit'
 
@@ -368,8 +368,9 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         const id = prefixChanged ? head.id : webentity.id
         const { options } = getState().corpora.status.corpus
         const depth = options && options.depthHypheBro || CRAWL_DEPTH
+        const cookies = null
 
-        return jsonrpc(serverUrl)('crawl_webentity', [id, depth, false, 'IN', {}, corpusId])
+        return jsonrpc(serverUrl)('crawl_webentity_with_startmode', [id, depth, false, 'IN', 'default', cookies, {}, corpusId])
           .then(() => {
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
