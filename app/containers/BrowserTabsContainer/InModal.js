@@ -56,7 +56,6 @@ const PagesList = ({
           isActive={ index === selectedPage }
           onClick={ () => setSelectedPage(index) }
           { ...link }
-          innerWidth={ 560 }
           displayHomePageButton={ false }
         />
       </div>
