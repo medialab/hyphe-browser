@@ -23,7 +23,7 @@ import { eventBusShape } from '../../types'
 import { showError, showNotification, hideError, toggleDoNotShowAgain } from '../../actions/browser'
 import { stoppedLoadingWebentity } from '../../actions/stacks'
 import {
-  setTabUrl, setTabStatus, setTabTitle, setTabIcon,
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon, setTabCookies,
   openTab, closeTab,
   addNavigationHistory,
 } from '../../actions/tabs'
@@ -126,7 +126,7 @@ class BrowserTabContent extends React.Component {
   }
 
   updateTabStatus = (event, info)  => {
-    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon,
+    const { id, setTabStatus, setTabTitle, setTabUrl, setTabIcon, setTabCookies,
       showError, showNotification, hideError, declarePage, setTabWebentity,
       eventBus, server, corpusId, disableWebentity, stoppedLoadingWebentity,
       webentity, tlds, selectedEngine, addNavigationHistory } = this.props
@@ -227,6 +227,9 @@ class BrowserTabContent extends React.Component {
       break
     case 'favicon':
       setTabIcon({ icon: info, id })
+      break
+    case 'cookies':
+      setTabCookies({ cookies: info, id })
       break
     case 'navigate':
       if (!this.state.mergeRequired) setTabUrl({ url: info, id })
@@ -594,6 +597,7 @@ BrowserTabContent.propTypes = {
   setTabStatus: PropTypes.func.isRequired,
   setTabTitle: PropTypes.func.isRequired,
   setTabIcon: PropTypes.func.isRequired,
+  setTabCookies: PropTypes.func.isRequired,
   openTab: PropTypes.func.isRequired,
   closeTab: PropTypes.func.isRequired,
   addNavigationHistory: PropTypes.func.isRequired,
@@ -643,7 +647,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = {
   showError, showNotification, hideError, toggleDoNotShowAgain,
-  setTabUrl, setTabStatus, setTabTitle, setTabIcon, openTab, closeTab, addNavigationHistory,
+  setTabUrl, setTabStatus, setTabTitle, setTabIcon, setTabCookies, openTab, closeTab, addNavigationHistory,
   declarePage, setTabWebentity, setWebentityHomepage, fetchStackAndSetTab, addWebentityPrefixes,
   stoppedLoadingWebentity, setWebentityStatus, setAdjustWebentity, showAdjustWebentity, hideAdjustWebentity,
   saveAdjustedWebentity, mergeWebentities

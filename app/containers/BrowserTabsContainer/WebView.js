@@ -174,12 +174,19 @@ const WebView = ({
         }
       })
 
+      // Store tab's cookies for reuse by crawler
+      webContents.session.cookies.get({ url: webviewRef.current.src })
+      .then((cookies) => {
+        update('cookies', cookies)
+      }).catch((error) => {
+        console.log("ERROR while collecting cookies:", error)
+      })
+
       // Handle Ctrl+F(show searchbar) event
       webContents.on('before-input-event', inputHandler)
       // Add menu when right-click/selection on webview
       webContents.on('context-menu', contextMenuHandler)
     })
-
 
     // found-in-page event called by searchbar
     webview.addEventListener('found-in-page', (event) => {
