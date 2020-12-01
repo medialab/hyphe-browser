@@ -376,7 +376,7 @@
   "stack-status.IN": "Webentités dans le corpus (IN)",
   "stack-status.OUT": "Webentités hors du corpus (OUT)",
   "stack-status.UNDECIDED": "Webentités non-décidées (UND.)",
-  "stack-status.help.DISCOVERED": "webentités découvertes durant votre navigation ou en analysant les webentités que vous avez inclues dans le corpus",
+  "stack-status.help.DISCOVERED": "webentités découvertes durant votre navigation ou parmi les liens des webentités que vous avez inclues dans le corpus",
   "stack-status.help.IN": "webentités pertinentes pour l'enquête, que vous avez inclues dans le corpus",
   "stack-status.help.OUT": "webentités non pertinentes pour l'enquête, que vous avez exclues du corpus",
   "stack-status.help.UNDECIDED": "webentités que vous avez mises de côté pour une décision future de les inclure ou exclure du corpus",
