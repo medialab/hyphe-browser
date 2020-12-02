@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 
 import networkErrors from 'chromium-net-errors'
 
-import { PAGE_HYPHE_HOME, SHORTCUT_FIND_IN_PAGE } from '../../constants'
+import { PAGE_HYPHE_HOME } from '../../constants'
 
 import BrowserBar from '../../components/BrowserBar'
 import NewTabContent from '../../components/NewTabContent'
@@ -40,6 +40,8 @@ import { simplierUrl, compareUrls, longestMatching, urlToLru, lruObjectToString 
 import InModal from './InModal'
 import RedirectionModal from './RedirectionModal'
 
+const { shortcuts } = require('../../shortcuts')
+const { SHORTCUT_FIND_IN_PAGE } = shortcuts
 class BrowserTabContent extends React.Component {
 
   constructor (props) {
@@ -74,8 +76,7 @@ class BrowserTabContent extends React.Component {
     this.navOpenHandler = (url) => openTab({ url, activeTabId: id })
     eventBus.on('open', this.navOpenHandler)
 
-    ipc.on(`shortcut-${SHORTCUT_FIND_IN_PAGE}`, this.handleShowSearchBar)
-    ipc.send('registerShortcut', SHORTCUT_FIND_IN_PAGE)
+    ipc.on(SHORTCUT_FIND_IN_PAGE, this.handleShowSearchBar)
     eventBus.on('showSearchBar', this.handleShowSearchBar)
   }
 
@@ -100,6 +101,8 @@ class BrowserTabContent extends React.Component {
     eventBus.off('canGoBack', this.navCanGoBackHandler)
     eventBus.off('canGoForward', this.navCanGoForwardHandler)
     eventBus.off('status', this.navStatusHandler)
+
+    ipc.removeListener(SHORTCUT_FIND_IN_PAGE, this.handleShowSearchBar)
   }
 
   samePage (info) {

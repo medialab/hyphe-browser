@@ -2,10 +2,17 @@
 
 /* eslint no-path-concat: 0, func-names:0 */
 
-const { app, BrowserWindow, ipcMain: ipc, Menu, globalShortcut } = require('electron')
+const { app, BrowserWindow, ipcMain: ipc, Menu, MenuItem, globalShortcut } = require('electron')
 const isPackaged = !process.argv[0].match(/(?:node|io)(?:\.exe)?/i)
 const open = require('open')
-const shortcuts = require('electron-localshortcut')
+const { shortcuts } = require('./app/shortcuts')
+
+const {
+  SHORTCUT_OPEN_TAB, SHORTCUT_CLOSE_TAB,
+  SHORTCUT_NEXT_TAB, SHORTCUT_PREV_TAB,
+  SHORTCUT_RELOAD_TAB, SHORTCUT_FULL_RELOAD_TAB,
+  SHORTCUT_FIND_IN_PAGE, SHORTCUT_RELOAD_WINDOW, SHORTCUT_TOGGLE_DEVTOOLS
+} = shortcuts
 
 // Force production environment in final binary
 if (isPackaged) {
@@ -84,35 +91,12 @@ app.on('ready', () => {
     Menu.setApplicationMenu(menu)
   })
 
-  // Debug menu, whatever environment
-  shortcuts.register('Shift+Ctrl+C', () => window.toggleDevTools())
-  shortcuts.register('Shift+Cmd+C', () => window.toggleDevTools())
-  shortcuts.register('F12', () => window.toggleDevTools())
-
-  // Force reload
-  shortcuts.register('Shift+Ctrl+R', () => window.reload())
+  // // Force reload
+  // shortcuts.register('Shift+Ctrl+R', () => window.reload())
 
   // allows more listeners for "browser-window-focus" and "browswer-window-blur" events
   // which are used by electron-shortcut
   app.setMaxListeners(25)
-
-  // Register shortcuts from here
-  // Rendered app cannot register shortcuts directly, we have to use IPC,
-  // on the other hand the rendered app must execute the callback
-  // So this event is just used to notify rendered app that an expected key combination has been pressed
-  ipc.on('registerShortcut', (event, accels) => {
-    const eventName = `shortcut-${accels}`
-    if (!Array.isArray(accels)) {
-      accels = [accels]
-    }
-    accels.forEach(accel => shortcuts.register(accel, () => event.sender.send(eventName)))
-  })
-  ipc.on('unregisterShortcut', (_, accels) => {
-    if (!Array.isArray(accels)) {
-      accels = [accels]
-    }
-    accels.forEach(accel => shortcuts.unregister(accel))
-  })
 
   // Open files in external app
   ipc.on('openExternal', (_, what, opener, cb) => {
@@ -130,6 +114,99 @@ app.on('ready', () => {
 
 })
 
+app.on('browser-window-focus', function () {
+  // disable default reload window
+  globalShortcut.register('CmdOrCtrl+R', () => {
+    window.webContents.send(SHORTCUT_RELOAD_TAB)
+  })
+  globalShortcut.register('F5', () => {
+    window.webContents.send(SHORTCUT_RELOAD_TAB)
+  })
+  globalShortcut.register('CmdOrCtrl+SHIFT+R', () => {
+    window.webContents.send(SHORTCUT_FULL_RELOAD_TAB)
+  })
+  globalShortcut.register('Shift+F5', () => {
+    window.webContents.send(SHORTCUT_FULL_RELOAD_TAB)
+  })
+  globalShortcut.register('CmdOrCtrl+F5', () => {
+    window.webContents.send(SHORTCUT_FULL_RELOAD_TAB)
+  })
+})
+
+app.on('browser-window-blur', function () {
+  globalShortcut.unregister('CmdOrCtrl+R')
+  globalShortcut.unregister('F5')
+  globalShortcut.unregister('CmdOrCtrl+Shift+R')
+  globalShortcut.unregister('Shift+F5')
+  globalShortcut.unregister('CmdOrCtrl+F5')
+})
+
+const shortcutEvents = [
+  {
+    key: 'CmdOrCtrl+C',
+    event: SHORTCUT_TOGGLE_DEVTOOLS
+  },
+  {
+    key: 'F12',
+    event: SHORTCUT_TOGGLE_DEVTOOLS
+  },
+  {
+    key: 'CmdOrCtrl+L',
+    event: SHORTCUT_RELOAD_WINDOW
+  },
+  {
+    key: 'CmdOrCtrl+N',
+    event: SHORTCUT_OPEN_TAB
+  },
+  {
+    key: 'CmdOrCtrl+T',
+    event: SHORTCUT_OPEN_TAB
+  },
+  {
+    key: 'CmdOrCtrl+W',
+    event: SHORTCUT_CLOSE_TAB
+  },
+  {
+    key: 'Ctrl+Tab',
+    event: SHORTCUT_NEXT_TAB
+  },
+  {
+    key: 'CmdOrCtrl+PageDown',
+    event: SHORTCUT_NEXT_TAB
+  },
+  {
+    key: 'Ctrl+Shift+Tab',
+    event: SHORTCUT_PREV_TAB
+  },
+  {
+    key: 'CmdOrCtrl+PageUp',
+    event: SHORTCUT_PREV_TAB
+  },
+  {
+    key: 'CmdOrCtrl+R',
+    event: SHORTCUT_RELOAD_TAB
+  },
+  {
+    key: 'F5',
+    event: SHORTCUT_RELOAD_TAB
+  },
+  {
+    key: 'CmdOrCtrl + F5',
+    event: SHORTCUT_FULL_RELOAD_TAB
+  },
+  {
+    key: 'Shift + F5',
+    event: SHORTCUT_FULL_RELOAD_TAB
+  },
+  {
+    key: 'CmdOrCtrl+Shift+R',
+    event: SHORTCUT_FULL_RELOAD_TAB
+  },
+  {
+    key: 'CmdOrCtrl+F',
+    event: SHORTCUT_FIND_IN_PAGE
+  }
+]
 
 function getNewMenuBar (locale) {
   const isMac = process.platform === 'darwin'
@@ -234,7 +311,7 @@ function getNewMenuBar (locale) {
         //   enabled: corpusReady,
         //   click () { window.webContents.send('exportFile', 'IN_UNDECIDED', 'sito') }
         // },
-        { type: 'separator'},
+        { type: 'separator' },
         { label: 'Tags as CSV',
           enabled: corpusReady,
           click () { window.webContents.send('exportFile', 'tags', 'csv') }
@@ -247,6 +324,25 @@ function getNewMenuBar (locale) {
     }
   ]
   const menu = Menu.buildFromTemplate(template)
+  // local shortcuts registered in invisible submenu
+  shortcutEvents.forEach((shortcut) => {
+    const editMenu = menu.getMenuItemById('edit')
+    editMenu.submenu.append(new MenuItem({
+      label: 'shortcut',
+      accelerator: shortcut.key,
+      visible: false,
+      click () {
+        if (shortcut.event === SHORTCUT_RELOAD_WINDOW && process.env.NODE_ENV === 'development') {
+          window.reload()
+        } else if (shortcut.event === SHORTCUT_TOGGLE_DEVTOOLS) {
+          window.toggleDevtools()
+        } else {
+          window.webContents.send(shortcut.event)
+        }
+      }
+    }))
+  })
+
   ipc.on('corpusReady', () => {
     corpusReady = true
     const downloadMenu = menu.getMenuItemById('download')

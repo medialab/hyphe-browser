@@ -32,15 +32,6 @@ export const SERVER_STATUS_UNKNOWN = 'UNKNOWN'
 export const SERVER_STATUS_SHUTOFF = 'SHUTOFF'
 export const SERVER_STATUS_ACTIVE = 'ACTIVE'
 
-// Keyboard shortcuts
-export const SHORTCUT_OPEN_TAB = ['CmdOrCtrl+N', 'CmdOrCtrl+T']
-export const SHORTCUT_CLOSE_TAB = ['CmdOrCtrl+W']
-export const SHORTCUT_NEXT_TAB = ['Ctrl+Tab', 'Ctrl+PageDown', 'Cmd+PageDown']
-export const SHORTCUT_PREV_TAB = ['Ctrl+Shift+Tab', 'CmdOrCtrl+PageUp']
-export const SHORTCUT_RELOAD_TAB = ['CmdOrCtrl+R', 'F5']
-export const SHORTCUT_FULL_RELOAD_TAB = ['Ctrl+Shift+R', 'Ctrl+F5', 'Shift+F5', 'Cmd+Shift+R', 'Cmd+F5']
-export const SHORTCUT_FIND_IN_PAGE = ['CmdOrCtrl+F']
-
 // local empty html for new home tab
 export const PAGE_HYPHE_HOME = 'file://' + app.getAppPath() + '/app/assets/tab.html'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
