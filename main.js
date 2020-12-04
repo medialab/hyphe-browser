@@ -151,7 +151,7 @@ const shortcutEvents = [
     event: SHORTCUT_TOGGLE_DEVTOOLS
   },
   {
-    key: 'CmdOrCtrl+L',
+    key: 'CmdOrCtrl+Shift+L',
     event: SHORTCUT_RELOAD_WINDOW
   },
   {
