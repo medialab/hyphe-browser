@@ -216,6 +216,10 @@
   "new-tab.url-placeholder": "enter an URL",
   "sidebar.overview.search-a-webentity": "search a webentity in the list",
 
+  "sidebar.filter.all": "all webentities",
+  "sidebar.filter.no-tags": "only untagged webentities",
+  "sidebar.filter.incomplete-tags": "incompletely tagged webentities",
+
   "sidebar.overview.show-only-no-tags": "Show only webentities with no tags",
   "sidebar.overview.show-only-incomplete-tags": "Show only webentities with incomplete tags",
   "sidebar.overview.show-all-we": "Show all webentities of the list",

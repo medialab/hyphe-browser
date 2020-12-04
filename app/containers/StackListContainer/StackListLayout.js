@@ -101,12 +101,10 @@ const StackListLayout = ({
   }
 
   const handleSelectFilter = (value) => {
-    let newValue = value
-    if (filterValue === value) {
-      newValue = null
+    if (filterValue !== value) {
+      onSelectStack(selectedStack, value)
+      setFilterValue(value)
     }
-    onSelectStack(selectedStack, newValue)
-    setFilterValue(newValue)
     setFilterOpen(false)
   }
 
@@ -188,8 +186,12 @@ const StackListLayout = ({
                 onClick={ () => setFilterOpen(!isFilterOpen) }
                 className="filter hint--bottom"
               >
-                {/* <T id="filter" /> <i className="ti-angle-down" /> */}
                 <i className="ti-filter" />
+                { filterValue ?
+                  filterValue==='no-tag' ?
+                    <T id='sidebar.filter.no-tags' />: <T id='sidebar.filter.incomplete-tags' />
+                  : <T id='sidebar.filter.all' />
+                }
               </button>
 
 

@@ -155,7 +155,13 @@
                 position: relative
                 stretch(row)
             .filter
-               buttonIcon()
+                buttonIcon()
+                display: flex
+                flex-flow: row nowrap
+                align-items: center
+                font-size: 10px
+                span
+                    padding-left: 5px
 
             .filter-container.is-active .filter
                 background: var(--color-black)
