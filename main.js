@@ -333,9 +333,9 @@ function getNewMenuBar (locale) {
       visible: false,
       click () {
         if (shortcut.event === SHORTCUT_RELOAD_WINDOW && process.env.NODE_ENV === 'development') {
-          window.reload()
+          window.webContents.reload()
         } else if (shortcut.event === SHORTCUT_TOGGLE_DEVTOOLS) {
-          window.toggleDevtools()
+          window.webContents.toggleDevTools()
         } else {
           window.webContents.send(shortcut.event)
         }
