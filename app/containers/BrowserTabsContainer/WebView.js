@@ -156,6 +156,12 @@ const WebView = ({
       }
     }
 
+    webview.addEventListener('ipc-message', ({ channel, args }) => {
+      if (channel === 'user-navigate') {
+        update('user-navigate', args[0])
+      }
+    })
+
     webview.addEventListener('dom-ready', () => {
       const webContents = remote.webContents.fromId(webview.getWebContentsId())
       // clear found-in-page event result
@@ -176,11 +182,11 @@ const WebView = ({
 
       // Store tab's cookies for reuse by crawler
       webContents.session.cookies.get({ url: webviewRef.current.src })
-      .then((cookies) => {
-        update('cookies', cookies)
-      }).catch((error) => {
-        console.log("ERROR while collecting cookies:", error)
-      })
+        .then((cookies) => {
+          update('cookies', cookies)
+        }).catch((error) => {
+          console.log('ERROR while collecting cookies:', error)
+        })
 
       // Handle Ctrl+F(show searchbar) event
       webContents.on('before-input-event', inputHandler)

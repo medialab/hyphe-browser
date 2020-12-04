@@ -49,6 +49,7 @@ class BrowserTabContent extends React.Component {
 
     this.state = {
       previousUrl: '',
+      userNavigateUrl: null,
       disableBack: true,
       disableForward: true,
       disableApplyButton: false,
@@ -159,33 +160,32 @@ class BrowserTabContent extends React.Component {
           corpusId,
           url: info
         }).then((webentity) => {
-          if (this.state.mergeRequired) {
-            // wait for url stop loading to declare webentity, then show RedirectionModal
-            this.setState({
-              mergeRequired: {
-                ...this.state.mergeRequired,
-                redirectWebentity: webentity
-              },
-              showRedirectionModal: true
-            })
-          } else if (!this.samePage(info) &&
-            !this.state.dnsError &&
-            this.state.originalWebentity &&
-            webentity.id !== this.state.originalWebentity.id &&
-            !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
-            // handle uncatched redirection, if originalWebentity is not equal to final webentity
-            this.setState({
-              mergeRequired: {
-                redirectUrl: info,
-                originalWebentity: this.state.originalWebentity,
-                redirectWebentity: webentity
-              },
-              showRedirectionModal: true
-            })
-            setTabUrl({ url: this.state.originalWebentity.tabUrl, id })
-            setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
-          } else {
-            setTabWebentity({ tabId: id, webentity })
+          if (id) {
+            if (this.state.mergeRequired) {
+              this.setState({
+                mergeRequired: {
+                  ...this.state.mergeRequired,
+                  redirectWebentity: webentity
+                },
+                showRedirectionModal: true
+              })
+            } else {
+              if (!this.state.dnsError && this.state.originalWebentity && webentity.id !== this.state.originalWebentity.id && !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+                // handle uncatched redirection, if originalWebentity is not equal to final webentity
+                this.setState({
+                  mergeRequired: {
+                    redirectUrl: info,
+                    originalWebentity: this.state.originalWebentity,
+                    redirectWebentity: webentity
+                  },
+                  showRedirectionModal: true
+                })
+                setTabUrl({ url: this.state.originalWebentity.tabUrl, id })
+                setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
+              } else {
+                setTabWebentity({ tabId: id, webentity })
+              }
+            }
           }
         })
       }
@@ -241,8 +241,19 @@ class BrowserTabContent extends React.Component {
       }
       break
     case 'will-navigate':
+      if (this.state.userNavigateUrl === info) {
+        // manually re-initiate tab url if user navigate
+        this.handleSetTabUrl(info)
+        this.setState({
+          userNavigateUrl: null
+        })
+      }
+      break
+    case 'user-navigate':
       // user click link in webpage
-      this.handleSetTabUrl(info)
+      this.setState({
+        userNavigateUrl: info
+      })
       break
     case 'error': {
       const err = networkErrors.createByCode(info.errorCode)

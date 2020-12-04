@@ -4,6 +4,11 @@
 // Note: this is a module and local variables defined here won't pollute guest's global environment
 'use strict'
 
+// Host ←→ Guest communication
+// ipc.sendToHost('channel', data…)
+// ipc.on('eventName', handler(e, data…))
+var ipc = require('electron').ipcRenderer
+
 window.addEventListener('DOMContentLoaded', () => {
   const style = {
     background: '#eee',
@@ -37,6 +42,13 @@ window.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('mouseout', ({ target }) => {
     if (target.tagName === 'A' || target.parentElement && target.parentElement.tagName === 'A') {
       bubble.style.display = 'none'
+    }
+  })
+
+  document.body.addEventListener('click', ({ target }) => {
+    if (target.tagName === 'A' || target.parentElement && target.parentElement.tagName === 'A') {
+      const aHref = target.href || target.parentElement.href
+      ipc.sendToHost('user-navigate', aHref)
     }
   })
 })
