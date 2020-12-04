@@ -30,7 +30,7 @@ export const KnownPageCard = ({
   return (
     <li onClick={ onClick } className={ cx('known-page-card', { 'is-active': isActive }, { 'is-visited': isVisited }) } key={ id }>
       <div className="card-content" ref={ urlRef }>
-        <span title={ url } className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</span>
+        <span data-tip={ url } className="known-page-url" >{ url.length > maxLetters ? `…${url.slice(url.length + 1 - maxLetters, url.length)}` : url }</span>
         {linked && <div className="known-page-statistics">
           { formatMessage({ id: 'linked' }) }
           <T className="link-linked" id="linkedtimes" values={ { count: linked } } />
@@ -43,7 +43,7 @@ export const KnownPageCard = ({
           <button
             className={ cx('homepage-btn', { 'is-active': isHomepage }) }
             onClick = { onClickHomepage }
-            title={ isHomepage ? formatMessage({ id: 'here-homepage' }) : formatMessage({ id: 'set-homepage' }) }
+            data-tip={ isHomepage ? formatMessage({ id: 'here-homepage' }) : formatMessage({ id: 'set-homepage' }) }
           >
             <span className="ti-layers-alt" />
           </button>

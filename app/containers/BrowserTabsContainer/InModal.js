@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect, useCallback, useReducer, useMemo } 
 import { FormattedMessage , useIntl } from 'react-intl'
 import Modal from 'react-modal'
 import cx from 'classnames'
+import { debounce } from 'lodash'
 
 import { FixedSizeList as List } from 'react-window'
 import  AutoSizer from 'react-virtualized-auto-sizer'
-
+import Tooltip from 'react-tooltip'
 import isNumber from 'lodash/fp/isNumber'
 import initial from 'lodash/fp/initial'
 import dropRightWhile from 'lodash/fp/dropRightWhile'
@@ -14,6 +15,8 @@ import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
 import PrefixSetter from '../../components/PrefixSetter'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
+import BodyTooltip from '../../components/BodyTooltip'
+
 import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
 
 import './InModal.styl'
@@ -27,6 +30,9 @@ const compareWithoutWww = (lru) => {
       )
     )
 }
+
+const rebuildTooltip = debounce(() => Tooltip.rebuild(), 200)
+
 
 const PagesList = ({
   selectedPage,
@@ -44,6 +50,7 @@ const PagesList = ({
     if (listContainer && listContainer.current) {
       const height = window.getComputedStyle(listContainer.current).getPropertyValue('max-height').replace('px', '')
       setContainerHeight(parseInt(height))
+      rebuildTooltip()
     }
   })
 
@@ -65,11 +72,12 @@ const PagesList = ({
   return (
     <div className="pages-list">
       <ul className="pages-container" ref={ listContainer }>
-        <AutoSizer disableHeight>
+        <AutoSizer disableHeight onResize={ rebuildTooltip }>
           {({ width }) => (
             <List
               height={ (pages.length * 46 < containerHeight) ? pages.length * 46 : containerHeight }
               width={ width }
+              onScroll={ rebuildTooltip }
               itemCount={ pages.length }
               itemSize={ 46 } // check stylesheet
             >
@@ -85,6 +93,7 @@ const PagesList = ({
           <span> ({ paginatePages } / { totalPages } webpages)</span>
         </div>
       }
+      <BodyTooltip />
     </div>
   )
 }

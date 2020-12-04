@@ -2,14 +2,19 @@ import './KnownPages.styl'
 
 import React, { useMemo, useRef, useEffect, useState } from 'react'
 import { FormattedMessage as T, useIntl } from 'react-intl'
+import { debounce } from 'lodash'
 
 import { FixedSizeList as List } from 'react-window'
 import  AutoSizer from 'react-virtualized-auto-sizer'
+import Tooltip from 'react-tooltip'
 
 import DownloadListBtn from '../DownloadListBtn'
 import KnownPageCard from './KnownPageCard'
+import BodyTooltip from '../BodyTooltip'
 
 import { compareUrls } from '../../utils/lru'
+
+const rebuildTooltip = debounce(() => Tooltip.rebuild(), 200)
 
 const KnownPages = ({
   list,
@@ -31,6 +36,7 @@ const KnownPages = ({
     if (listContainer && listContainer.current) {
       const height = window.getComputedStyle(listContainer.current).getPropertyValue('max-height').replace('px', '')
       setContainerHeight(parseInt(height))
+      rebuildTooltip()
     }
   })
 
@@ -75,11 +81,12 @@ const KnownPages = ({
         <ul>
           {
             pagesList.length > 0 ?
-              <AutoSizer disableHeight>
+              <AutoSizer disableHeight onResize={ rebuildTooltip }>
                 {({ width }) => (
                   <List
                     height={ (pagesList.length * 62 < containerHeight) ? pagesList.length * 62 : containerHeight }
                     width={ width }
+                    onScroll={ rebuildTooltip }
                     itemCount={ pagesList.length }
                     itemSize={ 62 } // check stylesheet item height: 50px padding: 6px
                   >
@@ -108,6 +115,7 @@ const KnownPages = ({
           }
         </div>
       }
+      <BodyTooltip />
     </div>
   )
 }
