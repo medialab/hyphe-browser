@@ -445,6 +445,20 @@ class BrowserTabContent extends React.Component {
             tabId: id,
             webentity: this.state.mergeRequired.redirectWebentity
           })
+        } else if (mergeDecision === 'MERGE-PART') {
+          addWebentityPrefixes({
+            serverUrl: server.url,
+            corpusId,
+            webentityId: this.state.mergeRequired.redirectWebentity.id,
+            prefixes,
+            tabId: id
+          })
+          // set current webentity to redirected one
+          setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
+          setTabWebentity({
+            tabId: id,
+            webentity: this.state.mergeRequired.redirectWebentity
+          })
         } else if (mergeDecision === 'MERGE-REVERSE') {
           addWebentityPrefixes({
             serverUrl: server.url,
@@ -453,6 +467,7 @@ class BrowserTabContent extends React.Component {
             prefixes,
             tabId: id
           }).then(() => {
+            // set tab back to the original webentity
             declarePage({
               serverUrl: server.url,
               corpusId,

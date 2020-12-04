@@ -25,11 +25,12 @@ const parsePrefixes = (lru, url, newEntity, tldTree) => {
   })
 }
 
-const MergeReverse = ({
+const MergePrefix = ({
   webentity,
   url,
   tlds,
   originalWebentity,
+  mergePart,
   onSetPrefixes
 }) => {
 
@@ -38,7 +39,7 @@ const MergeReverse = ({
     [webentity.prefixes, url, tlds]
   )
   const prefixes = useMemo(
-    () => parsePrefixes(lruObjectToString(longestLru), url, true, tlds),
+    () => parsePrefixes(lruObjectToString(longestLru), url, mergePart, tlds),
     [longestLru, url, tlds]
   )
 
@@ -62,7 +63,7 @@ const MergeReverse = ({
     <div>
       <p>
         <FormattedMessage
-          id="redirect-modal.step-2-merge-reverse-description"
+          id="redirect-modal.step-2-merge-part-description"
           values={ {
             webentity: webentity.name,
             originalWebentity: originalWebentity.name,
@@ -167,6 +168,18 @@ const RedirectionModal = ({
                     />
                   </button>
                 </li>
+                <li>
+                  <button onClick={ () => onSetMergeDecision('MERGE-PART') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-PART' }) }>
+                    <FormattedMessage
+                      id="redirect-modal.step-2-merge-part"
+                      values={ {
+                        originalWebentity: originalWebentity.name,
+                        redirectWebentity: redirectWebentity.name,
+                        strong: (name) => <strong>{name}</strong>
+                      } }
+                    />
+                  </button>
+                </li>
                 {longestMatching(redirectWebentity.prefixes, redirectUrl, tlds) &&
                   <li>
                     <button onClick={ () => onSetMergeDecision('MERGE-REVERSE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-REVERSE' }) }>
@@ -203,12 +216,23 @@ const RedirectionModal = ({
                   </button>
                 </li>
               </ul>
+              {mergeDecision === 'MERGE-PART' &&
+                <MergePrefix
+                  webentity={ originalWebentity }
+                  originalWebentity={ redirectWebentity }
+                  url={ originalWebentity.tabUrl }
+                  tlds={ tlds }
+                  mergePart
+                  onSetPrefixes={ setLruPrefixes }
+                />
+              }
               {mergeDecision === 'MERGE-REVERSE' &&
-                <MergeReverse
+                <MergePrefix
                   webentity={ redirectWebentity }
                   originalWebentity={ originalWebentity }
                   url={ redirectUrl }
                   tlds={ tlds }
+                  mergePart={ false }
                   onSetPrefixes={ setLruPrefixes }
                 />
               }
@@ -222,7 +246,8 @@ const RedirectionModal = ({
               <button
                 onClick={ handleDecision }
                 disabled={ redirectionDecision === null || redirectionDecision && !mergeDecision }
-                className="btn btn-success">
+                className="btn btn-success"
+              >
                 <FormattedMessage id="redirect-modal.confirm" />
               </button>
             </li>

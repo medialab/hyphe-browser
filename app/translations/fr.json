@@ -454,7 +454,8 @@
   "redirect-modal.step-2-out": "déplacer <strong>{originalWebentity}</strong> dans la liste OUT",
   "redirect-modal.step-2-no-action": "les conserver séparées",
   "redirect-modal.step-2-merge": "incorporer <strong>{originalWebentity}</strong> dans <strong>{redirectWebentity}</strong>",
+  "redirect-modal.step-2-merge-part": "incorporer une partie de <strong>{originalWebentity}</strong> dans <strong>{redirectWebentity}</strong>",
   "redirect-modal.step-2-merge-reverse": "incorporer une partie de <strong>{redirectWebentity}</strong> dans <strong>{originalWebentity}</strong>",
-  "redirect-modal.step-2-merge-reverse-description": "Choisir quelle partie de <strong>{webentity}</strong> (<code>{url}</code>) incorporer dans <strong>{originalWebentity}</strong> :",
+  "redirect-modal.step-2-merge-part-description": "Choisir quelle partie de <strong>{webentity}</strong> (<code>{url}</code>) incorporer dans <strong>{originalWebentity}</strong> :",
   "redirect-modal.confirm": "confirmer cette décision"
 }
