@@ -1,6 +1,6 @@
 import './PrefixSetter.styl'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, createRef } from 'react'
 import Draggable from 'react-draggable'
 import cx from 'classnames'
 import findLastIndex from 'lodash/fp/findLastIndex'
@@ -17,16 +17,21 @@ const dict = {
 
 const THRESHOLD = 0.25
 
-const PrefixSetter = function ({
+const PrefixSetter =  ({
   parts = [],
   setPrefix
-}) {
+}) => {
   const initialIndex = findLastSelected(parts)
   let firstEditableIndex = findFirstEditable(parts) - 1
   if (firstEditableIndex <= 0) {
     firstEditableIndex = initialIndex
   }
-  const refs = parts.map(() => useRef(null))
+  const [refs, setRefs] = useState([])
+
+  useEffect(() => {
+    setRefs(() => parts.map(() => createRef()))
+  }, [])
+
   const container = useRef(null)
   const editableRef = useRef(null)
   const [index, setIndex] = useState(initialIndex)
@@ -62,10 +67,14 @@ const PrefixSetter = function ({
       setStartingX(Math.ceil(x + box.width + editableRef.current.scrollLeft) - 1)
     }
   }
+
   useEffect(()=> {
-    setSliderX()
-    setEditable()
-  }, [])
+    if(refs && refs.length > 0) {
+      setSliderX()
+      setEditable()
+    }
+  }, [refs])
+
 
   const handleDrag = (event) => {
     const { clientX } = event

@@ -425,10 +425,11 @@ export const cancelWebentityCrawls = ({ serverUrl, corpusId, webentityId }) => (
 }
 
 export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity, selectedList }) => (dispatch) => {
-  dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity } })
+  dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity, selectedList } })
   const requestActions = actions.map((action) => {
     if (action.type === 'MERGE') {
-      return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
+      // return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
+      jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentity.id, action.prefixes, corpusId])
     } else {
       return dispatch(setWebentityStatus({ serverUrl, corpusId, status: action.type, webentityId: action.id }))
     }

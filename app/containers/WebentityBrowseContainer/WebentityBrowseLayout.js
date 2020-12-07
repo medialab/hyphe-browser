@@ -18,11 +18,13 @@ import Tooltipable from '../../components/Tooltipable'
 
 import HelpPin from '../../components/HelpPin'
 import WebentityNameField from './WebentityNameField'
+import MergeActionsModal from './MergeActionsModal'
 
 const pickByIdentity = pickBy(v => v)
 
 const WebentityBrowseLayout = ({
   webentity,
+  tlds,
   webentitiesList,
   initialStatus,
   viewedSuggestionIds,
@@ -56,6 +58,7 @@ const WebentityBrowseLayout = ({
    */
   const [selectedLinkedEntities, setSelectedLinkedEntities] = useState('referrers')
   const [statusActions, setStatusActions] = useState({})
+  const [mergeActions, setMergeActions] = useState([])
 
   /**
    * browse nav related
@@ -111,8 +114,20 @@ const WebentityBrowseLayout = ({
   )
 
   const submitLinkedEntitiesActions = () => {
-    onBatchActions(pendingActions, selectedLinkedEntities)
+    const nonMergeActions = pendingActions.filter((action) => action.type !== 'MERGE')
+    setMergeActions(pendingActions.filter((action) => action.type === 'MERGE'))
+    onBatchActions(nonMergeActions, selectedLinkedEntities)
     resetLinkedEntitiesActions()
+  }
+
+  const handleCloseMergeModal = () => {
+    setMergeActions([])
+  }
+
+  const handleValidateMerge = (mergeActions) => {
+    console.log(mergeActions, selectedLinkedEntities)
+    onBatchActions(mergeActions, selectedLinkedEntities)
+    setMergeActions([])
   }
 
   /**
@@ -264,7 +279,7 @@ const WebentityBrowseLayout = ({
               <LinkedWebentities
                 {
                 ...{
-                  webentity: webentity,
+                  webentity,
                   setSelected: setSelectedLinkedEntities,
                   selected: selectedLinkedEntities,
                   list: webentity[selectedLinkedEntities],
@@ -324,6 +339,17 @@ const WebentityBrowseLayout = ({
           />
         </EditionCartel>
       </ul>
+      {
+        mergeActions.length > 0 &&
+        <MergeActionsModal
+          isOpen
+          tlds={ tlds }
+          mergeActions={ mergeActions }
+          linkedList={ webentity[selectedLinkedEntities] }
+          onClose={ handleCloseMergeModal }
+          onValidateMerge={ handleValidateMerge }
+        />
+      }
     </div>
   )
 }

@@ -7,6 +7,8 @@ const specialHostsRegExp = /localhost|(\d{1,3}\.){3}\d{1,3}|\[[\da-f]*:[\da-f:]*
 import tail from 'lodash/fp/tail'
 import isEqual from 'lodash/fp/isEqual'
 import last from 'lodash/fp/last'
+import dropRightWhile from 'lodash/fp/dropRightWhile'
+import initial from 'lodash/fp/initial'
 
 const isEmptySpace = isEqual('')
 
@@ -367,4 +369,17 @@ export function lruObjectToString (input) {
     lru += 'f:' + input.fragment + '|'
   }
   return lru
+}
+
+export const parsePrefixes = (lru, url, newEntity, tldTree) => {
+  const urlLru = lruObjectToString(urlToLru(url, tldTree))
+  const l = lru.split('|').length
+  return dropRightWhile((stem) => stem === 'p:', initial(urlLru.split('|'))).map((stem, index) => {
+    const editable = newEntity ? index >= l : index >= l - 1
+    return {
+      name: stem,
+      editable,
+      selected: index < l - 1 || newEntity,
+    }
+  })
 }

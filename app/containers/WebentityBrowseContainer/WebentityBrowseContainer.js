@@ -203,6 +203,7 @@ const WebentityBrowseContainer = ({
   return (
     <WebentityBrowseLayout
       webentity={ webentity }
+      tlds={ tlds }
       viewedSuggestionIds={ viewedSuggestionIds }
       navigationHistory={ navigationHistory }
       stackWebentities={ stackWebentities }
