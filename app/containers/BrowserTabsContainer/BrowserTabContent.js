@@ -431,21 +431,23 @@ class BrowserTabContent extends React.Component {
             tabId: id,
             webentity: this.state.mergeRequired.redirectWebentity
           })
-        } else if (mergeDecision === 'MERGE') {
-          mergeWebentities({
-            serverUrl: server.url,
-            corpusId,
-            webentityId: this.state.mergeRequired.originalWebentity.id,
-            redirectWebentity: this.state.mergeRequired.redirectWebentity,
-            type: this.state.mergeRequired.type
-          })
-          // set current webentity to redirected one
-          setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
-          setTabWebentity({
-            tabId: id,
-            webentity: this.state.mergeRequired.redirectWebentity
-          })
-        } else if (mergeDecision === 'MERGE-PART') {
+        }
+        // else if (mergeDecision === 'MERGE') {
+        //   mergeWebentities({
+        //     serverUrl: server.url,
+        //     corpusId,
+        //     webentityId: this.state.mergeRequired.originalWebentity.id,
+        //     redirectWebentity: this.state.mergeRequired.redirectWebentity,
+        //     type: this.state.mergeRequired.type
+        //   })
+        //   // set current webentity to redirected one
+        //   setTabUrl({ url: this.state.mergeRequired.redirectUrl, id })
+        //   setTabWebentity({
+        //     tabId: id,
+        //     webentity: this.state.mergeRequired.redirectWebentity
+        //   })
+        // }
+        else if (mergeDecision === 'MERGE-PART') {
           addWebentityPrefixes({
             serverUrl: server.url,
             corpusId,
@@ -580,6 +582,7 @@ class BrowserTabContent extends React.Component {
           webentity &&
           this.state.mergeRequired && this.state.mergeRequired.redirectWebentity &&
           this.state.showRedirectionModal &&
+          this.state.mergeRequired.redirectWebentity.id !== this.state.mergeRequired.originalWebentity.id &&
           <RedirectionModal
             isOpen
             // onClose={ handleCloseRedirectModal }

@@ -156,7 +156,7 @@ const RedirectionModal = ({
             <div className={ cx('step-container') }>
               <h3><FormattedMessage id="redirect-modal.step-2-title" /></h3>
               <ul className="actions-container big column">
-                <li>
+                {/* <li>
                   <button onClick={ () => onSetMergeDecision('MERGE') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE' }) }>
                     <FormattedMessage
                       id="redirect-modal.step-2-merge"
@@ -167,7 +167,7 @@ const RedirectionModal = ({
                       } }
                     />
                   </button>
-                </li>
+                </li> */}
                 <li>
                   <button onClick={ () => onSetMergeDecision('MERGE-PART') } className={ cx('btn', { 'btn-success': mergeDecision === 'MERGE-PART' }) }>
                     <FormattedMessage
@@ -222,7 +222,7 @@ const RedirectionModal = ({
                   originalWebentity={ redirectWebentity }
                   url={ originalWebentity.tabUrl }
                   tlds={ tlds }
-                  mergePart
+                  mergePart={ false }
                   onSetPrefixes={ setLruPrefixes }
                 />
               }
