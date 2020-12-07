@@ -67,8 +67,6 @@ const MergePrefix = ({
           values={ {
             webentity: webentity.name,
             originalWebentity: originalWebentity.name,
-            url: prefixUrl,
-            code: (url) => <code>{url}</code>,
             strong: (name) => <strong>{name}</strong>
           } }
         />

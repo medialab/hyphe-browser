@@ -461,6 +461,6 @@
   "redirect-modal.step-2-merge": "merge <strong>{originalWebentity}</strong> into <strong>{redirectWebentity}</strong>",
   "redirect-modal.step-2-merge-part": "merge a part of <strong>{originalWebentity}</strong> into <strong>{redirectWebentity}</strong>",
   "redirect-modal.step-2-merge-reverse": "merge a part of <strong>{redirectWebentity}</strong> into <strong>{originalWebentity}</strong>",
-  "redirect-modal.step-2-merge-part-description": "Choose which part of <strong>{webentity}</strong> (<code>{url}</code>) you want to merge into <strong>{originalWebentity}</strong>:",
+  "redirect-modal.step-2-merge-part-description": "Choose which part of <strong>{webentity}</strong> you want to merge into <strong>{originalWebentity}</strong>:",
   "redirect-modal.confirm": "confirm this decision"
 }
