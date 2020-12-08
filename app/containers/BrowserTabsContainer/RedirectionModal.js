@@ -5,25 +5,10 @@ import { FormattedMessage } from 'react-intl'
 import Modal from 'react-modal'
 import PrefixSetter from '../../components/PrefixSetter'
 import cx from 'classnames'
-import dropRightWhile from 'lodash/fp/dropRightWhile'
-import initial from 'lodash/fp/initial'
 
-import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
+import { lruVariations, longestMatching, lruToUrl, lruObjectToString, parsePrefixes } from '../../utils/lru'
 
 Modal.setAppElement('#root')
-
-const parsePrefixes = (lru, url, newEntity, tldTree) => {
-  const urlLru = lruObjectToString(urlToLru(url, tldTree))
-  const l = lru.split('|').length
-  return dropRightWhile((stem) => stem === 'p:', initial(urlLru.split('|'))).map((stem, index) => {
-    const editable = newEntity ? index >= l : index >= l - 1
-    return {
-      name: stem,
-      editable,
-      selected: index < l - 1 || newEntity,
-    }
-  })
-}
 
 const MergePrefix = ({
   webentity,
@@ -35,7 +20,7 @@ const MergePrefix = ({
 }) => {
 
   const longestLru = useMemo(
-    () => longestMatching(webentity.prefixes, url, tlds).lru,
+    () => longestMatching(webentity.prefixes, url, tlds) && longestMatching(webentity.prefixes, url, tlds).lru,
     [webentity.prefixes, url, tlds]
   )
   const prefixes = useMemo(

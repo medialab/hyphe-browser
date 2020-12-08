@@ -1,6 +1,6 @@
 import './MergeActionsModal.styl'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import Modal from 'react-modal'
@@ -19,16 +19,24 @@ const MergePrefix = ({
   onCancel,
   onSetPrefixes
 }) => {
-  const longestLru = longestMatching(webentity.prefixes, url, tlds).lru
-  const prefixes = parsePrefixes(lruObjectToString(longestLru), url, mergePart, tlds)
+  const longestLru = useMemo(
+    () => longestMatching(webentity.prefixes, url, tlds) && longestMatching(webentity.prefixes, url, tlds).lru,
+    [webentity.prefixes, url, tlds]
+  )
+  const prefixes = useMemo(
+    () => parsePrefixes(lruObjectToString(longestLru), url, mergePart, tlds),
+    [longestLru, url, tlds]
+  )
 
-  const initialPrefix = prefixes
-    .filter(({ selected }) => selected)
-    .reduce((prev, part) => `${prev}${part.name}|`, '')
+  const initialPrefix = useMemo(
+    () => prefixes
+      .filter(({ selected }) => selected)
+      .reduce((prev, part) => `${prev}${part.name}|`, '')
+  )
 
   const handleSetPrefix = (prefix) => {
     setPrefixUrl(lruToUrl(prefix))
-    onSetPrefixes(webentity.id, lruVariations(prefix))
+    onSetPrefixes(lruVariations(prefix))
   }
 
   const [prefixUrl, setPrefixUrl] = useState(lruToUrl(initialPrefix))
@@ -153,14 +161,17 @@ const MergeModal = ({
         <div className="modal-footer">
           <ul className="actions-container big">
             <li><button onClick={ onClose } className="btn btn-danger">cancel</button></li>
-            <li>
-              <button
-                onClick={ handleValidateMerge }
-                className="btn btn-success"
-              >
-                <FormattedMessage id="merge-actions-modal.confirm" values={ { count: currentMergeActions.length } } />
-              </button>
-            </li>
+            {
+              currentMergeActions.length > 0 &&
+              <li>
+                <button
+                  onClick={ handleValidateMerge }
+                  className="btn btn-success"
+                >
+                  <FormattedMessage id="merge-actions-modal.confirm" values={ { count: currentMergeActions.length } } />
+                </button>
+              </li>
+            }
           </ul>
         </div>
       </div>

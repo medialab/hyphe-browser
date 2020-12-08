@@ -8,8 +8,6 @@ import { FixedSizeList as List } from 'react-window'
 import  AutoSizer from 'react-virtualized-auto-sizer'
 import Tooltip from 'react-tooltip'
 import isNumber from 'lodash/fp/isNumber'
-import initial from 'lodash/fp/initial'
-import dropRightWhile from 'lodash/fp/dropRightWhile'
 
 import HelpPin from '../../components/HelpPin'
 import Spinner from '../../components/Spinner'
@@ -17,7 +15,7 @@ import PrefixSetter from '../../components/PrefixSetter'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
 import BodyTooltip from '../../components/BodyTooltip'
 
-import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString } from '../../utils/lru'
+import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString, parsePrefixes } from '../../utils/lru'
 
 import './InModal.styl'
 
@@ -119,19 +117,6 @@ const Prefixes = (props) => {
   )
 }
 
-const parsePrefixes = (lru, url, newEntity, tldTree) => {
-  const urlLru = lruObjectToString(urlToLru(url, tldTree))
-  const l = lru.split('|').length
-  return dropRightWhile((stem) => stem === 'p:', initial(urlLru.split('|'))).map((stem, index) => {
-    const editable = newEntity ? index >= l : index >= l - 1
-    return {
-      name: stem,
-      editable,
-      selected: index < l - 1 || newEntity,
-    }
-  })
-}
-
 const orderList = (pages, prefix, tabLru) => {
   if (pages) {
     return [tabLru, prefix].reduce((accumulator, value) => {
@@ -226,7 +211,7 @@ const EntityModal = ({
 }) => {
   const { formatMessage } = useIntl()
   const longestLru = useMemo(
-    () => longestMatching(webentity.prefixes, tabUrl, tlds).lru,
+    () => longestMatching(webentity.prefixes, tabUrl, tlds) && longestMatching(webentity.prefixes, tabUrl, tlds).lru,
     [webentity.prefixes, tabUrl, tlds]
   )
   const prefixes = useMemo(
