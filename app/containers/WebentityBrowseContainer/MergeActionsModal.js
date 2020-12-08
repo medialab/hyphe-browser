@@ -1,4 +1,4 @@
-import './MergeActionsModal.styl'
+import '../../css/entity-modal.styl'
 
 import React, { useState, useMemo, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
@@ -128,7 +128,7 @@ const MergeModal = ({
           <h2><FormattedMessage id="merge-actions-modal.title" /></h2>
         </div>
         <div className="modal-body">
-          <div className="explanation-text">
+          <div className="explanation-text black-text">
             <FormattedMessage id="merge-actions-modal.description" />
           </div>
           <ul>

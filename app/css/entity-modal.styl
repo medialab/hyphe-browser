@@ -1,6 +1,6 @@
 
 
-@import '../../css/helpers.styl'
+@import './helpers.styl'
 
 .ReactModal__Overlay
     display: flex
@@ -31,6 +31,12 @@
     overflow : hidden
     height: 100%
     position: relative
+    max-height: calc(90vh - 15px);
+    ul
+      list-style: none
+      padding: 0
+    li
+      list-style: none
     input
         input()
     .step3-title-container
@@ -130,8 +136,21 @@
             flex: 1
             display: flex
             justify-content: stretch
+            flex-direction: column
             .btn
                 flex: 1
+                font-size: 14px
+            .prefix-setter
+                margin-top: 10px
+                font-size: 14px
+                li
+                    flex: unset
+                    margin: 0
+        &.column
+            flex-direction: column
+            li
+                margin-bottom: 5px
+
     .btn-success
         background: var(--color-blue)
         color: white
@@ -148,6 +167,16 @@
         background: var(--color-blue)
         color: white
         line-height: 1.5
+        &.black-text
+          background: var(--color-grey)
+          color: black
+        code
+          font-size: 1.2em
+          // background: var(--color-blue)
+          // color: white
+          text-decoration: underline
+          padding: 2px
+
     .step-container
         margin-bottom: 10px
         margin-top: 10px

@@ -1,4 +1,4 @@
-import './RedirectionModal.styl'
+import '../../css/entity-modal.styl'
 import React, { useState, useMemo, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -113,7 +113,7 @@ const RedirectionModal = ({
           </h2>
         </div>
         <div className="modal-body">
-          <div className="explanation-text">
+          <div className="explanation-text black-text">
             <FormattedMessage
               id="redirect-modal.description"
               values={ {

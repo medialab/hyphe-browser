@@ -17,7 +17,7 @@ import BodyTooltip from '../../components/BodyTooltip'
 
 import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString, parsePrefixes } from '../../utils/lru'
 
-import './InModal.styl'
+import '../../css/entity-modal.styl'
 
 const compareWithoutWww = (lru) => {
   const lrus = lruVariations(lru)
