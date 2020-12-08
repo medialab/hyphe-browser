@@ -447,7 +447,6 @@
   "merge-actions-modal.title": "Merge actions",
   "merge-actions-modal.description": "Merge actions explanation",
   "merge-actions-modal.remove-item": "cancel",
-  "merge-actions-modal.cancel": "cancel",
   "merge-actions-modal.confirm": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
 
   "redirect-modal.title": "This page requests a redirection to another one.",

@@ -113,7 +113,6 @@ const MergeModal = ({
       contentLabel="Merge Actions Modal"
       style={ {
         content: {
-          width: 700,
           maxWidth: '90vw',
           position: 'relative',
           top: 0,
@@ -160,7 +159,7 @@ const MergeModal = ({
         </div>
         <div className="modal-footer">
           <ul className="actions-container big">
-            <li><button onClick={ onClose } className="btn btn-danger">cancel</button></li>
+            <li><button onClick={ onClose } className="btn btn-danger"><FormattedMessage id="cancel" /></button></li>
             {
               currentMergeActions.length > 0 &&
               <li>
