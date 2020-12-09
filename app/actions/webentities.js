@@ -249,6 +249,7 @@ export const fetchReferrers = ({ serverUrl, corpusId, webentity }) => dispatch =
 
   return jsonrpc(serverUrl)('store.get_webentity_referrers', [webentity.id, -1, 0, false, false, corpusId])
     .then(referrers => dispatch({ type: FETCH_REFERRERS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrers } }))
+    .then(() => dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage })))
     .catch(error => {
       dispatch({ type: FETCH_REFERRERS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
       throw error
@@ -260,6 +261,7 @@ export const fetchReferrals = ({ serverUrl, corpusId, webentity }) => dispatch =
 
   return jsonrpc(serverUrl)('store.get_webentity_referrals', [webentity.id, -1, 0, false, false, corpusId])
     .then(referrals => dispatch({ type: FETCH_REFERRALS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrals } }))
+    .then(() => dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage })))
     .catch(error => {
       dispatch({ type: FETCH_REFERRALS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
       throw error
