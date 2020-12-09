@@ -203,7 +203,7 @@ const RedirectionModal = ({
                 <MergePrefix
                   webentity={ originalWebentity }
                   originalWebentity={ redirectWebentity }
-                  url={ originalWebentity.tabUrl }
+                  url={ originalWebentity.tabUrl || originalWebentity.homepage }
                   tlds={ tlds }
                   mergePart={ false }
                   onSetPrefixes={ setLruPrefixes }
