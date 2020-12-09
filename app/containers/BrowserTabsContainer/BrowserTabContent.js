@@ -422,13 +422,13 @@ class BrowserTabContent extends React.Component {
       if (!redirectionDecision) {
         // previousUrl is redirectedUrl here, need to set it back to originalUrl
         this.setState({
-          previousUrl: this.state.originalWebentity.tabUrl,
+          previousUrl: this.state.mergeRequired.originalWebentity.tabUrl || this.state.mergeRequired.originalWebentity.homepage,
+          tabUrl: this.state.mergeRequired.originalWebentity.tabUrl || this.state.mergeRequired.originalWebentity.homepage,
           disableRedirect: true,
           originalWebentity: null,
           dnsError: false
         })
-        this.setState({ tabUrl: this.state.originalWebentity.tabUrl })
-        setTabWebentity({ tabId: id, webentity: this.state.originalWebentity })
+        setTabWebentity({ tabId: id, webentity: this.state.mergeRequired.originalWebentity })
       } else {
         if(mergeDecision === 'OUT') {
           setWebentityStatus({
@@ -438,40 +438,48 @@ class BrowserTabContent extends React.Component {
             webentityId: this.state.mergeRequired.originalWebentity.id,
           })
           // set current webentity to redirected one
-          this.setState({ tabUrl: this.state.mergeRequired.redirectUrl })
           setTabWebentity({
             tabId: id,
             webentity: this.state.mergeRequired.redirectWebentity
           })
+          this.setState({
+            tabUrl: this.state.mergeRequired.redirectUrl,
+            originalWebentity: null,
+            dnsError: false,
+            mergeRequired: null,
+            disableRedirect: false
+          })
         }
-        // else if (mergeDecision === 'MERGE') {
-        //   mergeWebentities({
-        //     serverUrl: server.url,
-        //     corpusId,
-        //     webentityId: this.state.mergeRequired.originalWebentity.id,
-        //     redirectWebentity: this.state.mergeRequired.redirectWebentity,
-        //     type: this.state.mergeRequired.type
-        //   })
-        //   // set current webentity to redirected one
-        //   this.setState({ tabUrl: this.state.mergeRequired.redirectUrl })
-        //   setTabWebentity({
-        //     tabId: id,
-        //     webentity: this.state.mergeRequired.redirectWebentity
-        //   })
-        // }
         else if (mergeDecision === 'MERGE-PART') {
+          //   mergeWebentities({
+          //     serverUrl: server.url,
+          //     corpusId,
+          //     webentityId: this.state.mergeRequired.originalWebentity.id,
+          //     redirectWebentity: this.state.mergeRequired.redirectWebentity,
+          //     type: this.state.mergeRequired.type
+          //   })
           addWebentityPrefixes({
             serverUrl: server.url,
             corpusId,
             webentityId: this.state.mergeRequired.redirectWebentity.id,
             prefixes,
             tabId: id
-          })
-          // set current webentity to redirected one
-          this.setState({ tabUrl: this.state.mergeRequired.redirectUrl })
-          setTabWebentity({
-            tabId: id,
-            webentity: this.state.mergeRequired.redirectWebentity
+          }).then(() => {
+            declarePage({
+              serverUrl: server.url,
+              corpusId,
+              url: this.state.mergeRequired.redirectWebentity.homepage
+            }).then((webentity) => {
+              setTabWebentity({ tabId: id, webentity })
+            })
+            // set current webentity to redirected one
+            this.setState({
+              tabUrl: this.state.mergeRequired.redirectUrl,
+              originalWebentity: null,
+              dnsError: false,
+              mergeRequired: null,
+              disableRedirect: false
+             })
           })
         } else if (mergeDecision === 'MERGE-REVERSE') {
           addWebentityPrefixes({
@@ -485,19 +493,32 @@ class BrowserTabContent extends React.Component {
             declarePage({
               serverUrl: server.url,
               corpusId,
-              url: this.state.mergeRequired.redirectUrl
-            }).then((webentity) => setTabWebentity({ tabId: id, webentity }))
+              url: this.state.mergeRequired.originalWebentity.homepage
+            }).then((webentity) => {
+              setTabWebentity({ tabId: id, webentity })
+            })
+            this.setState({
+              tabUrl: this.state.mergeRequired.redirectUrl,
+              originalWebentity: null,
+              dnsError: false,
+              mergeRequired: null,
+              disableRedirect: false
+            })
           })
-          this.setState({ tabUrl: this.state.mergeRequired.redirectUrl })
         } else if (mergeDecision === 'NONE') {
           // set current webentity to redirected one
-          this.setState({ tabUrl: this.state.mergeRequired.redirectUrl })
           setTabWebentity({
             tabId: id,
             webentity: this.state.mergeRequired.redirectWebentity
           })
+          this.setState({
+            tabUrl: this.state.mergeRequired.redirectUrl,
+            originalWebentity: null,
+            dnsError: false,
+            mergeRequired: null,
+            disableRedirect: false
+          })
         }
-        this.setState({ originalWebentity: null, dnsError: false, mergeRequired: null, disableRedirect: false })
       }
       handleCloseRedirectModal()
     }
