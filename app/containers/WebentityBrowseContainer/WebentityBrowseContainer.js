@@ -197,7 +197,7 @@ const WebentityBrowseContainer = ({
   /**
    * Display loading bar if no we is provided
    */
-  if (!webentity) {
+  if (!webentity || !webentity.id) {
     return <div className="loader-container"><Spinner /></div>
   }
   return (

@@ -133,7 +133,7 @@ const WebentityBrowseLayout = ({
    * tags related
    */
 
-  const userTags = webentity.tags[TAGS_NS]
+  const userTags = webentity && webentity.tags && webentity.tags[TAGS_NS]
   const initialTags = React.useMemo(() => categories.map((category) => ({
     category,
     value: (userTags && userTags[category] && userTags[category][0]) || ''
