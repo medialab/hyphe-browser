@@ -39,7 +39,7 @@ const LinkedWebentities = ({
                 setSelected(l)
                 resetActions()
               }
-              const count = (webentity[l] && webentity[l].length) || 0
+              const count = (webentity[l] && webentity[l].length) || webentity[(l === 'referrers' ? 'in' : 'out') + 'degree']
 
               return (
                 <button

@@ -125,7 +125,6 @@ const WebentityBrowseLayout = ({
   }
 
   const handleValidateMerge = (mergeActions) => {
-    console.log(mergeActions, selectedLinkedEntities)
     onBatchActions(mergeActions, selectedLinkedEntities)
     setMergeActions([])
   }
