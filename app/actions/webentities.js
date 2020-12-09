@@ -436,16 +436,9 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
   })
   return Promise.all(requestActions)
     .then(() => {
-      // * Do not re-fetch stack after apply actions on stack
-      // const findStack = USED_STACKS.find((stack) => stack.id === selectedList)
-      // if (findStack) {
-      //   return dispatch(fetchStack({ serverUrl, corpusId, stack:selectedList }))
-      // }
-      if (selectedList === 'referrers') {
-        return dispatch(fetchReferrers({ serverUrl, corpusId, webentity }))
-      }
-      if (selectedList === 'referrals') {
-        return dispatch(fetchReferrals({ serverUrl, corpusId, webentity }))
+      // * Do not re-fetch stack/referrals/referrers after apply actions on stack/webentity
+      if (selectedList === 'referrers' || 'referrals') {
+        return dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage }))
       }
     })
     .then(() => {

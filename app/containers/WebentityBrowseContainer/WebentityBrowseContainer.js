@@ -173,6 +173,11 @@ const WebentityBrowseContainer = ({
   const handleRemoveTag = (category, value) => removeTag(serverUrl, corpusId, category, webentity.id, value)
   const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), [categories])
 
+  const handleFetchLinkedEntities = (selected) => {
+    if (selected === 'referrals') fetchReferrals({ serverUrl, corpusId, webentity })
+    if (selected === 'referrers') fetchReferrers({ serverUrl, corpusId, webentity })
+  }
+
   const [cartels, dispatchCartels] = React.useReducer(
     (state, action) => ({
       ...state,
@@ -217,6 +222,7 @@ const WebentityBrowseContainer = ({
       tabUrl={ activeTab.url }
       categories={ filteredCategories }
       tagsSuggestions={ tagsSuggestions || empty }
+      onFetchLinkedEntities={ handleFetchLinkedEntities }
       onSelectWebentity={ handleSelectWebentity }
       onDownloadList={ handleDownloadList }
       onSetTabUrl={ handleSetTabUrl }
