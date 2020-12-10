@@ -40,6 +40,7 @@ const WebView = ({
   url,
   closable,
   eventBus,
+  onDeclarePage
 }) => {
   const webviewRef = useRef(null)
   const [ignoreNextAbortedError, setIgnoreNextAbortedError] = useState(false)
@@ -52,6 +53,7 @@ const WebView = ({
     const webview = webviewRef.current
     // Store handlers for future cleanup
     const reloadHandler = (ignoreCache) => {
+      onDeclarePage(webview.src)
       return ignoreCache ? webview.reloadIgnoringCache() : webview.reload()
     }
     const goBackHandler = () => webview.goBack()

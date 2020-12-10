@@ -534,6 +534,8 @@ class BrowserTabContent extends React.Component {
       }
     }
 
+    const handleDeclarePage = (currentUrl) => declarePage({serverUrl: server.url, corpusId, url: currentUrl})
+
     return (
       <div
         key={ id } tabIndex="1" className="browser-tab-content"
@@ -554,7 +556,7 @@ class BrowserTabContent extends React.Component {
           onGoForward={ handleGoForward }
           onSetTabUrl={ this.handleSetTabUrl }
           onSetHomepage = { handleSetWebentityHomepage }
-          disableReload={ !!adjusting || disableNavigation }
+          disableReload={ !!adjusting || disableNavigation || url === PAGE_HYPHE_HOME }
           disableBack={ !!adjusting || this.state.disableBack || disableNavigation }
           disableForward={ !!adjusting || this.state.disableForward || disableNavigation }
           displayAddButton={ webentity && webentity.status !== 'DISCOVERED' && webentity.prefixes && !webentity.prefixes.includes(lruObjectToString(urlToLru(url))) }
@@ -572,6 +574,7 @@ class BrowserTabContent extends React.Component {
         <div className="webview-container" style={ { display: url === PAGE_HYPHE_HOME ? 'none' : 'block' } } >
           <WebView
             id={ id } url={ url } closable={ closable } eventBus={ eventBus }
+            onDeclarePage={ handleDeclarePage }
           />
           {this.state.showSearchBar &&
             <SearchBar
