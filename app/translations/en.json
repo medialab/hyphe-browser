@@ -184,8 +184,8 @@
 
   "go-to-homepage": "click to browse to webentity's Homepage",
 
-  "apply-decisions": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
-  "discard-decisions": "{count, plural, one {discard decision} other {discard decisions}}",
+  "apply-decisions": "{count, plural, one {apply this action} other {apply these {count} actions}}",
+  "discard-decisions": "cancel",
 
   "sidebar.overview.current-webentities-list": "Current webentities list",
   "sidebar.overview.current-webentities-list-help": "Choose which list of webentities you want to review",
@@ -444,10 +444,11 @@
   "browser-tab-content.disable-redirect-message": "This page is empty because it should be redirected to another one but you chose to refuse the redirection so that you can work on its metadata.",
   "browser-tab-content.show-redirection-again": "Show redirection settings again",
 
-  "merge-actions-modal.title": "Merge actions",
-  "merge-actions-modal.description": "Merge actions explanation",
+  "merge-actions-modal.title": "Merge other webentities within this one",
+  "merge-actions-modal.description": "You are about to merge the following webentities within <strong>{webentity}</strong>.",
+  "merge-actions-modal.description-extra": "Please adjust if necessary which part of these entities you actually wish to include within or cancel them, then confirm with the buttons at the bottom of this window.",
   "merge-actions-modal.remove-item": "cancel",
-  "merge-actions-modal.confirm": "{count, plural, one {apply one decision} other {apply {count} decisions}}",
+  "merge-actions-modal.confirm": "{count, plural, one {merge this webentity} other {merge these {count} webentities}}",
 
   "redirect-modal.title": "This page requests a redirection to another one.",
   "redirect-modal.description": "The web page <code>{originalUrl}</code> (which belongs to webentity <strong>{originalWebentity}</strong>) wants to redirect the browser to the webpage <code>{redirectUrl}</code> (which belongs to webentity <strong>{redirectWebentity}</strong>)",

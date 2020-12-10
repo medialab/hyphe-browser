@@ -297,7 +297,7 @@ const StackListLayout = ({
             <ul className="actions-container">
               <li onClick={ resetActions } >
                 <button className="btn cancel-btn">
-                  <T id="discard-decisions" values={ { count: pendingActions.length } } />
+                  <T id="discard-decisions" />
                 </button>
               </li>
               <li onClick={ submitActions }>

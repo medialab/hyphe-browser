@@ -144,7 +144,7 @@ const LinkedWebentities = ({
           <ul className="actions-container">
             <li onClick={ resetActions } >
               <button className="btn cancel-btn">
-                <T id="discard-decisions" values={ { count: pendingActions.length } } />
+                <T id="discard-decisions" />
               </button>
             </li>
             <li onClick={ handleSubmitActions }><button className="btn confirm-btn">
@@ -163,9 +163,10 @@ const LinkedWebentities = ({
         mergeActions.length > 0 &&
         <MergeActionsModal
           isOpen
-          tlds={ tlds }
           mergeActions={ mergeActions }
           linkedList={ webentity[linkedEntities] }
+          tlds={ tlds }
+          webentityName={ webentity.name }
           onClose={ handleCloseMergeModal }
           onValidateMerge={ handleValidateMerge }
         />

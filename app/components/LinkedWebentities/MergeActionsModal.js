@@ -78,6 +78,7 @@ const MergeModal = ({
   mergeActions,
   linkedList,
   tlds,
+  webentityName,
   onClose,
   onValidateMerge,
 }) => {
@@ -128,7 +129,15 @@ const MergeModal = ({
         </div>
         <div className="modal-body">
           <div className="explanation-text black-text">
-            <FormattedMessage id="merge-actions-modal.description" />
+            <FormattedMessage
+              id="merge-actions-modal.description"
+              values={ {
+                webentity: webentityName,
+                strong: (name) => <strong>{name}</strong>
+              } }
+            />
+            <br />
+            <FormattedMessage id="merge-actions-modal.description-extra" />
           </div>
           <ul>
             {
