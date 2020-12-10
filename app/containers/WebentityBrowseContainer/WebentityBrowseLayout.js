@@ -42,6 +42,7 @@ const WebentityBrowseLayout = ({
   onSetTabUrl,
   onOpenTab,
   onBatchActions,
+  onFetchKnownPages,
   onFetchLinkedEntities,
   onSetWebentityName,
   onSetWebentityHomepage,
@@ -250,6 +251,7 @@ const WebentityBrowseLayout = ({
                 homepage={ webentity.homepage }
                 isPaginating={ webentity.token }
                 totalPages={ webentity.pages_total }
+                updateList= { onFetchKnownPages }
                 onDownloadList={ onDownloadList }
                 onSetTabUrl= { onSetTabUrl }
                 onSetHomepage = { onSetWebentityHomepage }

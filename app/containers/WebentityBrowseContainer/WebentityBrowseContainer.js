@@ -185,6 +185,8 @@ const WebentityBrowseContainer = ({
     selected === 'referrals' ? fetchReferrals({ serverUrl, corpusId, webentity }) : fetchReferrers({ serverUrl, corpusId, webentity })
   }
 
+  const handleFetchKnownPages = () => debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
+
   const [cartels, dispatchCartels] = React.useReducer(
     (state, action) => ({
       ...state,
@@ -229,6 +231,7 @@ const WebentityBrowseContainer = ({
       tabUrl={ activeTab.url }
       categories={ filteredCategories }
       tagsSuggestions={ tagsSuggestions || empty }
+      onFetchKnownPages= { handleFetchKnownPages }
       onFetchLinkedEntities={ handleFetchLinkedEntities }
       onSelectWebentity={ handleSelectWebentity }
       onDownloadList={ handleDownloadList }

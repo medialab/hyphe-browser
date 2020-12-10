@@ -23,6 +23,7 @@ const KnownPages = ({
   homepage,
   isPaginating,
   totalPages,
+  updateList,
   onDownloadList,
   onSetHomepage,
   onSetTabUrl
@@ -77,6 +78,15 @@ const KnownPages = ({
 
   return (
     <div className="known-pages">
+      {
+        totalPages !== pagesList.length && !isPaginating &&
+        <div className="actualize-container">
+          <button className="btn actualize" onClick={ updateList }>
+            {formatMessage({ id: 'actualize-entities-list' })}
+            {` (${totalPages > pagesList.length ? `+${totalPages - pagesList.length}` : `-${ pagesList.length - totalPages }`})`}
+          </button>
+        </div>
+      }
       <div className="pages-container" ref={ listContainer }>
         <ul>
           {
