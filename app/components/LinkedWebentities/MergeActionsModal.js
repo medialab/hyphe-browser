@@ -108,7 +108,7 @@ const MergeModal = ({
 
   return (
     <Modal
-      isOpen={ isOpen }
+      isOpen={ isOpen && currentMergeActions.length > 0 }
       // onRequestClose={ onClose }
       contentLabel="Merge Actions Modal"
       style={ {
