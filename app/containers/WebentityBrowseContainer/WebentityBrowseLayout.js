@@ -238,7 +238,7 @@ const WebentityBrowseLayout = ({
         <EditionCartel
           isOpen={ cartels.knownPages }
           onToggle={ () => setCartels('knownPages', !cartels.knownPages) }
-          title={ formatMessage({ id: 'sidebar.cartel.known-webpages-title' }) }
+          title={ formatMessage({ id: 'sidebar.cartel.known-webpages-title'}, { count: webentity.pages_total }) }
           help={ formatMessage({ id: 'sidebar.cartel.known-webpages-help' }) }
         >
           {
@@ -260,7 +260,7 @@ const WebentityBrowseLayout = ({
         <EditionCartel
           isOpen={ cartels.linkedentities }
           onToggle={ () => setCartels('linkedentities', !cartels.linkedentities) }
-          title={ formatMessage({ id: 'sidebar.cartel.linked-webentities-title' }) }
+          title={ formatMessage({ id: 'sidebar.cartel.linked-webentities-title' }, { count: webentity.undirected_degree }) }
           help={ formatMessage({ id: 'sidebar.cartel.linked-webentities-help' }) }
         >
           {
