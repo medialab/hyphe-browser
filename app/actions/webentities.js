@@ -438,12 +438,6 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
   })
   return Promise.all(requestActions)
     .then(() => {
-      // * Do not re-fetch stack/referrals/referrers after apply actions on stack/webentity
-      if (selectedList === 'referrers' || selectedList === 'referrals') {
-        return dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage }))
-      }
-    })
-    .then(() => {
       dispatch({ type: BATCH_WEBENTITY_ACTIONS_SUCCESS, payload: { actions, serverUrl, corpusId, webentity } })
     })
     .catch((error) => {

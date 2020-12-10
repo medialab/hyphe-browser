@@ -15,7 +15,8 @@ import {
   setWebentityStatus,
   fetchPaginatePages,
   fetchReferrals,
-  fetchReferrers
+  fetchReferrers,
+  declarePage
 } from '../../actions/webentities'
 
 import { viewWebentity, fetchStack, selectStack } from '../../actions/stacks'
@@ -166,7 +167,14 @@ const WebentityBrowseContainer = ({
 
   const handleSetTabUrl = (url) => setTabUrl({ url, id: activeTab.id })
   const handleOpenTab = (url) => openTab({ url, activeTabId: activeTab.id })
-  const handleBatchActions = (actions, selectedList) => batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
+  const handleBatchActions = (actions, selectedList) => {
+    batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
+    .then(() => {
+      if (actions[0].type === 'MERGE') {
+        selectedList === 'referrals' ? fetchReferrals({ serverUrl, corpusId, webentity }) : fetchReferrers({ serverUrl, corpusId, webentity })
+      }
+    })
+  }
 
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)
   const handleUpdateTag = (category, oldValue, newValue) => updateTag(serverUrl, corpusId, category, webentity.id, oldValue, newValue)
@@ -174,8 +182,7 @@ const WebentityBrowseContainer = ({
   const filteredCategories = React.useMemo(() => categories.filter(cat => cat !== 'FREETAGS'), [categories])
 
   const handleFetchLinkedEntities = (selected) => {
-    if (selected === 'referrals') fetchReferrals({ serverUrl, corpusId, webentity })
-    if (selected === 'referrers') fetchReferrers({ serverUrl, corpusId, webentity })
+    selected === 'referrals' ? fetchReferrals({ serverUrl, corpusId, webentity }) : fetchReferrers({ serverUrl, corpusId, webentity })
   }
 
   const [cartels, dispatchCartels] = React.useReducer(
