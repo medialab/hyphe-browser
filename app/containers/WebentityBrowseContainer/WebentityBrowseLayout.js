@@ -264,29 +264,58 @@ const WebentityBrowseLayout = ({
           help={ formatMessage({ id: 'sidebar.cartel.linked-webentities-help' }) }
         >
           {
-            webentity[selectedLinkedEntities] ?
-              <LinkedWebentities
-                {
-                ...{
-                  webentity,
-                  tlds,
-                  setSelected: setSelectedLinkedEntities,
-                  selected: selectedLinkedEntities,
-                  list: webentity[selectedLinkedEntities],
-                  resetActions: resetLinkedEntitiesActions,
-                  submitActions: submitLinkedEntitiesActions,
-                  pendingActions,
-                  loadingBatchActions,
-                  viewedSuggestionIds,
-                  updateList: onFetchLinkedEntities,
-                  statusActions,
-                  setStatusActions,
-                  onDownloadList,
-                  onOpenTab
+            <div className="linked-entities-wrapper">
+              <nav className="list-toggle">
+              {
+                ['referrers', 'referrals'].map((l, index) => {
+                  const handleSelectContextualList = () => {
+                    setSelectedLinkedEntities(l)
+                    resetLinkedEntitiesActions()
+                  }
+                  const count = webentity[(l === 'referrers' ? 'in' : 'out') + 'degree']
+
+                  return (
+                    <button
+                      className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selectedLinkedEntities }) }
+                      key={ index }
+                      onClick={ handleSelectContextualList }
+                    >
+                      <span className="list-toggle-title">
+                        <T id={ `sidebar.contextual.${l}` } values={ { count } } />
+                      </span>
+                      <HelpPin>
+                        {formatMessage({ id: `sidebar.contextual.${l}-help` })}
+                      </HelpPin>
+                    </button>
+                  )
                 }
-                }
-              />:
-              <T id="loading" />
+                ) }
+              </nav>
+              {
+                webentity[selectedLinkedEntities] ?
+                  <LinkedWebentities
+                    {
+                    ...{
+                      webentity,
+                      key: `${webentity.id}-${selectedLinkedEntities}`,
+                      tlds,
+                      linkedEntities: selectedLinkedEntities,
+                      linkedEntitiesList: webentity[selectedLinkedEntities],
+                      resetActions: resetLinkedEntitiesActions,
+                      submitActions: submitLinkedEntitiesActions,
+                      pendingActions,
+                      loadingBatchActions,
+                      viewedSuggestionIds,
+                      updateList: onFetchLinkedEntities,
+                      statusActions,
+                      setStatusActions,
+                      onDownloadList,
+                      onOpenTab
+                    }
+                  }
+                  /> : <T id="loading" />
+              }
+            </div>
           }
         </EditionCartel>
         <EditionCartel
