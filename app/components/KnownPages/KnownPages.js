@@ -82,7 +82,7 @@ const KnownPages = ({
         totalPages !== pagesList.length && !isPaginating &&
         <div className="actualize-container">
           <button className="btn actualize" onClick={ updateList }>
-            {formatMessage({ id: 'actualize-entities-list' })}
+            {formatMessage({ id: 'actualize-pages-list' })}
             {` (${totalPages > pagesList.length ? `+${totalPages - pagesList.length}` : `-${ pagesList.length - totalPages }`})`}
           </button>
         </div>

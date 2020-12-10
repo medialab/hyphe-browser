@@ -183,7 +183,8 @@
   "fieldnotes.edit-note": "éditer la note",
   "fieldnotes.delete-note": "supprimer la note",
 
-  "actualize-entities-list": "actualiser la liste des webentités",
+  "actualize-entities-list": "rafraîchir la liste des webentités",
+  "actualize-pages-list": "rafraîchir la liste des pages",
 
   "webentity-card.move-to-undecided": "déplacer cette webentité dans la liste UNDECIDED",
   "webentity-card.move-to-out": "exclure cette webentité et la déplacer dans la liste OUT",
