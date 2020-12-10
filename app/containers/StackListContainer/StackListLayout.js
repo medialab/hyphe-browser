@@ -308,7 +308,7 @@ const StackListLayout = ({
             </ul>
           }
           {
-            !isEmpty &&
+            !isEmpty && (!pendingActions || pendingActions.length === 0) &&
             <div className="webentities-list-footer">
               <DownloadListBtn
                 isDisabled={ filteredList.length === 0 }

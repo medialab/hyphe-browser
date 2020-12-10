@@ -181,7 +181,7 @@ const LinkedWebentities = ({
             </ul>
           }
 
-          { stateList.length > 0 &&
+          { stateList.length > 0 && (!pendingActions || pendingActions.length === 0) &&
             <div className="download">
               <DownloadListBtn onClickDownload={ handleDownloadList } />
             </div>
