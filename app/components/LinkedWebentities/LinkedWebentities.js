@@ -80,12 +80,12 @@ const LinkedWebentities = ({
     onDownloadList(linkedEntities)
   }
 
-  // const filteredList = linkedEntitiesList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDECIDED')
+  const filteredList = linkedEntitiesList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDECIDED')
 
   return (
     <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
       <div className="main-wrapper">
-        {/* {
+        {
           selectedListCount !== filteredList.length &&
           <div className="actualize-container">
             <button className="btn actualize" onClick={ handleUpdateList }>
@@ -93,7 +93,7 @@ const LinkedWebentities = ({
               {` (${selectedListCount > filteredList.length ? `+${selectedListCount - filteredList.length}` : `-${ filteredList.length  - selectedListCount }`})`}
             </button>
           </div>
-        } */}
+        }
         <CardsList>
           { stateList.length ? stateList.map((link, index) => {
             const toggleAction = (obj, key, status) => {
