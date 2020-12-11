@@ -78,10 +78,13 @@ const WebentityBrowseContainer = ({
   viewedSuggestionIds = new Set(viewedSuggestionIds)
 
   useEffect(() => {
+    let interval
     if (webentity) {
       setInitialStatus(webentity.status)
+      // declare webentity every minute
+      interval = setInterval(() => declarePage({ serverUrl, corpusId, url: webentity.homepage }), 60000)
     }
-    // Fetch paginatePages, referrals and refferes of webentity only once
+    // Fetch paginatePages, referrals and refferes of webent  ity only once
     if (webentity && !webentity.referrals) {
       fetchReferrals({ serverUrl, corpusId, webentity })
     }
@@ -91,6 +94,7 @@ const WebentityBrowseContainer = ({
     if (webentity && !webentity.paginatePages) {
       fetchPaginatePages({ serverUrl, corpusId, webentity })
     }
+    return () => clearInterval(interval)
   }, [webentity && webentity.id])
 
   useEffect(() => {
@@ -99,7 +103,7 @@ const WebentityBrowseContainer = ({
       debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
     }
     // declare_page when finish fetchPaginatePages
-    if (webentity && webentity.paginatePages.length === webentity.pages_total) {
+    if (webentity && webentity.paginatePages && webentity.paginatePages.length === webentity.pages_total) {
       declarePage({ serverUrl, corpusId, url: webentity.homepage })
     }
   }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
