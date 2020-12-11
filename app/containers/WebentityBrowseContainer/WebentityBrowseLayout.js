@@ -274,8 +274,7 @@ const WebentityBrowseLayout = ({
                     setSelectedLinkedEntities(l)
                     resetLinkedEntitiesActions()
                   }
-                  const count = webentity[(l === 'referrers' ? 'in' : 'out') + 'degree']
-
+                  const count = webentity[l] && webentity[l].length || 0
                   return (
                     <button
                       className={ cx('btn', 'btn-default', 'navigation', { 'is-selected': l === selectedLinkedEntities }) }
