@@ -103,7 +103,7 @@ const WebentityBrowseContainer = ({
       debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
     }
     // declare_page when finish fetchPaginatePages
-    if (webentity && webentity.paginatePages && webentity.paginatePages.length === webentity.pages_total) {
+    if (webentity && webentity.token === null) {
       declarePage({ serverUrl, corpusId, url: webentity.homepage })
     }
   }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
