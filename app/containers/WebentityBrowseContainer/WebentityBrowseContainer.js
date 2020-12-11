@@ -84,7 +84,7 @@ const WebentityBrowseContainer = ({
       // declare webentity every minute
       interval = setInterval(() => declarePage({ serverUrl, corpusId, url: webentity.homepage }), 60000)
     }
-    // Fetch paginatePages, referrals and refferes of webent  ity only once
+    // Fetch paginatePages, referrals and refferers of webentity only once
     if (webentity && !webentity.referrals) {
       fetchReferrals({ serverUrl, corpusId, webentity })
     }
