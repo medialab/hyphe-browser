@@ -55,6 +55,7 @@ const WebentityBrowseContainer = ({
   viewWebentity,
   batchWebentityActions,
   setWebentityHomepage,
+  declarePage,
   fetchPaginatePages,
   fetchReferrals,
   fetchReferrers,
@@ -94,12 +95,17 @@ const WebentityBrowseContainer = ({
 
   useEffect(() => {
     // Fetch paginatePages if token
-    // TODO: crawling the declared page should refetch the paginate pages, currently not
     if (webentity && webentity.token) {
       debounceFetchPaginatePages({ serverUrl, corpusId, webentity, token: webentity.token })
     }
   }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
 
+  useEffect(() => {
+    // declare_page when finish fetchPaginatePages
+    if (webentity && webentity.paginatePages.length === webentity.pages_total) {
+      declarePage({ serverUrl, corpusId, url: webentity.homepage })
+    }
+  }, [webentity && webentity.paginatePages && webentity.paginatePages.length])
 
   const webentitiesList = selectedStack && stackWebentities[selectedStack] ? stackWebentities[selectedStack].webentities : []
 
@@ -264,6 +270,7 @@ WebentityBrowseContainer.propTypes = {
   setWebentityName: PropTypes.func,
   setWebentityStatus: PropTypes.func,
   setWebentityHomepage: PropTypes.func,
+  declarePage: PropTypes.func.isRequired,
   fetchReferrers: PropTypes.func.isRequired,
   fetchReferrals: PropTypes.func.isRequired,
   fetchPaginatePages: PropTypes.func.isRequired
@@ -303,6 +310,7 @@ export default connect(mapStateToProps, {
   updateTag,
   removeTag,
   setTabWebentity,
+  declarePage,
   fetchReferrals,
   fetchReferrers,
   fetchPaginatePages
