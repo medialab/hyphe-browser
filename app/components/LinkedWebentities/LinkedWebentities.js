@@ -80,16 +80,28 @@ const LinkedWebentities = ({
     onDownloadList(linkedEntities)
   }
 
+  const filteredList = linkedEntities === 'referrers' && stateList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDICIDED')
+
   return (
     <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
       <div className="main-wrapper">
         {
-          // only show actualize button when webentity is set to IN
-          degreeCount !== stateList.length && webentity.status === 'IN' &&
+          // show actualize button of referrals and during webentity is crawling
+          degreeCount !== stateList.length && webentity.status === 'IN' && linkedEntities === 'referrals' && webentity.crawling_status === 'RUNNING' &&
           <div className="actualize-container">
             <button className="btn actualize" onClick={ handleUpdateList }>
               {formatMessage({ id: 'actualize-entities-list' })}
               {` (${degreeCount > stateList.length ? `+${degreeCount - stateList.length}` : `-${ stateList.length  - degreeCount }`})`}
+            </button>
+          </div>
+        }
+        {
+          // show actualize button of referrers compared with filteredList
+          linkedEntities === 'referrers' &&  filteredList && degreeCount !== filteredList.length &&
+          <div className="actualize-container">
+            <button className="btn actualize" onClick={ handleUpdateList }>
+              {formatMessage({ id: 'actualize-entities-list' })}
+              {` (${degreeCount > filteredList.length ? `+${degreeCount - filteredList.length}` : `-${ filteredList.length  - degreeCount }`})`}
             </button>
           </div>
         }
