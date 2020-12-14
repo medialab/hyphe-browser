@@ -80,7 +80,7 @@ const LinkedWebentities = ({
     onDownloadList(linkedEntities)
   }
 
-  const filteredList = linkedEntities === 'referrers' && stateList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDICIDED')
+  const filteredList = linkedEntities === 'referrers' && stateList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDECIDED')
 
   return (
     <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
