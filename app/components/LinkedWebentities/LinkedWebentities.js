@@ -37,7 +37,7 @@ const LinkedWebentities = ({
     setStateList(linkedEntitiesList)
   }, [linkedEntitiesList])
 
-  const selectedListCount = webentity[(linkedEntities === 'referrers' ? 'in' : 'out') + 'degree']
+  const degreeCount = webentity[(linkedEntities === 'referrers' ? 'in' : 'out') + 'degree']
 
   const handleCloseMergeModal = () => {
     setMergeActions([])
@@ -80,17 +80,16 @@ const LinkedWebentities = ({
     onDownloadList(linkedEntities)
   }
 
-  const filteredList = linkedEntitiesList.filter((entity) => entity.status === 'IN' || entity.status === 'UNDECIDED')
-
   return (
     <div className={ cx('linked-entities', { 'is-loading': loadingBatchActions }) }>
       <div className="main-wrapper">
         {
-          selectedListCount !== filteredList.length &&
+          // only show actualize button when webentity is set to IN
+          degreeCount !== stateList.length && webentity.status === 'IN' &&
           <div className="actualize-container">
             <button className="btn actualize" onClick={ handleUpdateList }>
               {formatMessage({ id: 'actualize-entities-list' })}
-              {` (${selectedListCount > filteredList.length ? `+${selectedListCount - filteredList.length}` : `-${ filteredList.length  - selectedListCount }`})`}
+              {` (${degreeCount > stateList.length ? `+${degreeCount - stateList.length}` : `-${ stateList.length  - degreeCount }`})`}
             </button>
           </div>
         }
