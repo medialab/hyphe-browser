@@ -6,7 +6,7 @@
 // - url points to a non hyphe server
 
 
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import cx from 'classnames'
 import { clipboard } from 'electron'
 import { identity } from 'lodash'
@@ -20,7 +20,6 @@ import { fetchCorpora } from '../../actions/corpora'
 
 // for async validation
 // import jsonrpc from '../../utils/jsonrpc'
-import { selectNode } from '../../utils/misc'
 
 const JSON_PLACEHOLDER = JSON.stringify(
   {
@@ -41,7 +40,7 @@ const ServerForm = ({
   updateServer,
 }) => {
   const { formatMessage } = useIntl()
-  const jsonEl = useRef(null)
+
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState([])
   const [data, setData] = useState(editMode ? { ...server } : {
@@ -106,11 +105,6 @@ const ServerForm = ({
   const onSubmit = (evt) => {
     // no real submit to the server
     evt.preventDefault()
-
-    const newState = {
-      submitting: true,
-      errors: []
-    }
 
     // local validation errors
     if (!isValid()) {
@@ -230,7 +224,7 @@ const ServerForm = ({
               </button>
             </label>
             <textarea
-              readonly
+              readOnly
               value={ serverConfig }
               style={ {
                 resize: 'none',

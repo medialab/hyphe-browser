@@ -2,15 +2,13 @@ import './LinkedWebentities.styl'
 
 import { FormattedMessage as T, useIntl } from 'react-intl'
 
-import React, {useEffect, useState, useMemo} from 'react'
+import React, { useEffect, useState } from 'react'
 import cx from 'classnames'
 
-import HelpPin from '../HelpPin'
 import EntityCard from '../EntityCard'
 import CardsList from '../CardsList'
 import DownloadListBtn from '../DownloadListBtn'
 import MergeActionsModal from './MergeActionsModal'
-import { filter } from 'lodash'
 
 const LinkedWebentities = ({
   webentity,

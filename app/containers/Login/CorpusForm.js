@@ -49,7 +49,7 @@ const CorpusForm = ({
 
   useEffect(() => {
     if(!advancedOptions) {
-      setCrawlDepth(1);
+      setCrawlDepth(1)
       setCreationRule('domain')
     }
   }, [advancedOptions])

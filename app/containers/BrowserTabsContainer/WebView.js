@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 import { remote, ipcRenderer as ipc, clipboard } from 'electron'
-import once from 'lodash/once'
 
 import { eventBusShape } from '../../types'
 import { WEBVIEW_UA } from '../../constants'

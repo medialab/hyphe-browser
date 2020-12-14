@@ -479,7 +479,7 @@ class BrowserTabContent extends React.Component {
               dnsError: false,
               mergeRequired: null,
               disableRedirect: false
-             })
+            })
           })
         } else if (mergeDecision === 'MERGE-REVERSE') {
           addWebentityPrefixes({
@@ -534,7 +534,7 @@ class BrowserTabContent extends React.Component {
       }
     }
 
-    const handleDeclarePage = (currentUrl) => declarePage({serverUrl: server.url, corpusId, url: currentUrl})
+    const handleDeclarePage = (currentUrl) => declarePage({ serverUrl: server.url, corpusId, url: currentUrl })
 
     return (
       <div

@@ -39,7 +39,7 @@ class BrowserContainer extends React.Component {
   downloadWebentities = (list, listName, fileFormat) => {
     const { tlds, corpus, intl } = this.props
     const { formatMessage } = intl
-    if (list.length === 0) return window.alert(formatMessage({id: 'no-webentities-to-download'}))
+    if (list.length === 0) return window.alert(formatMessage({ id: 'no-webentities-to-download' }))
     const corpusId = corpus.corpus_id
     const parsedWebentity = list.map((we) => {
       if (we.tags) {
@@ -89,9 +89,9 @@ class BrowserContainer extends React.Component {
           Object.keys(tags).forEach((cat) => {
             Object.keys(tags[cat]).forEach((val) => {
               flatTags.push({
-                "CATEGORY": cat,
-                "VALUE": val,
-                "COUNT": tags[cat][val]
+                'CATEGORY': cat,
+                'VALUE': val,
+                'COUNT': tags[cat][val]
               })
             })
           })

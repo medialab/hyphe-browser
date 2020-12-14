@@ -129,15 +129,15 @@ class AuthenticationStep extends CreateServerFormStep {
           )
         }
 
-        <div style={{display: hostData.publicCloudURL ? 'block' : 'none'}}>
+        <div style={ { display: hostData.publicCloudURL ? 'block' : 'none' } }>
           <small>
             <T id="create-cloud-server.step1.host-url" />
             <Link url={ hostData.publicCloudURL }>{ hostData.publicCloudURL }</Link>
-            <br/>
+            <br />
             <T id="create-cloud-server.step1.host-prices" />
             <Link url={ hostData.priceURL }>{ hostData.priceURL }</Link>
-            <br/>
-            <br/>
+            <br />
+            <br />
           </small>
   
           {this.renderInput('openStackID', 'create-cloud-server.step1.openstack-id')}

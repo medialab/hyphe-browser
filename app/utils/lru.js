@@ -333,7 +333,7 @@ export function isValidUrl (string) {
   try {
     new URL(string)
   } catch (_) {
-    return false;
+    return false
   }
   return true
 }

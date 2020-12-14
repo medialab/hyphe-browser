@@ -176,11 +176,11 @@ const WebentityBrowseContainer = ({
   const handleOpenTab = (url) => openTab({ url, activeTabId: activeTab.id })
   const handleBatchActions = (actions, selectedList) => {
     batchWebentityActions({ actions, serverUrl, corpusId, webentity, selectedList })
-    .then(() => {
-      if (actions[0].type === 'MERGE') {
-        selectedList === 'referrals' ? fetchReferrals({ serverUrl, corpusId, webentity }) : fetchReferrers({ serverUrl, corpusId, webentity })
-      }
-    })
+      .then(() => {
+        if (actions[0].type === 'MERGE') {
+          selectedList === 'referrals' ? fetchReferrals({ serverUrl, corpusId, webentity }) : fetchReferrers({ serverUrl, corpusId, webentity })
+        }
+      })
   }
 
   const handleAddTag = (category, value) => addTag(serverUrl, corpusId, category, webentity.id, value)

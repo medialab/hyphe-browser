@@ -360,7 +360,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
       operations.push(setWebentityHomepage({ serverUrl, corpusId, homepage,webentityId: webentity.id })(dispatch))
     }
     if (name && name !== webentity.name) {
-      operations.push(setWebentityName({serverUrl, corpusId, name,webentityId: webentity.id })(dispatch))
+      operations.push(setWebentityName({ serverUrl, corpusId, name,webentityId: webentity.id })(dispatch))
     }
   }
 
@@ -374,7 +374,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         const id = prefixChanged ? head.id : webentity.id
         const { options } = getState().corpora.status.corpus
         const depth = options && options.depthHypheBro || CRAWL_DEPTH
-        const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + ": " + c.value).join("; ") || null
+        const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + ': ' + c.value).join('; ') || null
 
         return jsonrpc(serverUrl)('crawl_webentity_with_startmode', [id, depth, false, 'IN', 'default', cookies, {}, corpusId])
           .then(() => {
