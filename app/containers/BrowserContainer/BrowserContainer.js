@@ -156,8 +156,8 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
   webentities,
   tlds: webentities.tlds,
   activeTab: tabs.activeTab,
-  serverUrl: servers.selected.url,
-  instanceUrl: servers.selected.home,
+  serverUrl: servers.selected && servers.selected.url,
+  instanceUrl: servers.selected && servers.selected.home,
 
   // hack needed to propagate locale change
   locale
