@@ -3,7 +3,7 @@ export default (key, def) => {
   if (!hyphe) return def
 
   hyphe = JSON.parse(hyphe)
-  if (!hyphe.options) return def
+  if (!hyphe.options || !hyphe.options[key]) return def
 
   return hyphe.options[key]
 }
