@@ -108,7 +108,7 @@ const LinkedWebentities = ({
             const toggleAction = (obj, key, status) => {
               return {
                 ...obj,
-                [key]: obj[key] === status ? null : status
+                [key]: obj[key] && obj[key].status === status ? null : { preStatus: link.status, status }
               }
             }
 
@@ -138,9 +138,9 @@ const LinkedWebentities = ({
                 onClickMerge={ handleClickMerge }
                 onClickOut={ handleClickOut }
                 onClickUndecided={ handleClickUndecided }
-                isMergeActive={ statusActions[link.id] === 'MERGE' }
-                isUndecidedActive={ statusActions[link.id] === 'UNDECIDED' }
-                isOutActive={ statusActions[link.id] === 'OUT' }
+                isMergeActive={ statusActions[link.id] && statusActions[link.id].status === 'MERGE' }
+                isUndecidedActive={ statusActions[link.id] && statusActions[link.id].status === 'UNDECIDED' }
+                isOutActive={ statusActions[link.id] && statusActions[link.id].status === 'OUT' }
               />
             )
           })

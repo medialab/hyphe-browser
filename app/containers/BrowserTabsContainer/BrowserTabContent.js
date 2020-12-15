@@ -434,6 +434,7 @@ class BrowserTabContent extends React.Component {
           setWebentityStatus({
             serverUrl: server.url,
             corpusId,
+            prevStatus: this.state.mergeRequired.originalWebentity.status,
             status: 'OUT',
             webentityId: this.state.mergeRequired.originalWebentity.id,
           })

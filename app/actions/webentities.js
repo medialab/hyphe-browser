@@ -151,13 +151,13 @@ export const setWebentityName = ({ serverUrl, corpusId, name, webentityId }) => 
     })
 }
 
-export const setWebentityStatus = ({ serverUrl, corpusId, status, webentityId }) => (dispatch) => {
-  dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, status, webentityId } })
+export const setWebentityStatus = ({ serverUrl, corpusId, status, prevStatus,  webentityId }) => (dispatch) => {
+  dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, prevStatus, status, webentityId } })
 
   return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
-    .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status, webentityId } }))
+    .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, prevStatus, status, webentityId } }))
     .catch((error) => {
-      dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, status, webentityId, error } })
+      dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, prevStatus, status, webentityId, error } })
       throw error
     })
 }
@@ -437,7 +437,7 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
       // return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
       jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentity.id, action.prefixes, corpusId])
     } else {
-      return dispatch(setWebentityStatus({ serverUrl, corpusId, status: action.type, webentityId: action.id }))
+      return dispatch(setWebentityStatus({ serverUrl, corpusId, prevStatus: action.prevStatus, status: action.type, webentityId: action.id }))
     }
   })
   return Promise.all(requestActions)

@@ -70,13 +70,14 @@ const StackListLayout = ({
 
   const validateAction = (value, key) => {
     const findEntity = filteredList.find((e) => e.id.toString() === key)
-    if (value && findEntity && findEntity.status !== value) return value
+    if (value && findEntity && findEntity.status !== value.status) return value
   }
   const pendingActions = Object.keys(pickBy(statusActions, validateAction))
     .map((key) => {
       return {
         id: +key,
-        type: statusActions[key]
+        type: statusActions[key].status,
+        prevStatus: statusActions[key].prevStatus
       }
     })
   const resetActions = () => {
@@ -238,7 +239,7 @@ const StackListLayout = ({
                   const toggleAction = (obj, key, status) => {
                     return {
                       ...obj,
-                      [key]: obj[key] === status ? null : status
+                      [key]: obj[key] && obj[key].status === status ? null : { prevStatus: entity.status, status }
                     }
                   }
 
@@ -264,8 +265,8 @@ const StackListLayout = ({
                       onClickLink={ handleClickLink }
                       onClickOut={ handleClickOut }
                       onClickUndecided={ handleClickUndecided }
-                      isUndecidedActive={ statusActions[entity.id] === 'UNDECIDED' }
-                      isOutActive={ statusActions[entity.id] === 'OUT' }
+                      isUndecidedActive={ statusActions[entity.id] && statusActions[entity.id].status === 'UNDECIDED' }
+                      isOutActive={ statusActions[entity.id] && statusActions[entity.id].status === 'OUT' }
                     />
                   )
                 })

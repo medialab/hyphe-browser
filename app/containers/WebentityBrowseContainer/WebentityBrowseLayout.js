@@ -108,7 +108,8 @@ const WebentityBrowseLayout = ({
     Object.keys(pickByIdentity(statusActions)).map((key) =>  {
       return {
         id: +key,
-        type: pickByIdentity(statusActions)[key]
+        type: pickByIdentity(statusActions)[key].status,
+        prevStatus: pickByIdentity(statusActions)[key].prevStatus
       }
     }), [statusActions],
   )

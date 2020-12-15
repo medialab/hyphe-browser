@@ -164,7 +164,7 @@ const WebentityBrowseContainer = ({
       // Set to IN = go to "adjust" mode and validation triggers crawling
       showAdjustWebentity({ webentityId: we.id, crawl: true, createNewEntity: false })
     } else {
-      setWebentityStatus({ serverUrl, corpusId, status, webentityId: we.id })
+      setWebentityStatus({ serverUrl, corpusId, prevStatus: we.status, status, webentityId: we.id })
     }
 
     if (status === 'OUT' && crawling) {

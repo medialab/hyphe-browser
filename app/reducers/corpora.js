@@ -19,6 +19,11 @@ import {
   SET_SEARCH_ENGINE
 } from '../actions/tabs'
 
+import { SET_WEBENTITY_STATUS_SUCCESS } from '../actions/webentities'
+import update from 'lodash/fp/update'
+import flow from 'lodash/fp/flow'
+import { set } from 'lodash'
+
 const initialState = {
   // TODO: transform it in a array here?
   list: {}, // [corpusId]: corpus
@@ -67,6 +72,13 @@ export default createReducer(initialState, {
     }
   }),
 
+  [SET_WEBENTITY_STATUS_SUCCESS]: (state, { prevStatus, status }) => {
+    return flow(
+      update(`status.corpus.traph.webentities.${prevStatus}`, i => i - 1),
+      update(`status.corpus.traph.webentities.${status}`, i => i + 1),
+    )(state)
+  },
+
   [SELECT_CORPUS]: (state, { corpus }) => ({
     ...state,
     selected: corpus
@@ -94,7 +106,7 @@ export default createReducer(initialState, {
       }
     }
   },
- 
+
   [FETCH_TAGS_SUCCESS]: (state, { corpusId, values }) => ({
     ...state,
     tagsSuggestions: {
