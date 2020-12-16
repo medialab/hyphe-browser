@@ -108,7 +108,7 @@ const LinkedWebentities = ({
             const toggleAction = (obj, key, status) => {
               return {
                 ...obj,
-                [key]: obj[key] && obj[key].status === status ? null : { preStatus: link.status, status }
+                [key]: obj[key] && obj[key].status === status ? null : { prevStatus: link.status, status }
               }
             }
 
