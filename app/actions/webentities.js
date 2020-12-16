@@ -243,12 +243,33 @@ export const fetchPaginatePages = ({ serverUrl, corpusId, webentity, token }) =>
   }))
 }
 
+const STATUSES_ORDER = {
+  "IN": 0,
+  "UNDECIDED": 1,
+  "DISCOVERED": 2,
+  "OUT": 3
+}
+
+function sortEntitiesByStatusAndName(a, b) {
+  if (a.status !== b.status) {
+    return STATUSES_ORDER[a.status] - STATUSES_ORDER[b.status]
+  }
+  const aName = a.name.toLowerCase(),
+    bName = b.name.toLowerCase()
+  if (aName > bName) {
+    return 1
+  } else if (aName < bName) {
+    return -1
+  }
+  return 0
+}
 
 export const fetchReferrers = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_REFERRERS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_referrers', [webentity.id, -1, 0, false, false, corpusId])
-    .then(referrers => {
+    .then(refs => {
+      let referrers = refs.sort(sortEntitiesByStatusAndName)
       dispatch({ type: FETCH_REFERRERS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrers } })
       dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage }))
     })
@@ -262,7 +283,8 @@ export const fetchReferrals = ({ serverUrl, corpusId, webentity }) => dispatch =
   dispatch({ type: FETCH_REFERRALS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
   return jsonrpc(serverUrl)('store.get_webentity_referrals', [webentity.id, -1, 0, false, false, corpusId])
-    .then(referrals => {
+    .then(refs => {
+      let referrals = refs.sort(sortEntitiesByStatusAndName)
       dispatch({ type: FETCH_REFERRALS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrals } })
       dispatch(declarePage({ serverUrl, corpusId, url: webentity.homepage }))
     })

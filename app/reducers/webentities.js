@@ -142,18 +142,16 @@ export default createReducer(initialState, {
     }
   }),
 
-  [FETCH_REFERRALS_SUCCESS]: (state, { webentity, referrals }) => {
-    return ({
-      ...state,
-      webentities: {
-        ...state.webentities,
-        [webentity.id]: {
-          ...state.webentities[webentity.id],
-          referrals
-        }
+  [FETCH_REFERRALS_SUCCESS]: (state, { webentity, referrals }) => ({
+    ...state,
+    webentities: {
+      ...state.webentities,
+      [webentity.id]: {
+        ...state.webentities[webentity.id],
+        referrals
       }
-    })
-  },
+    }
+  }),
 
   [FETCH_PARENTS_SUCCESS]: (state, { webentity, parents }) => {
     return ({
