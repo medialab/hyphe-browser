@@ -8,7 +8,6 @@
     transition: all .2s ease
     cursor: pointer
     stretch(row)
-    justify-content space-around
 
     .status-marker-container
         display: flex
@@ -16,9 +15,10 @@
         align-items: center
         padding-right: 10px
         position : relative
+        min-width: 20%
         .status-marker
             border-radius: 50%
-            position : relative
+            position : absolute
             padding: 10px
             flexCenter()
             width: 15px
@@ -40,13 +40,13 @@
                 height: 5px
                 font-size: 10px
                 margin-bottom: 5px
-                position: absolute
-                top: -5px
-                left: -5px
+                position: relative
+                top: -10px
+                left: -15px
         .viewed-marker
             border-radius: 50%
             position : relative
-            left : -10px
+            left : 15px
             top: 10px
             padding: 3px
             flexCenter()
@@ -61,7 +61,7 @@
 
     .card-content
         flex: 1
-        max-width: 40%
+        max-width: 80%
         .name
             padding: 0
             margin: 0
@@ -87,29 +87,25 @@
             flexStretch()
             .text
                 flex: 1
-    .card-actions
-        min-width: 30%
     .card-actions-row
         padding: 0
         list-style : none
         margin: 0
+        margin-top: 10px
         overflow: visible
-        text-align: right;
-        // padding-bottom: 5px;
         li
             flex: 1
             background: inherit
             display: inline-block
             margin: 0
             padding: 0
-            margin-bottom: 5px
             .btn
                 button()
                 padding: 7px
                 background: var(--color-grey)
                 width: 40px
                 height: 40px
-                margin-left: 5px
+                margin-right: 5px
             &.is-active
                 .btn
                     button('active')
