@@ -23,11 +23,10 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({
     showDevTools: true
   })
-
-  // this was introduced by @mydu for some reason at one point
-  // but it breaks sigma.js integration, so commenting it for now
-  // app.disableHardwareAcceleration()
 }
+
+// this might break sigma.js integration with old electron version
+app.disableHardwareAcceleration()
 
 let window
 let corpusReady = false
