@@ -15,7 +15,6 @@ import {
 import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
-  SELECT_CONTEXTUAL_LIST,
   TOGGLE_DO_NOT_SHOW_AGAIN,
   TOGGLE_CONTEXT,
   TOGGLE_CATEGORIES,
@@ -199,11 +198,6 @@ export default createReducer(initialState, {
       }
     }
   },
-
-  [SELECT_CONTEXTUAL_LIST]: (state, { selectedContext }) => ({
-    ...state,
-    selectedContext
-  }),
 
   [TOGGLE_DO_NOT_SHOW_AGAIN]: (state, { key, hide = null }) => ({
     ...state,
