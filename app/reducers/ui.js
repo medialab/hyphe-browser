@@ -15,10 +15,7 @@ import {
 import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
-  TOGGLE_DO_NOT_SHOW_AGAIN,
-  TOGGLE_CONTEXT,
-  TOGGLE_CATEGORIES,
-  TOGGLE_FREETAGS
+  TOGGLE_DO_NOT_SHOW_AGAIN
 } from '../actions/browser'
 import {
   FETCH_CLOUD_SERVER_STATUS_REQUEST,
@@ -205,21 +202,6 @@ export default createReducer(initialState, {
       ...state.doNotShow,
       [key]: hide !== null ? hide : !state.doNotShow[key]
     }
-  }),
-
-  [TOGGLE_CONTEXT]: (state) => ({
-    ...state,
-    showContext: !state.showContext
-  }),
-
-  [TOGGLE_CATEGORIES]: (state) => ({
-    ...state,
-    showCategories: !state.showCategories
-  }),
-
-  [TOGGLE_FREETAGS]: (state) => ({
-    ...state,
-    showFreetags: !state.showFreetags
   })
 
 })
