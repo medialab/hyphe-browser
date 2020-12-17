@@ -61,7 +61,9 @@
 
     .card-content
         flex: 1
-        max-width: 80%
+        max-width: 60%
+        &.actions-new-line
+            max-width: 80%
         .name
             padding: 0
             margin: 0
@@ -87,33 +89,42 @@
             flexStretch()
             .text
                 flex: 1
-    .card-actions-row
-        padding: 0
-        list-style : none
-        margin: 0
-        margin-top: 10px
-        overflow: visible
-        li
-            flex: 1
-            background: inherit
-            display: inline-block
-            margin: 0
+    .card-actions
+        &.actions-new-line
+            .card-actions-row
+                flex-flow: row
+                margin-top: 5px
+                li
+                    margin-bottom: 0
+        .card-actions-row
+            display: flex
+            flex-flow: column
             padding: 0
-            .btn
-                button()
-                padding: 7px
-                background: var(--color-grey)
-                width: 40px
-                height: 40px
-                margin-right: 5px
-            &.is-active
+            list-style : none
+            margin: 0
+            overflow: visible
+            li
+                background: inherit
+                display: inline-block
+                margin: 0
+                margin-bottom: 5px
+                padding: 0
+                p
                 .btn
-                    button('active')
-                    background: var(--color-black)
-                    padding: 7px
-            &.tooltipable-placeholder
-                .btn,.btn:hover
-                    background: var(--color-grey-darker)
+                    button()
+                    padding: 5px
+                    background: var(--color-grey)
+                    font-size: 11px
+                    width: 30px
+                    height: 30px
+                    margin-right: 5px
+                &.is-active
+                    .btn
+                        button('active')
+                        background: var(--color-black)
+                &.tooltipable-placeholder
+                    .btn,.btn:hover
+                        background: var(--color-grey-darker)
     @media (max-width: $tablet-break-point)
         flex-direction: column
         .card-actions

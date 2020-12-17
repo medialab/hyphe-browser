@@ -134,6 +134,7 @@ const LinkedWebentities = ({
                 allowMerge
                 link={ link }
                 isViewed={ isViewed }
+                actionsNewLine
                 onClickLink={ handleClickLink }
                 onClickMerge={ handleClickMerge }
                 onClickOut={ handleClickOut }
