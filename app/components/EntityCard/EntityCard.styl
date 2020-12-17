@@ -61,7 +61,7 @@
 
     .card-content
         flex: 1
-        max-width: 60%
+        min-width: 60%
         &.actions-new-line
             max-width: 80%
         .name
@@ -96,6 +96,7 @@
                 margin-top: 5px
                 li
                     margin-bottom: 0
+                    margin-right: 5px
         .card-actions-row
             display: flex
             flex-flow: column
@@ -117,7 +118,6 @@
                     font-size: 11px
                     width: 30px
                     height: 30px
-                    margin-right: 5px
                 &.is-active
                     .btn
                         button('active')

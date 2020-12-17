@@ -78,7 +78,7 @@ const EntityCard = ({
           {formattedStatus === 'suggestions' && <span className={ `viewed-marker ${status} hint--bottom-right` } aria-label={ isViewed ? formatMessage({ id: 'webentity-already-visited' }) : formatMessage({ id: 'webentity-never-visited' }) }>{isViewed ? '✓' : '?'}</span>}
         </div>
       }
-      <div ref={ wrapperRef } className={ `card-content ${actionsNewLine && 'actions-new-line'}` }>
+      <div ref={ wrapperRef } className={ `card-content ${actionsNewLine ? 'actions-new-line' : ''}` }>
         <div aria-label={ name } className="name-wrapper hint--bottom">
           <h4 style={ { width: wrapperWidth } } className="name">{name}</h4>
         </div>
