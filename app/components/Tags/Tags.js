@@ -162,7 +162,6 @@ const Tags = (props) => {
                   .map(({ category, value }) => {
 
                     const handleUpdateTag = (option, { action }) => {
-                      console.log(action)
                       const newTag = option ? option.value.trim() : ''
                       const prevTag = cachedCategories.find((cat) => cat.category === category).value
                       if (prevTag && option) {
