@@ -9,9 +9,9 @@ import { FormattedMessage as T } from 'react-intl'
 import { hideNotif } from '../../actions/browser'
 
 const Notification = ( {
-  messageId, 
-  messageValues, 
-  type = 'error', 
+  messageId,
+  messageValues,
+  type = 'error',
   hideNotif
 } ) => {
   if (!messageId) {

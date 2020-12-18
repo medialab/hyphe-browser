@@ -407,6 +407,7 @@
   "webentity-info-merge-failure-notification": "La fusion des webentités a échoué",
   "webentity-info-created-sidebar": "Nouvelle webentité",
   "webentity-info-created-notification": "Nouvelle webentité créée avec succès",
+  "batch-merge-successful-notification": "{count, plural, one {1 webentité a bien été fusionnée} other {{count} webentités ont bien été fusionnées}}",
   "webentity-crawl-popup-title": "CRAWLER CETTE WEBENTITÉ ?",
   "webentity-crawl-popup-message": "ATTENTION : En déclarant le statut de cette webentité \"IN\", vous allez la crawler. Vérifiez avant tout que son périmètre défini en bleu ci-dessus vous convient.",
   "webentity-crawl-popup-message-2": "Autrement, veuillez annuler et définir une nouvelle webentité en cliquant sur \"+\" puis déclarez là \"IN\".",

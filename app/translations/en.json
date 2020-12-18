@@ -406,6 +406,7 @@
   "webentity-info-merge-failure-notification": "Merging the webentities failed",
   "webentity-info-created-sidebar": "New webentity",
   "webentity-info-created-notification": "New webentity created successfully",
+  "batch-merge-successful-notification": "{count, plural, one {1 webentity is successful merged} other {{count} webentities are successfully merged}}",
   "webentity-crawl-popup-title": "CRAWL THIS WEBENTITY?",
   "webentity-crawl-popup-message": "WARNING: Setting this webentity's status as \"IN\" will start crawling it. Please check before that its perimeter defined in blue above suits you.",
   "webentity-crawl-popup-message-2": "Otherwise, cancel and click on \"+\" to define a new webentity, then set it as \"IN\".",

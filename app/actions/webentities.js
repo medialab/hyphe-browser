@@ -168,10 +168,12 @@ export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixe
   return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentityId, prefixes, corpusId])
     .then((res) => {
       dispatch({ type: ADD_WEBENTITY_PREFIXES_SUCCESS, payload: { serverUrl, corpusId, webentityId, prefixes } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
       return res
     })
     .catch((error) => {
       dispatch({ type: ADD_WEBENTITY_PREFIXES_FAILURE, payload: { serverUrl, corpusId, webentityId, prefixes, error } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning' }))
       throw error
     })
 }
@@ -465,8 +467,17 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
   return Promise.all(requestActions)
     .then(() => {
       dispatch({ type: BATCH_WEBENTITY_ACTIONS_SUCCESS, payload: { actions, serverUrl, corpusId, webentity } })
+      if (actions[0].type === 'MERGE') {
+        dispatch(showNotification({
+          id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL,
+          messageId: 'batch-merge-successful-notification',
+          messageValues: { count: actions.length },
+          timeout: NOTICE_WEBENTITY_INFO_TIMEOUT
+        }))
+      }
     })
     .catch((error) => {
       dispatch({ type: BATCH_WEBENTITY_ACTIONS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
+      dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_FAILURE, messageId: 'webentity-info-merge-failure-notification', type: 'warning' }))
     })
 }
