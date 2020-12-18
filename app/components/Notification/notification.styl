@@ -14,16 +14,21 @@
     margin 0 auto
     padding 4px 8px
     max-width: 50%
-    min-height 31px
     line-height 24px
+
+    &.notification-error,
+    &.notification-warning
+      background var(--color-red)
 
     font-family var(--font-pt)
     font-size 14px
     color #faf9f8
 
     .error-dialog-close
-      float right
-      margin 0 0 0 8px
+      cursor pointer
+      color #faf9f8
+      padding-left 5px
+      font-size 10px
 
   &.hidden
     top -2000px

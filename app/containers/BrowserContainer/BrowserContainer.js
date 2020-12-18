@@ -16,6 +16,7 @@ import { openTab } from '../../actions/tabs'
 import {
   STACKS_LIST,
   PAGE_HYPHE_HOME } from '../../constants'
+import { showNotification } from '../../actions/browser'
 
 class BrowserContainer extends React.Component {
   componentDidMount () {
@@ -37,9 +38,12 @@ class BrowserContainer extends React.Component {
   }
 
   downloadWebentities = (list, listName, fileFormat) => {
-    const { tlds, corpus, intl } = this.props
-    const { formatMessage } = intl
-    if (list.length === 0) return window.alert(formatMessage({ id: 'no-webentities-to-download' }))
+    const { tlds, corpus, showNotification } = this.props
+
+    if (list.length === 0) {
+      // return window.alert(formatMessage({ id: 'no-webentities-to-download' }))
+      return showNotification({ messageId: 'no-webentities-to-download', type: 'warning' })
+    }
     const corpusId = corpus.corpus_id
     const parsedWebentity = list.map((we) => {
       if (we.tags) {
@@ -146,6 +150,7 @@ BrowserContainer.propTypes = {
   tlds: PropTypes.object,
   locale: PropTypes.string.isRequired,
   // actions
+  showNotification: PropTypes.func,
   openTab: PropTypes.func
 }
 
@@ -164,5 +169,6 @@ const mapStateToProps = ({ corpora, servers, webentities, tabs, intl: { locale }
 })
 
 export default injectIntl(connect(mapStateToProps, {
+  showNotification,
   openTab
 })(BrowserContainer))

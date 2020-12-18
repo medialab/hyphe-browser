@@ -23,8 +23,10 @@ const Notification = ( {
   return (
     <div className="notification-container">
       <div className={ `animated bounceInDown notification notification-${type}` }>
-        <a className="error-dialog-close" onClick={ hideNotif }><span className="icon icon-cancel-circled" /></a>
         <strong>{ message }</strong>
+        <a className="error-dialog-close" onClick={ hideNotif }>
+          <i className="ti-close" />
+        </a>
       </div>
     </div>
   )
