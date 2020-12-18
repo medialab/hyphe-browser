@@ -44,6 +44,9 @@ import {
   MERGE_WEBENTITY_REQUEST,
   MERGE_WEBENTITY_SUCCESS,
   MERGE_WEBENTITY_FAILURE,
+  ADD_WEBENTITY_PREFIXES_REQUEST,
+  ADD_WEBENTITY_PREFIXES_SUCCESS,
+  ADD_WEBENTITY_PREFIXES_FAILURE,
   BATCH_WEBENTITY_ACTIONS_REQUEST,
   BATCH_WEBENTITY_ACTIONS_SUCCESS,
   BATCH_WEBENTITY_ACTIONS_FAILURE,
@@ -155,6 +158,13 @@ export default createReducer(initialState, {
   [MERGE_WEBENTITY_REQUEST]: toggleLoader('webentity_merge', true),
   [MERGE_WEBENTITY_SUCCESS]: toggleLoader('webentity_merge', false),
   [MERGE_WEBENTITY_FAILURE]: toggleLoader('webentity_merge', false, {
+    messageId: 'error.merge-webentity'
+  }),
+
+
+  [ADD_WEBENTITY_PREFIXES_REQUEST]: toggleLoader('webentity_merge', true),
+  [ADD_WEBENTITY_PREFIXES_SUCCESS]: toggleLoader('webentity_merge', false),
+  [ADD_WEBENTITY_PREFIXES_FAILURE]: toggleLoader('webentity_merge', false, {
     messageId: 'error.merge-webentity'
   }),
 
