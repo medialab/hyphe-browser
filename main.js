@@ -346,7 +346,7 @@ function getNewMenuBar (locale) {
     corpusReady = true
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
-      item.visible = true
+      item.enabled = true
     })
   })
 
@@ -354,7 +354,7 @@ function getNewMenuBar (locale) {
     corpusReady = false
     const downloadMenu = menu.getMenuItemById('download')
     downloadMenu.submenu.items.forEach((item) => {
-      item.visible = false
+      item.enabled = false
     })
   })
 
