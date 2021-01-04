@@ -1,7 +1,7 @@
 .notification-container
   display block
   position absolute
-  top 0
+  top 4px
   left 0
   right 0
   z-index 999
@@ -16,9 +16,11 @@
     max-width: 50%
     line-height 24px
 
-    &.notification-error,
-    &.notification-warning
+    &.notification-error
       background var(--color-red)
+
+    &.notification-warning
+      background var(--color-corpus-undecided)
 
     font-family var(--font-pt)
     font-size 14px
