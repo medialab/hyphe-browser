@@ -29,6 +29,13 @@ const TagCreatable = ({
 }) => {
   const creatableRef = useRef(null)
 
+  React.useEffect(() => {
+    let select = creatableRef.current?.select?.select
+    if (select) {
+      select.getNextFocusedOption = () => null
+    }
+  }, [creatableRef.current])
+
   const customStyles = {
     control: (base) => ({
       ...base,
