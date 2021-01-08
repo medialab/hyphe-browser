@@ -17,26 +17,24 @@ const HypheView = ({
   useEffect(() => {
     const webview = webviewRef.current
 
-    const inejectStyle = once(() => {
-      webview.executeJavaScript(`
-        const style = document.createElement('style');
-        style.textContent = ".topbar-project button, .topbar-project .flex, #hybro-link, .no-hybro { display: none !important; }";
-        document.head.append(style);
-        console.log(style);
-      `)
-    })
-
     webview.addEventListener('did-start-loading', () => {
       setLoading(true)
     })
     webview.addEventListener('did-stop-loading', () => {
       setLoading(false)
-      inejectStyle()
 
-      webview.executeJavaScript(
+      webview.executeJavaScript(`
+        setTimeout(() => {
+        // Remove buttons from regular Hyphe front causing issues for HyBro (corpus name, close corpus button & link to HyBro)
+          document.querySelectorAll('.topbar-project button, .topbar-project .flex, #hybro-link, .no-hybro')
+            .forEach(node => node.parentNode.removeChild(node));
         // Stop Sigma's ForceAtlas2 in Hyphe tab when changing tab to avoid cpu overhaul
-        "window.onblur = function() { if (document.querySelector('#stopFA2') !== undefined) document.querySelector('#stopFA2').click() }; "
-      )
+          window.onblur = function() {
+            if (document.querySelector('#stopFA2') !== undefined)
+              document.querySelector('#stopFA2').click()
+          };
+        }, 250)
+      `)
     })
 
     webview.addEventListener('new-window', ({ url }) => {
