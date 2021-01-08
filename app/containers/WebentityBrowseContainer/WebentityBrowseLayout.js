@@ -89,7 +89,9 @@ const WebentityBrowseLayout = ({
     } else {
       findWebentity = webentitiesList[idx + offset]
     }
-    onSelectWebentity(findWebentity)
+    if (findWebentity) {
+      onSelectWebentity(findWebentity)
+    }
   }
 
   // disable next / prev

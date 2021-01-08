@@ -113,7 +113,7 @@ const WebentityBrowseContainer = ({
   const handleSelectWebentity = (webentity) => {
     viewWebentity(webentity)
     setTabWebentity({ tabId: activeTab.id, webentity })
-    setTabUrl({ url: webentity.homepage,id: activeTab.id })
+    setTabUrl({ url: webentity.homepage, id: activeTab.id })
   }
 
   const handleDownloadList = (list) => {
