@@ -4,7 +4,6 @@ import {
   ERROR_JSONRPC_PARSE
 } from '../constants'
 
-// Sample usage: jsonrpc('http://hyphe.medialab.sciences-po.fr/dev-forccast-api')('list_corpus')
 export default (uri) => (method, params = []) => {
   // if (DEBUG_JSONRPC) console.debug('JSONRPC →', method, params, uri) // eslint-disable-line no-console
 

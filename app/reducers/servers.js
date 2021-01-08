@@ -21,16 +21,6 @@ const initialState = {
   selected: null
 }
 
-if (process.env.NODE_ENV === 'development') {
-  initialState.list.push({
-    id: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
-    name: 'dev',
-    url: 'http://hyphe.medialab.sciences-po.fr/dev-forccast-api',
-    home: 'http://hyphe.medialab.sciences-po.fr/dev-forccast',
-    cloud: null
-  })
-}
-
 export default createReducer(initialState, {
   // a newly created server is automatically selected
   [CREATE_SERVER]: (state, { server }) => {
