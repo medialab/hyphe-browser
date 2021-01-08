@@ -180,7 +180,7 @@ export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixe
 
 export const createWebentity = ({ serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null }) => (dispatch) => {
   dispatch({ type: CREATE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, name, prefixUrl } })
-  return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', {url: prefixUrl, name, status: null, startPages: null, lruVariations: true, corpus: corpusId})
+  return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', {url: prefixUrl, name, status: null, startpages: null, lruVariations: true, corpus: corpusId})
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
