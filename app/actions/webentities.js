@@ -116,7 +116,7 @@ export const BATCH_WEBENTITY_ACTIONS_FAILURE = '§_BATCH_WEBENTITY_ACTIONS_FAILU
 
 export const declarePage = ({ serverUrl, corpusId, url }) => (dispatch) => {
   dispatch({ type: DECLARE_PAGE_REQUEST, payload: { serverUrl, corpusId, url } })
-  return jsonrpc(serverUrl)('declare_page', [url, corpusId])
+  return jsonrpc(serverUrl)('declare_page', {url: url, corpus: corpusId})
     .then(result => result.result || result ) // declare_page used to not return webentity directly but a { result } object, keep for backcompat
     .then((webentity) => {
       dispatch({ type: DECLARE_PAGE_SUCCESS, payload: { serverUrl, corpusId, url, webentity } })
@@ -132,7 +132,7 @@ export const setTabWebentity = ({ tabId, webentity }) => (dispatch) => {
 export const setWebentityHomepage = ({ serverUrl, corpusId, homepage, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_HOMEPAGE_REQUEST, payload: { serverUrl, corpusId, homepage, webentityId } })
 
-  return jsonrpc(serverUrl)('store.set_webentity_homepage', [webentityId, homepage, corpusId])
+  return jsonrpc(serverUrl)('store.set_webentity_homepage', {webentity_id: webentityId, homepage, corpus:corpusId})
     .then(() => dispatch({ type: SET_WEBENTITY_HOMEPAGE_SUCCESS, payload: { serverUrl, corpusId, homepage, webentityId } }))
     .catch((error) => {
       dispatch({ type: SET_WEBENTITY_HOMEPAGE_FAILURE, payload: { serverUrl, corpusId, homepage, webentityId, error } })
@@ -143,7 +143,7 @@ export const setWebentityHomepage = ({ serverUrl, corpusId, homepage, webentityI
 export const setWebentityName = ({ serverUrl, corpusId, name, webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_NAME_REQUEST, payload: { serverUrl, corpusId, name, webentityId } })
 
-  return jsonrpc(serverUrl)('store.rename_webentity', [webentityId, name, corpusId])
+  return jsonrpc(serverUrl)('store.rename_webentity', {webentity_id: webentityId, new_name: name, corpus: corpusId})
     .then(() => dispatch({ type: SET_WEBENTITY_NAME_SUCCESS, payload: { serverUrl, corpusId, name, webentityId } }))
     .catch((error) => {
       dispatch({ type: SET_WEBENTITY_NAME_FAILURE, payload: { serverUrl, corpusId, name, webentityId, error } })
@@ -154,7 +154,7 @@ export const setWebentityName = ({ serverUrl, corpusId, name, webentityId }) => 
 export const setWebentityStatus = ({ serverUrl, corpusId, status, prevStatus,  webentityId }) => (dispatch) => {
   dispatch({ type: SET_WEBENTITY_STATUS_REQUEST, payload: { serverUrl, corpusId, prevStatus, status, webentityId } })
 
-  return jsonrpc(serverUrl)('store.set_webentity_status', [webentityId, status, corpusId])
+  return jsonrpc(serverUrl)('store.set_webentity_status', {webentity_id: webentityId, status, corpus: corpusId})
     .then(() => dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, prevStatus, status, webentityId } }))
     .catch((error) => {
       dispatch({ type: SET_WEBENTITY_STATUS_FAILURE, payload: { serverUrl, corpusId, prevStatus, status, webentityId, error } })
@@ -165,7 +165,7 @@ export const setWebentityStatus = ({ serverUrl, corpusId, status, prevStatus,  w
 export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixes }) => (dispatch) => {
   dispatch({ type: ADD_WEBENTITY_PREFIXES_REQUEST, payload: { serverUrl, corpusId, webentityId, prefixes } })
 
-  return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentityId, prefixes, corpusId])
+  return jsonrpc(serverUrl)('store.add_webentity_lruprefixes', {webentity_id: webentityId, lru_prefixes: prefixes, corpus: corpusId})
     .then((res) => {
       dispatch({ type: ADD_WEBENTITY_PREFIXES_SUCCESS, payload: { serverUrl, corpusId, webentityId, prefixes } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
@@ -180,7 +180,7 @@ export const addWebentityPrefixes = ({ serverUrl, corpusId, webentityId, prefixe
 
 export const createWebentity = ({ serverUrl, corpusId, prefixUrl, name = null, homepage = null, tabId = null }) => (dispatch) => {
   dispatch({ type: CREATE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, name, prefixUrl } })
-  return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', [prefixUrl, name, null, null, true, corpusId])
+  return jsonrpc(serverUrl)('store.declare_webentity_by_lruprefix_as_url', {url: prefixUrl, name, status: null, startPages: null, lruVariations: true, corpus: corpusId})
     .then((webentity) => {
       dispatch({ type: CREATE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentity } })
       if (tabId) {
@@ -269,7 +269,7 @@ function sortEntitiesByStatusAndName (a, b) {
 export const fetchReferrers = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_REFERRERS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_referrers', [webentity.id, -1, 0, false, false, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_referrers', {webentity_id: webentity.id, count: -1, page: 0, light: false, semilight: false, corpus: corpusId})
     .then(refs => {
       const referrers = refs.sort(sortEntitiesByStatusAndName)
       dispatch({ type: FETCH_REFERRERS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrers } })
@@ -284,7 +284,7 @@ export const fetchReferrers = ({ serverUrl, corpusId, webentity }) => dispatch =
 export const fetchReferrals = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_REFERRALS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_referrals', [webentity.id, -1, 0, false, false, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_referrals', {webentity_id: webentity.id, count: -1, page: 0, light: false, semilight: false, corpus: corpusId})
     .then(refs => {
       const referrals = refs.sort(sortEntitiesByStatusAndName)
       dispatch({ type: FETCH_REFERRALS_SUCCESS, payload: { serverUrl, corpusId, webentity, referrals } })
@@ -299,7 +299,7 @@ export const fetchReferrals = ({ serverUrl, corpusId, webentity }) => dispatch =
 export const fetchParents = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_PARENTS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', [webentity.id, false, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_parentwebentities', {webentity_id: webentity.id, light: false, corpus: corpusId})
     .then(parents => dispatch({ type: FETCH_PARENTS_SUCCESS, payload: { serverUrl, corpusId, webentity, parents } }))
     .catch(error => {
       dispatch({ type: FETCH_PARENTS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
@@ -310,7 +310,7 @@ export const fetchParents = ({ serverUrl, corpusId, webentity }) => dispatch => 
 export const fetchChildren = ({ serverUrl, corpusId, webentity }) => dispatch => {
   dispatch({ type: FETCH_SUBS_REQUEST, payload: { serverUrl, corpusId, webentity } })
 
-  return jsonrpc(serverUrl)('store.get_webentity_subwebentities', [webentity.id, false, corpusId])
+  return jsonrpc(serverUrl)('store.get_webentity_subwebentities', {webentity_id: webentity.id, light: false, corpus: corpusId})
     .then(children => dispatch({ type: FETCH_SUBS_SUCCESS, payload: { serverUrl, corpusId, webentity, children } }))
     .catch(error => {
       dispatch({ type: FETCH_SUBS_FAILURE, payload: { serverUrl, corpusId, webentity, error } })
@@ -321,7 +321,7 @@ export const fetchChildren = ({ serverUrl, corpusId, webentity }) => dispatch =>
 export const fetchTLDs = ({ serverUrl, corpusId }) => dispatch => {
   dispatch({ type: FETCH_TLDS_REQUEST, payload: { serverUrl, corpusId } })
 
-  return jsonrpc(serverUrl)('get_corpus_tlds', [corpusId])
+  return jsonrpc(serverUrl)('get_corpus_tlds', {corpus: corpusId})
     .then(tlds => dispatch({ type: FETCH_TLDS_SUCCESS, payload: { serverUrl, corpusId, tlds } }))
     .catch(error => {
       dispatch({ type: FETCH_TLDS_FAILURE, payload: { serverUrl, corpusId, error } })
@@ -400,7 +400,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         const depth = options && options.depthHypheBro || CRAWL_DEPTH
         const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + ': ' + c.value).join('; ') || null
 
-        return jsonrpc(serverUrl)('crawl_webentity_with_startmode', [id, depth, false, 'IN', 'default', cookies, {}, corpusId])
+        return jsonrpc(serverUrl)('crawl_webentity_with_startmode', {webentity_id: id, depth, phantom_crawl: false, status: 'IN', startmode: 'default', cookies_string: cookies, phantom_timeouts: {}, corpus: corpusId})
           .then(() => {
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
@@ -420,7 +420,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
 export const mergeWebentities = ({ serverUrl, corpusId, webentityId, redirectWebentity, type }) => (dispatch) => {
   const { id: redirectWebentityId } = redirectWebentity
   dispatch({ type: MERGE_WEBENTITY_REQUEST, payload: { serverUrl, corpusId, webentityId, redirectWebentityId } })
-  return jsonrpc(serverUrl)('store.merge_webentity_into_another', [webentityId, redirectWebentityId, true, false, false, corpusId])
+  return jsonrpc(serverUrl)('store.merge_webentity_into_another', {old_webentity_id: webentityId, good_webentity_id: redirectWebentityId, include_tags: true, include_home_and_startpages_as_startpages: false, include_name_and_status: false, corpus: corpusId})
     .then(() => {
       dispatch({ type: MERGE_WEBENTITY_SUCCESS, payload: { serverUrl, corpusId, webentityId, redirectWebentityId } })
       dispatch(showNotification({ id: NOTICE_WEBENTITY_MERGE_SUCCESSFUL, messageId: 'webentity-info-merge-successful-notification', timeout: NOTICE_WEBENTITY_INFO_TIMEOUT }))
@@ -442,7 +442,7 @@ export const mergeWebentities = ({ serverUrl, corpusId, webentityId, redirectWeb
 export const cancelWebentityCrawls = ({ serverUrl, corpusId, webentityId }) => (dispatch) => {
   dispatch({ type: CANCEL_WEBENTITY_CRAWLS_REQUEST, payload: { serverUrl, corpusId, webentityId } })
 
-  return jsonrpc(serverUrl)('cancel_webentity_jobs', [webentityId, corpusId])
+  return jsonrpc(serverUrl)('cancel_webentity_jobs', {webentity_id: webentityId, corpus: corpusId})
     .then(() => {
       dispatch({ type: CANCEL_WEBENTITY_CRAWLS_SUCCESS, payload: { serverUrl, corpusId, webentityId } })
       dispatch({ type: SET_WEBENTITY_CRAWLING_STATUS, payload: { crawling_status: 'CANCELED', webentityId } })
@@ -458,8 +458,8 @@ export const batchWebentityActions = ({ actions, serverUrl, corpusId, webentity,
   dispatch({ type: BATCH_WEBENTITY_ACTIONS_REQUEST, payload: { actions, serverUrl, corpusId, webentity, selectedList } })
   const requestActions = actions.map((action) => {
     if (action.type === 'MERGE') {
-      // return jsonrpc(serverUrl)('store.merge_webentity_into_another', [action.id, webentity.id, true, false, false, corpusId])
-      jsonrpc(serverUrl)('store.add_webentity_lruprefixes', [webentity.id, action.prefixes, corpusId])
+      // return jsonrpc(serverUrl)('store.merge_webentity_into_another', {old_webentity_id: action.id, good_webentity_id: webentity.id, include_tags: true, include_home_and_startpages_as_startpages: false, include_name_and_status: false, corpus: corpusId})
+      jsonrpc(serverUrl)('store.add_webentity_lruprefixes', {webentity_id: webentity.id, lru_prefixes: action.prefixes, corpus: corpusId})
     } else {
       return dispatch(setWebentityStatus({ serverUrl, corpusId, prevStatus: action.prevStatus, status: action.type, webentityId: action.id }))
     }

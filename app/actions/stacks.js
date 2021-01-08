@@ -25,7 +25,7 @@ export const fetchStack = ({ serverUrl, corpusId, stack, filter }) => (dispatch)
   if (filter) {
     return jsonrpc(serverUrl)(
       'store.get_webentities_mistagged',
-      [stack, filter === 'no-tag' ? false: true, false, 'name', stack==='DISCOVERED' ? 50: -1, 0, false, false, corpusId]
+      {status: stack, missing_a_category: filter === 'no-tag' ? false: true, multiple_values: false, sort: 'name', count: stack==='DISCOVERED' ? 50: -1, page: 0, light: false, semilight: false, corpus: corpusId}
     ).then((res) => {
       if(stack === 'DISCOVERED') {
         return dispatch(receiveStack(serverUrl, stack, res, filter))
@@ -68,7 +68,7 @@ export const fetchStackPage = ({ serverUrl, corpusId, stack, token, page }) => (
   })
   return jsonrpc(serverUrl)(
     'store.get_webentities_page',
-    [token, page, false, corpusId]
+    {pagination_token: token, n_page: page, idNamesOnly: false, corpus: corpusId}
   ).then((res) => {
     dispatch({
       type: FETCH_STACK_PAGE_SUCCESS,

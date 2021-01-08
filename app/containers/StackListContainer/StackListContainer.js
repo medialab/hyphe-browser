@@ -105,7 +105,7 @@ const StackListContainer = ({
     setIsSearching(true)
     return jsonrpc(serverUrl)(
       'store.get_webentities_page',
-      [token, page, false, corpusId]
+      {pagination_token: token, n_page: page, idNamesOnly: false, corpus: corpusId}
     ).then((res) => {
       setSearchedResult({
         ...res,

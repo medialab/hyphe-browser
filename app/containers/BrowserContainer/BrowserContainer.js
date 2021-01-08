@@ -86,7 +86,7 @@ class BrowserContainer extends React.Component {
     const { corpus, serverUrl } = this.props
     const corpusId = corpus.corpus_id
     const fileName = `${corpusId}_tags`
-    jsonrpc(serverUrl)('store.get_tags', ['USER', corpusId])
+    jsonrpc(serverUrl)('store.get_tags', {namespace: 'USER', corpus: corpusId})
       .then((tags) => {
         if (fileFormat === 'csv') {
           const flatTags = []

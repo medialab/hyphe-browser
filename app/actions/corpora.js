@@ -71,7 +71,7 @@ export const receiveCorpusStatus = createAction(FETCH_CORPUS_STATUS_SUCCESS, (co
 export const fetchCorpusStatus = (serverUrl, corpus) => (dispatch) => {
   dispatch(requestCorpusStatus(corpus))
 
-  return jsonrpc(serverUrl)('get_status', [corpus.corpus_id])
+  return jsonrpc(serverUrl)('get_status', {corpus: corpus.corpus_id})
     .then((status) => dispatch(receiveCorpusStatus(corpus, status)))
     .catch((error) => dispatch({
       type: FETCH_CORPUS_STATUS_FAILURE,
@@ -82,7 +82,7 @@ export const fetchCorpusStatus = (serverUrl, corpus) => (dispatch) => {
 export const startCorpus = (serverUrl, corpus, password) => (dispatch) => {
   dispatch({ type: START_CORPUS_REQUEST, payload: { corpus } })
 
-  return jsonrpc(serverUrl)('start_corpus', [corpus.corpus_id, password])
+  return jsonrpc(serverUrl)('start_corpus', {corpus: corpus.corpus_id, password})
     .then(() => dispatch({ type: START_CORPUS_SUCCESS, payload: { corpus } }))
     .catch((error) => dispatch({
       type: START_CORPUS_FAILURE,
@@ -104,7 +104,7 @@ export const createCorpus = ({ server, corpus, options }) => (dispatch) => {
 
   // create_corpus does not return the full created corpus
   // so we must trigger a full fetch of all corpora
-  return jsonrpc(serverUrl)('create_corpus', [corpus.name, corpus.password || '', options])
+  return jsonrpc(serverUrl)('create_corpus', {name: corpus.name, password: corpus.password || '', options})
     .then((miniCorpus) => {
       if (miniCorpus.status === 'error') {
         return Promise.reject(miniCorpus)

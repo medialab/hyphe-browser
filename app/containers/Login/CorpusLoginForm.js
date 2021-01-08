@@ -25,7 +25,7 @@ class CorpusLoginForm extends React.Component {
     evt.preventDefault()
 
     this.setState({ submitting: true })
-    jsonrpc(server.url)('start_corpus', [corpus.corpus_id, this.state.password])
+    jsonrpc(server.url)('start_corpus', {corpus: corpus.corpus_id, password: this.state.password})
       .then(() => {
         this.setState({ submitting: false })
         selectCorpus(server, corpus)
