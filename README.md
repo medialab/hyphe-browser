@@ -41,8 +41,11 @@ npm run release
 Hyphe-Browser is a free open source software released under [AGPL 3.0 license](LICENSE).
 
 Conceived by [Benjamin Ooghe-Tabanou](https://github.com/boogheta), [Mathieu Jacomy](https://github.com/jacomyma) and [Thomas Tari](https://medialab.sciencespo.fr/equipe/thomas-tari/) at [médialab Sciences Po](https://medialab.sciencespo.fr/).
+
 First designed by [Agata Brill](https://github.com/agatabr) and implemented by [Bruno Heridet](https://github.com/Delapouite) and [Nicolas Chambrier](https://github.com/naholyr) from ByteClub.
+
 Redesigned by [Robin de Mourat](https://github.com/robindemourat/) and rebuilt by [Mengying Du](https://github.com/mydu) and [Arnaud Pichon](https://github.com/ArnaudMolo) from médialab.
+
 Cloud functionalities were added by [Alexis Jacomy](https://github.com/jacomyal), [Paul Girard](https://github.com/paulgirard) and [Benoît Simard](https://github.com/sim51) from [Ouestware](https://www.ouestware.com/).
 
 This work has been possible thanks to the support of DIME-Web, part of the [DIME-SHS](https://dime-shs.sciencespo.fr/) research equipment financed by the EQUIPEX program (ANR-10-EQPX-19-01) and of the [FORCCAST](http://controverses.org/) pedagogical innovation project financed by the IDEFI program.
