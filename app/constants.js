@@ -33,7 +33,7 @@ export const SERVER_STATUS_SHUTOFF = 'SHUTOFF'
 export const SERVER_STATUS_ACTIVE = 'ACTIVE'
 
 // local empty html for new home tab
-export const PAGE_HYPHE_HOME = 'file://' + app.getAppPath() + '/app/assets/tab.html'
+export const PAGE_HYPHE_HOME = 'file://' + encodeURI(app.getAppPath().replace(/\\/g, '/')) + '/app/assets/tab.html'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
 
 export const STACKS_LIST = [
