@@ -1,5 +1,6 @@
 import { remote } from 'electron'
 const { app } = remote
+const { normalize } = require('path')
 export const WEBVIEW_UA = 'Mozilla/5.0 (X11; Linux ax86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/1.0.0 Chrome/52.0.2743.82 Safari/537.36'
 export const CORPUS_STATUS_WATCHER_INTERVAL = 5000
 
@@ -33,7 +34,7 @@ export const SERVER_STATUS_SHUTOFF = 'SHUTOFF'
 export const SERVER_STATUS_ACTIVE = 'ACTIVE'
 
 // local empty html for new home tab
-export const PAGE_HYPHE_HOME = 'file://' + encodeURI(app.getAppPath().replace(/\\/g, '/')) + '/app/assets/tab.html'
+export const PAGE_HYPHE_HOME = 'file://' + normalize(app.getAppPath()) + '/app/assets/tab.html'
 export const HYPHE_TAB_ID = '$$_HYPHE_SPECIAL_TAB_$$'
 
 export const STACKS_LIST = [

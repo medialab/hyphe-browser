@@ -574,7 +574,7 @@ class BrowserTabContent extends React.Component {
         }
         <div className="webview-container" style={ { display: url === PAGE_HYPHE_HOME ? 'none' : 'block' } } >
           <WebView
-            id={ id } url={ url } closable={ closable } eventBus={ eventBus }
+            id={ id } url={ url === PAGE_HYPHE_HOME ? '' : url } closable={ closable } eventBus={ eventBus }
             onDeclarePage={ handleDeclarePage }
           />
           {this.state.showSearchBar &&
