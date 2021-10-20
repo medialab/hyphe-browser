@@ -12,7 +12,6 @@ import { compare } from '../../utils/misc'
 import { selectCorpus } from '../../actions/corpora'
 import Spinner from '../../components/Spinner'
 import CardsList from '../../components/CardsList'
-import SelectedServerLogs from '../../components/SelectedServerLogs'
 import CorpusCard from './CorpusCard'
 import {
   SERVER_STATUS_PROCESSING,
@@ -55,7 +54,6 @@ const CorpusList = props => {
     if (!server.cloud.installed) return (
       <div className="installing-server-container">
         <h3 className="section-header"><T id="server-being-installed" /></h3>
-        <SelectedServerLogs />
       </div>
     )
     if (NO_CORPORA_STATUSES[server.cloud.status]) return null

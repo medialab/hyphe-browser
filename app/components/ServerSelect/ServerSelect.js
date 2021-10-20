@@ -35,11 +35,6 @@ const ServerSelect = ({
       label: formatMessage({ id: 'server-add' }),
       value: 'add',
       key: 'server-add'
-    },
-    {
-      label: formatMessage({ id: 'server-create' }),
-      value: 'create',
-      key: 'server-create'
     }
   ].filter(o => o)
 

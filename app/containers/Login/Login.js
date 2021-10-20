@@ -29,9 +29,9 @@ class Login extends React.Component {
     } = this.props
     const { push: routerPush } = history
 
-    if (url === 'add' || url === 'create') {
+    if (url === 'add') {
       deselectServer()
-      routerPush(url === 'add' ? '/login/server-form' : '/login/create-form')
+      routerPush('/login/server-form')
       return
     }
 
@@ -56,9 +56,9 @@ class Login extends React.Component {
   }
 
   isLarge () {
-    const { selectedServer, location } = this.props
+    const { selectedServer } = this.props
     return (
-      location.pathname === '/login/create-form' || (selectedServer && selectedServer.cloud && !selectedServer.cloud.installed)
+      (selectedServer && selectedServer.cloud && !selectedServer.cloud.installed)
     )
   }
 

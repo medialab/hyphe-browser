@@ -8,7 +8,6 @@ import CorpusForm from './containers/Login/CorpusForm'
 import CorpusList from './containers/Login/CorpusList'
 import CorpusLoginForm from './containers/Login/CorpusLoginForm'
 import ServerForm from './containers/Login/ServerForm'
-import CreateServerForm from './containers/Login/CreateServerForm'
 
 export default () => (
   <Switch>
@@ -21,8 +20,6 @@ export default () => (
             <Route exact path="/login/corpus-login-form" component={ CorpusLoginForm } />
 
             <Route exact path="/login/server-form" component={ ServerForm } />
-
-            <Route exact path="/login/create-form" component={ CreateServerForm } />
 
             <Route path="/" component={ CorpusList } />
           </Switch>
