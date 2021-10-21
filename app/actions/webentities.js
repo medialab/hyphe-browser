@@ -400,7 +400,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         const depth = options && options.depthHypheBro || CRAWL_DEPTH
         const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + '=' + c.value).join('; ') || null
 
-        return jsonrpc(serverUrl)('crawl_webentity_with_startmode', {webentity_id: id, depth, phantom_crawl: false, status: 'IN', startmode: 'default', cookies_string: cookies, phantom_timeouts: {}, corpus: corpusId})
+        return jsonrpc(serverUrl)('crawl_webentity_with_startmode', {webentity_id: id, depth, phantom_crawl: false, status: 'IN', startmode: 'default', cookies_string: cookies, phantom_timeouts: {}, save_startpages: true, corpus: corpusId})
           .then(() => {
             // Broadcast the information that webentity's status has been updated
             dispatch({ type: SET_WEBENTITY_STATUS_SUCCESS, payload: { serverUrl, corpusId, status: 'IN', webentityId: id } })
