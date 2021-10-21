@@ -398,7 +398,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         const id = prefixChanged ? head.id : webentity.id
         const { options } = getState().corpora.status.corpus
         const depth = options && options.depthHypheBro || CRAWL_DEPTH
-        const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + ': ' + c.value).join('; ') || null
+        const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + '=' + c.value).join('; ') || null
 
         return jsonrpc(serverUrl)('crawl_webentity_with_startmode', {webentity_id: id, depth, phantom_crawl: false, status: 'IN', startmode: 'default', cookies_string: cookies, phantom_timeouts: {}, corpus: corpusId})
           .then(() => {
