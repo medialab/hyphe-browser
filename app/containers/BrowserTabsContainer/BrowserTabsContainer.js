@@ -78,6 +78,7 @@ class BrowserTabsContainer extends React.Component {
       activeTabId,
       searchEngines,
       corpus,
+      status,
       webentities,
       // actions
       openTab,
@@ -89,7 +90,6 @@ class BrowserTabsContainer extends React.Component {
     } = this.props
 
     const { formatMessage } = intl
-    const { total_webentities } = corpus
     const handleOpenNewTab = () => openTab({ url: PAGE_HYPHE_HOME })
     const handleGetWebentity = (tabId) => webentities && webentities.webentities[webentities.tabs[tabId]]
 
@@ -143,7 +143,7 @@ class BrowserTabsContainer extends React.Component {
                 webentity={ handleGetWebentity(tab.id) }
                 url={ tab.url }
                 title= { tab.title }
-                isEmpty={ total_webentities === 0 }
+                isEmpty={ status.traph.webentities.total === 0 }
                 closable={ tabs.length > 1 }
                 loading={ tab.loading || false }
                 selectedEngine = { searchEngines[corpus.corpus_id] || 'google' }
@@ -184,6 +184,7 @@ const mapStateToProps = ({ tabs, corpora, webentities, intl: { locale }, servers
   tabs: tabs.tabs,
   activeTabId: tabs.activeTab && tabs.activeTab.id,
   corpus: corpora.selected && corpora.selected,
+  status: corpora.selected && corpora.status.corpus,
   webentities,
   instanceUrl: servers.selected && servers.selected.home,
   searchEngines: corpora.searchEngines,

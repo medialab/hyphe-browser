@@ -17,7 +17,7 @@ const NewTabContent = ({
   onChangeEngine,
 }) => {
   const { formatMessage } = useIntl()
-  const [currentAction, setCurrentAction] = useState(isEmpty ? 'search': undefined)
+  const [currentAction, setCurrentAction] = useState(isEmpty ? 'search' : undefined)
   const [query, setQuery] = useState('')
   const [searchUrl, setSearchUrl] = useState('')
 
@@ -58,7 +58,7 @@ const NewTabContent = ({
             <p><T id="new-tab.begin-phrase" /></p>
           </div>
           <ul className="actions-container">
-            <li onClick={ () => setCurrentAction('search') } className={ `action-container ${currentAction === 'search' ? 'is-active': ''}` }>
+            <li onClick={ () => setCurrentAction('search') } className={ `action-container ${currentAction === 'search' ? 'is-active' : ''}` }>
               <button>
                 <h3><T id="new-tab.browse" /></h3>
                 <h4><T id="new-tab.browse-sentence" /></h4>
@@ -66,7 +66,7 @@ const NewTabContent = ({
             </li>
             <li
               onClick = { () => onSelectStack('DISCOVERED') }
-              className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
+              className={ `action-container ${currentAction === 'explore' ? 'is-active': ''} ${isEmpty ? 'is-disabled' : ''}` }
             >
               <button>
                 <h3><T id="new-tab.review" /></h3>
@@ -75,7 +75,7 @@ const NewTabContent = ({
             </li>
             <li
               onClick = { handleSelectTagStack }
-              className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled': ''}` }
+              className={ `action-container ${currentAction === 'tag' ? 'is-active': ''} ${isEmpty ? 'is-disabled' : ''}` }
             >
               <button>
                 <h3><T id="new-tab.tag" /></h3>
