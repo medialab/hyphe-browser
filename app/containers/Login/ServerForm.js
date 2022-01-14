@@ -169,6 +169,8 @@ const ServerForm = ({
       fullConfig :
       { ...data }
 
+    server.url = server.url.replace(/#.*$/, '')
+
     if (!server.password) delete server.password
     server.home = server.url.replace(/[/-]+api\/+?$/, '/')
 
