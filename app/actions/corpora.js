@@ -46,11 +46,17 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
   dispatch(requestCorpora(serverUrl))
 
   return jsonrpc(serverUrl)('list_corpus')
-    .then((res) => dispatch(receiveCorpora(serverUrl, res)))
-    .catch((error) => dispatch({
-      type: FETCH_CORPORA_FAILURE,
-      payload: { error, serverUrl }
-    }))
+    .then((res) => {
+      console.log("SUCCESS", res);
+      return dispatch(receiveCorpora(serverUrl, res))
+    })
+    .catch((error) => {
+      console.log("ERROR", res);
+      return dispatch({
+        type: FETCH_CORPORA_FAILURE,
+        payload: { error, serverUrl }
+      })
+    })
 }
 
 export const requestServerStatus = createAction(FETCH_SERVER_STATUS_REQUEST, (serverUrl) => ({ serverUrl }))
