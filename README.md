@@ -1,5 +1,8 @@
 # Hyphe Browser (HyBro)
 
+[![DOI](https://zenodo.org/badge/46920414.svg)](https://zenodo.org/badge/latestdoi/46920414)
+
+
 Hyphe Browser is a desktop application to be downloaded which consists of a web browser based on Chrome's engine (using [electronJs](https://www.electronjs.org)) connected at all times to médialab's web crawler [Hyphe](http://hyphe.medialab.sciences-po.fr).
 
 It allows to build, curate and annotate a corpus of web entities (websites, parts of websites or agregates) and crawl links between them while browsing their web pages at the same time, so that the user can curate and categorize them easily, in same ways as the [Navicrawler](https://medialab.sciencespo.fr/outils/navicrawler/) used to let one do.
