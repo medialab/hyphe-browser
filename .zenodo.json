@@ -1,0 +1,67 @@
+{
+  "language": "eng",
+  "license": "AGPL-3.0",
+  "title": "Hyphe-Browser",
+  "upload_type": "software",
+  "keywords": [
+    "crawl",
+    "webcrawler",
+    "controversies"
+  ],
+  "creators": [
+    {
+      "orcid": "0000-0001-7698-3507",
+      "affiliation": "médialab - Sciences Po",
+      "name": "Benjamin Ooghe-Tabanou"
+    },
+    {
+      "orcid": "0000-0002-6417-6895",
+      "affiliation": "TANTLab - Aalborg University",
+      "name": "Mathieu Jacomy"
+    },
+    {
+      "orcid": "0000-0001-6832-021X",
+      "affiliation": "médialab - Sciences Po",
+      "name": "Thomas Tari"
+    },
+    {
+      "name": "Agata Brill"
+    },
+    {
+      "affiliation": "Byte Club",
+      "name": "Bruno Heridet"
+    },
+    {
+      "affiliation": "Byte Club",
+      "name": "Nicolas Chambrier"
+    },
+    {
+      "orcid": "0000-0002-0601-7685",
+      "affiliation": "médialab - Sciences Po",
+      "name": "Robin de Mourat"
+    },
+    {
+      "affiliation": "médialab - Sciences Po",
+      "name": "Arnaud Pichon"
+    },
+    {
+      "affiliation": "médialab - Sciences Po",
+      "name": "Mengying Du"
+    },
+    {
+      "orcid": "0000-0001-9332-3308",
+      "affiliation": "OuestWare",
+      "name": "Paul Girard"
+    },
+    {
+      "affiliation": "OuestWare",
+      "name": "Alexis Jacomy"
+    },
+    {
+      "affiliation": "OuestWare",
+      "name": "Benoit Simard"
+    }
+  ],
+  "access_right": "open",
+  "description": "<p>Hyphe Browser is a desktop application which consists of a web browser based on Chrome's engine using electronJs which is connected with médialab's web crawler Hyphe. It allows to build, curate and annotate a corpus of web entities (websites, parts of websites or agregates) and crawl links between them while browsing their web pages at the same time, so that the user can curate and categorize them easily.</p>"
+}
