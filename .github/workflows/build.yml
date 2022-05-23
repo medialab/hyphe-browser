@@ -40,7 +40,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-Linux.zip"
           tag: ${{ github.ref }}
-          release_name: "HyBro, ${{ github.ref }}"
+          release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
 
       - name: Upload release for MacOSX
@@ -49,7 +49,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-MacOSX.zip"
           tag: ${{ github.ref }}
-          release_name: "HyBro, ${{ github.ref }}"
+          release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
 
       - name: Upload release for Windows
@@ -58,6 +58,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-Windows.zip"
           tag: ${{ github.ref }}
-          release_name: "HyBro, ${{ github.ref }}"
+          release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
 
