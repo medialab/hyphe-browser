@@ -1,6 +1,6 @@
 {
   "name": "hyphe-browser",
-  "version": "0.1.0",
+  "version": "2.2.2",
   "description": "Hyphe Browser",
   "main": "main.js",
   "scripts": {
