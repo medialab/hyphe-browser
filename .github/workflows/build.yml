@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-electron :
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Check out Git repository
@@ -21,7 +21,11 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: Install dependencies ⚙
-        run: npm install
+        run: |
+          npm install
+          brew install --cask xquartz
+          brew tap homebrew/cask-versions
+          brew install --cask --no-quarantine wine-stable
 
       - name: Build electron app 🔧
         run: npm run build:all
