@@ -1,11 +1,9 @@
 name: Build electron distributables
 
-on: 
-  # release:
-  #   types: [published]
-  push: 
-    branches:
-      - autobuild
+on:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   build-electron :
@@ -41,22 +39,25 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-Linux.zip"
-          asset_name: hybro.for.linux.zip
           tag: ${{ github.ref }}
+          release_name: "HyBro, ${{ github.ref }}"
+          overwrite: true
 
       - name: Upload release for MacOSX
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-MacOSX.zip"
-          asset_name: hybro.for.macosx.zip
           tag: ${{ github.ref }}
+          release_name: "HyBro, ${{ github.ref }}"
+          overwrite: true
 
       - name: Upload release for Windows
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: "./release/Hybro-Windows.zip"
-          asset_name: hybro.for.windows.zip
           tag: ${{ github.ref }}
+          release_name: "HyBro, ${{ github.ref }}"
+          overwrite: true
 
