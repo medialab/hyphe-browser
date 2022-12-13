@@ -26,6 +26,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // this might break sigma.js integration with old electron version
+app.commandLine.appendSwitch('disable-gpu-sandbox')
 app.disableHardwareAcceleration()
 
 let window
