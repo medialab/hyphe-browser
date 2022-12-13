@@ -15,7 +15,7 @@
     "dev:serve": "electron .",
     "start": "cross-env NODE_ENV=production electron .",
     "build:all": "cross-env NODE_ENV=production node bin/package.js",
-    "package": "cd release/ && ls | while read d; do cd $d; rm -f *.zip; zip -r HyBro-${npm_config_version}-$d.zip *; cd ..; done && mv */*.zip .",
+    "package": "cd release/ && ls | while read d; do cd $d; rm -f *.zip; zip -r HyBro-$VERSION-$d.zip *; cd ..; done && mv */*.zip .",
     "release": "npm run build:all && npm run package",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.production.js --progress --profile --colors",
     "watch:dev-server": "cross-env NODE_ENV=development webpack-dashboard",
