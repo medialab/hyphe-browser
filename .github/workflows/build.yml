@@ -29,7 +29,7 @@ jobs:
         run: npm run build:all
 
       - name: Package electron app in different versions and architectures 🔧
-        run: npm run package
+        run: npm run package --version=${{ github.ref_name }}
 
       - name: Check builds dir
         run: ls release dist
