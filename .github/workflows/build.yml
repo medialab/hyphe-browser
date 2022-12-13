@@ -38,7 +38,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "./release/Hybro-Linux.zip"
+          file: "./release/HyBro-${{ github.ref }}-Linux.zip"
           tag: ${{ github.ref }}
           release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
@@ -47,7 +47,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "./release/Hybro-MacOSX.zip"
+          file: "./release/HyBro-${{ github.ref }}-MacOSX.zip"
           tag: ${{ github.ref }}
           release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
@@ -56,7 +56,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "./release/Hybro-Windows.zip"
+          file: "./release/HyBro-${{ github.ref }}-Windows.zip"
           tag: ${{ github.ref }}
           release_name: "HyBro, ${{ github.ref_name }}"
           overwrite: true
