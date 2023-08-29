@@ -283,7 +283,7 @@ class BrowserTabContent extends React.Component {
         } else {
           // DNS error (ERR_NAME_NOT_RESOLVED(-105) || ERR_NAME_RESOLUTION_FAIL(-139)): let's search instead
           showNotification({ messageId: 'error.dns-error-search', timeout: 3500 })
-          const term = info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1')
+          const term = decodeURIComponent(info.pageURL.replace(/^.+:\/\/(.+?)\/?$/, '$1').replace(/^www\./, ''))
           setTabUrl({ url: getSearchUrl(selectedEngine, term), id })
           this.setState({
             originalWebentity: null,
