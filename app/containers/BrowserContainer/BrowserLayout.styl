@@ -48,26 +48,19 @@ input
         flex: 1
         stretch(row)
         overflow: hidden
-        @media (max-width: $tablet-break-point)
+        @media (max-width: $narrow-break-point)
           flex-direction: column
         .browser-column.browser-aside-column
-            // width: 416px
-            min-width: 30%
-            max-width: 30%
+            width: 416px
             max-height: 100%
             padding: 0
             box-sizing: border-box
             padding-right: 0
             background: var(--color-grey-light)
-            @media (min-width: 1500px)
-                min-width: 20%
-                max-width: 20%
             @media (max-width: $tablet-break-point)
-                min-width: 40%
-                max-width: 40%
+                width: 300px
             @media (max-width: $narrow-break-point)
-                min-width: 100%
-                max-width: 100%
+                width: 100%
                 max-height: 50%
                 min-height: 50%
                 overflow: hidden
@@ -88,18 +81,19 @@ input
 
                 li
                     flex: 1
-                @media (max-width: 1200px)
+                @media (max-width: $tablet-break-point)
                     flex-direction: column
                     min-height: 80px
                     li
                         margin-bottom: 5px
                     .mode-btn
-                        justify-content: flex-start
                         padding-left: 30px
                         padding-top: 7px;
             .aside-content
                 flex: 1
-                max-height: calc(100%)
+                max-height: calc(100% - 62px)
+                @media (max-width: $tablet-break-point)
+                    max-height: calc(100% - 90px)
                 height: 100%
                 overflow: hidden
                 stretch(column)
@@ -134,17 +128,11 @@ input
         .browser-column.browser-main-column
             flex: 1
             stretch(column)
-            max-width: 70%
-            min-width: 70%
-            @media (min-width: 1500px)
-                max-width: 80%
-                min-width: 80%
+            width: calc(100% - 416px)
             @media (max-width: $tablet-break-point)
-                max-width: 60%
-                min-width: 60%
+                width: calc(100% - 300px)
             @media (max-width: $narrow-break-point)
-                max-width: 100%
-                min-width: 100%
+                width: 100%
                 max-height: 50%
                 min-height: 50%
     .hyphe-view-container
