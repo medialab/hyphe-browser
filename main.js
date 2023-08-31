@@ -42,7 +42,9 @@ app.on('ready', () => {
   window = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
+      webviewTag: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     },
     center: true,
     width: 1024,
@@ -67,10 +69,11 @@ app.on('ready', () => {
     window.loadURL('file://' + __dirname + '/app/index-dev.html')
 
     // electron-devtools-installer is not compatible electron 9
-    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer')
+    /*const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer')
     installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS])
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err))
+    */
   } else {
     window.loadURL('file://' + __dirname + '/app/index.html')
   }
