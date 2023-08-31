@@ -117,6 +117,11 @@ const CorpusList = props => {
           >
             <i className="ti-list" />
           </button>
+
+          {isOrderOpen &&
+            <div className="order-unclick" onClick={ () => setOrderOpen(false) }></div>
+          }
+
           {isOrderOpen &&
             <ul className="order-options">
               {
