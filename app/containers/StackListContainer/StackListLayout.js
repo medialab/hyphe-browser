@@ -195,6 +195,9 @@ const StackListLayout = ({
                 }
               </button>
 
+              {isFilterOpen &&
+                <div className="filter-unclick" onClick={ () => setFilterOpen(false) }></div>
+              }
 
               {isFilterOpen &&
                 <ul className="filter-options">
