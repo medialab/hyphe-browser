@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom'
 import { FormattedMessage as T, useIntl } from 'react-intl'
 
 import { createServer, updateServer, deleteServer } from '../../actions/servers'
-import { fetchCorpora } from '../../actions/corpora'
+import { fetchCorpora, fetchServerStatus } from '../../actions/corpora'
 
 // for async validation
 // import jsonrpc from '../../utils/jsonrpc'
@@ -36,6 +36,7 @@ const ServerForm = ({
   server,
   history,
   fetchCorpora,
+  fetchServerStatus,
   createServer,
   updateServer,
 }) => {
@@ -124,17 +125,18 @@ const ServerForm = ({
     }
 
     // async validation
-    fetchCorpora(server.url)
+    fetchServerStatus(server.url)
       .then(() => {
         setSubmitting(true)
         setErrors([])
+        fetchCorpora(server.url)
         saveAndRedirect()
       }, () => {
         // Try alternative url ending with /api/ if missing and fix it automatically if working
         const altUrl = server.url.replace(/(\/|api)*$/, '/api/')
         console.log("API server url", server.url, "seems unaccessible, trying to rewrite it:", altUrl)
         if (! /\/api\/$/.test(server.url)) {
-          fetchCorpora(altUrl)
+          fetchServerStatus(altUrl)
             .then(() => {
               if (fullConfig && typeof fullConfig === 'object') {
                 fullConfig.url = altUrl
@@ -142,6 +144,7 @@ const ServerForm = ({
               data.url = altUrl
               setSubmitting(true)
               setErrors([])
+              fetchCorpora(altUrl)
               saveAndRedirect()
             }, () => {
               setSubmitting(false)
@@ -305,5 +308,6 @@ export default connect(mapStateToProps, {
   updateServer,
   deleteServer,
   fetchCorpora,
+  fetchServerStatus,
   // routerPush: routerActions.push,
 })(ServerForm)
