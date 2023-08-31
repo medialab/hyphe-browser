@@ -52,6 +52,8 @@ app.on('ready', () => {
     resizable: true
   })
 
+  window.webContents.session.clearCache(() => null)
+
   window.webContents.on('did-finish-load', () => {
     window.webContents.executeJavaScript('localStorage.getItem("hyphe")')
       .then((value) => {
