@@ -92,15 +92,13 @@ const StackListLayout = ({
   }
 
   const setSelectedList = l => {
-    if (l === selectedStack) {
-      setOpen(!isOpen)
-    } else {
+    if (l !== selectedStack) {
       setSelectedListReal(l)
       setFilterValue(null)
-      onSelectStack(l)
-      setOpen(false)
-      resetActions()
     }
+    onSelectStack(l, filterValue)
+    setOpen(false)
+    resetActions()
   }
 
   const handleSelectFilter = (value) => {
@@ -119,7 +117,7 @@ const StackListLayout = ({
 
   const handleLocate = () => {
     if (tabWebentity.status !== selectedStack) {
-      onSelectStack(tabWebentity.status)
+      onSelectStack(tabWebentity.status, filterValue)
     }
     setIsLocating(tabWebentity.id)
   }
