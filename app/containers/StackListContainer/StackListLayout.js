@@ -18,6 +18,7 @@ import WebentitiesContainer from './WebentitiesContainer'
 
 const StackListLayout = ({
   counters,
+  recentTags,
   selectedStack,
   stackWebentities,
   visitedWebentities,
@@ -217,11 +218,11 @@ const StackListLayout = ({
             </div>
           }
           {
-            counters[selectedStack] !== numberOfEntities &&
+            (counters[selectedStack] !== numberOfEntities || (!filterValue && recentTags)) &&
             <div className="actualize-container">
               <button className="btn actualize" onClick={ handleRefresh }>
                 {formatMessage({ id: 'actualize-entities-list' })}
-                {` (${counters[selectedStack] > numberOfEntities ? `+${counters[selectedStack] - numberOfEntities}` : `-${numberOfEntities - counters[selectedStack]}`})`}
+                {counters[selectedStack] !== numberOfEntities && ` (${counters[selectedStack] > numberOfEntities ? `+${counters[selectedStack] - numberOfEntities}` : `-${numberOfEntities - counters[selectedStack]}`})`}
               </button>
             </div>
           }

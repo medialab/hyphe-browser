@@ -24,6 +24,7 @@ const StackListContainer = ({
   status,
   serverUrl,
   webentities,
+  recentTags,
   selectedStack,
   stackWebentities,
   loadingStack,
@@ -173,6 +174,7 @@ const StackListContainer = ({
   return (
     <StackListLayout
       counters={ counters }
+      recentTags={ recentTags }
       searchString={ searchString }
       searchedResult={ searchedResult }
       isSearching={ isSearching }
@@ -199,6 +201,7 @@ const StackListContainer = ({
 StackListContainer.propTypes = {
   activeTab: PropTypes.object.isRequired,
   webentities: PropTypes.object.isRequired,
+  recentTags: PropTypes.bool.isRequired,
   tlds: PropTypes.object,
   corpusId: PropTypes.string,
   serverUrl: PropTypes.string,
@@ -213,6 +216,7 @@ const mapStateToProps = ({ corpora, servers, stacks, webentities, tabs, ui: { lo
   corpusId: corpora.selected.corpus_id,
   activeTab: tabs.activeTab,
   webentities,
+  recentTags: stacks.recentTags,
   selectedStack: stacks.selected,
   stackWebentities: stacks.webentities,
   tlds: webentities.tlds,
