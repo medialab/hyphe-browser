@@ -397,7 +397,7 @@ export const saveAdjustedWebentity = ({ serverUrl, corpusId, webentity, adjust, 
         // if prefixChanged, then webentity just been created, and we want this id, not the old one
         const id = prefixChanged ? head.id : webentity.id
         const { options } = getState().corpora.status.corpus
-        const depth = options && options.depthHypheBro || CRAWL_DEPTH
+        const depth = options && options.depthHypheBro !== undefined ? options.depthHypheBro : CRAWL_DEPTH
         const cookies = (getState().tabs.activeTab.cookies || []).map(c => c.name + '=' + c.value).join('; ') || null
 
         return jsonrpc(serverUrl)('crawl_webentity_with_startmode', {webentity_id: id, depth, phantom_crawl: false, status: 'IN', startmode: 'default', cookies_string: cookies, phantom_timeouts: {}, save_startpages: true, corpus: corpusId})
