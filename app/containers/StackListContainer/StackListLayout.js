@@ -127,7 +127,7 @@ const StackListLayout = ({
     setIsLocating(undefined)
   }
   const handleRefresh = () => {
-    onSelectStack(selectedStack)
+    onSelectStack(selectedStack, filterValue)
     setNumberOfEntities(counters[selectedStack])
   }
 
