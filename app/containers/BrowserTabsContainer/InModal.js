@@ -15,7 +15,7 @@ import PrefixSetter from '../../components/PrefixSetter'
 import KnownPageCard from '../../components/KnownPages/KnownPageCard'
 import BodyTooltip from '../../components/BodyTooltip'
 
-import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString, parsePrefixes } from '../../utils/lru'
+import { urlToLru, lruVariations, longestMatching, lruToUrl, lruObjectToString, parsePrefixes, lruToName } from '../../utils/lru'
 
 import '../../css/entity-modal.styl'
 
@@ -152,6 +152,7 @@ const modalReducer = (state, action) => {
       prefix: action.payload,
       step: 1,
       selectedPage: null,
+      name: lruToName(action.payload, action.tlds)
     }
   case 'SET_NAME':
     return {
@@ -229,7 +230,7 @@ const EntityModal = ({
     {
       step: 1,
       selectedPage: null,
-      name: createNewEntity ? '' : webentity.name,
+      name: createNewEntity ? lruToName(initialPrefix, tlds) : webentity.name,
       prefix: initialPrefix,
       loading: false,
       error: false,
@@ -268,7 +269,7 @@ const EntityModal = ({
     if (prefix === state.prefix) {
       return
     }
-    dispatch({ type: 'SET_PREFIX', payload: prefix })
+    dispatch({ type: 'SET_PREFIX', payload: prefix, tlds: tlds })
   }, [state.prefix])
 
   const ndLock = state.step !== 2 || !isNumber(state.selectedPage)
@@ -364,7 +365,7 @@ const EntityModal = ({
               <input
                 className="input"
                 ref={ nameRef }
-                defaultValue={ state.name }
+                value={ state.name }
                 onChange={ onInputChange }
                 onKeyUp= { handleKeyUp }
               />

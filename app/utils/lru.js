@@ -287,40 +287,45 @@ highlightUrlHTML([
 */
 
 export function urlToName (url, tldTree) {
-  const lru = urlToLru(url, tldTree)
+  const lruObj = urlToLru(url.replace(/\/$/, ''), tldTree)
+  return lruObjectToName(lruObj)
+}
 
-  if (!lru) {
+export function lruToName (lru, tldTree) {
+  const lruObj = parseLru(lru.replace(/\|p:\|$/, '|'), tldTree)
+  return lruObjectToName(lruObj)
+}
+
+export function lruObjectToName (lru) {
+  if (!lru)
     return '<Impossible to Name> ' + url
-  }
-
-  const tld = lru.tld
-  const tldLength = tld ? tld.split('.').length : 0
 
   let name = lru.host
     .map((d, i) => {
-      return (tldLength && i === tldLength) ? toDomainCase(d) : d.replace(/\[]/g, '')
+      if (i === 0 && lru.tld)
+        return toDomainCase(d)
+      return d.replace(/\[]/g, '')
     })
-    .filter((d, i) => d !== 'www' && (!tldLength || i > tldLength - 1))
     .reverse()
+    .filter((d, i) => d !== 'www' || i > 0)
     .join('.')
 
-  if (lru.port && lru.port !== '80') {
+  if (lru.tld)
+    name += "." + lru.tld
+
+  if (lru.port && lru.port !== '80')
     name += ' :' + lru.port
-  }
 
-  if (lru.path.length === 1 && lru.path[0].trim().length > 0) {
+  if (lru.path.length === 1 && lru.path[0].trim().length > 0)
     name += ' /' + decodeURIComponent(lru.path[0])
-  } else if (lru.path.length > 1) {
+  else if (lru.path.length > 1)
     name += ' /…/' + decodeURIComponent(lru.path[lru.path.length - 1])
-  }
 
-  if (lru.query && lru.query.length > 0) {
+  if (lru.query && lru.query.length > 0)
     name += ' ?' + decodeURIComponent(lru.query)
-  }
 
-  if (lru.fragment && lru.fragment.length > 0) {
+  if (lru.fragment && lru.fragment.length > 0)
     name += ' #' + decodeURIComponent(lru.fragment)
-  }
 
   return name
 }
