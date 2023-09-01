@@ -31,7 +31,8 @@ const initialState = {
   selected: null,
   lastRefresh: null,
   webentities: {},
-  loadingWebentity: false
+  loadingWebentity: false,
+  recentTags: false
 }
 
 export default createReducer(initialState, {
@@ -66,7 +67,8 @@ export default createReducer(initialState, {
     webentities: {
       ...state.webentities,
       [stack]: webentities
-    }
+    },
+    recentTags: false
   }),
 
   [FETCH_STACK_PAGE_SUCCESS]: (state, { stack, webentities }) => ({
@@ -143,7 +145,7 @@ export default createReducer(initialState, {
         }
       }
     }
-  }),
+  }, true),
 
   [ADD_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
     return {
@@ -156,7 +158,7 @@ export default createReducer(initialState, {
         }
       }
     }
-  }),
+  }, true),
 
   [REMOVE_TAG_SUCCESS]: updateWebentity((webentity, payload) => {
     return {
@@ -169,10 +171,10 @@ export default createReducer(initialState, {
         }
       }
     }
-  })
+  }, true)
 })
 
-function updateWebentity (updator) {
+function updateWebentity (updator, updatedTags) {
   return (state, payload) => {
     const wes = state.webentities[state.selected].webentities.map((webentity) => {
       if (webentity.id === payload.webentityId) {
@@ -181,6 +183,11 @@ function updateWebentity (updator) {
       }
       return webentity
     })
+    if (updatedTags)
+      return set(['webentities', state.selected, 'webentities'])(wes)({
+        ...state,
+        recentTags: true
+      })
     return set(['webentities', state.selected, 'webentities'])(wes)(state)
   }
 }
