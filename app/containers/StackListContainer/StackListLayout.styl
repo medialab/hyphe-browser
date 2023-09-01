@@ -201,6 +201,8 @@
                 border: none
                 transition: background .2s ease
                 color: var(--color-white)
+                &[disabled]
+                    opacity: 0.5
                 &.IN
                     background: var(--color-corpus-in)
                 &.OUT
@@ -209,7 +211,7 @@
                     background: var(--color-corpus-undecided)
                 &.DISCOVERED
                     background: var(--color-corpus-discovered)
-                &:hover
+                &:hover:not([disabled])
                     background: var(--color-black)
         .webentities-list-container
             background: var(--color-grey)

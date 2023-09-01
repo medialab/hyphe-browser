@@ -210,9 +210,24 @@ const StackListLayout = ({
             </span>
           </div>
           {
-            tabWebentity &&
+            tabWebentity && (tabWebentity.status !== selectedStack || stackWebentities[selectedStack].webentities.find((e) => e.id === tabWebentity.id)) &&
             <div className="locate-container">
-              <button onClick={ handleLocate } className={ cx('btn locate hint--bottom', tabWebentity.status) } aria-label={ formatMessage({ id: 'locate-currently-browsed-webentity-help' }) }>
+              <button
+                onClick={ handleLocate }
+                className={ cx('btn locate hint--bottom', tabWebentity.status) }
+                aria-label={ formatMessage({ id: 'locate-currently-browsed-webentity-help' }) }
+                disabled={ isLoading || isLocating }
+              >
+                <T id="locate-currently-browsed-webentity" />
+              </button>
+            </div>
+          }
+          {
+            tabWebentity && tabWebentity.status === selectedStack && !stackWebentities[selectedStack].webentities.find((e) => e.id === tabWebentity.id) &&
+            <div className="locate-container">
+              <button disabled={ true }
+                className={ cx('btn locate hint--bottom', tabWebentity.status) }
+              >
                 <T id="locate-currently-browsed-webentity" />
               </button>
             </div>
