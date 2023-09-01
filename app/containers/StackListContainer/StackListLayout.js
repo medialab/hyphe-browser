@@ -13,6 +13,7 @@ import HelpPin from '../../components/HelpPin'
 import { USED_STACKS } from '../../constants'
 import { formatCounter } from '../../utils/misc'
 import Spinner from '../../components/Spinner'
+import Tooltipable from '../../components/Tooltipable'
 
 import WebentitiesContainer from './WebentitiesContainer'
 
@@ -181,12 +182,13 @@ const StackListLayout = ({
               value={ searchString }
               onChange={ handleUpdateSearch }
             />
-            <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue }) }>
-
-              <button
-                aria-label={ formatMessage({ id: 'filter' }) }
+            <span className={ cx('filter-container', { 'is-active': isFilterOpen, 'has-filters': !!filterValue}) }>
+              <Tooltipable
+                Tag="button"
                 onClick={ () => setFilterOpen(!isFilterOpen) }
-                className="filter hint--bottom"
+                className="filter hint--right"
+                aria-label={ formatMessage({ id: 'filter' + (selectedStack !== "IN" ? '-disabled' : '') }) }
+                disabled={ selectedStack !== "IN" }
               >
                 <i className="ti-filter" />
                 { filterValue ?
@@ -194,7 +196,7 @@ const StackListLayout = ({
                     <T id='sidebar.filter.no-tags' />: <T id='sidebar.filter.incomplete-tags' />
                   : <T id='sidebar.filter.all' />
                 }
-              </button>
+              </Tooltipable>
 
               {isFilterOpen &&
                 <div className="filter-unclick" onClick={ () => setFilterOpen(false) }></div>

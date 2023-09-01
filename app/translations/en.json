@@ -190,7 +190,8 @@
   "sidebar.overview.current-webentities-list": "Current webentities list",
   "sidebar.overview.current-webentities-list-help": "Choose which list of webentities you want to review",
 
-  "filter": "filter",
+  "filter": "filter untagged webentities",
+  "filter-disabled": "filtering untagged webentities is only possible with webentities IN the corpus",
 
   "actualize-entities-list": "refresh webentities list",
   "actualize-pages-list": "refresh webpages list",

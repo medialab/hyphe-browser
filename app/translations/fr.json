@@ -164,7 +164,8 @@
   "webentity-already-visited": "cette webentité a déjà été visitée",
   "webentity-never-visited": "cette webentité n'a jamais été visitée",
 
-  "filter": "filtrer",
+  "filter": "filtrer les webentités non taggées",
+  "filter-disabled": "le filtrage des webentités non taggées est uniquement possible pour les webentités dans le corpus (IN)",
 
   "sidebar.overview.search-a-webentity": "chercher une webentité dans la liste",
 
