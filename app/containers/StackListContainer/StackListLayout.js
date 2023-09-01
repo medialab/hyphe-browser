@@ -220,7 +220,7 @@ const StackListLayout = ({
             </div>
           }
           {
-            (counters[selectedStack] !== numberOfEntities || (!filterValue && recentTags)) &&
+            (counters[selectedStack] !== numberOfEntities || (filterValue && recentTags)) &&
             <div className="actualize-container">
               <button className="btn actualize" onClick={ handleRefresh }>
                 {formatMessage({ id: 'actualize-entities-list' })}
