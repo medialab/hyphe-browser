@@ -51,7 +51,7 @@ export const fetchCorpora = (serverUrl) => (dispatch) => {
       return dispatch(receiveCorpora(serverUrl, res))
     })
     .catch((error) => {
-      console.log("ERROR", res);
+      console.log("ERROR", error);
       return dispatch({
         type: FETCH_CORPORA_FAILURE,
         payload: { error, serverUrl }
