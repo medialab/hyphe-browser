@@ -132,28 +132,8 @@ const ServerForm = ({
         fetchCorpora(server.url)
         saveAndRedirect()
       }, () => {
-        // Try alternative url ending with /api/ if missing and fix it automatically if working
-        const altUrl = server.url.replace(/(\/|api)*$/, '/api/')
-        console.log("API server url", server.url, "seems unaccessible, trying to rewrite it:", altUrl)
-        if (! /\/api\/$/.test(server.url)) {
-          fetchServerStatus(altUrl)
-            .then(() => {
-              if (fullConfig && typeof fullConfig === 'object') {
-                fullConfig.url = altUrl
-              }
-              data.url = altUrl
-              setSubmitting(true)
-              setErrors([])
-              fetchCorpora(altUrl)
-              saveAndRedirect()
-            }, () => {
-              setSubmitting(false)
-              setErrors(['error.server-url'])
-            })
-        } else {
-          setSubmitting(false)
-          setErrors(['error.server-url'])
-        }
+        setSubmitting(false)
+        setErrors(['error.server-url'])
       })
   }
 
@@ -172,7 +152,7 @@ const ServerForm = ({
       fullConfig :
       { ...data }
 
-    server.url = server.url.replace(/#.*$/, '')
+    server.url = server.url.replace(/#.*$/, '').replace(/(\/|api)*$/, '/api/')
 
     if (!server.password) delete server.password
     server.home = server.url.replace(/[/-]+api\/+?$/, '/')
