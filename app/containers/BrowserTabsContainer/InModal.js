@@ -353,9 +353,6 @@ const EntityModal = ({
                   setSelectedPage={ setPage }
                 /> : <Spinner />
             }
-            <li className="standalone-confirm-container">
-              <button disabled={ ndLock } onClick={ () => dispatch({ type: 'SET_STEP', payload: 3 }) } className="btn btn-success"><FormattedMessage id="in-modale.confirm" /></button>
-            </li>
           </div>
           <div className={ cx('step-container', { 'is-disabled': state.step < 3 }) }>
             <h3>
