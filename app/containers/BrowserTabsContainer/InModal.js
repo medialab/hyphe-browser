@@ -248,6 +248,9 @@ const EntityModal = ({
     () => orderList(webentity.paginatePages, state.prefix, lruObjectToString(urlToLru(tabUrl, tlds))),
     [webentity.paginatePages, state.prefix, tlds, tabUrl]
   )
+  if (pagesList.length === 1) {
+    state.selectedPage = 0
+  }
 
   const onSubmit = useCallback(() => {
     dispatch({
