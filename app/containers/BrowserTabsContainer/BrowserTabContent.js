@@ -183,7 +183,8 @@ class BrowserTabContent extends React.Component {
               if (!this.state.dnsError &&
                 this.state.originalWebentity &&
                 finalWebentity.id !== this.state.originalWebentity.id &&
-                !longestMatching(this.state.originalWebentity.prefixes, info, tlds)) {
+                !longestMatching(this.state.originalWebentity.prefixes, info, tlds) &&
+                !/https?:\/\/[^\/]*\b(google|yahoo|bing|duckduckgo|baidu|qwant|facebook).com\/(redirect(?:_to)?|target|redir|next|link|orig|goto|url|search|[lu])\b/i.test(this.state.originalWebentity.tabUrl)) {
                 // handle uncatched redirection, if originalWebentity is not equal to final webentity
                 this.setState({
                   mergeRequired: {
