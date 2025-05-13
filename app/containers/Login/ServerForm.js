@@ -153,6 +153,9 @@ const ServerForm = ({
       { ...data }
 
     server.url = server.url.replace(/#.*$/, '').replace(/(\/|-?api)*$/, '-api/')
+    if (server.url.split('/').length < 5) {
+      server.url = server.url.replace('-api/', '/api/');
+    }
 
     if (!server.password) delete server.password
     server.home = server.url.replace(/[/-]+api\/+?$/, '/')
