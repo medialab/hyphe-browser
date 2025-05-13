@@ -26,6 +26,8 @@ jobs:
           brew install --cask xquartz
           brew tap homebrew/cask
           brew install --cask --no-quarantine wine-stable
+          which wine
+          ln -s $(which wine) $(dirname `which wine`)/wine64
 
       - name: Build electron app 🔧
         run: npm run build:all
