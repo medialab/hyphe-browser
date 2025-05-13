@@ -29,10 +29,14 @@ jobs:
           ln -s $(which wine) $(dirname `which wine`)/wine64
 
       - name: Build electron app 🔧
-        run: WINEPREFIX=~/wine npm run build:all
+        run: |
+          export WINEPREFIX=~/wine
+          npm run build:all
 
       - name: Package electron app in different versions and architectures 🔧
-        run: WINEPREFIX=~/wine VERSION=${{ github.ref_name }} npm run package
+        run: |
+          export WINEPREFIX=~/wine
+          VERSION=${{ github.ref_name }} npm run package
 
       - name: Check builds dir
         run: ls release dist
