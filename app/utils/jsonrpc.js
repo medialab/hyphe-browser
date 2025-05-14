@@ -32,7 +32,7 @@ export default (uri) => (method, params = []) => {
         // console[m]('JSONRPC ←', method, row.code, row.result, row.message) // eslint-disable-line no-console
       }
 
-      if (row.code === 'success') {
+      if (row.code === 'success' || Object.keys(row).length === 0) {
         return row.result
       } else if (row.code === 'fail') {
         throw new Error(row.message)
