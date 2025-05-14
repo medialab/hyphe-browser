@@ -1,7 +1,7 @@
 import { remote } from 'electron'
 const { app } = remote
 const { normalize } = require('path')
-export const WEBVIEW_UA = 'Mozilla/5.0 (X11; Linux ax86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/1.0.0 Chrome/52.0.2743.82 Safari/537.36'
+export const WEBVIEW_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) hyphe-browser/2.4.2 Chrome/137.0.0.0 Safari/537.36'
 export const CORPUS_STATUS_WATCHER_INTERVAL = 5000
 
 export const LOCALES = ['en-US', 'fr-FR']
